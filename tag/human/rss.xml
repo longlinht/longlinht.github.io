@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+<channel>
+   
+      <title>longlinht.github.io/</title>
+   
+   <link>http://longlinht.github.io/</link>
+   <description>World is complex,confusing and wonderful,I will talk about machine,human and god to known it, to reveal it.</description>
+   <language>en-uk</language>
+   <managingEditor> Tao He</managingEditor>
+   <atom:link href="rss" rel="self" type="application/rss+xml" />
+   
+	<item>
+	  <title>Easy doesn't enter into grown-up life</title>
+	  <link>/easy-doesnt-enter-into-grown-up-life</link>
+	  <author>Tao He</author>
+	  <pubDate>2016-06-09T00:10:00+08:00</pubDate>
+	  <guid>/easy-doesnt-enter-into-grown-up-life</guid>
+	  <description><![CDATA[
+	     <div class="highlight"><pre><code class="language-text" data-lang="text">这是我“Human”目录的第一篇文章，我以一句电影里的台词作为题目，“成年人的生活里没有容易二字”。这个板块其实我更不知道写什么，不过倒是可以借此文来解释一下那个奇怪的目录名称，其实这个奇怪的名称源于我几年前写的一句话“ 茕茕孑力，与机器，人，神共舞”。此文止,期待后续的文章。
+</code></pre></div>
+	  ]]></description>
+	</item>
+
+
+</channel>
+</rss>

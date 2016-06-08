@@ -21,7 +21,7 @@ short_url: 'longlinht.github.io/'
 google_analytics: UA-78960009-1
 disqus: taospage
 # edit baseurl to simply '/' if using as your personal page (instead of a project page)
-baseurl: /
+baseurl: ""
 
 # Permalinks
 permalink: /:title

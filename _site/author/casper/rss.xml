@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+<channel>
+   
+      <title>longlinht.github.io/</title>
+   
+   <link>http://127.0.0.1:4000</link>
+   <description>World is complex,confusing and wonderful,I will talk about machine,human and god to known it, to reveal it.</description>
+   <language>en-uk</language>
+   <managingEditor> Tao He</managingEditor>
+   <atom:link href="rss" rel="self" type="application/rss+xml" />
+   
+	<item>
+	  <title>Hello World</title>
+	  <link>//I-do-not-know-what-I-may-appear-to-the-world</link>
+	  <author>Tao He</author>
+	  <pubDate>2016-06-09T01:20:00+08:00</pubDate>
+	  <guid>//I-do-not-know-what-I-may-appear-to-the-world</guid>
+	  <description><![CDATA[
+	     <p>作为“God”板块的第一篇，引用牛顿爵士的一段话来开启。</p>
+
+<p>I do not know what I may appear to the world, but to myself I seem to have been only like a boy playing on the sea-shore, and diverting myself in now and then finding a smoother pebble or a prettier shell than ordinary, whilst the great ocean of truth lay all undiscovered before me.  </p>
+
+	  ]]></description>
+	</item>
+
+	<item>
+	  <title>Easy doesn't enter into grown-up life</title>
+	  <link>//easy-doesnt-enter-into-grown-up-life</link>
+	  <author>Tao He</author>
+	  <pubDate>2016-06-09T00:10:00+08:00</pubDate>
+	  <guid>//easy-doesnt-enter-into-grown-up-life</guid>
+	  <description><![CDATA[
+	     <div class="highlight"><pre><code class="language-text" data-lang="text">这是我“Human”目录的第一篇文章，我以一句电影里的台词作为题目，“成年人的生活里没有容易二字”。这个板块其实我更不知道写什么，不过倒是可以借此文来解释一下那个奇怪的目录名称，其实这个奇怪的名称源于我几年前写的一句话“ 茕茕孑力，与机器，人，神共舞”。此文止,期待后续的文章。
+</code></pre></div>
+	  ]]></description>
+	</item>
+
+	<item>
+	  <title>Hello World</title>
+	  <link>//hello-world</link>
+	  <author>Tao He</author>
+	  <pubDate>2016-06-09T00:00:00+08:00</pubDate>
+	  <guid>//hello-world</guid>
+	  <description><![CDATA[
+	     <p>This is my first post for Machine category, I named it &#39;Hello World&#39; to start my blog. Because many developers start their first program with a single line code to print &#39;Hello World&#39;. Certainly my first line code also is &#39;Hello World&#39; in C programming language. I hope this will be a good start!</p>
+
+<p>Before Starting this blog, I think about this expression way for a long time, I didin&#39;t know what I should write, I also can&#39;t sure I could write down some useful, excellent articles. I even worry about my articles would be some non-value pieces. But now, I never care about it. I will do my best to write some useful, valuable IT articles.</p>
+
+<p>To make a good start, I need figure out what I shoud write. I think about some categories below:</p>
+
+<ul>
+<li><p>General IT</p></li>
+<li><p>Programming Miscellaneous</p></li>
+<li><p>Programming</p></li>
+<li><p>Computer Science</p></li>
+</ul>
+
+	  ]]></description>
+	</item>
+
+
+</channel>
+</rss>

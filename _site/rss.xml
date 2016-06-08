@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0"
+  xmlns:content="http://purl.org/rss/1.0/modules/content/"
+  xmlns:dc="http://purl.org/dc/elements/1.1/"
+  xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd"
+  xmlns:trackback="http://madskills.com/public/xml/rss/module/trackback/">
+  <channel>
+    <title>Dancing with Machine, Human and God</title>
+    <link>http://127.0.0.1:4000</link>
+    <description>World is complex,confusing and wonderful,I will talk about machine,human and god to known it, to reveal it.</description>
+    <pubDate>Thu, 09 Jun 2016 01:20:00 +0800</pubDate>
+    <item>
+      <title>Hello World</title>
+      <link>http://127.0.0.1:4000/I-do-not-know-what-I-may-appear-to-the-world</link>
+      <description>作为“God”板块的第一篇，引用牛顿爵士的一段话来开启。
+
+</description>
+      <pubDate>Thu, 09 Jun 2016 01:20:00 +0800</pubDate>
+      <dc:date>2016-06-09T01:20:00+08:00</dc:date>
+    </item>
+    <item>
+      <title>Easy doesn't enter into grown-up life</title>
+      <link>http://127.0.0.1:4000/easy-doesnt-enter-into-grown-up-life</link>
+      <description>    这是我“Human”目录的第一篇文章，我以一句电影里的台词作为题目，“成年人的生活里没有容易二字”。这个板块其实我更不知道写什么，不过倒是可以借此文来解释一下那个奇怪的目录名称，其实这个奇怪的名称源于我几年前写的一句话“ 茕茕孑力，与机器，人，神共舞”。此文止,期待后续的文章。
+
+</description>
+      <pubDate>Thu, 09 Jun 2016 00:10:00 +0800</pubDate>
+      <dc:date>2016-06-09T00:10:00+08:00</dc:date>
+    </item>
+    <item>
+      <title>Hello World</title>
+      <link>http://127.0.0.1:4000/hello-world</link>
+      <description>This is my first post for Machine category, I named it 'Hello World' to start my blog. Because many developers start their first program with a single line code to print 'Hello World'. Certainly my first line code also is 'Hello World' in C programming language. I hope this will be a good start!
+
+</description>
+      <pubDate>Thu, 09 Jun 2016 00:00:00 +0800</pubDate>
+      <dc:date>2016-06-09T00:00:00+08:00</dc:date>
+    </item>
+    <dc:date>2016-06-09T01:20:00+08:00</dc:date>
+  </channel>
+</rss>

@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 
     <!-- [[! Page Meta ]] -->
-    <title>Tao's Page</title>
+    <title>Dancing with Machine, Human and God</title>
     <meta name="description" content="Dancing with Machine, Human and God - World is complex,confusing and wonderful,I will talk about machine,human and god to known it, to reveal it." />
 
     <meta name="HandheldFriendly" content="True" />
@@ -53,7 +53,7 @@
     <link rel="alternate" type="application/rss+xml" title="Dancing with Machine, Human and God" href="/rss.xml" />
 
 </head>
-<body class="home-template nav-closed">
+<body class="tag-template nav-closed">
 
     <div class="nav">
     <h3 class="nav-title">Menu</h3>
@@ -61,9 +61,9 @@
         <span class="hidden">Close</span>
     </a>
     <ul>
-        <li class="nav-home  nav-current" role="presentation"><a href="/">Home</a></li>
+        <li class="nav-home " role="presentation"><a href="/">Home</a></li>
         <li class="nav-about " role="presentation"><a href="/about.html">About</a></li>
-        <li class="nav-fables " role="presentation"><a href="/tag/machine/">Machine</a></li>
+        <li class="nav-fables  nav-current" role="presentation"><a href="/tag/machine/">Machine</a></li>
         <li class="nav-speeches " role="presentation"><a href="/tag/human/">Human</a></li>
         <li class="nav-fiction " role="presentation"><a href="/tag/god/">God</a></li>
         <li class="nav-author " role="presentation"><a href="/author/casper/">Author</a></li>
@@ -76,12 +76,14 @@
     <div class="site-wrapper">
 
         <!-- [[! Everything else gets inserted here ]] -->
-        <!-- < default -->
+        <!-- < dynamically overriding backgrounds for tags as well as descriptions -->
+
+
+<!-- < default}} -->
 <!-- The tag above means - insert everything in this file into the [body] of the default.hbs template -->
 
-<!-- The big featured header  -->
-<header class="main-header "
-        style="background-image: url(/assets/images/cover1.jpg) ">
+<!-- If we have a tag cover, display that - else blog cover - else nothing 
+<header class="main-header tag-head " style="background-image: url(/assets/images/cover2.jpg) ">
     <nav class="main-nav overlay clearfix">
         <a class="blog-logo" href="/"><img src="/assets/images/ghost.png" alt="Blog Logo" /></a>
         
@@ -90,12 +92,15 @@
     </nav>
     <div class="vertical">
         <div class="main-header-content inner">
-            <h1 class="page-title">Dancing with Machine, Human and God</h1>
-            <h2 class="page-description">World is complex,confusing and wonderful,I will talk about machine,human and god to known it, to reveal it.</h2>
+            <h1 class="page-title">Machine</h1>
+            <h2 class="page-description">
+            
+			    A 1-post collection
+            
+            </h2>
         </div>
     </div>
-    <a class="scroll-down icon-arrow-left" href="#content" data-offset="-45"><span class="hidden">Scroll Down</span></a>
-</header>
+</header> -->
 
 <!-- The main content area on the homepage -->
 <main id="content" class="content" role="main">
@@ -113,55 +118,6 @@
     </div>
 
     <!-- This is the post loop - each post will be output using this markup -->
-    
-    <article class="post">
-        <header class="post-header">
-            <h2 class="post-title"><a href="http://127.0.0.1:4000/I-do-not-know-what-I-may-appear-to-the-world">Hello World</a></h2>
-        </header>
-        <section class="post-excerpt">
-            <p><p>作为“God”板块的第一篇，引用牛顿爵士的一段话来开启。</p> <p>I do not know what I may appear to the world, but to myself I seem to have been only like a boy playing on... <a class="read-more" href="//I-do-not-know-what-I-may-appear-to-the-world">&raquo;</a></p>
-        </section>
-        <footer class="post-meta">
-            <img class="author-thumb" src="/assets/images/casper.png" alt="Author image" nopin="nopin" />
-            <!-- author -->
-            <a href='/author/Tao'>Tao He</a>
-            <!-- [[tags prefix=" on "]] -->
-             
-                on 
-                
-                    
-                       <a href='/tag/god'>God</a>
-                       
-                
-            
-            <time class="post-date" datetime="2016-06-09">09 Jun 2016</time>
-        </footer>
-    </article>
-    
-    <article class="post">
-        <header class="post-header">
-            <h2 class="post-title"><a href="http://127.0.0.1:4000/easy-doesnt-enter-into-grown-up-life">Easy doesn't enter into grown-up life</a></h2>
-        </header>
-        <section class="post-excerpt">
-            <p><div class="highlight"><pre><code class="language-text" data-lang="text">这是我“Human”目录的第一篇文章，我以一句电影里的台词作为题目，“成年人的生活里没有容易二字”。这个板块其实我更不知道写什么，不过倒是可以借此文来解释一下那个奇怪的目录名称，其实这个奇怪的名称源于我几年前写的一句话“ 茕茕孑力，与机器，人，神共舞”。此文止,期待后续的文章。
-</code></pre></div> <a class="read-more" href="//easy-doesnt-enter-into-grown-up-life">&raquo;</a></p>
-        </section>
-        <footer class="post-meta">
-            <img class="author-thumb" src="/assets/images/casper.png" alt="Author image" nopin="nopin" />
-            <!-- author -->
-            <a href='/author/Tao'>Tao He</a>
-            <!-- [[tags prefix=" on "]] -->
-             
-                on 
-                
-                    
-                       <a href='/tag/human'>Human</a>
-                       
-                
-            
-            <time class="post-date" datetime="2016-06-09">09 Jun 2016</time>
-        </footer>
-    </article>
     
     <article class="post">
         <header class="post-header">

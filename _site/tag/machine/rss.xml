@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+<channel>
+   
+      <title>longlinht.github.io/</title>
+   
+   <link>http://127.0.0.1:4000</link>
+   <description>World is complex,confusing and wonderful,I will talk about machine,human and god to known it, to reveal it.</description>
+   <language>en-uk</language>
+   <managingEditor> Tao He</managingEditor>
+   <atom:link href="rss" rel="self" type="application/rss+xml" />
+   
+	<item>
+	  <title>Hello World</title>
+	  <link>//hello-world</link>
+	  <author>Tao He</author>
+	  <pubDate>2016-06-09T00:00:00+08:00</pubDate>
+	  <guid>//hello-world</guid>
+	  <description><![CDATA[
+	     <p>This is my first post for Machine category, I named it &#39;Hello World&#39; to start my blog. Because many developers start their first program with a single line code to print &#39;Hello World&#39;. Certainly my first line code also is &#39;Hello World&#39; in C programming language. I hope this will be a good start!</p>
+
+<p>Before Starting this blog, I think about this expression way for a long time, I didin&#39;t know what I should write, I also can&#39;t sure I could write down some useful, excellent articles. I even worry about my articles would be some non-value pieces. But now, I never care about it. I will do my best to write some useful, valuable IT articles.</p>
+
+<p>To make a good start, I need figure out what I shoud write. I think about some categories below:</p>
+
+<ul>
+<li><p>General IT</p></li>
+<li><p>Programming Miscellaneous</p></li>
+<li><p>Programming</p></li>
+<li><p>Computer Science</p></li>
+</ul>
+
+	  ]]></description>
+	</item>
+
+
+</channel>
+</rss>

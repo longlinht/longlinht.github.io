@@ -1,77 +1,72 @@
-#
-# This file contains configuration flags to customize your site
-#
-
-# Name of your site (displayed in the header)
-name: Tao 
-
-# Short bio or description (displayed in the header)
-description: C++ developer, vimer 
-
-# URL of your avatar or profile pic (you could use your GitHub profile pic)
-avatar: https://avatars3.githubusercontent.com/u/5089184?v=3&s=460
-
-#
-# Flags below are optional
-#
-
-# Includes an icon in the footer for each username you enter
-footer-links:
-  dribbble:
-  email:
-  facebook:
-  flickr:
-  github: 
-  instagram:
-  linkedin:
-  pinterest:
-  rss: # just type anything here for a working RSS icon, make sure you set the "url" above!
-  twitter: 
-  stackoverflow: # your stackoverflow profile, e.g. "users/50476/bart-kiers"
-  youtube: # channel/<your_long_string> or user/<user-name>
-  googleplus: # anything in your profile username that comes after plus.google.com/
-
-
-# Enter your Disqus shortname (not your username) to enable commenting on posts
-# You can find your shortname on the Settings page of your Disqus account
-disqus:
-
-# Enter your Google Analytics web tracking code (e.g. UA-2110908-2) to activate tracking
-google_analytics:
-
-# Your website URL (e.g. http://barryclark.github.io or http://www.barryclark.co)
-# Used for Sitemap.xml and your RSS feed
-url:
-
-# If you're hosting your site at a Project repository on GitHub pages
-# (http://yourusername.github.io/repository-name)
-# and NOT your User repository (http://yourusername.github.io)
-# then add in the baseurl here, like this: "/repository-name"
-baseurl: ""
-
-#
-# !! You don't need to change any of the configuration flags below !!
-#
-
+# Jykell configuration
 markdown: redcarpet
 highlighter: pygments
-permalink: /:title/
+paginate: 5
+language: 'en-uk'
 
-# The release of Jekyll Now that you're using
-version: v1.1.0
+# Website info
+name: 'Dancing with Machine, Human and God'
+description: "World is complex,confusing and wonderful,I will talk about machine,human and god to known it, to reveal it."
 
-# Set the Sass partials directory, as we're using @imports
-sass:
-  style: :expanded # You might prefer to minify using :compressed
+# Author's info
+author: 'Tao He'
+# edit 'categories' in the front matter of every post to match this username
+username: Tao
+bio: 'A computer engineer, a reader and thinker.'
+location: 'Beijing, China'
+url: 'http://longlinht.github.io/'
+image: 'assets/images/casper.png'
 
-# Use the following plug-ins
-gems:
-  - jekyll-sitemap # Create a sitemap using the official Jekyll sitemap gem
+short_url: 'longlinht.github.io/'
+google_analytics: UA-78960009-1
+disqus: taospage
+# edit baseurl to simply '/' if using as your personal page (instead of a project page)
+baseurl: /
 
-# Exclude these files from your production _site
+# Permalinks
+permalink: /:title
+# permalink: /author/:username
+# permalink: /tag/:tag
+
+
+# gems and other configs
+gems: [jekyll-paginate]
+exclude: [vendor]
+
+# Additional settings available on the front-matter
+# Site logo in the index.html (as in demo.ghost.io)
+# Author's page cover in _layouts/author.html
+# The same for page.html and tag.html layouts
+# Post's page cover as a per-post basis _posts/...
+# Disqus comments as a per-post basis
+# ...
+
+
+# Settings for builing master branch with travis-ci
+# with jekyll-travis
+
+# Settings for deploy rake task
+# Username and repo of Github repo, e.g.
+# https://github.com/USERNAME/REPO.git
+# username defaults to ENV['GIT_NAME'] used by Travis
+# repo defaults to USERNAME.github.io
+# Branch defaults to "source" for USERNAME.github.io
+# or "master" otherwise
+safe: false
+lsi: false
+username: Tao
+repo: longlinht
+branch: master
+
+source:       .
+destination:  ./_site
+
 exclude:
-    - Gemfile
-    - Gemfile.lock
-    - LICENSE
-    - README.md
-    - CNAME
+  - README.md
+  - Rakefile
+  - Gemfile
+  - Gemfile.lock
+  - changelog.md
+  - "*.Rmd"
+  - vendor
+  - .travis.yml

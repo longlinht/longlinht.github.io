@@ -11,7 +11,7 @@ description: "World is complex,confusing and wonderful,I will talk about machine
 # Author's info
 author: 'Tao He'
 # edit 'categories' in the front matter of every post to match this username
-username: Tao
+username: casper
 bio: 'A computer engineer, a reader and thinker.'
 location: 'Beijing, China'
 url: 'http://longlinht.github.io/'
@@ -21,7 +21,7 @@ short_url: 'longlinht.github.io/'
 google_analytics: UA-78960009-1
 disqus: taospage
 # edit baseurl to simply '/' if using as your personal page (instead of a project page)
-baseurl: ""
+baseurl: '/'
 
 # Permalinks
 permalink: /:title

@@ -5,7 +5,7 @@
    
       <title>longlinht.github.io/</title>
    
-   <link>http://127.0.0.1:4000</link>
+   <link>http://longlinht.github.io/</link>
    <description>World is complex,confusing and wonderful,I will talk about machine,human and god to known it, to reveal it.</description>
    <language>en-uk</language>
    <managingEditor> Tao He</managingEditor>
@@ -13,10 +13,10 @@
    
 	<item>
 	  <title>Hello World</title>
-	  <link>//hello-world</link>
+	  <link>/hello-world</link>
 	  <author>Tao He</author>
 	  <pubDate>2016-06-09T00:00:00+08:00</pubDate>
-	  <guid>//hello-world</guid>
+	  <guid>/hello-world</guid>
 	  <description><![CDATA[
 	     <p>This is my first post for Machine category, I named it &#39;Hello World&#39; to start my blog. Because many developers start their first program with a single line code to print &#39;Hello World&#39;. Certainly my first line code also is &#39;Hello World&#39; in C programming language. I hope this will be a good start!</p>
 

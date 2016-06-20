@@ -4,7 +4,7 @@ cover: false
 title: I Do Not Know What I May Appear To The World
 date:   2016-06-08 17:20:00
 tags: god
-subclass: 'post tag-fiction'
+subclass: 'post tag-god'
 categories: 'casper'
 ---
 

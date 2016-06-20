@@ -4,7 +4,7 @@ cover: false
 title: Easy doesn't enter into grown-up life
 date:   2016-06-08 16:10:00
 tags: human
-subclass: 'post tag-fiction'
+subclass: 'post tag-human'
 categories: 'casper'
 ---
 

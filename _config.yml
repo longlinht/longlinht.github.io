@@ -23,6 +23,9 @@ disqus: taospage
 # edit baseurl to simply '/' if using as your personal page (instead of a project page)
 baseurl: '/'
 
+
+url: 'http://localhost:4000/'
+
 # Permalinks
 permalink: /:title
 # permalink: /author/:username

@@ -4,7 +4,7 @@ cover: false
 title: Hello World
 date:   2016-06-08 16:00:00
 tags: machine
-subclass: 'post tag-fiction'
+subclass: 'post tag-machine'
 categories: 'casper'
 ---
 

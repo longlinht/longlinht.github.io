@@ -5,7 +5,7 @@ title: Hello World
 date:   2016-06-08 16:00:00
 tags: machine
 subclass: 'post tag-machine'
-categories: 'casper'
+categories: 'hetao'
 ---
 
 This is my first post for Machine category, I named it 'Hello World' to start my blog. Because many developers start their first program with a single line code to print 'Hello World'. Certainly my first line code also is 'Hello World' in C programming language. I hope this will be a good start!

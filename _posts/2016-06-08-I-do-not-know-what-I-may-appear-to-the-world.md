@@ -5,7 +5,7 @@ title: I Do Not Know What I May Appear To The World
 date:   2016-06-08 17:20:00
 tags: god
 subclass: 'post tag-god'
-categories: 'casper'
+categories: 'hetao'
 ---
 
 作为“God”板块的第一篇，引用牛顿爵士的一段话来开启。

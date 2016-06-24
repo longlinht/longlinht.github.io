@@ -1,1 +1,3 @@
-This is my blog based on Github Pages.
+## About
+
+This is my personal home page based on Github Pages

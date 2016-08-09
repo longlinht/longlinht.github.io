@@ -64,6 +64,189 @@ When you construct a phantom reference you must always pass in a <code>Reference
 	</item>
 
 	<item>
+	  <title>Memory Leak in Android Development</title>
+	  <link>//memory-leak-in-android-development</link>
+	  <author>Tao He</author>
+	  <pubDate>2016-08-01T22:00:00+08:00</pubDate>
+	  <guid>//memory-leak-in-android-development</guid>
+	  <description><![CDATA[
+	     <p>When programming Android, although java has GC mechanism, some our wrong code way and personal habits still cause memory leak, GC also can&#39;t fix it.</p>
+
+<h4>Senario 1: When programming a single instance</h4>
+
+<ul>
+<li>Error way:</li>
+</ul>
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">Sample</span><span class="o">{</span>      
+    <span class="kd">private</span> <span class="kd">static</span> <span class="n">Sample</span> <span class="n">sample</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="n">Context</span> <span class="n">mContext</span><span class="o">;</span> 
+    <span class="kd">private</span> <span class="nf">Sample</span><span class="o">(</span><span class="n">Context</span> <span class="n">mContext</span><span class="o">){</span>
+         <span class="k">this</span><span class="o">.</span><span class="na">mContext</span> <span class="o">=</span> <span class="n">mContext</span><span class="o">;</span>
+    <span class="o">}</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="n">Sample</span> <span class="nf">getInstance</span><span class="o">(</span><span class="n">Context</span> <span class="n">mContext</span><span class="o">){</span>
+         <span class="k">if</span><span class="o">(</span><span class="n">sample</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span>
+              <span class="n">sample</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">Sample</span><span class="o">(</span><span class="n">mContext</span><span class="o">);</span>
+         <span class="k">return</span> <span class="n">sample</span><span class="o">;</span>
+    <span class="o">}</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">otherAction</span><span class="o">(){</span>
+         <span class="n">mContext</span><span class="o">.</span><span class="na">act</span><span class="o">();</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div>
+<ul>
+<li>Error reason:</li>
+</ul>
+
+<p>If we use <code>Sample.getInstance()</code> in Acitivity A, pass <code>this</code> to Sample&#39;s <code>getInstatnce</code> static method, because Sample is static single instance, it exists untill application exit. But Sample&#39;s member variable still hold reference to Activity A, it causes Activity A can&#39;t be destroied. If we pass applicationContext, it doesn&#39;t cause this problem.</p>
+
+<ul>
+<li>Right way:</li>
+</ul>
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">Sample</span><span class="o">{</span>
+     <span class="kd">private</span> <span class="kd">static</span> <span class="n">Sample</span> <span class="n">sample</span><span class="o">;</span>
+     <span class="kd">private</span> <span class="n">Context</span> <span class="n">mContext</span><span class="o">;</span>
+     <span class="kd">private</span> <span class="nf">Sample</span><span class="o">(</span><span class="n">Context</span> <span class="n">mContext</span><span class="o">){</span>
+          <span class="k">this</span><span class="o">.</span><span class="na">mContext</span> <span class="o">=</span> <span class="n">mContext</span><span class="o">;</span>
+     <span class="o">}</span>
+     <span class="kd">public</span> <span class="kd">static</span> <span class="n">Sample</span> <span class="nf">getInstance</span><span class="o">(</span><span class="n">Context</span> <span class="n">mContext</span><span class="o">){</span>
+          <span class="k">if</span><span class="o">(</span><span class="n">sample</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span>
+               <span class="n">sample</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">Sample</span><span class="o">(</span><span class="n">mContext</span><span class="o">.</span><span class="na">getApplicationContext</span><span class="o">());</span>
+          <span class="k">return</span> <span class="n">sample</span><span class="o">;</span>
+     <span class="o">}</span>
+     <span class="kd">public</span> <span class="kt">void</span> <span class="nf">otherAction</span><span class="o">(){</span>
+          <span class="n">mContext</span><span class="o">.</span><span class="na">act</span><span class="o">();</span>
+     <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div>
+<p>     </p>
+
+<h4>Senario 2: When use anonymous inner class</h4>
+
+<ul>
+<li>Error way:
+```java
+public class SampleActivity extends Activity{
+     private TextView textView;          
+     private Handler handler = new Handler(){
+          @override
+          public void handlerMessage(Message msg){</li>
+</ul>
+
+<p>          }
+     };</p>
+
+<p>     @override
+     public void onCreate(Bundle bundle){
+          super.onCreate(bundle);
+          setContextView(R.layout.activity<em>sample</em>layout);
+          textView = (TextView)findViewById(R.id.textView);
+          handler.postDelayed(new Runnable(){</p>
+
+<p>               @override
+               public void run(){
+                    textView.setText(&quot;ok&quot;);
+               };</p>
+
+<p>          },1000 * 60 * 10);
+     }
+}
+```</p>
+
+<ul>
+<li>Error reason:</li>
+</ul>
+
+<p>When execute the <code>SampleAcitvity</code>&#39;s <code>finish</code> method, the delayed messages will exist in main thread for 10 minutes before be processed, while this message contains reference to Handler, Handler is a anonymous inner class, it hold reference to external SampleAcivity, so cause SampleAcivity can&#39;t be recycled. Above <code>Runnable</code> also is a anonymous inner class, it also prevent SampleActivity to be recycled.</p>
+
+<ul>
+<li>Right way:</li>
+</ul>
+
+<p><strong>A static anonymous inner class instance will not hold reference to external class.</strong></p>
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">SampleActivity</span> <span class="kd">extends</span> <span class="n">Activity</span><span class="o">{</span>
+     <span class="kd">private</span> <span class="n">TextView</span> <span class="n">textView</span><span class="o">;</span>
+     <span class="kd">private</span> <span class="kd">static</span> <span class="kd">class</span> <span class="nc">MyHandler</span> <span class="kd">extends</span> <span class="n">Handler</span> <span class="o">{</span>
+
+     <span class="kd">private</span> <span class="kd">final</span> <span class="n">WeakReference</span><span class="o">&lt;</span><span class="n">SampleActivity</span><span class="o">&gt;</span> <span class="n">mActivity</span><span class="o">;</span>
+     <span class="kd">public</span> <span class="nf">MyHandler</span><span class="o">(</span><span class="n">SampleActivity</span> <span class="n">activity</span><span class="o">)</span> <span class="o">{</span>
+          <span class="n">mActivity</span> <span class="o">=</span> <span class="k">new</span> <span class="n">WeakReference</span><span class="o">&lt;</span><span class="n">SampleActivity</span><span class="o">&gt;(</span><span class="n">activity</span><span class="o">);</span>
+     <span class="o">}</span>
+
+     <span class="nd">@Override</span>
+     <span class="kd">public</span> <span class="kt">void</span> <span class="nf">handleMessage</span><span class="o">(</span><span class="n">Message</span> <span class="n">msg</span><span class="o">)</span> <span class="o">{</span>
+          <span class="n">SampleActivity</span> <span class="n">activity</span> <span class="o">=</span> <span class="n">mActivity</span><span class="o">.</span><span class="na">get</span><span class="o">();</span>
+               <span class="k">if</span> <span class="o">(</span><span class="n">activity</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+
+               <span class="o">}</span>
+          <span class="o">}</span>
+     <span class="o">}</span>
+
+     <span class="kd">private</span> <span class="kd">final</span> <span class="n">MyHandler</span> <span class="n">handler</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">MyHandler</span><span class="o">(</span><span class="k">this</span><span class="o">);</span>
+
+     <span class="nd">@override</span>
+     <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onCreate</span><span class="o">(</span><span class="n">Bundle</span> <span class="n">bundle</span><span class="o">){</span>
+          <span class="kd">super</span><span class="o">.</span><span class="na">onCreate</span><span class="o">(</span><span class="n">bundle</span><span class="o">);</span>
+          <span class="n">setContextView</span><span class="o">(</span><span class="n">R</span><span class="o">.</span><span class="na">layout</span><span class="o">.</span><span class="na">activity_sample_layout</span><span class="o">);</span>
+          <span class="n">textView</span> <span class="o">=</span> <span class="o">(</span><span class="n">TextView</span><span class="o">)</span><span class="n">findViewById</span><span class="o">(</span><span class="n">R</span><span class="o">.</span><span class="na">id</span><span class="o">.</span><span class="na">textView</span><span class="o">);</span>
+          <span class="n">handler</span><span class="o">.</span><span class="na">postDelayed</span><span class="o">(</span><span class="k">new</span> <span class="nf">MyRunnable</span><span class="o">(</span><span class="n">textView</span><span class="o">),</span><span class="mi">1000</span> <span class="o">*</span> <span class="mi">60</span> <span class="o">*</span> <span class="mi">10</span><span class="o">);</span>
+     <span class="o">}</span>
+
+     <span class="kd">private</span> <span class="kd">static</span> <span class="kd">class</span> <span class="nc">MyRunnable</span> <span class="kd">implements</span> <span class="n">Runnable</span><span class="o">{</span>
+
+        <span class="c1">// use WeakReference to hold external class&#39;s member variables.</span>
+        <span class="kd">private</span> <span class="n">WeakReference</span><span class="o">&lt;</span><span class="n">TextView</span><span class="o">&gt;</span> <span class="n">textViewWeakReference</span><span class="o">;</span>
+        <span class="kd">public</span> <span class="nf">MyRunnable</span><span class="o">(</span><span class="n">TextView</span> <span class="n">textView</span><span class="o">){</span>
+             <span class="n">textViewWeakReference</span> <span class="o">=</span> <span class="k">new</span> <span class="n">WeakReference</span><span class="o">&lt;</span><span class="n">TextView</span><span class="o">&gt;(</span><span class="n">textView</span><span class="o">);</span>
+        <span class="o">}</span>
+
+        <span class="nd">@override</span>
+        <span class="kd">public</span> <span class="kt">void</span> <span class="nf">run</span><span class="o">(){</span>
+              <span class="kd">final</span> <span class="n">TextView</span> <span class="n">textView</span> <span class="o">=</span> <span class="n">textViewWeakReference</span><span class="o">.</span><span class="na">get</span><span class="o">();</span>
+              <span class="k">if</span><span class="o">(</span><span class="n">textView</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">){</span>
+                   <span class="n">textView</span><span class="o">.</span><span class="na">setText</span><span class="o">(</span><span class="s">&quot;OK&quot;</span><span class="o">);</span>
+              <span class="o">}</span>
+
+        <span class="o">};</span>
+     <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div>
+<h4>Senario 3: Forgot call removeCallbacksAndMessages after use handler</h4>
+
+<ul>
+<li>Right way:</li>
+</ul>
+
+<p>In onDestroy call this method:</p>
+<div class="highlight"><pre><code class="language-java" data-lang="java">     <span class="n">handler</span><span class="o">.</span><span class="na">removeCallbacksAndMessages</span><span class="o">(</span><span class="kc">null</span><span class="o">);</span>
+</code></pre></div>
+<p>This call passed null will destroy all Runnable and Message related to handler.</p>
+
+<h4>Conclude</h4>
+
+<ul>
+<li><p>Don&#39;t let object whose lifecycle longer then Acivity hold reference to Acivity.</p></li>
+<li><p>Prefer to use Application&#39;s Context rather than Activity&#39;s Context.</p></li>
+<li><p>Prefer to use static anonymous inner class rather than non-static.</p></li>
+<li><p>Use weak reference to hold external class&#39;s member variables.</p></li>
+<li><p>GC can&#39;t fix memory leak.</p></li>
+</ul>
+
+<h4>Reference</h4>
+
+<blockquote>
+<p>In Android, Handler classes should be static or leaks might occur, Messages enqueued on the application thread’s MessageQueue also retain their target Handler. If the Handler is an inner class, its outer class will be retained as well. To avoid leaking the outer class, declare the Handler as a static nested class with a WeakReference to its outer class</p>
+
+<p>When an Android application first starts, the framework creates a Looper object for the application’s main thread. A Looper implements a simple message queue, processing Message objects in a loop one after another. All major application framework events (such as Activity lifecycle method calls, button clicks, etc.) are contained inside Message objects, which are added to the Looper’s message queue and are processed one-by-one. The main thread’s Looper exists throughout the application’s lifecycle.</p>
+
+<p>When a Handler is instantiated on the main thread, it is associated with the Looper’s message queue. Messages posted to the message queue will hold a reference to the Handler so that the framework can call Handler#handleMessage(Message) when the Looper eventually processes the message.</p>
+
+<p>In Java, non-static inner and anonymous classes hold an implicit reference to their outer class. Static inner classes, on the other hand, do not.</p>
+</blockquote>
+
+	  ]]></description>
+	</item>
+
+	<item>
 	  <title>Hello World</title>
 	  <link>//hello-world</link>
 	  <author>Tao He</author>

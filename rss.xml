@@ -29,6 +29,15 @@ update UI when we finish something in separated thread. This is a basic problem,
       <dc:date>2016-08-06T03:00:00+08:00</dc:date>
     </item>
     <item>
+      <title>Understanding Java Garbage Collection</title>
+      <link>http://longlinht.github.io//java-garbage-collection</link>
+      <description>**stop-the-world** Stop-the-world means that the JVM is stopping the application from running to execute a GC. When stop-the-world occurs, every thread except for the threads needed for the GC will stop their tasks. The interrupted tasks will resume only after the GC task has completed. GC tuning often means reducing this stop-the-world time.
+
+</description>
+      <pubDate>Fri, 05 Aug 2016 00:00:00 +0800</pubDate>
+      <dc:date>2016-08-05T00:00:00+08:00</dc:date>
+    </item>
+    <item>
       <title>Android Binder Mechanism</title>
       <link>http://longlinht.github.io//android-binder-mechanism</link>
       <description>#### What is Binder

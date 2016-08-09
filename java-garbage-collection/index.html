@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 
     <!-- [[! Page Meta ]] -->
-    <title>Android Thread Related Stuff</title>
+    <title>Understanding Java Garbage Collection</title>
     <meta name="description" content="Dancing with Machine, Human and God - World is complex,confusing and wonderful,I will talk about machine,human and god to known it, to reveal it." />
 
     <meta name="HandheldFriendly" content="True" />
@@ -96,10 +96,10 @@
     <article class="post tag-machine">
 
         <header class="post-header">
-            <h1 class="post-title">Android Thread Related Stuff</h1>
+            <h1 class="post-title">Understanding Java Garbage Collection</h1>
             <section class="post-meta">
             <!-- <a href='/'>Tao He</a> -->
-            <time class="post-date" datetime="2016-08-06">06 Aug 2016</time>
+            <time class="post-date" datetime="2016-08-05">05 Aug 2016</time>
                 <!-- [[tags prefix=" on "]] -->
                  
                 on 
@@ -114,68 +114,70 @@
 
         <section class="post-content">
             
-            <p>It&#39;s widely known that it&#39;s illegal to update UI components directly from threads other than main thread in android. This a rule in Android world, we can&#39;t violate it. But, so many situations we need 
-update UI when we finish something in separated thread. This is a basic problem, it will refer more important concepts related thread.</p>
+            <p><strong>stop-the-world</strong> Stop-the-world means that the JVM is stopping the application from running to execute a GC. When stop-the-world occurs, every thread except for the threads needed for the GC will stop their tasks. The interrupted tasks will resume only after the GC task has completed. GC tuning often means reducing this stop-the-world time.</p>
 
-<h4><code>Looper</code></h4>
+<h4>Generational Garbage Collection</h4>
 
-<ul>
-<li><p>Class used to run a message loop for a thread.</p></li>
-<li><p>The <code>Looper</code> class maintains a synchronized <code>MessageQueue</code>, which contains a list messages.It reads and processes items from a <code>MessageQueue</code>.</p></li>
-<li><p>Threads by default do not have a message loop associated with them, to create one, call <code>prepare()</code> in the thread that is to run the loop, and then <code>loop()</code> to have it process messages until the loop is stopped.</p></li>
-<li><p>It&#39;s associated with the thread within which the <code>Looper</code> is created. This association is kept forever and can&#39;t be broken nor changed. Also note that a thread can&#39;t be associated with more than one Looper. </p></li>
-<li><p>The <code>Looper</code> class is usually used in conjunction with a <code>HandlerThread</code> (a subclass of Thread).</p></li>
-<li><p>There are 2 methods to terminate a Looper:</p>
+<p>Java does not explicitly specify a memory and remove it in the program code.Maybe there is to way to remove the memory explicitly :</p>
 
 <ul>
-<li>Looper.quit()</li>
-<li>Looper.quitSafely() </li>
-</ul></li>
-<li><p>Most interaction with a message loop is through the <code>Handler</code> class.</p></li>
+<li><p>Sets the relevant object to null</p></li>
+<li><p>Use System.gc() method to remove the memory - will affect the system performance drastically</p></li>
 </ul>
 
-<h4><code>Handler</code></h4>
+<p>But nobody do that. GC responsible to finds the unnecessary objects to remove them. GC created based on the following two preconditions:</p>
 
 <ul>
-<li><p>Allow you send and process <code>Message</code> and <code>Runnable</code> objects associated with a thread&#39;s <code>MessageQueue</code>. </p></li>
-<li><p>Each <code>Handler</code> instance is associated with a single thread and that thread&#39;s message queue. Multiple Handler instances can be bound to the same thread.</p></li>
-<li><p>It is bound to the thread / message queue of the thread that is creating it.</p></li>
-<li><p>There are two main uses for a Handler: </p>
-
-<ul>
-<li>To schedule messages and runnables to be executed as some point in the future. </li>
-<li>To enqueue an action to be performed on a different thread than your own.</li>
-</ul></li>
+<li><p>Most objects soon become unreachable.</p></li>
+<li><p>References from old objects to young objects only exist in small numbers.</p></li>
 </ul>
 
-<h4><code>Message</code></h4>
+<h5>Young generation</h5>
+
+<p>Most of the newly created objects are located here. Since most objects soon become unreachable, many objects are created in the young generation, then disappear. When objects disappear from this area, we say a &quot;minor GC&quot; has occurred.</p>
+
+<h5>Old generation</h5>
+
+<p>The objects that did not become unreachable and survived from the young generation are copied here. It is generally larger than the young generation. As it is bigger in size, the GC occurs less frequently than in the young generation. When objects disappear from the old generation, we say a &quot;major GC&quot; (or a &quot;full GC&quot;) has occurred.</p>
+
+<h5>Permanent generation</h5>
+
+<p>It stores classes or interned character strings. So, this area is definitely not for objects that survived from the old generation to stay permanently. A GC may occur in this area. The GC that took place here is still counted as a major GC.</p>
+
+<h4>Composition of the Young Generation</h4>
+
+<p>The young generation is divided into 3 spaces. </p>
 
 <ul>
-<li><p>Defines a message containing a description and arbitrary data object that can be sent to a Handler. This object contains two extra int fields and an extra object field that allow you to not do allocations in many cases.</p></li>
-<li><p>While the constructor of Message is public, the best way to get one of these is to call <code>Message.obtain()</code> or one of the <code>Handler.obtainMessage()</code> methods, which will pull them from a pool of recycled objects.</p></li>
+<li><p>One Eden space</p></li>
+<li><p>Two Survivor spaces</p></li>
 </ul>
 
-<h4><code>HandlerThread</code></h4>
+<p>There are 3 spaces in total, two of which are Survivor spaces. The order of execution process of each space is as below:</p>
 
 <ul>
-<li><p><code>HandlerThread</code> is a handy class for starting a new thread that has a Looper.prepare(), Looper. </p></li>
-<li><p>You generally need a thread attached with a Looper when you want sequential execution of tasks without race conditions and keep a thread alive even after a particular task is completed so that it can be reused so that you don’t have to create new thread instances.</p></li>
+<li><p>The majority of newly created objects are located in the Eden space.</p></li>
+<li><p>After one GC in the Eden space, the surviving objects are moved to one of the Survivor spaces. </p></li>
+<li><p>After a GC in the Eden space, the objects are piled up into the Survivor space, where other surviving objects already exist.</p></li>
+<li><p>Once a Survivor space is full, surviving objects are moved to the other Survivor space. Then, the Survivor space that is full will be changed to a state where there is no data at all.</p></li>
+<li><p>The objects that survived these steps that have been repeated a number of times are moved to the old generation.</p></li>
 </ul>
 
-<p>Once a HandlerThread is started, it sets up queuing through a Looper and MessageQueue and waits for incoming messages to process:</p>
-<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="n">HandlerThread</span> <span class="n">handlerThread</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">HandlerThread</span><span class="o">(</span><span class="s">&quot;HandlerThread&quot;</span><span class="o">);</span>
-<span class="n">handlerThread</span><span class="o">.</span><span class="na">start</span><span class="o">();</span>
+<h5>GC for the Old Generation</h5>
 
-<span class="c1">// Create a handler attached to the HandlerThread&#39;s Looper</span>
-<span class="n">mHandler</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">Handler</span><span class="o">(</span><span class="n">handlerThread</span><span class="o">.</span><span class="na">getLooper</span><span class="o">())</span> <span class="o">{</span>
-    <span class="nd">@Override</span>
-    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">handleMessage</span><span class="o">(</span><span class="n">Message</span> <span class="n">msg</span><span class="o">)</span> <span class="o">{</span>
-        <span class="c1">// Process messages here</span>
-    <span class="o">}</span>
-<span class="o">};</span>
- 
-<span class="c1">// Now send messages using mHandler.sendMessage()</span>
-</code></pre></div>
+<p>The old generation basically performs a GC when the data is full. The execution procedure varies by the GC type, so it would be easier to understand if you know different types of GC.
+According to JDK 7, there are 5 GC types.</p>
+
+<ul>
+<li><p>Serial GC</p></li>
+<li><p>Parallel GC</p></li>
+<li><p>Parallel Old GC (Parallel Compacting GC)</p></li>
+<li><p>Concurrent Mark &amp; Sweep GC (or &quot;CMS&quot;)</p></li>
+<li><p>Garbage First (G1) GC</p></li>
+</ul>
+
+<p>This article will not introduce 5 GCs, if you interested in, please google it.</p>
+
 
         </section>
 
@@ -206,15 +208,15 @@ update UI when we finish something in separated thread. This is a basic problem,
 
             <section class="share">
                 <h4>Share this post</h4>
-                <a class="icon-twitter" href="http://twitter.com/share?text=Android Thread Related Stuff&amp;url=http://longlinht.github.io//thread-looper-handler-in-android"
+                <a class="icon-twitter" href="http://twitter.com/share?text=Understanding Java Garbage Collection&amp;url=http://longlinht.github.io//java-garbage-collection"
                     onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
                     <span class="hidden">Twitter</span>
                 </a>
-                <a class="icon-facebook" href="https://www.facebook.com/sharer/sharer.php?u=http://longlinht.github.io//thread-looper-handler-in-android"
+                <a class="icon-facebook" href="https://www.facebook.com/sharer/sharer.php?u=http://longlinht.github.io//java-garbage-collection"
                     onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
                     <span class="hidden">Facebook</span>
                 </a>
-                <a class="icon-google-plus" href="https://plus.google.com/share?url=http://longlinht.github.io//thread-looper-handler-in-android"
+                <a class="icon-google-plus" href="https://plus.google.com/share?url=http://longlinht.github.io//java-garbage-collection"
                    onclick="window.open(this.href, 'google-plus-share', 'width=490,height=530');return false;">
                     <span class="hidden">Google+</span>
                 </a>
@@ -257,20 +259,20 @@ update UI when we finish something in separated thread. This is a basic problem,
 
     <!-- [[! next_post ]] -->
     
-        <a class="read-next-story no-cover" href="http://longlinht.github.io//java-references">
+        <a class="read-next-story no-cover" href="http://longlinht.github.io//thread-looper-handler-in-android">
             <section class="post">
-                <h2>Java References</h2>
-                <p>Before JDK 1.2, if a object isn't referenced by any variable, it can't be used...</p>
+                <h2>Android Thread Related Stuff</h2>
+                <p>It's widely known that it's illegal to update UI components directly from threads other than...</p>
             </section>
         </a>
     
     <!-- [[! /next_post ]] -->
     <!-- [[! prev_post ]] -->
     
-        <a class="read-next-story prev no-cover" href="http://longlinht.github.io//java-garbage-collection">
+        <a class="read-next-story prev no-cover" href="http://longlinht.github.io//android-binder-mechanism">
             <section class="post">
-                <h2>Understanding Java Garbage Collection</h2>
-                <p><p><strong>stop-the-world</strong> Stop-the-world means that the JVM is stopping the application from running to execute a...</p>
+                <h2>Android Binder Mechanism</h2>
+                <p><h4>What is Binder</h4> <ul> <li>The Binder mechanism has started from a simple idea. </li> </ul>...</p>
             </section>
         </a>
     

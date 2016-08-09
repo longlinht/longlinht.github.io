@@ -125,6 +125,77 @@ update UI when we finish something in separated thread. This is a basic problem,
       </item>
     
       <item>
+        <title>Understanding Java Garbage Collection</title>
+        <description>&lt;p&gt;&lt;strong&gt;stop-the-world&lt;/strong&gt; Stop-the-world means that the JVM is stopping the application from running to execute a GC. When stop-the-world occurs, every thread except for the threads needed for the GC will stop their tasks. The interrupted tasks will resume only after the GC task has completed. GC tuning often means reducing this stop-the-world time.&lt;/p&gt;
+
+&lt;h4&gt;Generational Garbage Collection&lt;/h4&gt;
+
+&lt;p&gt;Java does not explicitly specify a memory and remove it in the program code.Maybe there is to way to remove the memory explicitly :&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;Sets the relevant object to null&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Use System.gc() method to remove the memory - will affect the system performance drastically&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;But nobody do that. GC responsible to finds the unnecessary objects to remove them. GC created based on the following two preconditions:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;Most objects soon become unreachable.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;References from old objects to young objects only exist in small numbers.&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h5&gt;Young generation&lt;/h5&gt;
+
+&lt;p&gt;Most of the newly created objects are located here. Since most objects soon become unreachable, many objects are created in the young generation, then disappear. When objects disappear from this area, we say a &amp;quot;minor GC&amp;quot; has occurred.&lt;/p&gt;
+
+&lt;h5&gt;Old generation&lt;/h5&gt;
+
+&lt;p&gt;The objects that did not become unreachable and survived from the young generation are copied here. It is generally larger than the young generation. As it is bigger in size, the GC occurs less frequently than in the young generation. When objects disappear from the old generation, we say a &amp;quot;major GC&amp;quot; (or a &amp;quot;full GC&amp;quot;) has occurred.&lt;/p&gt;
+
+&lt;h5&gt;Permanent generation&lt;/h5&gt;
+
+&lt;p&gt;It stores classes or interned character strings. So, this area is definitely not for objects that survived from the old generation to stay permanently. A GC may occur in this area. The GC that took place here is still counted as a major GC.&lt;/p&gt;
+
+&lt;h4&gt;Composition of the Young Generation&lt;/h4&gt;
+
+&lt;p&gt;The young generation is divided into 3 spaces. &lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;One Eden space&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Two Survivor spaces&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;There are 3 spaces in total, two of which are Survivor spaces. The order of execution process of each space is as below:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;The majority of newly created objects are located in the Eden space.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;After one GC in the Eden space, the surviving objects are moved to one of the Survivor spaces. &lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;After a GC in the Eden space, the objects are piled up into the Survivor space, where other surviving objects already exist.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Once a Survivor space is full, surviving objects are moved to the other Survivor space. Then, the Survivor space that is full will be changed to a state where there is no data at all.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;The objects that survived these steps that have been repeated a number of times are moved to the old generation.&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h5&gt;GC for the Old Generation&lt;/h5&gt;
+
+&lt;p&gt;The old generation basically performs a GC when the data is full. The execution procedure varies by the GC type, so it would be easier to understand if you know different types of GC.
+According to JDK 7, there are 5 GC types.&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;Serial GC&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Parallel GC&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Parallel Old GC (Parallel Compacting GC)&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Concurrent Mark &amp;amp; Sweep GC (or &amp;quot;CMS&amp;quot;)&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Garbage First (G1) GC&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;This article will not introduce 5 GCs, if you interested in, please google it.&lt;/p&gt;
+</description>
+        <pubDate>Fri, 05 Aug 2016 00:00:00 +0800</pubDate>
+        <link>http://longlinht.github.io//java-garbage-collection</link>
+        <guid isPermaLink="true">http://longlinht.github.io//java-garbage-collection</guid>
+      </item>
+    
+      <item>
         <title>Android Binder Mechanism</title>
         <description>&lt;h4&gt;What is Binder&lt;/h4&gt;
 

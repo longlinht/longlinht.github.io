@@ -8,7 +8,16 @@
     <title>Dancing with Machine, Human and God</title>
     <link>http://longlinht.github.io/</link>
     <description>World is complex,confusing and wonderful,I will talk about machine,human and god to known it, to reveal it.</description>
-    <pubDate>Thu, 09 Jun 2016 01:20:00 +0800</pubDate>
+    <pubDate>Wed, 10 Aug 2016 00:00:00 +0800</pubDate>
+    <item>
+      <title>Java References</title>
+      <link>http://longlinht.github.io//java-references</link>
+      <description>Before JDK 1.2, if a object isn't referenced by any variable, it can't be used any more.Since JDK 1.2, Java has four reference types.In order from strongest to weakest these references are: Strong, Soft, Weak, Phantom. 
+
+</description>
+      <pubDate>Wed, 10 Aug 2016 00:00:00 +0800</pubDate>
+      <dc:date>2016-08-10T00:00:00+08:00</dc:date>
+    </item>
     <item>
       <title>I Do Not Know What I May Appear To The World</title>
       <link>http://longlinht.github.io//I-do-not-know-what-I-may-appear-to-the-world</link>
@@ -38,6 +47,6 @@
       <pubDate>Thu, 09 Jun 2016 00:00:00 +0800</pubDate>
       <dc:date>2016-06-09T00:00:00+08:00</dc:date>
     </item>
-    <dc:date>2016-06-09T01:20:00+08:00</dc:date>
+    <dc:date>2016-08-10T00:00:00+08:00</dc:date>
   </channel>
 </rss>

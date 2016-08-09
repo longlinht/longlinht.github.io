@@ -19,6 +19,15 @@
       <dc:date>2016-08-10T00:00:00+08:00</dc:date>
     </item>
     <item>
+      <title>Android Binder Mechanism</title>
+      <link>http://longlinht.github.io//android-binder-mechanism</link>
+      <description>#### What is Binder
+
+</description>
+      <pubDate>Fri, 05 Aug 2016 03:00:00 +0800</pubDate>
+      <dc:date>2016-08-05T03:00:00+08:00</dc:date>
+    </item>
+    <item>
       <title>Memory Leak in Android Development</title>
       <link>http://longlinht.github.io//memory-leak-in-android-development</link>
       <description>When programming Android, although java has GC mechanism, some our wrong code way and personal habits still cause memory leak, GC also can't fix it.

@@ -1,76 +1,120 @@
-<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- [[! Document Settings ]] -->
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
-<channel>
-   
-      <title>longlinht.github.io/</title>
-   
-   <link>http://longlinht.github.io/</link>
-   <description>World is complex,confusing and wonderful,I will talk about machine,human and god to known it, to reveal it.</description>
-   <language>en-uk</language>
-   <managingEditor> Tao He</managingEditor>
-   <atom:link href="rss" rel="self" type="application/rss+xml" />
-   
-	<item>
-	  <title>Java References</title>
-	  <link>//java-references</link>
-	  <author>Tao He</author>
-	  <pubDate>2016-08-10T00:00:00+08:00</pubDate>
-	  <guid>//java-references</guid>
-	  <description><![CDATA[
-	     <p>Before JDK 1.2, if a object isn&#39;t referenced by any variable, it can&#39;t be used any more.Since JDK 1.2, Java has four reference types.In order from strongest to weakest these references are: Strong, Soft, Weak, Phantom. </p>
+    <!-- [[! Page Meta ]] -->
+    <title>Android Binder Mechanism</title>
+    <meta name="description" content="Dancing with Machine, Human and God - World is complex,confusing and wonderful,I will talk about machine,human and god to known it, to reveal it." />
 
-<h4>Strong reference</h4>
+    <meta name="HandheldFriendly" content="True" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-<p>Below code is regular object reference:</p>
-<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="n">Sample</span> <span class="n">sample</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">Sample</span><span class="o">();</span>
-</code></pre></div>
-<p>The variable <code>sample</code> holds a strong reference to a Sample object. Before you stop reading there is a point to this: objects that are reachable through any chain of strong references are not eligible for garbage collection. Even JVM throw <code>OutOfMemoryError</code> to terminate the program, it will not to reclaim the memory that strong reference hold.</p>
+    <link rel="shortcut icon" href="/assets/images/favicon.ico" >
 
-<h4>Soft reference</h4>
+    <!-- [[! Styles'n'Scripts ]] -->
+    <link rel="stylesheet" type="text/css" href="/assets/css/screen.css" />
+    <link rel="stylesheet" type="text/css"
+          href="//fonts.googleapis.com/css?family=Merriweather:300,700,700italic,300italic|Open+Sans:700,400" />
+    <link rel="stylesheet" type="text/css" href="/assets/css/syntax.css" />
+    
+    <!-- [[! Ghost outputs important style and meta data with this tag ]] -->
+        <link rel="canonical" href="/" />
+    <meta name="referrer" content="origin" />
+    <link rel="next" href="/page2/" />
 
-<p>Soft references are cleared at the discretion of the garbage collector in response to memory demand. The virtual machine guarantees that all soft references to softly-reachable objects will have been cleared before it would ever throw an <code>OutOfMemoryError</code>.</p>
+    <meta property="og:site_name" content="Dancing with Machine, Human and God" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Dancing with Machine, Human and God" />
+    <meta property="og:description" content="World is complex,confusing and wonderful,I will talk about machine,human and god to known it, to reveal it." />
+    <meta property="og:url" content="/" />
+    <meta property="og:image" content="/assets/images/cover1.jpg" />
 
-<h4>Weak reference</h4>
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Dancing with Machine, Human and God" />
+    <meta name="twitter:description" content="World is complex,confusing and wonderful,I will talk about machine,human and god to known it, to reveal it." />
+    <meta name="twitter:url" content="/" />
+    <meta name="twitter:image:src" content="/assets/images/cover1.jpg" />
 
-<p>This code snippets is regular weak reference:</p>
-<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="n">WeakReference</span><span class="o">&lt;</span><span class="n">Cacheable</span><span class="o">&gt;</span> <span class="n">weakData</span> <span class="o">=</span> <span class="k">new</span> <span class="n">WeakReference</span><span class="o">&lt;</span><span class="n">Cacheable</span><span class="o">&gt;(</span><span class="n">data</span><span class="o">);</span>
-</code></pre></div>
-<p>To access data call weakData.get(). This call to get may return <code>null</code> if the weak reference was garbage collected: you must check the returned value to avoid <code>NullPointerException</code>s.</p>
+    <script type="application/ld+json">
+{
+    "@context": "http://schema.org",
+    "@type": "Website",
+    "publisher": "Tao's Page",
+    "url": "/",
+    "image": "/assets/images/cover1.jpg",
+    "description": "World is complex,confusing and wonderful,I will talk about machine,human and god to known it, to reveal it."
+}
+    </script>
 
-<p>An object that is identified as only weakly reachable will be collected at the next GC cycle.</p>
+    <meta name="generator" content="Jekyll 3.0.0" />
+    <link rel="alternate" type="application/rss+xml" title="Dancing with Machine, Human and God" href="/rss.xml" />
 
-<p>If you pass a <code>ReferenceQueue</code> into the constructor for a weak reference then the garbage collector will append that weak reference to the <code>ReferenceQueue</code> when it is no longer needed. You can periodically process this queue and deal with dead references.</p>
+</head>
+<body class="post-template nav-closed">
 
-<p>The difference between <code>SoftReference</code> and <code>WeakReference</code> is:</p>
+    <div class="nav">
+    <h3 class="nav-title">Menu</h3>
+    <a href="#" class="nav-close">
+        <span class="hidden">Close</span>
+    </a>
+    <ul>
+        <li class="nav-home " role="presentation"><a href="/">Home</a></li>
+        <li class="nav-about " role="presentation"><a href="/about.html">About</a></li>
+        <li class="nav-fables " role="presentation"><a href="/tag/machine/">Machine</a></li>
+        <li class="nav-speeches " role="presentation"><a href="/tag/human/">Human</a></li>
+        <li class="nav-fiction " role="presentation"><a href="/tag/god/">God</a></li>
+        <li class="nav-author " role="presentation"><a href="/author/hetao/">Author</a></li>
+    </ul>
+    <a class="subscribe-button icon-feed" href="/rss.xml">Subscribe</a>
+</div>
+<span class="nav-cover"></span>
 
-<ul>
-<li><p>A soft reference is exactly like a weak reference, except that it is less eager to throw away the object to which it refers. </p></li>
-<li><p>An object which is only weakly reachable (the strongest references to it are WeakReferences) will be discarded at the next garbage collection cycle, but an object which is softly reachable will generally stick around for a while.</p></li>
-<li><p><code>SoftReferences</code> aren&#39;t required to behave any differently than <code>WeakReferences</code>, but in practice softly reachable objects are generally retained as long as memory is in plentiful supply. This makes them an excellent foundation for a cache, such as the image cache described above, since you can let the garbage collector worry about both how reachable the objects are (a strongly reachable object will never be removed from the cache) and how badly it needs the memory they are consuming.</p></li>
-<li><p>Garbage collector uses algorithms to decide whether or not to reclaim a softly reachable object, but always reclaims a weakly reachable object.</p></li>
-</ul>
 
-<h4>Phantom reference</h4>
+    <div class="site-wrapper">
 
-<p>Phantom references are the most tenuous of all reference types: calling get will always return null.
-When you construct a phantom reference you must always pass in a <code>ReferenceQueue</code>. </p>
-<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="n">ReferenceQueue</span> <span class="n">queue</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">ReferenceQueue</span> <span class="o">();</span>
-<span class="n">PhantomReference</span> <span class="n">pr</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">PhantomReference</span> <span class="o">(</span><span class="n">object</span><span class="o">,</span> <span class="n">queue</span><span class="o">);</span>
-</code></pre></div>
-<p>This indicates that you can use a phantom reference to see when your object is GC’d. The phantom reference is enqueued after it has been physically removed from memory — as opposed to weak references which are enqueued before they’re finalized or GC’d.</p>
+        <!-- [[! Everything else gets inserted here ]] -->
+        <!-- < default -->
 
-	  ]]></description>
-	</item>
+<!-- The comment above "< default" means - insert everything in this file into -->
+    <!-- the [body] of the default.hbs template, which contains our header/footer. -->
 
-	<item>
-	  <title>Android Binder Mechanism</title>
-	  <link>//android-binder-mechanism</link>
-	  <author>Tao He</author>
-	  <pubDate>2016-08-05T03:00:00+08:00</pubDate>
-	  <guid>//android-binder-mechanism</guid>
-	  <description><![CDATA[
-	     <h4>What is Binder</h4>
+<!-- Everything inside the #post tags pulls data from the post -->
+<!-- #post -->
+
+<header class="main-header post-head no-cover">
+    <nav class="main-nav  clearfix">
+        
+        
+    </nav>
+</header>
+
+<main class="content" role="main">
+
+    <article class="post tag-machine">
+
+        <header class="post-header">
+            <h1 class="post-title">Android Binder Mechanism</h1>
+            <section class="post-meta">
+            <!-- <a href='/'>Tao He</a> -->
+            <time class="post-date" datetime="2016-08-05">05 Aug 2016</time>
+                <!-- [[tags prefix=" on "]] -->
+                 
+                on 
+                
+                    
+                       <a href='/tag/machine'>Machine</a>
+                       
+                
+                
+            </section>
+        </header>
+
+        <section class="post-content">
+            
+            <h4>What is Binder</h4>
 
 <ul>
 <li>The Binder mechanism has started from a simple idea. </li>
@@ -444,215 +488,132 @@ When you construct a phantom reference you must always pass in a <code>Reference
 <p>Read The Fucking Source Code.</p>
 </blockquote>
 
-	  ]]></description>
-	</item>
 
-	<item>
-	  <title>Memory Leak in Android Development</title>
-	  <link>//memory-leak-in-android-development</link>
-	  <author>Tao He</author>
-	  <pubDate>2016-08-01T22:00:00+08:00</pubDate>
-	  <guid>//memory-leak-in-android-development</guid>
-	  <description><![CDATA[
-	     <p>When programming Android, although java has GC mechanism, some our wrong code way and personal habits still cause memory leak, GC also can&#39;t fix it.</p>
+        </section>
 
-<h4>Senario 1: When programming a single instance</h4>
+        <footer class="post-footer">
 
-<ul>
-<li>Error way:</li>
-</ul>
-<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">Sample</span><span class="o">{</span>      
-    <span class="kd">private</span> <span class="kd">static</span> <span class="n">Sample</span> <span class="n">sample</span><span class="o">;</span>
-    <span class="kd">private</span> <span class="n">Context</span> <span class="n">mContext</span><span class="o">;</span> 
-    <span class="kd">private</span> <span class="nf">Sample</span><span class="o">(</span><span class="n">Context</span> <span class="n">mContext</span><span class="o">){</span>
-         <span class="k">this</span><span class="o">.</span><span class="na">mContext</span> <span class="o">=</span> <span class="n">mContext</span><span class="o">;</span>
-    <span class="o">}</span>
-    <span class="kd">public</span> <span class="kd">static</span> <span class="n">Sample</span> <span class="nf">getInstance</span><span class="o">(</span><span class="n">Context</span> <span class="n">mContext</span><span class="o">){</span>
-         <span class="k">if</span><span class="o">(</span><span class="n">sample</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span>
-              <span class="n">sample</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">Sample</span><span class="o">(</span><span class="n">mContext</span><span class="o">);</span>
-         <span class="k">return</span> <span class="n">sample</span><span class="o">;</span>
-    <span class="o">}</span>
-    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">otherAction</span><span class="o">(){</span>
-         <span class="n">mContext</span><span class="o">.</span><span class="na">act</span><span class="o">();</span>
-    <span class="o">}</span>
-<span class="o">}</span>
-</code></pre></div>
-<ul>
-<li>Error reason:</li>
-</ul>
+            <!-- Everything inside the #author tags pulls data from the author -->
+            <!-- #author-->
 
-<p>If we use <code>Sample.getInstance()</code> in Acitivity A, pass <code>this</code> to Sample&#39;s <code>getInstatnce</code> static method, because Sample is static single instance, it exists untill application exit. But Sample&#39;s member variable still hold reference to Activity A, it causes Activity A can&#39;t be destroied. If we pass applicationContext, it doesn&#39;t cause this problem.</p>
+            
+            <figure class="author-image">
+                <a class="img" href="/author/hetao" style="background-image: url(/assets/images/casper.png)"><span class="hidden">'s Picture</span></a>
+            </figure>
+            
 
-<ul>
-<li>Right way:</li>
-</ul>
-<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">Sample</span><span class="o">{</span>
-     <span class="kd">private</span> <span class="kd">static</span> <span class="n">Sample</span> <span class="n">sample</span><span class="o">;</span>
-     <span class="kd">private</span> <span class="n">Context</span> <span class="n">mContext</span><span class="o">;</span>
-     <span class="kd">private</span> <span class="nf">Sample</span><span class="o">(</span><span class="n">Context</span> <span class="n">mContext</span><span class="o">){</span>
-          <span class="k">this</span><span class="o">.</span><span class="na">mContext</span> <span class="o">=</span> <span class="n">mContext</span><span class="o">;</span>
-     <span class="o">}</span>
-     <span class="kd">public</span> <span class="kd">static</span> <span class="n">Sample</span> <span class="nf">getInstance</span><span class="o">(</span><span class="n">Context</span> <span class="n">mContext</span><span class="o">){</span>
-          <span class="k">if</span><span class="o">(</span><span class="n">sample</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span>
-               <span class="n">sample</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">Sample</span><span class="o">(</span><span class="n">mContext</span><span class="o">.</span><span class="na">getApplicationContext</span><span class="o">());</span>
-          <span class="k">return</span> <span class="n">sample</span><span class="o">;</span>
-     <span class="o">}</span>
-     <span class="kd">public</span> <span class="kt">void</span> <span class="nf">otherAction</span><span class="o">(){</span>
-          <span class="n">mContext</span><span class="o">.</span><span class="na">act</span><span class="o">();</span>
-     <span class="o">}</span>
-<span class="o">}</span>
-</code></pre></div>
-<p>     </p>
+            <section class="author">
+                <h4><a href="/author/hetao">Tao He</a></h4>
+                
+                
+                    <p> A computer engineer, a reader and thinker.</p>
+                
+                <div class="author-meta">
+                    <span class="author-location icon-location"> Beijing, China</span> 
+                    <span class="author-link icon-link"><a href="http://longlinht.github.io/"> longlinht.github.io/</a></span> 
+                </div>
+            </section>
 
-<h4>Senario 2: When use anonymous inner class</h4>
+            <!-- /author  -->
 
-<ul>
-<li>Error way:
-```java
-public class SampleActivity extends Activity{
-     private TextView textView;          
-     private Handler handler = new Handler(){
-          @override
-          public void handlerMessage(Message msg){</li>
-</ul>
+            <section class="share">
+                <h4>Share this post</h4>
+                <a class="icon-twitter" href="http://twitter.com/share?text=Android Binder Mechanism&amp;url=http://longlinht.github.io//android-binder-mechanism"
+                    onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
+                    <span class="hidden">Twitter</span>
+                </a>
+                <a class="icon-facebook" href="https://www.facebook.com/sharer/sharer.php?u=http://longlinht.github.io//android-binder-mechanism"
+                    onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
+                    <span class="hidden">Facebook</span>
+                </a>
+                <a class="icon-google-plus" href="https://plus.google.com/share?url=http://longlinht.github.io//android-binder-mechanism"
+                   onclick="window.open(this.href, 'google-plus-share', 'width=490,height=530');return false;">
+                    <span class="hidden">Google+</span>
+                </a>
+            </section>
+            
+            <!-- Add Disqus Comments -->
+            
+                <div id="disqus_thread"></div>
+<script>
+    /**
+     *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+     *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables
+     */
+    /*
+    var disqus_config = function () {
+        this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
+        this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+    };
+    */
+    (function() {  // DON'T EDIT BELOW THIS LINE
+        var d = document, s = d.createElement('script');
+        
+        s.src = '//hetaoof.disqus.com/embed.js';
+        
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
 
-<p>          }
-     };</p>
+            
+            
+        </footer>
 
-<p>     @override
-     public void onCreate(Bundle bundle){
-          super.onCreate(bundle);
-          setContextView(R.layout.activity<em>sample</em>layout);
-          textView = (TextView)findViewById(R.id.textView);
-          handler.postDelayed(new Runnable(){</p>
+    </article>
 
-<p>               @override
-               public void run(){
-                    textView.setText(&quot;ok&quot;);
-               };</p>
+</main>
 
-<p>          },1000 * 60 * 10);
-     }
-}
-```</p>
+<aside class="read-next">
 
-<ul>
-<li>Error reason:</li>
-</ul>
+    <!-- [[! next_post ]] -->
+    
+        <a class="read-next-story no-cover" href="http://longlinht.github.io//java-references">
+            <section class="post">
+                <h2>Java References</h2>
+                <p>Before JDK 1.2, if a object isn't referenced by any variable, it can't be used...</p>
+            </section>
+        </a>
+    
+    <!-- [[! /next_post ]] -->
+    <!-- [[! prev_post ]] -->
+    
+        <a class="read-next-story prev no-cover" href="http://longlinht.github.io//memory-leak-in-android-development">
+            <section class="post">
+                <h2>Memory Leak in Android Development</h2>
+                <p><p>When programming Android, although java has GC mechanism, some our wrong code way and personal...</p>
+            </section>
+        </a>
+    
+    <!-- [[! /prev_post ]] -->
+</aside>
 
-<p>When execute the <code>SampleAcitvity</code>&#39;s <code>finish</code> method, the delayed messages will exist in main thread for 10 minutes before be processed, while this message contains reference to Handler, Handler is a anonymous inner class, it hold reference to external SampleAcivity, so cause SampleAcivity can&#39;t be recycled. Above <code>Runnable</code> also is a anonymous inner class, it also prevent SampleActivity to be recycled.</p>
-
-<ul>
-<li>Right way:</li>
-</ul>
-
-<p><strong>A static anonymous inner class instance will not hold reference to external class.</strong></p>
-<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">SampleActivity</span> <span class="kd">extends</span> <span class="n">Activity</span><span class="o">{</span>
-     <span class="kd">private</span> <span class="n">TextView</span> <span class="n">textView</span><span class="o">;</span>
-     <span class="kd">private</span> <span class="kd">static</span> <span class="kd">class</span> <span class="nc">MyHandler</span> <span class="kd">extends</span> <span class="n">Handler</span> <span class="o">{</span>
-
-     <span class="kd">private</span> <span class="kd">final</span> <span class="n">WeakReference</span><span class="o">&lt;</span><span class="n">SampleActivity</span><span class="o">&gt;</span> <span class="n">mActivity</span><span class="o">;</span>
-     <span class="kd">public</span> <span class="nf">MyHandler</span><span class="o">(</span><span class="n">SampleActivity</span> <span class="n">activity</span><span class="o">)</span> <span class="o">{</span>
-          <span class="n">mActivity</span> <span class="o">=</span> <span class="k">new</span> <span class="n">WeakReference</span><span class="o">&lt;</span><span class="n">SampleActivity</span><span class="o">&gt;(</span><span class="n">activity</span><span class="o">);</span>
-     <span class="o">}</span>
-
-     <span class="nd">@Override</span>
-     <span class="kd">public</span> <span class="kt">void</span> <span class="nf">handleMessage</span><span class="o">(</span><span class="n">Message</span> <span class="n">msg</span><span class="o">)</span> <span class="o">{</span>
-          <span class="n">SampleActivity</span> <span class="n">activity</span> <span class="o">=</span> <span class="n">mActivity</span><span class="o">.</span><span class="na">get</span><span class="o">();</span>
-               <span class="k">if</span> <span class="o">(</span><span class="n">activity</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
-
-               <span class="o">}</span>
-          <span class="o">}</span>
-     <span class="o">}</span>
-
-     <span class="kd">private</span> <span class="kd">final</span> <span class="n">MyHandler</span> <span class="n">handler</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">MyHandler</span><span class="o">(</span><span class="k">this</span><span class="o">);</span>
-
-     <span class="nd">@override</span>
-     <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onCreate</span><span class="o">(</span><span class="n">Bundle</span> <span class="n">bundle</span><span class="o">){</span>
-          <span class="kd">super</span><span class="o">.</span><span class="na">onCreate</span><span class="o">(</span><span class="n">bundle</span><span class="o">);</span>
-          <span class="n">setContextView</span><span class="o">(</span><span class="n">R</span><span class="o">.</span><span class="na">layout</span><span class="o">.</span><span class="na">activity_sample_layout</span><span class="o">);</span>
-          <span class="n">textView</span> <span class="o">=</span> <span class="o">(</span><span class="n">TextView</span><span class="o">)</span><span class="n">findViewById</span><span class="o">(</span><span class="n">R</span><span class="o">.</span><span class="na">id</span><span class="o">.</span><span class="na">textView</span><span class="o">);</span>
-          <span class="n">handler</span><span class="o">.</span><span class="na">postDelayed</span><span class="o">(</span><span class="k">new</span> <span class="nf">MyRunnable</span><span class="o">(</span><span class="n">textView</span><span class="o">),</span><span class="mi">1000</span> <span class="o">*</span> <span class="mi">60</span> <span class="o">*</span> <span class="mi">10</span><span class="o">);</span>
-     <span class="o">}</span>
-
-     <span class="kd">private</span> <span class="kd">static</span> <span class="kd">class</span> <span class="nc">MyRunnable</span> <span class="kd">implements</span> <span class="n">Runnable</span><span class="o">{</span>
-
-        <span class="c1">// use WeakReference to hold external class&#39;s member variables.</span>
-        <span class="kd">private</span> <span class="n">WeakReference</span><span class="o">&lt;</span><span class="n">TextView</span><span class="o">&gt;</span> <span class="n">textViewWeakReference</span><span class="o">;</span>
-        <span class="kd">public</span> <span class="nf">MyRunnable</span><span class="o">(</span><span class="n">TextView</span> <span class="n">textView</span><span class="o">){</span>
-             <span class="n">textViewWeakReference</span> <span class="o">=</span> <span class="k">new</span> <span class="n">WeakReference</span><span class="o">&lt;</span><span class="n">TextView</span><span class="o">&gt;(</span><span class="n">textView</span><span class="o">);</span>
-        <span class="o">}</span>
-
-        <span class="nd">@override</span>
-        <span class="kd">public</span> <span class="kt">void</span> <span class="nf">run</span><span class="o">(){</span>
-              <span class="kd">final</span> <span class="n">TextView</span> <span class="n">textView</span> <span class="o">=</span> <span class="n">textViewWeakReference</span><span class="o">.</span><span class="na">get</span><span class="o">();</span>
-              <span class="k">if</span><span class="o">(</span><span class="n">textView</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">){</span>
-                   <span class="n">textView</span><span class="o">.</span><span class="na">setText</span><span class="o">(</span><span class="s">&quot;OK&quot;</span><span class="o">);</span>
-              <span class="o">}</span>
-
-        <span class="o">};</span>
-     <span class="o">}</span>
-<span class="o">}</span>
-</code></pre></div>
-<h4>Senario 3: Forgot call removeCallbacksAndMessages after use handler</h4>
-
-<ul>
-<li>Right way:</li>
-</ul>
-
-<p>In onDestroy call this method:</p>
-<div class="highlight"><pre><code class="language-java" data-lang="java">     <span class="n">handler</span><span class="o">.</span><span class="na">removeCallbacksAndMessages</span><span class="o">(</span><span class="kc">null</span><span class="o">);</span>
-</code></pre></div>
-<p>This call passed null will destroy all Runnable and Message related to handler.</p>
-
-<h4>Conclude</h4>
-
-<ul>
-<li><p>Don&#39;t let object whose lifecycle longer then Acivity hold reference to Acivity.</p></li>
-<li><p>Prefer to use Application&#39;s Context rather than Activity&#39;s Context.</p></li>
-<li><p>Prefer to use static anonymous inner class rather than non-static.</p></li>
-<li><p>Use weak reference to hold external class&#39;s member variables.</p></li>
-<li><p>GC can&#39;t fix memory leak.</p></li>
-</ul>
-
-<h4>Reference</h4>
-
-<blockquote>
-<p>In Android, Handler classes should be static or leaks might occur, Messages enqueued on the application thread’s MessageQueue also retain their target Handler. If the Handler is an inner class, its outer class will be retained as well. To avoid leaking the outer class, declare the Handler as a static nested class with a WeakReference to its outer class</p>
-
-<p>When an Android application first starts, the framework creates a Looper object for the application’s main thread. A Looper implements a simple message queue, processing Message objects in a loop one after another. All major application framework events (such as Activity lifecycle method calls, button clicks, etc.) are contained inside Message objects, which are added to the Looper’s message queue and are processed one-by-one. The main thread’s Looper exists throughout the application’s lifecycle.</p>
-
-<p>When a Handler is instantiated on the main thread, it is associated with the Looper’s message queue. Messages posted to the message queue will hold a reference to the Handler so that the framework can call Handler#handleMessage(Message) when the Looper eventually processes the message.</p>
-
-<p>In Java, non-static inner and anonymous classes hold an implicit reference to their outer class. Static inner classes, on the other hand, do not.</p>
-</blockquote>
-
-	  ]]></description>
-	</item>
-
-	<item>
-	  <title>Hello World</title>
-	  <link>//hello-world</link>
-	  <author>Tao He</author>
-	  <pubDate>2016-06-09T00:00:00+08:00</pubDate>
-	  <guid>//hello-world</guid>
-	  <description><![CDATA[
-	     <p>This is my first post for Machine category, I named it &#39;Hello World&#39; to start my blog. Because many developers start their first program with a single line code to print &#39;Hello World&#39;. Certainly my first line code also is &#39;Hello World&#39; in C programming language. I hope this will be a good start!</p>
-
-<p>Before Starting this blog, I think about this expression way for a long time, I didin&#39;t know what I should write, I also can&#39;t sure I could write down some useful, excellent articles. I even worry about my articles would be some non-value pieces. But now, I never care about it. I will do my best to write some useful, valuable IT articles.</p>
-
-<p>To make a good start, I need figure out what I shoud write. I think about some categories below:</p>
-
-<ul>
-<li><p>General IT</p></li>
-<li><p>Programming Miscellaneous</p></li>
-<li><p>Programming</p></li>
-<li><p>Computer Science</p></li>
-</ul>
-
-	  ]]></description>
-	</item>
+<!-- /post -->
 
 
-</channel>
-</rss>
+        <footer class="site-footer clearfix">
+          <section class="copyright"><a href="/">Dancing with Machine, Human and God</a> &copy; 2016</section>
+        </footer>
+    </div>
+    <!-- [[! Ghost outputs important scripts and data with this tag ]] -->
+    <script type="text/javascript" src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+    <!-- [[! The main JavaScript file for Casper ]] -->
+    <script type="text/javascript" src="/assets/js/jquery.fitvids.js"></script>
+    <script type="text/javascript" src="/assets/js/index.js"></script>
+
+    <!-- Add Google Analytics  -->
+        <!-- Google Analytics Tracking code -->
+     <script>
+	    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+	    ga('create', 'UA-78960009-1', 'auto');
+	    ga('send', 'pageview');
+
+     </script>
+   
+</body>
+</html>

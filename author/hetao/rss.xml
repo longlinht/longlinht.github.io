@@ -64,6 +64,390 @@ When you construct a phantom reference you must always pass in a <code>Reference
 	</item>
 
 	<item>
+	  <title>Android Binder Mechanism</title>
+	  <link>//android-binder-mechanism</link>
+	  <author>Tao He</author>
+	  <pubDate>2016-08-05T03:00:00+08:00</pubDate>
+	  <guid>//android-binder-mechanism</guid>
+	  <description><![CDATA[
+	     <h4>What is Binder</h4>
+
+<ul>
+<li>The Binder mechanism has started from a simple idea. </li>
+</ul>
+
+<blockquote>
+<p>&quot;Let requests and responses be written in an area where all processes can share and let each process refer to the memory address.&quot; </p>
+</blockquote>
+
+<ul>
+<li><p>Binder is a IPC mechanism.</p></li>
+<li><p>Binder implementation is based on <strong>OpenBinder</strong>.</p></li>
+<li><p>Binder refers to a kernel memory which is shared between all processes to minimize the overhead caused by memory copy. </p></li>
+<li><p>It provides the Remote Procedure Call (RPC) framework written in C++ for high productivity.</p></li>
+</ul>
+
+<h4>Why need Binder</h4>
+
+<ul>
+<li><p>Android need IPC mechanism because of its loosely coupled component design. Every application in Android is comprised of some components ,like Activity or Service, they maybe in same process or not. If they are in different process, they need communicate each other.</p></li>
+<li><p>All of the default system functions of Android are provided as the <strong>server process</strong> type. In other words, to use the functions such as <code>SurfaceFlinger</code> or <code>AudioFlinger</code>, a request should be made as a separate process that runs on the user mode. As all system services are provided as a <strong>server process</strong>, a mechanism to send requests and responses to other processes is necessary. In Android it is called the Binder. Android uses functions provided by other processes through Binder.</p></li>
+<li><p>Android is based on Linux, Linux has a lot of IPC mechanism. But, Android didn&#39;t adopted it. Maybe because of performance and low memory of Android device.</p></li>
+</ul>
+
+<h4>The Benefits of Using Binder Mechanism</h4>
+
+<ul>
+<li><p>Easy to expand or remove functions: It is easy to add a new system service or remove an existing function.</p></li>
+<li><p>Easy to port: Porting to a new processor requires few changes. A toolchain for porting is provided.</p></li>
+<li><p>Easy to test: Tests are limited by the component unit, so it is not necessary to test the entire services, and more strict tests are available.</p></li>
+<li><p>Support for distribution system: Process communication is based on the Binder, so it guarantees transparency in location between components.</p></li>
+</ul>
+
+<h4>Binder Driver</h4>
+
+<p>A Binder Driver is implemented to use the kernel space. The role of the Binder driver is to convert the memory address that each process has mapped with the memory address of the kernel space for reference.</p>
+
+<h4>Understanding Binder Mechanism through Media Service</h4>
+
+<h5><code>ServiceManager</code></h5>
+
+<p>ServiceManager is a system manager which manages all services in Android.</p>
+
+<h5>What is Media Service</h5>
+
+<ul>
+<li><p>Media Service is a general C++ application, is core of android media.</p></li>
+<li><p>Media Service is a general service Android supplied.</p></li>
+<li><p>Source code location: <em>frameworks/base/media/mediaserver/main_mediaserver.cpp</em></p></li>
+<li><p>Entry point:</p></li>
+</ul>
+<div class="highlight"><pre><code class="language-c++" data-lang="c++"><span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span><span class="o">**</span> <span class="n">argv</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="c1">// Require a ServiceManager proxy</span>
+    <span class="n">sp</span><span class="o">&lt;</span><span class="n">ProcessState</span><span class="o">&gt;</span> <span class="n">proc</span><span class="p">(</span><span class="n">ProcessState</span><span class="o">::</span><span class="n">self</span><span class="p">());</span>
+    <span class="n">sp</span><span class="o">&lt;</span><span class="n">IServiceManager</span><span class="o">&gt;</span> <span class="n">sm</span> <span class="o">=</span> <span class="n">defaultServiceManager</span><span class="p">();</span>
+    <span class="n">LOGI</span><span class="p">(</span><span class="s">&quot;ServiceManager: %p&quot;</span><span class="p">,</span> <span class="n">sm</span><span class="p">.</span><span class="n">get</span><span class="p">());</span>
+    <span class="n">AudioFlinger</span><span class="o">::</span><span class="n">instantiate</span><span class="p">();</span>
+    <span class="n">MediaPlayerService</span><span class="o">::</span><span class="n">instantiate</span><span class="p">();</span>
+    <span class="n">CameraService</span><span class="o">::</span><span class="n">instantiate</span><span class="p">();</span>
+    <span class="n">AudioPolicyService</span><span class="o">::</span><span class="n">instantiate</span><span class="p">();</span>
+
+    <span class="c1">// Forever process messages sent from Binder.</span>
+    <span class="n">ProcessState</span><span class="o">::</span><span class="n">self</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">startThreadPool</span><span class="p">();</span>
+    <span class="n">IPCThreadState</span><span class="o">::</span><span class="n">self</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">joinThreadPool</span><span class="p">();</span>
+<span class="p">}</span>
+</code></pre></div>
+<ul>
+<li><p>Media server service has four sub-module.</p>
+
+<ul>
+<li><code>AudioFlinger</code></li>
+<li><code>MediaPlayerService</code></li>
+<li><code>CameraService</code></li>
+<li><code>AudioPolicyService</code></li>
+</ul></li>
+</ul>
+
+<h5><code>ProcessState</code></h5>
+
+<ul>
+<li><p>Source code location: <em>frameworks/base/libs/binder/ProcessState.cpp</em></p></li>
+<li><p>Media Service first call <code>ProcessState::self()</code></p></li>
+</ul>
+<div class="highlight"><pre><code class="language-c++" data-lang="c++"><span class="n">sp</span><span class="o">&lt;</span><span class="n">ProcessState</span><span class="o">&gt;</span> <span class="n">ProcessState</span><span class="o">::</span><span class="n">self</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">gProcess</span> <span class="o">!=</span> <span class="nb">NULL</span><span class="p">)</span> <span class="k">return</span> <span class="n">gProcess</span><span class="p">;</span>
+
+    <span class="n">AutoMutex</span> <span class="nf">_l</span><span class="p">(</span><span class="n">gProcessMutex</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">gProcess</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="n">gProcess</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ProcessState</span><span class="p">;</span>
+    <span class="k">return</span> <span class="n">gProcess</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+<ul>
+<li>Then <code>ProcessState::self()</code> call ProcessState constructor</li>
+</ul>
+<div class="highlight"><pre><code class="language-c++" data-lang="c++"><span class="n">ProcessState</span><span class="o">::</span><span class="n">ProcessState</span><span class="p">()</span>
+    <span class="o">:</span> <span class="n">mDriverFD</span><span class="p">(</span><span class="n">open_driver</span><span class="p">())</span>
+    <span class="p">,</span> <span class="n">mVMStart</span><span class="p">(</span><span class="n">MAP_FAILED</span><span class="p">)</span> <span class="c1">// Map the memory start address</span>
+    <span class="p">,</span> <span class="n">mManagesContexts</span><span class="p">(</span><span class="nb">false</span><span class="p">)</span>
+    <span class="p">,</span> <span class="n">mBinderContextCheckFunc</span><span class="p">(</span><span class="nb">NULL</span><span class="p">)</span>
+    <span class="p">,</span> <span class="n">mBinderContextUserData</span><span class="p">(</span><span class="nb">NULL</span><span class="p">)</span>
+    <span class="p">,</span> <span class="n">mThreadPoolStarted</span><span class="p">(</span><span class="nb">false</span><span class="p">)</span>
+    <span class="p">,</span> <span class="n">mThreadPoolSeq</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">mDriverFD</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+        <span class="c1">// XXX Ideally, there should be a specific define for whether we</span>
+        <span class="c1">// have mmap (or whether we could possibly have the kernel module</span>
+        <span class="c1">// availabla).</span>
+<span class="cp">#if !defined(HAVE_WIN32_IPC)</span>
+        <span class="c1">// mmap the binder, providing a chunk of virtual address space to receive transactions.</span>
+        <span class="n">mVMStart</span> <span class="o">=</span> <span class="n">mmap</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">BINDER_VM_SIZE</span><span class="p">,</span> <span class="n">PROT_READ</span><span class="p">,</span> <span class="n">MAP_PRIVATE</span> <span class="o">|</span> <span class="n">MAP_NORESERVE</span><span class="p">,</span> <span class="n">mDriverFD</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">mVMStart</span> <span class="o">==</span> <span class="n">MAP_FAILED</span><span class="p">)</span> <span class="p">{</span>
+            <span class="c1">// *sigh*</span>
+            <span class="n">LOGE</span><span class="p">(</span><span class="s">&quot;Using /dev/binder failed: unable to mmap transaction memory.</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+            <span class="n">close</span><span class="p">(</span><span class="n">mDriverFD</span><span class="p">);</span>
+            <span class="n">mDriverFD</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+        <span class="p">}</span>
+<span class="cp">#else</span>
+        <span class="n">mDriverFD</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+<span class="cp">#endif</span>
+    <span class="p">}</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">mDriverFD</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+        <span class="c1">// Need to run without the driver, starting our own thread pool.</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<ul>
+<li><p><code>open_driver()</code> function</p>
+
+<ul>
+<li>Very important function call to open a virtual device for communication.</li>
+<li>This functon will open this device <strong>/dev/binder</strong>.</li>
+</ul></li>
+<li><p>When <code>ProcessState::self()</code> complete, it had do two important jobs:</p>
+
+<ul>
+<li>Open the virtual device <strong>/dev/binder</strong>, so there has been a channel to communicate with kernel.</li>
+<li>Map <strong>/dev/binder</strong> device&#39;s fd to memory.<br></li>
+</ul></li>
+</ul>
+
+<h5><code>defaultServiceManager()</code></h5>
+
+<ul>
+<li><p>Source code location: <em>frameworks/base/libs/binder/IServiceManager.cpp</em></p></li>
+<li><p>Trace the source code call path, finally find that this call <code>sp&lt;IServiceManager&gt; sm = defaultServiceManager()</code> equals <code>gDefaultServiceManager = interface_cast&lt;IServiceManager&gt;(new BpBinder(0))</code>.</p></li>
+<li><p>BpBinder</p>
+
+<ul>
+<li>Source code location: <em>frameworks/base/libs/binder/BpBinder.cpp</em></li>
+<li>BpBinder constructor:</li>
+</ul></li>
+</ul>
+<div class="highlight"><pre><code class="language-c++" data-lang="c++"><span class="n">BpBinder</span><span class="o">::</span><span class="n">BpBinder</span><span class="p">(</span><span class="kt">int32_t</span> <span class="n">handle</span><span class="p">)</span>
+    <span class="o">:</span> <span class="n">mHandle</span><span class="p">(</span><span class="n">handle</span><span class="p">)</span>
+    <span class="p">,</span> <span class="n">mAlive</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    <span class="p">,</span> <span class="n">mObitsSent</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+    <span class="p">,</span> <span class="n">mObituaries</span><span class="p">(</span><span class="nb">NULL</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">LOGV</span><span class="p">(</span><span class="s">&quot;Creating BpBinder %p handle %d</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="k">this</span><span class="p">,</span> <span class="n">mHandle</span><span class="p">);</span>
+
+    <span class="n">extendObjectLifetime</span><span class="p">(</span><span class="n">OBJECT_LIFETIME_WEAK</span><span class="p">);</span>
+    <span class="n">IPCThreadState</span><span class="o">::</span><span class="n">self</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">incWeakHandle</span><span class="p">(</span><span class="n">handle</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div>
+<ul>
+<li><p>What did <code>interface_cast</code> do?</p>
+
+<ul>
+<li><code>interface_cast</code> defined in <em>/home/tao/android_source/frameworks/base/include/binder/IInterface.h</em></li>
+<li><code>interface_cast</code> defination</li>
+</ul></li>
+</ul>
+<div class="highlight"><pre><code class="language-c++" data-lang="c++"><span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">INTERFACE</span><span class="o">&gt;</span>
+<span class="kr">inline</span> <span class="n">sp</span><span class="o">&lt;</span><span class="n">INTERFACE</span><span class="o">&gt;</span> <span class="n">interface_cast</span><span class="p">(</span><span class="k">const</span> <span class="n">sp</span><span class="o">&lt;</span><span class="n">IBinder</span><span class="o">&gt;&amp;</span> <span class="n">obj</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">return</span> <span class="n">INTERFACE</span><span class="o">::</span><span class="n">asInterface</span><span class="p">(</span><span class="n">obj</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div>
+<ul>
+<li>So <code>gDefaultServiceManager = interface_cast&lt;IServiceManager&gt;(new BpBinder(0))</code> statement call <code>interface_cast</code> will equals:</li>
+</ul>
+<div class="highlight"><pre><code class="language-c++" data-lang="c++"><span class="kr">inline</span> <span class="n">sp</span><span class="o">&lt;</span><span class="n">IServiceManager</span><span class="o">&gt;</span> <span class="n">interface_cast</span><span class="p">(</span><span class="k">const</span> <span class="n">sp</span><span class="o">&lt;</span><span class="n">IBinder</span><span class="o">&gt;&amp;</span> <span class="n">obj</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">return</span> <span class="n">IServiceManager</span><span class="o">::</span><span class="n">asInterface</span><span class="p">(</span><span class="n">obj</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div>
+<ul>
+<li><p>We need find clue in <code>IServiceManager</code></p>
+
+<ul>
+<li>Source code location: <em>frameworks/base/include/binder/IInterface.h</em></li>
+<li><code>IServiceManager</code> defination</li>
+</ul></li>
+</ul>
+<div class="highlight"><pre><code class="language-c++" data-lang="c++"><span class="k">class</span> <span class="nc">IServiceManager</span> <span class="o">:</span> <span class="k">public</span> <span class="n">IInterface</span>
+<span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+    <span class="n">DECLARE_META_INTERFACE</span><span class="p">(</span><span class="n">ServiceManager</span><span class="p">);</span>
+
+    <span class="cm">/**</span>
+<span class="cm">     * Retrieve an existing service, blocking for a few seconds</span>
+<span class="cm">     * if it doesn&#39;t yet exist.</span>
+<span class="cm">     */</span>
+    <span class="k">virtual</span> <span class="n">sp</span><span class="o">&lt;</span><span class="n">IBinder</span><span class="o">&gt;</span>         <span class="n">getService</span><span class="p">(</span> <span class="k">const</span> <span class="n">String16</span><span class="o">&amp;</span> <span class="n">name</span><span class="p">)</span> <span class="k">const</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+
+    <span class="cm">/**</span>
+<span class="cm">     * Retrieve an existing service, non-blocking.</span>
+<span class="cm">     */</span>
+    <span class="k">virtual</span> <span class="n">sp</span><span class="o">&lt;</span><span class="n">IBinder</span><span class="o">&gt;</span>         <span class="n">checkService</span><span class="p">(</span> <span class="k">const</span> <span class="n">String16</span><span class="o">&amp;</span> <span class="n">name</span><span class="p">)</span> <span class="k">const</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+
+    <span class="cm">/**</span>
+<span class="cm">     * Register a service.</span>
+<span class="cm">     */</span>
+    <span class="k">virtual</span> <span class="kt">status_t</span>            <span class="n">addService</span><span class="p">(</span> <span class="k">const</span> <span class="n">String16</span><span class="o">&amp;</span> <span class="n">name</span><span class="p">,</span>
+                                            <span class="k">const</span> <span class="n">sp</span><span class="o">&lt;</span><span class="n">IBinder</span><span class="o">&gt;&amp;</span> <span class="n">service</span><span class="p">)</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+
+    <span class="cm">/**</span>
+<span class="cm">     * Return list of all existing services.</span>
+<span class="cm">     */</span>
+    <span class="k">virtual</span> <span class="n">Vector</span><span class="o">&lt;</span><span class="n">String16</span><span class="o">&gt;</span>    <span class="n">listServices</span><span class="p">()</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+
+    <span class="k">enum</span> <span class="p">{</span>
+        <span class="n">GET_SERVICE_TRANSACTION</span> <span class="o">=</span> <span class="n">IBinder</span><span class="o">::</span><span class="n">FIRST_CALL_TRANSACTION</span><span class="p">,</span>
+        <span class="n">CHECK_SERVICE_TRANSACTION</span><span class="p">,</span>
+        <span class="n">ADD_SERVICE_TRANSACTION</span><span class="p">,</span>
+        <span class="n">LIST_SERVICES_TRANSACTION</span><span class="p">,</span>
+    <span class="p">};</span>
+<span class="p">};</span>
+</code></pre></div><div class="highlight"><pre><code class="language-text" data-lang="text">* We need trace this macro `DECLARE_META_INTERFACE(ServiceManager)` 
+</code></pre></div><div class="highlight"><pre><code class="language-c++" data-lang="c++"><span class="cp">#define DECLARE_META_INTERFACE(INTERFACE)                             </span>
+    <span class="k">static</span> <span class="k">const</span> <span class="n">String16</span> <span class="n">descriptor</span><span class="p">;</span>                                 
+    <span class="k">static</span> <span class="n">sp</span><span class="o">&lt;</span><span class="n">I</span><span class="err">##</span><span class="n">INTERFACE</span><span class="o">&gt;</span> <span class="n">asInterface</span><span class="p">(</span><span class="k">const</span> <span class="n">sp</span><span class="o">&lt;</span><span class="n">IBinder</span><span class="o">&gt;&amp;</span> <span class="n">obj</span><span class="p">);</span>      
+    <span class="k">virtual</span> <span class="k">const</span> <span class="n">String16</span><span class="o">&amp;</span> <span class="n">getInterfaceDescriptor</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span>           
+    <span class="n">I</span><span class="err">##</span><span class="n">INTERFACE</span><span class="p">();</span>                                                   
+    <span class="k">virtual</span> <span class="o">~</span><span class="n">I</span><span class="err">##</span><span class="n">INTERFACE</span><span class="p">();</span>                                          
+
+
+<span class="cp">#define IMPLEMENT_META_INTERFACE(INTERFACE, NAME)                     </span>
+    <span class="k">const</span> <span class="n">String16</span> <span class="n">I</span><span class="err">##</span><span class="n">INTERFACE</span><span class="o">::</span><span class="n">descriptor</span><span class="p">(</span><span class="n">NAME</span><span class="p">);</span>                    
+    <span class="k">const</span> <span class="n">String16</span><span class="o">&amp;</span> <span class="n">I</span><span class="err">##</span><span class="n">INTERFACE</span><span class="o">::</span><span class="n">getInterfaceDescriptor</span><span class="p">()</span> <span class="k">const</span> <span class="p">{</span>    
+        <span class="k">return</span> <span class="n">I</span><span class="err">##</span><span class="n">INTERFACE</span><span class="o">::</span><span class="n">descriptor</span><span class="p">;</span>                              
+    <span class="p">}</span>                                                                 
+    <span class="n">sp</span><span class="o">&lt;</span><span class="n">I</span><span class="err">##</span><span class="n">INTERFACE</span><span class="o">&gt;</span> <span class="n">I</span><span class="err">##</span><span class="n">INTERFACE</span><span class="o">::</span><span class="n">asInterface</span><span class="p">(</span><span class="k">const</span> <span class="n">sp</span><span class="o">&lt;</span><span class="n">IBinder</span><span class="o">&gt;&amp;</span> <span class="n">obj</span><span class="p">)</span>
+    <span class="p">{</span>                                                                 
+        <span class="n">sp</span><span class="o">&lt;</span><span class="n">I</span><span class="err">##</span><span class="n">INTERFACE</span><span class="o">&gt;</span> <span class="n">intr</span><span class="p">;</span>                                        
+        <span class="k">if</span> <span class="p">(</span><span class="n">obj</span> <span class="o">!=</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>                                            
+            <span class="n">intr</span> <span class="o">=</span> <span class="k">static_cast</span><span class="o">&lt;</span><span class="n">I</span><span class="err">##</span><span class="n">INTERFACE</span><span class="o">*&gt;</span><span class="p">(</span>                        
+                <span class="n">obj</span><span class="o">-&gt;</span><span class="n">queryLocalInterface</span><span class="p">(</span>                             
+                        <span class="n">I</span><span class="err">##</span><span class="n">INTERFACE</span><span class="o">::</span><span class="n">descriptor</span><span class="p">).</span><span class="n">get</span><span class="p">());</span>             
+            <span class="k">if</span> <span class="p">(</span><span class="n">intr</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>                                       
+                <span class="n">intr</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Bp</span><span class="err">##</span><span class="n">INTERFACE</span><span class="p">(</span><span class="n">obj</span><span class="p">);</span>                        
+            <span class="p">}</span>                                                         
+        <span class="p">}</span>                                                             
+        <span class="k">return</span> <span class="n">intr</span><span class="p">;</span>                                                  
+    <span class="p">}</span>                                                                 
+    <span class="n">I</span><span class="err">##</span><span class="n">INTERFACE</span><span class="o">::</span><span class="n">I</span><span class="err">##</span><span class="n">INTERFACE</span><span class="p">()</span> <span class="p">{</span> <span class="p">}</span>                                  
+    <span class="n">I</span><span class="err">##</span><span class="n">INTERFACE</span><span class="o">::~</span><span class="n">I</span><span class="err">##</span><span class="n">INTERFACE</span><span class="p">()</span> <span class="p">{</span> <span class="p">}</span>                                 
+</code></pre></div>
+<ul>
+<li>Finally, we find that <code>interface_cast&lt;IServiceManager&gt;(new BpBinder(0))</code> statement actually return a <code>BpServiceManager</code> object. It means <code>sp&lt;IServiceManager&gt; sm = defaultServiceManager()</code> acquired a <code>BpServiceManager</code> object.</li>
+</ul>
+
+<h5><code>BpServiceManager</code></h5>
+
+<ul>
+<li>Bp stands for Binder proxy, it means <code>BpServiceManager</code> is <code>ServiceManager</code>&#39;s proxy to Binder.</li>
+</ul>
+
+<h5><code>MediaPlayerService</code></h5>
+
+<ul>
+<li><p>Source code location: <em>frameworks/base/media/libmediaplayerservice/MediaPlayerService.cpp</em></p></li>
+<li><p>Defination and instantiation </p></li>
+</ul>
+<div class="highlight"><pre><code class="language-c++" data-lang="c++"><span class="kt">void</span> <span class="n">MediaPlayerService</span><span class="o">::</span><span class="n">instantiate</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">defaultServiceManager</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">addService</span><span class="p">(</span>
+            <span class="n">String16</span><span class="p">(</span><span class="s">&quot;media.player&quot;</span><span class="p">),</span> <span class="k">new</span> <span class="n">MediaPlayerService</span><span class="p">());</span>
+<span class="p">}</span>
+
+<span class="n">MediaPlayerService</span><span class="o">::</span><span class="n">MediaPlayerService</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="n">LOGV</span><span class="p">(</span><span class="s">&quot;MediaPlayerService created&quot;</span><span class="p">);</span>
+    <span class="n">mNextConnId</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="n">MediaPlayerService</span><span class="o">::~</span><span class="n">MediaPlayerService</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="n">LOGV</span><span class="p">(</span><span class="s">&quot;MediaPlayerService destroyed&quot;</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div>
+<ul>
+<li><p><code>MediaPlayerService</code> derivatived from <code>BnMediaPlayerService</code></p></li>
+<li><p>Bn stands for Binder native.</p></li>
+<li><p>Add <code>MediaPlayerService</code> to <code>ServiceManager</code></p></li>
+</ul>
+<div class="highlight"><pre><code class="language-c++" data-lang="c++"><span class="k">virtual</span> <span class="kt">status_t</span> <span class="nf">addService</span><span class="p">(</span><span class="k">const</span> <span class="n">String16</span><span class="o">&amp;</span> <span class="n">name</span><span class="p">,</span> <span class="k">const</span> <span class="n">sp</span><span class="o">&lt;</span><span class="n">IBinder</span><span class="o">&gt;&amp;</span> <span class="n">service</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">Parcel</span> <span class="n">data</span><span class="p">,</span> <span class="n">reply</span><span class="p">;</span>
+    <span class="n">data</span><span class="p">.</span><span class="n">writeInterfaceToken</span><span class="p">(</span><span class="n">IServiceManager</span><span class="o">::</span><span class="n">getInterfaceDescriptor</span><span class="p">());</span>
+    <span class="n">data</span><span class="p">.</span><span class="n">writeString16</span><span class="p">(</span><span class="n">name</span><span class="p">);</span>
+    <span class="n">data</span><span class="p">.</span><span class="n">writeStrongBinder</span><span class="p">(</span><span class="n">service</span><span class="p">);</span>
+    <span class="c1">// remote() return BpBinder object</span>
+    <span class="kt">status_t</span> <span class="n">err</span> <span class="o">=</span> <span class="n">remote</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">transact</span><span class="p">(</span><span class="n">ADD_SERVICE_TRANSACTION</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">reply</span><span class="p">);</span>
+    <span class="k">return</span> <span class="n">err</span> <span class="o">==</span> <span class="n">NO_ERROR</span> <span class="o">?</span> <span class="n">reply</span><span class="p">.</span><span class="n">readInt32</span><span class="p">()</span> <span class="o">:</span> <span class="n">err</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+<ul>
+<li><code>remote()</code> return BpBinder</li>
+</ul>
+<div class="highlight"><pre><code class="language-c++" data-lang="c++"><span class="kt">status_t</span> <span class="n">BpBinder</span><span class="o">::</span><span class="n">transact</span><span class="p">(</span><span class="kt">uint32_t</span> <span class="n">code</span><span class="p">,</span> <span class="k">const</span> <span class="n">Parcel</span><span class="o">&amp;</span> <span class="n">data</span><span class="p">,</span> <span class="n">Parcel</span><span class="o">*</span> <span class="n">reply</span><span class="p">,</span> <span class="kt">uint32_t</span> <span class="n">flags</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="c1">// Once a binder has died, it will never come back to life.</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">mAlive</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kt">status_t</span> <span class="n">status</span> <span class="o">=</span> <span class="n">IPCThreadState</span><span class="o">::</span><span class="n">self</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">transact</span><span class="p">(</span>
+            <span class="n">mHandle</span><span class="p">,</span> <span class="n">code</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">reply</span><span class="p">,</span> <span class="n">flags</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">status</span> <span class="o">==</span> <span class="n">DEAD_OBJECT</span><span class="p">)</span> <span class="n">mAlive</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="k">return</span> <span class="n">status</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">return</span> <span class="n">DEAD_OBJECT</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+<ul>
+<li><p><code>IPCThreadState</code> do with transaction, write add service command and wait for response.</p></li>
+<li><p><code>BpServiceManager</code> had sent a add service message, but who receive and process it?</p></li>
+<li><p><code>BnServiceManager</code>? unfortunately it doesn&#39;t exist. service do same job.</p></li>
+<li><p>service</p>
+
+<ul>
+<li>service is a general c++ applcation.</li>
+<li>Source code location: <em>frameworks/base/cmds/servicemanager/service_manager.c</em></li>
+<li>Entry point:</li>
+</ul></li>
+</ul>
+<div class="highlight"><pre><code class="language-c++" data-lang="c++"><span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span> <span class="o">**</span><span class="n">argv</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">struct</span> <span class="n">binder_state</span> <span class="o">*</span><span class="n">bs</span><span class="p">;</span>
+    <span class="c1">//  BINDER_SERVICE_MANAGER is NULL, is a magic number</span>
+    <span class="kt">void</span> <span class="o">*</span><span class="n">svcmgr</span> <span class="o">=</span> <span class="n">BINDER_SERVICE_MANAGER</span><span class="p">;</span>
+
+    <span class="n">bs</span> <span class="o">=</span> <span class="n">binder_open</span><span class="p">(</span><span class="mi">128</span><span class="o">*</span><span class="mi">1024</span><span class="p">);</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">binder_become_context_manager</span><span class="p">(</span><span class="n">bs</span><span class="p">))</span> <span class="p">{</span>
+        <span class="n">LOGE</span><span class="p">(</span><span class="s">&quot;cannot become context manager (%s)</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">strerror</span><span class="p">(</span><span class="n">errno</span><span class="p">));</span>
+        <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="n">svcmgr_handle</span> <span class="o">=</span> <span class="n">svcmgr</span><span class="p">;</span>
+    <span class="n">binder_loop</span><span class="p">(</span><span class="n">bs</span><span class="p">,</span> <span class="n">svcmgr_handler</span><span class="p">);</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+<h4>Conclusion</h4>
+
+<p>Through tracing so many codes, the MediaPlayerService example maybe reveal the Binder&#39;s mysterious veil. We need write down some important conclusions:</p>
+
+<ul>
+<li><p>If two processes need communicate each other, one as Client, the other is Server, Server need registered to <code>ServiceManager</code>, if Client want request to Server, it need query Server&#39;s info from <code>ServiceManager</code>, based the qureid info, Client and Server can communicate each other. </p></li>
+<li><p>Client, Server, <code>ServiceManager</code> are implemented in use space, Binder is implemented in kernel space.</p></li>
+<li><p><code>ServiceManager</code> and Binder is implemented by Android, developers need implemente their Client and Server.</p></li>
+<li><p>Binder supplied device file <strong>/dev/binder</strong> communicate to user space. Client, Server and <code>ServiceManager</code> communicated to Binder through <code>open</code> and <code>ioctl</code> file operation function.</p></li>
+<li><p>Client and Server communicate each other immediately through Binder.</p></li>
+<li><p><code>ServiceManager</code> is a daemon process, it manages Server, supply interface to qurey Server function.</p></li>
+</ul>
+
+<p>If want to learn Android IPC mechanism deeply, a lot of Android source code need be read. Linus said:</p>
+
+<blockquote>
+<p>Read The Fucking Source Code.</p>
+</blockquote>
+
+	  ]]></description>
+	</item>
+
+	<item>
 	  <title>Memory Leak in Android Development</title>
 	  <link>//memory-leak-in-android-development</link>
 	  <author>Tao He</author>

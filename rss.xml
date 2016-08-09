@@ -19,6 +19,16 @@
       <dc:date>2016-08-10T00:00:00+08:00</dc:date>
     </item>
     <item>
+      <title>Android Thread Related Stuff</title>
+      <link>http://longlinht.github.io//thread-looper-handler-in-android</link>
+      <description>It's widely known that it's illegal to update UI components directly from threads other than main thread in android. This a rule in Android world, we can't violate it. But, so many situations we need 
+update UI when we finish something in separated thread. This is a basic problem, it will refer more important concepts related thread.
+
+</description>
+      <pubDate>Sat, 06 Aug 2016 03:00:00 +0800</pubDate>
+      <dc:date>2016-08-06T03:00:00+08:00</dc:date>
+    </item>
+    <item>
       <title>Android Binder Mechanism</title>
       <link>http://longlinht.github.io//android-binder-mechanism</link>
       <description>#### What is Binder

@@ -56,6 +56,75 @@ When you construct a phantom reference you must always pass in a &lt;code&gt;Ref
       </item>
     
       <item>
+        <title>Android Thread Related Stuff</title>
+        <description>&lt;p&gt;It&amp;#39;s widely known that it&amp;#39;s illegal to update UI components directly from threads other than main thread in android. This a rule in Android world, we can&amp;#39;t violate it. But, so many situations we need 
+update UI when we finish something in separated thread. This is a basic problem, it will refer more important concepts related thread.&lt;/p&gt;
+
+&lt;h4&gt;&lt;code&gt;Looper&lt;/code&gt;&lt;/h4&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;Class used to run a message loop for a thread.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;The &lt;code&gt;Looper&lt;/code&gt; class maintains a synchronized &lt;code&gt;MessageQueue&lt;/code&gt;, which contains a list messages.It reads and processes items from a &lt;code&gt;MessageQueue&lt;/code&gt;.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Threads by default do not have a message loop associated with them, to create one, call &lt;code&gt;prepare()&lt;/code&gt; in the thread that is to run the loop, and then &lt;code&gt;loop()&lt;/code&gt; to have it process messages until the loop is stopped.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;It&amp;#39;s associated with the thread within which the &lt;code&gt;Looper&lt;/code&gt; is created. This association is kept forever and can&amp;#39;t be broken nor changed. Also note that a thread can&amp;#39;t be associated with more than one Looper. &lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;The &lt;code&gt;Looper&lt;/code&gt; class is usually used in conjunction with a &lt;code&gt;HandlerThread&lt;/code&gt; (a subclass of Thread).&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;There are 2 methods to terminate a Looper:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Looper.quit()&lt;/li&gt;
+&lt;li&gt;Looper.quitSafely() &lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Most interaction with a message loop is through the &lt;code&gt;Handler&lt;/code&gt; class.&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h4&gt;&lt;code&gt;Handler&lt;/code&gt;&lt;/h4&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;Allow you send and process &lt;code&gt;Message&lt;/code&gt; and &lt;code&gt;Runnable&lt;/code&gt; objects associated with a thread&amp;#39;s &lt;code&gt;MessageQueue&lt;/code&gt;. &lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Each &lt;code&gt;Handler&lt;/code&gt; instance is associated with a single thread and that thread&amp;#39;s message queue. Multiple Handler instances can be bound to the same thread.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;It is bound to the thread / message queue of the thread that is creating it.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;There are two main uses for a Handler: &lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;To schedule messages and runnables to be executed as some point in the future. &lt;/li&gt;
+&lt;li&gt;To enqueue an action to be performed on a different thread than your own.&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h4&gt;&lt;code&gt;Message&lt;/code&gt;&lt;/h4&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;Defines a message containing a description and arbitrary data object that can be sent to a Handler. This object contains two extra int fields and an extra object field that allow you to not do allocations in many cases.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;While the constructor of Message is public, the best way to get one of these is to call &lt;code&gt;Message.obtain()&lt;/code&gt; or one of the &lt;code&gt;Handler.obtainMessage()&lt;/code&gt; methods, which will pull them from a pool of recycled objects.&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h4&gt;&lt;code&gt;HandlerThread&lt;/code&gt;&lt;/h4&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;&lt;code&gt;HandlerThread&lt;/code&gt; is a handy class for starting a new thread that has a Looper.prepare(), Looper. &lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;You generally need a thread attached with a Looper when you want sequential execution of tasks without race conditions and keep a thread alive even after a particular task is completed so that it can be reused so that you don’t have to create new thread instances.&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Once a HandlerThread is started, it sets up queuing through a Looper and MessageQueue and waits for incoming messages to process:&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-java&quot; data-lang=&quot;java&quot;&gt;&lt;span class=&quot;n&quot;&gt;HandlerThread&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;handlerThread&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;HandlerThread&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;HandlerThread&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;handlerThread&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;start&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+
+&lt;span class=&quot;c1&quot;&gt;// Create a handler attached to the HandlerThread&amp;#39;s Looper&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;mHandler&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;Handler&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;handlerThread&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getLooper&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;())&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;nd&quot;&gt;@Override&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;handleMessage&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Message&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;msg&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;c1&quot;&gt;// Process messages here&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;};&lt;/span&gt;
+ 
+&lt;span class=&quot;c1&quot;&gt;// Now send messages using mHandler.sendMessage()&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</description>
+        <pubDate>Sat, 06 Aug 2016 03:00:00 +0800</pubDate>
+        <link>http://longlinht.github.io//thread-looper-handler-in-android</link>
+        <guid isPermaLink="true">http://longlinht.github.io//thread-looper-handler-in-android</guid>
+      </item>
+    
+      <item>
         <title>Android Binder Mechanism</title>
         <description>&lt;h4&gt;What is Binder&lt;/h4&gt;
 

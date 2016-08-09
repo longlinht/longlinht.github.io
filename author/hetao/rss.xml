@@ -67,7 +67,7 @@ When you construct a phantom reference you must always pass in a <code>Reference
 	  <title>Android Binder Mechanism</title>
 	  <link>//android-binder-mechanism</link>
 	  <author>Tao He</author>
-	  <pubDate>2016-08-05T03:00:00+08:00</pubDate>
+	  <pubDate>2016-08-03T03:00:00+08:00</pubDate>
 	  <guid>//android-binder-mechanism</guid>
 	  <description><![CDATA[
 	     <h4>What is Binder</h4>

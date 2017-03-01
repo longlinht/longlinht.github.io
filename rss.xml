@@ -85,6 +85,15 @@ update UI when we finish something in separated thread. This is a basic problem,
       <dc:date>2016-06-09T00:00:00+08:00</dc:date>
     </item>
     <item>
+      <title>Similarities and Differences between Java and C++</title>
+      <link>http://longlinht.github.io//similarities-and-differences-between-java-and-cpp</link>
+      <description>* Java does not support typedefs, defines, or a preprocessor. 
+
+</description>
+      <pubDate>Sun, 15 Jan 2012 22:00:00 +0800</pubDate>
+      <dc:date>2012-01-15T22:00:00+08:00</dc:date>
+    </item>
+    <item>
       <title>高质量C++编程注意事项</title>
       <link>http://longlinht.github.io//high-quality-cpp</link>
       <description>* 不提倡使用全局变量，尽量不要在头文件中出现象extern int value 这类声明

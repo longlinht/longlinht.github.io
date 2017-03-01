@@ -149,6 +149,30 @@
         </footer>
     </article>
     
+    <article class="post">
+        <header class="post-header">
+            <h2 class="post-title"><a href="http://longlinht.github.io//high-quality-cpp">高质量C++编程注意事项</a></h2>
+        </header>
+        <section class="post-excerpt">
+            <p><ul> <li><p>不提倡使用全局变量，尽量不要在头文件中出现象extern int value 这类声明</p></li> <li><p>变量的名字应当使用“名词”或者“形容词＋名词”</p></li> <li><p>全局函数的名字应当使用“动词”或者“动词＋名词”（动宾词组）</p></li> <li><p>不可将布尔变量直接与TRUE、FALSE 或者1、0 进行比较</p></li> <li><p>不可将浮点变量用“==”或“！=”与任何数字比较</p></li> <li><p>在多重循环中，如果有可能，应当将最长的循环放在最内层，最短的循环放在最外层，以减少CPU 跨切循环层的次数</p></li> <li><p>如果循环体内存在逻辑判断，并且循环次数很大，宜将逻辑判断移到循环体的外面</p></li> <li><p>在C++ 程序中只使用const 常量而不使用宏常量，即const 常量完全取代宏常量</p></li> <li><p>需要对外公开的常量放在头文件中，不需要对外公开的常量放在定义文件的头部。为便于管理，可以把不同模块的常量集中存放在一个公共的头文件中</p></li> <li><p>不要将正常值和错误标志混在一起返回。正常值用输出参数获得，而错误标志用return 语句返回</p></li> <li><p>使用断言捕捉不应该发生的非法情况。不要混淆非法情况与错误情况之间的区别，后者是必然存在的并且是一定要作出处理的</p></li> <li><p>用free 或delete 释放了内存之后，立即将指针设置为NULL，防止产生“野指针”</p></li> <li><p>当数组作为函数的参数进行传递时，该数组自动退化为同类型的指针</p></li>... <a class="read-more" href="http://longlinht.github.io//high-quality-cpp">&raquo;</a></p>
+        </section>
+        <footer class="post-meta">
+            <img class="author-thumb" src="/assets/images/casper.png" alt="Author image" nopin="nopin" />
+            <!-- author -->
+            <a href='/author/hetao'>Tao He</a>
+            <!-- [[tags prefix=" on "]] -->
+             
+                on 
+                
+                    
+                       <a href='/tag/machine'>Machine</a>
+                       
+                
+            
+            <time class="post-date" datetime="2011-02-05">05 Feb 2011</time>
+        </footer>
+    </article>
+    
 
     <!-- Previous/next page links - displayed on every page -->
     
@@ -168,7 +192,7 @@
 
 
         <footer class="site-footer clearfix">
-          <section class="copyright"><a href="/">Dancing with Machine, Human and God</a> &copy; 2016</section>
+          <section class="copyright"><a href="/">Dancing with Machine, Human and God</a> &copy; 2017</section>
         </footer>
     </div>
     <!-- [[! Ghost outputs important scripts and data with this tag ]] -->

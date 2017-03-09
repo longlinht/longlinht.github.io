@@ -85,6 +85,15 @@ update UI when we finish something in separated thread. This is a basic problem,
       <dc:date>2016-06-09T00:00:00+08:00</dc:date>
     </item>
     <item>
+      <title>Using Duilib to build GUI</title>
+      <link>http://longlinht.github.io//using-duilib-to-build-gui</link>
+      <description>Duilib is a free open source DirectUI library on Windows , because its simple and expandable design and stable and efficient implementation, accepted generally by the major Internet companies  widely used in IM, video client, stock market software, navigation software, mobile phone support Software, security software and many PC client software in other industries. When We developed a IM in a company I worked, we even use this library to replace Qt GUI part we used in our code.
+
+</description>
+      <pubDate>Sun, 04 Jan 2015 03:20:00 +0800</pubDate>
+      <dc:date>2015-01-04T03:20:00+08:00</dc:date>
+    </item>
+    <item>
       <title>Similarities and Differences between Java and C++</title>
       <link>http://longlinht.github.io//similarities-and-differences-between-java-and-cpp</link>
       <description>* Java does not support typedefs, defines, or a preprocessor. 
@@ -101,15 +110,6 @@ update UI when we finish something in separated thread. This is a basic problem,
 </description>
       <pubDate>Sat, 05 Feb 2011 22:00:00 +0800</pubDate>
       <dc:date>2011-02-05T22:00:00+08:00</dc:date>
-    </item>
-    <item>
-      <title>Split a String in C++</title>
-      <link>http://longlinht.github.io//split-s-string-in-cpp</link>
-      <description>There are many ways to split a string in C++, but what's the most elegant way to split a string in C++? May be we can find it step by step. The most simple and direct way is use `istringstream` to split.
-
-</description>
-      <pubDate>Wed, 15 Dec 2010 22:00:00 +0800</pubDate>
-      <dc:date>2010-12-15T22:00:00+08:00</dc:date>
     </item>
     <dc:date>2016-08-10T00:00:00+08:00</dc:date>
   </channel>

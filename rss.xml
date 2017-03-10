@@ -120,6 +120,15 @@ update UI when we finish something in separated thread. This is a basic problem,
       <pubDate>Wed, 19 Jan 2011 03:40:32 +0800</pubDate>
       <dc:date>2011-01-19T03:40:32+08:00</dc:date>
     </item>
+    <item>
+      <title>Split a String in C++</title>
+      <link>http://longlinht.github.io//split-string-in-cpp</link>
+      <description>## 
+
+</description>
+      <pubDate>Wed, 29 Dec 2010 02:20:12 +0800</pubDate>
+      <dc:date>2010-12-29T02:20:12+08:00</dc:date>
+    </item>
     <dc:date>2016-08-10T00:00:00+08:00</dc:date>
   </channel>
 </rss>

@@ -112,6 +112,15 @@ update UI when we finish something in separated thread. This is a basic problem,
       <dc:date>2011-02-05T22:00:00+08:00</dc:date>
     </item>
     <item>
+      <title>Type conversion in C++</title>
+      <link>http://longlinht.github.io//type-conversion-in-cpp</link>
+      <description>* `static_cast`
+
+</description>
+      <pubDate>Thu, 27 Jan 2011 02:20:12 +0800</pubDate>
+      <dc:date>2011-01-27T02:20:12+08:00</dc:date>
+    </item>
+    <item>
       <title>References vs. Pointers in C++</title>
       <link>http://longlinht.github.io//pointers-vs-references-in-cpp</link>
       <description>In C++, references provide many of the same capabilities as pointers. In real development, we prefer to use references to avoid the complex and error prone of pointers. But in some situations, our choices're not clear. As a good C++ developer, we shouldn't ignore this confusion, this hesitation, so we need make it clear, more clear.
@@ -123,7 +132,7 @@ update UI when we finish something in separated thread. This is a basic problem,
     <item>
       <title>Split a String in C++</title>
       <link>http://longlinht.github.io//split-string-in-cpp</link>
-      <description>## 
+      <description>There are many ways to split a string in C++, but what's the most elegant way to split a string in C++? May be we can find it step by step. The most simple and direct way is use `istringstream` to split.
 
 </description>
       <pubDate>Wed, 29 Dec 2010 02:20:12 +0800</pubDate>

@@ -1071,37 +1071,51 @@ public class SampleActivity extends Activity{
 	</item>
 
 	<item>
-	  <title>References vs. Pointers in C++</title>
-	  <link>//pointers-vs-references-in-cpp</link>
+	  <title>Type conversion in C++</title>
+	  <link>//type-conversion-in-cpp</link>
 	  <author>Tao He</author>
-	  <pubDate>2011-01-19T03:40:32+08:00</pubDate>
-	  <guid>//pointers-vs-references-in-cpp</guid>
+	  <pubDate>2011-01-27T02:20:12+08:00</pubDate>
+	  <guid>//type-conversion-in-cpp</guid>
 	  <description><![CDATA[
-	     <p>In C++, references provide many of the same capabilities as pointers. In real development, we prefer to use references to avoid the complex and error prone of pointers. But in some situations, our choices&#39;re not clear. As a good C++ developer, we shouldn&#39;t ignore this confusion, this hesitation, so we need make it clear, more clear.</p>
+	     <ul>
+<li><code>static_cast</code></li>
+</ul>
+
+<p><code>static_cast</code> is the first cast you should attempt to use. It does things like implicit conversions between types (such as <code>int</code> to <code>float</code>, or pointer to <code>void*</code>), and it can also call explicit conversion functions (or implicit ones). In many cases, explicitly stating <code>static_cast</code> isn&#39;t necessary, but it&#39;s important to note that the T(something) syntax is equivalent to (T)something and should be avoided (more on that later). A <code>T(something, something_else)</code> is safe, however, and guaranteed to call the constructor.</p>
+
+<p><code>static_cast</code> can also cast through inheritance hierarchies. It is unnecessary when casting upwards (towards a base class), but when casting downwards it can be used as long as it doesn&#39;t cast through <code>virtual</code> inheritance. It does not do checking, however, and it is undefined behavior to <code>static_cast</code> down a hierarchy to a type that isn&#39;t actually the type of the object.</p>
 
 <ul>
-<li><p>The references can&#39;t be re-assigned, but pointers can be.</p></li>
-<li><p>A pointer has its own memory address and size on the stack (4 bytes on x86), whereas a reference shares the same memory address (with the original variable) but also takes up some space on the stack. Since a reference has the same address as the original variable itself, it is safe to think of a reference as another name for the same variable. 
-<code>c++
-int x = 0;
-int &amp;r = x;
-int *p = &amp;x;
-int *p2 = &amp;r;
-bool equal = p == p2; // equal is true
-</code></p></li>
-<li><p>You can have pointers to pointers to pointers offering extra levels of indirection. Whereas references only offer one level of indirection.</p></li>
-<li><p>Pointer can be assigned <code>nullptr</code> or <code>NULL</code> directly, whereas reference cannot.</p></li>
-<li><p>Pointers can iterate over an array, you can use ++ to go to the next item that a pointer is pointing to, and + 4 to go to the 5th element. This is no matter what size the object is that the pointer points to.</p></li>
-<li><p>A pointer needs to be dereferenced with * to access the memory location it points to, whereas a reference can be used directly. A pointer to a class/struct uses <code>-&gt;</code> to access it&#39;s members whereas a reference uses a <code>.</code>.</p></li>
-<li><p>A pointer is a variable that holds a memory address. Regardless of how a reference is implemented, a reference has the same memory address as the item it references.</p></li>
-<li><p>References cannot be stuffed into an array, whereas pointers can be.</p></li>
-<li><p>Const references can be bound to temporaries. Pointers cannot (not without some indirection):
-<code>c++
-const int &amp;x = int(12); //legal C++
-int *y = &amp;int(12); //illegal to dereference a temporary.
-</code>
-This makes const&amp; safer for use in argument lists and so forth.</p></li>
+<li><code>const_cast</code></li>
 </ul>
+
+<p><code>const_cast</code> can be used to remove or add const to a variable; no other C++ cast is capable of removing it (not even <code>reinterpret_cast</code>). It is important to note that modifying a formerly const value is only undefined if the original variable is const; if you use it to take the const off a reference to something that wasn&#39;t declared with const, it is safe. This can be useful when overloading member functions based on const, for instance. It can also be used to add const to an object, such as to call a member function overload.</p>
+
+<p><code>const_cast</code> also works similarly on volatile, though that&#39;s less common.</p>
+
+<ul>
+<li><code>dynamic_cast</code></li>
+</ul>
+
+<p><code>dynamic_cast</code> is almost exclusively used for handling polymorphism. You can cast a pointer or reference to any polymorphic type to any other class type (a polymorphic type has at least one virtual function, declared or inherited). You can use it for more than just casting downwards -- you can cast sideways or even up another chain. The <code>dynamic_cast</code> will seek out the desired object and return it if possible. If it can&#39;t, it will return nullptr in the case of a pointer, or throw <code>std::bad_cast</code> in the case of a reference.</p>
+
+<p><code>dynamic_cast</code> has some limitations, though. It doesn&#39;t work if there are multiple objects of the same type in the inheritance hierarchy (the so-called &#39;dreaded diamond&#39;) and you aren&#39;t using virtual inheritance. It also can only go through public inheritance - it will always fail to travel through protected or private inheritance. This is rarely an issue, however, as such forms of inheritance are rare.</p>
+
+<ul>
+<li><code>reinterpret_casti</code>
+<code>reinterpret_cast</code> is the most dangerous cast, and should be used very sparingly. It turns one type directly into another - such as casting the value from one pointer to another, or storing a pointer in an int, or all sorts of other nasty things. Largely, the only guarantee you get with <code>reinterpret_cast</code> is that normally if you cast the result back to the original type, you will get the exact same value (but not if the intermediate type is smaller than the original type). There are a number of conversions that <code>reinterpret_cast</code> cannot do, too. It&#39;s used primarily for particularly weird conversions and bit manipulations, like turning a raw data stream into actual data, or storing data in the low bits of an aligned pointer.</li>
+</ul>
+
+<p>C-style cast and function-style cast are casts using (type)object or type(object), respectively. A C-style cast is defined as the first of the following which succeeds:</p>
+
+<p><code>const_cast</code>
+<code>static_cast</code> (though ignoring access restrictions)
+<code>static_cast</code> (see above), then <code>const_cast</code>
+<code>reinterpret_cast</code>
+<code>reinterpret_cast</code>, then <code>const_cast</code>
+It can therefore be used as a replacement for other casts in some instances, but can be extremely dangerous because of the ability to devolve into a <code>reinterpret_cast</code>, and the latter should be preferred when explicit casting is needed, unless you are sure <code>static_cast</code> will succeed or <code>reinterpret_cast</code> will fail. Even then, consider the longer, more explicit option.</p>
+
+<p>C-style casts also ignore access control when performing a <code>static_cast</code>, which means that they have the ability to perform an operation that no other cast can. This is mostly a kludge, though, and in my mind is just another reason to avoid C-style casts.</p>
 
 	  ]]></description>
 	</item>

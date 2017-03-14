@@ -1071,51 +1071,142 @@ public class SampleActivity extends Activity{
 	</item>
 
 	<item>
-	  <title>Type conversion in C++</title>
-	  <link>//type-conversion-in-cpp</link>
+	  <title>Copy and swap idiom in C++</title>
+	  <link>//copy-and-swap-idiom-in-cpp</link>
 	  <author>Tao He</author>
-	  <pubDate>2011-01-27T02:20:12+08:00</pubDate>
-	  <guid>//type-conversion-in-cpp</guid>
+	  <pubDate>2011-02-04T02:20:12+08:00</pubDate>
+	  <guid>//copy-and-swap-idiom-in-cpp</guid>
 	  <description><![CDATA[
-	     <ul>
-<li><code>static_cast</code></li>
-</ul>
-
-<p><code>static_cast</code> is the first cast you should attempt to use. It does things like implicit conversions between types (such as <code>int</code> to <code>float</code>, or pointer to <code>void*</code>), and it can also call explicit conversion functions (or implicit ones). In many cases, explicitly stating <code>static_cast</code> isn&#39;t necessary, but it&#39;s important to note that the T(something) syntax is equivalent to (T)something and should be avoided (more on that later). A <code>T(something, something_else)</code> is safe, however, and guaranteed to call the constructor.</p>
-
-<p><code>static_cast</code> can also cast through inheritance hierarchies. It is unnecessary when casting upwards (towards a base class), but when casting downwards it can be used as long as it doesn&#39;t cast through <code>virtual</code> inheritance. It does not do checking, however, and it is undefined behavior to <code>static_cast</code> down a hierarchy to a type that isn&#39;t actually the type of the object.</p>
+	     <h4>Purpose - assists the assignment operator in achieving two things:</h4>
 
 <ul>
-<li><code>const_cast</code></li>
+<li><p>avoiding code duplication </p></li>
+<li><p>providing a strong exception guarantee.</p></li>
 </ul>
 
-<p><code>const_cast</code> can be used to remove or add const to a variable; no other C++ cast is capable of removing it (not even <code>reinterpret_cast</code>). It is important to note that modifying a formerly const value is only undefined if the original variable is const; if you use it to take the const off a reference to something that wasn&#39;t declared with const, it is safe. This can be useful when overloading member functions based on const, for instance. It can also be used to add const to an object, such as to call a member function overload.</p>
+<h4>How - to implement</h4>
 
-<p><code>const_cast</code> also works similarly on volatile, though that&#39;s less common.</p>
+<p>Let&#39;s consider a concrete case. </p>
+<div class="highlight"><pre><code class="language-c++" data-lang="c++"><span class="cp">#include &lt;algorithm&gt; </span><span class="c1">// std::copy</span>
+<span class="cp">#include &lt;cstddef&gt; </span><span class="c1">// std::size_t</span>
+
+<span class="k">class</span> <span class="nc">dumb_array</span>
+<span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+    <span class="c1">// (default) constructor</span>
+    <span class="n">dumb_array</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="kt">size_t</span> <span class="n">size</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="o">:</span> <span class="n">mSize</span><span class="p">(</span><span class="n">size</span><span class="p">),</span>
+          <span class="n">mArray</span><span class="p">(</span><span class="n">mSize</span> <span class="o">?</span> <span class="k">new</span> <span class="kt">int</span><span class="p">[</span><span class="n">mSize</span><span class="p">]()</span> <span class="o">:</span> <span class="k">nullptr</span><span class="p">)</span>
+    <span class="p">{</span>
+    <span class="p">}</span>
+
+    <span class="c1">// copy-constructor</span>
+    <span class="n">dumb_array</span><span class="p">(</span><span class="k">const</span> <span class="n">dumb_array</span><span class="o">&amp;</span> <span class="n">other</span><span class="p">)</span>
+        <span class="o">:</span> <span class="n">mSize</span><span class="p">(</span><span class="n">other</span><span class="p">.</span><span class="n">mSize</span><span class="p">),</span>
+          <span class="n">mArray</span><span class="p">(</span><span class="n">mSize</span> <span class="o">?</span> <span class="k">new</span> <span class="kt">int</span><span class="p">[</span><span class="n">mSize</span><span class="p">]</span> <span class="o">:</span> <span class="k">nullptr</span><span class="p">),</span>
+    <span class="p">{</span>
+        <span class="c1">// note that this is non-throwing, because of the data</span>
+        <span class="c1">// types being used; more attention to detail with regards</span>
+        <span class="c1">// to exceptions must be given in a more general case, however</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">copy</span><span class="p">(</span><span class="n">other</span><span class="p">.</span><span class="n">mArray</span><span class="p">,</span> <span class="n">other</span><span class="p">.</span><span class="n">mArray</span> <span class="o">+</span> <span class="n">mSize</span><span class="p">,</span> <span class="n">mArray</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="c1">// destructor</span>
+    <span class="o">~</span><span class="n">dumb_array</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="k">delete</span> <span class="p">[]</span> <span class="n">mArray</span><span class="p">;</span>
+    <span class="p">}</span>
+
+<span class="k">private</span><span class="o">:</span>
+    <span class="n">std</span><span class="o">::</span><span class="kt">size_t</span> <span class="n">mSize</span><span class="p">;</span>
+    <span class="kt">int</span><span class="o">*</span> <span class="n">mArray</span><span class="p">;</span>
+<span class="p">};</span>
+</code></pre></div>
+<p>This class almost manages the array successfully, but it needs operator= to work correctly.</p>
+
+<p><strong>A failed solution</strong></p>
+
+<p>Here&#39;s how a naive implementation might look:</p>
+<div class="highlight"><pre><code class="language-c++" data-lang="c++"><span class="c1">// the hard part</span>
+<span class="n">dumb_array</span><span class="o">&amp;</span> <span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="k">const</span> <span class="n">dumb_array</span><span class="o">&amp;</span> <span class="n">other</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="k">this</span> <span class="o">!=</span> <span class="o">&amp;</span><span class="n">other</span><span class="p">)</span> <span class="c1">// (1)</span>
+    <span class="p">{</span>
+        <span class="c1">// get rid of the old data...</span>
+        <span class="k">delete</span> <span class="p">[]</span> <span class="n">mArray</span><span class="p">;</span> <span class="c1">// (2)</span>
+        <span class="n">mArray</span> <span class="o">=</span> <span class="k">nullptr</span><span class="p">;</span> <span class="c1">// (2) *(see footnote for rationale)</span>
+
+        <span class="c1">// ...and put in the new</span>
+        <span class="n">mSize</span> <span class="o">=</span> <span class="n">other</span><span class="p">.</span><span class="n">mSize</span><span class="p">;</span> <span class="c1">// (3)</span>
+        <span class="n">mArray</span> <span class="o">=</span> <span class="n">mSize</span> <span class="o">?</span> <span class="k">new</span> <span class="kt">int</span><span class="p">[</span><span class="n">mSize</span><span class="p">]</span> <span class="o">:</span> <span class="k">nullptr</span><span class="p">;</span> <span class="c1">// (3)</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">copy</span><span class="p">(</span><span class="n">other</span><span class="p">.</span><span class="n">mArray</span><span class="p">,</span> <span class="n">other</span><span class="p">.</span><span class="n">mArray</span> <span class="o">+</span> <span class="n">mSize</span><span class="p">,</span> <span class="n">mArray</span><span class="p">);</span> <span class="c1">// (3)</span>
+    <span class="p">}</span>
+
+    <span class="k">return</span> <span class="o">*</span><span class="k">this</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>And we say we&#39;re finished; this now manages an array, without leaks. However, it suffers from three problems, marked sequentially in the code as (n).</p>
 
 <ul>
-<li><code>dynamic_cast</code></li>
+<li><p>The first is the self-assignment test. This check serves two purposes: it&#39;s an easy way to prevent us from running needless code on self-assignment, and it protects us from subtle bugs (such as deleting the array only to try and copy it). But in all other cases it merely serves to slow the program down, and act as noise in the code; self-assignment rarely occurs, so most of the time this check is a waste. It would be better if the operator could work properly without it.</p></li>
+<li><p>The second is that it only provides a basic exception guarantee. If new int[mSize] fails,<code>*this</code> will have been modified. (Namely, the size is wrong and the data is gone!) For a strong exception guarantee, it would need to be something akin to:</p></li>
 </ul>
+<div class="highlight"><pre><code class="language-c++" data-lang="c++"><span class="n">dumb_array</span><span class="o">&amp;</span> <span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="k">const</span> <span class="n">dumb_array</span><span class="o">&amp;</span> <span class="n">other</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="k">this</span> <span class="o">!=</span> <span class="o">&amp;</span><span class="n">other</span><span class="p">)</span> <span class="c1">// (1)</span>
+    <span class="p">{</span>
+        <span class="c1">// get the new data ready before we replace the old</span>
+        <span class="n">std</span><span class="o">::</span><span class="kt">size_t</span> <span class="n">newSize</span> <span class="o">=</span> <span class="n">other</span><span class="p">.</span><span class="n">mSize</span><span class="p">;</span>
+        <span class="kt">int</span><span class="o">*</span> <span class="n">newArray</span> <span class="o">=</span> <span class="n">newSize</span> <span class="o">?</span> <span class="k">new</span> <span class="kt">int</span><span class="p">[</span><span class="n">newSize</span><span class="p">]()</span> <span class="o">:</span> <span class="k">nullptr</span><span class="p">;</span> <span class="c1">// (3)</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">copy</span><span class="p">(</span><span class="n">other</span><span class="p">.</span><span class="n">mArray</span><span class="p">,</span> <span class="n">other</span><span class="p">.</span><span class="n">mArray</span> <span class="o">+</span> <span class="n">newSize</span><span class="p">,</span> <span class="n">newArray</span><span class="p">);</span> <span class="c1">// (3)</span>
 
-<p><code>dynamic_cast</code> is almost exclusively used for handling polymorphism. You can cast a pointer or reference to any polymorphic type to any other class type (a polymorphic type has at least one virtual function, declared or inherited). You can use it for more than just casting downwards -- you can cast sideways or even up another chain. The <code>dynamic_cast</code> will seek out the desired object and return it if possible. If it can&#39;t, it will return nullptr in the case of a pointer, or throw <code>std::bad_cast</code> in the case of a reference.</p>
+        <span class="c1">// replace the old data (all are non-throwing)</span>
+        <span class="k">delete</span> <span class="p">[]</span> <span class="n">mArray</span><span class="p">;</span>
+        <span class="n">mSize</span> <span class="o">=</span> <span class="n">newSize</span><span class="p">;</span>
+        <span class="n">mArray</span> <span class="o">=</span> <span class="n">newArray</span><span class="p">;</span>
+    <span class="p">}</span>
 
-<p><code>dynamic_cast</code> has some limitations, though. It doesn&#39;t work if there are multiple objects of the same type in the inheritance hierarchy (the so-called &#39;dreaded diamond&#39;) and you aren&#39;t using virtual inheritance. It also can only go through public inheritance - it will always fail to travel through protected or private inheritance. This is rarely an issue, however, as such forms of inheritance are rare.</p>
+    <span class="k">return</span> <span class="o">*</span><span class="k">this</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>The code has expanded! Which leads us to the third problem: code duplication. Our assignment operator effectively duplicates all the code we&#39;ve already written elsewhere, and that&#39;s a terrible thing.</p>
 
-<ul>
-<li><code>reinterpret_casti</code>
-<code>reinterpret_cast</code> is the most dangerous cast, and should be used very sparingly. It turns one type directly into another - such as casting the value from one pointer to another, or storing a pointer in an int, or all sorts of other nasty things. Largely, the only guarantee you get with <code>reinterpret_cast</code> is that normally if you cast the result back to the original type, you will get the exact same value (but not if the intermediate type is smaller than the original type). There are a number of conversions that <code>reinterpret_cast</code> cannot do, too. It&#39;s used primarily for particularly weird conversions and bit manipulations, like turning a raw data stream into actual data, or storing data in the low bits of an aligned pointer.</li>
-</ul>
+<p><strong>A successful solution</strong></p>
 
-<p>C-style cast and function-style cast are casts using (type)object or type(object), respectively. A C-style cast is defined as the first of the following which succeeds:</p>
+<p>As mentioned, the copy-and-swap idiom will fix all these issues. But right now, we have all the requirements except one: a swap function. While The Rule of Three successfully entails the existence of our copy-constructor, assignment operator, and destructor, it should really be called &quot;The Big Three and A Half&quot;: any time your class manages a resource it also makes sense to provide a swap function.</p>
 
-<p><code>const_cast</code>
-<code>static_cast</code> (though ignoring access restrictions)
-<code>static_cast</code> (see above), then <code>const_cast</code>
-<code>reinterpret_cast</code>
-<code>reinterpret_cast</code>, then <code>const_cast</code>
-It can therefore be used as a replacement for other casts in some instances, but can be extremely dangerous because of the ability to devolve into a <code>reinterpret_cast</code>, and the latter should be preferred when explicit casting is needed, unless you are sure <code>static_cast</code> will succeed or <code>reinterpret_cast</code> will fail. Even then, consider the longer, more explicit option.</p>
+<p>We need to add swap functionality to our class, and we do that as follows†:
+```c++
+class dumb_array
+{
+public:
+    // ...</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">friend void swap(dumb_array&amp; first, dumb_array&amp; second) // nothrow
+{
+    // enable ADL (not necessary in our case, but good practice)
+    using std::swap;
 
-<p>C-style casts also ignore access control when performing a <code>static_cast</code>, which means that they have the ability to perform an operation that no other cast can. This is mostly a kludge, though, and in my mind is just another reason to avoid C-style casts.</p>
+    // by swapping the members of two objects,
+    // the two objects are effectively swapped
+    swap(first.mSize, second.mSize);
+    swap(first.mArray, second.mArray);
+}
+
+// ...
+</code></pre></div>
+<p>};
+``<code>
+(Here is the explanation why public friend swap.) Now not only can we swap our</code>dumb_array`&#39;s, but swaps in general can be more efficient; it merely swaps pointers and sizes, rather than allocating and copying entire arrays. Aside from this bonus in functionality and efficiency, we are now ready to implement the copy-and-swap idiom.</p>
+
+<p>Without further ado, our assignment operator is:</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">dumb_array&amp; operator=(dumb_array other) // (1)
+{
+    swap(*this, other); // (2)
+
+    return *this;
+}
+</code></pre></div>
+<p>And that&#39;s it! With one fell swoop, all three problems are elegantly tackled at once.</p>
 
 	  ]]></description>
 	</item>

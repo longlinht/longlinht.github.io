@@ -112,6 +112,15 @@ update UI when we finish something in separated thread. This is a basic problem,
       <dc:date>2011-02-05T22:00:00+08:00</dc:date>
     </item>
     <item>
+      <title>Copy and swap idiom in C++</title>
+      <link>http://longlinht.github.io//copy-and-swap-idiom-in-cpp</link>
+      <description>#### Purpose - assists the assignment operator in achieving two things: 
+
+</description>
+      <pubDate>Fri, 04 Feb 2011 02:20:12 +0800</pubDate>
+      <dc:date>2011-02-04T02:20:12+08:00</dc:date>
+    </item>
+    <item>
       <title>Type conversion in C++</title>
       <link>http://longlinht.github.io//type-conversion-in-cpp</link>
       <description>* `static_cast`

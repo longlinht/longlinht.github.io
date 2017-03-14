@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- [[! Document Settings ]] -->
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+    <!-- [[! Page Meta ]] -->
+    <title>Copy and swap idiom in C++</title>
+    <meta name="description" content="Dancing with Machine, Human and God - World is complex,confusing and wonderful,I will talk about machine,human and god to known it, to reveal it." />
+
+    <meta name="HandheldFriendly" content="True" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link rel="shortcut icon" href="/assets/images/favicon.ico" >
+
+    <!-- [[! Styles'n'Scripts ]] -->
+    <link rel="stylesheet" type="text/css" href="/assets/css/screen.css" />
+    <link rel="stylesheet" type="text/css"
+          href="//fonts.googleapis.com/css?family=Merriweather:300,700,700italic,300italic|Open+Sans:700,400" />
+    <link rel="stylesheet" type="text/css" href="/assets/css/syntax.css" />
+    
+    <!-- [[! Ghost outputs important style and meta data with this tag ]] -->
+        <link rel="canonical" href="/" />
+    <meta name="referrer" content="origin" />
+    <link rel="next" href="/page2/" />
+
+    <meta property="og:site_name" content="Dancing with Machine, Human and God" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Dancing with Machine, Human and God" />
+    <meta property="og:description" content="World is complex,confusing and wonderful,I will talk about machine,human and god to known it, to reveal it." />
+    <meta property="og:url" content="/" />
+    <meta property="og:image" content="/assets/images/cover1.jpg" />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Dancing with Machine, Human and God" />
+    <meta name="twitter:description" content="World is complex,confusing and wonderful,I will talk about machine,human and god to known it, to reveal it." />
+    <meta name="twitter:url" content="/" />
+    <meta name="twitter:image:src" content="/assets/images/cover1.jpg" />
+
+    <script type="application/ld+json">
+{
+    "@context": "http://schema.org",
+    "@type": "Website",
+    "publisher": "Tao's Page",
+    "url": "/",
+    "image": "/assets/images/cover1.jpg",
+    "description": "World is complex,confusing and wonderful,I will talk about machine,human and god to known it, to reveal it."
+}
+    </script>
+
+    <meta name="generator" content="Jekyll 3.0.0" />
+    <link rel="alternate" type="application/rss+xml" title="Dancing with Machine, Human and God" href="/rss.xml" />
+
+</head>
+<body class="post-template nav-closed">
+
+    <div class="nav">
+    <h3 class="nav-title">Menu</h3>
+    <a href="#" class="nav-close">
+        <span class="hidden">Close</span>
+    </a>
+    <ul>
+        <li class="nav-home " role="presentation"><a href="/">Home</a></li>
+        <li class="nav-about " role="presentation"><a href="/about.html">About</a></li>
+        <li class="nav-fables " role="presentation"><a href="/tag/machine/">Machine</a></li>
+        <li class="nav-speeches " role="presentation"><a href="/tag/human/">Human</a></li>
+        <li class="nav-fiction " role="presentation"><a href="/tag/god/">God</a></li>
+        <li class="nav-author " role="presentation"><a href="/author/hetao/">Author</a></li>
+    </ul>
+    <a class="subscribe-button icon-feed" href="/rss.xml">Subscribe</a>
+</div>
+<span class="nav-cover"></span>
+
+
+    <div class="site-wrapper">
+
+        <!-- [[! Everything else gets inserted here ]] -->
+        <!-- < default -->
+
+<!-- The comment above "< default" means - insert everything in this file into -->
+    <!-- the [body] of the default.hbs template, which contains our header/footer. -->
+
+<!-- Everything inside the #post tags pulls data from the post -->
+<!-- #post -->
+
+<header class="main-header post-head no-cover">
+    <nav class="main-nav  clearfix">
+        
+        
+    </nav>
+</header>
+
+<main class="content" role="main">
+
+    <article class="post tag-machine">
+
+        <header class="post-header">
+            <h1 class="post-title">Copy and swap idiom in C++</h1>
+            <section class="post-meta">
+            <!-- <a href='/'>Tao He</a> -->
+            <time class="post-date" datetime="2011-02-04">04 Feb 2011</time>
+                <!-- [[tags prefix=" on "]] -->
+                 
+                on 
+                
+                    
+                       <a href='/tag/machine'>Machine</a>
+                       
+                
+                
+            </section>
+        </header>
+
+        <section class="post-content">
+            
+            <h4>Purpose - assists the assignment operator in achieving two things:</h4>
+
+<ul>
+<li><p>avoiding code duplication </p></li>
+<li><p>providing a strong exception guarantee.</p></li>
+</ul>
+
+<h4>How - to implement</h4>
+
+<p>Let&#39;s consider a concrete case. </p>
+<div class="highlight"><pre><code class="language-c++" data-lang="c++"><span class="cp">#include &lt;algorithm&gt; </span><span class="c1">// std::copy</span>
+<span class="cp">#include &lt;cstddef&gt; </span><span class="c1">// std::size_t</span>
+
+<span class="k">class</span> <span class="nc">dumb_array</span>
+<span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+    <span class="c1">// (default) constructor</span>
+    <span class="n">dumb_array</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="kt">size_t</span> <span class="n">size</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="o">:</span> <span class="n">mSize</span><span class="p">(</span><span class="n">size</span><span class="p">),</span>
+          <span class="n">mArray</span><span class="p">(</span><span class="n">mSize</span> <span class="o">?</span> <span class="k">new</span> <span class="kt">int</span><span class="p">[</span><span class="n">mSize</span><span class="p">]()</span> <span class="o">:</span> <span class="k">nullptr</span><span class="p">)</span>
+    <span class="p">{</span>
+    <span class="p">}</span>
+
+    <span class="c1">// copy-constructor</span>
+    <span class="n">dumb_array</span><span class="p">(</span><span class="k">const</span> <span class="n">dumb_array</span><span class="o">&amp;</span> <span class="n">other</span><span class="p">)</span>
+        <span class="o">:</span> <span class="n">mSize</span><span class="p">(</span><span class="n">other</span><span class="p">.</span><span class="n">mSize</span><span class="p">),</span>
+          <span class="n">mArray</span><span class="p">(</span><span class="n">mSize</span> <span class="o">?</span> <span class="k">new</span> <span class="kt">int</span><span class="p">[</span><span class="n">mSize</span><span class="p">]</span> <span class="o">:</span> <span class="k">nullptr</span><span class="p">),</span>
+    <span class="p">{</span>
+        <span class="c1">// note that this is non-throwing, because of the data</span>
+        <span class="c1">// types being used; more attention to detail with regards</span>
+        <span class="c1">// to exceptions must be given in a more general case, however</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">copy</span><span class="p">(</span><span class="n">other</span><span class="p">.</span><span class="n">mArray</span><span class="p">,</span> <span class="n">other</span><span class="p">.</span><span class="n">mArray</span> <span class="o">+</span> <span class="n">mSize</span><span class="p">,</span> <span class="n">mArray</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="c1">// destructor</span>
+    <span class="o">~</span><span class="n">dumb_array</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="k">delete</span> <span class="p">[]</span> <span class="n">mArray</span><span class="p">;</span>
+    <span class="p">}</span>
+
+<span class="k">private</span><span class="o">:</span>
+    <span class="n">std</span><span class="o">::</span><span class="kt">size_t</span> <span class="n">mSize</span><span class="p">;</span>
+    <span class="kt">int</span><span class="o">*</span> <span class="n">mArray</span><span class="p">;</span>
+<span class="p">};</span>
+</code></pre></div>
+<p>This class almost manages the array successfully, but it needs operator= to work correctly.</p>
+
+<p><strong>A failed solution</strong></p>
+
+<p>Here&#39;s how a naive implementation might look:</p>
+<div class="highlight"><pre><code class="language-c++" data-lang="c++"><span class="c1">// the hard part</span>
+<span class="n">dumb_array</span><span class="o">&amp;</span> <span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="k">const</span> <span class="n">dumb_array</span><span class="o">&amp;</span> <span class="n">other</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="k">this</span> <span class="o">!=</span> <span class="o">&amp;</span><span class="n">other</span><span class="p">)</span> <span class="c1">// (1)</span>
+    <span class="p">{</span>
+        <span class="c1">// get rid of the old data...</span>
+        <span class="k">delete</span> <span class="p">[]</span> <span class="n">mArray</span><span class="p">;</span> <span class="c1">// (2)</span>
+        <span class="n">mArray</span> <span class="o">=</span> <span class="k">nullptr</span><span class="p">;</span> <span class="c1">// (2) *(see footnote for rationale)</span>
+
+        <span class="c1">// ...and put in the new</span>
+        <span class="n">mSize</span> <span class="o">=</span> <span class="n">other</span><span class="p">.</span><span class="n">mSize</span><span class="p">;</span> <span class="c1">// (3)</span>
+        <span class="n">mArray</span> <span class="o">=</span> <span class="n">mSize</span> <span class="o">?</span> <span class="k">new</span> <span class="kt">int</span><span class="p">[</span><span class="n">mSize</span><span class="p">]</span> <span class="o">:</span> <span class="k">nullptr</span><span class="p">;</span> <span class="c1">// (3)</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">copy</span><span class="p">(</span><span class="n">other</span><span class="p">.</span><span class="n">mArray</span><span class="p">,</span> <span class="n">other</span><span class="p">.</span><span class="n">mArray</span> <span class="o">+</span> <span class="n">mSize</span><span class="p">,</span> <span class="n">mArray</span><span class="p">);</span> <span class="c1">// (3)</span>
+    <span class="p">}</span>
+
+    <span class="k">return</span> <span class="o">*</span><span class="k">this</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>And we say we&#39;re finished; this now manages an array, without leaks. However, it suffers from three problems, marked sequentially in the code as (n).</p>
+
+<ul>
+<li><p>The first is the self-assignment test. This check serves two purposes: it&#39;s an easy way to prevent us from running needless code on self-assignment, and it protects us from subtle bugs (such as deleting the array only to try and copy it). But in all other cases it merely serves to slow the program down, and act as noise in the code; self-assignment rarely occurs, so most of the time this check is a waste. It would be better if the operator could work properly without it.</p></li>
+<li><p>The second is that it only provides a basic exception guarantee. If new int[mSize] fails,<code>*this</code> will have been modified. (Namely, the size is wrong and the data is gone!) For a strong exception guarantee, it would need to be something akin to:</p></li>
+</ul>
+<div class="highlight"><pre><code class="language-c++" data-lang="c++"><span class="n">dumb_array</span><span class="o">&amp;</span> <span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="k">const</span> <span class="n">dumb_array</span><span class="o">&amp;</span> <span class="n">other</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="k">this</span> <span class="o">!=</span> <span class="o">&amp;</span><span class="n">other</span><span class="p">)</span> <span class="c1">// (1)</span>
+    <span class="p">{</span>
+        <span class="c1">// get the new data ready before we replace the old</span>
+        <span class="n">std</span><span class="o">::</span><span class="kt">size_t</span> <span class="n">newSize</span> <span class="o">=</span> <span class="n">other</span><span class="p">.</span><span class="n">mSize</span><span class="p">;</span>
+        <span class="kt">int</span><span class="o">*</span> <span class="n">newArray</span> <span class="o">=</span> <span class="n">newSize</span> <span class="o">?</span> <span class="k">new</span> <span class="kt">int</span><span class="p">[</span><span class="n">newSize</span><span class="p">]()</span> <span class="o">:</span> <span class="k">nullptr</span><span class="p">;</span> <span class="c1">// (3)</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">copy</span><span class="p">(</span><span class="n">other</span><span class="p">.</span><span class="n">mArray</span><span class="p">,</span> <span class="n">other</span><span class="p">.</span><span class="n">mArray</span> <span class="o">+</span> <span class="n">newSize</span><span class="p">,</span> <span class="n">newArray</span><span class="p">);</span> <span class="c1">// (3)</span>
+
+        <span class="c1">// replace the old data (all are non-throwing)</span>
+        <span class="k">delete</span> <span class="p">[]</span> <span class="n">mArray</span><span class="p">;</span>
+        <span class="n">mSize</span> <span class="o">=</span> <span class="n">newSize</span><span class="p">;</span>
+        <span class="n">mArray</span> <span class="o">=</span> <span class="n">newArray</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">return</span> <span class="o">*</span><span class="k">this</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>The code has expanded! Which leads us to the third problem: code duplication. Our assignment operator effectively duplicates all the code we&#39;ve already written elsewhere, and that&#39;s a terrible thing.</p>
+
+<p><strong>A successful solution</strong></p>
+
+<p>As mentioned, the copy-and-swap idiom will fix all these issues. But right now, we have all the requirements except one: a swap function. While The Rule of Three successfully entails the existence of our copy-constructor, assignment operator, and destructor, it should really be called &quot;The Big Three and A Half&quot;: any time your class manages a resource it also makes sense to provide a swap function.</p>
+
+<p>We need to add swap functionality to our class, and we do that as follows†:
+```c++
+class dumb_array
+{
+public:
+    // ...</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">friend void swap(dumb_array&amp; first, dumb_array&amp; second) // nothrow
+{
+    // enable ADL (not necessary in our case, but good practice)
+    using std::swap;
+
+    // by swapping the members of two objects,
+    // the two objects are effectively swapped
+    swap(first.mSize, second.mSize);
+    swap(first.mArray, second.mArray);
+}
+
+// ...
+</code></pre></div>
+<p>};
+``<code>
+(Here is the explanation why public friend swap.) Now not only can we swap our</code>dumb_array`&#39;s, but swaps in general can be more efficient; it merely swaps pointers and sizes, rather than allocating and copying entire arrays. Aside from this bonus in functionality and efficiency, we are now ready to implement the copy-and-swap idiom.</p>
+
+<p>Without further ado, our assignment operator is:</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">dumb_array&amp; operator=(dumb_array other) // (1)
+{
+    swap(*this, other); // (2)
+
+    return *this;
+}
+</code></pre></div>
+<p>And that&#39;s it! With one fell swoop, all three problems are elegantly tackled at once.</p>
+
+
+        </section>
+
+        <footer class="post-footer">
+
+            <!-- Everything inside the #author tags pulls data from the author -->
+            <!-- #author-->
+
+            
+            <figure class="author-image">
+                <a class="img" href="/author/hetao" style="background-image: url(/assets/images/casper.png)"><span class="hidden">'s Picture</span></a>
+            </figure>
+            
+
+            <section class="author">
+                <h4><a href="/author/hetao">Tao He</a></h4>
+                
+                
+                    <p> A computer engineer, reader and thinker.</p>
+                
+                <div class="author-meta">
+                    <span class="author-location icon-location"> Beijing, China</span> 
+                    <span class="author-link icon-link"><a href="http://longlinht.github.io/"> longlinht.github.io/</a></span> 
+                </div>
+            </section>
+
+            <!-- /author  -->
+
+            <section class="share">
+                <h4>Share this post</h4>
+                <a class="icon-twitter" href="http://twitter.com/share?text=Copy and swap idiom in C++&amp;url=http://longlinht.github.io//copy-and-swap-idiom-in-cpp"
+                    onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
+                    <span class="hidden">Twitter</span>
+                </a>
+                <a class="icon-facebook" href="https://www.facebook.com/sharer/sharer.php?u=http://longlinht.github.io//copy-and-swap-idiom-in-cpp"
+                    onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
+                    <span class="hidden">Facebook</span>
+                </a>
+                <a class="icon-google-plus" href="https://plus.google.com/share?url=http://longlinht.github.io//copy-and-swap-idiom-in-cpp"
+                   onclick="window.open(this.href, 'google-plus-share', 'width=490,height=530');return false;">
+                    <span class="hidden">Google+</span>
+                </a>
+            </section>
+            
+            <!-- Add Disqus Comments -->
+            
+                <div id="disqus_thread"></div>
+<script>
+    /**
+     *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+     *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables
+     */
+    /*
+    var disqus_config = function () {
+        this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
+        this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+    };
+    */
+    (function() {  // DON'T EDIT BELOW THIS LINE
+        var d = document, s = d.createElement('script');
+        
+        s.src = '//hetaoof.disqus.com/embed.js';
+        
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+
+            
+            
+        </footer>
+
+    </article>
+
+</main>
+
+<aside class="read-next">
+
+    <!-- [[! next_post ]] -->
+    
+        <a class="read-next-story no-cover" href="http://longlinht.github.io//high-quality-cpp">
+            <section class="post">
+                <h2>高质量C++编程注意事项</h2>
+                <p>* 不提倡使用全局变量，尽量不要在头文件中出现象extern int value 这类声明 * 变量的名字应当使用“名词”或者“形容词＋名词” * 全局函数的名字应当使用“动词”或者“动词＋名词”（动宾词组） * 不可将布尔变量直接与TRUE、FALSE 或者1、0 进行比较 * 不可将浮点变量用“==”或“！=”与任何数字比较...</p>
+            </section>
+        </a>
+    
+    <!-- [[! /next_post ]] -->
+    <!-- [[! prev_post ]] -->
+    
+        <a class="read-next-story prev no-cover" href="http://longlinht.github.io//type-conversion-in-cpp">
+            <section class="post">
+                <h2>Type conversion in C++</h2>
+                <p><ul> <li><code>static_cast</code></li> </ul> <p><code>static_cast</code> is the first cast you should attempt to use. It does...</p>
+            </section>
+        </a>
+    
+    <!-- [[! /prev_post ]] -->
+</aside>
+
+<!-- /post -->
+
+
+        <footer class="site-footer clearfix">
+          <section class="copyright"><a href="/">Dancing with Machine, Human and God</a> &copy; 2017</section>
+        </footer>
+    </div>
+    <!-- [[! Ghost outputs important scripts and data with this tag ]] -->
+    <script type="text/javascript" src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+    <!-- [[! The main JavaScript file for Casper ]] -->
+    <script type="text/javascript" src="/assets/js/jquery.fitvids.js"></script>
+    <script type="text/javascript" src="/assets/js/index.js"></script>
+
+    <!-- Add Google Analytics  -->
+        <!-- Google Analytics Tracking code -->
+     <script>
+	    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+	    ga('create', 'UA-78960009-1', 'auto');
+	    ga('send', 'pageview');
+
+     </script>
+   
+</body>
+</html>

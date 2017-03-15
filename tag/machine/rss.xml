@@ -783,7 +783,9 @@ public class SampleActivity extends Activity{
 	  <pubDate>2016-07-06T02:20:12+08:00</pubDate>
 	  <guid>//define-userful-android-drawables</guid>
 	  <description><![CDATA[
-	     <h4>Define a round corner drawable</h4>
+	     <p>We can define many useful drawables in Android, in this article, I collected some of definations I ever used.</p>
+
+<h4>Define a round corner drawable</h4>
 <div class="highlight"><pre><code class="language-xml" data-lang="xml"><span class="nt">&lt;shape</span> <span class="na">xmlns:android=</span><span class="s">&quot;http://schemas.android.com/apk/res/android&quot;</span><span class="nt">&gt;</span>
     <span class="nt">&lt;solid</span> <span class="na">android:color=</span><span class="s">&quot;#ffffffff&quot;</span><span class="nt">/&gt;</span>
     <span class="nt">&lt;stroke</span> <span class="na">android:width=</span><span class="s">&quot;0dp&quot;</span>

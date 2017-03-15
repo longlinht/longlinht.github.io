@@ -758,7 +758,9 @@ public class SampleActivity extends Activity{
     
       <item>
         <title>Define Userful Android Drawables</title>
-        <description>&lt;h4&gt;Define a round corner drawable&lt;/h4&gt;
+        <description>&lt;p&gt;We can define many useful drawables in Android, in this article, I collected some of definations I ever used.&lt;/p&gt;
+
+&lt;h4&gt;Define a round corner drawable&lt;/h4&gt;
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-xml&quot; data-lang=&quot;xml&quot;&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;shape&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;xmlns:android=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;http://schemas.android.com/apk/res/android&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
     &lt;span class=&quot;nt&quot;&gt;&amp;lt;solid&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;android:color=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;#ffffffff&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
     &lt;span class=&quot;nt&quot;&gt;&amp;lt;stroke&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;android:width=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;0dp&amp;quot;&lt;/span&gt;

@@ -159,7 +159,7 @@ update UI when we finish something in separated thread. This is a basic problem,
     <item>
       <title>Forward declaration in C++</title>
       <link>http://longlinht.github.io//forward-declaration-in-cpp</link>
-      <description>#### Why
+      <description>* Forward-declarations can significantly reduce build times
 
 </description>
       <pubDate>Wed, 03 Nov 2010 02:20:12 +0800</pubDate>

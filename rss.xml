@@ -159,7 +159,8 @@ update UI when we finish something in separated thread. This is a basic problem,
     <item>
       <title>Forward declaration in C++</title>
       <link>http://longlinht.github.io//forward-declaration-in-cpp</link>
-      <description>* Forward-declarations can significantly reduce build times
+      <description>Put yourself in the compiler's position: when you forward declare a type, all the compiler knows is that this type exists; it knows nothing about its size, members, or methods. This is why it's called an incomplete type. Therefore, you cannot use the type to declare a member, or a base class, since the compiler would need to know the layout of the type.
+
 
 </description>
       <pubDate>Wed, 03 Nov 2010 02:20:12 +0800</pubDate>

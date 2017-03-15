@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 
     <!-- [[! Page Meta ]] -->
-    <title>Define Userful Android Drawables</title>
+    <title>Userful command line in Android development</title>
     <meta name="description" content="Dancing with Machine, Human and God - World is complex,confusing and wonderful,I will talk about machine,human and god to known it, to reveal it." />
 
     <meta name="HandheldFriendly" content="True" />
@@ -96,10 +96,10 @@
     <article class="post tag-machine">
 
         <header class="post-header">
-            <h1 class="post-title">Define Userful Android Drawables</h1>
+            <h1 class="post-title">Userful command line in Android development</h1>
             <section class="post-meta">
             <!-- <a href='/'>Tao He</a> -->
-            <time class="post-date" datetime="2016-07-06">06 Jul 2016</time>
+            <time class="post-date" datetime="2016-07-10">10 Jul 2016</time>
                 <!-- [[tags prefix=" on "]] -->
                  
                 on 
@@ -114,81 +114,40 @@
 
         <section class="post-content">
             
-            <p>We can define many useful drawables in Android, in this article, I collected some of definations I ever used.</p>
+            <p>Over the years, these are the Android development tools I’ve found most useful. I consistently use these tools to build apps. I recommend you take a look at them and see whether they’re a good fit for your tool chain.</p>
 
-<h4>Define a round corner drawable</h4>
-<div class="highlight"><pre><code class="language-xml" data-lang="xml"><span class="nt">&lt;shape</span> <span class="na">xmlns:android=</span><span class="s">&quot;http://schemas.android.com/apk/res/android&quot;</span><span class="nt">&gt;</span>
-    <span class="nt">&lt;solid</span> <span class="na">android:color=</span><span class="s">&quot;#ffffffff&quot;</span><span class="nt">/&gt;</span>
-    <span class="nt">&lt;stroke</span> <span class="na">android:width=</span><span class="s">&quot;0dp&quot;</span>
-            <span class="na">android:color=</span><span class="s">&quot;#ffffffff&quot;</span> <span class="nt">/&gt;</span>
-    <span class="nt">&lt;padding</span> <span class="na">android:left=</span><span class="s">&quot;1dp&quot;</span>
-             <span class="na">android:top=</span><span class="s">&quot;1dp&quot;</span>
-             <span class="na">android:right=</span><span class="s">&quot;1dp&quot;</span>
-             <span class="na">android:bottom=</span><span class="s">&quot;1dp&quot;</span> <span class="nt">/&gt;</span>
-    <span class="nt">&lt;corners</span> <span class="na">android:bottomRightRadius=</span><span class="s">&quot;4dp&quot;</span>
-             <span class="na">android:bottomLeftRadius=</span><span class="s">&quot;4dp&quot;</span>
-             <span class="na">android:topLeftRadius=</span><span class="s">&quot;0dp&quot;</span>
-             <span class="na">android:topRightRadius=</span><span class="s">&quot;0dp&quot;</span><span class="nt">/&gt;</span>
-<span class="nt">&lt;/shape&gt;</span>
+<h4>View SQLite log</h4>
+<div class="highlight"><pre><code class="language-text" data-lang="text">adb shell setprop log.tag.SQLiteLog V
+adb shell setprop log.tag.SQLiteStatements V
 </code></pre></div>
-<h4>Define a circle</h4>
-<div class="highlight"><pre><code class="language-xml" data-lang="xml"><span class="cp">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;</span>
-<span class="nt">&lt;shape</span>
-    <span class="na">xmlns:android=</span><span class="s">&quot;http://schemas.android.com/apk/res/android&quot;</span>
-    <span class="na">android:shape=</span><span class="s">&quot;oval&quot;</span><span class="nt">&gt;</span>
-   <span class="nt">&lt;solid</span>
-       <span class="na">android:color=</span><span class="s">&quot;#66000000&quot;</span><span class="nt">/&gt;</span>
-<span class="nt">&lt;/shape&gt;</span>
+<h4>Tcpdump packet capture</h4>
+<div class="highlight"><pre><code class="language-text" data-lang="text">adb shell /data/local/tcpdump -i any -p -s 0 -w /sdcard/capture.pcap
 </code></pre></div>
-<h4>Define a ring</h4>
-<div class="highlight"><pre><code class="language-xml" data-lang="xml"><span class="nt">&lt;shape</span>
-    <span class="na">android:shape=</span><span class="s">&quot;ring&quot;</span>
-    <span class="na">android:thickness=</span><span class="s">&quot;2.5dp&quot;</span>
-    <span class="na">android:useLevel=</span><span class="s">&quot;true&quot;</span><span class="nt">&gt;</span>
-    <span class="nt">&lt;solid</span> <span class="na">android:color=</span><span class="s">&quot;#979797&quot;</span><span class="nt">/&gt;</span>
-<span class="nt">&lt;/shape&gt;</span>
+<h4>View Signature</h4>
+<div class="highlight"><pre><code class="language-text" data-lang="text">keytool -list -v -keystore release.jks
 </code></pre></div>
-<h4>Define a drawable with state</h4>
-<div class="highlight"><pre><code class="language-xml" data-lang="xml"><span class="cp">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;</span>
-<span class="nt">&lt;selector</span> <span class="na">xmlns:android=</span><span class="s">&quot;http://schemas.android.com/apk/res/android&quot;</span><span class="nt">&gt;</span>
-    <span class="nt">&lt;item</span> <span class="na">android:drawable=</span><span class="s">&quot;@drawable/qq_login_button_bg_pressed&quot;</span> <span class="na">android:state_pressed=</span><span class="s">&quot;true&quot;</span><span class="nt">/&gt;</span>
-    <span class="nt">&lt;item</span> <span class="na">android:drawable=</span><span class="s">&quot;@drawable/qq_login_button_bg_normal&quot;</span><span class="nt">/&gt;</span>
-<span class="nt">&lt;/selector&gt;</span>
+<h4>View Important System Log Tag</h4>
+<div class="highlight"><pre><code class="language-text" data-lang="text">// View Acitivity switch
+adb logcat -v time | grep ActivityManager
+// View Crash info 
+adb logcat -v time | grep AndroidRuntime
+// View Dalvik info
+adb logcat -v time | grep &quot;D\/Dalvik&quot;
+// View art info
+adb logcat -v time | grep &quot;I\/art&quot;
 </code></pre></div>
-<h4>Define a ring as progressbar background</h4>
-<div class="highlight"><pre><code class="language-xml" data-lang="xml"><span class="cp">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;</span>
-<span class="nt">&lt;layer-list</span> <span class="na">xmlns:android=</span><span class="s">&quot;http://schemas.android.com/apk/res/android&quot;</span><span class="nt">&gt;</span>
-    <span class="nt">&lt;item</span> <span class="na">android:id=</span><span class="s">&quot;@android:id/secondaryProgress&quot;</span><span class="nt">&gt;</span>
-        <span class="nt">&lt;shape</span>
-            <span class="na">android:shape=</span><span class="s">&quot;ring&quot;</span>
-            <span class="na">android:thickness=</span><span class="s">&quot;2.5dp&quot;</span>
-            <span class="na">android:useLevel=</span><span class="s">&quot;true&quot;</span><span class="nt">&gt;</span>
-            <span class="nt">&lt;solid</span> <span class="na">android:color=</span><span class="s">&quot;#979797&quot;</span><span class="nt">/&gt;</span>
-        <span class="nt">&lt;/shape&gt;</span>
-    <span class="nt">&lt;/item&gt;</span>
-
-    <span class="nt">&lt;item</span> <span class="na">android:id=</span><span class="s">&quot;@android:id/progress&quot;</span><span class="nt">&gt;</span>
-        <span class="nt">&lt;rotate</span>
-            <span class="na">android:fromDegrees=</span><span class="s">&quot;270&quot;</span>
-            <span class="na">android:pivotX=</span><span class="s">&quot;50%&quot;</span>
-            <span class="na">android:pivotY=</span><span class="s">&quot;50%&quot;</span>
-            <span class="na">android:toDegrees=</span><span class="s">&quot;270&quot;</span><span class="nt">&gt;</span>
-
-            <span class="nt">&lt;shape</span>
-                <span class="na">android:shape=</span><span class="s">&quot;ring&quot;</span>
-                <span class="na">android:thickness=</span><span class="s">&quot;2.5dp&quot;</span>
-                <span class="na">android:useLevel=</span><span class="s">&quot;true&quot;</span><span class="nt">&gt;</span>
-
-                <span class="nt">&lt;rotate</span>
-                    <span class="na">android:fromDegrees=</span><span class="s">&quot;0&quot;</span>
-                    <span class="na">android:pivotX=</span><span class="s">&quot;50%&quot;</span>
-                    <span class="na">android:pivotY=</span><span class="s">&quot;50%&quot;</span>
-                    <span class="na">android:toDegrees=</span><span class="s">&quot;360&quot;</span> <span class="nt">/&gt;</span>
-                <span class="nt">&lt;solid</span> <span class="na">android:color=</span><span class="s">&quot;#ffffffff&quot;</span><span class="nt">/&gt;</span>
-            <span class="nt">&lt;/shape&gt;</span>
-        <span class="nt">&lt;/rotate&gt;</span>
-    <span class="nt">&lt;/item&gt;</span>
-<span class="nt">&lt;/layer-list&gt;</span>
+<h4>View application running time</h4>
+<div class="highlight"><pre><code class="language-text" data-lang="text">adb logcat -v time | grep TAG
+</code></pre></div>
+<h4>View sytem service and status</h4>
+<div class="highlight"><pre><code class="language-text" data-lang="text">// SERVICE maybe activity, cpuinfo, window, meminfo, alarm, statusbar, usagestatus
+dumpsys | grep &quot;DUMP OF SERVICE&quot;
+</code></pre></div>
+<h4>Bugreport command</h4>
+<div class="highlight"><pre><code class="language-text" data-lang="text">adb bugreport &gt; main.log
+</code></pre></div>
+<h4>Monkey parameters</h4>
+<div class="highlight"><pre><code class="language-text" data-lang="text">adb shell monkey -p -s 1000 --ignore-crashes --ignore-timeouts --ignore-security-exceptions --pct-trackball 0 --pct-nav 0 --pct-majornav 0 --pct-anyevent 0  -v --throttle 300 1200000000 
 </code></pre></div>
 
         </section>
@@ -220,15 +179,15 @@
 
             <section class="share">
                 <h4>Share this post</h4>
-                <a class="icon-twitter" href="http://twitter.com/share?text=Define Userful Android Drawables&amp;url=http://longlinht.github.io//define-userful-android-drawables"
+                <a class="icon-twitter" href="http://twitter.com/share?text=Userful command line in Android development&amp;url=http://longlinht.github.io//userful-command-line-in-android-development"
                     onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
                     <span class="hidden">Twitter</span>
                 </a>
-                <a class="icon-facebook" href="https://www.facebook.com/sharer/sharer.php?u=http://longlinht.github.io//define-userful-android-drawables"
+                <a class="icon-facebook" href="https://www.facebook.com/sharer/sharer.php?u=http://longlinht.github.io//userful-command-line-in-android-development"
                     onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
                     <span class="hidden">Facebook</span>
                 </a>
-                <a class="icon-google-plus" href="https://plus.google.com/share?url=http://longlinht.github.io//define-userful-android-drawables"
+                <a class="icon-google-plus" href="https://plus.google.com/share?url=http://longlinht.github.io//userful-command-line-in-android-development"
                    onclick="window.open(this.href, 'google-plus-share', 'width=490,height=530');return false;">
                     <span class="hidden">Google+</span>
                 </a>
@@ -271,20 +230,20 @@
 
     <!-- [[! next_post ]] -->
     
-        <a class="read-next-story no-cover" href="http://longlinht.github.io//userful-command-line-in-android-development">
+        <a class="read-next-story no-cover" href="http://longlinht.github.io//memory-leak-in-android-development">
             <section class="post">
-                <h2>Userful command line in Android development</h2>
-                <p>## Over the years, these are the Android development tools I’ve found most useful. I...</p>
+                <h2>Memory Leak in Android Development</h2>
+                <p>When programming Android, although java has GC mechanism, some our wrong code way and personal...</p>
             </section>
         </a>
     
     <!-- [[! /next_post ]] -->
     <!-- [[! prev_post ]] -->
     
-        <a class="read-next-story prev no-cover" href="http://longlinht.github.io//I-do-not-know-what-I-may-appear-to-the-world">
+        <a class="read-next-story prev no-cover" href="http://longlinht.github.io//define-userful-android-drawables">
             <section class="post">
-                <h2>I Do Not Know What I May Appear To The World</h2>
-                <p><p>作为“God”板块的第一篇，引用牛顿爵士的一段话来开启。</p> <p>I do not know what I may appear to the world, but to myself...</p>
+                <h2>Define Userful Android Drawables</h2>
+                <p><p>We can define many useful drawables in Android, in this article, I collected some of...</p>
             </section>
         </a>
     

@@ -777,6 +777,90 @@ public class SampleActivity extends Activity{
 	</item>
 
 	<item>
+	  <title>Define Userful Android Drawables</title>
+	  <link>//define-userful-android-drawables</link>
+	  <author>Tao He</author>
+	  <pubDate>2016-07-06T02:20:12+08:00</pubDate>
+	  <guid>//define-userful-android-drawables</guid>
+	  <description><![CDATA[
+	     <h4>Define a round corner drawable</h4>
+<div class="highlight"><pre><code class="language-xml" data-lang="xml"><span class="nt">&lt;shape</span> <span class="na">xmlns:android=</span><span class="s">&quot;http://schemas.android.com/apk/res/android&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;solid</span> <span class="na">android:color=</span><span class="s">&quot;#ffffffff&quot;</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;stroke</span> <span class="na">android:width=</span><span class="s">&quot;0dp&quot;</span>
+            <span class="na">android:color=</span><span class="s">&quot;#ffffffff&quot;</span> <span class="nt">/&gt;</span>
+    <span class="nt">&lt;padding</span> <span class="na">android:left=</span><span class="s">&quot;1dp&quot;</span>
+             <span class="na">android:top=</span><span class="s">&quot;1dp&quot;</span>
+             <span class="na">android:right=</span><span class="s">&quot;1dp&quot;</span>
+             <span class="na">android:bottom=</span><span class="s">&quot;1dp&quot;</span> <span class="nt">/&gt;</span>
+    <span class="nt">&lt;corners</span> <span class="na">android:bottomRightRadius=</span><span class="s">&quot;4dp&quot;</span>
+             <span class="na">android:bottomLeftRadius=</span><span class="s">&quot;4dp&quot;</span>
+             <span class="na">android:topLeftRadius=</span><span class="s">&quot;0dp&quot;</span>
+             <span class="na">android:topRightRadius=</span><span class="s">&quot;0dp&quot;</span><span class="nt">/&gt;</span>
+<span class="nt">&lt;/shape&gt;</span>
+</code></pre></div>
+<h4>Define a circle</h4>
+<div class="highlight"><pre><code class="language-xml" data-lang="xml"><span class="cp">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;</span>
+<span class="nt">&lt;shape</span>
+    <span class="na">xmlns:android=</span><span class="s">&quot;http://schemas.android.com/apk/res/android&quot;</span>
+    <span class="na">android:shape=</span><span class="s">&quot;oval&quot;</span><span class="nt">&gt;</span>
+   <span class="nt">&lt;solid</span>
+       <span class="na">android:color=</span><span class="s">&quot;#66000000&quot;</span><span class="nt">/&gt;</span>
+<span class="nt">&lt;/shape&gt;</span>
+</code></pre></div>
+<h4>Define a ring</h4>
+<div class="highlight"><pre><code class="language-xml" data-lang="xml"><span class="nt">&lt;shape</span>
+    <span class="na">android:shape=</span><span class="s">&quot;ring&quot;</span>
+    <span class="na">android:thickness=</span><span class="s">&quot;2.5dp&quot;</span>
+    <span class="na">android:useLevel=</span><span class="s">&quot;true&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;solid</span> <span class="na">android:color=</span><span class="s">&quot;#979797&quot;</span><span class="nt">/&gt;</span>
+<span class="nt">&lt;/shape&gt;</span>
+</code></pre></div>
+<h4>Define a drawable with state</h4>
+<div class="highlight"><pre><code class="language-xml" data-lang="xml"><span class="cp">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;</span>
+<span class="nt">&lt;selector</span> <span class="na">xmlns:android=</span><span class="s">&quot;http://schemas.android.com/apk/res/android&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;item</span> <span class="na">android:drawable=</span><span class="s">&quot;@drawable/qq_login_button_bg_pressed&quot;</span> <span class="na">android:state_pressed=</span><span class="s">&quot;true&quot;</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;item</span> <span class="na">android:drawable=</span><span class="s">&quot;@drawable/qq_login_button_bg_normal&quot;</span><span class="nt">/&gt;</span>
+<span class="nt">&lt;/selector&gt;</span>
+</code></pre></div>
+<h4>Define a ring as progressbar background</h4>
+<div class="highlight"><pre><code class="language-xml" data-lang="xml"><span class="cp">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;</span>
+<span class="nt">&lt;layer-list</span> <span class="na">xmlns:android=</span><span class="s">&quot;http://schemas.android.com/apk/res/android&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;item</span> <span class="na">android:id=</span><span class="s">&quot;@android:id/secondaryProgress&quot;</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;shape</span>
+            <span class="na">android:shape=</span><span class="s">&quot;ring&quot;</span>
+            <span class="na">android:thickness=</span><span class="s">&quot;2.5dp&quot;</span>
+            <span class="na">android:useLevel=</span><span class="s">&quot;true&quot;</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;solid</span> <span class="na">android:color=</span><span class="s">&quot;#979797&quot;</span><span class="nt">/&gt;</span>
+        <span class="nt">&lt;/shape&gt;</span>
+    <span class="nt">&lt;/item&gt;</span>
+
+    <span class="nt">&lt;item</span> <span class="na">android:id=</span><span class="s">&quot;@android:id/progress&quot;</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;rotate</span>
+            <span class="na">android:fromDegrees=</span><span class="s">&quot;270&quot;</span>
+            <span class="na">android:pivotX=</span><span class="s">&quot;50%&quot;</span>
+            <span class="na">android:pivotY=</span><span class="s">&quot;50%&quot;</span>
+            <span class="na">android:toDegrees=</span><span class="s">&quot;270&quot;</span><span class="nt">&gt;</span>
+
+            <span class="nt">&lt;shape</span>
+                <span class="na">android:shape=</span><span class="s">&quot;ring&quot;</span>
+                <span class="na">android:thickness=</span><span class="s">&quot;2.5dp&quot;</span>
+                <span class="na">android:useLevel=</span><span class="s">&quot;true&quot;</span><span class="nt">&gt;</span>
+
+                <span class="nt">&lt;rotate</span>
+                    <span class="na">android:fromDegrees=</span><span class="s">&quot;0&quot;</span>
+                    <span class="na">android:pivotX=</span><span class="s">&quot;50%&quot;</span>
+                    <span class="na">android:pivotY=</span><span class="s">&quot;50%&quot;</span>
+                    <span class="na">android:toDegrees=</span><span class="s">&quot;360&quot;</span> <span class="nt">/&gt;</span>
+                <span class="nt">&lt;solid</span> <span class="na">android:color=</span><span class="s">&quot;#ffffffff&quot;</span><span class="nt">/&gt;</span>
+            <span class="nt">&lt;/shape&gt;</span>
+        <span class="nt">&lt;/rotate&gt;</span>
+    <span class="nt">&lt;/item&gt;</span>
+<span class="nt">&lt;/layer-list&gt;</span>
+</code></pre></div>
+	  ]]></description>
+	</item>
+
+	<item>
 	  <title>Hello World</title>
 	  <link>//hello-world</link>
 	  <author>Tao He</author>
@@ -1066,147 +1150,6 @@ public class SampleActivity extends Activity{
 <li><p>不要设计面面俱到、非常灵活的数据结构。</p></li>
 <li><p>如果原有的代码质量比较好，尽量复用它。但是不要修补很差劲的代码，应当重新编写。</p></li>
 </ul>
-
-	  ]]></description>
-	</item>
-
-	<item>
-	  <title>Copy and swap idiom in C++</title>
-	  <link>//copy-and-swap-idiom-in-cpp</link>
-	  <author>Tao He</author>
-	  <pubDate>2011-02-04T02:20:12+08:00</pubDate>
-	  <guid>//copy-and-swap-idiom-in-cpp</guid>
-	  <description><![CDATA[
-	     <h4>Purpose - assists the assignment operator in achieving two things:</h4>
-
-<ul>
-<li><p>avoiding code duplication </p></li>
-<li><p>providing a strong exception guarantee.</p></li>
-</ul>
-
-<h4>How - to implement</h4>
-
-<p>Let&#39;s consider a concrete case. </p>
-<div class="highlight"><pre><code class="language-c++" data-lang="c++"><span class="cp">#include &lt;algorithm&gt; </span><span class="c1">// std::copy</span>
-<span class="cp">#include &lt;cstddef&gt; </span><span class="c1">// std::size_t</span>
-
-<span class="k">class</span> <span class="nc">dumb_array</span>
-<span class="p">{</span>
-<span class="k">public</span><span class="o">:</span>
-    <span class="c1">// (default) constructor</span>
-    <span class="n">dumb_array</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="kt">size_t</span> <span class="n">size</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span>
-        <span class="o">:</span> <span class="n">mSize</span><span class="p">(</span><span class="n">size</span><span class="p">),</span>
-          <span class="n">mArray</span><span class="p">(</span><span class="n">mSize</span> <span class="o">?</span> <span class="k">new</span> <span class="kt">int</span><span class="p">[</span><span class="n">mSize</span><span class="p">]()</span> <span class="o">:</span> <span class="k">nullptr</span><span class="p">)</span>
-    <span class="p">{</span>
-    <span class="p">}</span>
-
-    <span class="c1">// copy-constructor</span>
-    <span class="n">dumb_array</span><span class="p">(</span><span class="k">const</span> <span class="n">dumb_array</span><span class="o">&amp;</span> <span class="n">other</span><span class="p">)</span>
-        <span class="o">:</span> <span class="n">mSize</span><span class="p">(</span><span class="n">other</span><span class="p">.</span><span class="n">mSize</span><span class="p">),</span>
-          <span class="n">mArray</span><span class="p">(</span><span class="n">mSize</span> <span class="o">?</span> <span class="k">new</span> <span class="kt">int</span><span class="p">[</span><span class="n">mSize</span><span class="p">]</span> <span class="o">:</span> <span class="k">nullptr</span><span class="p">),</span>
-    <span class="p">{</span>
-        <span class="c1">// note that this is non-throwing, because of the data</span>
-        <span class="c1">// types being used; more attention to detail with regards</span>
-        <span class="c1">// to exceptions must be given in a more general case, however</span>
-        <span class="n">std</span><span class="o">::</span><span class="n">copy</span><span class="p">(</span><span class="n">other</span><span class="p">.</span><span class="n">mArray</span><span class="p">,</span> <span class="n">other</span><span class="p">.</span><span class="n">mArray</span> <span class="o">+</span> <span class="n">mSize</span><span class="p">,</span> <span class="n">mArray</span><span class="p">);</span>
-    <span class="p">}</span>
-
-    <span class="c1">// destructor</span>
-    <span class="o">~</span><span class="n">dumb_array</span><span class="p">()</span>
-    <span class="p">{</span>
-        <span class="k">delete</span> <span class="p">[]</span> <span class="n">mArray</span><span class="p">;</span>
-    <span class="p">}</span>
-
-<span class="k">private</span><span class="o">:</span>
-    <span class="n">std</span><span class="o">::</span><span class="kt">size_t</span> <span class="n">mSize</span><span class="p">;</span>
-    <span class="kt">int</span><span class="o">*</span> <span class="n">mArray</span><span class="p">;</span>
-<span class="p">};</span>
-</code></pre></div>
-<p>This class almost manages the array successfully, but it needs operator= to work correctly.</p>
-
-<p><strong>A failed solution</strong></p>
-
-<p>Here&#39;s how a naive implementation might look:</p>
-<div class="highlight"><pre><code class="language-c++" data-lang="c++"><span class="c1">// the hard part</span>
-<span class="n">dumb_array</span><span class="o">&amp;</span> <span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="k">const</span> <span class="n">dumb_array</span><span class="o">&amp;</span> <span class="n">other</span><span class="p">)</span>
-<span class="p">{</span>
-    <span class="k">if</span> <span class="p">(</span><span class="k">this</span> <span class="o">!=</span> <span class="o">&amp;</span><span class="n">other</span><span class="p">)</span> <span class="c1">// (1)</span>
-    <span class="p">{</span>
-        <span class="c1">// get rid of the old data...</span>
-        <span class="k">delete</span> <span class="p">[]</span> <span class="n">mArray</span><span class="p">;</span> <span class="c1">// (2)</span>
-        <span class="n">mArray</span> <span class="o">=</span> <span class="k">nullptr</span><span class="p">;</span> <span class="c1">// (2) *(see footnote for rationale)</span>
-
-        <span class="c1">// ...and put in the new</span>
-        <span class="n">mSize</span> <span class="o">=</span> <span class="n">other</span><span class="p">.</span><span class="n">mSize</span><span class="p">;</span> <span class="c1">// (3)</span>
-        <span class="n">mArray</span> <span class="o">=</span> <span class="n">mSize</span> <span class="o">?</span> <span class="k">new</span> <span class="kt">int</span><span class="p">[</span><span class="n">mSize</span><span class="p">]</span> <span class="o">:</span> <span class="k">nullptr</span><span class="p">;</span> <span class="c1">// (3)</span>
-        <span class="n">std</span><span class="o">::</span><span class="n">copy</span><span class="p">(</span><span class="n">other</span><span class="p">.</span><span class="n">mArray</span><span class="p">,</span> <span class="n">other</span><span class="p">.</span><span class="n">mArray</span> <span class="o">+</span> <span class="n">mSize</span><span class="p">,</span> <span class="n">mArray</span><span class="p">);</span> <span class="c1">// (3)</span>
-    <span class="p">}</span>
-
-    <span class="k">return</span> <span class="o">*</span><span class="k">this</span><span class="p">;</span>
-<span class="p">}</span>
-</code></pre></div>
-<p>And we say we&#39;re finished; this now manages an array, without leaks. However, it suffers from three problems, marked sequentially in the code as (n).</p>
-
-<ul>
-<li><p>The first is the self-assignment test. This check serves two purposes: it&#39;s an easy way to prevent us from running needless code on self-assignment, and it protects us from subtle bugs (such as deleting the array only to try and copy it). But in all other cases it merely serves to slow the program down, and act as noise in the code; self-assignment rarely occurs, so most of the time this check is a waste. It would be better if the operator could work properly without it.</p></li>
-<li><p>The second is that it only provides a basic exception guarantee. If new int[mSize] fails,<code>*this</code> will have been modified. (Namely, the size is wrong and the data is gone!) For a strong exception guarantee, it would need to be something akin to:</p></li>
-</ul>
-<div class="highlight"><pre><code class="language-c++" data-lang="c++"><span class="n">dumb_array</span><span class="o">&amp;</span> <span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="k">const</span> <span class="n">dumb_array</span><span class="o">&amp;</span> <span class="n">other</span><span class="p">)</span>
-<span class="p">{</span>
-    <span class="k">if</span> <span class="p">(</span><span class="k">this</span> <span class="o">!=</span> <span class="o">&amp;</span><span class="n">other</span><span class="p">)</span> <span class="c1">// (1)</span>
-    <span class="p">{</span>
-        <span class="c1">// get the new data ready before we replace the old</span>
-        <span class="n">std</span><span class="o">::</span><span class="kt">size_t</span> <span class="n">newSize</span> <span class="o">=</span> <span class="n">other</span><span class="p">.</span><span class="n">mSize</span><span class="p">;</span>
-        <span class="kt">int</span><span class="o">*</span> <span class="n">newArray</span> <span class="o">=</span> <span class="n">newSize</span> <span class="o">?</span> <span class="k">new</span> <span class="kt">int</span><span class="p">[</span><span class="n">newSize</span><span class="p">]()</span> <span class="o">:</span> <span class="k">nullptr</span><span class="p">;</span> <span class="c1">// (3)</span>
-        <span class="n">std</span><span class="o">::</span><span class="n">copy</span><span class="p">(</span><span class="n">other</span><span class="p">.</span><span class="n">mArray</span><span class="p">,</span> <span class="n">other</span><span class="p">.</span><span class="n">mArray</span> <span class="o">+</span> <span class="n">newSize</span><span class="p">,</span> <span class="n">newArray</span><span class="p">);</span> <span class="c1">// (3)</span>
-
-        <span class="c1">// replace the old data (all are non-throwing)</span>
-        <span class="k">delete</span> <span class="p">[]</span> <span class="n">mArray</span><span class="p">;</span>
-        <span class="n">mSize</span> <span class="o">=</span> <span class="n">newSize</span><span class="p">;</span>
-        <span class="n">mArray</span> <span class="o">=</span> <span class="n">newArray</span><span class="p">;</span>
-    <span class="p">}</span>
-
-    <span class="k">return</span> <span class="o">*</span><span class="k">this</span><span class="p">;</span>
-<span class="p">}</span>
-</code></pre></div>
-<p>The code has expanded! Which leads us to the third problem: code duplication. Our assignment operator effectively duplicates all the code we&#39;ve already written elsewhere, and that&#39;s a terrible thing.</p>
-
-<p><strong>A successful solution</strong></p>
-
-<p>As mentioned, the copy-and-swap idiom will fix all these issues. But right now, we have all the requirements except one: a swap function. While The Rule of Three successfully entails the existence of our copy-constructor, assignment operator, and destructor, it should really be called &quot;The Big Three and A Half&quot;: any time your class manages a resource it also makes sense to provide a swap function.</p>
-
-<p>We need to add swap functionality to our class, and we do that as follows†:
-```c++
-class dumb_array
-{
-public:
-    // ...</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">friend void swap(dumb_array&amp; first, dumb_array&amp; second) // nothrow
-{
-    // enable ADL (not necessary in our case, but good practice)
-    using std::swap;
-
-    // by swapping the members of two objects,
-    // the two objects are effectively swapped
-    swap(first.mSize, second.mSize);
-    swap(first.mArray, second.mArray);
-}
-
-// ...
-</code></pre></div>
-<p>};
-``<code>
-(Here is the explanation why public friend swap.) Now not only can we swap our</code>dumb_array`&#39;s, but swaps in general can be more efficient; it merely swaps pointers and sizes, rather than allocating and copying entire arrays. Aside from this bonus in functionality and efficiency, we are now ready to implement the copy-and-swap idiom.</p>
-
-<p>Without further ado, our assignment operator is:</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">dumb_array&amp; operator=(dumb_array other) // (1)
-{
-    swap(*this, other); // (2)
-
-    return *this;
-}
-</code></pre></div>
-<p>And that&#39;s it! With one fell swoop, all three problems are elegantly tackled at once.</p>
 
 	  ]]></description>
 	</item>

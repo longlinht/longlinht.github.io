@@ -757,6 +757,87 @@ public class SampleActivity extends Activity{
       </item>
     
       <item>
+        <title>Define Userful Android Drawables</title>
+        <description>&lt;h4&gt;Define a round corner drawable&lt;/h4&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-xml&quot; data-lang=&quot;xml&quot;&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;shape&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;xmlns:android=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;http://schemas.android.com/apk/res/android&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;solid&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;android:color=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;#ffffffff&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;stroke&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;android:width=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;0dp&amp;quot;&lt;/span&gt;
+            &lt;span class=&quot;na&quot;&gt;android:color=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;#ffffffff&amp;quot;&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;padding&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;android:left=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;1dp&amp;quot;&lt;/span&gt;
+             &lt;span class=&quot;na&quot;&gt;android:top=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;1dp&amp;quot;&lt;/span&gt;
+             &lt;span class=&quot;na&quot;&gt;android:right=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;1dp&amp;quot;&lt;/span&gt;
+             &lt;span class=&quot;na&quot;&gt;android:bottom=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;1dp&amp;quot;&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;corners&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;android:bottomRightRadius=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;4dp&amp;quot;&lt;/span&gt;
+             &lt;span class=&quot;na&quot;&gt;android:bottomLeftRadius=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;4dp&amp;quot;&lt;/span&gt;
+             &lt;span class=&quot;na&quot;&gt;android:topLeftRadius=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;0dp&amp;quot;&lt;/span&gt;
+             &lt;span class=&quot;na&quot;&gt;android:topRightRadius=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;0dp&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;/shape&amp;gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h4&gt;Define a circle&lt;/h4&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-xml&quot; data-lang=&quot;xml&quot;&gt;&lt;span class=&quot;cp&quot;&gt;&amp;lt;?xml version=&amp;quot;1.0&amp;quot; encoding=&amp;quot;utf-8&amp;quot;?&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;shape&lt;/span&gt;
+    &lt;span class=&quot;na&quot;&gt;xmlns:android=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;http://schemas.android.com/apk/res/android&amp;quot;&lt;/span&gt;
+    &lt;span class=&quot;na&quot;&gt;android:shape=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;oval&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+   &lt;span class=&quot;nt&quot;&gt;&amp;lt;solid&lt;/span&gt;
+       &lt;span class=&quot;na&quot;&gt;android:color=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;#66000000&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;/shape&amp;gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h4&gt;Define a ring&lt;/h4&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-xml&quot; data-lang=&quot;xml&quot;&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;shape&lt;/span&gt;
+    &lt;span class=&quot;na&quot;&gt;android:shape=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;ring&amp;quot;&lt;/span&gt;
+    &lt;span class=&quot;na&quot;&gt;android:thickness=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;2.5dp&amp;quot;&lt;/span&gt;
+    &lt;span class=&quot;na&quot;&gt;android:useLevel=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;true&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;solid&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;android:color=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;#979797&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;/shape&amp;gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h4&gt;Define a drawable with state&lt;/h4&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-xml&quot; data-lang=&quot;xml&quot;&gt;&lt;span class=&quot;cp&quot;&gt;&amp;lt;?xml version=&amp;quot;1.0&amp;quot; encoding=&amp;quot;utf-8&amp;quot;?&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;selector&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;xmlns:android=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;http://schemas.android.com/apk/res/android&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;item&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;android:drawable=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;@drawable/qq_login_button_bg_pressed&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;android:state_pressed=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;true&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;item&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;android:drawable=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;@drawable/qq_login_button_bg_normal&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;/selector&amp;gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h4&gt;Define a ring as progressbar background&lt;/h4&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-xml&quot; data-lang=&quot;xml&quot;&gt;&lt;span class=&quot;cp&quot;&gt;&amp;lt;?xml version=&amp;quot;1.0&amp;quot; encoding=&amp;quot;utf-8&amp;quot;?&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;layer-list&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;xmlns:android=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;http://schemas.android.com/apk/res/android&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;item&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;android:id=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;@android:id/secondaryProgress&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;shape&lt;/span&gt;
+            &lt;span class=&quot;na&quot;&gt;android:shape=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;ring&amp;quot;&lt;/span&gt;
+            &lt;span class=&quot;na&quot;&gt;android:thickness=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;2.5dp&amp;quot;&lt;/span&gt;
+            &lt;span class=&quot;na&quot;&gt;android:useLevel=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;true&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+            &lt;span class=&quot;nt&quot;&gt;&amp;lt;solid&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;android:color=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;#979797&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;/shape&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;/item&amp;gt;&lt;/span&gt;
+
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;item&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;android:id=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;@android:id/progress&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;rotate&lt;/span&gt;
+            &lt;span class=&quot;na&quot;&gt;android:fromDegrees=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;270&amp;quot;&lt;/span&gt;
+            &lt;span class=&quot;na&quot;&gt;android:pivotX=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;50%&amp;quot;&lt;/span&gt;
+            &lt;span class=&quot;na&quot;&gt;android:pivotY=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;50%&amp;quot;&lt;/span&gt;
+            &lt;span class=&quot;na&quot;&gt;android:toDegrees=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;270&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+
+            &lt;span class=&quot;nt&quot;&gt;&amp;lt;shape&lt;/span&gt;
+                &lt;span class=&quot;na&quot;&gt;android:shape=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;ring&amp;quot;&lt;/span&gt;
+                &lt;span class=&quot;na&quot;&gt;android:thickness=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;2.5dp&amp;quot;&lt;/span&gt;
+                &lt;span class=&quot;na&quot;&gt;android:useLevel=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;true&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+
+                &lt;span class=&quot;nt&quot;&gt;&amp;lt;rotate&lt;/span&gt;
+                    &lt;span class=&quot;na&quot;&gt;android:fromDegrees=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;0&amp;quot;&lt;/span&gt;
+                    &lt;span class=&quot;na&quot;&gt;android:pivotX=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;50%&amp;quot;&lt;/span&gt;
+                    &lt;span class=&quot;na&quot;&gt;android:pivotY=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;50%&amp;quot;&lt;/span&gt;
+                    &lt;span class=&quot;na&quot;&gt;android:toDegrees=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;360&amp;quot;&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+                &lt;span class=&quot;nt&quot;&gt;&amp;lt;solid&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;android:color=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;#ffffffff&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+            &lt;span class=&quot;nt&quot;&gt;&amp;lt;/shape&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;/rotate&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;/item&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;/layer-list&amp;gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</description>
+        <pubDate>Wed, 06 Jul 2016 02:20:12 +0800</pubDate>
+        <link>http://longlinht.github.io//define-userful-android-drawables</link>
+        <guid isPermaLink="true">http://longlinht.github.io//define-userful-android-drawables</guid>
+      </item>
+    
+      <item>
         <title>I Do Not Know What I May Appear To The World</title>
         <description>&lt;p&gt;作为“God”板块的第一篇，引用牛顿爵士的一段话来开启。&lt;/p&gt;
 
@@ -931,52 +1012,6 @@ public class SampleActivity extends Activity{
         <pubDate>Sun, 04 Jan 2015 03:20:00 +0800</pubDate>
         <link>http://longlinht.github.io//using-duilib-to-build-gui</link>
         <guid isPermaLink="true">http://longlinht.github.io//using-duilib-to-build-gui</guid>
-      </item>
-    
-      <item>
-        <title>Similarities and Differences between Java and C++</title>
-        <description>&lt;ul&gt;
-&lt;li&gt;&lt;p&gt;Java does not support typedefs, defines, or a preprocessor. &lt;/p&gt;&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;Java does not support enums but does support named constants through use of the final keyword.&lt;/p&gt;&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;Java supports classes, but does not support structures or unions.&lt;/p&gt;&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;There are no stand-alone functions in Java, all function or method definitions in Java are contained within the class definition. &lt;/p&gt;&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;All classes in Java ultimately inherit from the Object class. This is significantly different from C++ where it is possible to create inheritance trees that are completely unrelated to one another.&lt;/p&gt;&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;Both C++ and Java support class (static) methods or functions that can be called without the requirement to instantiate an object of the class.&lt;/p&gt;&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;Java does not support multiple inheritance, while the interface concept is not supported by C++.&lt;/p&gt;&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;Java does not support the goto statement (but goto is a reserved word). However, it does support labeled break and continue statements, a feature not supported by C++. &lt;/p&gt;&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;Java does not support operator overloading.&lt;/p&gt;&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;Java does not support automatic type conversions (except where guaranteed safe).&lt;/p&gt;&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;Unlike C++, Java provides true arrays as first-class objects, true boolean type and has a String type.&lt;/p&gt;&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;Java does not support pointers(at least it does not allow you to modify the address contained in a pointer or to perform pointer arithmetic).&lt;/p&gt;&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;A class definition in Java looks similar to a class definition in C++, but there is no closing semicolon. Also forward reference declarations that are sometimes required in C++ are not required in Java.&lt;/p&gt;&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;The scope resolution operator (::) required in C++ is not used in Java. &lt;/p&gt;&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;In C++, static data members and functions are called using the name of the class and the name of the static member connected by the scope resolution operator. In Java, the dot is used for this purpose.&lt;/p&gt;&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;Like C++, Java has primitive types such as int, float, etc. Unlike C++, the size of each primitive type is the same regardless of the platform. There is no unsigned integer type in Java. Type checking and type requirements are much tighter in Java than in C++.&lt;/p&gt;&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;Conditional expressions in Java must evaluate to boolean rather than to integer, as is the case in C++.&lt;/p&gt;&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;The char type in C++ is an 8-bit type that maps to the ASCII (or extended ASCII) character set. The char type in Java is a 16-bit type and uses the Unicode character set &lt;/p&gt;&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;Unlike C++, the &amp;gt;&amp;gt; operator in Java is a &amp;quot;signed&amp;quot; right bit shift, inserting the sign bit into the vacated bit position. Java adds an operator that inserts zeros into the vacated bit positions.&lt;/p&gt;&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;C++ allows the instantiation of variables or objects of all types either at compile time in static memory or at run time using dynamic memory. However, Java requires all variables of primitive types to be instantiated at compile time, and requires all objects to be instantiated in dynamic memory at runtime. Wrapper classes are provided for all primitive types except byte and short to allow them to be instantiated as objects in dynamic memory at runtime if needed.&lt;/p&gt;&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;C++ requires that classes and functions be declared before they are used. This is not necessary in Java.&lt;/p&gt;&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;The &amp;quot;namespace&amp;quot; issues prevalent in C++ are handled in Java by including everything in a class, and collecting classes into packages.&lt;/p&gt;&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;In C++, unless you specifically initialize variables of primitive types, they will contain garbage. Although local variables of primitive types can be initialized in the declaration, primitive data members of a class cannot be initialized in the class definition in C++.&lt;/p&gt;&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;Like C++, Java supports constructors that may be overloaded. &lt;/p&gt;&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;All objects in Java are passed by reference, eliminating the need for the copy constructor used in C++.&lt;/p&gt;&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;There are no destructors in Java.&lt;/p&gt;&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;Like C++, Java allows you to overload functions. However, default arguments are not supported by Java.&lt;/p&gt;&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;Unlike C++, Java does not support templates. Thus, there are no generic functions or classes.&lt;/p&gt;&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;Unlike C++, several &amp;quot;data structure&amp;quot; classes are contained in the &amp;quot;standard&amp;quot; version of Java. &lt;/p&gt;&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;Multithreading is a standard feature of the Java language.&lt;/p&gt;&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;Although Java uses the same keywords as C++ for access control: private, public, and protected, the interpretation of these keywords is significantly different between Java and C++. &lt;/p&gt;&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;There is no virtual keyword in Java. All non-static methods always use dynamic binding, so the virtual keyword isn&amp;#39;t needed for the same purpose that it is used in C++.&lt;/p&gt;&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;Java provides the final keyword that can be used to specify that a method cannot be overridden and that it can be statically bound. (The compiler may elect to make it inline in this case.)&lt;/p&gt;&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;The detailed implementation of the exception handling system in Java is significantly different from that in C++.&lt;/p&gt;&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;As in C++, Java applications can call functions written in another language.&lt;/p&gt;&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;Unlike C++, Java has built-in support for program documentation.&lt;/p&gt;&lt;/li&gt;
-&lt;/ul&gt;
-</description>
-        <pubDate>Sun, 15 Jan 2012 22:00:00 +0800</pubDate>
-        <link>http://longlinht.github.io//similarities-and-differences-between-java-and-cpp</link>
-        <guid isPermaLink="true">http://longlinht.github.io//similarities-and-differences-between-java-and-cpp</guid>
       </item>
     
   </channel>

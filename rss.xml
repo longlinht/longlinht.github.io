@@ -147,6 +147,15 @@ update UI when we finish something in separated thread. This is a basic problem,
       <pubDate>Wed, 29 Dec 2010 02:20:12 +0800</pubDate>
       <dc:date>2010-12-29T02:20:12+08:00</dc:date>
     </item>
+    <item>
+      <title>Forward declaration in C++</title>
+      <link>http://longlinht.github.io//forward-declaration-in-cpp</link>
+      <description>#### Why
+
+</description>
+      <pubDate>Wed, 03 Nov 2010 02:20:12 +0800</pubDate>
+      <dc:date>2010-11-03T02:20:12+08:00</dc:date>
+    </item>
     <dc:date>2016-08-10T00:00:00+08:00</dc:date>
   </channel>
 </rss>

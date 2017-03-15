@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 
     <!-- [[! Page Meta ]] -->
-    <title>Split a String in C++</title>
+    <title>Forward declaration in C++</title>
     <meta name="description" content="Dancing with Machine, Human and God - World is complex,confusing and wonderful,I will talk about machine,human and god to known it, to reveal it." />
 
     <meta name="HandheldFriendly" content="True" />
@@ -96,10 +96,10 @@
     <article class="post tag-machine">
 
         <header class="post-header">
-            <h1 class="post-title">Split a String in C++</h1>
+            <h1 class="post-title">Forward declaration in C++</h1>
             <section class="post-meta">
             <!-- <a href='/'>Tao He</a> -->
-            <time class="post-date" datetime="2010-12-29">29 Dec 2010</time>
+            <time class="post-date" datetime="2010-11-03">03 Nov 2010</time>
                 <!-- [[tags prefix=" on "]] -->
                  
                 on 
@@ -114,52 +114,97 @@
 
         <section class="post-content">
             
-            <p>There are many ways to split a string in C++, but what&#39;s the most elegant way to split a string in C++? May be we can find it step by step. The most simple and direct way is use <code>istringstream</code> to split.</p>
+            <h4>Why</h4>
 
-<p>If the delimiter is whitespace, we could simply code like thie and print substrings:</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">std::string s(&quot;Split a string in C++&quot;);
-std::istringstream iss(s);
+<ul>
+<li><p>Forward-declarations can significantly reduce build times</p></li>
+<li><p>Break cyclic references where two definitions both use each other  </p></li>
+</ul>
+<div class="highlight"><pre><code class="language-c++" data-lang="c++"><span class="n">File</span> <span class="n">Car</span><span class="p">.</span><span class="n">h</span>
 
-do 
-{
-    std::string sub;
-    iss &gt;&gt; sub;
-    if(!sub.empty())
-        std::cout &lt;&lt; &quot;Substring: &quot; &lt;&lt; sub &lt;&lt; std::endl;
-} while (iss);
+<span class="cp">#include &quot;Wheel.h&quot;  </span><span class="c1">// Include Wheel&#39;s definition so it can be used in Car.</span>
+<span class="cp">#include &lt;vector&gt;</span>
+
+<span class="k">class</span> <span class="nc">Car</span>
+<span class="p">{</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">Wheel</span><span class="o">&gt;</span> <span class="n">wheels</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="n">File</span> <span class="n">Wheel</span><span class="p">.</span><span class="n">h</span>
+
+<span class="k">class</span> <span class="nc">Car</span><span class="p">;</span>     <span class="c1">// forward declaration</span>
+
+<span class="k">class</span> <span class="nc">Wheel</span>
+<span class="p">{</span>
+    <span class="n">Car</span><span class="o">*</span> <span class="n">car</span><span class="p">;</span>
+<span class="p">};</span>
 </code></pre></div>
-<p>While when the delimiter is not whitespace, we need think about other way to resolve this problem. If you ever have used vector container in C++ STL, you can combine it figure out more general solution. We could create a function like this:</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">typedef std::vector&lt;std::string&gt; StringVector;
+<h4>When</h4>
 
-StringVector&amp; splitString(const std::string &amp;s, char delim, StringVector &amp;elems)
+<p>Put yourself in the compiler&#39;s position: when you forward declare a type, all the compiler knows is that this type exists; it knows nothing about its size, members, or methods. This is why it&#39;s called an incomplete type. Therefore, you cannot use the type to declare a member, or a base class, since the compiler would need to know the layout of the type.</p>
+
+<p>Assuming the following forward declaration.</p>
+<div class="highlight"><pre><code class="language-c++" data-lang="c++"><span class="k">class</span> <span class="nc">X</span><span class="p">;</span>
+</code></pre></div>
+<p>Here&#39;s what you can and cannot do.</p>
+
+<p><strong>What you can do with an incomplete type</strong>:</p>
+
+<ul>
+<li>Declare a member to be a pointer or a reference to the incomplete type:
+<code>c++
+class Foo {
+X *pt;
+X &amp;pt;
+};
+</code></li>
+<li>Declare functions or methods which accept/return incomplete types:</li>
+</ul>
+<div class="highlight"><pre><code class="language-c++" data-lang="c++"><span class="kt">void</span> <span class="nf">f1</span><span class="p">(</span><span class="n">X</span><span class="p">);</span>
+<span class="n">X</span>    <span class="nf">f2</span><span class="p">();</span>
+</code></pre></div>
+<ul>
+<li>Define functions or methods which accept/return pointers/references to the incomplete type (but without using its members):
+<code>c++
+void f3(X*, X&amp;) {}
+X&amp;   f4()       {}
+X*   f5()       {}
+</code></li>
+</ul>
+
+<p><strong>What you cannot do with an incomplete type</strong>:</p>
+
+<ul>
+<li><p>Use it as a base class
+<code>c++
+class Foo : X {} // compiler error!
+Use it to declare a member:
+class Foo {
+X m; // compiler error!
+};
+</code></p></li>
+<li><p>Define functions or methods using this type
+<code>c++
+void f1(X x) {} // compiler error!
+X    f2()    {} // compiler error!
+</code></p></li>
+<li><p>Use its methods or fields, in fact trying to dereference a variable with incomplete type
+<code>c++
+class Foo {
+X *m;            
+void method()            
 {
-    std::stringstream ss(s);
-    std::string item;
-    while (std::getline(ss, item, delim))
-    {
-        elems.push_back(item);
-    }
-    return elems;
+    m-&gt;someMethod();      // compiler error!
+    int i = m-&gt;someField; // compiler error!
 }
-</code></pre></div>
-<p>May be above solution is more elegent then first one, but it still use <code>stringstream</code>, while structure and some string class&#39;s method, the STL&#39;s power is not incarnated. The later solution will embody the elegence and power of STL&#39;s design.
-<code>
-string sentence = &quot;Split a string in C++&quot;;
-istringstream iss(sentence);
-copy(istream_iterator&lt;string&gt;(iss),
-     istream_iterator&lt;string&gt;(),
-     ostream_iterator&lt;string&gt;(cout, &quot;\n&quot;));
+};
 </code>
-Instead of copying the extracted tokens to an output stream, one could insert them into a container, using the same generic copy algorithm.
-<code>
-vector&lt;string&gt; tokens;
-copy(istream_iterator&lt;string&gt;(iss),
-     istream_iterator&lt;string&gt;(),
-     back_inserter(tokens));
-</code>
-So simple code, it seems elegent, but its delimiter must be whitespace, it&#39;s not a general solution.</p>
+When it comes to templates, there is no absolute rule: whether you can use an incomplete type as a template parameter is dependent on the way the type is used in the template.</p></li>
+</ul>
 
-<p>Conclusion: There is not a standard solution in C++, neither in STL, so usual and common operation on string, why C++ not provide a method in string class.</p>
+<p>For instance, <code>std::vector&lt;T&gt;</code> requires its parameter to be a complete type, while <code>boost::container::vector&lt;T&gt;</code> does not. Sometimes, a complete type is required only if you use certain member functions; this is the case for <code>std::unique_ptr&lt;T&gt;</code>, for example.</p>
+
+<p>A well-documented template should indicate in its documentation all the requirements of its parameters, including whether they need to be complete types or not.</p>
 
 
         </section>
@@ -191,15 +236,15 @@ So simple code, it seems elegent, but its delimiter must be whitespace, it&#39;s
 
             <section class="share">
                 <h4>Share this post</h4>
-                <a class="icon-twitter" href="http://twitter.com/share?text=Split a String in C++&amp;url=http://longlinht.github.io//split-string-in-cpp"
+                <a class="icon-twitter" href="http://twitter.com/share?text=Forward declaration in C++&amp;url=http://longlinht.github.io//forward-declaration-in-cpp"
                     onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
                     <span class="hidden">Twitter</span>
                 </a>
-                <a class="icon-facebook" href="https://www.facebook.com/sharer/sharer.php?u=http://longlinht.github.io//split-string-in-cpp"
+                <a class="icon-facebook" href="https://www.facebook.com/sharer/sharer.php?u=http://longlinht.github.io//forward-declaration-in-cpp"
                     onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
                     <span class="hidden">Facebook</span>
                 </a>
-                <a class="icon-google-plus" href="https://plus.google.com/share?url=http://longlinht.github.io//split-string-in-cpp"
+                <a class="icon-google-plus" href="https://plus.google.com/share?url=http://longlinht.github.io//forward-declaration-in-cpp"
                    onclick="window.open(this.href, 'google-plus-share', 'width=490,height=530');return false;">
                     <span class="hidden">Google+</span>
                 </a>
@@ -242,22 +287,15 @@ So simple code, it seems elegent, but its delimiter must be whitespace, it&#39;s
 
     <!-- [[! next_post ]] -->
     
-        <a class="read-next-story no-cover" href="http://longlinht.github.io//pointers-vs-references-in-cpp">
+        <a class="read-next-story no-cover" href="http://longlinht.github.io//split-string-in-cpp">
             <section class="post">
-                <h2>References vs. Pointers in C++</h2>
-                <p>In C++, references provide many of the same capabilities as pointers. In real development, we...</p>
+                <h2>Split a String in C++</h2>
+                <p>There are many ways to split a string in C++, but what's the most elegant...</p>
             </section>
         </a>
     
     <!-- [[! /next_post ]] -->
     <!-- [[! prev_post ]] -->
-    
-        <a class="read-next-story prev no-cover" href="http://longlinht.github.io//forward-declaration-in-cpp">
-            <section class="post">
-                <h2>Forward declaration in C++</h2>
-                <p><h4>Why</h4> <ul> <li><p>Forward-declarations can significantly reduce build times</p></li> <li><p>Break cyclic references where two definitions both...</p>
-            </section>
-        </a>
     
     <!-- [[! /prev_post ]] -->
 </aside>

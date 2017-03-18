@@ -121,6 +121,15 @@ update UI when we finish something in separated thread. This is a basic problem,
       <dc:date>2012-01-15T22:00:00+08:00</dc:date>
     </item>
     <item>
+      <title>Smart Pointer in C++</title>
+      <link>http://longlinht.github.io//smart-pointer-in-cpp</link>
+      <description>In C++, there is a uncommnon conception named smart pointer, it is rarely seen in other programming lauguages. So, what's it? We could simply define it. **A smart pointer is a class that wraps a 'raw' (or 'bare') C++ pointer, to manage the lifetime of the object being pointed to**.
+
+</description>
+      <pubDate>Mon, 07 Mar 2011 02:30:12 +0800</pubDate>
+      <dc:date>2011-03-07T02:30:12+08:00</dc:date>
+    </item>
+    <item>
       <title>高质量C++编程注意事项</title>
       <link>http://longlinht.github.io//high-quality-cpp</link>
       <description>* 不提倡使用全局变量，尽量不要在头文件中出现象extern int value 这类声明

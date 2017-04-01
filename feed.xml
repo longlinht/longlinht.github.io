@@ -7,7 +7,7 @@
     <atom:link href="http://longlinht.github.io//feed.xml" rel="self" type="application/rss+xml" />
     
       <item>
-        <title>Building my own mac working environment</title>
+        <title>Building My Own Mac Working Environment</title>
         <description>&lt;p&gt;In recent 2 years, I have switched my own working environment from Windows to Ubuntu and Mac. For the reason that I switched C/C++ development for Windows to Java development for Android. But I still prefer C++, so I won&amp;#39;t give up C/C++ programming. In this article I will write down detail steps that how I build working environment. This working environment on Mac is a general working environment, not just for Android development but also C/C++ development. Let&amp;#39;s start!&lt;/p&gt;
 
 &lt;p&gt;First, I would install some universal tools.&lt;/p&gt;

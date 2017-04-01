@@ -12,6 +12,102 @@
    <atom:link href="rss" rel="self" type="application/rss+xml" />
    
 	<item>
+	  <title>Building my own mac working environment</title>
+	  <link>//building-my-own-mac-working-environment</link>
+	  <author>Tao He</author>
+	  <pubDate>2017-04-02T06:30:12+08:00</pubDate>
+	  <guid>//building-my-own-mac-working-environment</guid>
+	  <description><![CDATA[
+	     <p>In recent 2 years, I have switched my own working environment from Windows to Ubuntu and Mac. For the reason that I switched C/C++ development for Windows to Java development for Android. But I still prefer C++, so I won&#39;t give up C/C++ programming. In this article I will write down detail steps that how I build working environment. This working environment on Mac is a general working environment, not just for Android development but also C/C++ development. Let&#39;s start!</p>
+
+<p>First, I would install some universal tools.</p>
+
+<h3>Universal Tools</h3>
+
+<h4>Install and configure Oh my zsh</h4>
+
+<ul>
+<li>Install via curl or wget</li>
+</ul>
+
+<p><strong>via curl</strong></p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">sh -c &quot;$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)&quot;
+</code></pre></div>
+<p><strong>via wget</strong></p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">sh -c &quot;$(wget https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh -O -)&quot;
+</code></pre></div>
+<ul>
+<li>Configure my prefer feature via edit .zshrc file</li>
+</ul>
+
+<p>Add this line to .zshrc file
+<code>
+plugins=(git vi-mode adb)
+</code></p>
+
+<h4>Install and configure iTerm</h4>
+
+<ul>
+<li><p>Install lastest release dmg</p></li>
+<li><p>Clone solarized git project from github and import color scheme for iTerm2
+<code>
+git clone https://github.com/altercation/solarized.git
+cd iterm2-colors-solarized
+./Solarized Dark.itermcolors
+</code></p>
+
+<h4>Install userful command line tools</h4></li>
+<li><p>Install brew - <code>ruby -e &quot;$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)&quot;</code></p></li>
+<li><p>Install ctags - <code>brew install ctags</code></p></li>
+<li><p>Install cscope - <code>brew install cscope</code></p></li>
+<li><p>Install ag - <code>brew install ag</code></p></li>
+<li><p>Install grip - <code>brew install grip</code></p></li>
+</ul>
+
+<h4>Install and configure Vim</h4>
+
+<ul>
+<li>Install vim via source
+<code>
+git clone https://github.com/vim/vim.git
+cd vim 
+./configure --with-features=huge --enable-gui=gnome2 --enable-pythoninterp=yes --enable-cscope --enable-gui=auto \ --enable-gtk2-check --enable-gnome-check \ --enable-fail-if-missing --enable-multibyte --enable-fontset \ --with-x --with-compiledby=&quot;Tao He&quot;
+make
+sudo make install
+</code></li>
+<li><p>Configure vim
+<code>
+cd ~
+git clone https://github.com/longlinht/vimrc.git ~/.vim_runtime
+sh ~/.vim_runtime/install_awesome_vimrc.sh
+</code></p>
+
+<h3>Utilities</h3></li>
+<li><p>Install Alfred</p></li>
+<li><p>Install Dropbox</p></li>
+<li><p>Install NutsCloud</p></li>
+</ul>
+
+<h3>Install IDE</h3>
+
+<h4>Install and configure Android Studio</h4>
+
+<ul>
+<li><p>Install Android Studio via dmg</p></li>
+<li><p>Install and configure ideavim plugin 
+<code>
+Install ideavim in Android Studio
+git clone https://github.com/longlinht/VimForIDEs.git
+In Android Studio -&gt; File -&gt;Import Settings -&gt; Choose VimForIDEs/ideavim/monokai/settings.jar
+</code></p></li>
+</ul>
+
+<p>There are some userful application I have installed, but I don&#39;t want to list them becasue their easy installation. Until now, I work comfortably in this woking environment. Maybe I will develop a script to automate this process in the future. If I make it done, I would update this article and supply this script.</p>
+
+	  ]]></description>
+	</item>
+
+	<item>
 	  <title>Java References</title>
 	  <link>//java-references</link>
 	  <author>Tao He</author>
@@ -930,29 +1026,6 @@ dumpsys | grep &quot;DUMP OF SERVICE&quot;
 	  <description><![CDATA[
 	     <p>这是我“Human”目录的第一篇文章，我以一句电影里的台词作为题目，“成年人的生活里没有容易二字”。这个板块其实我更不知道写什么，不过倒是可以借此文来解释一下那个奇怪的目录名称，其实这个奇怪的名称源于我几年前写
 的一句话“ 茕茕孑力，与机器，人，神共舞”。此文止,期待后续的文章。</p>
-
-	  ]]></description>
-	</item>
-
-	<item>
-	  <title>Hello World</title>
-	  <link>//hello-world</link>
-	  <author>Tao He</author>
-	  <pubDate>2016-06-09T00:00:00+08:00</pubDate>
-	  <guid>//hello-world</guid>
-	  <description><![CDATA[
-	     <p>This is my first post for Machine category, I named it &#39;Hello World&#39; to start my blog. Because many developers start their first program with a single line code to print &#39;Hello World&#39;. Certainly my first line code also is &#39;Hello World&#39; in C programming language. I hope this will be a good start!</p>
-
-<p>Before Starting this blog, I think about this expression way for a long time, I didin&#39;t know what I should write, I also can&#39;t sure I could write down some useful, excellent articles. I even worry about my articles would be some non-value pieces. But now, I never care about it. I will do my best to write some useful, valuable IT articles.</p>
-
-<p>To make a good start, I need figure out what I shoud write. I think about some categories below:</p>
-
-<ul>
-<li><p>General IT</p></li>
-<li><p>Programming Miscellaneous</p></li>
-<li><p>Programming</p></li>
-<li><p>Computer Science</p></li>
-</ul>
 
 	  ]]></description>
 	</item>

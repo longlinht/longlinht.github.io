@@ -7,6 +7,99 @@
     <atom:link href="http://longlinht.github.io//feed.xml" rel="self" type="application/rss+xml" />
     
       <item>
+        <title>Building my own mac working environment</title>
+        <description>&lt;p&gt;In recent 2 years, I have switched my own working environment from Windows to Ubuntu and Mac. For the reason that I switched C/C++ development for Windows to Java development for Android. But I still prefer C++, so I won&amp;#39;t give up C/C++ programming. In this article I will write down detail steps that how I build working environment. This working environment on Mac is a general working environment, not just for Android development but also C/C++ development. Let&amp;#39;s start!&lt;/p&gt;
+
+&lt;p&gt;First, I would install some universal tools.&lt;/p&gt;
+
+&lt;h3&gt;Universal Tools&lt;/h3&gt;
+
+&lt;h4&gt;Install and configure Oh my zsh&lt;/h4&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Install via curl or wget&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;strong&gt;via curl&lt;/strong&gt;&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;sh -c &amp;quot;$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;&lt;strong&gt;via wget&lt;/strong&gt;&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;sh -c &amp;quot;$(wget https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh -O -)&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;ul&gt;
+&lt;li&gt;Configure my prefer feature via edit .zshrc file&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Add this line to .zshrc file
+&lt;code&gt;
+plugins=(git vi-mode adb)
+&lt;/code&gt;&lt;/p&gt;
+
+&lt;h4&gt;Install and configure iTerm&lt;/h4&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;Install lastest release dmg&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Clone solarized git project from github and import color scheme for iTerm2
+&lt;code&gt;
+git clone https://github.com/altercation/solarized.git
+cd iterm2-colors-solarized
+./Solarized Dark.itermcolors
+&lt;/code&gt;&lt;/p&gt;
+
+&lt;h4&gt;Install userful command line tools&lt;/h4&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Install brew - &lt;code&gt;ruby -e &amp;quot;$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)&amp;quot;&lt;/code&gt;&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Install ctags - &lt;code&gt;brew install ctags&lt;/code&gt;&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Install cscope - &lt;code&gt;brew install cscope&lt;/code&gt;&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Install ag - &lt;code&gt;brew install ag&lt;/code&gt;&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Install grip - &lt;code&gt;brew install grip&lt;/code&gt;&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h4&gt;Install and configure Vim&lt;/h4&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Install vim via source
+&lt;code&gt;
+git clone https://github.com/vim/vim.git
+cd vim 
+./configure --with-features=huge --enable-gui=gnome2 --enable-pythoninterp=yes --enable-cscope --enable-gui=auto \ --enable-gtk2-check --enable-gnome-check \ --enable-fail-if-missing --enable-multibyte --enable-fontset \ --with-x --with-compiledby=&amp;quot;Tao He&amp;quot;
+make
+sudo make install
+&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Configure vim
+&lt;code&gt;
+cd ~
+git clone https://github.com/longlinht/vimrc.git ~/.vim_runtime
+sh ~/.vim_runtime/install_awesome_vimrc.sh
+&lt;/code&gt;&lt;/p&gt;
+
+&lt;h3&gt;Utilities&lt;/h3&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Install Alfred&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Install Dropbox&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Install NutsCloud&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3&gt;Install IDE&lt;/h3&gt;
+
+&lt;h4&gt;Install and configure Android Studio&lt;/h4&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;Install Android Studio via dmg&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Install and configure ideavim plugin 
+&lt;code&gt;
+Install ideavim in Android Studio
+git clone https://github.com/longlinht/VimForIDEs.git
+In Android Studio -&amp;gt; File -&amp;gt;Import Settings -&amp;gt; Choose VimForIDEs/ideavim/monokai/settings.jar
+&lt;/code&gt;&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;There are some userful application I have installed, but I don&amp;#39;t want to list them becasue their easy installation. Until now, I work comfortably in this woking environment. Maybe I will develop a script to automate this process in the future. If I make it done, I would update this article and supply this script.&lt;/p&gt;
+</description>
+        <pubDate>Sun, 02 Apr 2017 06:30:12 +0800</pubDate>
+        <link>http://longlinht.github.io//building-my-own-mac-working-environment</link>
+        <guid isPermaLink="true">http://longlinht.github.io//building-my-own-mac-working-environment</guid>
+      </item>
+    
+      <item>
         <title>Java References</title>
         <description>&lt;p&gt;Before JDK 1.2, if a object isn&amp;#39;t referenced by any variable, it can&amp;#39;t be used any more.Since JDK 1.2, Java has four reference types.In order from strongest to weakest these references are: Strong, Soft, Weak, Phantom. &lt;/p&gt;
 
@@ -900,26 +993,6 @@ dumpsys | grep &amp;quot;DUMP OF SERVICE&amp;quot;
         <pubDate>Thu, 09 Jun 2016 00:10:00 +0800</pubDate>
         <link>http://longlinht.github.io//easy-doesnt-enter-into-grown-up-life</link>
         <guid isPermaLink="true">http://longlinht.github.io//easy-doesnt-enter-into-grown-up-life</guid>
-      </item>
-    
-      <item>
-        <title>Hello World</title>
-        <description>&lt;p&gt;This is my first post for Machine category, I named it &amp;#39;Hello World&amp;#39; to start my blog. Because many developers start their first program with a single line code to print &amp;#39;Hello World&amp;#39;. Certainly my first line code also is &amp;#39;Hello World&amp;#39; in C programming language. I hope this will be a good start!&lt;/p&gt;
-
-&lt;p&gt;Before Starting this blog, I think about this expression way for a long time, I didin&amp;#39;t know what I should write, I also can&amp;#39;t sure I could write down some useful, excellent articles. I even worry about my articles would be some non-value pieces. But now, I never care about it. I will do my best to write some useful, valuable IT articles.&lt;/p&gt;
-
-&lt;p&gt;To make a good start, I need figure out what I shoud write. I think about some categories below:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;p&gt;General IT&lt;/p&gt;&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;Programming Miscellaneous&lt;/p&gt;&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;Programming&lt;/p&gt;&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;Computer Science&lt;/p&gt;&lt;/li&gt;
-&lt;/ul&gt;
-</description>
-        <pubDate>Thu, 09 Jun 2016 00:00:00 +0800</pubDate>
-        <link>http://longlinht.github.io//hello-world</link>
-        <guid isPermaLink="true">http://longlinht.github.io//hello-world</guid>
       </item>
     
   </channel>

@@ -8,7 +8,16 @@
     <title>Dancing with Machine, Human and God</title>
     <link>http://longlinht.github.io/</link>
     <description>World is complex,confusing and wonderful,I will talk about machine,human and god to known it, to reveal it.</description>
-    <pubDate>Wed, 10 Aug 2016 00:00:00 +0800</pubDate>
+    <pubDate>Sun, 02 Apr 2017 06:30:12 +0800</pubDate>
+    <item>
+      <title>Building My Own Mac Working Environment</title>
+      <link>http://longlinht.github.io//building-my-own-mac-working-environment</link>
+      <description>In recent 2 years, I have switched my own working environment from Windows to Ubuntu and Mac. For the reason that I switched C/C++ development for Windows to Java development for Android. But I still prefer C++, so I won't give up C/C++ programming. In this article I will write down detail steps that how I build working environment. This working environment on Mac is a general working environment, not just for Android development but also C/C++ development. Let's start!
+
+</description>
+      <pubDate>Sun, 02 Apr 2017 06:30:12 +0800</pubDate>
+      <dc:date>2017-04-02T06:30:12+08:00</dc:date>
+    </item>
     <item>
       <title>Java References</title>
       <link>http://longlinht.github.io//java-references</link>
@@ -112,15 +121,6 @@ update UI when we finish something in separated thread. This is a basic problem,
       <dc:date>2015-01-04T03:20:00+08:00</dc:date>
     </item>
     <item>
-      <title>CAS实现单点登录</title>
-      <link>http://longlinht.github.io//CAS%E5%AE%9E%E7%8E%B0%E5%8D%95%E7%82%B9%E7%99%BB%E5%BD%95</link>
-      <description>公司的云平台做了一个账号系统，要求网页版和客户端实现单点登录，于是我选用了CAS这个开源项目，把这个流程折腾了一遍，现小记基本流程如下：
-
-</description>
-      <pubDate>Thu, 06 Sep 2012 02:30:12 +0800</pubDate>
-      <dc:date>2012-09-06T02:30:12+08:00</dc:date>
-    </item>
-    <item>
       <title>Similarities and Differences between Java and C++</title>
       <link>http://longlinht.github.io//similarities-and-differences-between-java-and-cpp</link>
       <description>* Java does not support typedefs, defines, or a preprocessor. 
@@ -192,6 +192,6 @@ update UI when we finish something in separated thread. This is a basic problem,
       <pubDate>Wed, 03 Nov 2010 02:30:12 +0800</pubDate>
       <dc:date>2010-11-03T02:30:12+08:00</dc:date>
     </item>
-    <dc:date>2016-08-10T00:00:00+08:00</dc:date>
+    <dc:date>2017-04-02T06:30:12+08:00</dc:date>
   </channel>
 </rss>

@@ -12,6 +12,102 @@
    <atom:link href="rss" rel="self" type="application/rss+xml" />
    
 	<item>
+	  <title>Building My Own Mac Working Environment</title>
+	  <link>//building-my-own-mac-working-environment</link>
+	  <author>Tao He</author>
+	  <pubDate>2017-04-02T06:30:12+08:00</pubDate>
+	  <guid>//building-my-own-mac-working-environment</guid>
+	  <description><![CDATA[
+	     <p>In recent 2 years, I have switched my own working environment from Windows to Ubuntu and Mac. For the reason that I switched C/C++ development for Windows to Java development for Android. But I still prefer C++, so I won&#39;t give up C/C++ programming. In this article I will write down detail steps that how I build working environment. This working environment on Mac is a general working environment, not just for Android development but also C/C++ development. Let&#39;s start!</p>
+
+<p>First, I would install some universal tools.</p>
+
+<h3>Universal Tools</h3>
+
+<h4>Install and configure Oh my zsh</h4>
+
+<ul>
+<li>Install via curl or wget</li>
+</ul>
+
+<p><strong>via curl</strong></p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">sh -c &quot;$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)&quot;
+</code></pre></div>
+<p><strong>via wget</strong></p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">sh -c &quot;$(wget https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh -O -)&quot;
+</code></pre></div>
+<ul>
+<li>Configure my prefer feature via edit .zshrc file</li>
+</ul>
+
+<p>Add this line to .zshrc file
+<code>
+plugins=(git vi-mode adb)
+</code></p>
+
+<h4>Install and configure iTerm</h4>
+
+<ul>
+<li><p>Install lastest release dmg</p></li>
+<li><p>Clone solarized git project from github and import color scheme for iTerm2
+<code>
+git clone https://github.com/altercation/solarized.git
+cd iterm2-colors-solarized
+./Solarized Dark.itermcolors
+</code></p>
+
+<h4>Install userful command line tools</h4></li>
+<li><p>Install brew - <code>ruby -e &quot;$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)&quot;</code></p></li>
+<li><p>Install ctags - <code>brew install ctags</code></p></li>
+<li><p>Install cscope - <code>brew install cscope</code></p></li>
+<li><p>Install ag - <code>brew install ag</code></p></li>
+<li><p>Install grip - <code>brew install grip</code></p></li>
+</ul>
+
+<h4>Install and configure Vim</h4>
+
+<ul>
+<li>Install vim via source
+<code>
+git clone https://github.com/vim/vim.git
+cd vim 
+./configure --with-features=huge --enable-gui=gnome2 --enable-pythoninterp=yes --enable-cscope --enable-gui=auto \ --enable-gtk2-check --enable-gnome-check \ --enable-fail-if-missing --enable-multibyte --enable-fontset \ --with-x --with-compiledby=&quot;Tao He&quot;
+make
+sudo make install
+</code></li>
+<li><p>Configure vim
+<code>
+cd ~
+git clone https://github.com/longlinht/vimrc.git ~/.vim_runtime
+sh ~/.vim_runtime/install_awesome_vimrc.sh
+</code></p>
+
+<h3>Utilities</h3></li>
+<li><p>Install Alfred</p></li>
+<li><p>Install Dropbox</p></li>
+<li><p>Install NutsCloud</p></li>
+</ul>
+
+<h3>Install IDE</h3>
+
+<h4>Install and configure Android Studio</h4>
+
+<ul>
+<li><p>Install Android Studio via dmg</p></li>
+<li><p>Install and configure ideavim plugin 
+<code>
+Install ideavim in Android Studio
+git clone https://github.com/longlinht/VimForIDEs.git
+In Android Studio -&gt; File -&gt;Import Settings -&gt; Choose VimForIDEs/ideavim/monokai/settings.jar
+</code></p></li>
+</ul>
+
+<p>There are some userful application I have installed, but I don&#39;t want to list them becasue their easy installation. Until now, I work comfortably in this woking environment. Maybe I will develop a script to automate this process in the future. If I make it done, I would update this article and supply this script.</p>
+
+	  ]]></description>
+	</item>
+
+	<item>
 	  <title>Java References</title>
 	  <link>//java-references</link>
 	  <author>Tao He</author>
@@ -945,7 +1041,7 @@ dumpsys | grep &quot;DUMP OF SERVICE&quot;
 
 <h3>Class architecture of library</h3>
 
-<p><img src="https://dl.dropboxusercontent.com/u/83663714/Figures/duilib_arch.png" alt=""></p>
+<p><img src="http://oi63.tinypic.com/23m3a5t.jpg" alt=""></p>
 
 <h4>Basic library</h4>
 
@@ -971,7 +1067,7 @@ dumpsys | grep &quot;DUMP OF SERVICE&quot;
 
 <h4>Basic process</h4>
 
-<p><img src="https://dl.dropboxusercontent.com/u/83663714/Figures/duilib_typical_process.png" alt=""></p>
+<p><img src="http://oi67.tinypic.com/2a8kb4i.jpg" alt=""></p>
 
 <p>The DUILib framework&#39;s basic message process similar to create window process in WIN32.</p>
 <div class="highlight"><pre><code class="language-c++" data-lang="c++"><span class="kt">int</span> <span class="n">APIENTRY</span> <span class="nf">WinMain</span><span class="p">(</span><span class="n">HINSTANCE</span> <span class="n">hInstance</span><span class="p">,</span> <span class="n">HINSTANCE</span> <span class="n">hPrevInstance</span><span class="p">,</span> <span class="n">LPSTR</span> <span class="n">lpCmdLine</span><span class="p">,</span> <span class="kt">int</span> <span class="n">nCmdShow</span><span class="p">)</span>
@@ -1066,111 +1162,6 @@ dumpsys | grep &quot;DUMP OF SERVICE&quot;
 <li><p>Organizing whole UI element in separated xml files and do not conflit with C++ class inheritance through CreateControl method;</p></li>
 </ul>
 
-	  ]]></description>
-	</item>
-
-	<item>
-	  <title>CAS实现单点登录</title>
-	  <link>//using-cas-to-implement-one-point-login</link>
-	  <author>Tao He</author>
-	  <pubDate>2012-09-06T02:30:12+08:00</pubDate>
-	  <guid>//using-cas-to-implement-one-point-login</guid>
-	  <description><![CDATA[
-	     <p>公司的云平台做了一个账号系统，要求网页版和客户端实现单点登录，于是我选用了CAS这个开源项目，把这个流程折腾了一遍，现小记基本流程如下：</p>
-
-<h4>生成证书 - 证书是服务器端和客户端安全通信的凭证</h4>
-
-<ul>
-<li>用JDK自带的keytool生成证书</li>
-</ul>
-
-<p>命令：
-<code>
-     keytool -genkey -alias  keystore文件别名 -keyalg RSA -keystore keystore文件保存路径
-</code></p>
-
-<ul>
-<li>导出证书</li>
-</ul>
-<div class="highlight"><pre><code class="language-text" data-lang="text">     命令：keytool -export -file 证书保存路径 -alias 别名 -keystore keystore文件路径
-</code></pre></div>
-<ul>
-<li>把证书导入到客户端JDK中</li>
-</ul>
-<div class="highlight"><pre><code class="language-text" data-lang="text">     命令：keytool -import -keystore %JAVA_HOME%\lib\security\cacerts -file 证书路径 -alias 别名
-</code></pre></div>
-<p>注：也可以使用Portecle工具生成证书</p>
-
-<h4>配置服务端</h4>
-<div class="highlight"><pre><code class="language-text" data-lang="text">改%TOMCAT_HOME%\conf\server.xml文件，开启https连接，修改server.xml文件如下：
-    &lt;Connector port=&quot;8443&quot; protocol=&quot;org.apache.coyote.http11.Http11Protocol&quot; SSLEnabled=&quot;true&quot;
-               maxThreads=&quot;150&quot; scheme=&quot;https&quot; secure=&quot;true&quot;
-                  keystoreFile=&quot;conf/ssoServer.jks&quot; keyAlias=&quot;tomcat&quot; keystorePass=&quot;passw0rd&quot;
-               clientAuth=&quot;false&quot; sslProtocol=&quot;TLS&quot; /&gt;
-</code></pre></div>
-<ul>
-<li><p>生成的keystore文件ssoServer.jks到<code>%TOMCAT_HOME%\conf\</code>下。</p></li>
-<li><p>下载Cas的服务端解压，把解压后的文件中modules文件夹中的cas-server-webapp-3.4.8.war文件拷贝的<code>%TOMCAT_HOME%\webapps</code>下，并修改文件名为：cas.war。</p></li>
-<li><p>在浏览器中输入http://localhost:8080/cas/地址，若出现登陆界面，说明部署成功</p></li>
-</ul>
-
-<h4>配置客户端(Java)</h4>
-
-<ul>
-<li><p>添加客户端到你的项目中
- 手动下载下载cas-client，地址：http://www.ja-sig.org/downloads/cas-clients/，然后解压cas-client-3.1.12.zip，在modules文件夹中有需要的jar包。</p></li>
-<li><p>在客户端项目的web.xml配置过滤器
-<code>
-&lt;!-- 该过滤器负责用户的认证工作，必须启用它 --&gt;  
-&lt;filter&gt; 
-    &lt;filter-name&gt;CASFilter&lt;/filter-name&gt; 
-    &lt;filter-class&gt;org.jasig.cas.client.authentication.AuthenticationFilter&lt;/filter-class&gt; 
-    &lt;init-param&gt; 
-        &lt;param-name&gt;casServerLoginUrl&lt;/param-name&gt; 
-        &lt;param-value&gt;https://www.travel.com:8443/cas/login&lt;/param-value&gt; 
-        &lt;!--这里的server是服务端的IP --&gt; 
-    &lt;/init-param&gt; 
-    &lt;init-param&gt; 
-        &lt;param-name&gt;serverName&lt;/param-name&gt; 
-        &lt;param-value&gt;http://www.travel.com:8080&lt;/param-value&gt;&lt;span style=&quot;color:#FF0000;&quot;&gt; ①&lt;/span&gt; 
-    &lt;/init-param&gt; 
-&lt;/filter&gt; 
-&lt;filter-mapping&gt; 
-    &lt;filter-name&gt;CASFilter&lt;/filter-name&gt; 
-    &lt;url-pattern&gt;/*&lt;/url-pattern&gt; 
-&lt;/filter-mapping&gt; 
-&lt;!-- 该过滤器负责对Ticket的校验工作，必须启用它 --&gt; 
-&lt;filter&gt; 
-    &lt;filter-name&gt;CAS Validation Filter&lt;/filter-name&gt; 
-    &lt;filter-class&gt; 
-        org.jasig.cas.client.validation.Cas20ProxyReceivingTicketValidationFilter&lt;/filter-class&gt; 
-    &lt;init-param&gt; 
-        &lt;param-name&gt;casServerUrlPrefix&lt;/param-name&gt; 
-        &lt;param-value&gt;https://www.travel.com:8443/cas&lt;/param-value&gt; 
-    &lt;/init-param&gt; 
-    &lt;init-param&gt; 
-        &lt;param-name&gt;serverName&lt;/param-name&gt; 
-        &lt;param-value&gt;http://www.travel.com:8080&lt;/param-value&gt; 
-    &lt;/init-param&gt; 
-&lt;/filter&gt; 
-&lt;filter-mapping&gt; 
-    &lt;filter-name&gt;CAS Validation Filter&lt;/filter-name&gt; 
-    &lt;url-pattern&gt;/*&lt;/url-pattern&gt; 
-&lt;/filter-mapping&gt;
-</code></p></li>
-</ul>
-
-<h4>主要原理</h4>
-<div class="highlight"><pre><code class="language-text" data-lang="text"> 用户第一次访问一个CAS 服务的客户web 应用时（访问URL ：http://192.168.7.90:8081/web1 ），部署在客户web 应用的cas AuthenticationFilter ，会截获此请求，生成service 参数然后redirect 到CAS 服务的login 接口，url 为https://cas:8443/cas/login?service=http%3A%2F%2F192.168.7.90%3A8081%2Fweb1%2F，认证成功后，CAS 服务器会生成认证cookie ，写入浏览器，同时将cookie 缓存到服务器本地，CAS 服务器还会根据service 参数生成ticket,ticket 会保存到服务器，也会加在url 后面，然后将请求redirect 回客户web 应用，url为http://192.168.7.90:8081/web1/?ticket=ST-5-Sx6eyvj7cPPCfn0pMZuMwnbMvxpCBcNAIi6-20 。这时客户端的AuthenticationFilter 看到ticket 参数后，会跳过，由其后面的TicketValidationFilter 处理，TicketValidationFilter会利用httpclient 工具访问cas 服务的/serviceValidate 接口, 将ticket 、service 都传到此接口，由此接口验证ticket的有效性，TicketValidationFilter 如果得到验证成功的消息，就会把用户信息写入web 应用的session 里。至此为止，SSO 会话就建立起来了，以后用户在同一浏览器里访问此web 应用时，AuthenticationFilter 会在session 里读取到用户信息，所以就不会去CAS 认证，如果在此浏览器里访问别的web 应用时，AuthenticationFilter在session 里读取不到用户信息，会去CAS 的login 接口认证，但这时CAS 会读取到浏览器传来的cookie ，所以CAS 不会要求用户去登录页面登录，只是会根据service 参数生成一个ticket ，然后再和web 应用做一个验证ticket 的交互而已。
-</code></pre></div>
-<h4>名词解释</h4>
-
-<h6>TGT（Ticket Grangting Ticket）</h6>
-<div class="highlight"><pre><code class="language-text" data-lang="text">TGT是CAS为用户签发的登录票据，拥有了TGT，用户就可以证明自己在CAS成功登录过。TGT封装了Cookie值以及此Cookie值对应的用户信息。用户在CAS认证成功后，CAS生成cookie，写入浏览器，同时生成一个TGT对象，放入自己的缓存，TGT对象的ID就是cookie的值。当HTTP再次请求到来时，如果传过来的有CAS生成的cookie，则CAS以此cookie值为key查询缓存中有无TGT ，如果有的话，则说明用户之前登录过，如果没有，则用户需要重新登录。
-</code></pre></div>
-<h5>ST（Service Ticket）</h5>
-<div class="highlight"><pre><code class="language-text" data-lang="text"> ST是CAS为用户签发的访问某一service的票据。用户访问service时，service发现用户没有ST，则要求用户去CAS获取ST。用户向CAS发出获取ST的请求，如果用户的请求中包含cookie，则CAS会以此cookie值为key查询缓存中有无TGT，如果存在TGT，则用此TGT签发一个ST，返回给用户。用户凭借ST去访问service，service拿ST去CAS验证，验证通过后，允许用户访问资源。
-</code></pre></div>
 	  ]]></description>
 	</item>
 

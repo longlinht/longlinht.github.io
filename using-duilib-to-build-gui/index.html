@@ -122,7 +122,7 @@
 
 <h3>Class architecture of library</h3>
 
-<p><img src="http://oi63.tinypic.com/23m3a5t.jpg" alt=""></p>
+<p><img src="https://dl.dropboxusercontent.com/u/83663714/Figures/duilib_arch.png" alt=""></p>
 
 <h4>Basic library</h4>
 
@@ -148,7 +148,7 @@
 
 <h4>Basic process</h4>
 
-<p><img src="http://oi67.tinypic.com/2a8kb4i.jpg" alt=""></p>
+<p><img src="https://dl.dropboxusercontent.com/u/83663714/Figures/duilib_typical_process.png" alt=""></p>
 
 <p>The DUILib framework&#39;s basic message process similar to create window process in WIN32.</p>
 <div class="highlight"><pre><code class="language-c++" data-lang="c++"><span class="kt">int</span> <span class="n">APIENTRY</span> <span class="nf">WinMain</span><span class="p">(</span><span class="n">HINSTANCE</span> <span class="n">hInstance</span><span class="p">,</span> <span class="n">HINSTANCE</span> <span class="n">hPrevInstance</span><span class="p">,</span> <span class="n">LPSTR</span> <span class="n">lpCmdLine</span><span class="p">,</span> <span class="kt">int</span> <span class="n">nCmdShow</span><span class="p">)</span>
@@ -334,10 +334,10 @@
     <!-- [[! /next_post ]] -->
     <!-- [[! prev_post ]] -->
     
-        <a class="read-next-story prev no-cover" href="http://longlinht.github.io//similarities-and-differences-between-java-and-cpp">
+        <a class="read-next-story prev no-cover" href="http://longlinht.github.io//using-cas-to-implement-one-point-login">
             <section class="post">
-                <h2>Similarities and Differences between Java and C++</h2>
-                <p><ul> <li><p>Java does not support typedefs, defines, or a preprocessor. </p></li> <li><p>Java does not support...</p>
+                <h2>CAS实现单点登录</h2>
+                <p><p>公司的云平台做了一个账号系统，要求网页版和客户端实现单点登录，于是我选用了CAS这个开源项目，把这个流程折腾了一遍，现小记基本流程如下：</p> <h4>生成证书 - 证书是服务器端和客户端安全通信的凭证</h4> <ul> <li>用JDK自带的keytool生成证书</li> </ul> <p>命令： <code> keytool -genkey -alias keystore文件别名 -keyalg RSA...</p>
             </section>
         </a>
     

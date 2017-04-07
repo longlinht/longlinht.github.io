@@ -1,120 +1,6 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <!-- [[! Document Settings ]] -->
-    <meta charset="utf-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<h2>C#创建不规则窗体（控件）</h2>
 
-    <!-- [[! Page Meta ]] -->
-    <title>C#创建不规则窗体（控件）</title>
-    <meta name="description" content="Dancing with Machine, Human and God - World is complex,confusing and wonderful,I will talk about machine,human and god to known it, to reveal it." />
-
-    <meta name="HandheldFriendly" content="True" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
-    <link rel="shortcut icon" href="/assets/images/favicon.ico" >
-
-    <!-- [[! Styles'n'Scripts ]] -->
-    <link rel="stylesheet" type="text/css" href="/assets/css/screen.css" />
-    <link rel="stylesheet" type="text/css"
-          href="//fonts.googleapis.com/css?family=Merriweather:300,700,700italic,300italic|Open+Sans:700,400" />
-    <link rel="stylesheet" type="text/css" href="/assets/css/syntax.css" />
-    
-    <!-- [[! Ghost outputs important style and meta data with this tag ]] -->
-        <link rel="canonical" href="/" />
-    <meta name="referrer" content="origin" />
-    <link rel="next" href="/page2/" />
-
-    <meta property="og:site_name" content="Dancing with Machine, Human and God" />
-    <meta property="og:type" content="website" />
-    <meta property="og:title" content="Dancing with Machine, Human and God" />
-    <meta property="og:description" content="World is complex,confusing and wonderful,I will talk about machine,human and god to known it, to reveal it." />
-    <meta property="og:url" content="/" />
-    <meta property="og:image" content="/assets/images/cover1.jpg" />
-
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Dancing with Machine, Human and God" />
-    <meta name="twitter:description" content="World is complex,confusing and wonderful,I will talk about machine,human and god to known it, to reveal it." />
-    <meta name="twitter:url" content="/" />
-    <meta name="twitter:image:src" content="/assets/images/cover1.jpg" />
-
-    <script type="application/ld+json">
-{
-    "@context": "http://schema.org",
-    "@type": "Website",
-    "publisher": "Tao's Page",
-    "url": "/",
-    "image": "/assets/images/cover1.jpg",
-    "description": "World is complex,confusing and wonderful,I will talk about machine,human and god to known it, to reveal it."
-}
-    </script>
-
-    <meta name="generator" content="Jekyll 3.0.0" />
-    <link rel="alternate" type="application/rss+xml" title="Dancing with Machine, Human and God" href="/rss.xml" />
-
-</head>
-<body class="post-template nav-closed">
-
-    <div class="nav">
-    <h3 class="nav-title">Menu</h3>
-    <a href="#" class="nav-close">
-        <span class="hidden">Close</span>
-    </a>
-    <ul>
-        <li class="nav-home " role="presentation"><a href="/">Home</a></li>
-        <li class="nav-about " role="presentation"><a href="/about.html">About</a></li>
-        <li class="nav-fables " role="presentation"><a href="/tag/machine/">Machine</a></li>
-        <li class="nav-speeches " role="presentation"><a href="/tag/human/">Human</a></li>
-        <li class="nav-fiction " role="presentation"><a href="/tag/god/">God</a></li>
-        <li class="nav-author " role="presentation"><a href="/author/hetao/">Author</a></li>
-    </ul>
-    <a class="subscribe-button icon-feed" href="/rss.xml">Subscribe</a>
-</div>
-<span class="nav-cover"></span>
-
-
-    <div class="site-wrapper">
-
-        <!-- [[! Everything else gets inserted here ]] -->
-        <!-- < default -->
-
-<!-- The comment above "< default" means - insert everything in this file into -->
-    <!-- the [body] of the default.hbs template, which contains our header/footer. -->
-
-<!-- Everything inside the #post tags pulls data from the post -->
-<!-- #post -->
-
-<header class="main-header post-head no-cover">
-    <nav class="main-nav  clearfix">
-        
-        
-    </nav>
-</header>
-
-<main class="content" role="main">
-
-    <article class="post tag-machine">
-
-        <header class="post-header">
-            <h1 class="post-title">C#创建不规则窗体（控件）</h1>
-            <section class="post-meta">
-            <!-- <a href='/'>Tao He</a> -->
-            <time class="post-date" datetime="2012-09-03">03 Sep 2012</time>
-                <!-- [[tags prefix=" on "]] -->
-                 
-                on 
-                
-                    
-                       <a href='/tag/machine'>Machine</a>
-                       
-                
-                
-            </section>
-        </header>
-
-        <section class="post-content">
-            
-            <p>创建不规则窗体和控件这个过程包含了大量的图形编程工作，不同的计算机因内存和显卡的不同可能会导致最终的效果有所不同 。创建不规则窗体具体步骤：</p>
+<p>创建不规则窗体和控件这个过程包含了大量的图形编程工作，不同的计算机因内存和显卡的不同可能会导致最终的效果有所不同 。创建不规则窗体具体步骤：</p>
 
 <h4>先创建一个具有不规则形状的位图文件</h4>
 
@@ -125,132 +11,236 @@
 
 <p>3．保存位图文件。</p>
 
+<h4>下面创建窗体：在VS.net中创建一个新的工程</h4>
 
-        </section>
+<ul>
+<li><p>首先，设置窗体的背景从而建立窗体形状。</p>
 
-        <footer class="post-footer">
+<ul>
+<li>将FormBorderStyle属性设置为None。</li>
+<li>将BackgroundImage属性设置为你创建的图片文件。</li>
+<li>将TransparencyKey属性设置为图片文件的背景颜色值。该属性使得位图的背景部分不可见，从而窗体就呈现出一个不规则形。</li>
+<li>保存工程,按Ctrl+F5可以运行此程序。</li>
+</ul></li>
+</ul>
 
-            <!-- Everything inside the #author tags pulls data from the author -->
-            <!-- #author-->
+<h4>实现关闭功能以及移动窗体的功能</h4>
 
-            
-            <figure class="author-image">
-                <a class="img" href="/author/hetao" style="background-image: url(/assets/images/casper.png)"><span class="hidden">'s Picture</span></a>
-            </figure>
-            
+<ul>
+<li><p>实现窗体的关闭及移动：</p>
 
-            <section class="author">
-                <h4><a href="/author/hetao">Tao He</a></h4>
-                
-                
-                    <p> A computer engineer, reader and thinker.</p>
-                
-                <div class="author-meta">
-                    <span class="author-location icon-location"> Beijing, China</span> 
-                    <span class="author-link icon-link"><a href="http://longlinht.github.io/"> longlinht.github.io/</a></span> 
-                </div>
-            </section>
+<ul>
+<li>往窗体上拖放一个按钮控件。</li>
+<li>在属性对话框中，将该控件的Text属性设置为&quot;关闭&quot;。</li>
+<li>双击按钮添加一个Click事件处理函数，添加如下代码：</li>
+</ul></li>
+</ul>
+<div class="highlight"><pre><code class="language-text" data-lang="text">private void button1_Click(object sender, System.EventArgs e)
+{
+    this.Close();
+}
+</code></pre></div><div class="highlight"><pre><code class="language-text" data-lang="text">* 添加以下代码来创建一个Point对象，该对象（作为一个变量）决定在什么情况下移动窗体。
+</code></pre></div><div class="highlight"><pre><code class="language-text" data-lang="text">private Point mouse_offset; 
+</code></pre></div><div class="highlight"><pre><code class="language-text" data-lang="text">* 创建窗体的MouseDown事件的事件处理函数。为该事件添加代码后，用户就可以在任何位置移动窗体了。代码如下
+</code></pre></div><div class="highlight"><pre><code class="language-text" data-lang="text">private void Form1_MouseDown(object sender, System.Windows.Forms.MouseEventArgs e)
+{
+       mouse_offset = new Point(-e.X, -e.Y);
+}
+</code></pre></div><div class="highlight"><pre><code class="language-text" data-lang="text">* 创建窗体的MouseMove事件的事件处理函数。当鼠标左键被按下，同时鼠标被移动时，窗体的Location属性就被设置为新的位置了，这样窗体就被用户拖动了。
+</code></pre></div><div class="highlight"><pre><code class="language-text" data-lang="text">private void Form1_MouseMove(object sender,
+System.Windows.Forms.MouseEventArgs e)
+{
+    if (e.Button == MouseButtons.Left)
+    {
+       Point mousePos = Control.MousePosition;
+       mousePos.Offset(mouse_offset.X, mouse_offset.Y);
+       Location = mousePos;
+    }
+} 
+</code></pre></div>
+<h4>利用Windows API重绘窗体</h4>
 
-            <!-- /author  -->
+<p>所用到的函数：
+```
+        [ DllImportAttribute(&quot;gdi32.dll&quot; )]
+        public static extern IntPtr CreateRoundRectRgn(int nLeftRect, int nTopRect, int nRightRect, int nBottomRect, int nWidthEllipse, int nHeightEllipse);</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">    [ DllImportAttribute(&quot;gdi32.dll&quot; )]
+    static extern int CombineRgn( IntPtr hrgnDest, IntPtr hrgnSrc1, IntPtr hrgnSrc2, int fnCombineMode);
 
-            <section class="share">
-                <h4>Share this post</h4>
-                <a class="icon-twitter" href="http://twitter.com/share?text=C#创建不规则窗体（控件）&amp;url=http://longlinht.github.io//c-sharp-create-unregular-window"
-                    onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
-                    <span class="hidden">Twitter</span>
-                </a>
-                <a class="icon-facebook" href="https://www.facebook.com/sharer/sharer.php?u=http://longlinht.github.io//c-sharp-create-unregular-window"
-                    onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
-                    <span class="hidden">Facebook</span>
-                </a>
-                <a class="icon-google-plus" href="https://plus.google.com/share?url=http://longlinht.github.io//c-sharp-create-unregular-window"
-                   onclick="window.open(this.href, 'google-plus-share', 'width=490,height=530');return false;">
-                    <span class="hidden">Google+</span>
-                </a>
-            </section>
-            
-            <!-- Add Disqus Comments -->
-            
-                <div id="disqus_thread"></div>
-<script>
-    /**
-     *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
-     *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables
-     */
-    /*
-    var disqus_config = function () {
-        this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
-        this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
-    };
-    */
-    (function() {  // DON'T EDIT BELOW THIS LINE
-        var d = document, s = d.createElement('script');
-        
-        s.src = '//hetaoof.disqus.com/embed.js';
-        
-        s.setAttribute('data-timestamp', +new Date());
-        (d.head || d.body).appendChild(s);
-    })();
-</script>
-<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+    [ DllImportAttribute(&quot;gdi32.dll&quot; )]
+    static extern int CombineRgn( IntPtr hrgnSrc1, IntPtr hrgnSrc2, int fnCombineMode);
 
-            
-            
-        </footer>
+    [ DllImportAttribute(&quot;user32.dll&quot; )]
+    public static extern int SetWindowRgn(IntPtr hWnd, IntPtr hRgn, bool bRedraw); 
+</code></pre></div><div class="highlight"><pre><code class="language-text" data-lang="text">在窗体的构造函数中添加如下定制代码：
+</code></pre></div><div class="highlight"><pre><code class="language-text" data-lang="text">    IntPtr smallRegion = CreateRoundRectRgn(6, 22, 149, 78, 20, 20);
+    IntPtr largeRegion = CreateRoundRectRgn(3, 3, this .Width - 18, this.Height - 1, 20, 20);
+    IntPtr destRegion = CreateRoundRectRgn(0, 0, this .Width, this.Height, 10, 10);
+    int i = CombineRgn(destRegion, largeRegion, smallRegion, 2);
+    SetWindowRgn( this.Handle, destRegion, true);
+</code></pre></div><div class="highlight"><pre><code class="language-text" data-lang="text">#### 创建不规则控件实现方法
+   在窗体上画一个自定义形状的控件时，需要精确的告知窗体在什么位置以及如何画该控件。GraphicsPath类代表了一系列用来画图的直线和曲线。首先，指定一个GraphicsPath类的对象并告知它要画什么图形。然后，将控件的Region属性设置为上述GraphicsPath类的对象。这样就可以创建任何自定义形状的控件了。
 
-    </article>
+##### 创建不规则控件具体步骤
 
-</main>
+    1. 创建一个GraphicsPath类的实例对象。
 
-<aside class="read-next">
+    2. 指定好该对象的各项细节（如大小、形状等等）。
 
-    <!-- [[! next_post ]] -->
-    
-        <a class="read-next-story no-cover" href="http://longlinht.github.io//using-duilib-to-build-gui">
-            <section class="post">
-                <h2>Using Duilib to build GUI</h2>
-                <p>Duilib is a free open source DirectUI library on Windows , because its simple and...</p>
-            </section>
-        </a>
-    
-    <!-- [[! /next_post ]] -->
-    <!-- [[! prev_post ]] -->
-    
-        <a class="read-next-story prev no-cover" href="http://longlinht.github.io//similarities-and-differences-between-java-and-cpp">
-            <section class="post">
-                <h2>Similarities and Differences between Java and C++</h2>
-                <p><ul> <li><p>Java does not support typedefs, defines, or a preprocessor. </p></li> <li><p>Java does not support...</p>
-            </section>
-        </a>
-    
-    <!-- [[! /prev_post ]] -->
-</aside>
+    3. 将控件的Region属性设置为上面建立的GraphicsPath类的实例对象。
 
-<!-- /post -->
+##### 下面举一个例子：创建一个像文本的按钮控件：
 
+* 拖放一个按钮控件到窗体上。
 
-        <footer class="site-footer clearfix">
-          <section class="copyright"><a href="/">Dancing with Machine, Human and God</a> &copy; 2017</section>
-        </footer>
-    </div>
-    <!-- [[! Ghost outputs important scripts and data with this tag ]] -->
-    <script type="text/javascript" src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
-    <!-- [[! The main JavaScript file for Casper ]] -->
-    <script type="text/javascript" src="/assets/js/jquery.fitvids.js"></script>
-    <script type="text/javascript" src="/assets/js/index.js"></script>
+* 在属性对话框中进行如下设置：
 
-    <!-- Add Google Analytics  -->
-        <!-- Google Analytics Tracking code -->
-     <script>
-	    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-	    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-	    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-	    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+    * 将Name属性设置为CustomButton。
 
-	    ga('create', 'UA-78960009-1', 'auto');
-	    ga('send', 'pageview');
+    * 将BackColor属性设置为一个和窗体背景颜色不同的颜色值。
 
-     </script>
-   
-</body>
-</html>
+    * 将其Text属性设置为空字符串。
+
+* 添加窗体的Paint事件的事件处理函数。
+
+* 添加以下代码，用GraphicsPath类的实例对象来画控件。下面的代码以一串字符串的形式画该按钮控件，同时，程序还设置了字符串的字体、大小、风格等属性。字符串被赋给GraphicsPath类的实例对象。然后，该实例对象就被设置为按钮控件的Region属性。这样一个自定义形状的控件就完成了。
+</code></pre></div>
+<p>private void CustomButton_Paint(object sender,
+System.Windows.Forms.PaintEventArgs e)
+{
+    //初始化一个GraphicsPath类的对象
+    System.Drawing.Drawing2D.GraphicsPath myGraphicsPath   = new
+System.Drawing.Drawing2D.GraphicsPath();
+    //确定一个字符串，该字符串就是控件的形状
+    string stringText = Click Me!;
+    //确定字符串的字体
+    FontFamily family = new FontFamily(Arial);
+    //确定字符串的风格
+    int fontStyle = (int)FontStyle.Bold;
+    //确定字符串的高度
+    int emSize = 35;
+    //确定字符串的起始位置，它是从控件开始计算而非窗体
+    PointF origin = new PointF(0, 0);
+    //一个StringFormat对象来确定字符串的字间距以及对齐方式
+    StringFormat format = new StringFormat(StringFormat.GenericDefault);
+    //用AddString方法创建字符串
+    myGraphicsPath.AddString(stringText, family, fontStyle, emSize, origin, format);
+    //将控件的Region属性设置为上面创建的GraphicsPath对象
+    CustomButton.Region = new Region(myGraphicsPath);
+}
+```
+* 创建按钮的Click事件的事件处理函数。添加该处理函数来改变控件的背景颜色，从而证实控件原来的那些功能没有被削减。</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">private void CustomButton_Click(object sender, System.EventArgs e)
+{
+    CustomButton.BackColor = Color.BlanchedAlmond;
+}
+</code></pre></div>
+<h5>进一步优化效果</h5>
+<div class="highlight"><pre><code class="language-text" data-lang="text">以上我们运用了GraphicsPath类的实例对象来创建了自定义形状的一个按钮控件。不过我们用的是文本字符串形式的一个形状，是否可以用三角形或是圆形等形状呢？答案是肯定的。.Net Framework能为我们提供一些预先定义好了的形状以供我们在程序中使用。通过运用这些，你可以创造出几乎任意形状的控件，你还可以把它们结合起来使用以发挥更大的功能。  下面的实例就运用了四个椭圆，当它们被运用到控件上后，看起来就像人的眼睛，很有意思吧。
+</code></pre></div><div class="highlight"><pre><code class="language-text" data-lang="text">private void button1_Paint(object sender,
+System.Windows.Forms.PaintEventArgs e)
+{
+    System.Drawing.Drawing2D.GraphicsPath myGraphicsPath   = new
+System.Drawing.Drawing2D.GraphicsPath();
+    myGraphicsPath.AddEllipse(new Rectangle(0, 0, 125, 125));
+    myGraphicsPath.AddEllipse(new Rectangle(75, 75, 20, 20));
+    myGraphicsPath.AddEllipse(new Rectangle(120, 0, 125, 125));
+    myGraphicsPath.AddEllipse(new Rectangle(145, 75, 20, 20));
+    //改变按钮的背景颜色使之能被容易辨认
+    button1.BackColor = Color.Chartreuse;
+    button1.Size = new System.Drawing.Size(256, 256);
+    button1.Region = new Region(myGraphicsPath);
+}
+</code></pre></div>
+<p>最后，你还得搞清楚窗体类是从System.Windows.Forms.Control类继承而来的。也就是说，由窗体设计器提供给你的窗体最终还是一个控件。因此，你能用位图文件创建一个不规则的窗体，你还能用GraphicsPath类对象来像创建自定义形状的控件那样创建不规则的窗体。有兴趣的读者不妨用此方法一试效果。 最后再举一个更好的例子：一个和微软的Windows Media Player 7的界面差不多的界面。创建步骤如下：</p>
+
+<p>1．将某种颜色设置为窗体的背景颜色，然后将窗体的TransparenceKey属性设置为那种颜色，同时将窗体的FormBorderStyle属性设置为None。</p>
+
+<p>2．重载<code>Form_Paint()</code>函数：</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">protected override void OnPaint(PaintEventArgs e)
+</code></pre></div>
+<p>或是
+<code>
+this.Paint += new System.Windows.Form.PaintEventHandler(Form_Paint)。
+</code></p>
+
+<p>3．程序的主体部分的函数如下：
+```
+private void Form_Paint(object sender, PaintEventArgs e) {
+    Graphics g = e.Graphics;
+    Rectangle mainRect = new Rectangle(0, 0, 695, 278);
+    Region mainRegion = new Region(mainRect);
+    e.Graphics.SetClip(mainRegion, CombineMode.Replace);
+    Point point1 = new Point(0, 32);
+    Point point2 = new Point(9, 20);
+    Point point3 = new Point(21, 13);
+    Point point4 = new Point(34, 9);
+    // 创建一个以点为元素的数组
+    Point[] curvePoints = { point1, point2, point3, point4 };
+    // 创建一个GraphicsPath对象并添加一条曲线
+    GraphicsPath myPath = new GraphicsPath();
+    myPath.AddCurve(curvePoints, 0, 3, 0.8f);
+    myPath.AddLine(36, 9, 378, 9);
+    point1.X=378;point1.Y=9;
+    point2.X=387;point2.Y=5;
+    point3.X=394;point3.Y=0;
+    Point[] curvePoints2 = { point1, point2, point3 };
+    myPath.AddCurve(curvePoints2, 0, 2, 0.8f);
+    myPath.AddLine(394, 0, 0, 0);
+    Region ExcludeRegion3 = new Region(myPath);
+    e.Graphics.ExcludeClip(ExcludeRegion3);</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">GraphicsPath myPath3 = new GraphicsPath();
+  point1.X=0;point1.Y=180;
+  point2.X=19;point2.Y=198;
+  point3.X=62;point3.Y=204;
+  point4.X=83;point4.Y=221;
+  Point point5 = new Point(93, 248);
+  Point point6 = new Point(102, 267);
+  Point point7 = new Point(125, 278);
+  Point[] curvePoints3 = { point1, point2, point3, point4,
+</code></pre></div>
+<p>point5, point6, point7 };
+      myPath3.AddCurve(curvePoints3, 0, 6, 0.8f);
+      myPath3.AddLine(125, 278, 90, 300);
+      myPath3.AddLine(90, 300, 0, 300);
+      Region ExcludeRegion2 = new Region(myPath3);
+      e.Graphics.ExcludeClip(ExcludeRegion2);
+      point1.X=454;point1.Y=0;
+      point2.X=470;point2.Y=12;
+      point3.X=481;point3.Y=34;
+      Point[] curvePoints4 = { point1, point2, point3 };
+      GraphicsPath myPath2 = new GraphicsPath();
+      myPath2.AddCurve(curvePoints4, 0, 2, 0.8f);
+      myPath2.AddLine(481, 30, 481, 76);
+      myPath2.AddLine(481, 76, 495, 76);
+      myPath2.AddLine(495, 76, 495, 0);
+      Region ExcludeRegion4 = new Region(myPath2);
+      e.Graphics.ExcludeClip(ExcludeRegion4);
+      GraphicsPath myPath5 = new GraphicsPath();
+      point1.X=481;point1.Y=76;
+      point2.X=494;point2.Y=115;
+      point3.X=481;point3.Y=158;
+      Point[] curvePoints5 = { point1, point2, point3 };
+      myPath5.AddCurve(curvePoints5, 0, 2, 0.8f);
+      myPath5.AddLine(481, 158, 481, 279);
+      myPath5.AddLine(481, 255, 495, 279);
+      myPath5.AddLine(495, 279, 495, 0);
+      Region ExcludeRegion6 = new Region(myPath5);
+      e.Graphics.ExcludeClip(ExcludeRegion6);</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">  point1.X=480;point1.Y=250;
+  point2.X=469;point2.Y=264;
+  point3.X=446;point3.Y=278;
+  Point[] curvePoints6 = { point1, point2, point3 };
+  GraphicsPath myPath4 = new GraphicsPath();
+  myPath4.AddCurve(curvePoints6, 0, 2, 0.8f);
+  myPath4.AddLine(450, 277, 495, 279);
+  Region ExcludeRegion5 = new Region(myPath4);
+  e.Graphics.ExcludeClip(ExcludeRegion5);
+
+  e.Graphics.DrawImage(img, 0, 0, 695,278);
+
+  // 重设剪切好的区域
+  e.Graphics.ResetClip();
+</code></pre></div>
+<p>}
+```</p>

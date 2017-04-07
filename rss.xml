@@ -112,13 +112,13 @@ update UI when we finish something in separated thread. This is a basic problem,
       <dc:date>2015-01-04T03:20:00+08:00</dc:date>
     </item>
     <item>
-      <title>C#创建不规则窗体（控件）</title>
+      <title>C Sharp Create Unregular Window</title>
       <link>http://longlinht.github.io//c-sharp-create-unregular-window</link>
-      <description>创建不规则窗体和控件这个过程包含了大量的图形编程工作，不同的计算机因内存和显卡的不同可能会导致最终的效果有所不同 。创建不规则窗体具体步骤：
+      <description>## C#创建不规则窗体（控件）
 
 </description>
-      <pubDate>Mon, 03 Sep 2012 02:30:12 +0800</pubDate>
-      <dc:date>2012-09-03T02:30:12+08:00</dc:date>
+      <pubDate>Sun, 02 Sep 2012 00:00:00 +0800</pubDate>
+      <dc:date>2012-09-02T00:00:00+08:00</dc:date>
     </item>
     <item>
       <title>Similarities and Differences between Java and C++</title>

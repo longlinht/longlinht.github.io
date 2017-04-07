@@ -112,15 +112,6 @@ update UI when we finish something in separated thread. This is a basic problem,
       <dc:date>2015-01-04T03:20:00+08:00</dc:date>
     </item>
     <item>
-      <title>C Sharp Create Unregular Window</title>
-      <link>http://longlinht.github.io//c-sharp-create-unregular-window</link>
-      <description>## C#创建不规则窗体（控件）
-
-</description>
-      <pubDate>Sun, 02 Sep 2012 00:00:00 +0800</pubDate>
-      <dc:date>2012-09-02T00:00:00+08:00</dc:date>
-    </item>
-    <item>
       <title>Similarities and Differences between Java and C++</title>
       <link>http://longlinht.github.io//similarities-and-differences-between-java-and-cpp</link>
       <description>* Java does not support typedefs, defines, or a preprocessor. 
@@ -187,6 +178,15 @@ update UI when we finish something in separated thread. This is a basic problem,
       <title>Forward declaration in C++</title>
       <link>http://longlinht.github.io//forward-declaration-in-cpp</link>
       <description>Why need use forward declaration? when we can use it? I will figure out these problem separately.
+
+</description>
+      <pubDate>Wed, 03 Nov 2010 02:30:12 +0800</pubDate>
+      <dc:date>2010-11-03T02:30:12+08:00</dc:date>
+    </item>
+    <item>
+      <title>C#创建不规则窗体(控件)</title>
+      <link>http://longlinht.github.io//c-sharp-create-unregular-window</link>
+      <description>创建不规则窗体和控件这个过程包含了大量的图形编程工作，不同的计算机因内存和显卡的不同可能会导致最终的效果有所不同 。创建不规则窗体具体步骤：
 
 </description>
       <pubDate>Wed, 03 Nov 2010 02:30:12 +0800</pubDate>

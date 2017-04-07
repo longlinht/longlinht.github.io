@@ -12,102 +12,6 @@
    <atom:link href="rss" rel="self" type="application/rss+xml" />
    
 	<item>
-	  <title>Building My Own Mac Working Environment</title>
-	  <link>//building-my-own-mac-working-environment</link>
-	  <author>Tao He</author>
-	  <pubDate>2017-04-02T06:30:12+08:00</pubDate>
-	  <guid>//building-my-own-mac-working-environment</guid>
-	  <description><![CDATA[
-	     <p>In recent 2 years, I have switched my own working environment from Windows to Ubuntu and Mac. For the reason that I switched C/C++ development for Windows to Java development for Android. But I still prefer C++, so I won&#39;t give up C/C++ programming. In this article I will write down detail steps that how I build working environment. This working environment on Mac is a general working environment, not just for Android development but also C/C++ development. Let&#39;s start!</p>
-
-<p>First, I would install some universal tools.</p>
-
-<h3>Universal Tools</h3>
-
-<h4>Install and configure Oh my zsh</h4>
-
-<ul>
-<li>Install via curl or wget</li>
-</ul>
-
-<p><strong>via curl</strong></p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">sh -c &quot;$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)&quot;
-</code></pre></div>
-<p><strong>via wget</strong></p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">sh -c &quot;$(wget https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh -O -)&quot;
-</code></pre></div>
-<ul>
-<li>Configure my prefer feature via edit .zshrc file</li>
-</ul>
-
-<p>Add this line to .zshrc file
-<code>
-plugins=(git vi-mode adb)
-</code></p>
-
-<h4>Install and configure iTerm</h4>
-
-<ul>
-<li><p>Install lastest release dmg</p></li>
-<li><p>Clone solarized git project from github and import color scheme for iTerm2
-<code>
-git clone https://github.com/altercation/solarized.git
-cd iterm2-colors-solarized
-./Solarized Dark.itermcolors
-</code></p>
-
-<h4>Install userful command line tools</h4></li>
-<li><p>Install brew - <code>ruby -e &quot;$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)&quot;</code></p></li>
-<li><p>Install ctags - <code>brew install ctags</code></p></li>
-<li><p>Install cscope - <code>brew install cscope</code></p></li>
-<li><p>Install ag - <code>brew install ag</code></p></li>
-<li><p>Install grip - <code>brew install grip</code></p></li>
-</ul>
-
-<h4>Install and configure Vim</h4>
-
-<ul>
-<li>Install vim via source
-<code>
-git clone https://github.com/vim/vim.git
-cd vim 
-./configure --with-features=huge --enable-gui=gnome2 --enable-pythoninterp=yes --enable-cscope --enable-gui=auto \ --enable-gtk2-check --enable-gnome-check \ --enable-fail-if-missing --enable-multibyte --enable-fontset \ --with-x --with-compiledby=&quot;Tao He&quot;
-make
-sudo make install
-</code></li>
-<li><p>Configure vim
-<code>
-cd ~
-git clone https://github.com/longlinht/vimrc.git ~/.vim_runtime
-sh ~/.vim_runtime/install_awesome_vimrc.sh
-</code></p>
-
-<h3>Utilities</h3></li>
-<li><p>Install Alfred</p></li>
-<li><p>Install Dropbox</p></li>
-<li><p>Install NutsCloud</p></li>
-</ul>
-
-<h3>Install IDE</h3>
-
-<h4>Install and configure Android Studio</h4>
-
-<ul>
-<li><p>Install Android Studio via dmg</p></li>
-<li><p>Install and configure ideavim plugin 
-<code>
-Install ideavim in Android Studio
-git clone https://github.com/longlinht/VimForIDEs.git
-In Android Studio -&gt; File -&gt;Import Settings -&gt; Choose VimForIDEs/ideavim/monokai/settings.jar
-</code></p></li>
-</ul>
-
-<p>There are some userful application I have installed, but I don&#39;t want to list them becasue their easy installation. Until now, I work comfortably in this woking environment. Maybe I will develop a script to automate this process in the future. If I make it done, I would update this article and supply this script.</p>
-
-	  ]]></description>
-	</item>
-
-	<item>
 	  <title>Java References</title>
 	  <link>//java-references</link>
 	  <author>Tao He</author>
@@ -1041,7 +945,7 @@ dumpsys | grep &quot;DUMP OF SERVICE&quot;
 
 <h3>Class architecture of library</h3>
 
-<p><img src="http://oi63.tinypic.com/23m3a5t.jpg" alt=""></p>
+<p><img src="https://dl.dropboxusercontent.com/u/83663714/Figures/duilib_arch.png" alt=""></p>
 
 <h4>Basic library</h4>
 
@@ -1067,7 +971,7 @@ dumpsys | grep &quot;DUMP OF SERVICE&quot;
 
 <h4>Basic process</h4>
 
-<p><img src="http://oi67.tinypic.com/2a8kb4i.jpg" alt=""></p>
+<p><img src="https://dl.dropboxusercontent.com/u/83663714/Figures/duilib_typical_process.png" alt=""></p>
 
 <p>The DUILib framework&#39;s basic message process similar to create window process in WIN32.</p>
 <div class="highlight"><pre><code class="language-c++" data-lang="c++"><span class="kt">int</span> <span class="n">APIENTRY</span> <span class="nf">WinMain</span><span class="p">(</span><span class="n">HINSTANCE</span> <span class="n">hInstance</span><span class="p">,</span> <span class="n">HINSTANCE</span> <span class="n">hPrevInstance</span><span class="p">,</span> <span class="n">LPSTR</span> <span class="n">lpCmdLine</span><span class="p">,</span> <span class="kt">int</span> <span class="n">nCmdShow</span><span class="p">)</span>
@@ -1161,6 +1065,27 @@ dumpsys | grep &quot;DUMP OF SERVICE&quot;
 <li><p>Remember this point : Control and custom UI in xml file always a good choice in most of case;</p></li>
 <li><p>Organizing whole UI element in separated xml files and do not conflit with C++ class inheritance through CreateControl method;</p></li>
 </ul>
+
+	  ]]></description>
+	</item>
+
+	<item>
+	  <title>C#创建不规则窗体（控件）</title>
+	  <link>//c-sharp-create-unregular-window</link>
+	  <author>Tao He</author>
+	  <pubDate>2012-09-03T02:30:12+08:00</pubDate>
+	  <guid>//c-sharp-create-unregular-window</guid>
+	  <description><![CDATA[
+	     <p>创建不规则窗体和控件这个过程包含了大量的图形编程工作，不同的计算机因内存和显卡的不同可能会导致最终的效果有所不同 。创建不规则窗体具体步骤：</p>
+
+<h4>先创建一个具有不规则形状的位图文件</h4>
+
+<ol>
+<li><p>用任何画图程序创建不规则形状的位图。  </p></li>
+<li><p>用一种颜色画出一个不规则的区域作为程序的窗体，并用另一种颜色画出该位图的背景。</p></li>
+</ol>
+
+<p>3．保存位图文件。</p>
 
 	  ]]></description>
 	</item>

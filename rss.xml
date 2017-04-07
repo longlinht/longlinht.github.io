@@ -8,16 +8,7 @@
     <title>Dancing with Machine, Human and God</title>
     <link>http://longlinht.github.io/</link>
     <description>World is complex,confusing and wonderful,I will talk about machine,human and god to known it, to reveal it.</description>
-    <pubDate>Sun, 02 Apr 2017 06:30:12 +0800</pubDate>
-    <item>
-      <title>Building My Own Mac Working Environment</title>
-      <link>http://longlinht.github.io//building-my-own-mac-working-environment</link>
-      <description>In recent 2 years, I have switched my own working environment from Windows to Ubuntu and Mac. For the reason that I switched C/C++ development for Windows to Java development for Android. But I still prefer C++, so I won't give up C/C++ programming. In this article I will write down detail steps that how I build working environment. This working environment on Mac is a general working environment, not just for Android development but also C/C++ development. Let's start!
-
-</description>
-      <pubDate>Sun, 02 Apr 2017 06:30:12 +0800</pubDate>
-      <dc:date>2017-04-02T06:30:12+08:00</dc:date>
-    </item>
+    <pubDate>Wed, 10 Aug 2016 00:00:00 +0800</pubDate>
     <item>
       <title>Java References</title>
       <link>http://longlinht.github.io//java-references</link>
@@ -121,6 +112,15 @@ update UI when we finish something in separated thread. This is a basic problem,
       <dc:date>2015-01-04T03:20:00+08:00</dc:date>
     </item>
     <item>
+      <title>C#创建不规则窗体（控件）</title>
+      <link>http://longlinht.github.io//c-sharp-create-unregular-window</link>
+      <description>创建不规则窗体和控件这个过程包含了大量的图形编程工作，不同的计算机因内存和显卡的不同可能会导致最终的效果有所不同 。创建不规则窗体具体步骤：
+
+</description>
+      <pubDate>Mon, 03 Sep 2012 02:30:12 +0800</pubDate>
+      <dc:date>2012-09-03T02:30:12+08:00</dc:date>
+    </item>
+    <item>
       <title>Similarities and Differences between Java and C++</title>
       <link>http://longlinht.github.io//similarities-and-differences-between-java-and-cpp</link>
       <description>* Java does not support typedefs, defines, or a preprocessor. 
@@ -192,6 +192,6 @@ update UI when we finish something in separated thread. This is a basic problem,
       <pubDate>Wed, 03 Nov 2010 02:30:12 +0800</pubDate>
       <dc:date>2010-11-03T02:30:12+08:00</dc:date>
     </item>
-    <dc:date>2017-04-02T06:30:12+08:00</dc:date>
+    <dc:date>2016-08-10T00:00:00+08:00</dc:date>
   </channel>
 </rss>

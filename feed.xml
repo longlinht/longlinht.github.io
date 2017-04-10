@@ -7,6 +7,90 @@
     <atom:link href="http://longlinht.github.io//feed.xml" rel="self" type="application/rss+xml" />
     
       <item>
+        <title>Dimension units in Android</title>
+        <description>&lt;p&gt;When I start develop application for Android, I am confused about the dimension units many times. So I decide to figure out it clearly through this article.&lt;/p&gt;
+
+&lt;p&gt;Android is a mobile operating system that compatible many devices, because of its compatibility, we must think about vary size, density, shape of device&amp;#39;s screen. The &lt;strong&gt;density independence&lt;/strong&gt; is a important conception here. Later, I will explain detail about it. Now, we need give the defination of the dimension units and explain the relation of them.&lt;/p&gt;
+
+&lt;h3&gt;Dimension Unit&lt;/h3&gt;
+
+&lt;h4&gt;Defination&lt;/h4&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;px - An actual pixel on the screen.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;in - A physical inch on the screen.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;mm - A physical millimeter on the screen.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;pt - A point, a common font size unit, on the screen. &lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;dp - An abstract unit that is based on the physical density of the screen. These units are relative to a 160 dpi (dots per inch) screen, on which 1dp is roughly equal to 1px. &lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;sp - A scale independent pixel, specially designated for text sizes. &lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h4&gt;Relation&lt;/h4&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;+----------------+----------------+---------------+-------------------------------+
+| Density Bucket | Screen Density | Physical Size | Pixel Size                    | 
++----------------+----------------+---------------+-------------------------------+
+| ldpi           | 120 dpi        | 0.5 x 0.5 in  | 0.5 in * 120 dpi = 60x60 px   | 
++----------------+----------------+---------------+-------------------------------+
+| mdpi           | 160 dpi        | 0.5 x 0.5 in  | 0.5 in * 160 dpi = 80x80 px   | 
++----------------+----------------+---------------+-------------------------------+
+| hdpi           | 240 dpi        | 0.5 x 0.5 in  | 0.5 in * 240 dpi = 120x120 px | 
++----------------+----------------+---------------+-------------------------------+
+| xhdpi          | 320 dpi        | 0.5 x 0.5 in  | 0.5 in * 320 dpi = 160x160 px | 
++----------------+----------------+---------------+-------------------------------+
+| xxhdpi         | 480 dpi        | 0.5 x 0.5 in  | 0.5 in * 480 dpi = 240x240 px | 
++----------------+----------------+---------------+-------------------------------+
+| xxxhdpi        | 640 dpi        | 0.5 x 0.5 in  | 0.5 in * 640 dpi = 320x320 px | 
++----------------+----------------+---------------+-------------------------------+
+
++---------+-------------+---------------+-------------+--------------------+
+| Unit    | Description | Units Per     | Density     | Same Physical Size | 
+|         |             | Physical Inch | Independent | On Every Screen    | 
++---------+-------------+---------------+-------------+--------------------+
+| px      | Pixels      | Varies        | No          | No                 | 
++---------+-------------+---------------+-------------+--------------------+
+| in      | Inches      | 1             | Yes         | Yes                | 
++---------+-------------+---------------+-------------+--------------------+
+| mm      | Millimeters | 25.4          | Yes         | Yes                | 
++---------+-------------+---------------+-------------+--------------------+
+| pt      | Points      | 72            | Yes         | Yes                | 
++---------+-------------+---------------+-------------+--------------------+
+| dp      | Density     | ~160          | Yes         | No                 | 
+|         | Independent |               |             |                    | 
+|         | Pixels      |               |             |                    | 
++---------+-------------+---------------+-------------+--------------------+
+| sp      | Scale       | ~160          | Yes         | No                 | 
+|         | Independent |               |             |                    | 
+|         | Pixels      |               |             |                    | 
++---------+-------------+---------------+-------------+--------------------+
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h3&gt;Density Independence&lt;/h3&gt;
+
+&lt;p&gt;&lt;strong&gt;Screen Density&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Screen density is a ratio of resolution and display size, which can be quantified as dots per inch, or &lt;strong&gt;dpi&lt;/strong&gt;. The higher the dpi, the smaller each individual pixel is, and the greater clarity.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Density Independence&lt;/strong&gt; means the physical size of a dimension unit is only approximately the same on every screen density. The &lt;strong&gt;dp, sp, pt, mm, in&lt;/strong&gt; are all density independence. The number of pixels these translate to varies depending on screen density and the &lt;strong&gt;density bucket&lt;/strong&gt; the device falls into.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Density Bucket&lt;/strong&gt;&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;There is a myriad of Android devices with varying screen densities, which can range from 100 dpi to over 480 dpi. In order to optimize images for all these screen densities, images need to be created at different resolutions. However, trying to optimize every image resource for every possible density would be incredibly tedious, cause app sizes to be enormous, and simply is not a feasible solution. As a compromise, Android uses density &amp;quot;buckets&amp;quot; that are used to group devices together within certain screen density ranges. This way, apps are only required to optimize images for each density bucket, instead of every possible density. This keeps the workload reasonable for designers and developer, and also prevents the application size from ballooning. Of course, there is a tradeoff, leading to variance in the physical rendered size of images depending on device density.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h3&gt;Using Tips:&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;Try to use dp in xml file as much as possiable.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Use sp for font size.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Don&amp;#39;t use px as much as possiable.&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+        <pubDate>Fri, 07 Apr 2017 20:30:12 +0800</pubDate>
+        <link>http://longlinht.github.io//dimension-units-in-android</link>
+        <guid isPermaLink="true">http://longlinht.github.io//dimension-units-in-android</guid>
+      </item>
+    
+      <item>
         <title>Java References</title>
         <description>&lt;p&gt;Before JDK 1.2, if a object isn&amp;#39;t referenced by any variable, it can&amp;#39;t be used any more.Since JDK 1.2, Java has four reference types.In order from strongest to weakest these references are: Strong, Soft, Weak, Phantom. &lt;/p&gt;
 
@@ -900,26 +984,6 @@ dumpsys | grep &amp;quot;DUMP OF SERVICE&amp;quot;
         <pubDate>Thu, 09 Jun 2016 00:10:00 +0800</pubDate>
         <link>http://longlinht.github.io//easy-doesnt-enter-into-grown-up-life</link>
         <guid isPermaLink="true">http://longlinht.github.io//easy-doesnt-enter-into-grown-up-life</guid>
-      </item>
-    
-      <item>
-        <title>Hello World</title>
-        <description>&lt;p&gt;This is my first post for Machine category, I named it &amp;#39;Hello World&amp;#39; to start my blog. Because many developers start their first program with a single line code to print &amp;#39;Hello World&amp;#39;. Certainly my first line code also is &amp;#39;Hello World&amp;#39; in C programming language. I hope this will be a good start!&lt;/p&gt;
-
-&lt;p&gt;Before Starting this blog, I think about this expression way for a long time, I didin&amp;#39;t know what I should write, I also can&amp;#39;t sure I could write down some useful, excellent articles. I even worry about my articles would be some non-value pieces. But now, I never care about it. I will do my best to write some useful, valuable IT articles.&lt;/p&gt;
-
-&lt;p&gt;To make a good start, I need figure out what I shoud write. I think about some categories below:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;p&gt;General IT&lt;/p&gt;&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;Programming Miscellaneous&lt;/p&gt;&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;Programming&lt;/p&gt;&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;Computer Science&lt;/p&gt;&lt;/li&gt;
-&lt;/ul&gt;
-</description>
-        <pubDate>Thu, 09 Jun 2016 00:00:00 +0800</pubDate>
-        <link>http://longlinht.github.io//hello-world</link>
-        <guid isPermaLink="true">http://longlinht.github.io//hello-world</guid>
       </item>
     
   </channel>

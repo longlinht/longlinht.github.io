@@ -8,7 +8,16 @@
     <title>Dancing with Machine, Human and God</title>
     <link>http://longlinht.github.io/</link>
     <description>World is complex,confusing and wonderful,I will talk about machine,human and god to known it, to reveal it.</description>
-    <pubDate>Wed, 10 Aug 2016 00:00:00 +0800</pubDate>
+    <pubDate>Fri, 07 Apr 2017 20:30:12 +0800</pubDate>
+    <item>
+      <title>Dimension units in Android</title>
+      <link>http://longlinht.github.io//dimension-units-in-android</link>
+      <description>When I start develop application for Android, I am confused about the dimension units many times. So I decide to figure out it clearly through this article.
+
+</description>
+      <pubDate>Fri, 07 Apr 2017 20:30:12 +0800</pubDate>
+      <dc:date>2017-04-07T20:30:12+08:00</dc:date>
+    </item>
     <item>
       <title>Java References</title>
       <link>http://longlinht.github.io//java-references</link>
@@ -192,6 +201,6 @@ update UI when we finish something in separated thread. This is a basic problem,
       <pubDate>Wed, 03 Nov 2010 02:30:12 +0800</pubDate>
       <dc:date>2010-11-03T02:30:12+08:00</dc:date>
     </item>
-    <dc:date>2016-08-10T00:00:00+08:00</dc:date>
+    <dc:date>2017-04-07T20:30:12+08:00</dc:date>
   </channel>
 </rss>

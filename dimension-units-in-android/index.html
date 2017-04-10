@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 
     <!-- [[! Page Meta ]] -->
-    <title>Java References</title>
+    <title>Dimension units in Android</title>
     <meta name="description" content="Dancing with Machine, Human and God - World is complex,confusing and wonderful,I will talk about machine,human and god to known it, to reveal it." />
 
     <meta name="HandheldFriendly" content="True" />
@@ -96,10 +96,10 @@
     <article class="post tag-machine">
 
         <header class="post-header">
-            <h1 class="post-title">Java References</h1>
+            <h1 class="post-title">Dimension units in Android</h1>
             <section class="post-meta">
             <!-- <a href='/'>Tao He</a> -->
-            <time class="post-date" datetime="2016-08-10">10 Aug 2016</time>
+            <time class="post-date" datetime="2017-04-07">07 Apr 2017</time>
                 <!-- [[tags prefix=" on "]] -->
                  
                 on 
@@ -114,47 +114,82 @@
 
         <section class="post-content">
             
-            <p>Before JDK 1.2, if a object isn&#39;t referenced by any variable, it can&#39;t be used any more.Since JDK 1.2, Java has four reference types.In order from strongest to weakest these references are: Strong, Soft, Weak, Phantom. </p>
+            <p>When I start develop application for Android, I am confused about the dimension units many times. So I decide to figure out it clearly through this article.</p>
 
-<h4>Strong reference</h4>
+<p>Android is a mobile operating system that compatible many devices, because of its compatibility, we must think about vary size, density, shape of device&#39;s screen. The <strong>density independence</strong> is a important conception here. Later, I will explain detail about it. Now, we need give the defination of the dimension units and explain the relation of them.</p>
 
-<p>Below code is regular object reference:</p>
-<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="n">Sample</span> <span class="n">sample</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">Sample</span><span class="o">();</span>
-</code></pre></div>
-<p>The variable <code>sample</code> holds a strong reference to a Sample object. Before you stop reading there is a point to this: objects that are reachable through any chain of strong references are not eligible for garbage collection. Even JVM throw <code>OutOfMemoryError</code> to terminate the program, it will not to reclaim the memory that strong reference hold.</p>
+<h3>Dimension Unit</h3>
 
-<h4>Soft reference</h4>
-
-<p>Soft references are cleared at the discretion of the garbage collector in response to memory demand. The virtual machine guarantees that all soft references to softly-reachable objects will have been cleared before it would ever throw an <code>OutOfMemoryError</code>.</p>
-
-<h4>Weak reference</h4>
-
-<p>This code snippets is regular weak reference:</p>
-<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="n">WeakReference</span><span class="o">&lt;</span><span class="n">Cacheable</span><span class="o">&gt;</span> <span class="n">weakData</span> <span class="o">=</span> <span class="k">new</span> <span class="n">WeakReference</span><span class="o">&lt;</span><span class="n">Cacheable</span><span class="o">&gt;(</span><span class="n">data</span><span class="o">);</span>
-</code></pre></div>
-<p>To access data call weakData.get(). This call to get may return <code>null</code> if the weak reference was garbage collected: you must check the returned value to avoid <code>NullPointerException</code>s.</p>
-
-<p>An object that is identified as only weakly reachable will be collected at the next GC cycle.</p>
-
-<p>If you pass a <code>ReferenceQueue</code> into the constructor for a weak reference then the garbage collector will append that weak reference to the <code>ReferenceQueue</code> when it is no longer needed. You can periodically process this queue and deal with dead references.</p>
-
-<p>The difference between <code>SoftReference</code> and <code>WeakReference</code> is:</p>
+<h4>Defination</h4>
 
 <ul>
-<li><p>A soft reference is exactly like a weak reference, except that it is less eager to throw away the object to which it refers. </p></li>
-<li><p>An object which is only weakly reachable (the strongest references to it are WeakReferences) will be discarded at the next garbage collection cycle, but an object which is softly reachable will generally stick around for a while.</p></li>
-<li><p><code>SoftReferences</code> aren&#39;t required to behave any differently than <code>WeakReferences</code>, but in practice softly reachable objects are generally retained as long as memory is in plentiful supply. This makes them an excellent foundation for a cache, such as the image cache described above, since you can let the garbage collector worry about both how reachable the objects are (a strongly reachable object will never be removed from the cache) and how badly it needs the memory they are consuming.</p></li>
-<li><p>Garbage collector uses algorithms to decide whether or not to reclaim a softly reachable object, but always reclaims a weakly reachable object.</p></li>
+<li><p>px - An actual pixel on the screen.</p></li>
+<li><p>in - A physical inch on the screen.</p></li>
+<li><p>mm - A physical millimeter on the screen.</p></li>
+<li><p>pt - A point, a common font size unit, on the screen. </p></li>
+<li><p>dp - An abstract unit that is based on the physical density of the screen. These units are relative to a 160 dpi (dots per inch) screen, on which 1dp is roughly equal to 1px. </p></li>
+<li><p>sp - A scale independent pixel, specially designated for text sizes. </p></li>
 </ul>
 
-<h4>Phantom reference</h4>
+<h4>Relation</h4>
+<div class="highlight"><pre><code class="language-text" data-lang="text">+----------------+----------------+---------------+-------------------------------+
+| Density Bucket | Screen Density | Physical Size | Pixel Size                    | 
++----------------+----------------+---------------+-------------------------------+
+| ldpi           | 120 dpi        | 0.5 x 0.5 in  | 0.5 in * 120 dpi = 60x60 px   | 
++----------------+----------------+---------------+-------------------------------+
+| mdpi           | 160 dpi        | 0.5 x 0.5 in  | 0.5 in * 160 dpi = 80x80 px   | 
++----------------+----------------+---------------+-------------------------------+
+| hdpi           | 240 dpi        | 0.5 x 0.5 in  | 0.5 in * 240 dpi = 120x120 px | 
++----------------+----------------+---------------+-------------------------------+
+| xhdpi          | 320 dpi        | 0.5 x 0.5 in  | 0.5 in * 320 dpi = 160x160 px | 
++----------------+----------------+---------------+-------------------------------+
+| xxhdpi         | 480 dpi        | 0.5 x 0.5 in  | 0.5 in * 480 dpi = 240x240 px | 
++----------------+----------------+---------------+-------------------------------+
+| xxxhdpi        | 640 dpi        | 0.5 x 0.5 in  | 0.5 in * 640 dpi = 320x320 px | 
++----------------+----------------+---------------+-------------------------------+
 
-<p>Phantom references are the most tenuous of all reference types: calling get will always return null.
-When you construct a phantom reference you must always pass in a <code>ReferenceQueue</code>. </p>
-<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="n">ReferenceQueue</span> <span class="n">queue</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">ReferenceQueue</span> <span class="o">();</span>
-<span class="n">PhantomReference</span> <span class="n">pr</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">PhantomReference</span> <span class="o">(</span><span class="n">object</span><span class="o">,</span> <span class="n">queue</span><span class="o">);</span>
++---------+-------------+---------------+-------------+--------------------+
+| Unit    | Description | Units Per     | Density     | Same Physical Size | 
+|         |             | Physical Inch | Independent | On Every Screen    | 
++---------+-------------+---------------+-------------+--------------------+
+| px      | Pixels      | Varies        | No          | No                 | 
++---------+-------------+---------------+-------------+--------------------+
+| in      | Inches      | 1             | Yes         | Yes                | 
++---------+-------------+---------------+-------------+--------------------+
+| mm      | Millimeters | 25.4          | Yes         | Yes                | 
++---------+-------------+---------------+-------------+--------------------+
+| pt      | Points      | 72            | Yes         | Yes                | 
++---------+-------------+---------------+-------------+--------------------+
+| dp      | Density     | ~160          | Yes         | No                 | 
+|         | Independent |               |             |                    | 
+|         | Pixels      |               |             |                    | 
++---------+-------------+---------------+-------------+--------------------+
+| sp      | Scale       | ~160          | Yes         | No                 | 
+|         | Independent |               |             |                    | 
+|         | Pixels      |               |             |                    | 
++---------+-------------+---------------+-------------+--------------------+
 </code></pre></div>
-<p>This indicates that you can use a phantom reference to see when your object is GC’d. The phantom reference is enqueued after it has been physically removed from memory — as opposed to weak references which are enqueued before they’re finalized or GC’d.</p>
+<h3>Density Independence</h3>
+
+<p><strong>Screen Density</strong></p>
+
+<p>Screen density is a ratio of resolution and display size, which can be quantified as dots per inch, or <strong>dpi</strong>. The higher the dpi, the smaller each individual pixel is, and the greater clarity.</p>
+
+<p><strong>Density Independence</strong> means the physical size of a dimension unit is only approximately the same on every screen density. The <strong>dp, sp, pt, mm, in</strong> are all density independence. The number of pixels these translate to varies depending on screen density and the <strong>density bucket</strong> the device falls into.</p>
+
+<p><strong>Density Bucket</strong></p>
+
+<blockquote>
+<p>There is a myriad of Android devices with varying screen densities, which can range from 100 dpi to over 480 dpi. In order to optimize images for all these screen densities, images need to be created at different resolutions. However, trying to optimize every image resource for every possible density would be incredibly tedious, cause app sizes to be enormous, and simply is not a feasible solution. As a compromise, Android uses density &quot;buckets&quot; that are used to group devices together within certain screen density ranges. This way, apps are only required to optimize images for each density bucket, instead of every possible density. This keeps the workload reasonable for designers and developer, and also prevents the application size from ballooning. Of course, there is a tradeoff, leading to variance in the physical rendered size of images depending on device density.</p>
+</blockquote>
+
+<h3>Using Tips:</h3>
+
+<ul>
+<li><p>Try to use dp in xml file as much as possiable.</p></li>
+<li><p>Use sp for font size.</p></li>
+<li><p>Don&#39;t use px as much as possiable.</p></li>
+</ul>
 
 
         </section>
@@ -186,15 +221,15 @@ When you construct a phantom reference you must always pass in a <code>Reference
 
             <section class="share">
                 <h4>Share this post</h4>
-                <a class="icon-twitter" href="http://twitter.com/share?text=Java References&amp;url=http://longlinht.github.io//java-references"
+                <a class="icon-twitter" href="http://twitter.com/share?text=Dimension units in Android&amp;url=http://longlinht.github.io//dimension-units-in-android"
                     onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
                     <span class="hidden">Twitter</span>
                 </a>
-                <a class="icon-facebook" href="https://www.facebook.com/sharer/sharer.php?u=http://longlinht.github.io//java-references"
+                <a class="icon-facebook" href="https://www.facebook.com/sharer/sharer.php?u=http://longlinht.github.io//dimension-units-in-android"
                     onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
                     <span class="hidden">Facebook</span>
                 </a>
-                <a class="icon-google-plus" href="https://plus.google.com/share?url=http://longlinht.github.io//java-references"
+                <a class="icon-google-plus" href="https://plus.google.com/share?url=http://longlinht.github.io//dimension-units-in-android"
                    onclick="window.open(this.href, 'google-plus-share', 'width=490,height=530');return false;">
                     <span class="hidden">Google+</span>
                 </a>
@@ -237,20 +272,13 @@ When you construct a phantom reference you must always pass in a <code>Reference
 
     <!-- [[! next_post ]] -->
     
-        <a class="read-next-story no-cover" href="http://longlinht.github.io//dimension-units-in-android">
-            <section class="post">
-                <h2>Dimension units in Android</h2>
-                <p>When I start develop application for Android, I am confused about the dimension units many...</p>
-            </section>
-        </a>
-    
     <!-- [[! /next_post ]] -->
     <!-- [[! prev_post ]] -->
     
-        <a class="read-next-story prev no-cover" href="http://longlinht.github.io//thread-looper-handler-in-android">
+        <a class="read-next-story prev no-cover" href="http://longlinht.github.io//java-references">
             <section class="post">
-                <h2>Android Thread Related Stuff</h2>
-                <p><p>It&#39;s widely known that it&#39;s illegal to update UI components directly from threads other than...</p>
+                <h2>Java References</h2>
+                <p><p>Before JDK 1.2, if a object isn&#39;t referenced by any variable, it can&#39;t be used...</p>
             </section>
         </a>
     

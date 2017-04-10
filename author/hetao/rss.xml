@@ -12,6 +12,93 @@
    <atom:link href="rss" rel="self" type="application/rss+xml" />
    
 	<item>
+	  <title>Dimension units in Android</title>
+	  <link>//dimension-units-in-android</link>
+	  <author>Tao He</author>
+	  <pubDate>2017-04-07T20:30:12+08:00</pubDate>
+	  <guid>//dimension-units-in-android</guid>
+	  <description><![CDATA[
+	     <p>When I start develop application for Android, I am confused about the dimension units many times. So I decide to figure out it clearly through this article.</p>
+
+<p>Android is a mobile operating system that compatible many devices, because of its compatibility, we must think about vary size, density, shape of device&#39;s screen. The <strong>density independence</strong> is a important conception here. Later, I will explain detail about it. Now, we need give the defination of the dimension units and explain the relation of them.</p>
+
+<h3>Dimension Unit</h3>
+
+<h4>Defination</h4>
+
+<ul>
+<li><p>px - An actual pixel on the screen.</p></li>
+<li><p>in - A physical inch on the screen.</p></li>
+<li><p>mm - A physical millimeter on the screen.</p></li>
+<li><p>pt - A point, a common font size unit, on the screen. </p></li>
+<li><p>dp - An abstract unit that is based on the physical density of the screen. These units are relative to a 160 dpi (dots per inch) screen, on which 1dp is roughly equal to 1px. </p></li>
+<li><p>sp - A scale independent pixel, specially designated for text sizes. </p></li>
+</ul>
+
+<h4>Relation</h4>
+<div class="highlight"><pre><code class="language-text" data-lang="text">+----------------+----------------+---------------+-------------------------------+
+| Density Bucket | Screen Density | Physical Size | Pixel Size                    | 
++----------------+----------------+---------------+-------------------------------+
+| ldpi           | 120 dpi        | 0.5 x 0.5 in  | 0.5 in * 120 dpi = 60x60 px   | 
++----------------+----------------+---------------+-------------------------------+
+| mdpi           | 160 dpi        | 0.5 x 0.5 in  | 0.5 in * 160 dpi = 80x80 px   | 
++----------------+----------------+---------------+-------------------------------+
+| hdpi           | 240 dpi        | 0.5 x 0.5 in  | 0.5 in * 240 dpi = 120x120 px | 
++----------------+----------------+---------------+-------------------------------+
+| xhdpi          | 320 dpi        | 0.5 x 0.5 in  | 0.5 in * 320 dpi = 160x160 px | 
++----------------+----------------+---------------+-------------------------------+
+| xxhdpi         | 480 dpi        | 0.5 x 0.5 in  | 0.5 in * 480 dpi = 240x240 px | 
++----------------+----------------+---------------+-------------------------------+
+| xxxhdpi        | 640 dpi        | 0.5 x 0.5 in  | 0.5 in * 640 dpi = 320x320 px | 
++----------------+----------------+---------------+-------------------------------+
+
++---------+-------------+---------------+-------------+--------------------+
+| Unit    | Description | Units Per     | Density     | Same Physical Size | 
+|         |             | Physical Inch | Independent | On Every Screen    | 
++---------+-------------+---------------+-------------+--------------------+
+| px      | Pixels      | Varies        | No          | No                 | 
++---------+-------------+---------------+-------------+--------------------+
+| in      | Inches      | 1             | Yes         | Yes                | 
++---------+-------------+---------------+-------------+--------------------+
+| mm      | Millimeters | 25.4          | Yes         | Yes                | 
++---------+-------------+---------------+-------------+--------------------+
+| pt      | Points      | 72            | Yes         | Yes                | 
++---------+-------------+---------------+-------------+--------------------+
+| dp      | Density     | ~160          | Yes         | No                 | 
+|         | Independent |               |             |                    | 
+|         | Pixels      |               |             |                    | 
++---------+-------------+---------------+-------------+--------------------+
+| sp      | Scale       | ~160          | Yes         | No                 | 
+|         | Independent |               |             |                    | 
+|         | Pixels      |               |             |                    | 
++---------+-------------+---------------+-------------+--------------------+
+</code></pre></div>
+<h3>Density Independence</h3>
+
+<p><strong>Screen Density</strong></p>
+
+<p>Screen density is a ratio of resolution and display size, which can be quantified as dots per inch, or <strong>dpi</strong>. The higher the dpi, the smaller each individual pixel is, and the greater clarity.</p>
+
+<p><strong>Density Independence</strong> means the physical size of a dimension unit is only approximately the same on every screen density. The <strong>dp, sp, pt, mm, in</strong> are all density independence. The number of pixels these translate to varies depending on screen density and the <strong>density bucket</strong> the device falls into.</p>
+
+<p><strong>Density Bucket</strong></p>
+
+<blockquote>
+<p>There is a myriad of Android devices with varying screen densities, which can range from 100 dpi to over 480 dpi. In order to optimize images for all these screen densities, images need to be created at different resolutions. However, trying to optimize every image resource for every possible density would be incredibly tedious, cause app sizes to be enormous, and simply is not a feasible solution. As a compromise, Android uses density &quot;buckets&quot; that are used to group devices together within certain screen density ranges. This way, apps are only required to optimize images for each density bucket, instead of every possible density. This keeps the workload reasonable for designers and developer, and also prevents the application size from ballooning. Of course, there is a tradeoff, leading to variance in the physical rendered size of images depending on device density.</p>
+</blockquote>
+
+<h3>Using Tips:</h3>
+
+<ul>
+<li><p>Try to use dp in xml file as much as possiable.</p></li>
+<li><p>Use sp for font size.</p></li>
+<li><p>Don&#39;t use px as much as possiable.</p></li>
+</ul>
+
+	  ]]></description>
+	</item>
+
+	<item>
 	  <title>Java References</title>
 	  <link>//java-references</link>
 	  <author>Tao He</author>
@@ -930,29 +1017,6 @@ dumpsys | grep &quot;DUMP OF SERVICE&quot;
 	  <description><![CDATA[
 	     <p>这是我“Human”目录的第一篇文章，我以一句电影里的台词作为题目，“成年人的生活里没有容易二字”。这个板块其实我更不知道写什么，不过倒是可以借此文来解释一下那个奇怪的目录名称，其实这个奇怪的名称源于我几年前写
 的一句话“ 茕茕孑力，与机器，人，神共舞”。此文止,期待后续的文章。</p>
-
-	  ]]></description>
-	</item>
-
-	<item>
-	  <title>Hello World</title>
-	  <link>//hello-world</link>
-	  <author>Tao He</author>
-	  <pubDate>2016-06-09T00:00:00+08:00</pubDate>
-	  <guid>//hello-world</guid>
-	  <description><![CDATA[
-	     <p>This is my first post for Machine category, I named it &#39;Hello World&#39; to start my blog. Because many developers start their first program with a single line code to print &#39;Hello World&#39;. Certainly my first line code also is &#39;Hello World&#39; in C programming language. I hope this will be a good start!</p>
-
-<p>Before Starting this blog, I think about this expression way for a long time, I didin&#39;t know what I should write, I also can&#39;t sure I could write down some useful, excellent articles. I even worry about my articles would be some non-value pieces. But now, I never care about it. I will do my best to write some useful, valuable IT articles.</p>
-
-<p>To make a good start, I need figure out what I shoud write. I think about some categories below:</p>
-
-<ul>
-<li><p>General IT</p></li>
-<li><p>Programming Miscellaneous</p></li>
-<li><p>Programming</p></li>
-<li><p>Computer Science</p></li>
-</ul>
 
 	  ]]></description>
 	</item>

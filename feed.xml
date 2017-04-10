@@ -7,7 +7,7 @@
     <atom:link href="http://longlinht.github.io//feed.xml" rel="self" type="application/rss+xml" />
     
       <item>
-        <title>Dimension units in Android</title>
+        <title>Dimension Units in Android</title>
         <description>&lt;p&gt;When I start develop application for Android, I am confused about the dimension units many times. So I decide to figure out it clearly through this article.&lt;/p&gt;
 
 &lt;p&gt;Android is a mobile operating system that compatible many devices, because of its compatibility, we must think about vary size, density, shape of device&amp;#39;s screen. The &lt;strong&gt;density independence&lt;/strong&gt; is a important conception here. Later, I will explain detail about it. Now, we need give the defination of the dimension units and explain the relation of them.&lt;/p&gt;
@@ -17,12 +17,12 @@
 &lt;h4&gt;Defination&lt;/h4&gt;
 
 &lt;ul&gt;
-&lt;li&gt;&lt;p&gt;px - An actual pixel on the screen.&lt;/p&gt;&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;in - A physical inch on the screen.&lt;/p&gt;&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;mm - A physical millimeter on the screen.&lt;/p&gt;&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;pt - A point, a common font size unit, on the screen. &lt;/p&gt;&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;dp - An abstract unit that is based on the physical density of the screen. These units are relative to a 160 dpi (dots per inch) screen, on which 1dp is roughly equal to 1px. &lt;/p&gt;&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;sp - A scale independent pixel, specially designated for text sizes. &lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;px&lt;/strong&gt; - An actual pixel on the screen.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;in&lt;/strong&gt; - A physical inch on the screen.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;mm&lt;/strong&gt; - A physical millimeter on the screen.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;pt&lt;/strong&gt; - A point, a common font size unit, on the screen. &lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;dp&lt;/strong&gt; - An abstract unit that is based on the physical density of the screen. These units are relative to a 160 dpi (dots per inch) screen, on which 1dp is roughly equal to 1px. &lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;sp&lt;/strong&gt; - A scale independent pixel, specially designated for text sizes. &lt;/p&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;h4&gt;Relation&lt;/h4&gt;

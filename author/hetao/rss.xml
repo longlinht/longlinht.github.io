@@ -12,7 +12,7 @@
    <atom:link href="rss" rel="self" type="application/rss+xml" />
    
 	<item>
-	  <title>Dimension units in Android</title>
+	  <title>Dimension Units in Android</title>
 	  <link>//dimension-units-in-android</link>
 	  <author>Tao He</author>
 	  <pubDate>2017-04-07T20:30:12+08:00</pubDate>
@@ -27,12 +27,12 @@
 <h4>Defination</h4>
 
 <ul>
-<li><p>px - An actual pixel on the screen.</p></li>
-<li><p>in - A physical inch on the screen.</p></li>
-<li><p>mm - A physical millimeter on the screen.</p></li>
-<li><p>pt - A point, a common font size unit, on the screen. </p></li>
-<li><p>dp - An abstract unit that is based on the physical density of the screen. These units are relative to a 160 dpi (dots per inch) screen, on which 1dp is roughly equal to 1px. </p></li>
-<li><p>sp - A scale independent pixel, specially designated for text sizes. </p></li>
+<li><p><strong>px</strong> - An actual pixel on the screen.</p></li>
+<li><p><strong>in</strong> - A physical inch on the screen.</p></li>
+<li><p><strong>mm</strong> - A physical millimeter on the screen.</p></li>
+<li><p><strong>pt</strong> - A point, a common font size unit, on the screen. </p></li>
+<li><p><strong>dp</strong> - An abstract unit that is based on the physical density of the screen. These units are relative to a 160 dpi (dots per inch) screen, on which 1dp is roughly equal to 1px. </p></li>
+<li><p><strong>sp</strong> - A scale independent pixel, specially designated for text sizes. </p></li>
 </ul>
 
 <h4>Relation</h4>

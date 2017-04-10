@@ -836,35 +836,33 @@ According to JDK 7, there are 5 GC types.</p>
 <h4>Senario 2: When use anonymous inner class</h4>
 
 <ul>
-<li>Error way:
-```java
-public class SampleActivity extends Activity{
-     private TextView textView;          
-     private Handler handler = new Handler(){
-          @override
-          public void handlerMessage(Message msg){</li>
+<li>Error way:</li>
 </ul>
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">SampleActivity</span> <span class="kd">extends</span> <span class="n">Activity</span><span class="o">{</span>
+     <span class="kd">private</span> <span class="n">TextView</span> <span class="n">textView</span><span class="o">;</span>          
+     <span class="kd">private</span> <span class="n">Handler</span> <span class="n">handler</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">Handler</span><span class="o">(){</span>
+          <span class="nd">@override</span>
+          <span class="kd">public</span> <span class="kt">void</span> <span class="nf">handlerMessage</span><span class="o">(</span><span class="n">Message</span> <span class="n">msg</span><span class="o">){</span>
 
-<p>          }
-     };</p>
+          <span class="o">}</span>
+     <span class="o">};</span>
 
-<p>     @override
-     public void onCreate(Bundle bundle){
-          super.onCreate(bundle);
-          setContextView(R.layout.activity<em>sample</em>layout);
-          textView = (TextView)findViewById(R.id.textView);
-          handler.postDelayed(new Runnable(){</p>
+     <span class="nd">@override</span>
+     <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onCreate</span><span class="o">(</span><span class="n">Bundle</span> <span class="n">bundle</span><span class="o">){</span>
+          <span class="kd">super</span><span class="o">.</span><span class="na">onCreate</span><span class="o">(</span><span class="n">bundle</span><span class="o">);</span>
+          <span class="n">setContextView</span><span class="o">(</span><span class="n">R</span><span class="o">.</span><span class="na">layout</span><span class="o">.</span><span class="na">activity_sample_layout</span><span class="o">);</span>
+          <span class="n">textView</span> <span class="o">=</span> <span class="o">(</span><span class="n">TextView</span><span class="o">)</span><span class="n">findViewById</span><span class="o">(</span><span class="n">R</span><span class="o">.</span><span class="na">id</span><span class="o">.</span><span class="na">textView</span><span class="o">);</span>
+          <span class="n">handler</span><span class="o">.</span><span class="na">postDelayed</span><span class="o">(</span><span class="k">new</span> <span class="nf">Runnable</span><span class="o">(){</span>
 
-<p>               @override
-               public void run(){
-                    textView.setText(&quot;ok&quot;);
-               };</p>
+               <span class="nd">@override</span>
+               <span class="kd">public</span> <span class="kt">void</span> <span class="nf">run</span><span class="o">(){</span>
+                    <span class="n">textView</span><span class="o">.</span><span class="na">setText</span><span class="o">(</span><span class="s">&quot;ok&quot;</span><span class="o">);</span>
+               <span class="o">};</span>
 
-<p>          },1000 * 60 * 10);
-     }
-}
-```</p>
-
+          <span class="o">},</span><span class="mi">1000</span> <span class="o">*</span> <span class="mi">60</span> <span class="o">*</span> <span class="mi">10</span><span class="o">);</span>
+     <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div>
 <ul>
 <li>Error reason:</li>
 </ul>

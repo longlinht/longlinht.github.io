@@ -19,6 +19,15 @@
       <dc:date>2017-04-07T20:30:12+08:00</dc:date>
     </item>
     <item>
+      <title>Building My Own Mac Working Environment</title>
+      <link>http://longlinht.github.io//building-my-own-mac-working-environment</link>
+      <description>In recent 2 years, I have switched my own working environment from Windows to Ubuntu and Mac. For the reason that I switched C/C++ development for Windows to Java development for Android. But I still prefer C++, so I won't give up C/C++ programming. In this article I will write down detail steps that how I build working environment. This working environment on Mac is a general working environment, not just for Android development but also C/C++ development. Let's start!
+
+</description>
+      <pubDate>Sun, 02 Apr 2017 06:30:12 +0800</pubDate>
+      <dc:date>2017-04-02T06:30:12+08:00</dc:date>
+    </item>
+    <item>
       <title>Java References</title>
       <link>http://longlinht.github.io//java-references</link>
       <description>Before JDK 1.2, if a object isn't referenced by any variable, it can't be used any more.Since JDK 1.2, Java has four reference types.In order from strongest to weakest these references are: Strong, Soft, Weak, Phantom. 

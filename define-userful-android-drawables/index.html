@@ -117,6 +117,26 @@
             <p>We can define many useful drawables in Android, in this article, I collected some of definations I ever used.</p>
 
 <h4>Define a round corner drawable</h4>
+
+<h4>With frame</h4>
+<div class="highlight"><pre><code class="language-xml" data-lang="xml"><span class="cp">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;</span>
+<span class="nt">&lt;shape</span> <span class="na">xmlns:android=</span><span class="s">&quot;http://schemas.android.com/apk/res/android&quot;</span>
+    <span class="na">android:shape=</span><span class="s">&quot;rectangle&quot;</span><span class="nt">&gt;</span>
+
+    <span class="nt">&lt;stroke</span>
+        <span class="na">android:width=</span><span class="s">&quot;1dp&quot;</span>
+        <span class="na">android:color=</span><span class="s">&quot;#ff000000&quot;</span><span class="nt">/&gt;</span>
+
+    <span class="nt">&lt;padding</span>
+        <span class="na">android:left=</span><span class="s">&quot;5dp&quot;</span>
+        <span class="na">android:right=</span><span class="s">&quot;5dp&quot;</span>
+        <span class="na">android:top=</span><span class="s">&quot;5dp&quot;</span>
+        <span class="na">android:bottom=</span><span class="s">&quot;5dp&quot;</span> <span class="nt">/&gt;</span>
+
+    <span class="nt">&lt;corners</span> <span class="na">android:radius=</span><span class="s">&quot;50dp&quot;</span> <span class="nt">/&gt;</span>
+<span class="nt">&lt;/shape&gt;</span>
+</code></pre></div>
+<h4>Without frame</h4>
 <div class="highlight"><pre><code class="language-xml" data-lang="xml"><span class="nt">&lt;shape</span> <span class="na">xmlns:android=</span><span class="s">&quot;http://schemas.android.com/apk/res/android&quot;</span><span class="nt">&gt;</span>
     <span class="nt">&lt;solid</span> <span class="na">android:color=</span><span class="s">&quot;#ffffffff&quot;</span><span class="nt">/&gt;</span>
     <span class="nt">&lt;stroke</span> <span class="na">android:width=</span><span class="s">&quot;0dp&quot;</span>

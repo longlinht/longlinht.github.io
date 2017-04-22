@@ -1049,6 +1049,26 @@ dumpsys | grep &amp;quot;DUMP OF SERVICE&amp;quot;
         <description>&lt;p&gt;We can define many useful drawables in Android, in this article, I collected some of definations I ever used.&lt;/p&gt;
 
 &lt;h4&gt;Define a round corner drawable&lt;/h4&gt;
+
+&lt;h4&gt;With frame&lt;/h4&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-xml&quot; data-lang=&quot;xml&quot;&gt;&lt;span class=&quot;cp&quot;&gt;&amp;lt;?xml version=&amp;quot;1.0&amp;quot; encoding=&amp;quot;utf-8&amp;quot;?&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;shape&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;xmlns:android=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;http://schemas.android.com/apk/res/android&amp;quot;&lt;/span&gt;
+    &lt;span class=&quot;na&quot;&gt;android:shape=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;rectangle&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;stroke&lt;/span&gt;
+        &lt;span class=&quot;na&quot;&gt;android:width=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;1dp&amp;quot;&lt;/span&gt;
+        &lt;span class=&quot;na&quot;&gt;android:color=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;#ff000000&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;padding&lt;/span&gt;
+        &lt;span class=&quot;na&quot;&gt;android:left=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;5dp&amp;quot;&lt;/span&gt;
+        &lt;span class=&quot;na&quot;&gt;android:right=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;5dp&amp;quot;&lt;/span&gt;
+        &lt;span class=&quot;na&quot;&gt;android:top=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;5dp&amp;quot;&lt;/span&gt;
+        &lt;span class=&quot;na&quot;&gt;android:bottom=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;5dp&amp;quot;&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;corners&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;android:radius=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;50dp&amp;quot;&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;/shape&amp;gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h4&gt;Without frame&lt;/h4&gt;
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-xml&quot; data-lang=&quot;xml&quot;&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;shape&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;xmlns:android=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;http://schemas.android.com/apk/res/android&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
     &lt;span class=&quot;nt&quot;&gt;&amp;lt;solid&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;android:color=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;#ffffffff&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
     &lt;span class=&quot;nt&quot;&gt;&amp;lt;stroke&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;android:width=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;0dp&amp;quot;&lt;/span&gt;

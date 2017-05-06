@@ -85,7 +85,7 @@ update UI when we finish something in separated thread. This is a basic problem,
     <item>
       <title>Define Userful Android Drawables</title>
       <link>http://longlinht.github.io//define-userful-android-drawables</link>
-      <description>We can define many useful drawables in Android, in this article, I collected some of definations I ever used and describes the usage of Drawables in Android.Every Drawable is stored as individual files in one of the res/drawable folders. Typically you would store bitmaps for different resolutions in the -mdpi, -hdpi, -xhdpi, -xxhdpi subfolders of res/drawable. The ADT project creation wizard creates these folders by default. If these bitmaps are provided in different folder, the Android system selects the correct one automatically based on the device configuration.
+      <description>We can define many useful drawables in Android, in this article, I collected some of definations I ever used.
 
 </description>
       <pubDate>Wed, 06 Jul 2016 02:20:12 +0800</pubDate>

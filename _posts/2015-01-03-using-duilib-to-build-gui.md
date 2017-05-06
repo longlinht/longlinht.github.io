@@ -14,7 +14,7 @@ Duilib is a free open source DirectUI library on Windows , because its simple an
 The native Windows user interface is composed of multiple WND, each WND has its own Handle and WndProc, while the DirectUI is directly drawn on the parent window (Paint on parent DC). That is, the child window is not created in the form of a window handle (windowless), but a logical window, using the GDI function to draw on the parent window. There is no extra WND, so the controls are all virtual, do not have their own message loop, they are using WND message loop. When the WND receives the message, it will locate the control and then passes the message to the specific control, which will response this message.
 
 ### Class architecture of library
-![](https://dl.dropboxusercontent.com/u/83663714/Figures/duilib_arch.png)
+![](http://wx2.sinaimg.cn/mw690/7033bf1dly1ffbgrdyw59j20zp0pw0zo.jpg)
 #### Basic library
 
 ##### Tool library
@@ -37,7 +37,7 @@ Control library has two parts to be implemented seperately in DUILib.
 
 #### Basic process
 
-![](https://dl.dropboxusercontent.com/u/83663714/Figures/duilib_typical_process.png)
+![](http://wx4.sinaimg.cn/mw690/7033bf1dly1ffbgrdt8bxj20ir0or75f.jpg)
 
 The DUILib framework's basic message process similar to create window process in WIN32.
 

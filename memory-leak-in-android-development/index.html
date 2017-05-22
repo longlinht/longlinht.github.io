@@ -116,25 +116,6 @@
             
             <p>When programming Android, although java has GC mechanism, some our wrong code way and personal habits still cause memory leak, GC also can&#39;t fix it.</p>
 
-<h4>What is a memory leak?</h4>
-
-<p>Some objects have a limited lifetime. When their job is done, they are expected to be garbage collected. If a chain of references holds an object in memory after the end of its expected lifetime, this creates a memory leak. When these leaks accumulate, the app runs out of memory.</p>
-
-<h4>OOM</h4>
-
-<p>A symptom of a deeper problem: memory leaks.</p>
-
-<h4>Shallow Size vs. Retained Size</h4>
-
-<ul>
-<li><p>Shallow Heap - is the amount required for an object itself </p></li>
-<li><p>Retained size - is the amount required for an object and all of the objects it refers to (i.e. via instance attributes).</p></li>
-</ul>
-
-<h4>Heap Dump</h4>
-
-<p>A heap dump is a portable (i.e. file-based) representation of a VM&#39;s heap at a particular point in time.</p>
-
 <h4>Senario 1: When programming a single instance</h4>
 
 <ul>
@@ -186,33 +167,35 @@
 <h4>Senario 2: When use anonymous inner class</h4>
 
 <ul>
-<li>Error way:</li>
+<li>Error way:
+```java
+public class SampleActivity extends Activity{
+     private TextView textView;          
+     private Handler handler = new Handler(){
+          @override
+          public void handlerMessage(Message msg){</li>
 </ul>
-<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">SampleActivity</span> <span class="kd">extends</span> <span class="n">Activity</span><span class="o">{</span>
-     <span class="kd">private</span> <span class="n">TextView</span> <span class="n">textView</span><span class="o">;</span>          
-     <span class="kd">private</span> <span class="n">Handler</span> <span class="n">handler</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">Handler</span><span class="o">(){</span>
-          <span class="nd">@override</span>
-          <span class="kd">public</span> <span class="kt">void</span> <span class="nf">handlerMessage</span><span class="o">(</span><span class="n">Message</span> <span class="n">msg</span><span class="o">){</span>
 
-          <span class="o">}</span>
-     <span class="o">};</span>
+<p>          }
+     };</p>
 
-     <span class="nd">@override</span>
-     <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onCreate</span><span class="o">(</span><span class="n">Bundle</span> <span class="n">bundle</span><span class="o">){</span>
-          <span class="kd">super</span><span class="o">.</span><span class="na">onCreate</span><span class="o">(</span><span class="n">bundle</span><span class="o">);</span>
-          <span class="n">setContextView</span><span class="o">(</span><span class="n">R</span><span class="o">.</span><span class="na">layout</span><span class="o">.</span><span class="na">activity_sample_layout</span><span class="o">);</span>
-          <span class="n">textView</span> <span class="o">=</span> <span class="o">(</span><span class="n">TextView</span><span class="o">)</span><span class="n">findViewById</span><span class="o">(</span><span class="n">R</span><span class="o">.</span><span class="na">id</span><span class="o">.</span><span class="na">textView</span><span class="o">);</span>
-          <span class="n">handler</span><span class="o">.</span><span class="na">postDelayed</span><span class="o">(</span><span class="k">new</span> <span class="nf">Runnable</span><span class="o">(){</span>
+<p>     @override
+     public void onCreate(Bundle bundle){
+          super.onCreate(bundle);
+          setContextView(R.layout.activity<em>sample</em>layout);
+          textView = (TextView)findViewById(R.id.textView);
+          handler.postDelayed(new Runnable(){</p>
 
-               <span class="nd">@override</span>
-               <span class="kd">public</span> <span class="kt">void</span> <span class="nf">run</span><span class="o">(){</span>
-                    <span class="n">textView</span><span class="o">.</span><span class="na">setText</span><span class="o">(</span><span class="s">&quot;ok&quot;</span><span class="o">);</span>
-               <span class="o">};</span>
+<p>               @override
+               public void run(){
+                    textView.setText(&quot;ok&quot;);
+               };</p>
 
-          <span class="o">},</span><span class="mi">1000</span> <span class="o">*</span> <span class="mi">60</span> <span class="o">*</span> <span class="mi">10</span><span class="o">);</span>
-     <span class="o">}</span>
-<span class="o">}</span>
-</code></pre></div>
+<p>          },1000 * 60 * 10);
+     }
+}
+```</p>
+
 <ul>
 <li>Error reason:</li>
 </ul>
@@ -282,58 +265,6 @@
 </code></pre></div>
 <p>This call passed null will destroy all Runnable and Message related to handler.</p>
 
-<h4>Senario 4: Register methods but their unregister counterparts are nowhere to be seen.</h4>
-
-<ul>
-<li>Error way:</li>
-</ul>
-<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">LeaksActivity</span> <span class="kd">extends</span> <span class="n">Activity</span> <span class="kd">implements</span> <span class="n">LocationListener</span> <span class="o">{</span>
-
-    <span class="kd">private</span> <span class="n">LocationManager</span> <span class="n">locationManager</span><span class="o">;</span>
-
-    <span class="nd">@Override</span>
-    <span class="kd">protected</span> <span class="kt">void</span> <span class="nf">onCreate</span><span class="o">(</span><span class="n">Bundle</span> <span class="n">savedInstanceState</span><span class="o">)</span> <span class="o">{</span>
-        <span class="kd">super</span><span class="o">.</span><span class="na">onCreate</span><span class="o">(</span><span class="n">savedInstanceState</span><span class="o">);</span>
-        <span class="n">setContentView</span><span class="o">(</span><span class="n">R</span><span class="o">.</span><span class="na">layout</span><span class="o">.</span><span class="na">activity_leaks</span><span class="o">);</span>
-        <span class="n">locationManager</span> <span class="o">=</span> <span class="o">(</span><span class="n">LocationManager</span><span class="o">)</span> <span class="n">getSystemService</span><span class="o">(</span><span class="n">LOCATION_SERVICE</span><span class="o">);</span>
-        <span class="n">locationManager</span><span class="o">.</span><span class="na">requestLocationUpdates</span><span class="o">(</span><span class="n">LocationManager</span><span class="o">.</span><span class="na">NETWORK_PROVIDER</span><span class="o">,</span>
-                <span class="n">TimeUnit</span><span class="o">.</span><span class="na">MINUTES</span><span class="o">.</span><span class="na">toMillis</span><span class="o">(</span><span class="mi">5</span><span class="o">),</span> <span class="mi">100</span><span class="o">,</span> <span class="k">this</span><span class="o">);</span>
-    <span class="o">}</span>
-
-    <span class="c1">// Listener implementation omitted</span>
-<span class="o">}</span>
-</code></pre></div>
-<ul>
-<li>Error reason:</li>
-</ul>
-
-<p>Here we implement the location interface in the activity itself, meaning that the LocationManager will hold a reference to our activity. Now if the device were to be rotated, a new activity would be created replacing the old one already registered for location updates. Since a system service will most definitely outlive any activity, the LocationManager will still hold a reference to the previous activity, making it impossible for the garbage collector to reclaim the resources still tied to that particular activity, resulting in memory being leaked. </p>
-
-<ul>
-<li>Right way:</li>
-</ul>
-<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">LeaksActivity</span> <span class="kd">extends</span> <span class="n">Activity</span> <span class="kd">implements</span> <span class="n">LocationListener</span> <span class="o">{</span>
-
-    <span class="kd">private</span> <span class="n">LocationManager</span> <span class="n">locationManager</span><span class="o">;</span>
-
-    <span class="nd">@Override</span>
-    <span class="kd">protected</span> <span class="kt">void</span> <span class="nf">onCreate</span><span class="o">(</span><span class="n">Bundle</span> <span class="n">savedInstanceState</span><span class="o">)</span> <span class="o">{</span>
-        <span class="kd">super</span><span class="o">.</span><span class="na">onCreate</span><span class="o">(</span><span class="n">savedInstanceState</span><span class="o">);</span>
-        <span class="n">setContentView</span><span class="o">(</span><span class="n">R</span><span class="o">.</span><span class="na">layout</span><span class="o">.</span><span class="na">activity_leaks</span><span class="o">);</span>
-        <span class="n">locationManager</span> <span class="o">=</span> <span class="o">(</span><span class="n">LocationManager</span><span class="o">)</span> <span class="n">getSystemService</span><span class="o">(</span><span class="n">LOCATION_SERVICE</span><span class="o">);</span>
-        <span class="n">locationManager</span><span class="o">.</span><span class="na">requestLocationUpdates</span><span class="o">(</span><span class="n">LocationManager</span><span class="o">.</span><span class="na">NETWORK_PROVIDER</span><span class="o">,</span>
-                <span class="n">TimeUnit</span><span class="o">.</span><span class="na">MINUTES</span><span class="o">.</span><span class="na">toMillis</span><span class="o">(</span><span class="mi">5</span><span class="o">),</span> <span class="mi">100</span><span class="o">,</span> <span class="k">this</span><span class="o">);</span>
-    <span class="o">}</span>
-
-    <span class="nd">@Override</span>
-    <span class="kd">protected</span> <span class="kt">void</span> <span class="nf">onDestroy</span><span class="o">()</span> <span class="o">{</span>
-        <span class="n">locationManager</span><span class="o">.</span><span class="na">removeUpdates</span><span class="o">(</span><span class="k">this</span><span class="o">);</span>
-        <span class="kd">super</span><span class="o">.</span><span class="na">onDestroy</span><span class="o">();</span>
-    <span class="o">}</span>
-
-    <span class="c1">// Listener implementation omitted</span>
-<span class="o">}</span>
-</code></pre></div>
 <h4>Conclude</h4>
 
 <ul>
@@ -341,7 +272,7 @@
 <li><p>Prefer to use Application&#39;s Context rather than Activity&#39;s Context.</p></li>
 <li><p>Prefer to use static anonymous inner class rather than non-static.</p></li>
 <li><p>Use weak reference to hold external class&#39;s member variables.</p></li>
-<li><p>A garbage collector is not an insurance against memory leaks.</p></li>
+<li><p>GC can&#39;t fix memory leak.</p></li>
 </ul>
 
 <h4>Reference</h4>

@@ -785,25 +785,6 @@ According to JDK 7, there are 5 GC types.</p>
 	  <description><![CDATA[
 	     <p>When programming Android, although java has GC mechanism, some our wrong code way and personal habits still cause memory leak, GC also can&#39;t fix it.</p>
 
-<h4>What is a memory leak?</h4>
-
-<p>Some objects have a limited lifetime. When their job is done, they are expected to be garbage collected. If a chain of references holds an object in memory after the end of its expected lifetime, this creates a memory leak. When these leaks accumulate, the app runs out of memory.</p>
-
-<h4>OOM</h4>
-
-<p>A symptom of a deeper problem: memory leaks.</p>
-
-<h4>Shallow Size vs. Retained Size</h4>
-
-<ul>
-<li><p>Shallow Heap - is the amount required for an object itself </p></li>
-<li><p>Retained size - is the amount required for an object and all of the objects it refers to (i.e. via instance attributes).</p></li>
-</ul>
-
-<h4>Heap Dump</h4>
-
-<p>A heap dump is a portable (i.e. file-based) representation of a VM&#39;s heap at a particular point in time.</p>
-
 <h4>Senario 1: When programming a single instance</h4>
 
 <ul>
@@ -855,33 +836,35 @@ According to JDK 7, there are 5 GC types.</p>
 <h4>Senario 2: When use anonymous inner class</h4>
 
 <ul>
-<li>Error way:</li>
+<li>Error way:
+```java
+public class SampleActivity extends Activity{
+     private TextView textView;          
+     private Handler handler = new Handler(){
+          @override
+          public void handlerMessage(Message msg){</li>
 </ul>
-<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">SampleActivity</span> <span class="kd">extends</span> <span class="n">Activity</span><span class="o">{</span>
-     <span class="kd">private</span> <span class="n">TextView</span> <span class="n">textView</span><span class="o">;</span>          
-     <span class="kd">private</span> <span class="n">Handler</span> <span class="n">handler</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">Handler</span><span class="o">(){</span>
-          <span class="nd">@override</span>
-          <span class="kd">public</span> <span class="kt">void</span> <span class="nf">handlerMessage</span><span class="o">(</span><span class="n">Message</span> <span class="n">msg</span><span class="o">){</span>
 
-          <span class="o">}</span>
-     <span class="o">};</span>
+<p>          }
+     };</p>
 
-     <span class="nd">@override</span>
-     <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onCreate</span><span class="o">(</span><span class="n">Bundle</span> <span class="n">bundle</span><span class="o">){</span>
-          <span class="kd">super</span><span class="o">.</span><span class="na">onCreate</span><span class="o">(</span><span class="n">bundle</span><span class="o">);</span>
-          <span class="n">setContextView</span><span class="o">(</span><span class="n">R</span><span class="o">.</span><span class="na">layout</span><span class="o">.</span><span class="na">activity_sample_layout</span><span class="o">);</span>
-          <span class="n">textView</span> <span class="o">=</span> <span class="o">(</span><span class="n">TextView</span><span class="o">)</span><span class="n">findViewById</span><span class="o">(</span><span class="n">R</span><span class="o">.</span><span class="na">id</span><span class="o">.</span><span class="na">textView</span><span class="o">);</span>
-          <span class="n">handler</span><span class="o">.</span><span class="na">postDelayed</span><span class="o">(</span><span class="k">new</span> <span class="nf">Runnable</span><span class="o">(){</span>
+<p>     @override
+     public void onCreate(Bundle bundle){
+          super.onCreate(bundle);
+          setContextView(R.layout.activity<em>sample</em>layout);
+          textView = (TextView)findViewById(R.id.textView);
+          handler.postDelayed(new Runnable(){</p>
 
-               <span class="nd">@override</span>
-               <span class="kd">public</span> <span class="kt">void</span> <span class="nf">run</span><span class="o">(){</span>
-                    <span class="n">textView</span><span class="o">.</span><span class="na">setText</span><span class="o">(</span><span class="s">&quot;ok&quot;</span><span class="o">);</span>
-               <span class="o">};</span>
+<p>               @override
+               public void run(){
+                    textView.setText(&quot;ok&quot;);
+               };</p>
 
-          <span class="o">},</span><span class="mi">1000</span> <span class="o">*</span> <span class="mi">60</span> <span class="o">*</span> <span class="mi">10</span><span class="o">);</span>
-     <span class="o">}</span>
-<span class="o">}</span>
-</code></pre></div>
+<p>          },1000 * 60 * 10);
+     }
+}
+```</p>
+
 <ul>
 <li>Error reason:</li>
 </ul>
@@ -951,58 +934,6 @@ According to JDK 7, there are 5 GC types.</p>
 </code></pre></div>
 <p>This call passed null will destroy all Runnable and Message related to handler.</p>
 
-<h4>Senario 4: Register methods but their unregister counterparts are nowhere to be seen.</h4>
-
-<ul>
-<li>Error way:</li>
-</ul>
-<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">LeaksActivity</span> <span class="kd">extends</span> <span class="n">Activity</span> <span class="kd">implements</span> <span class="n">LocationListener</span> <span class="o">{</span>
-
-    <span class="kd">private</span> <span class="n">LocationManager</span> <span class="n">locationManager</span><span class="o">;</span>
-
-    <span class="nd">@Override</span>
-    <span class="kd">protected</span> <span class="kt">void</span> <span class="nf">onCreate</span><span class="o">(</span><span class="n">Bundle</span> <span class="n">savedInstanceState</span><span class="o">)</span> <span class="o">{</span>
-        <span class="kd">super</span><span class="o">.</span><span class="na">onCreate</span><span class="o">(</span><span class="n">savedInstanceState</span><span class="o">);</span>
-        <span class="n">setContentView</span><span class="o">(</span><span class="n">R</span><span class="o">.</span><span class="na">layout</span><span class="o">.</span><span class="na">activity_leaks</span><span class="o">);</span>
-        <span class="n">locationManager</span> <span class="o">=</span> <span class="o">(</span><span class="n">LocationManager</span><span class="o">)</span> <span class="n">getSystemService</span><span class="o">(</span><span class="n">LOCATION_SERVICE</span><span class="o">);</span>
-        <span class="n">locationManager</span><span class="o">.</span><span class="na">requestLocationUpdates</span><span class="o">(</span><span class="n">LocationManager</span><span class="o">.</span><span class="na">NETWORK_PROVIDER</span><span class="o">,</span>
-                <span class="n">TimeUnit</span><span class="o">.</span><span class="na">MINUTES</span><span class="o">.</span><span class="na">toMillis</span><span class="o">(</span><span class="mi">5</span><span class="o">),</span> <span class="mi">100</span><span class="o">,</span> <span class="k">this</span><span class="o">);</span>
-    <span class="o">}</span>
-
-    <span class="c1">// Listener implementation omitted</span>
-<span class="o">}</span>
-</code></pre></div>
-<ul>
-<li>Error reason:</li>
-</ul>
-
-<p>Here we implement the location interface in the activity itself, meaning that the LocationManager will hold a reference to our activity. Now if the device were to be rotated, a new activity would be created replacing the old one already registered for location updates. Since a system service will most definitely outlive any activity, the LocationManager will still hold a reference to the previous activity, making it impossible for the garbage collector to reclaim the resources still tied to that particular activity, resulting in memory being leaked. </p>
-
-<ul>
-<li>Right way:</li>
-</ul>
-<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">LeaksActivity</span> <span class="kd">extends</span> <span class="n">Activity</span> <span class="kd">implements</span> <span class="n">LocationListener</span> <span class="o">{</span>
-
-    <span class="kd">private</span> <span class="n">LocationManager</span> <span class="n">locationManager</span><span class="o">;</span>
-
-    <span class="nd">@Override</span>
-    <span class="kd">protected</span> <span class="kt">void</span> <span class="nf">onCreate</span><span class="o">(</span><span class="n">Bundle</span> <span class="n">savedInstanceState</span><span class="o">)</span> <span class="o">{</span>
-        <span class="kd">super</span><span class="o">.</span><span class="na">onCreate</span><span class="o">(</span><span class="n">savedInstanceState</span><span class="o">);</span>
-        <span class="n">setContentView</span><span class="o">(</span><span class="n">R</span><span class="o">.</span><span class="na">layout</span><span class="o">.</span><span class="na">activity_leaks</span><span class="o">);</span>
-        <span class="n">locationManager</span> <span class="o">=</span> <span class="o">(</span><span class="n">LocationManager</span><span class="o">)</span> <span class="n">getSystemService</span><span class="o">(</span><span class="n">LOCATION_SERVICE</span><span class="o">);</span>
-        <span class="n">locationManager</span><span class="o">.</span><span class="na">requestLocationUpdates</span><span class="o">(</span><span class="n">LocationManager</span><span class="o">.</span><span class="na">NETWORK_PROVIDER</span><span class="o">,</span>
-                <span class="n">TimeUnit</span><span class="o">.</span><span class="na">MINUTES</span><span class="o">.</span><span class="na">toMillis</span><span class="o">(</span><span class="mi">5</span><span class="o">),</span> <span class="mi">100</span><span class="o">,</span> <span class="k">this</span><span class="o">);</span>
-    <span class="o">}</span>
-
-    <span class="nd">@Override</span>
-    <span class="kd">protected</span> <span class="kt">void</span> <span class="nf">onDestroy</span><span class="o">()</span> <span class="o">{</span>
-        <span class="n">locationManager</span><span class="o">.</span><span class="na">removeUpdates</span><span class="o">(</span><span class="k">this</span><span class="o">);</span>
-        <span class="kd">super</span><span class="o">.</span><span class="na">onDestroy</span><span class="o">();</span>
-    <span class="o">}</span>
-
-    <span class="c1">// Listener implementation omitted</span>
-<span class="o">}</span>
-</code></pre></div>
 <h4>Conclude</h4>
 
 <ul>
@@ -1010,7 +941,7 @@ According to JDK 7, there are 5 GC types.</p>
 <li><p>Prefer to use Application&#39;s Context rather than Activity&#39;s Context.</p></li>
 <li><p>Prefer to use static anonymous inner class rather than non-static.</p></li>
 <li><p>Use weak reference to hold external class&#39;s member variables.</p></li>
-<li><p>A garbage collector is not an insurance against memory leaks.</p></li>
+<li><p>GC can&#39;t fix memory leak.</p></li>
 </ul>
 
 <h4>Reference</h4>
@@ -1080,43 +1011,9 @@ dumpsys | grep &quot;DUMP OF SERVICE&quot;
 	  <pubDate>2016-07-06T02:20:12+08:00</pubDate>
 	  <guid>//define-userful-android-drawables</guid>
 	  <description><![CDATA[
-	     <p>We can define many useful drawables in Android, in this article, I collected some of definations I ever used and describes the usage of Drawables in Android.Every Drawable is stored as individual files in one of the res/drawable folders. Typically you would store bitmaps for different resolutions in the -mdpi, -hdpi, -xhdpi, -xxhdpi subfolders of res/drawable. The ADT project creation wizard creates these folders by default. If these bitmaps are provided in different folder, the Android system selects the correct one automatically based on the device configuration.</p>
+	     <p>We can define many useful drawables in Android, in this article, I collected some of definations I ever used.</p>
 
-<p>In addition to graphical files, Android supports XML drawables and 9-patch graphics. XML drawables are used to describe shapes (color, border, gradient), state, transitions and more.</p>
-
-<h3>General Drawables</h3>
-
-<p>Genenal picture resources, png format is recommend, jpg is accepted, gif is not recommend.</p>
-
-<h3>9 Patch Drawables</h3>
-
-<p>9 Patch drawables are Drawables which have a one pixel additional border. On the top and left you define the area which should be scaled if the Drawable is to small for the view.</p>
-
-<h3>Shape Drawables</h3>
-
-<p>Shape Drawables are XML files which allow to define a geometric object with colors, borders and gradients which can get assigned to Views. The advantage of using XML Shape Drawables is that they automatically adjust to the correct size.</p>
-
-<p>The following listing shows an example of a Shape Drawable.</p>
-
-<h4>Define a round corner drawable with frame</h4>
-<div class="highlight"><pre><code class="language-xml" data-lang="xml"><span class="cp">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;</span>
-<span class="nt">&lt;shape</span> <span class="na">xmlns:android=</span><span class="s">&quot;http://schemas.android.com/apk/res/android&quot;</span>
-    <span class="na">android:shape=</span><span class="s">&quot;rectangle&quot;</span><span class="nt">&gt;</span>
-
-    <span class="nt">&lt;stroke</span>
-        <span class="na">android:width=</span><span class="s">&quot;1dp&quot;</span>
-        <span class="na">android:color=</span><span class="s">&quot;#ff000000&quot;</span><span class="nt">/&gt;</span>
-
-    <span class="nt">&lt;padding</span>
-        <span class="na">android:left=</span><span class="s">&quot;5dp&quot;</span>
-        <span class="na">android:right=</span><span class="s">&quot;5dp&quot;</span>
-        <span class="na">android:top=</span><span class="s">&quot;5dp&quot;</span>
-        <span class="na">android:bottom=</span><span class="s">&quot;5dp&quot;</span> <span class="nt">/&gt;</span>
-
-    <span class="nt">&lt;corners</span> <span class="na">android:radius=</span><span class="s">&quot;50dp&quot;</span> <span class="nt">/&gt;</span>
-<span class="nt">&lt;/shape&gt;</span>
-</code></pre></div>
-<h4>Define a round corner drawable without frame</h4>
+<h4>Define a round corner drawable</h4>
 <div class="highlight"><pre><code class="language-xml" data-lang="xml"><span class="nt">&lt;shape</span> <span class="na">xmlns:android=</span><span class="s">&quot;http://schemas.android.com/apk/res/android&quot;</span><span class="nt">&gt;</span>
     <span class="nt">&lt;solid</span> <span class="na">android:color=</span><span class="s">&quot;#ffffffff&quot;</span><span class="nt">/&gt;</span>
     <span class="nt">&lt;stroke</span> <span class="na">android:width=</span><span class="s">&quot;0dp&quot;</span>
@@ -1129,10 +1026,6 @@ dumpsys | grep &quot;DUMP OF SERVICE&quot;
              <span class="na">android:bottomLeftRadius=</span><span class="s">&quot;4dp&quot;</span>
              <span class="na">android:topLeftRadius=</span><span class="s">&quot;0dp&quot;</span>
              <span class="na">android:topRightRadius=</span><span class="s">&quot;0dp&quot;</span><span class="nt">/&gt;</span>
-    <span class="nt">&lt;gradient</span>
-            <span class="na">android:endColor=</span><span class="s">&quot;#DDBBBBBB&quot;</span>
-            <span class="na">android:startColor=</span><span class="s">&quot;#DD777777&quot;</span>
-            <span class="na">android:angle=</span><span class="s">&quot;90&quot;</span> <span class="nt">/&gt;</span>
 <span class="nt">&lt;/shape&gt;</span>
 </code></pre></div>
 <h4>Define a circle</h4>
@@ -1152,19 +1045,13 @@ dumpsys | grep &quot;DUMP OF SERVICE&quot;
     <span class="nt">&lt;solid</span> <span class="na">android:color=</span><span class="s">&quot;#979797&quot;</span><span class="nt">/&gt;</span>
 <span class="nt">&lt;/shape&gt;</span>
 </code></pre></div>
-<h3>State Drawable</h3>
-
 <h4>Define a drawable with state</h4>
-
-<p>State drawables allow to define states. For each state a different drawable can get assigned to the View. For example the following defines different drawables for a button depending on its state.</p>
 <div class="highlight"><pre><code class="language-xml" data-lang="xml"><span class="cp">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;</span>
 <span class="nt">&lt;selector</span> <span class="na">xmlns:android=</span><span class="s">&quot;http://schemas.android.com/apk/res/android&quot;</span><span class="nt">&gt;</span>
     <span class="nt">&lt;item</span> <span class="na">android:drawable=</span><span class="s">&quot;@drawable/qq_login_button_bg_pressed&quot;</span> <span class="na">android:state_pressed=</span><span class="s">&quot;true&quot;</span><span class="nt">/&gt;</span>
     <span class="nt">&lt;item</span> <span class="na">android:drawable=</span><span class="s">&quot;@drawable/qq_login_button_bg_normal&quot;</span><span class="nt">/&gt;</span>
 <span class="nt">&lt;/selector&gt;</span>
 </code></pre></div>
-<h3>Layer Drawable</h3>
-
 <h4>Define a ring as progressbar background</h4>
 <div class="highlight"><pre><code class="language-xml" data-lang="xml"><span class="cp">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;</span>
 <span class="nt">&lt;layer-list</span> <span class="na">xmlns:android=</span><span class="s">&quot;http://schemas.android.com/apk/res/android&quot;</span><span class="nt">&gt;</span>
@@ -1199,134 +1086,6 @@ dumpsys | grep &quot;DUMP OF SERVICE&quot;
         <span class="nt">&lt;/rotate&gt;</span>
     <span class="nt">&lt;/item&gt;</span>
 <span class="nt">&lt;/layer-list&gt;</span>
-</code></pre></div>
-<h3>Transition Drawables</h3>
-
-<p>Transition Drawables allow to define transitions which can be triggered in the coding.</p>
-
-<h4>Define a transition drawable</h4>
-<div class="highlight"><pre><code class="language-xml" data-lang="xml"><span class="cp">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;</span>
-<span class="nt">&lt;transition</span> <span class="na">xmlns:android=</span><span class="s">&quot;http://schemas.android.com/apk/res/android&quot;</span><span class="nt">&gt;</span>
-        <span class="nt">&lt;item</span> <span class="na">android:drawable=</span><span class="s">&quot;@drawable/first_image&quot;</span> <span class="nt">/&gt;</span>
-        <span class="nt">&lt;item</span> <span class="na">android:drawable=</span><span class="s">&quot;@drawable/second_image&quot;</span> <span class="nt">/&gt;</span>
-<span class="nt">&lt;/transition&gt;</span>
-</code></pre></div>
-<h3>Vector drawables</h3>
-
-<p>Android 5.0 includes the possibility to define vector drawables, similar to svg files but with a limited scope. The following listing demonstrates its usage in the vectordrawable.xml file. Using vector drawables has the advantages that this drawables automatically scale to the density of the device.</p>
-<div class="highlight"><pre><code class="language-xml" data-lang="xml"><span class="nt">&lt;vector</span> <span class="na">xmlns:android=</span><span class="s">&quot;http://schemas.android.com/apk/res/android&quot;</span>
-     <span class="na">android:height=</span><span class="s">&quot;64dp&quot;</span>
-     <span class="na">android:width=</span><span class="s">&quot;64dp&quot;</span>
-     <span class="na">android:viewportHeight=</span><span class="s">&quot;600&quot;</span>
-     <span class="na">android:viewportWidth=</span><span class="s">&quot;600&quot;</span> <span class="nt">&gt;</span>
-     <span class="nt">&lt;group</span>
-         <span class="na">android:name=</span><span class="s">&quot;rotationGroup&quot;</span>
-         <span class="na">android:pivotX=</span><span class="s">&quot;300.0&quot;</span>
-         <span class="na">android:pivotY=</span><span class="s">&quot;300.0&quot;</span>
-         <span class="na">android:rotation=</span><span class="s">&quot;45.0&quot;</span> <span class="nt">&gt;</span>
-         <span class="nt">&lt;path</span>
-             <span class="na">android:name=</span><span class="s">&quot;v&quot;</span>
-             <span class="na">android:fillColor=</span><span class="s">&quot;#000000&quot;</span>
-             <span class="na">android:pathData=</span><span class="s">&quot;M300,70 l 0,-70 70,70 0,0 -70,70z&quot;</span> <span class="nt">/&gt;</span>
-     <span class="nt">&lt;/group&gt;</span>
- <span class="nt">&lt;/vector&gt;</span>
-</code></pre></div>
-<h3>Animation Drawables</h3>
-
-<p>You can also define an animation drawables and assign it to a View via the <code>setBackgroundResource()</code> method.</p>
-<div class="highlight"><pre><code class="language-xml" data-lang="xml"><span class="c">&lt;!-- Animation frames are phase*.png files inside the</span>
-<span class="c"> res/drawable/ folder --&gt;</span>
- <span class="nt">&lt;animation-list</span> <span class="na">android:id=</span><span class="s">&quot;@+id/selected&quot;</span> <span class="na">android:oneshot=</span><span class="s">&quot;false&quot;</span><span class="nt">&gt;</span>
-    <span class="nt">&lt;item</span> <span class="na">android:drawable=</span><span class="s">&quot;@drawable/phase1&quot;</span> <span class="na">android:duration=</span><span class="s">&quot;400&quot;</span> <span class="nt">/&gt;</span>
-    <span class="nt">&lt;item</span> <span class="na">android:drawable=</span><span class="s">&quot;@drawable/phase2&quot;</span> <span class="na">android:duration=</span><span class="s">&quot;400&quot;</span> <span class="nt">/&gt;</span>
-    <span class="nt">&lt;item</span> <span class="na">android:drawable=</span><span class="s">&quot;@drawable/phase3&quot;</span> <span class="na">android:duration=</span><span class="s">&quot;400&quot;</span> <span class="nt">/&gt;</span>
- <span class="nt">&lt;/animation-list&gt;</span>
-</code></pre></div>
-<h3>Some Drawable Tags</h3>
-
-<h4>bitmap</h4>
-
-<h4>nine-patch</h4>
-
-<h4>color</h4>
-
-<h4>inset</h4>
-
-<h4>clip</h4>
-<div class="highlight"><pre><code class="language-xml" data-lang="xml">?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
-<span class="nt">&lt;clip</span> <span class="na">xmlns:android=</span><span class="s">&quot;http://schemas.android.com/apk/res/android&quot;</span>
-    <span class="na">android:clipOrientation=</span><span class="s">&quot;horizontal&quot;</span>
-    <span class="na">android:drawable=</span><span class="s">&quot;@drawable/img4clip&quot;</span>
-    <span class="na">android:gravity=</span><span class="s">&quot;left&quot;</span> <span class="nt">/&gt;</span>
-</code></pre></div>
-<h4>scale</h4>
-<div class="highlight"><pre><code class="language-xml" data-lang="xml"><span class="cp">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;</span>
-<span class="nt">&lt;scale</span> <span class="na">xmlns:android=</span><span class="s">&quot;http://schemas.android.com/apk/res/android&quot;</span>
-    <span class="na">android:drawable=</span><span class="s">&quot;@drawable/img4scale&quot;</span>
-    <span class="na">android:scaleGravity=</span><span class="s">&quot;left&quot;</span>
-    <span class="na">android:scaleHeight=</span><span class="s">&quot;50%&quot;</span>
-    <span class="na">android:scaleWidth=</span><span class="s">&quot;50%&quot;</span>
-    <span class="na">android:useIntrinsicSizeAsMinimum=</span><span class="s">&quot;false&quot;</span> <span class="nt">/&gt;</span>
-</code></pre></div>
-<h4>level-list</h4>
-<div class="highlight"><pre><code class="language-xml" data-lang="xml"><span class="cp">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;</span>
-<span class="nt">&lt;level-list</span> <span class="na">xmlns:android=</span><span class="s">&quot;http://schemas.android.com/apk/res/android&quot;</span><span class="nt">&gt;</span>
-    <span class="nt">&lt;item</span>
-        <span class="na">android:drawable=</span><span class="s">&quot;@drawable/battery_low&quot;</span>
-        <span class="na">android:maxLevel=</span><span class="s">&quot;10&quot;</span>
-        <span class="na">android:minLevel=</span><span class="s">&quot;0&quot;</span> <span class="nt">/&gt;</span>
-    <span class="nt">&lt;item</span>
-        <span class="na">android:drawable=</span><span class="s">&quot;@drawable/battery_below_half&quot;</span>
-        <span class="na">android:maxLevel=</span><span class="s">&quot;50&quot;</span>
-        <span class="na">android:minLevel=</span><span class="s">&quot;10&quot;</span> <span class="nt">/&gt;</span>
-    <span class="nt">&lt;item</span>
-        <span class="na">android:drawable=</span><span class="s">&quot;@drawable/battery_over_half&quot;</span>
-        <span class="na">android:maxLevel=</span><span class="s">&quot;99&quot;</span>
-        <span class="na">android:minLevel=</span><span class="s">&quot;50&quot;</span> <span class="nt">/&gt;</span>
-    <span class="nt">&lt;item</span>
-        <span class="na">android:drawable=</span><span class="s">&quot;@drawable/battery_full&quot;</span>
-        <span class="na">android:maxLevel=</span><span class="s">&quot;100&quot;</span>
-        <span class="na">android:minLevel=</span><span class="s">&quot;100&quot;</span> <span class="nt">/&gt;</span>
-<span class="nt">&lt;/level-list&gt;</span>
-</code></pre></div>
-<h4>transition</h4>
-<div class="highlight"><pre><code class="language-xml" data-lang="xml"><span class="cp">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;</span>
-<span class="nt">&lt;transition</span> <span class="na">xmlns:android=</span><span class="s">&quot;http://schemas.android.com/apk/res/android&quot;</span><span class="nt">&gt;</span>
-    <span class="nt">&lt;item</span> <span class="na">android:drawable=</span><span class="s">&quot;@drawable/on&quot;</span> <span class="nt">/&gt;</span>
-    <span class="nt">&lt;item</span> <span class="na">android:drawable=</span><span class="s">&quot;@drawable/off&quot;</span> <span class="nt">/&gt;</span>
-<span class="nt">&lt;/transition&gt;</span>
-</code></pre></div>
-<h4>rotate</h4>
-<div class="highlight"><pre><code class="language-xml" data-lang="xml"><span class="cp">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;</span>
-<span class="nt">&lt;rotate</span> <span class="na">xmlns:android=</span><span class="s">&quot;http://schemas.android.com/apk/res/android&quot;</span>
-    <span class="na">android:drawable=</span><span class="s">&quot;@drawable/ic_arrow&quot;</span>
-    <span class="na">android:fromDegrees=</span><span class="s">&quot;0&quot;</span>
-    <span class="na">android:pivotX=</span><span class="s">&quot;50%&quot;</span>
-    <span class="na">android:pivotY=</span><span class="s">&quot;50%&quot;</span>
-    <span class="na">android:toDegrees=</span><span class="s">&quot;180&quot;</span> <span class="nt">/&gt;</span>
-</code></pre></div>
-<h4>animation-list</h4>
-<div class="highlight"><pre><code class="language-xml" data-lang="xml"><span class="cp">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;</span>
-<span class="nt">&lt;animation-list</span> <span class="na">xmlns:android=</span><span class="s">&quot;http://schemas.android.com/apk/res/android&quot;</span>
-    <span class="na">android:oneshot=</span><span class="s">&quot;false&quot;</span><span class="nt">&gt;</span>
-    <span class="nt">&lt;item</span>
-        <span class="na">android:drawable=</span><span class="s">&quot;@drawable/anim1&quot;</span>
-        <span class="na">android:duration=</span><span class="s">&quot;1000&quot;</span> <span class="nt">/&gt;</span>
-    <span class="nt">&lt;item</span>
-        <span class="na">android:drawable=</span><span class="s">&quot;@mipmap/anim2&quot;</span>
-        <span class="na">android:duration=</span><span class="s">&quot;1000&quot;</span> <span class="nt">/&gt;</span>
-    <span class="nt">&lt;item</span>
-        <span class="na">android:drawable=</span><span class="s">&quot;@mipmap/anim3&quot;</span>
-        <span class="na">android:duration=</span><span class="s">&quot;1000&quot;</span> <span class="nt">/&gt;</span>
-<span class="nt">&lt;/animation-list&gt;</span>
-</code></pre></div>
-<h4>animation-rotate</h4>
-<div class="highlight"><pre><code class="language-xml" data-lang="xml"><span class="cp">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;</span>
-<span class="nt">&lt;animated-rotate</span> <span class="na">xmlns:android=</span><span class="s">&quot;http://schemas.android.com/apk/res/android&quot;</span>
-    <span class="na">android:drawable=</span><span class="s">&quot;@drawable/img_daisy&quot;</span>
-    <span class="na">android:pivotX=</span><span class="s">&quot;50%&quot;</span>
-    <span class="na">android:pivotY=</span><span class="s">&quot;50%&quot;</span>
-    <span class="na">android:visible=</span><span class="s">&quot;false&quot;</span> <span class="nt">/&gt;</span>
 </code></pre></div>
 	  ]]></description>
 	</item>

@@ -174,52 +174,52 @@ System.Windows.Forms.MouseEventArgs e)
 </code></pre></div>
 <h4>利用Windows API重绘窗体</h4>
 
-<p>所用到的函数：</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">        [ DllImportAttribute(&quot;gdi32.dll&quot; )]
-        public static extern IntPtr CreateRoundRectRgn(int nLeftRect, int nTopRect, int nRightRect, int nBottomRect, int nWidthEllipse, int nHeightEllipse);
-
+<p>所用到的函数：
+```
         [ DllImportAttribute(&quot;gdi32.dll&quot; )]
-        static extern int CombineRgn( IntPtr hrgnDest, IntPtr hrgnSrc1, IntPtr hrgnSrc2, int fnCombineMode);
+        public static extern IntPtr CreateRoundRectRgn(int nLeftRect, int nTopRect, int nRightRect, int nBottomRect, int nWidthEllipse, int nHeightEllipse);</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">    [ DllImportAttribute(&quot;gdi32.dll&quot; )]
+    static extern int CombineRgn( IntPtr hrgnDest, IntPtr hrgnSrc1, IntPtr hrgnSrc2, int fnCombineMode);
 
-        [ DllImportAttribute(&quot;gdi32.dll&quot; )]
-        static extern int CombineRgn( IntPtr hrgnSrc1, IntPtr hrgnSrc2, int fnCombineMode);
+    [ DllImportAttribute(&quot;gdi32.dll&quot; )]
+    static extern int CombineRgn( IntPtr hrgnSrc1, IntPtr hrgnSrc2, int fnCombineMode);
 
-        [ DllImportAttribute(&quot;user32.dll&quot; )]
-        public static extern int SetWindowRgn(IntPtr hWnd, IntPtr hRgn, bool bRedraw); 
+    [ DllImportAttribute(&quot;user32.dll&quot; )]
+    public static extern int SetWindowRgn(IntPtr hWnd, IntPtr hRgn, bool bRedraw); 
+</code></pre></div><div class="highlight"><pre><code class="language-text" data-lang="text">在窗体的构造函数中添加如下定制代码：
+</code></pre></div><div class="highlight"><pre><code class="language-text" data-lang="text">    IntPtr smallRegion = CreateRoundRectRgn(6, 22, 149, 78, 20, 20);
+    IntPtr largeRegion = CreateRoundRectRgn(3, 3, this .Width - 18, this.Height - 1, 20, 20);
+    IntPtr destRegion = CreateRoundRectRgn(0, 0, this .Width, this.Height, 10, 10);
+    int i = CombineRgn(destRegion, largeRegion, smallRegion, 2);
+    SetWindowRgn( this.Handle, destRegion, true);
+</code></pre></div><div class="highlight"><pre><code class="language-text" data-lang="text">#### 创建不规则控件实现方法
+   在窗体上画一个自定义形状的控件时，需要精确的告知窗体在什么位置以及如何画该控件。GraphicsPath类代表了一系列用来画图的直线和曲线。首先，指定一个GraphicsPath类的对象并告知它要画什么图形。然后，将控件的Region属性设置为上述GraphicsPath类的对象。这样就可以创建任何自定义形状的控件了。
+
+##### 创建不规则控件具体步骤
+
+    1. 创建一个GraphicsPath类的实例对象。
+
+    2. 指定好该对象的各项细节（如大小、形状等等）。
+
+    3. 将控件的Region属性设置为上面建立的GraphicsPath类的实例对象。
+
+##### 下面举一个例子：创建一个像文本的按钮控件：
+
+* 拖放一个按钮控件到窗体上。
+
+* 在属性对话框中进行如下设置：
+
+    * 将Name属性设置为CustomButton。
+
+    * 将BackColor属性设置为一个和窗体背景颜色不同的颜色值。
+
+    * 将其Text属性设置为空字符串。
+
+* 添加窗体的Paint事件的事件处理函数。
+
+* 添加以下代码，用GraphicsPath类的实例对象来画控件。下面的代码以一串字符串的形式画该按钮控件，同时，程序还设置了字符串的字体、大小、风格等属性。字符串被赋给GraphicsPath类的实例对象。然后，该实例对象就被设置为按钮控件的Region属性。这样一个自定义形状的控件就完成了。
 </code></pre></div>
-<p>在窗体的构造函数中添加如下定制代码：</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">        IntPtr smallRegion = CreateRoundRectRgn(6, 22, 149, 78, 20, 20);
-        IntPtr largeRegion = CreateRoundRectRgn(3, 3, this .Width - 18, this.Height - 1, 20, 20);
-        IntPtr destRegion = CreateRoundRectRgn(0, 0, this .Width, this.Height, 10, 10);
-        int i = CombineRgn(destRegion, largeRegion, smallRegion, 2);
-        SetWindowRgn( this.Handle, destRegion, true);
-</code></pre></div>
-<h4>创建不规则控件实现方法</h4>
-
-<p>在窗体上画一个自定义形状的控件时，需要精确的告知窗体在什么位置以及如何画该控件。GraphicsPath类代表了一系列用来画图的直线和曲线。首先，指定一个GraphicsPath类的对象并告知它要画什么图形。然后，将控件的Region属性设置为上述GraphicsPath类的对象。这样就可以创建任何自定义形状的控件了。</p>
-
-<h5>创建不规则控件具体步骤</h5>
-<div class="highlight"><pre><code class="language-text" data-lang="text">1. 创建一个GraphicsPath类的实例对象。
-
-2. 指定好该对象的各项细节（如大小、形状等等）。
-
-3. 将控件的Region属性设置为上面建立的GraphicsPath类的实例对象。
-</code></pre></div>
-<h5>下面举一个例子：创建一个像文本的按钮控件：</h5>
-
-<ul>
-<li><p>拖放一个按钮控件到窗体上。</p></li>
-<li><p>在属性对话框中进行如下设置：</p>
-
-<ul>
-<li>将Name属性设置为CustomButton。</li>
-<li>将BackColor属性设置为一个和窗体背景颜色不同的颜色值。</li>
-<li>将其Text属性设置为空字符串。</li>
-</ul></li>
-<li><p>添加窗体的Paint事件的事件处理函数。</p></li>
-<li><p>添加以下代码，用GraphicsPath类的实例对象来画控件。下面的代码以一串字符串的形式画该按钮控件，同时，程序还设置了字符串的字体、大小、风格等属性。字符串被赋给GraphicsPath类的实例对象。然后，该实例对象就被设置为按钮控件的Region属性。这样一个自定义形状的控件就完成了。</p></li>
-</ul>
-<div class="highlight"><pre><code class="language-text" data-lang="text">private void CustomButton_Paint(object sender,
+<p>private void CustomButton_Paint(object sender,
 System.Windows.Forms.PaintEventArgs e)
 {
     //初始化一个GraphicsPath类的对象
@@ -242,10 +242,8 @@ System.Drawing.Drawing2D.GraphicsPath();
     //将控件的Region属性设置为上面创建的GraphicsPath对象
     CustomButton.Region = new Region(myGraphicsPath);
 }
-</code></pre></div>
-<ul>
-<li>创建按钮的Click事件的事件处理函数。添加该处理函数来改变控件的背景颜色，从而证实控件原来的那些功能没有被削减。</li>
-</ul>
+```
+* 创建按钮的Click事件的事件处理函数。添加该处理函数来改变控件的背景颜色，从而证实控件原来的那些功能没有被削减。</p>
 <div class="highlight"><pre><code class="language-text" data-lang="text">private void CustomButton_Click(object sender, System.EventArgs e)
 {
     CustomButton.BackColor = Color.BlanchedAlmond;
@@ -275,11 +273,14 @@ System.Drawing.Drawing2D.GraphicsPath();
 <p>2．重载<code>Form_Paint()</code>函数：</p>
 <div class="highlight"><pre><code class="language-text" data-lang="text">protected override void OnPaint(PaintEventArgs e)
 </code></pre></div>
-<p>或是</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">this.Paint += new System.Windows.Form.PaintEventHandler(Form_Paint)。
-</code></pre></div>
-<p>3．程序的主体部分的函数如下：</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">private void Form_Paint(object sender, PaintEventArgs e) {
+<p>或是
+<code>
+this.Paint += new System.Windows.Form.PaintEventHandler(Form_Paint)。
+</code></p>
+
+<p>3．程序的主体部分的函数如下：
+```
+private void Form_Paint(object sender, PaintEventArgs e) {
     Graphics g = e.Graphics;
     Rectangle mainRect = new Rectangle(0, 0, 695, 278);
     Region mainRegion = new Region(mainRect);
@@ -301,18 +302,18 @@ System.Drawing.Drawing2D.GraphicsPath();
     myPath.AddCurve(curvePoints2, 0, 2, 0.8f);
     myPath.AddLine(394, 0, 0, 0);
     Region ExcludeRegion3 = new Region(myPath);
-    e.Graphics.ExcludeClip(ExcludeRegion3);
-
-    GraphicsPath myPath3 = new GraphicsPath();
-      point1.X=0;point1.Y=180;
-      point2.X=19;point2.Y=198;
-      point3.X=62;point3.Y=204;
-      point4.X=83;point4.Y=221;
-      Point point5 = new Point(93, 248);
-      Point point6 = new Point(102, 267);
-      Point point7 = new Point(125, 278);
-      Point[] curvePoints3 = { point1, point2, point3, point4,
-point5, point6, point7 };
+    e.Graphics.ExcludeClip(ExcludeRegion3);</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">GraphicsPath myPath3 = new GraphicsPath();
+  point1.X=0;point1.Y=180;
+  point2.X=19;point2.Y=198;
+  point3.X=62;point3.Y=204;
+  point4.X=83;point4.Y=221;
+  Point point5 = new Point(93, 248);
+  Point point6 = new Point(102, 267);
+  Point point7 = new Point(125, 278);
+  Point[] curvePoints3 = { point1, point2, point3, point4,
+</code></pre></div>
+<p>point5, point6, point7 };
       myPath3.AddCurve(curvePoints3, 0, 6, 0.8f);
       myPath3.AddLine(125, 278, 90, 300);
       myPath3.AddLine(90, 300, 0, 300);
@@ -339,24 +340,25 @@ point5, point6, point7 };
       myPath5.AddLine(481, 255, 495, 279);
       myPath5.AddLine(495, 279, 495, 0);
       Region ExcludeRegion6 = new Region(myPath5);
-      e.Graphics.ExcludeClip(ExcludeRegion6);
+      e.Graphics.ExcludeClip(ExcludeRegion6);</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">  point1.X=480;point1.Y=250;
+  point2.X=469;point2.Y=264;
+  point3.X=446;point3.Y=278;
+  Point[] curvePoints6 = { point1, point2, point3 };
+  GraphicsPath myPath4 = new GraphicsPath();
+  myPath4.AddCurve(curvePoints6, 0, 2, 0.8f);
+  myPath4.AddLine(450, 277, 495, 279);
+  Region ExcludeRegion5 = new Region(myPath4);
+  e.Graphics.ExcludeClip(ExcludeRegion5);
 
-      point1.X=480;point1.Y=250;
-      point2.X=469;point2.Y=264;
-      point3.X=446;point3.Y=278;
-      Point[] curvePoints6 = { point1, point2, point3 };
-      GraphicsPath myPath4 = new GraphicsPath();
-      myPath4.AddCurve(curvePoints6, 0, 2, 0.8f);
-      myPath4.AddLine(450, 277, 495, 279);
-      Region ExcludeRegion5 = new Region(myPath4);
-      e.Graphics.ExcludeClip(ExcludeRegion5);
+  e.Graphics.DrawImage(img, 0, 0, 695,278);
 
-      e.Graphics.DrawImage(img, 0, 0, 695,278);
-
-      // 重设剪切好的区域
-      e.Graphics.ResetClip();
-}
+  // 重设剪切好的区域
+  e.Graphics.ResetClip();
 </code></pre></div>
+<p>}
+```</p>
+
 
         </section>
 

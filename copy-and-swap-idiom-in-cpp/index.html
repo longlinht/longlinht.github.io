@@ -212,27 +212,28 @@
 
 <p>As mentioned, the copy-and-swap idiom will fix all these issues. But right now, we have all the requirements except one: a swap function. While The Rule of Three successfully entails the existence of our copy-constructor, assignment operator, and destructor, it should really be called &quot;The Big Three and A Half&quot;: any time your class manages a resource it also makes sense to provide a swap function.</p>
 
-<p>We need to add swap functionality to our class, and we do that as follows:</p>
-<div class="highlight"><pre><code class="language-c++" data-lang="c++"><span class="k">class</span> <span class="nc">dumb_array</span>
-<span class="p">{</span>
-<span class="k">public</span><span class="o">:</span>
-    <span class="c1">// ...</span>
+<p>We need to add swap functionality to our class, and we do that as follows†:
+```c++
+class dumb_array
+{
+public:
+    // ...</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">friend void swap(dumb_array&amp; first, dumb_array&amp; second) // nothrow
+{
+    // enable ADL (not necessary in our case, but good practice)
+    using std::swap;
 
-    <span class="k">friend</span> <span class="kt">void</span> <span class="n">swap</span><span class="p">(</span><span class="n">dumb_array</span><span class="o">&amp;</span> <span class="n">first</span><span class="p">,</span> <span class="n">dumb_array</span><span class="o">&amp;</span> <span class="n">second</span><span class="p">)</span> <span class="c1">// nothrow</span>
-    <span class="p">{</span>
-        <span class="c1">// enable ADL (not necessary in our case, but good practice)</span>
-        <span class="k">using</span> <span class="n">std</span><span class="o">::</span><span class="n">swap</span><span class="p">;</span>
+    // by swapping the members of two objects,
+    // the two objects are effectively swapped
+    swap(first.mSize, second.mSize);
+    swap(first.mArray, second.mArray);
+}
 
-        <span class="c1">// by swapping the members of two objects,</span>
-        <span class="c1">// the two objects are effectively swapped</span>
-        <span class="n">swap</span><span class="p">(</span><span class="n">first</span><span class="p">.</span><span class="n">mSize</span><span class="p">,</span> <span class="n">second</span><span class="p">.</span><span class="n">mSize</span><span class="p">);</span>
-        <span class="n">swap</span><span class="p">(</span><span class="n">first</span><span class="p">.</span><span class="n">mArray</span><span class="p">,</span> <span class="n">second</span><span class="p">.</span><span class="n">mArray</span><span class="p">);</span>
-    <span class="p">}</span>
-
-    <span class="c1">// ...</span>
-<span class="p">};</span>
+// ...
 </code></pre></div>
-<p>(Here is the explanation why public friend swap.) Now not only can we swap our <code>dumb_array</code>&#39;s, but swaps in general can be more efficient; it merely swaps pointers and sizes, rather than allocating and copying entire arrays. Aside from this bonus in functionality and efficiency, we are now ready to implement the copy-and-swap idiom.</p>
+<p>};
+``<code>
+(Here is the explanation why public friend swap.) Now not only can we swap our</code>dumb_array`&#39;s, but swaps in general can be more efficient; it merely swaps pointers and sizes, rather than allocating and copying entire arrays. Aside from this bonus in functionality and efficiency, we are now ready to implement the copy-and-swap idiom.</p>
 
 <p>Without further ado, our assignment operator is:</p>
 <div class="highlight"><pre><code class="language-text" data-lang="text">dumb_array&amp; operator=(dumb_array other) // (1)

@@ -10,31 +10,31 @@
         <title>Intall Emacs on Ubuntu</title>
         <description>&lt;p&gt;Install Emacs 25 on Ubuntu from source is very easy, follow these steps below could achieve it.&lt;/p&gt;
 
-&lt;ol&gt;
+&lt;ul&gt;
 &lt;li&gt;Open terminal (Ctrl+Alt+T) and run command to install build tools:&lt;/li&gt;
-&lt;/ol&gt;
+&lt;/ul&gt;
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;sudo apt install build-essential checkinstall
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;ol&gt;
+&lt;ul&gt;
 &lt;li&gt;Then install the build dependencies via command:&lt;/li&gt;
-&lt;/ol&gt;
+&lt;/ul&gt;
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;sudo apt-get build-dep emacs24
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;ol&gt;
+&lt;ul&gt;
 &lt;li&gt;&lt;p&gt;Now download the source at ftp.gnu.org/gnu/emacs/, then extract:&lt;/p&gt;&lt;/li&gt;
 &lt;li&gt;&lt;p&gt;Open terminal and navigate to the &amp;quot;emacs-25.1&amp;quot; folder via command (or select &amp;quot;Open in terminal&amp;quot; from its context menu):&lt;/p&gt;&lt;/li&gt;
-&lt;/ol&gt;
+&lt;/ul&gt;
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;cd ~/Downloads/emacs-25.1
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;ol&gt;
+&lt;ul&gt;
 &lt;li&gt;In the same terminal window, once you’re in the source folder, run the commands below one by one:&lt;/li&gt;
-&lt;/ol&gt;
+&lt;/ul&gt;
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;./configure
 make
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;ol&gt;
+&lt;ul&gt;
 &lt;li&gt;Finally use checkinstall command to create .deb and install Emacs 25.1:&lt;/li&gt;
-&lt;/ol&gt;
+&lt;/ul&gt;
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;sudo checkinstall
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;p&gt;While running the command, answer on screen questions, e.g., install docs, type package description, change package name, version, etc.&lt;/p&gt;

@@ -20,31 +20,31 @@
 	  <description><![CDATA[
 	     <p>Install Emacs 25 on Ubuntu from source is very easy, follow these steps below could achieve it.</p>
 
-<ol>
+<ul>
 <li>Open terminal (Ctrl+Alt+T) and run command to install build tools:</li>
-</ol>
+</ul>
 <div class="highlight"><pre><code class="language-text" data-lang="text">sudo apt install build-essential checkinstall
 </code></pre></div>
-<ol>
+<ul>
 <li>Then install the build dependencies via command:</li>
-</ol>
+</ul>
 <div class="highlight"><pre><code class="language-text" data-lang="text">sudo apt-get build-dep emacs24
 </code></pre></div>
-<ol>
+<ul>
 <li><p>Now download the source at ftp.gnu.org/gnu/emacs/, then extract:</p></li>
 <li><p>Open terminal and navigate to the &quot;emacs-25.1&quot; folder via command (or select &quot;Open in terminal&quot; from its context menu):</p></li>
-</ol>
+</ul>
 <div class="highlight"><pre><code class="language-text" data-lang="text">cd ~/Downloads/emacs-25.1
 </code></pre></div>
-<ol>
+<ul>
 <li>In the same terminal window, once you’re in the source folder, run the commands below one by one:</li>
-</ol>
+</ul>
 <div class="highlight"><pre><code class="language-text" data-lang="text">./configure
 make
 </code></pre></div>
-<ol>
+<ul>
 <li>Finally use checkinstall command to create .deb and install Emacs 25.1:</li>
-</ol>
+</ul>
 <div class="highlight"><pre><code class="language-text" data-lang="text">sudo checkinstall
 </code></pre></div>
 <p>While running the command, answer on screen questions, e.g., install docs, type package description, change package name, version, etc.</p>

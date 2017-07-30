@@ -8,7 +8,16 @@
     <title>Dancing with Machine, Human and God</title>
     <link>http://longlinht.github.io/</link>
     <description>World is complex,confusing and wonderful,I will talk about machine,human and god to known it, to reveal it.</description>
-    <pubDate>Mon, 10 Jul 2017 02:30:12 +0800</pubDate>
+    <pubDate>Sun, 16 Jul 2017 02:30:12 +0800</pubDate>
+    <item>
+      <title>Intall Emacs on Ubuntu</title>
+      <link>http://longlinht.github.io//install-emacs-on-ubuntu</link>
+      <description>Install Emacs 25 on Ubuntu from source is very easy, follow these steps below could achieve it.
+
+</description>
+      <pubDate>Sun, 16 Jul 2017 02:30:12 +0800</pubDate>
+      <dc:date>2017-07-16T02:30:12+08:00</dc:date>
+    </item>
     <item>
       <title>对AI的一些臆想</title>
       <link>http://longlinht.github.io//think-about-AI</link>
@@ -220,6 +229,6 @@ update UI when we finish something in separated thread. This is a basic problem,
       <pubDate>Wed, 03 Nov 2010 02:30:12 +0800</pubDate>
       <dc:date>2010-11-03T02:30:12+08:00</dc:date>
     </item>
-    <dc:date>2017-07-10T02:30:12+08:00</dc:date>
+    <dc:date>2017-07-16T02:30:12+08:00</dc:date>
   </channel>
 </rss>

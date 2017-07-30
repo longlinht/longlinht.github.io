@@ -7,6 +7,53 @@
     <atom:link href="http://longlinht.github.io//feed.xml" rel="self" type="application/rss+xml" />
     
       <item>
+        <title>Intall Emacs on Ubuntu</title>
+        <description>&lt;p&gt;Install Emacs 25 on Ubuntu from source is very easy, follow these steps below could achieve it.&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;Open terminal (Ctrl+Alt+T) and run command to install build tools:&lt;/li&gt;
+&lt;/ol&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;sudo apt install build-essential checkinstall
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;ol&gt;
+&lt;li&gt;Then install the build dependencies via command:&lt;/li&gt;
+&lt;/ol&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;sudo apt-get build-dep emacs24
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;p&gt;Now download the source at ftp.gnu.org/gnu/emacs/, then extract:&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Open terminal and navigate to the &amp;quot;emacs-25.1&amp;quot; folder via command (or select &amp;quot;Open in terminal&amp;quot; from its context menu):&lt;/p&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;cd ~/Downloads/emacs-25.1
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;ol&gt;
+&lt;li&gt;In the same terminal window, once you’re in the source folder, run the commands below one by one:&lt;/li&gt;
+&lt;/ol&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;./configure
+make
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;ol&gt;
+&lt;li&gt;Finally use checkinstall command to create .deb and install Emacs 25.1:&lt;/li&gt;
+&lt;/ol&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;sudo checkinstall
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;While running the command, answer on screen questions, e.g., install docs, type package description, change package name, version, etc.&lt;/p&gt;
+
+&lt;p&gt;Once done, Emacs is installed on your system and you can remove it anytime by running the command in the prompt with sudo privilege:&lt;/p&gt;
+
+&lt;p&gt;In my case it’s:&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;sudo dpkg -r emacs-25
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;And the last command create a .deb package in the source folder, and it can be used in another Ubuntu machine to install Emacs(need to manually install dependencies via step 2).&lt;/p&gt;
+
+&lt;p&gt;Finally, run command emacs to launch the text editor, or launch it from Unity Dash (App Launcher) at next login (or next boot).&lt;/p&gt;
+</description>
+        <pubDate>Sun, 16 Jul 2017 02:30:12 +0800</pubDate>
+        <link>http://longlinht.github.io//install-emacs-on-ubuntu</link>
+        <guid isPermaLink="true">http://longlinht.github.io//install-emacs-on-ubuntu</guid>
+      </item>
+    
+      <item>
         <title>对AI的一些臆想</title>
         <description>&lt;p&gt;作为一个码农，长期从事应用研发的工作，于当下热门的人工智能其实一点都没有交集，既不了解机器学习，也没有接触过计算机神经网络，甚至没有使用过Hadoop这种技术，可谓对AI相关的领域所知甚少，但这并不阻碍我对AI产生一些思考和想法，而这些思考和想法的缘起竟然都是这一两年上映的几部AI相关的电影和相关的几本畅销书，其中所涉及的技术和思想也都相对易懂，和机器学习类的书籍形成鲜明对比。&lt;/p&gt;
 
@@ -996,89 +1043,6 @@ dumpsys | grep &amp;quot;DUMP OF SERVICE&amp;quot;
         <pubDate>Sun, 10 Jul 2016 02:30:12 +0800</pubDate>
         <link>http://longlinht.github.io//userful-command-line-in-android-development</link>
         <guid isPermaLink="true">http://longlinht.github.io//userful-command-line-in-android-development</guid>
-      </item>
-    
-      <item>
-        <title>Define Userful Android Drawables</title>
-        <description>&lt;p&gt;We can define many useful drawables in Android, in this article, I collected some of definations I ever used.&lt;/p&gt;
-
-&lt;h4&gt;Define a round corner drawable&lt;/h4&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-xml&quot; data-lang=&quot;xml&quot;&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;shape&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;xmlns:android=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;http://schemas.android.com/apk/res/android&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
-    &lt;span class=&quot;nt&quot;&gt;&amp;lt;solid&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;android:color=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;#ffffffff&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
-    &lt;span class=&quot;nt&quot;&gt;&amp;lt;stroke&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;android:width=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;0dp&amp;quot;&lt;/span&gt;
-            &lt;span class=&quot;na&quot;&gt;android:color=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;#ffffffff&amp;quot;&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
-    &lt;span class=&quot;nt&quot;&gt;&amp;lt;padding&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;android:left=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;1dp&amp;quot;&lt;/span&gt;
-             &lt;span class=&quot;na&quot;&gt;android:top=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;1dp&amp;quot;&lt;/span&gt;
-             &lt;span class=&quot;na&quot;&gt;android:right=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;1dp&amp;quot;&lt;/span&gt;
-             &lt;span class=&quot;na&quot;&gt;android:bottom=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;1dp&amp;quot;&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
-    &lt;span class=&quot;nt&quot;&gt;&amp;lt;corners&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;android:bottomRightRadius=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;4dp&amp;quot;&lt;/span&gt;
-             &lt;span class=&quot;na&quot;&gt;android:bottomLeftRadius=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;4dp&amp;quot;&lt;/span&gt;
-             &lt;span class=&quot;na&quot;&gt;android:topLeftRadius=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;0dp&amp;quot;&lt;/span&gt;
-             &lt;span class=&quot;na&quot;&gt;android:topRightRadius=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;0dp&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;/shape&amp;gt;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;h4&gt;Define a circle&lt;/h4&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-xml&quot; data-lang=&quot;xml&quot;&gt;&lt;span class=&quot;cp&quot;&gt;&amp;lt;?xml version=&amp;quot;1.0&amp;quot; encoding=&amp;quot;utf-8&amp;quot;?&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;shape&lt;/span&gt;
-    &lt;span class=&quot;na&quot;&gt;xmlns:android=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;http://schemas.android.com/apk/res/android&amp;quot;&lt;/span&gt;
-    &lt;span class=&quot;na&quot;&gt;android:shape=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;oval&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
-   &lt;span class=&quot;nt&quot;&gt;&amp;lt;solid&lt;/span&gt;
-       &lt;span class=&quot;na&quot;&gt;android:color=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;#66000000&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;/shape&amp;gt;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;h4&gt;Define a ring&lt;/h4&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-xml&quot; data-lang=&quot;xml&quot;&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;shape&lt;/span&gt;
-    &lt;span class=&quot;na&quot;&gt;android:shape=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;ring&amp;quot;&lt;/span&gt;
-    &lt;span class=&quot;na&quot;&gt;android:thickness=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;2.5dp&amp;quot;&lt;/span&gt;
-    &lt;span class=&quot;na&quot;&gt;android:useLevel=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;true&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
-    &lt;span class=&quot;nt&quot;&gt;&amp;lt;solid&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;android:color=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;#979797&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;/shape&amp;gt;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;h4&gt;Define a drawable with state&lt;/h4&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-xml&quot; data-lang=&quot;xml&quot;&gt;&lt;span class=&quot;cp&quot;&gt;&amp;lt;?xml version=&amp;quot;1.0&amp;quot; encoding=&amp;quot;utf-8&amp;quot;?&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;selector&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;xmlns:android=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;http://schemas.android.com/apk/res/android&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
-    &lt;span class=&quot;nt&quot;&gt;&amp;lt;item&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;android:drawable=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;@drawable/qq_login_button_bg_pressed&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;android:state_pressed=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;true&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
-    &lt;span class=&quot;nt&quot;&gt;&amp;lt;item&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;android:drawable=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;@drawable/qq_login_button_bg_normal&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;/selector&amp;gt;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;h4&gt;Define a ring as progressbar background&lt;/h4&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-xml&quot; data-lang=&quot;xml&quot;&gt;&lt;span class=&quot;cp&quot;&gt;&amp;lt;?xml version=&amp;quot;1.0&amp;quot; encoding=&amp;quot;utf-8&amp;quot;?&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;layer-list&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;xmlns:android=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;http://schemas.android.com/apk/res/android&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
-    &lt;span class=&quot;nt&quot;&gt;&amp;lt;item&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;android:id=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;@android:id/secondaryProgress&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
-        &lt;span class=&quot;nt&quot;&gt;&amp;lt;shape&lt;/span&gt;
-            &lt;span class=&quot;na&quot;&gt;android:shape=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;ring&amp;quot;&lt;/span&gt;
-            &lt;span class=&quot;na&quot;&gt;android:thickness=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;2.5dp&amp;quot;&lt;/span&gt;
-            &lt;span class=&quot;na&quot;&gt;android:useLevel=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;true&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
-            &lt;span class=&quot;nt&quot;&gt;&amp;lt;solid&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;android:color=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;#979797&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
-        &lt;span class=&quot;nt&quot;&gt;&amp;lt;/shape&amp;gt;&lt;/span&gt;
-    &lt;span class=&quot;nt&quot;&gt;&amp;lt;/item&amp;gt;&lt;/span&gt;
-
-    &lt;span class=&quot;nt&quot;&gt;&amp;lt;item&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;android:id=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;@android:id/progress&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
-        &lt;span class=&quot;nt&quot;&gt;&amp;lt;rotate&lt;/span&gt;
-            &lt;span class=&quot;na&quot;&gt;android:fromDegrees=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;270&amp;quot;&lt;/span&gt;
-            &lt;span class=&quot;na&quot;&gt;android:pivotX=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;50%&amp;quot;&lt;/span&gt;
-            &lt;span class=&quot;na&quot;&gt;android:pivotY=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;50%&amp;quot;&lt;/span&gt;
-            &lt;span class=&quot;na&quot;&gt;android:toDegrees=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;270&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
-
-            &lt;span class=&quot;nt&quot;&gt;&amp;lt;shape&lt;/span&gt;
-                &lt;span class=&quot;na&quot;&gt;android:shape=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;ring&amp;quot;&lt;/span&gt;
-                &lt;span class=&quot;na&quot;&gt;android:thickness=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;2.5dp&amp;quot;&lt;/span&gt;
-                &lt;span class=&quot;na&quot;&gt;android:useLevel=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;true&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
-
-                &lt;span class=&quot;nt&quot;&gt;&amp;lt;rotate&lt;/span&gt;
-                    &lt;span class=&quot;na&quot;&gt;android:fromDegrees=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;0&amp;quot;&lt;/span&gt;
-                    &lt;span class=&quot;na&quot;&gt;android:pivotX=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;50%&amp;quot;&lt;/span&gt;
-                    &lt;span class=&quot;na&quot;&gt;android:pivotY=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;50%&amp;quot;&lt;/span&gt;
-                    &lt;span class=&quot;na&quot;&gt;android:toDegrees=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;360&amp;quot;&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
-                &lt;span class=&quot;nt&quot;&gt;&amp;lt;solid&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;android:color=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;#ffffffff&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
-            &lt;span class=&quot;nt&quot;&gt;&amp;lt;/shape&amp;gt;&lt;/span&gt;
-        &lt;span class=&quot;nt&quot;&gt;&amp;lt;/rotate&amp;gt;&lt;/span&gt;
-    &lt;span class=&quot;nt&quot;&gt;&amp;lt;/item&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;/layer-list&amp;gt;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</description>
-        <pubDate>Wed, 06 Jul 2016 02:20:12 +0800</pubDate>
-        <link>http://longlinht.github.io//define-userful-android-drawables</link>
-        <guid isPermaLink="true">http://longlinht.github.io//define-userful-android-drawables</guid>
       </item>
     
   </channel>

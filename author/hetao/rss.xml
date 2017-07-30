@@ -12,6 +12,56 @@
    <atom:link href="rss" rel="self" type="application/rss+xml" />
    
 	<item>
+	  <title>Intall Emacs on Ubuntu</title>
+	  <link>//install-emacs-on-ubuntu</link>
+	  <author>Tao He</author>
+	  <pubDate>2017-07-16T02:30:12+08:00</pubDate>
+	  <guid>//install-emacs-on-ubuntu</guid>
+	  <description><![CDATA[
+	     <p>Install Emacs 25 on Ubuntu from source is very easy, follow these steps below could achieve it.</p>
+
+<ol>
+<li>Open terminal (Ctrl+Alt+T) and run command to install build tools:</li>
+</ol>
+<div class="highlight"><pre><code class="language-text" data-lang="text">sudo apt install build-essential checkinstall
+</code></pre></div>
+<ol>
+<li>Then install the build dependencies via command:</li>
+</ol>
+<div class="highlight"><pre><code class="language-text" data-lang="text">sudo apt-get build-dep emacs24
+</code></pre></div>
+<ol>
+<li><p>Now download the source at ftp.gnu.org/gnu/emacs/, then extract:</p></li>
+<li><p>Open terminal and navigate to the &quot;emacs-25.1&quot; folder via command (or select &quot;Open in terminal&quot; from its context menu):</p></li>
+</ol>
+<div class="highlight"><pre><code class="language-text" data-lang="text">cd ~/Downloads/emacs-25.1
+</code></pre></div>
+<ol>
+<li>In the same terminal window, once you’re in the source folder, run the commands below one by one:</li>
+</ol>
+<div class="highlight"><pre><code class="language-text" data-lang="text">./configure
+make
+</code></pre></div>
+<ol>
+<li>Finally use checkinstall command to create .deb and install Emacs 25.1:</li>
+</ol>
+<div class="highlight"><pre><code class="language-text" data-lang="text">sudo checkinstall
+</code></pre></div>
+<p>While running the command, answer on screen questions, e.g., install docs, type package description, change package name, version, etc.</p>
+
+<p>Once done, Emacs is installed on your system and you can remove it anytime by running the command in the prompt with sudo privilege:</p>
+
+<p>In my case it’s:</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">sudo dpkg -r emacs-25
+</code></pre></div>
+<p>And the last command create a .deb package in the source folder, and it can be used in another Ubuntu machine to install Emacs(need to manually install dependencies via step 2).</p>
+
+<p>Finally, run command emacs to launch the text editor, or launch it from Unity Dash (App Launcher) at next login (or next boot).</p>
+
+	  ]]></description>
+	</item>
+
+	<item>
 	  <title>对AI的一些臆想</title>
 	  <link>//think-about-AI</link>
 	  <author>Tao He</author>
@@ -1026,92 +1076,6 @@ dumpsys | grep &quot;DUMP OF SERVICE&quot;
 </code></pre></div>
 <h4>Monkey parameters</h4>
 <div class="highlight"><pre><code class="language-text" data-lang="text">adb shell monkey -p -s 1000 --ignore-crashes --ignore-timeouts --ignore-security-exceptions --pct-trackball 0 --pct-nav 0 --pct-majornav 0 --pct-anyevent 0  -v --throttle 300 1200000000 
-</code></pre></div>
-	  ]]></description>
-	</item>
-
-	<item>
-	  <title>Define Userful Android Drawables</title>
-	  <link>//define-userful-android-drawables</link>
-	  <author>Tao He</author>
-	  <pubDate>2016-07-06T02:20:12+08:00</pubDate>
-	  <guid>//define-userful-android-drawables</guid>
-	  <description><![CDATA[
-	     <p>We can define many useful drawables in Android, in this article, I collected some of definations I ever used.</p>
-
-<h4>Define a round corner drawable</h4>
-<div class="highlight"><pre><code class="language-xml" data-lang="xml"><span class="nt">&lt;shape</span> <span class="na">xmlns:android=</span><span class="s">&quot;http://schemas.android.com/apk/res/android&quot;</span><span class="nt">&gt;</span>
-    <span class="nt">&lt;solid</span> <span class="na">android:color=</span><span class="s">&quot;#ffffffff&quot;</span><span class="nt">/&gt;</span>
-    <span class="nt">&lt;stroke</span> <span class="na">android:width=</span><span class="s">&quot;0dp&quot;</span>
-            <span class="na">android:color=</span><span class="s">&quot;#ffffffff&quot;</span> <span class="nt">/&gt;</span>
-    <span class="nt">&lt;padding</span> <span class="na">android:left=</span><span class="s">&quot;1dp&quot;</span>
-             <span class="na">android:top=</span><span class="s">&quot;1dp&quot;</span>
-             <span class="na">android:right=</span><span class="s">&quot;1dp&quot;</span>
-             <span class="na">android:bottom=</span><span class="s">&quot;1dp&quot;</span> <span class="nt">/&gt;</span>
-    <span class="nt">&lt;corners</span> <span class="na">android:bottomRightRadius=</span><span class="s">&quot;4dp&quot;</span>
-             <span class="na">android:bottomLeftRadius=</span><span class="s">&quot;4dp&quot;</span>
-             <span class="na">android:topLeftRadius=</span><span class="s">&quot;0dp&quot;</span>
-             <span class="na">android:topRightRadius=</span><span class="s">&quot;0dp&quot;</span><span class="nt">/&gt;</span>
-<span class="nt">&lt;/shape&gt;</span>
-</code></pre></div>
-<h4>Define a circle</h4>
-<div class="highlight"><pre><code class="language-xml" data-lang="xml"><span class="cp">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;</span>
-<span class="nt">&lt;shape</span>
-    <span class="na">xmlns:android=</span><span class="s">&quot;http://schemas.android.com/apk/res/android&quot;</span>
-    <span class="na">android:shape=</span><span class="s">&quot;oval&quot;</span><span class="nt">&gt;</span>
-   <span class="nt">&lt;solid</span>
-       <span class="na">android:color=</span><span class="s">&quot;#66000000&quot;</span><span class="nt">/&gt;</span>
-<span class="nt">&lt;/shape&gt;</span>
-</code></pre></div>
-<h4>Define a ring</h4>
-<div class="highlight"><pre><code class="language-xml" data-lang="xml"><span class="nt">&lt;shape</span>
-    <span class="na">android:shape=</span><span class="s">&quot;ring&quot;</span>
-    <span class="na">android:thickness=</span><span class="s">&quot;2.5dp&quot;</span>
-    <span class="na">android:useLevel=</span><span class="s">&quot;true&quot;</span><span class="nt">&gt;</span>
-    <span class="nt">&lt;solid</span> <span class="na">android:color=</span><span class="s">&quot;#979797&quot;</span><span class="nt">/&gt;</span>
-<span class="nt">&lt;/shape&gt;</span>
-</code></pre></div>
-<h4>Define a drawable with state</h4>
-<div class="highlight"><pre><code class="language-xml" data-lang="xml"><span class="cp">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;</span>
-<span class="nt">&lt;selector</span> <span class="na">xmlns:android=</span><span class="s">&quot;http://schemas.android.com/apk/res/android&quot;</span><span class="nt">&gt;</span>
-    <span class="nt">&lt;item</span> <span class="na">android:drawable=</span><span class="s">&quot;@drawable/qq_login_button_bg_pressed&quot;</span> <span class="na">android:state_pressed=</span><span class="s">&quot;true&quot;</span><span class="nt">/&gt;</span>
-    <span class="nt">&lt;item</span> <span class="na">android:drawable=</span><span class="s">&quot;@drawable/qq_login_button_bg_normal&quot;</span><span class="nt">/&gt;</span>
-<span class="nt">&lt;/selector&gt;</span>
-</code></pre></div>
-<h4>Define a ring as progressbar background</h4>
-<div class="highlight"><pre><code class="language-xml" data-lang="xml"><span class="cp">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;</span>
-<span class="nt">&lt;layer-list</span> <span class="na">xmlns:android=</span><span class="s">&quot;http://schemas.android.com/apk/res/android&quot;</span><span class="nt">&gt;</span>
-    <span class="nt">&lt;item</span> <span class="na">android:id=</span><span class="s">&quot;@android:id/secondaryProgress&quot;</span><span class="nt">&gt;</span>
-        <span class="nt">&lt;shape</span>
-            <span class="na">android:shape=</span><span class="s">&quot;ring&quot;</span>
-            <span class="na">android:thickness=</span><span class="s">&quot;2.5dp&quot;</span>
-            <span class="na">android:useLevel=</span><span class="s">&quot;true&quot;</span><span class="nt">&gt;</span>
-            <span class="nt">&lt;solid</span> <span class="na">android:color=</span><span class="s">&quot;#979797&quot;</span><span class="nt">/&gt;</span>
-        <span class="nt">&lt;/shape&gt;</span>
-    <span class="nt">&lt;/item&gt;</span>
-
-    <span class="nt">&lt;item</span> <span class="na">android:id=</span><span class="s">&quot;@android:id/progress&quot;</span><span class="nt">&gt;</span>
-        <span class="nt">&lt;rotate</span>
-            <span class="na">android:fromDegrees=</span><span class="s">&quot;270&quot;</span>
-            <span class="na">android:pivotX=</span><span class="s">&quot;50%&quot;</span>
-            <span class="na">android:pivotY=</span><span class="s">&quot;50%&quot;</span>
-            <span class="na">android:toDegrees=</span><span class="s">&quot;270&quot;</span><span class="nt">&gt;</span>
-
-            <span class="nt">&lt;shape</span>
-                <span class="na">android:shape=</span><span class="s">&quot;ring&quot;</span>
-                <span class="na">android:thickness=</span><span class="s">&quot;2.5dp&quot;</span>
-                <span class="na">android:useLevel=</span><span class="s">&quot;true&quot;</span><span class="nt">&gt;</span>
-
-                <span class="nt">&lt;rotate</span>
-                    <span class="na">android:fromDegrees=</span><span class="s">&quot;0&quot;</span>
-                    <span class="na">android:pivotX=</span><span class="s">&quot;50%&quot;</span>
-                    <span class="na">android:pivotY=</span><span class="s">&quot;50%&quot;</span>
-                    <span class="na">android:toDegrees=</span><span class="s">&quot;360&quot;</span> <span class="nt">/&gt;</span>
-                <span class="nt">&lt;solid</span> <span class="na">android:color=</span><span class="s">&quot;#ffffffff&quot;</span><span class="nt">/&gt;</span>
-            <span class="nt">&lt;/shape&gt;</span>
-        <span class="nt">&lt;/rotate&gt;</span>
-    <span class="nt">&lt;/item&gt;</span>
-<span class="nt">&lt;/layer-list&gt;</span>
 </code></pre></div>
 	  ]]></description>
 	</item>

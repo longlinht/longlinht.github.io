@@ -241,7 +241,7 @@ make
         <a class="read-next-story prev no-cover" href="http://longlinht.github.io//implement-page-up-down-animation-on-android">
             <section class="post">
                 <h2>在Android上实现无限翻页轮播动画效果</h2>
-                <p><p>最近在工作中遇到一个需求，要求在一个Dialog的标题上显示两行字，但是这行字如果同时出现的话会非常难看，设计出了套方案，类似无限翻页轮播这两行字，要有翻书的效果。 刚开始实现的时候，动画的效果也出来了，但是拿去给设计验收的时候设计总感觉怪怪的，始终达不到设计最终想要的结果。后来通过好多次的调试和验证，发现问题出现在两个 View的动画播放时序和旋转轴的问题上，解决了这两个问题后再拿去给设计看的时候，一切都完美了。 现在这个比较好的设计也已上线， 也因为这个调试和验证的过程感觉对 Android动画的一些细节碰触的较多，所以写下此文记录下这个过程。</p> <h4>基本原理</h4> <p>通过<code>ObjectAnimation</code>操作<code>View</code>的<code>RotationY</code>属性，再利用动态改变<code>PivotY</code>的值和动画播放时序的不同来模拟出无限翻页轮播的动画效果</p> <h4>ObjectAnimation</h4> <div class="highlight"><pre><code class="language-java" data-lang="java"><span class="c1">// 上面的View翻下去的动画</span>...</p>
+                <p><p>最近在工作中遇到一个需求，要求在一个Dialog的标题上显示两行字，但是这行字如果同时出现的话会非常难看，设计出了套方案，类似无限翻页轮播这两行字，要有翻书的效果。 刚开始实现的时候，动画的效果也出来了，但是拿去给设计验收的时候设计总感觉怪怪的，始终达不到设计最终想要的结果。后来通过好多次的调试和验证，发现问题出现在两个 View的动画播放时序和旋转轴的问题上，解决了这两个问题后再拿去给设计看的时候，一切都完美了。 现在这个比较好的设计也已上线， 也因为这个调试和验证的过程感觉对 Android动画的一些细节碰触的较多，所以写下此文记录下这个过程。</p> <h4>基本原理</h4> <p>通过<code>ObjectAnimation</code>操作<code>View</code>的<code>RotationY</code>属性，再利用动态改变<code>PivotY</code>的值和动画播放时序的不同来模拟出无限翻页轮播的动画效果</p> <h4>ObjectAnimation</h4> <div class="highlight"><pre><code class="language-text" data-lang="text">// 上面的View翻下去的动画 private...</p>
             </section>
         </a>
     

@@ -124,21 +124,21 @@ Android动画的一些细节碰触的较多，所以写下此文记录下这个�
 <p>通过<code>ObjectAnimation</code>操作<code>View</code>的<code>RotationY</code>属性，再利用动态改变<code>PivotY</code>的值和动画播放时序的不同来模拟出无限翻页轮播的动画效果</p>
 
 <h4>ObjectAnimation</h4>
-<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="c1">// 上面的View翻下去的动画</span>
+<div class="highlight"><pre><code class="language-text" data-lang="text">// 上面的View翻下去的动画
 
-<span class="kd">private</span> <span class="kd">static</span> <span class="n">ObjectAnimator</span> <span class="n">aboveViewPageDownAnim</span><span class="o">;</span>
+private static ObjectAnimator aboveViewPageDownAnim;
 
-<span class="c1">// 下面的View翻上去的动画</span>
+// 下面的View翻上去的动画
 
-<span class="kd">private</span> <span class="kd">static</span> <span class="n">ObjectAnimator</span> <span class="n">belowViewPageUpAnim</span><span class="o">;</span>
+private static ObjectAnimator belowViewPageUpAnim;
 
-<span class="c1">// 上面的View翻上去的动画</span>
+// 上面的View翻上去的动画
 
-<span class="kd">private</span> <span class="kd">static</span> <span class="n">ObjectAnimator</span> <span class="n">aboveViewPageUpAnim</span><span class="o">;</span>
+private static ObjectAnimator aboveViewPageUpAnim;
 
-<span class="c1">// 下面的View翻下去的动画</span>
+// 下面的View翻下去的动画
 
-<span class="kd">private</span> <span class="kd">static</span> <span class="n">ObjectAnimator</span> <span class="n">belowViewPageDownAnim</span><span class="o">;</span>
+private static ObjectAnimator belowViewPageDownAnim;
 </code></pre></div>
 <h4>关键的常量</h4>
 <div class="highlight"><pre><code class="language-text" data-lang="text">// 翻页动画的播放时长
@@ -162,143 +162,143 @@ private static int pageUpPivotY = 100;
 private static int pageDownPivotY = 70;
 </code></pre></div>
 <h4>具体实现</h4>
-<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">startPageUpDownAnimation</span><span class="o">(</span><span class="kd">final</span> <span class="n">View</span> <span class="n">aboveView</span><span class="o">,</span> <span class="kd">final</span> <span class="n">View</span> <span class="n">belowView</span><span class="o">)</span> <span class="o">{</span>
+<div class="highlight"><pre><code class="language-text" data-lang="text">public static void startPageUpDownAnimation(final View aboveView, final View belowView) {
 
-    <span class="n">aboveViewPageDownAnim</span> <span class="o">=</span> <span class="n">ObjectAnimator</span><span class="o">.</span><span class="na">ofPropertyValuesHolder</span><span class="o">(</span><span class="n">aboveView</span><span class="o">,</span>
-            <span class="n">PropertyValuesHolder</span><span class="o">.</span><span class="na">ofFloat</span><span class="o">(</span><span class="n">View</span><span class="o">.</span><span class="na">ROTATION_X</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="mi">90</span><span class="o">));</span>
+    aboveViewPageDownAnim = ObjectAnimator.ofPropertyValuesHolder(aboveView,
+            PropertyValuesHolder.ofFloat(View.ROTATION_X, 0, 90));
 
-    <span class="n">aboveViewPageDownAnim</span><span class="o">.</span><span class="na">setDuration</span><span class="o">(</span><span class="n">pageUpDownDurition</span><span class="o">);</span>
-    <span class="n">aboveViewPageDownAnim</span><span class="o">.</span><span class="na">setInterpolator</span><span class="o">(</span><span class="k">new</span> <span class="nf">LinearInterpolator</span><span class="o">());</span>
-    <span class="n">aboveViewPageDownAnim</span><span class="o">.</span><span class="na">addListener</span><span class="o">(</span><span class="k">new</span> <span class="n">Animator</span><span class="o">.</span><span class="na">AnimatorListener</span><span class="o">()</span> <span class="o">{</span>
-        <span class="nd">@Override</span>
-        <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onAnimationStart</span><span class="o">(</span><span class="n">Animator</span> <span class="n">animator</span><span class="o">)</span> <span class="o">{</span>
-            <span class="n">aboveView</span><span class="o">.</span><span class="na">setPivotY</span><span class="o">(</span><span class="n">pageDownPivotY</span><span class="o">);</span>
-            <span class="n">belowView</span><span class="o">.</span><span class="na">setVisibility</span><span class="o">(</span><span class="n">View</span><span class="o">.</span><span class="na">GONE</span><span class="o">);</span>
-            <span class="n">belowView</span><span class="o">.</span><span class="na">postDelayed</span><span class="o">(</span><span class="k">new</span> <span class="nf">Runnable</span><span class="o">()</span> <span class="o">{</span>
-                <span class="nd">@Override</span>
-                <span class="kd">public</span> <span class="kt">void</span> <span class="nf">run</span><span class="o">()</span> <span class="o">{</span>
-                    <span class="n">belowViewPageUpAnim</span><span class="o">.</span><span class="na">start</span><span class="o">();</span>
-                <span class="o">}</span>
-            <span class="o">},</span> <span class="n">pageUpBeforeDownEnd</span><span class="o">);</span>
-        <span class="o">}</span>
+    aboveViewPageDownAnim.setDuration(pageUpDownDurition);
+    aboveViewPageDownAnim.setInterpolator(new LinearInterpolator());
+    aboveViewPageDownAnim.addListener(new Animator.AnimatorListener() {
+        @Override
+        public void onAnimationStart(Animator animator) {
+            aboveView.setPivotY(pageDownPivotY);
+            belowView.setVisibility(View.GONE);
+            belowView.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    belowViewPageUpAnim.start();
+                }
+            }, pageUpBeforeDownEnd);
+        }
 
-        <span class="nd">@Override</span>
-        <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onAnimationEnd</span><span class="o">(</span><span class="n">Animator</span> <span class="n">animator</span><span class="o">)</span> <span class="o">{</span>
+        @Override
+        public void onAnimationEnd(Animator animator) {
 
-        <span class="o">}</span>
+        }
 
-        <span class="nd">@Override</span>
-        <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onAnimationCancel</span><span class="o">(</span><span class="n">Animator</span> <span class="n">animator</span><span class="o">)</span> <span class="o">{</span>
+        @Override
+        public void onAnimationCancel(Animator animator) {
 
-        <span class="o">}</span>
+        }
 
-        <span class="nd">@Override</span>
-        <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onAnimationRepeat</span><span class="o">(</span><span class="n">Animator</span> <span class="n">animator</span><span class="o">)</span> <span class="o">{</span>
+        @Override
+        public void onAnimationRepeat(Animator animator) {
 
-        <span class="o">}</span>
-    <span class="o">});</span>
+        }
+    });
 
-    <span class="n">belowViewPageUpAnim</span> <span class="o">=</span> <span class="n">ObjectAnimator</span><span class="o">.</span><span class="na">ofPropertyValuesHolder</span><span class="o">(</span><span class="n">belowView</span><span class="o">,</span>
-    <span class="n">PropertyValuesHolder</span><span class="o">.</span><span class="na">ofFloat</span><span class="o">(</span><span class="n">View</span><span class="o">.</span><span class="na">ROTATION_X</span><span class="o">,</span> <span class="o">-</span><span class="mi">90</span><span class="o">,</span> <span class="mi">0</span><span class="o">));</span>
-    <span class="n">belowViewPageUpAnim</span><span class="o">.</span><span class="na">setDuration</span><span class="o">(</span><span class="n">pageUpDownDurition</span><span class="o">);</span>
-    <span class="n">belowViewPageUpAnim</span><span class="o">.</span><span class="na">setInterpolator</span><span class="o">(</span><span class="k">new</span> <span class="nf">LinearInterpolator</span><span class="o">());</span>
-    <span class="n">belowViewPageUpAnim</span><span class="o">.</span><span class="na">addListener</span><span class="o">(</span><span class="k">new</span> <span class="n">Animator</span><span class="o">.</span><span class="na">AnimatorListener</span><span class="o">()</span> <span class="o">{</span>
-        <span class="nd">@Override</span>
-        <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onAnimationStart</span><span class="o">(</span><span class="n">Animator</span> <span class="n">animator</span><span class="o">)</span> <span class="o">{</span>
-            <span class="n">belowView</span><span class="o">.</span><span class="na">setVisibility</span><span class="o">(</span><span class="n">View</span><span class="o">.</span><span class="na">VISIBLE</span><span class="o">);</span>
-            <span class="n">belowView</span><span class="o">.</span><span class="na">setPivotY</span><span class="o">(</span><span class="n">pageUpPivotY</span><span class="o">);</span>
-        <span class="o">}</span>
+    belowViewPageUpAnim = ObjectAnimator.ofPropertyValuesHolder(belowView,
+    PropertyValuesHolder.ofFloat(View.ROTATION_X, -90, 0));
+    belowViewPageUpAnim.setDuration(pageUpDownDurition);
+    belowViewPageUpAnim.setInterpolator(new LinearInterpolator());
+    belowViewPageUpAnim.addListener(new Animator.AnimatorListener() {
+        @Override
+        public void onAnimationStart(Animator animator) {
+            belowView.setVisibility(View.VISIBLE);
+            belowView.setPivotY(pageUpPivotY);
+        }
 
-        <span class="nd">@Override</span>
-        <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onAnimationEnd</span><span class="o">(</span><span class="n">Animator</span> <span class="n">animator</span><span class="o">)</span> <span class="o">{</span>
-            <span class="n">belowView</span><span class="o">.</span><span class="na">postDelayed</span><span class="o">(</span><span class="k">new</span> <span class="nf">Runnable</span><span class="o">()</span> <span class="o">{</span>
-                <span class="nd">@Override</span>
-                <span class="kd">public</span> <span class="kt">void</span> <span class="nf">run</span><span class="o">()</span> <span class="o">{</span>
-                    <span class="n">belowViewPageDownAnim</span><span class="o">.</span><span class="na">start</span><span class="o">();</span>
-                <span class="o">}</span>
-            <span class="o">},</span> <span class="n">belowViewStayInterval</span><span class="o">);</span>
-        <span class="o">}</span>
+        @Override
+        public void onAnimationEnd(Animator animator) {
+            belowView.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    belowViewPageDownAnim.start();
+                }
+            }, belowViewStayInterval);
+        }
 
-        <span class="nd">@Override</span>
-        <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onAnimationCancel</span><span class="o">(</span><span class="n">Animator</span> <span class="n">animator</span><span class="o">)</span> <span class="o">{</span>
+        @Override
+        public void onAnimationCancel(Animator animator) {
 
-        <span class="o">}</span>
+        }
 
-        <span class="nd">@Override</span>
-        <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onAnimationRepeat</span><span class="o">(</span><span class="n">Animator</span> <span class="n">animator</span><span class="o">)</span> <span class="o">{</span>
+        @Override
+        public void onAnimationRepeat(Animator animator) {
 
-        <span class="o">}</span>
-    <span class="o">});</span>
+        }
+    });
 
-    <span class="n">belowViewPageDownAnim</span> <span class="o">=</span> <span class="n">ObjectAnimator</span><span class="o">.</span><span class="na">ofPropertyValuesHolder</span><span class="o">(</span><span class="n">belowView</span><span class="o">,</span>
-            <span class="n">PropertyValuesHolder</span><span class="o">.</span><span class="na">ofFloat</span><span class="o">(</span><span class="n">View</span><span class="o">.</span><span class="na">ROTATION_X</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="mi">90</span><span class="o">));</span>
+    belowViewPageDownAnim = ObjectAnimator.ofPropertyValuesHolder(belowView,
+            PropertyValuesHolder.ofFloat(View.ROTATION_X, 0, 90));
 
-    <span class="n">belowViewPageDownAnim</span><span class="o">.</span><span class="na">setDuration</span><span class="o">(</span><span class="n">pageUpDownDurition</span><span class="o">);</span>
-    <span class="n">belowViewPageDownAnim</span><span class="o">.</span><span class="na">setInterpolator</span><span class="o">(</span><span class="k">new</span> <span class="nf">LinearInterpolator</span><span class="o">());</span>
-    <span class="n">belowViewPageDownAnim</span><span class="o">.</span><span class="na">addListener</span><span class="o">(</span><span class="k">new</span> <span class="n">Animator</span><span class="o">.</span><span class="na">AnimatorListener</span><span class="o">()</span> <span class="o">{</span>
+    belowViewPageDownAnim.setDuration(pageUpDownDurition);
+    belowViewPageDownAnim.setInterpolator(new LinearInterpolator());
+    belowViewPageDownAnim.addListener(new Animator.AnimatorListener() {
 
-        <span class="nd">@Override</span>
-        <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onAnimationStart</span><span class="o">(</span><span class="n">Animator</span> <span class="n">animator</span><span class="o">)</span> <span class="o">{</span>
-            <span class="n">belowView</span><span class="o">.</span><span class="na">setPivotY</span><span class="o">(</span><span class="n">pageDownPivotY</span><span class="o">);</span>
-            <span class="n">aboveView</span><span class="o">.</span><span class="na">setVisibility</span><span class="o">(</span><span class="n">View</span><span class="o">.</span><span class="na">GONE</span><span class="o">);</span>
-            <span class="n">aboveView</span><span class="o">.</span><span class="na">postDelayed</span><span class="o">(</span><span class="k">new</span> <span class="nf">Runnable</span><span class="o">()</span> <span class="o">{</span>
-                <span class="nd">@Override</span>
-                <span class="kd">public</span> <span class="kt">void</span> <span class="nf">run</span><span class="o">()</span> <span class="o">{</span>
-                    <span class="n">aboveViewPageUpAnim</span><span class="o">.</span><span class="na">start</span><span class="o">();</span>
-                <span class="o">}</span>
-            <span class="o">},</span> <span class="n">pageUpBeforeDownEnd</span><span class="o">);</span>
-        <span class="o">}</span>
+        @Override
+        public void onAnimationStart(Animator animator) {
+            belowView.setPivotY(pageDownPivotY);
+            aboveView.setVisibility(View.GONE);
+            aboveView.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    aboveViewPageUpAnim.start();
+                }
+            }, pageUpBeforeDownEnd);
+        }
 
-        <span class="nd">@Override</span>
-        <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onAnimationEnd</span><span class="o">(</span><span class="n">Animator</span> <span class="n">animator</span><span class="o">)</span> <span class="o">{</span>
+        @Override
+        public void onAnimationEnd(Animator animator) {
 
-        <span class="o">}</span>
+        }
 
-        <span class="nd">@Override</span>
-        <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onAnimationCancel</span><span class="o">(</span><span class="n">Animator</span> <span class="n">animator</span><span class="o">)</span> <span class="o">{</span>
+        @Override
+        public void onAnimationCancel(Animator animator) {
 
-        <span class="o">}</span>
+        }
 
-        <span class="nd">@Override</span>
-        <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onAnimationRepeat</span><span class="o">(</span><span class="n">Animator</span> <span class="n">animator</span><span class="o">)</span> <span class="o">{</span>
+        @Override
+        public void onAnimationRepeat(Animator animator) {
 
-        <span class="o">}</span>
-    <span class="o">});</span>
+        }
+    });
 
-    <span class="n">aboveViewPageUpAnim</span> <span class="o">=</span> <span class="n">ObjectAnimator</span><span class="o">.</span><span class="na">ofPropertyValuesHolder</span><span class="o">(</span><span class="n">aboveView</span><span class="o">,</span>
-            <span class="n">PropertyValuesHolder</span><span class="o">.</span><span class="na">ofFloat</span><span class="o">(</span><span class="n">View</span><span class="o">.</span><span class="na">ROTATION_X</span><span class="o">,</span> <span class="o">-</span><span class="mi">90</span><span class="o">,</span> <span class="mi">0</span><span class="o">));</span>
-    <span class="n">aboveViewPageUpAnim</span><span class="o">.</span><span class="na">setDuration</span><span class="o">(</span><span class="n">pageUpDownDurition</span><span class="o">);</span>
-    <span class="n">aboveViewPageUpAnim</span><span class="o">.</span><span class="na">setInterpolator</span><span class="o">(</span><span class="k">new</span> <span class="nf">LinearInterpolator</span><span class="o">());</span>
-    <span class="n">aboveViewPageUpAnim</span><span class="o">.</span><span class="na">addListener</span><span class="o">(</span><span class="k">new</span> <span class="n">Animator</span><span class="o">.</span><span class="na">AnimatorListener</span><span class="o">()</span> <span class="o">{</span>
-        <span class="nd">@Override</span>
-        <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onAnimationStart</span><span class="o">(</span><span class="n">Animator</span> <span class="n">animator</span><span class="o">)</span> <span class="o">{</span>
-            <span class="n">aboveView</span><span class="o">.</span><span class="na">setVisibility</span><span class="o">(</span><span class="n">View</span><span class="o">.</span><span class="na">VISIBLE</span><span class="o">);</span>
-            <span class="n">aboveView</span><span class="o">.</span><span class="na">setPivotY</span><span class="o">(</span><span class="n">pageUpPivotY</span><span class="o">);</span>
-        <span class="o">}</span>
+    aboveViewPageUpAnim = ObjectAnimator.ofPropertyValuesHolder(aboveView,
+            PropertyValuesHolder.ofFloat(View.ROTATION_X, -90, 0));
+    aboveViewPageUpAnim.setDuration(pageUpDownDurition);
+    aboveViewPageUpAnim.setInterpolator(new LinearInterpolator());
+    aboveViewPageUpAnim.addListener(new Animator.AnimatorListener() {
+        @Override
+        public void onAnimationStart(Animator animator) {
+            aboveView.setVisibility(View.VISIBLE);
+            aboveView.setPivotY(pageUpPivotY);
+        }
 
-        <span class="nd">@Override</span>
-        <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onAnimationEnd</span><span class="o">(</span><span class="n">Animator</span> <span class="n">animator</span><span class="o">)</span> <span class="o">{</span>
-            <span class="n">aboveView</span><span class="o">.</span><span class="na">postDelayed</span><span class="o">(</span><span class="k">new</span> <span class="nf">Runnable</span><span class="o">()</span> <span class="o">{</span>
-                <span class="nd">@Override</span>
-                <span class="kd">public</span> <span class="kt">void</span> <span class="nf">run</span><span class="o">()</span> <span class="o">{</span>
-                    <span class="n">aboveViewPageDownAnim</span><span class="o">.</span><span class="na">start</span><span class="o">();</span>
-                <span class="o">}</span>
-            <span class="o">},</span> <span class="n">belowViewStayInterval</span><span class="o">);</span>
-        <span class="o">}</span>
+        @Override
+        public void onAnimationEnd(Animator animator) {
+            aboveView.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    aboveViewPageDownAnim.start();
+                }
+            }, belowViewStayInterval);
+        }
 
-        <span class="nd">@Override</span>
-        <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onAnimationCancel</span><span class="o">(</span><span class="n">Animator</span> <span class="n">animator</span><span class="o">)</span> <span class="o">{</span>
+        @Override
+        public void onAnimationCancel(Animator animator) {
 
-        <span class="o">}</span>
+        }
 
-        <span class="nd">@Override</span>
-        <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onAnimationRepeat</span><span class="o">(</span><span class="n">Animator</span> <span class="n">animator</span><span class="o">)</span> <span class="o">{</span>
+        @Override
+        public void onAnimationRepeat(Animator animator) {
 
-        <span class="o">}</span>
-    <span class="o">});</span>
+        }
+    });
 
-    <span class="n">aboveViewPageDownAnim</span><span class="o">.</span><span class="na">start</span><span class="o">();</span>
-<span class="o">}</span>
+    aboveViewPageDownAnim.start();
+}
 </code></pre></div>
 <p>其实这个实现已经是一个基本比较通用的翻页动画了，不仅可以用于TextView，ImageView应该也没有问题。</p>
 

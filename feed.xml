@@ -11,66 +11,42 @@
         <description>&lt;p&gt;Install Emacs 25 on Ubuntu from source is very easy, follow these steps below could achieve it.&lt;/p&gt;
 
 &lt;ul&gt;
-  &lt;li&gt;Open terminal (Ctrl+Alt+T) and run command to install build tools:&lt;/li&gt;
+&lt;li&gt;Open terminal (Ctrl+Alt+T) and run command to install build tools:&lt;/li&gt;
 &lt;/ul&gt;
-
-&lt;p&gt;&lt;code&gt;
-sudo apt install build-essential checkinstall
-&lt;/code&gt;&lt;/p&gt;
-
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;sudo apt install build-essential checkinstall
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;ul&gt;
-  &lt;li&gt;Then install the build dependencies via command:&lt;/li&gt;
+&lt;li&gt;Then install the build dependencies via command:&lt;/li&gt;
 &lt;/ul&gt;
-
-&lt;p&gt;&lt;code&gt;
-sudo apt-get build-dep emacs24
-&lt;/code&gt;&lt;/p&gt;
-
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;sudo apt-get build-dep emacs24
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;ul&gt;
-  &lt;li&gt;
-    &lt;p&gt;Now download the source at ftp.gnu.org/gnu/emacs/, then extract:&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;Open terminal and navigate to the “emacs-25.1” folder via command (or select “Open in terminal” from its context menu):&lt;/p&gt;
-  &lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Now download the source at ftp.gnu.org/gnu/emacs/, then extract:&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Open terminal and navigate to the &amp;quot;emacs-25.1&amp;quot; folder via command (or select &amp;quot;Open in terminal&amp;quot; from its context menu):&lt;/p&gt;&lt;/li&gt;
 &lt;/ul&gt;
-
-&lt;p&gt;&lt;code&gt;
-cd ~/Downloads/emacs-25.1
-&lt;/code&gt;&lt;/p&gt;
-
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;cd ~/Downloads/emacs-25.1
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;ul&gt;
-  &lt;li&gt;In the same terminal window, once you’re in the source folder, run the commands below one by one:&lt;/li&gt;
+&lt;li&gt;In the same terminal window, once you’re in the source folder, run the commands below one by one:&lt;/li&gt;
 &lt;/ul&gt;
-
-&lt;p&gt;&lt;code&gt;
-./configure
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;./configure
 make
-&lt;/code&gt;&lt;/p&gt;
-
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;ul&gt;
-  &lt;li&gt;Finally use checkinstall command to create .deb and install Emacs 25.1:&lt;/li&gt;
+&lt;li&gt;Finally use checkinstall command to create .deb and install Emacs 25.1:&lt;/li&gt;
 &lt;/ul&gt;
-
-&lt;p&gt;```
-sudo checkinstall&lt;/p&gt;
-
-&lt;p&gt;```&lt;/p&gt;
-
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;sudo checkinstall
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;p&gt;While running the command, answer on screen questions, e.g., install docs, type package description, change package name, version, etc.&lt;/p&gt;
 
 &lt;p&gt;Once done, Emacs is installed on your system and you can remove it anytime by running the command in the prompt with sudo privilege:&lt;/p&gt;
 
 &lt;p&gt;In my case it’s:&lt;/p&gt;
-
-&lt;p&gt;```
-sudo dpkg -r emacs-25&lt;/p&gt;
-
-&lt;p&gt;```
-And the last command create a .deb package in the source folder, and it can be used in another Ubuntu machine to install Emacs(need to manually install dependencies via step 2).&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;sudo dpkg -r emacs-25
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;And the last command create a .deb package in the source folder, and it can be used in another Ubuntu machine to install Emacs(need to manually install dependencies via step 2).&lt;/p&gt;
 
 &lt;p&gt;Finally, run command emacs to launch the text editor, or launch it from Unity Dash (App Launcher) at next login (or next boot).&lt;/p&gt;
-
 </description>
         <pubDate>Sun, 16 Jul 2017 02:30:12 +0800</pubDate>
         <link>http://longlinht.github.io//install-emacs-on-ubuntu</link>
@@ -84,199 +60,187 @@ And the last command create a .deb package in the source folder, and it can be u
 View的动画播放时序和旋转轴的问题上，解决了这两个问题后再拿去给设计看的时候，一切都完美了。 现在这个比较好的设计也已上线， 也因为这个调试和验证的过程感觉对
 Android动画的一些细节碰触的较多，所以写下此文记录下这个过程。&lt;/p&gt;
 
-&lt;h4 id=&quot;section&quot;&gt;基本原理&lt;/h4&gt;
+&lt;h4&gt;基本原理&lt;/h4&gt;
 
 &lt;p&gt;通过&lt;code&gt;ObjectAnimation&lt;/code&gt;操作&lt;code&gt;View&lt;/code&gt;的&lt;code&gt;RotationY&lt;/code&gt;属性，再利用动态改变&lt;code&gt;PivotY&lt;/code&gt;的值和动画播放时序的不同来模拟出无限翻页轮播的动画效果&lt;/p&gt;
 
-&lt;h4 id=&quot;objectanimation&quot;&gt;ObjectAnimation&lt;/h4&gt;
+&lt;h4&gt;ObjectAnimation&lt;/h4&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;// 上面的View翻下去的动画
 
-&lt;p&gt;```&lt;/p&gt;
+private static ObjectAnimator aboveViewPageDownAnim;
 
-&lt;p&gt;// 上面的View翻下去的动画&lt;/p&gt;
+// 下面的View翻上去的动画
 
-&lt;p&gt;private static ObjectAnimator aboveViewPageDownAnim;&lt;/p&gt;
+private static ObjectAnimator belowViewPageUpAnim;
 
-&lt;p&gt;// 下面的View翻上去的动画&lt;/p&gt;
+// 上面的View翻上去的动画
 
-&lt;p&gt;private static ObjectAnimator belowViewPageUpAnim;&lt;/p&gt;
+private static ObjectAnimator aboveViewPageUpAnim;
 
-&lt;p&gt;// 上面的View翻上去的动画&lt;/p&gt;
+// 下面的View翻下去的动画
 
-&lt;p&gt;private static ObjectAnimator aboveViewPageUpAnim;&lt;/p&gt;
+private static ObjectAnimator belowViewPageDownAnim;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h4&gt;关键的常量&lt;/h4&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;// 翻页动画的播放时长
 
-&lt;p&gt;// 下面的View翻下去的动画&lt;/p&gt;
+private static int pageUpDownDurition = 500;
 
-&lt;p&gt;private static ObjectAnimator belowViewPageDownAnim;&lt;/p&gt;
+// 翻下播放结束前100翻上就开始播放
 
-&lt;p&gt;```&lt;/p&gt;
+private static int pageUpBeforeDownEnd = 400;
 
-&lt;h4 id=&quot;section-1&quot;&gt;关键的常量&lt;/h4&gt;
+// 翻上播放完后停留时间
 
-&lt;p&gt;```
-// 翻页动画的播放时长&lt;/p&gt;
+private static int belowViewStayInterval = 800;
 
-&lt;p&gt;private static int pageUpDownDurition = 500;&lt;/p&gt;
+// 在Y轴底部翻转
 
-&lt;p&gt;// 翻下播放结束前100翻上就开始播放&lt;/p&gt;
+private static int pageUpPivotY = 100;
 
-&lt;p&gt;private static int pageUpBeforeDownEnd = 400;&lt;/p&gt;
+// 在Y近顶部的位置翻转
 
-&lt;p&gt;// 翻上播放完后停留时间&lt;/p&gt;
+private static int pageDownPivotY = 70;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h4&gt;具体实现&lt;/h4&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;public static void startPageUpDownAnimation(final View aboveView, final View belowView) {
 
-&lt;p&gt;private static int belowViewStayInterval = 800;&lt;/p&gt;
+    aboveViewPageDownAnim = ObjectAnimator.ofPropertyValuesHolder(aboveView,
+            PropertyValuesHolder.ofFloat(View.ROTATION_X, 0, 90));
 
-&lt;p&gt;// 在Y轴底部翻转&lt;/p&gt;
+    aboveViewPageDownAnim.setDuration(pageUpDownDurition);
+    aboveViewPageDownAnim.setInterpolator(new LinearInterpolator());
+    aboveViewPageDownAnim.addListener(new Animator.AnimatorListener() {
+        @Override
+        public void onAnimationStart(Animator animator) {
+            aboveView.setPivotY(pageDownPivotY);
+            belowView.setVisibility(View.GONE);
+            belowView.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    belowViewPageUpAnim.start();
+                }
+            }, pageUpBeforeDownEnd);
+        }
 
-&lt;p&gt;private static int pageUpPivotY = 100;&lt;/p&gt;
+        @Override
+        public void onAnimationEnd(Animator animator) {
 
-&lt;p&gt;// 在Y近顶部的位置翻转&lt;/p&gt;
+        }
 
-&lt;p&gt;private static int pageDownPivotY = 70;&lt;/p&gt;
+        @Override
+        public void onAnimationCancel(Animator animator) {
 
-&lt;p&gt;```&lt;/p&gt;
+        }
 
-&lt;h4 id=&quot;section-2&quot;&gt;具体实现&lt;/h4&gt;
+        @Override
+        public void onAnimationRepeat(Animator animator) {
 
-&lt;p&gt;```&lt;/p&gt;
+        }
+    });
 
-&lt;p&gt;public static void startPageUpDownAnimation(final View aboveView, final View belowView) {&lt;/p&gt;
+    belowViewPageUpAnim = ObjectAnimator.ofPropertyValuesHolder(belowView,
+    PropertyValuesHolder.ofFloat(View.ROTATION_X, -90, 0));
+    belowViewPageUpAnim.setDuration(pageUpDownDurition);
+    belowViewPageUpAnim.setInterpolator(new LinearInterpolator());
+    belowViewPageUpAnim.addListener(new Animator.AnimatorListener() {
+        @Override
+        public void onAnimationStart(Animator animator) {
+            belowView.setVisibility(View.VISIBLE);
+            belowView.setPivotY(pageUpPivotY);
+        }
 
-&lt;pre&gt;&lt;code&gt;aboveViewPageDownAnim = ObjectAnimator.ofPropertyValuesHolder(aboveView,
-        PropertyValuesHolder.ofFloat(View.ROTATION_X, 0, 90));
+        @Override
+        public void onAnimationEnd(Animator animator) {
+            belowView.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    belowViewPageDownAnim.start();
+                }
+            }, belowViewStayInterval);
+        }
 
-aboveViewPageDownAnim.setDuration(pageUpDownDurition);
-aboveViewPageDownAnim.setInterpolator(new LinearInterpolator());
-aboveViewPageDownAnim.addListener(new Animator.AnimatorListener() {
-    @Override
-    public void onAnimationStart(Animator animator) {
-        aboveView.setPivotY(pageDownPivotY);
-        belowView.setVisibility(View.GONE);
-        belowView.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                belowViewPageUpAnim.start();
-            }
-        }, pageUpBeforeDownEnd);
-    }
+        @Override
+        public void onAnimationCancel(Animator animator) {
 
-    @Override
-    public void onAnimationEnd(Animator animator) {
+        }
 
-    }
+        @Override
+        public void onAnimationRepeat(Animator animator) {
 
-    @Override
-    public void onAnimationCancel(Animator animator) {
+        }
+    });
 
-    }
+    belowViewPageDownAnim = ObjectAnimator.ofPropertyValuesHolder(belowView,
+            PropertyValuesHolder.ofFloat(View.ROTATION_X, 0, 90));
 
-    @Override
-    public void onAnimationRepeat(Animator animator) {
+    belowViewPageDownAnim.setDuration(pageUpDownDurition);
+    belowViewPageDownAnim.setInterpolator(new LinearInterpolator());
+    belowViewPageDownAnim.addListener(new Animator.AnimatorListener() {
 
-    }
-});
+        @Override
+        public void onAnimationStart(Animator animator) {
+            belowView.setPivotY(pageDownPivotY);
+            aboveView.setVisibility(View.GONE);
+            aboveView.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    aboveViewPageUpAnim.start();
+                }
+            }, pageUpBeforeDownEnd);
+        }
 
-belowViewPageUpAnim = ObjectAnimator.ofPropertyValuesHolder(belowView,
-PropertyValuesHolder.ofFloat(View.ROTATION_X, -90, 0));
-belowViewPageUpAnim.setDuration(pageUpDownDurition);
-belowViewPageUpAnim.setInterpolator(new LinearInterpolator());
-belowViewPageUpAnim.addListener(new Animator.AnimatorListener() {
-    @Override
-    public void onAnimationStart(Animator animator) {
-        belowView.setVisibility(View.VISIBLE);
-        belowView.setPivotY(pageUpPivotY);
-    }
+        @Override
+        public void onAnimationEnd(Animator animator) {
 
-    @Override
-    public void onAnimationEnd(Animator animator) {
-        belowView.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                belowViewPageDownAnim.start();
-            }
-        }, belowViewStayInterval);
-    }
+        }
 
-    @Override
-    public void onAnimationCancel(Animator animator) {
+        @Override
+        public void onAnimationCancel(Animator animator) {
 
-    }
+        }
 
-    @Override
-    public void onAnimationRepeat(Animator animator) {
+        @Override
+        public void onAnimationRepeat(Animator animator) {
 
-    }
-});
+        }
+    });
 
-belowViewPageDownAnim = ObjectAnimator.ofPropertyValuesHolder(belowView,
-        PropertyValuesHolder.ofFloat(View.ROTATION_X, 0, 90));
+    aboveViewPageUpAnim = ObjectAnimator.ofPropertyValuesHolder(aboveView,
+            PropertyValuesHolder.ofFloat(View.ROTATION_X, -90, 0));
+    aboveViewPageUpAnim.setDuration(pageUpDownDurition);
+    aboveViewPageUpAnim.setInterpolator(new LinearInterpolator());
+    aboveViewPageUpAnim.addListener(new Animator.AnimatorListener() {
+        @Override
+        public void onAnimationStart(Animator animator) {
+            aboveView.setVisibility(View.VISIBLE);
+            aboveView.setPivotY(pageUpPivotY);
+        }
 
-belowViewPageDownAnim.setDuration(pageUpDownDurition);
-belowViewPageDownAnim.setInterpolator(new LinearInterpolator());
-belowViewPageDownAnim.addListener(new Animator.AnimatorListener() {
+        @Override
+        public void onAnimationEnd(Animator animator) {
+            aboveView.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    aboveViewPageDownAnim.start();
+                }
+            }, belowViewStayInterval);
+        }
 
-    @Override
-    public void onAnimationStart(Animator animator) {
-        belowView.setPivotY(pageDownPivotY);
-        aboveView.setVisibility(View.GONE);
-        aboveView.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                aboveViewPageUpAnim.start();
-            }
-        }, pageUpBeforeDownEnd);
-    }
+        @Override
+        public void onAnimationCancel(Animator animator) {
 
-    @Override
-    public void onAnimationEnd(Animator animator) {
+        }
 
-    }
+        @Override
+        public void onAnimationRepeat(Animator animator) {
 
-    @Override
-    public void onAnimationCancel(Animator animator) {
+        }
+    });
 
-    }
-
-    @Override
-    public void onAnimationRepeat(Animator animator) {
-
-    }
-});
-
-aboveViewPageUpAnim = ObjectAnimator.ofPropertyValuesHolder(aboveView,
-        PropertyValuesHolder.ofFloat(View.ROTATION_X, -90, 0));
-aboveViewPageUpAnim.setDuration(pageUpDownDurition);
-aboveViewPageUpAnim.setInterpolator(new LinearInterpolator());
-aboveViewPageUpAnim.addListener(new Animator.AnimatorListener() {
-    @Override
-    public void onAnimationStart(Animator animator) {
-        aboveView.setVisibility(View.VISIBLE);
-        aboveView.setPivotY(pageUpPivotY);
-    }
-
-    @Override
-    public void onAnimationEnd(Animator animator) {
-        aboveView.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                aboveViewPageDownAnim.start();
-            }
-        }, belowViewStayInterval);
-    }
-
-    @Override
-    public void onAnimationCancel(Animator animator) {
-
-    }
-
-    @Override
-    public void onAnimationRepeat(Animator animator) {
-
-    }
-});
-
-aboveViewPageDownAnim.start(); } ```
-&lt;/code&gt;&lt;/pre&gt;
-
+    aboveViewPageDownAnim.start();
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;p&gt;其实这个实现已经是一个基本比较通用的翻页动画了，不仅可以用于TextView，ImageView应该也没有问题。&lt;/p&gt;
 </description>
         <pubDate>Thu, 13 Jul 2017 02:30:12 +0800</pubDate>
@@ -298,10 +262,9 @@ aboveViewPageDownAnim.start(); } ```
 
 &lt;p&gt;以上就是一些我截取的一些有意思的观点和想法，可以看出近几年的一些电影和书籍多半不会深入艰深的技术细节，而多是通过对AI未来的畅想和猜测，以及带入AI这个特殊角色后对人类自身的一种反省和思考，我因受这些想法和思考的影响，也时而会在脑中闪出一下奇怪的想法，我甚至也不明白我为什么会产生这些奇思异想。&lt;/p&gt;
 
-&lt;p&gt;我竟想到人类的起源和AI的未来可能有某种相似性，怎么说呢？因为我之前看到过一些文章分析人类可能并不是地球上的土著生物，可能真的是被一种神一样的存在所创造的，无中生有的，而这种神一样的存在现在却只留在了人类的神话中，我突然就想到，这种神一样的存在创造了我们，而后被我们所取代，他们存在过的痕迹也就只留在了我们的神话中，也许我们现在之于AI，就是那个神一样的存在，但我们最终会被AI取代，只留在AI的神话中，就跟没存在过一样……&lt;/p&gt;
+&lt;p&gt;我竟想到人类的起源和AI的未来可能有某种相似性，怎么说呢？因为我之前看到过一些文章分析人类可能并不是地球上的土著生物，可能真的是被一种神一样的存在所创造的，无中生有的，而这种神一样的存在现在却只留在了人类的神话中，我突然就想到，这种神一样的存在创造了我们，而后被我们所取代，他们存在过的痕迹也就只留在了我们的神话中，也许我们现在之于AI，就是那个神一样的存在，但我们最终会被AI取代，只留在AI的神话中，就跟没存在过一样......&lt;/p&gt;
 
 &lt;p&gt;也许人类的真正归宿还真就是以硅为载体，以此长存于世，胡说八道了这么多，可以止笔了，再有臆想，再来码字&lt;/p&gt;
-
 </description>
         <pubDate>Mon, 10 Jul 2017 02:30:12 +0800</pubDate>
         <link>http://longlinht.github.io//think-about-AI</link>
@@ -312,75 +275,60 @@ aboveViewPageDownAnim.start(); } ```
         <title>Dimension Units in Android</title>
         <description>&lt;p&gt;When I start develop application for Android, I am confused about the dimension units many times. So I decide to figure out it clearly through this article.&lt;/p&gt;
 
-&lt;p&gt;Android is a mobile operating system that compatible many devices, because of its compatibility, we must think about vary size, density, shape of device’s screen. The &lt;strong&gt;density independence&lt;/strong&gt; is a important conception here. Later, I will explain detail about it. Now, we need give the defination of the dimension units and explain the relation of them.&lt;/p&gt;
+&lt;p&gt;Android is a mobile operating system that compatible many devices, because of its compatibility, we must think about vary size, density, shape of device&amp;#39;s screen. The &lt;strong&gt;density independence&lt;/strong&gt; is a important conception here. Later, I will explain detail about it. Now, we need give the defination of the dimension units and explain the relation of them.&lt;/p&gt;
 
-&lt;h3 id=&quot;dimension-unit&quot;&gt;Dimension Unit&lt;/h3&gt;
+&lt;h3&gt;Dimension Unit&lt;/h3&gt;
 
-&lt;h4 id=&quot;defination&quot;&gt;Defination&lt;/h4&gt;
+&lt;h4&gt;Defination&lt;/h4&gt;
 
 &lt;ul&gt;
-  &lt;li&gt;
-    &lt;p&gt;&lt;strong&gt;px&lt;/strong&gt; - An actual pixel on the screen.&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;&lt;strong&gt;in&lt;/strong&gt; - A physical inch on the screen.&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;&lt;strong&gt;mm&lt;/strong&gt; - A physical millimeter on the screen.&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;&lt;strong&gt;pt&lt;/strong&gt; - A point, a common font size unit, on the screen. &lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;&lt;strong&gt;dp&lt;/strong&gt; - An abstract unit that is based on the physical density of the screen. These units are relative to a 160 dpi (dots per inch) screen, on which 1dp is roughly equal to 1px. &lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;&lt;strong&gt;sp&lt;/strong&gt; - A scale independent pixel, specially designated for text sizes. &lt;/p&gt;
-  &lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;px&lt;/strong&gt; - An actual pixel on the screen.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;in&lt;/strong&gt; - A physical inch on the screen.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;mm&lt;/strong&gt; - A physical millimeter on the screen.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;pt&lt;/strong&gt; - A point, a common font size unit, on the screen. &lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;dp&lt;/strong&gt; - An abstract unit that is based on the physical density of the screen. These units are relative to a 160 dpi (dots per inch) screen, on which 1dp is roughly equal to 1px. &lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;sp&lt;/strong&gt; - A scale independent pixel, specially designated for text sizes. &lt;/p&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;h4 id=&quot;relation&quot;&gt;Relation&lt;/h4&gt;
-
-&lt;p&gt;```
-+—————-+—————-+—————+——————————-+
+&lt;h4&gt;Relation&lt;/h4&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;+----------------+----------------+---------------+-------------------------------+
 | Density Bucket | Screen Density | Physical Size | Pixel Size                    | 
-+—————-+—————-+—————+——————————-+
++----------------+----------------+---------------+-------------------------------+
 | ldpi           | 120 dpi        | 0.5 x 0.5 in  | 0.5 in * 120 dpi = 60x60 px   | 
-+—————-+—————-+—————+——————————-+
++----------------+----------------+---------------+-------------------------------+
 | mdpi           | 160 dpi        | 0.5 x 0.5 in  | 0.5 in * 160 dpi = 80x80 px   | 
-+—————-+—————-+—————+——————————-+
++----------------+----------------+---------------+-------------------------------+
 | hdpi           | 240 dpi        | 0.5 x 0.5 in  | 0.5 in * 240 dpi = 120x120 px | 
-+—————-+—————-+—————+——————————-+
++----------------+----------------+---------------+-------------------------------+
 | xhdpi          | 320 dpi        | 0.5 x 0.5 in  | 0.5 in * 320 dpi = 160x160 px | 
-+—————-+—————-+—————+——————————-+
++----------------+----------------+---------------+-------------------------------+
 | xxhdpi         | 480 dpi        | 0.5 x 0.5 in  | 0.5 in * 480 dpi = 240x240 px | 
-+—————-+—————-+—————+——————————-+
++----------------+----------------+---------------+-------------------------------+
 | xxxhdpi        | 640 dpi        | 0.5 x 0.5 in  | 0.5 in * 640 dpi = 320x320 px | 
-+—————-+—————-+—————+——————————-+&lt;/p&gt;
++----------------+----------------+---------------+-------------------------------+
 
-&lt;p&gt;+———+————-+—————+————-+——————–+
++---------+-------------+---------------+-------------+--------------------+
 | Unit    | Description | Units Per     | Density     | Same Physical Size | 
 |         |             | Physical Inch | Independent | On Every Screen    | 
-+———+————-+—————+————-+——————–+
++---------+-------------+---------------+-------------+--------------------+
 | px      | Pixels      | Varies        | No          | No                 | 
-+———+————-+—————+————-+——————–+
++---------+-------------+---------------+-------------+--------------------+
 | in      | Inches      | 1             | Yes         | Yes                | 
-+———+————-+—————+————-+——————–+
++---------+-------------+---------------+-------------+--------------------+
 | mm      | Millimeters | 25.4          | Yes         | Yes                | 
-+———+————-+—————+————-+——————–+
++---------+-------------+---------------+-------------+--------------------+
 | pt      | Points      | 72            | Yes         | Yes                | 
-+———+————-+—————+————-+——————–+
++---------+-------------+---------------+-------------+--------------------+
 | dp      | Density     | ~160          | Yes         | No                 | 
 |         | Independent |               |             |                    | 
 |         | Pixels      |               |             |                    | 
-+———+————-+—————+————-+——————–+
++---------+-------------+---------------+-------------+--------------------+
 | sp      | Scale       | ~160          | Yes         | No                 | 
 |         | Independent |               |             |                    | 
 |         | Pixels      |               |             |                    | 
-+———+————-+—————+————-+——————–+
-```&lt;/p&gt;
-
-&lt;h3 id=&quot;density-independence&quot;&gt;Density Independence&lt;/h3&gt;
++---------+-------------+---------------+-------------+--------------------+
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h3&gt;Density Independence&lt;/h3&gt;
 
 &lt;p&gt;&lt;strong&gt;Screen Density&lt;/strong&gt;&lt;/p&gt;
 
@@ -391,21 +339,15 @@ aboveViewPageDownAnim.start(); } ```
 &lt;p&gt;&lt;strong&gt;Density Bucket&lt;/strong&gt;&lt;/p&gt;
 
 &lt;blockquote&gt;
-  &lt;p&gt;There is a myriad of Android devices with varying screen densities, which can range from 100 dpi to over 480 dpi. In order to optimize images for all these screen densities, images need to be created at different resolutions. However, trying to optimize every image resource for every possible density would be incredibly tedious, cause app sizes to be enormous, and simply is not a feasible solution. As a compromise, Android uses density “buckets” that are used to group devices together within certain screen density ranges. This way, apps are only required to optimize images for each density bucket, instead of every possible density. This keeps the workload reasonable for designers and developer, and also prevents the application size from ballooning. Of course, there is a tradeoff, leading to variance in the physical rendered size of images depending on device density.&lt;/p&gt;
+&lt;p&gt;There is a myriad of Android devices with varying screen densities, which can range from 100 dpi to over 480 dpi. In order to optimize images for all these screen densities, images need to be created at different resolutions. However, trying to optimize every image resource for every possible density would be incredibly tedious, cause app sizes to be enormous, and simply is not a feasible solution. As a compromise, Android uses density &amp;quot;buckets&amp;quot; that are used to group devices together within certain screen density ranges. This way, apps are only required to optimize images for each density bucket, instead of every possible density. This keeps the workload reasonable for designers and developer, and also prevents the application size from ballooning. Of course, there is a tradeoff, leading to variance in the physical rendered size of images depending on device density.&lt;/p&gt;
 &lt;/blockquote&gt;
 
-&lt;h3 id=&quot;using-tips&quot;&gt;Using Tips:&lt;/h3&gt;
+&lt;h3&gt;Using Tips:&lt;/h3&gt;
 
 &lt;ul&gt;
-  &lt;li&gt;
-    &lt;p&gt;Try to use dp in xml file as much as possiable.&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;Use sp for font size.&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;Don’t use px as much as possiable.&lt;/p&gt;
-  &lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Try to use dp in xml file as much as possiable.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Use sp for font size.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Don&amp;#39;t use px as much as possiable.&lt;/p&gt;&lt;/li&gt;
 &lt;/ul&gt;
 </description>
         <pubDate>Fri, 07 Apr 2017 20:30:12 +0800</pubDate>
@@ -415,113 +357,91 @@ aboveViewPageDownAnim.start(); } ```
     
       <item>
         <title>Building My Own Mac Working Environment</title>
-        <description>&lt;p&gt;In recent 2 years, I have switched my own working environment from Windows to Ubuntu and Mac. For the reason that I switched C/C++ development for Windows to Java development for Android. But I still prefer C++, so I won’t give up C/C++ programming. In this article I will write down detail steps that how I build working environment. This working environment on Mac is a general working environment, not just for Android development but also C/C++ development. Let’s start!&lt;/p&gt;
+        <description>&lt;p&gt;In recent 2 years, I have switched my own working environment from Windows to Ubuntu and Mac. For the reason that I switched C/C++ development for Windows to Java development for Android. But I still prefer C++, so I won&amp;#39;t give up C/C++ programming. In this article I will write down detail steps that how I build working environment. This working environment on Mac is a general working environment, not just for Android development but also C/C++ development. Let&amp;#39;s start!&lt;/p&gt;
 
 &lt;p&gt;First, I would install some universal tools.&lt;/p&gt;
 
-&lt;h3 id=&quot;universal-tools&quot;&gt;Universal Tools&lt;/h3&gt;
+&lt;h3&gt;Universal Tools&lt;/h3&gt;
 
-&lt;h4 id=&quot;install-and-configure-oh-my-zsh&quot;&gt;Install and configure Oh my zsh&lt;/h4&gt;
+&lt;h4&gt;Install and configure Oh my zsh&lt;/h4&gt;
 
 &lt;ul&gt;
-  &lt;li&gt;Install via curl or wget&lt;/li&gt;
+&lt;li&gt;Install via curl or wget&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;p&gt;&lt;strong&gt;via curl&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;code&gt;
-sh -c &quot;$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)&quot;
-&lt;/code&gt;
-&lt;strong&gt;via wget&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;code&gt;
-sh -c &quot;$(wget https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh -O -)&quot;
-&lt;/code&gt; &lt;/p&gt;
-
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;sh -c &amp;quot;$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;&lt;strong&gt;via wget&lt;/strong&gt;&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;sh -c &amp;quot;$(wget https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh -O -)&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;ul&gt;
-  &lt;li&gt;Configure my prefer feature via edit .zshrc file&lt;/li&gt;
+&lt;li&gt;Configure my prefer feature via edit .zshrc file&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;p&gt;Add this line to .zshrc file
 &lt;code&gt;
 plugins=(git vi-mode adb)
-&lt;/code&gt;
-#### Install and configure iTerm&lt;/p&gt;
+&lt;/code&gt;&lt;/p&gt;
+
+&lt;h4&gt;Install and configure iTerm&lt;/h4&gt;
 
 &lt;ul&gt;
-  &lt;li&gt;
-    &lt;p&gt;Install lastest release dmg&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;Clone solarized git project from github and import color scheme for iTerm2
+&lt;li&gt;&lt;p&gt;Install lastest release dmg&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Clone solarized git project from github and import color scheme for iTerm2
 &lt;code&gt;
 git clone https://github.com/altercation/solarized.git
 cd iterm2-colors-solarized
 ./Solarized Dark.itermcolors
-&lt;/code&gt;
-#### Install userful command line tools&lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;Install brew - &lt;code&gt;ruby -e &quot;$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)&quot;&lt;/code&gt;&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;Install ctags - &lt;code&gt;brew install ctags&lt;/code&gt;&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;Install cscope - &lt;code&gt;brew install cscope&lt;/code&gt;&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;Install ag - &lt;code&gt;brew install ag&lt;/code&gt;&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;Install grip - &lt;code&gt;brew install grip&lt;/code&gt;&lt;/li&gt;
+&lt;/code&gt;&lt;/p&gt;
+
+&lt;h4&gt;Install userful command line tools&lt;/h4&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Install brew - &lt;code&gt;ruby -e &amp;quot;$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)&amp;quot;&lt;/code&gt;&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Install ctags - &lt;code&gt;brew install ctags&lt;/code&gt;&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Install cscope - &lt;code&gt;brew install cscope&lt;/code&gt;&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Install ag - &lt;code&gt;brew install ag&lt;/code&gt;&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Install grip - &lt;code&gt;brew install grip&lt;/code&gt;&lt;/p&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;h4 id=&quot;install-and-configure-vim&quot;&gt;Install and configure Vim&lt;/h4&gt;
+&lt;h4&gt;Install and configure Vim&lt;/h4&gt;
 
 &lt;ul&gt;
-  &lt;li&gt;Install vim via source
+&lt;li&gt;Install vim via source
 &lt;code&gt;
 git clone https://github.com/vim/vim.git
 cd vim 
-./configure --with-features=huge --enable-gui=gnome2 --enable-pythoninterp=yes --enable-cscope --enable-gui=auto \ --enable-gtk2-check --enable-gnome-check \ --enable-fail-if-missing --enable-multibyte --enable-fontset \ --with-x --with-compiledby=&quot;Tao He&quot;
+./configure --with-features=huge --enable-gui=gnome2 --enable-pythoninterp=yes --enable-cscope --enable-gui=auto \ --enable-gtk2-check --enable-gnome-check \ --enable-fail-if-missing --enable-multibyte --enable-fontset \ --with-x --with-compiledby=&amp;quot;Tao He&amp;quot;
 make
 sudo make install
 &lt;/code&gt;&lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;Configure vim
+&lt;li&gt;&lt;p&gt;Configure vim
 &lt;code&gt;
 cd ~
 git clone https://github.com/longlinht/vimrc.git ~/.vim_runtime
 sh ~/.vim_runtime/install_awesome_vimrc.sh
-&lt;/code&gt;
-### Utilities&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;Install Alfred&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;Install Dropbox&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;Install NutsCloud&lt;/li&gt;
+&lt;/code&gt;&lt;/p&gt;
+
+&lt;h3&gt;Utilities&lt;/h3&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Install Alfred&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Install Dropbox&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Install NutsCloud&lt;/p&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;h3 id=&quot;install-ide&quot;&gt;Install IDE&lt;/h3&gt;
+&lt;h3&gt;Install IDE&lt;/h3&gt;
 
-&lt;h4 id=&quot;install-and-configure-android-studio&quot;&gt;Install and configure Android Studio&lt;/h4&gt;
+&lt;h4&gt;Install and configure Android Studio&lt;/h4&gt;
 
 &lt;ul&gt;
-  &lt;li&gt;
-    &lt;p&gt;Install Android Studio via dmg&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;Install and configure ideavim plugin 
+&lt;li&gt;&lt;p&gt;Install Android Studio via dmg&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Install and configure ideavim plugin 
 &lt;code&gt;
 Install ideavim in Android Studio
 git clone https://github.com/longlinht/VimForIDEs.git
 In Android Studio -&amp;gt; File -&amp;gt;Import Settings -&amp;gt; Choose VimForIDEs/ideavim/monokai/settings.jar
-&lt;/code&gt;&lt;/p&gt;
-  &lt;/li&gt;
+&lt;/code&gt;&lt;/p&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;There are some userful application I have installed, but I don’t want to list them becasue their easy installation. Until now, I work comfortably in this woking environment. Maybe I will develop a script to automate this process in the future. If I make it done, I would update this article and supply this script.&lt;/p&gt;
+&lt;p&gt;There are some userful application I have installed, but I don&amp;#39;t want to list them becasue their easy installation. Until now, I work comfortably in this woking environment. Maybe I will develop a script to automate this process in the future. If I make it done, I would update this article and supply this script.&lt;/p&gt;
 </description>
         <pubDate>Sun, 02 Apr 2017 06:30:12 +0800</pubDate>
         <link>http://longlinht.github.io//building-my-own-mac-working-environment</link>
@@ -530,30 +450,25 @@ In Android Studio -&amp;gt; File -&amp;gt;Import Settings -&amp;gt; Choose VimFo
     
       <item>
         <title>Java References</title>
-        <description>&lt;p&gt;Before JDK 1.2, if a object isn’t referenced by any variable, it can’t be used any more.Since JDK 1.2, Java has four reference types.In order from strongest to weakest these references are: Strong, Soft, Weak, Phantom. &lt;/p&gt;
+        <description>&lt;p&gt;Before JDK 1.2, if a object isn&amp;#39;t referenced by any variable, it can&amp;#39;t be used any more.Since JDK 1.2, Java has four reference types.In order from strongest to weakest these references are: Strong, Soft, Weak, Phantom. &lt;/p&gt;
 
-&lt;h4 id=&quot;strong-reference&quot;&gt;Strong reference&lt;/h4&gt;
+&lt;h4&gt;Strong reference&lt;/h4&gt;
 
 &lt;p&gt;Below code is regular object reference:&lt;/p&gt;
-
-&lt;p&gt;&lt;code&gt;java
-Sample sample = new Sample();
-&lt;/code&gt;&lt;/p&gt;
-
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-java&quot; data-lang=&quot;java&quot;&gt;&lt;span class=&quot;n&quot;&gt;Sample&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;sample&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;Sample&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;p&gt;The variable &lt;code&gt;sample&lt;/code&gt; holds a strong reference to a Sample object. Before you stop reading there is a point to this: objects that are reachable through any chain of strong references are not eligible for garbage collection. Even JVM throw &lt;code&gt;OutOfMemoryError&lt;/code&gt; to terminate the program, it will not to reclaim the memory that strong reference hold.&lt;/p&gt;
 
-&lt;h4 id=&quot;soft-reference&quot;&gt;Soft reference&lt;/h4&gt;
+&lt;h4&gt;Soft reference&lt;/h4&gt;
 
 &lt;p&gt;Soft references are cleared at the discretion of the garbage collector in response to memory demand. The virtual machine guarantees that all soft references to softly-reachable objects will have been cleared before it would ever throw an &lt;code&gt;OutOfMemoryError&lt;/code&gt;.&lt;/p&gt;
 
-&lt;h4 id=&quot;weak-reference&quot;&gt;Weak reference&lt;/h4&gt;
+&lt;h4&gt;Weak reference&lt;/h4&gt;
 
 &lt;p&gt;This code snippets is regular weak reference:&lt;/p&gt;
-
-&lt;p&gt;&lt;code&gt;java
-WeakReference&amp;lt;Cacheable&amp;gt; weakData = new WeakReference&amp;lt;Cacheable&amp;gt;(data);
-&lt;/code&gt;
-To access data call weakData.get(). This call to get may return &lt;code&gt;null&lt;/code&gt; if the weak reference was garbage collected: you must check the returned value to avoid &lt;code&gt;NullPointerException&lt;/code&gt;s.&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-java&quot; data-lang=&quot;java&quot;&gt;&lt;span class=&quot;n&quot;&gt;WeakReference&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Cacheable&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;weakData&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;WeakReference&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Cacheable&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;data&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;To access data call weakData.get(). This call to get may return &lt;code&gt;null&lt;/code&gt; if the weak reference was garbage collected: you must check the returned value to avoid &lt;code&gt;NullPointerException&lt;/code&gt;s.&lt;/p&gt;
 
 &lt;p&gt;An object that is identified as only weakly reachable will be collected at the next GC cycle.&lt;/p&gt;
 
@@ -562,30 +477,19 @@ To access data call weakData.get(). This call to get may return &lt;code&gt;null
 &lt;p&gt;The difference between &lt;code&gt;SoftReference&lt;/code&gt; and &lt;code&gt;WeakReference&lt;/code&gt; is:&lt;/p&gt;
 
 &lt;ul&gt;
-  &lt;li&gt;
-    &lt;p&gt;A soft reference is exactly like a weak reference, except that it is less eager to throw away the object to which it refers. &lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;An object which is only weakly reachable (the strongest references to it are WeakReferences) will be discarded at the next garbage collection cycle, but an object which is softly reachable will generally stick around for a while.&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;&lt;code&gt;SoftReferences&lt;/code&gt; aren’t required to behave any differently than &lt;code&gt;WeakReferences&lt;/code&gt;, but in practice softly reachable objects are generally retained as long as memory is in plentiful supply. This makes them an excellent foundation for a cache, such as the image cache described above, since you can let the garbage collector worry about both how reachable the objects are (a strongly reachable object will never be removed from the cache) and how badly it needs the memory they are consuming.&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;Garbage collector uses algorithms to decide whether or not to reclaim a softly reachable object, but always reclaims a weakly reachable object.&lt;/p&gt;
-  &lt;/li&gt;
+&lt;li&gt;&lt;p&gt;A soft reference is exactly like a weak reference, except that it is less eager to throw away the object to which it refers. &lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;An object which is only weakly reachable (the strongest references to it are WeakReferences) will be discarded at the next garbage collection cycle, but an object which is softly reachable will generally stick around for a while.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;code&gt;SoftReferences&lt;/code&gt; aren&amp;#39;t required to behave any differently than &lt;code&gt;WeakReferences&lt;/code&gt;, but in practice softly reachable objects are generally retained as long as memory is in plentiful supply. This makes them an excellent foundation for a cache, such as the image cache described above, since you can let the garbage collector worry about both how reachable the objects are (a strongly reachable object will never be removed from the cache) and how badly it needs the memory they are consuming.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Garbage collector uses algorithms to decide whether or not to reclaim a softly reachable object, but always reclaims a weakly reachable object.&lt;/p&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;h4 id=&quot;phantom-reference&quot;&gt;Phantom reference&lt;/h4&gt;
+&lt;h4&gt;Phantom reference&lt;/h4&gt;
 
 &lt;p&gt;Phantom references are the most tenuous of all reference types: calling get will always return null.
 When you construct a phantom reference you must always pass in a &lt;code&gt;ReferenceQueue&lt;/code&gt;. &lt;/p&gt;
-
-&lt;p&gt;&lt;code&gt;java
-ReferenceQueue queue = new ReferenceQueue ();
-PhantomReference pr = new PhantomReference (object, queue);
-&lt;/code&gt;&lt;/p&gt;
-
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-java&quot; data-lang=&quot;java&quot;&gt;&lt;span class=&quot;n&quot;&gt;ReferenceQueue&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;queue&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;ReferenceQueue&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;PhantomReference&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;pr&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;PhantomReference&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;object&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;queue&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;p&gt;This indicates that you can use a phantom reference to see when your object is GC’d. The phantom reference is enqueued after it has been physically removed from memory — as opposed to weak references which are enqueued before they’re finalized or GC’d.&lt;/p&gt;
 </description>
         <pubDate>Wed, 10 Aug 2016 00:00:00 +0800</pubDate>
@@ -595,111 +499,68 @@ PhantomReference pr = new PhantomReference (object, queue);
     
       <item>
         <title>Android Thread Related Stuff</title>
-        <description>&lt;p&gt;It’s widely known that it’s illegal to update UI components directly from threads other than main thread in android. This a rule in Android world, we can’t violate it. But, so many situations we need 
+        <description>&lt;p&gt;It&amp;#39;s widely known that it&amp;#39;s illegal to update UI components directly from threads other than main thread in android. This a rule in Android world, we can&amp;#39;t violate it. But, so many situations we need 
 update UI when we finish something in separated thread. This is a basic problem, it will refer more important concepts related thread.&lt;/p&gt;
 
-&lt;h4 id=&quot;looper&quot;&gt;&lt;code&gt;Looper&lt;/code&gt;&lt;/h4&gt;
+&lt;h4&gt;&lt;code&gt;Looper&lt;/code&gt;&lt;/h4&gt;
 
 &lt;ul&gt;
-  &lt;li&gt;
-    &lt;p&gt;Class used to run a message loop for a thread.&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;The &lt;code&gt;Looper&lt;/code&gt; class maintains a synchronized &lt;code&gt;MessageQueue&lt;/code&gt;, which contains a list messages.It reads and processes items from a &lt;code&gt;MessageQueue&lt;/code&gt;.&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;Threads by default do not have a message loop associated with them, to create one, call &lt;code&gt;prepare()&lt;/code&gt; in the thread that is to run the loop, and then &lt;code&gt;loop()&lt;/code&gt; to have it process messages until the loop is stopped.&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;It’s associated with the thread within which the &lt;code&gt;Looper&lt;/code&gt; is created. This association is kept forever and can’t be broken nor changed. Also note that a thread can’t be associated with more than one Looper. &lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;The &lt;code&gt;Looper&lt;/code&gt; class is usually used in conjunction with a &lt;code&gt;HandlerThread&lt;/code&gt; (a subclass of Thread).&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;There are 2 methods to terminate a Looper:&lt;/p&gt;
+&lt;li&gt;&lt;p&gt;Class used to run a message loop for a thread.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;The &lt;code&gt;Looper&lt;/code&gt; class maintains a synchronized &lt;code&gt;MessageQueue&lt;/code&gt;, which contains a list messages.It reads and processes items from a &lt;code&gt;MessageQueue&lt;/code&gt;.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Threads by default do not have a message loop associated with them, to create one, call &lt;code&gt;prepare()&lt;/code&gt; in the thread that is to run the loop, and then &lt;code&gt;loop()&lt;/code&gt; to have it process messages until the loop is stopped.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;It&amp;#39;s associated with the thread within which the &lt;code&gt;Looper&lt;/code&gt; is created. This association is kept forever and can&amp;#39;t be broken nor changed. Also note that a thread can&amp;#39;t be associated with more than one Looper. &lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;The &lt;code&gt;Looper&lt;/code&gt; class is usually used in conjunction with a &lt;code&gt;HandlerThread&lt;/code&gt; (a subclass of Thread).&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;There are 2 methods to terminate a Looper:&lt;/p&gt;
 
-    &lt;ul&gt;
-      &lt;li&gt;
-        &lt;p&gt;Looper.quit()&lt;/p&gt;
-      &lt;/li&gt;
-      &lt;li&gt;
-        &lt;p&gt;Looper.quitSafely() &lt;/p&gt;
-      &lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;Most interaction with a message loop is through the &lt;code&gt;Handler&lt;/code&gt; class.&lt;/p&gt;
-  &lt;/li&gt;
+&lt;ul&gt;
+&lt;li&gt;Looper.quit()&lt;/li&gt;
+&lt;li&gt;Looper.quitSafely() &lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Most interaction with a message loop is through the &lt;code&gt;Handler&lt;/code&gt; class.&lt;/p&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;h4 id=&quot;handler&quot;&gt;&lt;code&gt;Handler&lt;/code&gt;&lt;/h4&gt;
+&lt;h4&gt;&lt;code&gt;Handler&lt;/code&gt;&lt;/h4&gt;
 
 &lt;ul&gt;
-  &lt;li&gt;
-    &lt;p&gt;Allow you send and process &lt;code&gt;Message&lt;/code&gt; and &lt;code&gt;Runnable&lt;/code&gt; objects associated with a thread’s &lt;code&gt;MessageQueue&lt;/code&gt;. &lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;Each &lt;code&gt;Handler&lt;/code&gt; instance is associated with a single thread and that thread’s message queue. Multiple Handler instances can be bound to the same thread.&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;It is bound to the thread / message queue of the thread that is creating it.&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;There are two main uses for a Handler: &lt;/p&gt;
+&lt;li&gt;&lt;p&gt;Allow you send and process &lt;code&gt;Message&lt;/code&gt; and &lt;code&gt;Runnable&lt;/code&gt; objects associated with a thread&amp;#39;s &lt;code&gt;MessageQueue&lt;/code&gt;. &lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Each &lt;code&gt;Handler&lt;/code&gt; instance is associated with a single thread and that thread&amp;#39;s message queue. Multiple Handler instances can be bound to the same thread.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;It is bound to the thread / message queue of the thread that is creating it.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;There are two main uses for a Handler: &lt;/p&gt;
 
-    &lt;ul&gt;
-      &lt;li&gt;
-        &lt;p&gt;To schedule messages and runnables to be executed as some point in the future. &lt;/p&gt;
-      &lt;/li&gt;
-      &lt;li&gt;
-        &lt;p&gt;To enqueue an action to be performed on a different thread than your own.&lt;/p&gt;
-      &lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
+&lt;ul&gt;
+&lt;li&gt;To schedule messages and runnables to be executed as some point in the future. &lt;/li&gt;
+&lt;li&gt;To enqueue an action to be performed on a different thread than your own.&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;h4 id=&quot;message&quot;&gt;&lt;code&gt;Message&lt;/code&gt;&lt;/h4&gt;
+&lt;h4&gt;&lt;code&gt;Message&lt;/code&gt;&lt;/h4&gt;
 
 &lt;ul&gt;
-  &lt;li&gt;
-    &lt;p&gt;Defines a message containing a description and arbitrary data object that can be sent to a Handler. This object contains two extra int fields and an extra object field that allow you to not do allocations in many cases.&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;While the constructor of Message is public, the best way to get one of these is to call &lt;code&gt;Message.obtain()&lt;/code&gt; or one of the &lt;code&gt;Handler.obtainMessage()&lt;/code&gt; methods, which will pull them from a pool of recycled objects.&lt;/p&gt;
-  &lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Defines a message containing a description and arbitrary data object that can be sent to a Handler. This object contains two extra int fields and an extra object field that allow you to not do allocations in many cases.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;While the constructor of Message is public, the best way to get one of these is to call &lt;code&gt;Message.obtain()&lt;/code&gt; or one of the &lt;code&gt;Handler.obtainMessage()&lt;/code&gt; methods, which will pull them from a pool of recycled objects.&lt;/p&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;h4 id=&quot;handlerthread&quot;&gt;&lt;code&gt;HandlerThread&lt;/code&gt;&lt;/h4&gt;
+&lt;h4&gt;&lt;code&gt;HandlerThread&lt;/code&gt;&lt;/h4&gt;
 
 &lt;ul&gt;
-  &lt;li&gt;
-    &lt;p&gt;&lt;code&gt;HandlerThread&lt;/code&gt; is a handy class for starting a new thread that has a Looper.prepare(), Looper. &lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;You generally need a thread attached with a Looper when you want sequential execution of tasks without race conditions and keep a thread alive even after a particular task is completed so that it can be reused so that you don’t have to create new thread instances.&lt;/p&gt;
-  &lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;code&gt;HandlerThread&lt;/code&gt; is a handy class for starting a new thread that has a Looper.prepare(), Looper. &lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;You generally need a thread attached with a Looper when you want sequential execution of tasks without race conditions and keep a thread alive even after a particular task is completed so that it can be reused so that you don’t have to create new thread instances.&lt;/p&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;p&gt;Once a HandlerThread is started, it sets up queuing through a Looper and MessageQueue and waits for incoming messages to process:&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-java&quot; data-lang=&quot;java&quot;&gt;&lt;span class=&quot;n&quot;&gt;HandlerThread&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;handlerThread&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;HandlerThread&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;HandlerThread&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;handlerThread&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;start&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
 
-&lt;p&gt;```java&lt;/p&gt;
-
-&lt;p&gt;HandlerThread handlerThread = new HandlerThread(“HandlerThread”);
-handlerThread.start();&lt;/p&gt;
-
-&lt;p&gt;// Create a handler attached to the HandlerThread’s Looper
-mHandler = new Handler(handlerThread.getLooper()) {
-    @Override
-    public void handleMessage(Message msg) {
-        // Process messages here
-    }
-};
+&lt;span class=&quot;c1&quot;&gt;// Create a handler attached to the HandlerThread&amp;#39;s Looper&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;mHandler&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;Handler&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;handlerThread&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getLooper&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;())&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;nd&quot;&gt;@Override&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;handleMessage&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Message&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;msg&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;c1&quot;&gt;// Process messages here&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;};&lt;/span&gt;
  
-// Now send messages using mHandler.sendMessage()&lt;/p&gt;
-
-&lt;p&gt;```&lt;/p&gt;
-</description>
+&lt;span class=&quot;c1&quot;&gt;// Now send messages using mHandler.sendMessage()&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</description>
         <pubDate>Sat, 06 Aug 2016 03:00:00 +0800</pubDate>
         <link>http://longlinht.github.io//thread-looper-handler-in-android</link>
         <guid isPermaLink="true">http://longlinht.github.io//thread-looper-handler-in-android</guid>
@@ -709,95 +570,64 @@ mHandler = new Handler(handlerThread.getLooper()) {
         <title>Understanding Java Garbage Collection</title>
         <description>&lt;p&gt;&lt;strong&gt;stop-the-world&lt;/strong&gt; Stop-the-world means that the JVM is stopping the application from running to execute a GC. When stop-the-world occurs, every thread except for the threads needed for the GC will stop their tasks. The interrupted tasks will resume only after the GC task has completed. GC tuning often means reducing this stop-the-world time.&lt;/p&gt;
 
-&lt;h4 id=&quot;generational-garbage-collection&quot;&gt;Generational Garbage Collection&lt;/h4&gt;
+&lt;h4&gt;Generational Garbage Collection&lt;/h4&gt;
 
 &lt;p&gt;Java does not explicitly specify a memory and remove it in the program code.Maybe there is to way to remove the memory explicitly :&lt;/p&gt;
 
 &lt;ul&gt;
-  &lt;li&gt;
-    &lt;p&gt;Sets the relevant object to null&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;Use System.gc() method to remove the memory - will affect the system performance drastically&lt;/p&gt;
-  &lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Sets the relevant object to null&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Use System.gc() method to remove the memory - will affect the system performance drastically&lt;/p&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;p&gt;But nobody do that. GC responsible to finds the unnecessary objects to remove them. GC created based on the following two preconditions:&lt;/p&gt;
 
 &lt;ul&gt;
-  &lt;li&gt;
-    &lt;p&gt;Most objects soon become unreachable.&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;References from old objects to young objects only exist in small numbers.&lt;/p&gt;
-  &lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Most objects soon become unreachable.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;References from old objects to young objects only exist in small numbers.&lt;/p&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;h5 id=&quot;young-generation&quot;&gt;Young generation&lt;/h5&gt;
+&lt;h5&gt;Young generation&lt;/h5&gt;
 
-&lt;p&gt;Most of the newly created objects are located here. Since most objects soon become unreachable, many objects are created in the young generation, then disappear. When objects disappear from this area, we say a “minor GC” has occurred.&lt;/p&gt;
+&lt;p&gt;Most of the newly created objects are located here. Since most objects soon become unreachable, many objects are created in the young generation, then disappear. When objects disappear from this area, we say a &amp;quot;minor GC&amp;quot; has occurred.&lt;/p&gt;
 
-&lt;h5 id=&quot;old-generation&quot;&gt;Old generation&lt;/h5&gt;
+&lt;h5&gt;Old generation&lt;/h5&gt;
 
-&lt;p&gt;The objects that did not become unreachable and survived from the young generation are copied here. It is generally larger than the young generation. As it is bigger in size, the GC occurs less frequently than in the young generation. When objects disappear from the old generation, we say a “major GC” (or a “full GC”) has occurred.&lt;/p&gt;
+&lt;p&gt;The objects that did not become unreachable and survived from the young generation are copied here. It is generally larger than the young generation. As it is bigger in size, the GC occurs less frequently than in the young generation. When objects disappear from the old generation, we say a &amp;quot;major GC&amp;quot; (or a &amp;quot;full GC&amp;quot;) has occurred.&lt;/p&gt;
 
-&lt;h5 id=&quot;permanent-generation&quot;&gt;Permanent generation&lt;/h5&gt;
+&lt;h5&gt;Permanent generation&lt;/h5&gt;
 
 &lt;p&gt;It stores classes or interned character strings. So, this area is definitely not for objects that survived from the old generation to stay permanently. A GC may occur in this area. The GC that took place here is still counted as a major GC.&lt;/p&gt;
 
-&lt;h4 id=&quot;composition-of-the-young-generation&quot;&gt;Composition of the Young Generation&lt;/h4&gt;
+&lt;h4&gt;Composition of the Young Generation&lt;/h4&gt;
+
 &lt;p&gt;The young generation is divided into 3 spaces. &lt;/p&gt;
 
 &lt;ul&gt;
-  &lt;li&gt;
-    &lt;p&gt;One Eden space&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;Two Survivor spaces&lt;/p&gt;
-  &lt;/li&gt;
+&lt;li&gt;&lt;p&gt;One Eden space&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Two Survivor spaces&lt;/p&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;p&gt;There are 3 spaces in total, two of which are Survivor spaces. The order of execution process of each space is as below:&lt;/p&gt;
 
 &lt;ul&gt;
-  &lt;li&gt;
-    &lt;p&gt;The majority of newly created objects are located in the Eden space.&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;After one GC in the Eden space, the surviving objects are moved to one of the Survivor spaces. &lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;After a GC in the Eden space, the objects are piled up into the Survivor space, where other surviving objects already exist.&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;Once a Survivor space is full, surviving objects are moved to the other Survivor space. Then, the Survivor space that is full will be changed to a state where there is no data at all.&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;The objects that survived these steps that have been repeated a number of times are moved to the old generation.&lt;/p&gt;
-  &lt;/li&gt;
+&lt;li&gt;&lt;p&gt;The majority of newly created objects are located in the Eden space.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;After one GC in the Eden space, the surviving objects are moved to one of the Survivor spaces. &lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;After a GC in the Eden space, the objects are piled up into the Survivor space, where other surviving objects already exist.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Once a Survivor space is full, surviving objects are moved to the other Survivor space. Then, the Survivor space that is full will be changed to a state where there is no data at all.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;The objects that survived these steps that have been repeated a number of times are moved to the old generation.&lt;/p&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;h5 id=&quot;gc-for-the-old-generation&quot;&gt;GC for the Old Generation&lt;/h5&gt;
+&lt;h5&gt;GC for the Old Generation&lt;/h5&gt;
 
 &lt;p&gt;The old generation basically performs a GC when the data is full. The execution procedure varies by the GC type, so it would be easier to understand if you know different types of GC.
 According to JDK 7, there are 5 GC types.&lt;/p&gt;
 
 &lt;ul&gt;
-  &lt;li&gt;
-    &lt;p&gt;Serial GC&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;Parallel GC&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;Parallel Old GC (Parallel Compacting GC)&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;Concurrent Mark &amp;amp; Sweep GC (or “CMS”)&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;Garbage First (G1) GC&lt;/p&gt;
-  &lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Serial GC&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Parallel GC&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Parallel Old GC (Parallel Compacting GC)&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Concurrent Mark &amp;amp; Sweep GC (or &amp;quot;CMS&amp;quot;)&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Garbage First (G1) GC&lt;/p&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;p&gt;This article will not introduce 5 GCs, if you interested in, please google it.&lt;/p&gt;
@@ -809,504 +639,378 @@ According to JDK 7, there are 5 GC types.&lt;/p&gt;
     
       <item>
         <title>Android Binder Mechanism</title>
-        <description>&lt;h4 id=&quot;what-is-binder&quot;&gt;What is Binder&lt;/h4&gt;
+        <description>&lt;h4&gt;What is Binder&lt;/h4&gt;
 
 &lt;ul&gt;
-  &lt;li&gt;The Binder mechanism has started from a simple idea. &lt;/li&gt;
+&lt;li&gt;The Binder mechanism has started from a simple idea. &lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;blockquote&gt;
-  &lt;p&gt;“Let requests and responses be written in an area where all processes can share and let each process refer to the memory address.” &lt;/p&gt;
+&lt;p&gt;&amp;quot;Let requests and responses be written in an area where all processes can share and let each process refer to the memory address.&amp;quot; &lt;/p&gt;
 &lt;/blockquote&gt;
 
 &lt;ul&gt;
-  &lt;li&gt;
-    &lt;p&gt;Binder is a IPC mechanism.&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;Binder implementation is based on &lt;strong&gt;OpenBinder&lt;/strong&gt;.&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;Binder refers to a kernel memory which is shared between all processes to minimize the overhead caused by memory copy. &lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;It provides the Remote Procedure Call (RPC) framework written in C++ for high productivity.&lt;/p&gt;
-  &lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Binder is a IPC mechanism.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Binder implementation is based on &lt;strong&gt;OpenBinder&lt;/strong&gt;.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Binder refers to a kernel memory which is shared between all processes to minimize the overhead caused by memory copy. &lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;It provides the Remote Procedure Call (RPC) framework written in C++ for high productivity.&lt;/p&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;h4 id=&quot;why-need-binder&quot;&gt;Why need Binder&lt;/h4&gt;
+&lt;h4&gt;Why need Binder&lt;/h4&gt;
 
 &lt;ul&gt;
-  &lt;li&gt;
-    &lt;p&gt;Android need IPC mechanism because of its loosely coupled component design. Every application in Android is comprised of some components ,like Activity or Service, they maybe in same process or not. If they are in different process, they need communicate each other.&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;All of the default system functions of Android are provided as the &lt;strong&gt;server process&lt;/strong&gt; type. In other words, to use the functions such as &lt;code&gt;SurfaceFlinger&lt;/code&gt; or &lt;code&gt;AudioFlinger&lt;/code&gt;, a request should be made as a separate process that runs on the user mode. As all system services are provided as a &lt;strong&gt;server process&lt;/strong&gt;, a mechanism to send requests and responses to other processes is necessary. In Android it is called the Binder. Android uses functions provided by other processes through Binder.&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;Android is based on Linux, Linux has a lot of IPC mechanism. But, Android didn’t adopted it. Maybe because of performance and low memory of Android device.&lt;/p&gt;
-  &lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Android need IPC mechanism because of its loosely coupled component design. Every application in Android is comprised of some components ,like Activity or Service, they maybe in same process or not. If they are in different process, they need communicate each other.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;All of the default system functions of Android are provided as the &lt;strong&gt;server process&lt;/strong&gt; type. In other words, to use the functions such as &lt;code&gt;SurfaceFlinger&lt;/code&gt; or &lt;code&gt;AudioFlinger&lt;/code&gt;, a request should be made as a separate process that runs on the user mode. As all system services are provided as a &lt;strong&gt;server process&lt;/strong&gt;, a mechanism to send requests and responses to other processes is necessary. In Android it is called the Binder. Android uses functions provided by other processes through Binder.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Android is based on Linux, Linux has a lot of IPC mechanism. But, Android didn&amp;#39;t adopted it. Maybe because of performance and low memory of Android device.&lt;/p&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;h4 id=&quot;the-benefits-of-using-binder-mechanism&quot;&gt;The Benefits of Using Binder Mechanism&lt;/h4&gt;
+&lt;h4&gt;The Benefits of Using Binder Mechanism&lt;/h4&gt;
 
 &lt;ul&gt;
-  &lt;li&gt;
-    &lt;p&gt;Easy to expand or remove functions: It is easy to add a new system service or remove an existing function.&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;Easy to port: Porting to a new processor requires few changes. A toolchain for porting is provided.&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;Easy to test: Tests are limited by the component unit, so it is not necessary to test the entire services, and more strict tests are available.&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;Support for distribution system: Process communication is based on the Binder, so it guarantees transparency in location between components.&lt;/p&gt;
-  &lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Easy to expand or remove functions: It is easy to add a new system service or remove an existing function.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Easy to port: Porting to a new processor requires few changes. A toolchain for porting is provided.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Easy to test: Tests are limited by the component unit, so it is not necessary to test the entire services, and more strict tests are available.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Support for distribution system: Process communication is based on the Binder, so it guarantees transparency in location between components.&lt;/p&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;h4 id=&quot;binder-driver&quot;&gt;Binder Driver&lt;/h4&gt;
+&lt;h4&gt;Binder Driver&lt;/h4&gt;
 
 &lt;p&gt;A Binder Driver is implemented to use the kernel space. The role of the Binder driver is to convert the memory address that each process has mapped with the memory address of the kernel space for reference.&lt;/p&gt;
 
-&lt;h4 id=&quot;understanding-binder-mechanism-through-media-service&quot;&gt;Understanding Binder Mechanism through Media Service&lt;/h4&gt;
+&lt;h4&gt;Understanding Binder Mechanism through Media Service&lt;/h4&gt;
 
-&lt;h5 id=&quot;servicemanager&quot;&gt;&lt;code&gt;ServiceManager&lt;/code&gt;&lt;/h5&gt;
+&lt;h5&gt;&lt;code&gt;ServiceManager&lt;/code&gt;&lt;/h5&gt;
 
 &lt;p&gt;ServiceManager is a system manager which manages all services in Android.&lt;/p&gt;
 
-&lt;h5 id=&quot;what-is-media-service&quot;&gt;What is Media Service&lt;/h5&gt;
+&lt;h5&gt;What is Media Service&lt;/h5&gt;
 
 &lt;ul&gt;
-  &lt;li&gt;
-    &lt;p&gt;Media Service is a general C++ application, is core of android media.&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;Media Service is a general service Android supplied.&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;Source code location: &lt;em&gt;frameworks/base/media/mediaserver/main_mediaserver.cpp&lt;/em&gt;&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;Entry point:&lt;/p&gt;
-  &lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Media Service is a general C++ application, is core of android media.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Media Service is a general service Android supplied.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Source code location: &lt;em&gt;frameworks/base/media/mediaserver/main_mediaserver.cpp&lt;/em&gt;&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Entry point:&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-c++&quot; data-lang=&quot;c++&quot;&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;argc&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;char&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;**&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;argv&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;c1&quot;&gt;// Require a ServiceManager proxy&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;sp&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ProcessState&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;proc&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ProcessState&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;());&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;sp&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;IServiceManager&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;sm&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;defaultServiceManager&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;LOGI&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;ServiceManager: %p&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;sm&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;get&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;());&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;AudioFlinger&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;instantiate&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;MediaPlayerService&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;instantiate&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;CameraService&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;instantiate&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;AudioPolicyService&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;instantiate&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
+
+    &lt;span class=&quot;c1&quot;&gt;// Forever process messages sent from Binder.&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;ProcessState&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;startThreadPool&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;IPCThreadState&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;joinThreadPool&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;Media server service has four sub-module.&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;AudioFlinger&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;MediaPlayerService&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;CameraService&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;AudioPolicyService&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;```c++
-int main(int argc, char** argv)
-{
-    // Require a ServiceManager proxy
-    sp&lt;processstate&gt; proc(ProcessState::self());
-    sp&lt;iservicemanager&gt; sm = defaultServiceManager();
-    LOGI(&quot;ServiceManager: %p&quot;, sm.get());
-    AudioFlinger::instantiate();
-    MediaPlayerService::instantiate();
-    CameraService::instantiate();
-    AudioPolicyService::instantiate();&lt;/iservicemanager&gt;&lt;/processstate&gt;&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;// Forever process messages sent from Binder.
-ProcessState::self()-&amp;gt;startThreadPool();
-IPCThreadState::self()-&amp;gt;joinThreadPool(); } ``` * Media server service has four sub-module.
-&lt;/code&gt;&lt;/pre&gt;
+&lt;h5&gt;&lt;code&gt;ProcessState&lt;/code&gt;&lt;/h5&gt;
 
 &lt;ul&gt;
-  &lt;li&gt;
-    &lt;p&gt;&lt;code&gt;AudioFlinger&lt;/code&gt;&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;&lt;code&gt;MediaPlayerService&lt;/code&gt;&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;&lt;code&gt;CameraService&lt;/code&gt;&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;&lt;code&gt;AudioPolicyService&lt;/code&gt;&lt;/p&gt;
-  &lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Source code location: &lt;em&gt;frameworks/base/libs/binder/ProcessState.cpp&lt;/em&gt;&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Media Service first call &lt;code&gt;ProcessState::self()&lt;/code&gt;&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-c++&quot; data-lang=&quot;c++&quot;&gt;&lt;span class=&quot;n&quot;&gt;sp&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ProcessState&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ProcessState&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;gProcess&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;!=&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;NULL&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;gProcess&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+
+    &lt;span class=&quot;n&quot;&gt;AutoMutex&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;_l&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;gProcessMutex&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;gProcess&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;NULL&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;gProcess&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ProcessState&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;gProcess&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;ul&gt;
+&lt;li&gt;Then &lt;code&gt;ProcessState::self()&lt;/code&gt; call ProcessState constructor&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-c++&quot; data-lang=&quot;c++&quot;&gt;&lt;span class=&quot;n&quot;&gt;ProcessState&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ProcessState&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;mDriverFD&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;open_driver&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;())&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;mVMStart&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;MAP_FAILED&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;// Map the memory start address&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;mManagesContexts&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;false&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;mBinderContextCheckFunc&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;NULL&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;mBinderContextUserData&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;NULL&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;mThreadPoolStarted&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;false&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;mThreadPoolSeq&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;mDriverFD&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;c1&quot;&gt;// XXX Ideally, there should be a specific define for whether we&lt;/span&gt;
+        &lt;span class=&quot;c1&quot;&gt;// have mmap (or whether we could possibly have the kernel module&lt;/span&gt;
+        &lt;span class=&quot;c1&quot;&gt;// availabla).&lt;/span&gt;
+&lt;span class=&quot;cp&quot;&gt;#if !defined(HAVE_WIN32_IPC)&lt;/span&gt;
+        &lt;span class=&quot;c1&quot;&gt;// mmap the binder, providing a chunk of virtual address space to receive transactions.&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;mVMStart&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;mmap&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;BINDER_VM_SIZE&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;PROT_READ&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;MAP_PRIVATE&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;MAP_NORESERVE&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;mDriverFD&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;mVMStart&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;MAP_FAILED&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+            &lt;span class=&quot;c1&quot;&gt;// *sigh*&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;LOGE&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;Using /dev/binder failed: unable to mmap transaction memory.&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\n&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;close&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;mDriverFD&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;mDriverFD&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;cp&quot;&gt;#else&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;mDriverFD&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;cp&quot;&gt;#endif&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;mDriverFD&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;c1&quot;&gt;// Need to run without the driver, starting our own thread pool.&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;&lt;code&gt;open_driver()&lt;/code&gt; function&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Very important function call to open a virtual device for communication.&lt;/li&gt;
+&lt;li&gt;This functon will open this device &lt;strong&gt;/dev/binder&lt;/strong&gt;.&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;When &lt;code&gt;ProcessState::self()&lt;/code&gt; complete, it had do two important jobs:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Open the virtual device &lt;strong&gt;/dev/binder&lt;/strong&gt;, so there has been a channel to communicate with kernel.&lt;/li&gt;
+&lt;li&gt;Map &lt;strong&gt;/dev/binder&lt;/strong&gt; device&amp;#39;s fd to memory.&lt;br&gt;&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;h5 id=&quot;processstate&quot;&gt;&lt;code&gt;ProcessState&lt;/code&gt;&lt;/h5&gt;
+&lt;h5&gt;&lt;code&gt;defaultServiceManager()&lt;/code&gt;&lt;/h5&gt;
 
 &lt;ul&gt;
-  &lt;li&gt;
-    &lt;p&gt;Source code location: &lt;em&gt;frameworks/base/libs/binder/ProcessState.cpp&lt;/em&gt;&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;Media Service first call &lt;code&gt;ProcessState::self()&lt;/code&gt;&lt;/p&gt;
-  &lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Source code location: &lt;em&gt;frameworks/base/libs/binder/IServiceManager.cpp&lt;/em&gt;&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Trace the source code call path, finally find that this call &lt;code&gt;sp&amp;lt;IServiceManager&amp;gt; sm = defaultServiceManager()&lt;/code&gt; equals &lt;code&gt;gDefaultServiceManager = interface_cast&amp;lt;IServiceManager&amp;gt;(new BpBinder(0))&lt;/code&gt;.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;BpBinder&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Source code location: &lt;em&gt;frameworks/base/libs/binder/BpBinder.cpp&lt;/em&gt;&lt;/li&gt;
+&lt;li&gt;BpBinder constructor:&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-c++&quot; data-lang=&quot;c++&quot;&gt;&lt;span class=&quot;n&quot;&gt;BpBinder&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;BpBinder&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int32_t&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;handle&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;mHandle&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;handle&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;mAlive&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;mObitsSent&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;mObituaries&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;NULL&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;LOGV&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;Creating BpBinder %p handle %d&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\n&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;mHandle&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+
+    &lt;span class=&quot;n&quot;&gt;extendObjectLifetime&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;OBJECT_LIFETIME_WEAK&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;IPCThreadState&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;incWeakHandle&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;handle&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;What did &lt;code&gt;interface_cast&lt;/code&gt; do?&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;interface_cast&lt;/code&gt; defined in &lt;em&gt;/home/tao/android_source/frameworks/base/include/binder/IInterface.h&lt;/em&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;interface_cast&lt;/code&gt; defination&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-c++&quot; data-lang=&quot;c++&quot;&gt;&lt;span class=&quot;k&quot;&gt;template&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;typename&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;INTERFACE&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;kr&quot;&gt;inline&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;sp&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;INTERFACE&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;interface_cast&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;const&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;sp&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;IBinder&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&amp;amp;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;obj&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;INTERFACE&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;asInterface&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;obj&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;ul&gt;
+&lt;li&gt;So &lt;code&gt;gDefaultServiceManager = interface_cast&amp;lt;IServiceManager&amp;gt;(new BpBinder(0))&lt;/code&gt; statement call &lt;code&gt;interface_cast&lt;/code&gt; will equals:&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-c++&quot; data-lang=&quot;c++&quot;&gt;&lt;span class=&quot;kr&quot;&gt;inline&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;sp&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;IServiceManager&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;interface_cast&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;const&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;sp&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;IBinder&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&amp;amp;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;obj&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;IServiceManager&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;asInterface&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;obj&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;We need find clue in &lt;code&gt;IServiceManager&lt;/code&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Source code location: &lt;em&gt;frameworks/base/include/binder/IInterface.h&lt;/em&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;IServiceManager&lt;/code&gt; defination&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-c++&quot; data-lang=&quot;c++&quot;&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;IServiceManager&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;IInterface&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;public&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;DECLARE_META_INTERFACE&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ServiceManager&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+
+    &lt;span class=&quot;cm&quot;&gt;/**&lt;/span&gt;
+&lt;span class=&quot;cm&quot;&gt;     * Retrieve an existing service, blocking for a few seconds&lt;/span&gt;
+&lt;span class=&quot;cm&quot;&gt;     * if it doesn&amp;#39;t yet exist.&lt;/span&gt;
+&lt;span class=&quot;cm&quot;&gt;     */&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;virtual&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;sp&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;IBinder&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;         &lt;span class=&quot;n&quot;&gt;getService&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;const&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;String16&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;amp;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;const&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+
+    &lt;span class=&quot;cm&quot;&gt;/**&lt;/span&gt;
+&lt;span class=&quot;cm&quot;&gt;     * Retrieve an existing service, non-blocking.&lt;/span&gt;
+&lt;span class=&quot;cm&quot;&gt;     */&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;virtual&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;sp&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;IBinder&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;         &lt;span class=&quot;n&quot;&gt;checkService&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;const&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;String16&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;amp;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;const&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+
+    &lt;span class=&quot;cm&quot;&gt;/**&lt;/span&gt;
+&lt;span class=&quot;cm&quot;&gt;     * Register a service.&lt;/span&gt;
+&lt;span class=&quot;cm&quot;&gt;     */&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;virtual&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;status_t&lt;/span&gt;            &lt;span class=&quot;n&quot;&gt;addService&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;const&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;String16&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;amp;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+                                            &lt;span class=&quot;k&quot;&gt;const&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;sp&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;IBinder&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&amp;amp;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;service&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+
+    &lt;span class=&quot;cm&quot;&gt;/**&lt;/span&gt;
+&lt;span class=&quot;cm&quot;&gt;     * Return list of all existing services.&lt;/span&gt;
+&lt;span class=&quot;cm&quot;&gt;     */&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;virtual&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Vector&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;String16&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;    &lt;span class=&quot;n&quot;&gt;listServices&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+
+    &lt;span class=&quot;k&quot;&gt;enum&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;GET_SERVICE_TRANSACTION&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;IBinder&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;FIRST_CALL_TRANSACTION&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;CHECK_SERVICE_TRANSACTION&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;ADD_SERVICE_TRANSACTION&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;LIST_SERVICES_TRANSACTION&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;};&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;};&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;* We need trace this macro `DECLARE_META_INTERFACE(ServiceManager)` 
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-c++&quot; data-lang=&quot;c++&quot;&gt;&lt;span class=&quot;cp&quot;&gt;#define DECLARE_META_INTERFACE(INTERFACE)                             &lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;const&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;String16&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;descriptor&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;                                 
+    &lt;span class=&quot;k&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;sp&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;I&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;##&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;INTERFACE&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;asInterface&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;const&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;sp&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;IBinder&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&amp;amp;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;obj&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;      
+    &lt;span class=&quot;k&quot;&gt;virtual&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;const&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;String16&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;amp;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;getInterfaceDescriptor&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;const&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;           
+    &lt;span class=&quot;n&quot;&gt;I&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;##&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;INTERFACE&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;                                                   
+    &lt;span class=&quot;k&quot;&gt;virtual&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;~&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;I&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;##&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;INTERFACE&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;                                          
+
+
+&lt;span class=&quot;cp&quot;&gt;#define IMPLEMENT_META_INTERFACE(INTERFACE, NAME)                     &lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;const&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;String16&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;I&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;##&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;INTERFACE&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;descriptor&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;NAME&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;                    
+    &lt;span class=&quot;k&quot;&gt;const&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;String16&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;amp;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;I&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;##&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;INTERFACE&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;getInterfaceDescriptor&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;const&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;    
+        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;I&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;##&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;INTERFACE&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;descriptor&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;                              
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;                                                                 
+    &lt;span class=&quot;n&quot;&gt;sp&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;I&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;##&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;INTERFACE&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;I&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;##&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;INTERFACE&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;asInterface&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;const&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;sp&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;IBinder&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&amp;amp;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;obj&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;                                                                 
+        &lt;span class=&quot;n&quot;&gt;sp&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;I&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;##&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;INTERFACE&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;intr&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;                                        
+        &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;obj&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;!=&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;NULL&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;                                            
+            &lt;span class=&quot;n&quot;&gt;intr&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;static_cast&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;I&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;##&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;INTERFACE&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&amp;gt;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;                        
+                &lt;span class=&quot;n&quot;&gt;obj&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;queryLocalInterface&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;                             
+                        &lt;span class=&quot;n&quot;&gt;I&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;##&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;INTERFACE&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;descriptor&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;get&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;());&lt;/span&gt;             
+            &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;intr&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;NULL&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;                                       
+                &lt;span class=&quot;n&quot;&gt;intr&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Bp&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;##&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;INTERFACE&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;obj&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;                        
+            &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;                                                         
+        &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;                                                             
+        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;intr&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;                                                  
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;                                                                 
+    &lt;span class=&quot;n&quot;&gt;I&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;##&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;INTERFACE&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;I&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;##&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;INTERFACE&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;                                  
+    &lt;span class=&quot;n&quot;&gt;I&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;##&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;INTERFACE&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::~&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;I&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;##&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;INTERFACE&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;                                 
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;ul&gt;
+&lt;li&gt;Finally, we find that &lt;code&gt;interface_cast&amp;lt;IServiceManager&amp;gt;(new BpBinder(0))&lt;/code&gt; statement actually return a &lt;code&gt;BpServiceManager&lt;/code&gt; object. It means &lt;code&gt;sp&amp;lt;IServiceManager&amp;gt; sm = defaultServiceManager()&lt;/code&gt; acquired a &lt;code&gt;BpServiceManager&lt;/code&gt; object.&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;```c++
-sp&lt;processstate&gt; ProcessState::self()
-{
-    if (gProcess != NULL) return gProcess;&lt;/processstate&gt;&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;AutoMutex _l(gProcessMutex);
-if (gProcess == NULL) gProcess = new ProcessState;
-return gProcess; } ```
-&lt;/code&gt;&lt;/pre&gt;
+&lt;h5&gt;&lt;code&gt;BpServiceManager&lt;/code&gt;&lt;/h5&gt;
 
 &lt;ul&gt;
-  &lt;li&gt;Then &lt;code&gt;ProcessState::self()&lt;/code&gt; call ProcessState constructor&lt;/li&gt;
+&lt;li&gt;Bp stands for Binder proxy, it means &lt;code&gt;BpServiceManager&lt;/code&gt; is &lt;code&gt;ServiceManager&lt;/code&gt;&amp;#39;s proxy to Binder.&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;&lt;code&gt;c++
-ProcessState::ProcessState()
-    : mDriverFD(open_driver())
-    , mVMStart(MAP_FAILED) // Map the memory start address
-    , mManagesContexts(false)
-    , mBinderContextCheckFunc(NULL)
-    , mBinderContextUserData(NULL)
-    , mThreadPoolStarted(false)
-    , mThreadPoolSeq(1)
-{
-    if (mDriverFD &amp;gt;= 0) {
-        // XXX Ideally, there should be a specific define for whether we
-        // have mmap (or whether we could possibly have the kernel module
-        // availabla).
-#if !defined(HAVE_WIN32_IPC)
-        // mmap the binder, providing a chunk of virtual address space to receive transactions.
-        mVMStart = mmap(0, BINDER_VM_SIZE, PROT_READ, MAP_PRIVATE | MAP_NORESERVE, mDriverFD, 0);
-        if (mVMStart == MAP_FAILED) {
-            // *sigh*
-            LOGE(&quot;Using /dev/binder failed: unable to mmap transaction memory.\n&quot;);
-            close(mDriverFD);
-            mDriverFD = -1;
-        }
-#else
-        mDriverFD = -1;
-#endif
-    }
-    if (mDriverFD &amp;lt; 0) {
-        // Need to run without the driver, starting our own thread pool.
-    }
-}
-&lt;/code&gt;&lt;/p&gt;
+&lt;h5&gt;&lt;code&gt;MediaPlayerService&lt;/code&gt;&lt;/h5&gt;
 
 &lt;ul&gt;
-  &lt;li&gt;
-    &lt;p&gt;&lt;code&gt;open_driver()&lt;/code&gt; function&lt;/p&gt;
-
-    &lt;ul&gt;
-      &lt;li&gt;
-        &lt;p&gt;Very important function call to open a virtual device for communication.&lt;/p&gt;
-      &lt;/li&gt;
-      &lt;li&gt;
-        &lt;p&gt;This functon will open this device &lt;strong&gt;/dev/binder&lt;/strong&gt;.&lt;/p&gt;
-      &lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;When &lt;code&gt;ProcessState::self()&lt;/code&gt; complete, it had do two important jobs:&lt;/p&gt;
-
-    &lt;ul&gt;
-      &lt;li&gt;Open the virtual device &lt;strong&gt;/dev/binder&lt;/strong&gt;, so there has been a channel to communicate with kernel.&lt;/li&gt;
-      &lt;li&gt;Map &lt;strong&gt;/dev/binder&lt;/strong&gt; device’s fd to memory.  &lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Source code location: &lt;em&gt;frameworks/base/media/libmediaplayerservice/MediaPlayerService.cpp&lt;/em&gt;&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Defination and instantiation &lt;/p&gt;&lt;/li&gt;
 &lt;/ul&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-c++&quot; data-lang=&quot;c++&quot;&gt;&lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;MediaPlayerService&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;instantiate&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;defaultServiceManager&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;addService&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;String16&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;media.player&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;MediaPlayerService&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;());&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
 
-&lt;h5 id=&quot;defaultservicemanager&quot;&gt;&lt;code&gt;defaultServiceManager()&lt;/code&gt;&lt;/h5&gt;
+&lt;span class=&quot;n&quot;&gt;MediaPlayerService&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;MediaPlayerService&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;LOGV&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;MediaPlayerService created&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;mNextConnId&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
 
+&lt;span class=&quot;n&quot;&gt;MediaPlayerService&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::~&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;MediaPlayerService&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;LOGV&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;MediaPlayerService destroyed&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;ul&gt;
-  &lt;li&gt;
-    &lt;p&gt;Source code location: &lt;em&gt;frameworks/base/libs/binder/IServiceManager.cpp&lt;/em&gt;&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;Trace the source code call path, finally find that this call &lt;code&gt;sp&amp;lt;IServiceManager&amp;gt; sm = defaultServiceManager()&lt;/code&gt; equals &lt;code&gt;gDefaultServiceManager = interface_cast&amp;lt;IServiceManager&amp;gt;(new BpBinder(0))&lt;/code&gt;.&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;BpBinder&lt;/p&gt;
-
-    &lt;ul&gt;
-      &lt;li&gt;
-        &lt;p&gt;Source code location: &lt;em&gt;frameworks/base/libs/binder/BpBinder.cpp&lt;/em&gt;&lt;/p&gt;
-      &lt;/li&gt;
-      &lt;li&gt;
-        &lt;p&gt;BpBinder constructor:&lt;/p&gt;
-      &lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;code&gt;MediaPlayerService&lt;/code&gt; derivatived from &lt;code&gt;BnMediaPlayerService&lt;/code&gt;&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Bn stands for Binder native.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Add &lt;code&gt;MediaPlayerService&lt;/code&gt; to &lt;code&gt;ServiceManager&lt;/code&gt;&lt;/p&gt;&lt;/li&gt;
 &lt;/ul&gt;
-
-&lt;p&gt;```c++
-BpBinder::BpBinder(int32_t handle)
-    : mHandle(handle)
-    , mAlive(1)
-    , mObitsSent(0)
-    , mObituaries(NULL)
-{
-    LOGV(“Creating BpBinder %p handle %d\n”, this, mHandle);&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;extendObjectLifetime(OBJECT_LIFETIME_WEAK);
-IPCThreadState::self()-&amp;gt;incWeakHandle(handle); } ```
-&lt;/code&gt;&lt;/pre&gt;
-
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-c++&quot; data-lang=&quot;c++&quot;&gt;&lt;span class=&quot;k&quot;&gt;virtual&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;status_t&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;addService&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;const&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;String16&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;amp;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;const&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;sp&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;IBinder&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&amp;amp;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;service&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;Parcel&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;data&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;reply&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;data&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;writeInterfaceToken&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;IServiceManager&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;getInterfaceDescriptor&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;());&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;data&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;writeString16&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;data&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;writeStrongBinder&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;service&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;c1&quot;&gt;// remote() return BpBinder object&lt;/span&gt;
+    &lt;span class=&quot;kt&quot;&gt;status_t&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;err&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;remote&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;transact&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ADD_SERVICE_TRANSACTION&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;data&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;amp;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;reply&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;err&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;NO_ERROR&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;?&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;reply&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;readInt32&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;err&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;ul&gt;
-  &lt;li&gt;
-    &lt;p&gt;What did &lt;code&gt;interface_cast&lt;/code&gt; do?&lt;/p&gt;
-
-    &lt;ul&gt;
-      &lt;li&gt;
-        &lt;p&gt;&lt;code&gt;interface_cast&lt;/code&gt; defined in &lt;em&gt;/home/tao/android_source/frameworks/base/include/binder/IInterface.h&lt;/em&gt;&lt;/p&gt;
-      &lt;/li&gt;
-      &lt;li&gt;
-        &lt;p&gt;&lt;code&gt;interface_cast&lt;/code&gt; defination&lt;/p&gt;
-      &lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
+&lt;li&gt;&lt;code&gt;remote()&lt;/code&gt; return BpBinder&lt;/li&gt;
 &lt;/ul&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-c++&quot; data-lang=&quot;c++&quot;&gt;&lt;span class=&quot;kt&quot;&gt;status_t&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;BpBinder&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;transact&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;uint32_t&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;code&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;const&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Parcel&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;amp;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;data&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Parcel&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;reply&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;uint32_t&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;flags&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;c1&quot;&gt;// Once a binder has died, it will never come back to life.&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;mAlive&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;kt&quot;&gt;status_t&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;status&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;IPCThreadState&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;transact&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;mHandle&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;code&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;data&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;reply&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;flags&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;status&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;DEAD_OBJECT&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;mAlive&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;status&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
 
-&lt;p&gt;&lt;code&gt;c++
-template&amp;lt;typename INTERFACE&amp;gt;
-inline sp&amp;lt;INTERFACE&amp;gt; interface_cast(const sp&amp;lt;IBinder&amp;gt;&amp;amp; obj)
-{
-    return INTERFACE::asInterface(obj);
-}
-&lt;/code&gt;
-   * So &lt;code&gt;gDefaultServiceManager = interface_cast&amp;lt;IServiceManager&amp;gt;(new BpBinder(0))&lt;/code&gt; statement call &lt;code&gt;interface_cast&lt;/code&gt; will equals:&lt;/p&gt;
-
-&lt;p&gt;&lt;code&gt;c++
-inline sp&amp;lt;IServiceManager&amp;gt; interface_cast(const sp&amp;lt;IBinder&amp;gt;&amp;amp; obj)
-{
-    return IServiceManager::asInterface(obj);
-}
-&lt;/code&gt;&lt;/p&gt;
+    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;DEAD_OBJECT&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;&lt;code&gt;IPCThreadState&lt;/code&gt; do with transaction, write add service command and wait for response.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;code&gt;BpServiceManager&lt;/code&gt; had sent a add service message, but who receive and process it?&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;code&gt;BnServiceManager&lt;/code&gt;? unfortunately it doesn&amp;#39;t exist. service do same job.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;service&lt;/p&gt;
 
 &lt;ul&gt;
-  &lt;li&gt;
-    &lt;p&gt;We need find clue in &lt;code&gt;IServiceManager&lt;/code&gt;&lt;/p&gt;
-
-    &lt;ul&gt;
-      &lt;li&gt;
-        &lt;p&gt;Source code location: &lt;em&gt;frameworks/base/include/binder/IInterface.h&lt;/em&gt;&lt;/p&gt;
-      &lt;/li&gt;
-      &lt;li&gt;
-        &lt;p&gt;&lt;code&gt;IServiceManager&lt;/code&gt; defination&lt;/p&gt;
-      &lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
+&lt;li&gt;service is a general c++ applcation.&lt;/li&gt;
+&lt;li&gt;Source code location: &lt;em&gt;frameworks/base/cmds/servicemanager/service_manager.c&lt;/em&gt;&lt;/li&gt;
+&lt;li&gt;Entry point:&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
 &lt;/ul&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-c++&quot; data-lang=&quot;c++&quot;&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;argc&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;char&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;**&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;argv&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;struct&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;binder_state&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;bs&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;c1&quot;&gt;//  BINDER_SERVICE_MANAGER is NULL, is a magic number&lt;/span&gt;
+    &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;svcmgr&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;BINDER_SERVICE_MANAGER&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
 
-&lt;p&gt;```c++
-class IServiceManager : public IInterface
-{
-public:
-    DECLARE_META_INTERFACE(ServiceManager);&lt;/p&gt;
+    &lt;span class=&quot;n&quot;&gt;bs&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;binder_open&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;128&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1024&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
 
-&lt;pre&gt;&lt;code&gt;/**
- * Retrieve an existing service, blocking for a few seconds
- * if it doesn&#39;t yet exist.
- */
-virtual sp&amp;lt;IBinder&amp;gt;         getService( const String16&amp;amp; name) const = 0;
+    &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;binder_become_context_manager&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;bs&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;LOGE&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;cannot become context manager (%s)&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\n&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;strerror&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;errno&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;));&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
 
-/**
- * Retrieve an existing service, non-blocking.
- */
-virtual sp&amp;lt;IBinder&amp;gt;         checkService( const String16&amp;amp; name) const = 0;
+    &lt;span class=&quot;n&quot;&gt;svcmgr_handle&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;svcmgr&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;binder_loop&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;bs&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;svcmgr_handler&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h4&gt;Conclusion&lt;/h4&gt;
 
-/**
- * Register a service.
- */
-virtual status_t            addService( const String16&amp;amp; name,
-                                        const sp&amp;lt;IBinder&amp;gt;&amp;amp; service) = 0;
-
-/**
- * Return list of all existing services.
- */
-virtual Vector&amp;lt;String16&amp;gt;    listServices() = 0;
-
-enum {
-    GET_SERVICE_TRANSACTION = IBinder::FIRST_CALL_TRANSACTION,
-    CHECK_SERVICE_TRANSACTION,
-    ADD_SERVICE_TRANSACTION,
-    LIST_SERVICES_TRANSACTION,
-}; }; ```     
-* We need trace this macro `DECLARE_META_INTERFACE(ServiceManager)` 
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;```c++
-#define DECLARE_META_INTERFACE(INTERFACE)                           &lt;br /&gt;
-    static const String16 descriptor;                               &lt;br /&gt;
-    static sp&amp;lt;I##INTERFACE&amp;gt; asInterface(const sp&lt;ibinder&gt;&amp;amp; obj);      
-    virtual const String16&amp;amp; getInterfaceDescriptor() const;           
-    I##INTERFACE();                                                   
-    virtual ~I##INTERFACE();                                          &lt;/ibinder&gt;&lt;/p&gt;
-
-&lt;h1 id=&quot;define-implementmetainterfaceinterface-name&quot;&gt;define IMPLEMENT_META_INTERFACE(INTERFACE, NAME)&lt;/h1&gt;
-&lt;pre&gt;&lt;code&gt;const String16 I##INTERFACE::descriptor(NAME);                    
-const String16&amp;amp; I##INTERFACE::getInterfaceDescriptor() const {    
-    return I##INTERFACE::descriptor;                              
-}                                                                 
-sp&amp;lt;I##INTERFACE&amp;gt; I##INTERFACE::asInterface(const sp&amp;lt;IBinder&amp;gt;&amp;amp; obj)
-{                                                                 
-    sp&amp;lt;I##INTERFACE&amp;gt; intr;                                        
-    if (obj != NULL) {                                            
-        intr = static_cast&amp;lt;I##INTERFACE*&amp;gt;(                        
-            obj-&amp;gt;queryLocalInterface(                             
-                    I##INTERFACE::descriptor).get());             
-        if (intr == NULL) {                                       
-            intr = new Bp##INTERFACE(obj);                        
-        }                                                         
-    }                                                             
-    return intr;                                                  
-}                                                                 
-I##INTERFACE::I##INTERFACE() { }                                  
-I##INTERFACE::~I##INTERFACE() { }                                  ```
-&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Through tracing so many codes, the MediaPlayerService example maybe reveal the Binder&amp;#39;s mysterious veil. We need write down some important conclusions:&lt;/p&gt;
 
 &lt;ul&gt;
-  &lt;li&gt;Finally, we find that &lt;code&gt;interface_cast&amp;lt;IServiceManager&amp;gt;(new BpBinder(0))&lt;/code&gt; statement actually return a &lt;code&gt;BpServiceManager&lt;/code&gt; object. It means &lt;code&gt;sp&amp;lt;IServiceManager&amp;gt; sm = defaultServiceManager()&lt;/code&gt; acquired a &lt;code&gt;BpServiceManager&lt;/code&gt; object.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h5 id=&quot;bpservicemanager&quot;&gt;&lt;code&gt;BpServiceManager&lt;/code&gt;&lt;/h5&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;Bp stands for Binder proxy, it means &lt;code&gt;BpServiceManager&lt;/code&gt; is &lt;code&gt;ServiceManager&lt;/code&gt;’s proxy to Binder.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h5 id=&quot;mediaplayerservice&quot;&gt;&lt;code&gt;MediaPlayerService&lt;/code&gt;&lt;/h5&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;
-    &lt;p&gt;Source code location: &lt;em&gt;frameworks/base/media/libmediaplayerservice/MediaPlayerService.cpp&lt;/em&gt;&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;Defination and instantiation &lt;/p&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;```c++
-void MediaPlayerService::instantiate() {
-    defaultServiceManager()-&amp;gt;addService(
-            String16(“media.player”), new MediaPlayerService());
-}&lt;/p&gt;
-
-&lt;p&gt;MediaPlayerService::MediaPlayerService()
-{
-    LOGV(“MediaPlayerService created”);
-    mNextConnId = 1;
-}&lt;/p&gt;
-
-&lt;p&gt;MediaPlayerService::~MediaPlayerService()
-{
-    LOGV(“MediaPlayerService destroyed”);
-}
-```&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;
-    &lt;p&gt;&lt;code&gt;MediaPlayerService&lt;/code&gt; derivatived from &lt;code&gt;BnMediaPlayerService&lt;/code&gt;&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;Bn stands for Binder native.&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;Add &lt;code&gt;MediaPlayerService&lt;/code&gt; to &lt;code&gt;ServiceManager&lt;/code&gt;&lt;/p&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;code&gt;c++
-virtual status_t addService(const String16&amp;amp; name, const sp&amp;lt;IBinder&amp;gt;&amp;amp; service)
-{
-    Parcel data, reply;
-    data.writeInterfaceToken(IServiceManager::getInterfaceDescriptor());
-    data.writeString16(name);
-    data.writeStrongBinder(service);
-    // remote() return BpBinder object
-    status_t err = remote()-&amp;gt;transact(ADD_SERVICE_TRANSACTION, data, &amp;amp;reply);
-    return err == NO_ERROR ? reply.readInt32() : err;
-}
-&lt;/code&gt;
-* &lt;code&gt;remote()&lt;/code&gt; return BpBinder&lt;/p&gt;
-
-&lt;p&gt;```c++
-status_t BpBinder::transact(uint32_t code, const Parcel&amp;amp; data, Parcel* reply, uint32_t flags)
-{
-    // Once a binder has died, it will never come back to life.
-    if (mAlive) {
-        status_t status = IPCThreadState::self()-&amp;gt;transact(
-            mHandle, code, data, reply, flags);
-        if (status == DEAD_OBJECT) mAlive = 0;
-        return status;
-    }&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;return DEAD_OBJECT; } ```
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;
-    &lt;p&gt;&lt;code&gt;IPCThreadState&lt;/code&gt; do with transaction, write add service command and wait for response.&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;&lt;code&gt;BpServiceManager&lt;/code&gt; had sent a add service message, but who receive and process it?&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;&lt;code&gt;BnServiceManager&lt;/code&gt;? unfortunately it doesn’t exist. service do same job.&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;service&lt;/p&gt;
-    &lt;ul&gt;
-      &lt;li&gt;
-        &lt;p&gt;service is a general c++ applcation.&lt;/p&gt;
-      &lt;/li&gt;
-      &lt;li&gt;
-        &lt;p&gt;Source code location: &lt;em&gt;frameworks/base/cmds/servicemanager/service_manager.c&lt;/em&gt;&lt;/p&gt;
-      &lt;/li&gt;
-      &lt;li&gt;
-        &lt;p&gt;Entry point:&lt;/p&gt;
-      &lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;```c++
-int main(int argc, char **argv)
-{
-    struct binder_state *bs;
-    //  BINDER_SERVICE_MANAGER is NULL, is a magic number
-    void *svcmgr = BINDER_SERVICE_MANAGER;&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;bs = binder_open(128*1024);
-
-if (binder_become_context_manager(bs)) {
-    LOGE(&quot;cannot become context manager (%s)\n&quot;, strerror(errno));
-    return -1;
-}
-
-svcmgr_handle = svcmgr;
-binder_loop(bs, svcmgr_handler);
-return 0; } ```
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h4 id=&quot;conclusion&quot;&gt;Conclusion&lt;/h4&gt;
-
-&lt;p&gt;Through tracing so many codes, the MediaPlayerService example maybe reveal the Binder’s mysterious veil. We need write down some important conclusions:&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;
-    &lt;p&gt;If two processes need communicate each other, one as Client, the other is Server, Server need registered to &lt;code&gt;ServiceManager&lt;/code&gt;, if Client want request to Server, it need query Server’s info from &lt;code&gt;ServiceManager&lt;/code&gt;, based the qureid info, Client and Server can communicate each other. &lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;Client, Server, &lt;code&gt;ServiceManager&lt;/code&gt; are implemented in use space, Binder is implemented in kernel space.&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;&lt;code&gt;ServiceManager&lt;/code&gt; and Binder is implemented by Android, developers need implemente their Client and Server.&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;Binder supplied device file &lt;strong&gt;/dev/binder&lt;/strong&gt; communicate to user space. Client, Server and &lt;code&gt;ServiceManager&lt;/code&gt; communicated to Binder through &lt;code&gt;open&lt;/code&gt; and &lt;code&gt;ioctl&lt;/code&gt; file operation function.&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;Client and Server communicate each other immediately through Binder.&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;&lt;code&gt;ServiceManager&lt;/code&gt; is a daemon process, it manages Server, supply interface to qurey Server function.&lt;/p&gt;
-  &lt;/li&gt;
+&lt;li&gt;&lt;p&gt;If two processes need communicate each other, one as Client, the other is Server, Server need registered to &lt;code&gt;ServiceManager&lt;/code&gt;, if Client want request to Server, it need query Server&amp;#39;s info from &lt;code&gt;ServiceManager&lt;/code&gt;, based the qureid info, Client and Server can communicate each other. &lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Client, Server, &lt;code&gt;ServiceManager&lt;/code&gt; are implemented in use space, Binder is implemented in kernel space.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;code&gt;ServiceManager&lt;/code&gt; and Binder is implemented by Android, developers need implemente their Client and Server.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Binder supplied device file &lt;strong&gt;/dev/binder&lt;/strong&gt; communicate to user space. Client, Server and &lt;code&gt;ServiceManager&lt;/code&gt; communicated to Binder through &lt;code&gt;open&lt;/code&gt; and &lt;code&gt;ioctl&lt;/code&gt; file operation function.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Client and Server communicate each other immediately through Binder.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;code&gt;ServiceManager&lt;/code&gt; is a daemon process, it manages Server, supply interface to qurey Server function.&lt;/p&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;p&gt;If want to learn Android IPC mechanism deeply, a lot of Android source code need be read. Linus said:&lt;/p&gt;
 
 &lt;blockquote&gt;
-  &lt;p&gt;Read The Fucking Source Code.&lt;/p&gt;
+&lt;p&gt;Read The Fucking Source Code.&lt;/p&gt;
 &lt;/blockquote&gt;
 </description>
         <pubDate>Wed, 03 Aug 2016 03:00:00 +0800</pubDate>
@@ -1316,64 +1020,60 @@ return 0; } ```
     
       <item>
         <title>Memory Leak in Android Development</title>
-        <description>&lt;p&gt;When programming Android, although java has GC mechanism, some our wrong code way and personal habits still cause memory leak, GC also can’t fix it.&lt;/p&gt;
+        <description>&lt;p&gt;When programming Android, although java has GC mechanism, some our wrong code way and personal habits still cause memory leak, GC also can&amp;#39;t fix it.&lt;/p&gt;
 
-&lt;h4 id=&quot;senario-1-when-programming-a-single-instance&quot;&gt;Senario 1: When programming a single instance&lt;/h4&gt;
+&lt;h4&gt;Senario 1: When programming a single instance&lt;/h4&gt;
 
 &lt;ul&gt;
-  &lt;li&gt;Error way:&lt;/li&gt;
+&lt;li&gt;Error way:&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-java&quot; data-lang=&quot;java&quot;&gt;&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Sample&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;      
+    &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Sample&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;sample&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Context&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;mContext&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt; 
+    &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;Sample&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Context&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;mContext&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;){&lt;/span&gt;
+         &lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;mContext&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;mContext&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Sample&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;getInstance&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Context&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;mContext&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;){&lt;/span&gt;
+         &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;sample&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;null&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+              &lt;span class=&quot;n&quot;&gt;sample&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;Sample&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;mContext&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+         &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;sample&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;otherAction&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(){&lt;/span&gt;
+         &lt;span class=&quot;n&quot;&gt;mContext&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;act&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;ul&gt;
+&lt;li&gt;Error reason:&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;&lt;code&gt;java
-public class Sample{      
-    private static Sample sample;
-    private Context mContext; 
-    private Sample(Context mContext){
-         this.mContext = mContext;
-    }
-    public static Sample getInstance(Context mContext){
-         if(sample == null)
-              sample = new Sample(mContext);
-         return sample;
-    }
-    public void otherAction(){
-         mContext.act();
-    }
-}
-&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;If we use &lt;code&gt;Sample.getInstance()&lt;/code&gt; in Acitivity A, pass &lt;code&gt;this&lt;/code&gt; to Sample&amp;#39;s &lt;code&gt;getInstatnce&lt;/code&gt; static method, because Sample is static single instance, it exists untill application exit. But Sample&amp;#39;s member variable still hold reference to Activity A, it causes Activity A can&amp;#39;t be destroied. If we pass applicationContext, it doesn&amp;#39;t cause this problem.&lt;/p&gt;
 
 &lt;ul&gt;
-  &lt;li&gt;Error reason:&lt;/li&gt;
+&lt;li&gt;Right way:&lt;/li&gt;
 &lt;/ul&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-java&quot; data-lang=&quot;java&quot;&gt;&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Sample&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+     &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Sample&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;sample&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+     &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Context&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;mContext&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+     &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;Sample&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Context&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;mContext&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;){&lt;/span&gt;
+          &lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;mContext&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;mContext&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+     &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+     &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Sample&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;getInstance&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Context&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;mContext&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;){&lt;/span&gt;
+          &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;sample&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;null&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+               &lt;span class=&quot;n&quot;&gt;sample&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;Sample&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;mContext&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getApplicationContext&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;());&lt;/span&gt;
+          &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;sample&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+     &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+     &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;otherAction&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(){&lt;/span&gt;
+          &lt;span class=&quot;n&quot;&gt;mContext&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;act&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+     &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;     &lt;/p&gt;
 
-&lt;p&gt;If we use &lt;code&gt;Sample.getInstance()&lt;/code&gt; in Acitivity A, pass &lt;code&gt;this&lt;/code&gt; to Sample’s &lt;code&gt;getInstatnce&lt;/code&gt; static method, because Sample is static single instance, it exists untill application exit. But Sample’s member variable still hold reference to Activity A, it causes Activity A can’t be destroied. If we pass applicationContext, it doesn’t cause this problem.&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;Right way:&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;code&gt;java
-public class Sample{
-     private static Sample sample;
-     private Context mContext;
-     private Sample(Context mContext){
-          this.mContext = mContext;
-     }
-     public static Sample getInstance(Context mContext){
-          if(sample == null)
-               sample = new Sample(mContext.getApplicationContext());
-          return sample;
-     }
-     public void otherAction(){
-          mContext.act();
-     }
-}
-&lt;/code&gt;
-     
-#### Senario 2: When use anonymous inner class&lt;/p&gt;
+&lt;h4&gt;Senario 2: When use anonymous inner class&lt;/h4&gt;
 
 &lt;ul&gt;
-  &lt;li&gt;Error way:
+&lt;li&gt;Error way:
 ```java
 public class SampleActivity extends Activity{
      private TextView textView;          
@@ -1388,13 +1088,13 @@ public class SampleActivity extends Activity{
 &lt;p&gt;     @override
      public void onCreate(Bundle bundle){
           super.onCreate(bundle);
-          setContextView(R.layout.activity_sample_layout);
+          setContextView(R.layout.activity&lt;em&gt;sample&lt;/em&gt;layout);
           textView = (TextView)findViewById(R.id.textView);
           handler.postDelayed(new Runnable(){&lt;/p&gt;
 
 &lt;p&gt;               @override
                public void run(){
-                    textView.setText(“ok”);
+                    textView.setText(&amp;quot;ok&amp;quot;);
                };&lt;/p&gt;
 
 &lt;p&gt;          },1000 * 60 * 10);
@@ -1403,115 +1103,95 @@ public class SampleActivity extends Activity{
 ```&lt;/p&gt;
 
 &lt;ul&gt;
-  &lt;li&gt;Error reason:&lt;/li&gt;
+&lt;li&gt;Error reason:&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;When execute the &lt;code&gt;SampleAcitvity&lt;/code&gt;’s &lt;code&gt;finish&lt;/code&gt; method, the delayed messages will exist in main thread for 10 minutes before be processed, while this message contains reference to Handler, Handler is a anonymous inner class, it hold reference to external SampleAcivity, so cause SampleAcivity can’t be recycled. Above &lt;code&gt;Runnable&lt;/code&gt; also is a anonymous inner class, it also prevent SampleActivity to be recycled.&lt;/p&gt;
+&lt;p&gt;When execute the &lt;code&gt;SampleAcitvity&lt;/code&gt;&amp;#39;s &lt;code&gt;finish&lt;/code&gt; method, the delayed messages will exist in main thread for 10 minutes before be processed, while this message contains reference to Handler, Handler is a anonymous inner class, it hold reference to external SampleAcivity, so cause SampleAcivity can&amp;#39;t be recycled. Above &lt;code&gt;Runnable&lt;/code&gt; also is a anonymous inner class, it also prevent SampleActivity to be recycled.&lt;/p&gt;
 
 &lt;ul&gt;
-  &lt;li&gt;Right way:&lt;/li&gt;
+&lt;li&gt;Right way:&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;p&gt;&lt;strong&gt;A static anonymous inner class instance will not hold reference to external class.&lt;/strong&gt;&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-java&quot; data-lang=&quot;java&quot;&gt;&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;SampleActivity&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;extends&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Activity&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+     &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;TextView&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;textView&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+     &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;MyHandler&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;extends&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Handler&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
 
-&lt;p&gt;```java
-public class SampleActivity extends Activity{
-     private TextView textView;
-     private static class MyHandler extends Handler {&lt;/p&gt;
+     &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;final&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;WeakReference&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;SampleActivity&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;mActivity&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+     &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;MyHandler&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;SampleActivity&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;activity&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+          &lt;span class=&quot;n&quot;&gt;mActivity&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;WeakReference&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;SampleActivity&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;activity&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+     &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
 
-&lt;p&gt;     private final WeakReference&lt;sampleactivity&gt; mActivity;
-     public MyHandler(SampleActivity activity) {
-          mActivity = new WeakReference&lt;sampleactivity&gt;(activity);
-     }&lt;/sampleactivity&gt;&lt;/sampleactivity&gt;&lt;/p&gt;
+     &lt;span class=&quot;nd&quot;&gt;@Override&lt;/span&gt;
+     &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;handleMessage&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Message&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;msg&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+          &lt;span class=&quot;n&quot;&gt;SampleActivity&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;activity&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;mActivity&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;get&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+               &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;activity&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;!=&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;null&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
 
-&lt;p&gt;     @Override
-     public void handleMessage(Message msg) {
-          SampleActivity activity = mActivity.get();
-               if (activity != null) {&lt;/p&gt;
+               &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+          &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+     &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
 
-&lt;p&gt;               }
-          }
-     }&lt;/p&gt;
+     &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;final&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;MyHandler&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;handler&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;MyHandler&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
 
-&lt;p&gt;     private final MyHandler handler = new MyHandler(this);&lt;/p&gt;
+     &lt;span class=&quot;nd&quot;&gt;@override&lt;/span&gt;
+     &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;onCreate&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Bundle&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;bundle&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;){&lt;/span&gt;
+          &lt;span class=&quot;kd&quot;&gt;super&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;onCreate&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;bundle&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+          &lt;span class=&quot;n&quot;&gt;setContextView&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;R&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;layout&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;activity_sample_layout&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+          &lt;span class=&quot;n&quot;&gt;textView&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;TextView&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;findViewById&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;R&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;id&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;textView&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+          &lt;span class=&quot;n&quot;&gt;handler&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;postDelayed&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;MyRunnable&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;textView&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;),&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1000&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;60&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;10&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+     &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
 
-&lt;p&gt;     @override
-     public void onCreate(Bundle bundle){
-          super.onCreate(bundle);
-          setContextView(R.layout.activity_sample_layout);
-          textView = (TextView)findViewById(R.id.textView);
-          handler.postDelayed(new MyRunnable(textView),1000 * 60 * 10);
-     }&lt;/p&gt;
+     &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;MyRunnable&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;implements&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Runnable&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
 
-&lt;p&gt;     private static class MyRunnable implements Runnable{&lt;/p&gt;
+        &lt;span class=&quot;c1&quot;&gt;// use WeakReference to hold external class&amp;#39;s member variables.&lt;/span&gt;
+        &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;WeakReference&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;TextView&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;textViewWeakReference&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;MyRunnable&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;TextView&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;textView&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;){&lt;/span&gt;
+             &lt;span class=&quot;n&quot;&gt;textViewWeakReference&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;WeakReference&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;TextView&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;textView&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
 
-&lt;pre&gt;&lt;code&gt;    // use WeakReference to hold external class&#39;s member variables.         private WeakReference&amp;lt;TextView&amp;gt; textViewWeakReference;         public MyRunnable(TextView textView){              textViewWeakReference = new WeakReference&amp;lt;TextView&amp;gt;(textView);         }
-&lt;/code&gt;&lt;/pre&gt;
+        &lt;span class=&quot;nd&quot;&gt;@override&lt;/span&gt;
+        &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;run&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(){&lt;/span&gt;
+              &lt;span class=&quot;kd&quot;&gt;final&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;TextView&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;textView&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;textViewWeakReference&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;get&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+              &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;textView&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;!=&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;null&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;){&lt;/span&gt;
+                   &lt;span class=&quot;n&quot;&gt;textView&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;setText&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;OK&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+              &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
 
-&lt;p&gt;        @override
-        public void run(){
-              final TextView textView = textViewWeakReference.get();
-              if(textView != null){
-                   textView.setText(“OK”);
-              }&lt;/p&gt;
-
-&lt;p&gt;        };
-     }
-}
-```&lt;/p&gt;
-
-&lt;h4 id=&quot;senario-3-forgot-call-removecallbacksandmessages-after-use-handler&quot;&gt;Senario 3: Forgot call removeCallbacksAndMessages after use handler&lt;/h4&gt;
+        &lt;span class=&quot;o&quot;&gt;};&lt;/span&gt;
+     &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h4&gt;Senario 3: Forgot call removeCallbacksAndMessages after use handler&lt;/h4&gt;
 
 &lt;ul&gt;
-  &lt;li&gt;Right way:&lt;/li&gt;
+&lt;li&gt;Right way:&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;p&gt;In onDestroy call this method:&lt;/p&gt;
-
-&lt;p&gt;&lt;code&gt;java
-     handler.removeCallbacksAndMessages(null);
-&lt;/code&gt;&lt;/p&gt;
-
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-java&quot; data-lang=&quot;java&quot;&gt;     &lt;span class=&quot;n&quot;&gt;handler&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;removeCallbacksAndMessages&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kc&quot;&gt;null&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;p&gt;This call passed null will destroy all Runnable and Message related to handler.&lt;/p&gt;
 
-&lt;h4 id=&quot;conclude&quot;&gt;Conclude&lt;/h4&gt;
+&lt;h4&gt;Conclude&lt;/h4&gt;
 
 &lt;ul&gt;
-  &lt;li&gt;
-    &lt;p&gt;Don’t let object whose lifecycle longer then Acivity hold reference to Acivity.&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;Prefer to use Application’s Context rather than Activity’s Context.&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;Prefer to use static anonymous inner class rather than non-static.&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;Use weak reference to hold external class’s member variables.&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;GC can’t fix memory leak.&lt;/p&gt;
-  &lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Don&amp;#39;t let object whose lifecycle longer then Acivity hold reference to Acivity.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Prefer to use Application&amp;#39;s Context rather than Activity&amp;#39;s Context.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Prefer to use static anonymous inner class rather than non-static.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Use weak reference to hold external class&amp;#39;s member variables.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;GC can&amp;#39;t fix memory leak.&lt;/p&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;h4 id=&quot;reference&quot;&gt;Reference&lt;/h4&gt;
+&lt;h4&gt;Reference&lt;/h4&gt;
 
 &lt;blockquote&gt;
-  &lt;p&gt;In Android, Handler classes should be static or leaks might occur, Messages enqueued on the application thread’s MessageQueue also retain their target Handler. If the Handler is an inner class, its outer class will be retained as well. To avoid leaking the outer class, declare the Handler as a static nested class with a WeakReference to its outer class&lt;/p&gt;
-&lt;/blockquote&gt;
+&lt;p&gt;In Android, Handler classes should be static or leaks might occur, Messages enqueued on the application thread’s MessageQueue also retain their target Handler. If the Handler is an inner class, its outer class will be retained as well. To avoid leaking the outer class, declare the Handler as a static nested class with a WeakReference to its outer class&lt;/p&gt;
 
-&lt;blockquote&gt;
-  &lt;p&gt;When an Android application first starts, the framework creates a Looper object for the application’s main thread. A Looper implements a simple message queue, processing Message objects in a loop one after another. All major application framework events (such as Activity lifecycle method calls, button clicks, etc.) are contained inside Message objects, which are added to the Looper’s message queue and are processed one-by-one. The main thread’s Looper exists throughout the application’s lifecycle.&lt;/p&gt;
-&lt;/blockquote&gt;
+&lt;p&gt;When an Android application first starts, the framework creates a Looper object for the application’s main thread. A Looper implements a simple message queue, processing Message objects in a loop one after another. All major application framework events (such as Activity lifecycle method calls, button clicks, etc.) are contained inside Message objects, which are added to the Looper’s message queue and are processed one-by-one. The main thread’s Looper exists throughout the application’s lifecycle.&lt;/p&gt;
 
-&lt;blockquote&gt;
-  &lt;p&gt;When a Handler is instantiated on the main thread, it is associated with the Looper’s message queue. Messages posted to the message queue will hold a reference to the Handler so that the framework can call Handler#handleMessage(Message) when the Looper eventually processes the message.&lt;/p&gt;
-&lt;/blockquote&gt;
+&lt;p&gt;When a Handler is instantiated on the main thread, it is associated with the Looper’s message queue. Messages posted to the message queue will hold a reference to the Handler so that the framework can call Handler#handleMessage(Message) when the Looper eventually processes the message.&lt;/p&gt;
 
-&lt;blockquote&gt;
-  &lt;p&gt;In Java, non-static inner and anonymous classes hold an implicit reference to their outer class. Static inner classes, on the other hand, do not.&lt;/p&gt;
+&lt;p&gt;In Java, non-static inner and anonymous classes hold an implicit reference to their outer class. Static inner classes, on the other hand, do not.&lt;/p&gt;
 &lt;/blockquote&gt;
-
 </description>
         <pubDate>Mon, 01 Aug 2016 22:00:00 +0800</pubDate>
         <link>http://longlinht.github.io//memory-leak-in-android-development</link>

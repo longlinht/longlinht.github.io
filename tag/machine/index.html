@@ -152,7 +152,7 @@
             <h2 class="post-title"><a href="http://longlinht.github.io//implement-page-up-down-animation-on-android">在Android上实现无限翻页轮播动画效果</a></h2>
         </header>
         <section class="post-excerpt">
-            <p><p>最近在工作中遇到一个需求，要求在一个Dialog的标题上显示两行字，但是这行字如果同时出现的话会非常难看，设计出了套方案，类似无限翻页轮播这两行字，要有翻书的效果。 刚开始实现的时候，动画的效果也出来了，但是拿去给设计验收的时候设计总感觉怪怪的，始终达不到设计最终想要的结果。后来通过好多次的调试和验证，发现问题出现在两个 View的动画播放时序和旋转轴的问题上，解决了这两个问题后再拿去给设计看的时候，一切都完美了。 现在这个比较好的设计也已上线， 也因为这个调试和验证的过程感觉对 Android动画的一些细节碰触的较多，所以写下此文记录下这个过程。</p> <h4 id="section">基本原理</h4> <p>通过<code>ObjectAnimation</code>操作<code>View</code>的<code>RotationY</code>属性，再利用动态改变<code>PivotY</code>的值和动画播放时序的不同来模拟出无限翻页轮播的动画效果</p> <h4 id="objectanimation">ObjectAnimation</h4> <p>```</p> <p>// 上面的View翻下去的动画</p> <p>private static ObjectAnimator aboveViewPageDownAnim;</p> <p>// 下面的View翻上去的动画</p> <p>private static ObjectAnimator belowViewPageUpAnim;</p> <p>// 上面的View翻上去的动画</p>... <a class="read-more" href="http://longlinht.github.io//implement-page-up-down-animation-on-android">&raquo;</a></p>
+            <p><p>最近在工作中遇到一个需求，要求在一个Dialog的标题上显示两行字，但是这行字如果同时出现的话会非常难看，设计出了套方案，类似无限翻页轮播这两行字，要有翻书的效果。 刚开始实现的时候，动画的效果也出来了，但是拿去给设计验收的时候设计总感觉怪怪的，始终达不到设计最终想要的结果。后来通过好多次的调试和验证，发现问题出现在两个 View的动画播放时序和旋转轴的问题上，解决了这两个问题后再拿去给设计看的时候，一切都完美了。 现在这个比较好的设计也已上线， 也因为这个调试和验证的过程感觉对 Android动画的一些细节碰触的较多，所以写下此文记录下这个过程。</p> <h4>基本原理</h4> <p>通过<code>ObjectAnimation</code>操作<code>View</code>的<code>RotationY</code>属性，再利用动态改变<code>PivotY</code>的值和动画播放时序的不同来模拟出无限翻页轮播的动画效果</p> <h4>ObjectAnimation</h4> <div class="highlight"><pre><code class="language-text" data-lang="text">// 上面的View翻下去的动画 private static ObjectAnimator aboveViewPageDownAnim; // 下面的View翻上去的动画 private static ObjectAnimator belowViewPageUpAnim; // 上面的View翻上去的动画... <a class="read-more" href="http://longlinht.github.io//implement-page-up-down-animation-on-android">&raquo;</a></p>
         </section>
         <footer class="post-meta">
             <img class="author-thumb" src="/assets/images/casper.png" alt="Author image" nopin="nopin" />
@@ -188,10 +188,9 @@
 
 <p>以上就是一些我截取的一些有意思的观点和想法，可以看出近几年的一些电影和书籍多半不会深入艰深的技术细节，而多是通过对AI未来的畅想和猜测，以及带入AI这个特殊角色后对人类自身的一种反省和思考，我因受这些想法和思考的影响，也时而会在脑中闪出一下奇怪的想法，我甚至也不明白我为什么会产生这些奇思异想。</p>
 
-<p>我竟想到人类的起源和AI的未来可能有某种相似性，怎么说呢？因为我之前看到过一些文章分析人类可能并不是地球上的土著生物，可能真的是被一种神一样的存在所创造的，无中生有的，而这种神一样的存在现在却只留在了人类的神话中，我突然就想到，这种神一样的存在创造了我们，而后被我们所取代，他们存在过的痕迹也就只留在了我们的神话中，也许我们现在之于AI，就是那个神一样的存在，但我们最终会被AI取代，只留在AI的神话中，就跟没存在过一样……</p>
+<p>我竟想到人类的起源和AI的未来可能有某种相似性，怎么说呢？因为我之前看到过一些文章分析人类可能并不是地球上的土著生物，可能真的是被一种神一样的存在所创造的，无中生有的，而这种神一样的存在现在却只留在了人类的神话中，我突然就想到，这种神一样的存在创造了我们，而后被我们所取代，他们存在过的痕迹也就只留在了我们的神话中，也许我们现在之于AI，就是那个神一样的存在，但我们最终会被AI取代，只留在AI的神话中，就跟没存在过一样......</p>
 
 <p>也许人类的真正归宿还真就是以硅为载体，以此长存于世，胡说八道了这么多，可以止笔了，再有臆想，再来码字</p>
-
  <a class="read-more" href="http://longlinht.github.io//think-about-AI">&raquo;</a></p>
         </section>
         <footer class="post-meta">

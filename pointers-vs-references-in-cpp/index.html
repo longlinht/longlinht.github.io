@@ -114,44 +114,30 @@
 
         <section class="post-content">
             
-            <p>In C++, references provide many of the same capabilities as pointers. In real development, we prefer to use references to avoid the complex and error prone of pointers. But in some situations, our choices’re not clear. As a good C++ developer, we shouldn’t ignore this confusion, this hesitation, so we need make it clear, more clear.</p>
+            <p>In C++, references provide many of the same capabilities as pointers. In real development, we prefer to use references to avoid the complex and error prone of pointers. But in some situations, our choices&#39;re not clear. As a good C++ developer, we shouldn&#39;t ignore this confusion, this hesitation, so we need make it clear, more clear.</p>
 
 <ul>
-  <li>
-    <p>The references can’t be re-assigned, but pointers can be.</p>
-  </li>
-  <li>A pointer has its own memory address and size on the stack (4 bytes on x86), whereas a reference shares the same memory address (with the original variable) but also takes up some space on the stack. Since a reference has the same address as the original variable itself, it is safe to think of a reference as another name for the same variable. 
+<li><p>The references can&#39;t be re-assigned, but pointers can be.</p></li>
+<li><p>A pointer has its own memory address and size on the stack (4 bytes on x86), whereas a reference shares the same memory address (with the original variable) but also takes up some space on the stack. Since a reference has the same address as the original variable itself, it is safe to think of a reference as another name for the same variable. 
 <code>c++
 int x = 0;
 int &amp;r = x;
 int *p = &amp;x;
 int *p2 = &amp;r;
 bool equal = p == p2; // equal is true
-</code></li>
-  <li>
-    <p>You can have pointers to pointers to pointers offering extra levels of indirection. Whereas references only offer one level of indirection.</p>
-  </li>
-  <li>
-    <p>Pointer can be assigned <code>nullptr</code> or <code>NULL</code> directly, whereas reference cannot.</p>
-  </li>
-  <li>
-    <p>Pointers can iterate over an array, you can use ++ to go to the next item that a pointer is pointing to, and + 4 to go to the 5th element. This is no matter what size the object is that the pointer points to.</p>
-  </li>
-  <li>
-    <p>A pointer needs to be dereferenced with * to access the memory location it points to, whereas a reference can be used directly. A pointer to a class/struct uses <code>-&gt;</code> to access it’s members whereas a reference uses a <code>.</code>.</p>
-  </li>
-  <li>
-    <p>A pointer is a variable that holds a memory address. Regardless of how a reference is implemented, a reference has the same memory address as the item it references.</p>
-  </li>
-  <li>
-    <p>References cannot be stuffed into an array, whereas pointers can be.</p>
-  </li>
-  <li>Const references can be bound to temporaries. Pointers cannot (not without some indirection):
+</code></p></li>
+<li><p>You can have pointers to pointers to pointers offering extra levels of indirection. Whereas references only offer one level of indirection.</p></li>
+<li><p>Pointer can be assigned <code>nullptr</code> or <code>NULL</code> directly, whereas reference cannot.</p></li>
+<li><p>Pointers can iterate over an array, you can use ++ to go to the next item that a pointer is pointing to, and + 4 to go to the 5th element. This is no matter what size the object is that the pointer points to.</p></li>
+<li><p>A pointer needs to be dereferenced with * to access the memory location it points to, whereas a reference can be used directly. A pointer to a class/struct uses <code>-&gt;</code> to access it&#39;s members whereas a reference uses a <code>.</code>.</p></li>
+<li><p>A pointer is a variable that holds a memory address. Regardless of how a reference is implemented, a reference has the same memory address as the item it references.</p></li>
+<li><p>References cannot be stuffed into an array, whereas pointers can be.</p></li>
+<li><p>Const references can be bound to temporaries. Pointers cannot (not without some indirection):
 <code>c++
 const int &amp;x = int(12); //legal C++
 int *y = &amp;int(12); //illegal to dereference a temporary.
 </code>
-This makes const&amp; safer for use in argument lists and so forth.</li>
+This makes const&amp; safer for use in argument lists and so forth.</p></li>
 </ul>
 
 
@@ -248,7 +234,7 @@ This makes const&amp; safer for use in argument lists and so forth.</li>
         <a class="read-next-story prev no-cover" href="http://longlinht.github.io//split-string-in-cpp">
             <section class="post">
                 <h2>Split a String in C++</h2>
-                <p><p>There are many ways to split a string in C++, but what’s the most elegant...</p>
+                <p><p>There are many ways to split a string in C++, but what&#39;s the most elegant...</p>
             </section>
         </a>
     

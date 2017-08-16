@@ -116,75 +116,60 @@
             
             <p>When I start develop application for Android, I am confused about the dimension units many times. So I decide to figure out it clearly through this article.</p>
 
-<p>Android is a mobile operating system that compatible many devices, because of its compatibility, we must think about vary size, density, shape of device’s screen. The <strong>density independence</strong> is a important conception here. Later, I will explain detail about it. Now, we need give the defination of the dimension units and explain the relation of them.</p>
+<p>Android is a mobile operating system that compatible many devices, because of its compatibility, we must think about vary size, density, shape of device&#39;s screen. The <strong>density independence</strong> is a important conception here. Later, I will explain detail about it. Now, we need give the defination of the dimension units and explain the relation of them.</p>
 
-<h3 id="dimension-unit">Dimension Unit</h3>
+<h3>Dimension Unit</h3>
 
-<h4 id="defination">Defination</h4>
+<h4>Defination</h4>
 
 <ul>
-  <li>
-    <p><strong>px</strong> - An actual pixel on the screen.</p>
-  </li>
-  <li>
-    <p><strong>in</strong> - A physical inch on the screen.</p>
-  </li>
-  <li>
-    <p><strong>mm</strong> - A physical millimeter on the screen.</p>
-  </li>
-  <li>
-    <p><strong>pt</strong> - A point, a common font size unit, on the screen. </p>
-  </li>
-  <li>
-    <p><strong>dp</strong> - An abstract unit that is based on the physical density of the screen. These units are relative to a 160 dpi (dots per inch) screen, on which 1dp is roughly equal to 1px. </p>
-  </li>
-  <li>
-    <p><strong>sp</strong> - A scale independent pixel, specially designated for text sizes. </p>
-  </li>
+<li><p><strong>px</strong> - An actual pixel on the screen.</p></li>
+<li><p><strong>in</strong> - A physical inch on the screen.</p></li>
+<li><p><strong>mm</strong> - A physical millimeter on the screen.</p></li>
+<li><p><strong>pt</strong> - A point, a common font size unit, on the screen. </p></li>
+<li><p><strong>dp</strong> - An abstract unit that is based on the physical density of the screen. These units are relative to a 160 dpi (dots per inch) screen, on which 1dp is roughly equal to 1px. </p></li>
+<li><p><strong>sp</strong> - A scale independent pixel, specially designated for text sizes. </p></li>
 </ul>
 
-<h4 id="relation">Relation</h4>
-
-<p>```
-+—————-+—————-+—————+——————————-+
+<h4>Relation</h4>
+<div class="highlight"><pre><code class="language-text" data-lang="text">+----------------+----------------+---------------+-------------------------------+
 | Density Bucket | Screen Density | Physical Size | Pixel Size                    | 
-+—————-+—————-+—————+——————————-+
++----------------+----------------+---------------+-------------------------------+
 | ldpi           | 120 dpi        | 0.5 x 0.5 in  | 0.5 in * 120 dpi = 60x60 px   | 
-+—————-+—————-+—————+——————————-+
++----------------+----------------+---------------+-------------------------------+
 | mdpi           | 160 dpi        | 0.5 x 0.5 in  | 0.5 in * 160 dpi = 80x80 px   | 
-+—————-+—————-+—————+——————————-+
++----------------+----------------+---------------+-------------------------------+
 | hdpi           | 240 dpi        | 0.5 x 0.5 in  | 0.5 in * 240 dpi = 120x120 px | 
-+—————-+—————-+—————+——————————-+
++----------------+----------------+---------------+-------------------------------+
 | xhdpi          | 320 dpi        | 0.5 x 0.5 in  | 0.5 in * 320 dpi = 160x160 px | 
-+—————-+—————-+—————+——————————-+
++----------------+----------------+---------------+-------------------------------+
 | xxhdpi         | 480 dpi        | 0.5 x 0.5 in  | 0.5 in * 480 dpi = 240x240 px | 
-+—————-+—————-+—————+——————————-+
++----------------+----------------+---------------+-------------------------------+
 | xxxhdpi        | 640 dpi        | 0.5 x 0.5 in  | 0.5 in * 640 dpi = 320x320 px | 
-+—————-+—————-+—————+——————————-+</p>
++----------------+----------------+---------------+-------------------------------+
 
-<p>+———+————-+—————+————-+——————–+
++---------+-------------+---------------+-------------+--------------------+
 | Unit    | Description | Units Per     | Density     | Same Physical Size | 
 |         |             | Physical Inch | Independent | On Every Screen    | 
-+———+————-+—————+————-+——————–+
++---------+-------------+---------------+-------------+--------------------+
 | px      | Pixels      | Varies        | No          | No                 | 
-+———+————-+—————+————-+——————–+
++---------+-------------+---------------+-------------+--------------------+
 | in      | Inches      | 1             | Yes         | Yes                | 
-+———+————-+—————+————-+——————–+
++---------+-------------+---------------+-------------+--------------------+
 | mm      | Millimeters | 25.4          | Yes         | Yes                | 
-+———+————-+—————+————-+——————–+
++---------+-------------+---------------+-------------+--------------------+
 | pt      | Points      | 72            | Yes         | Yes                | 
-+———+————-+—————+————-+——————–+
++---------+-------------+---------------+-------------+--------------------+
 | dp      | Density     | ~160          | Yes         | No                 | 
 |         | Independent |               |             |                    | 
 |         | Pixels      |               |             |                    | 
-+———+————-+—————+————-+——————–+
++---------+-------------+---------------+-------------+--------------------+
 | sp      | Scale       | ~160          | Yes         | No                 | 
 |         | Independent |               |             |                    | 
 |         | Pixels      |               |             |                    | 
-+———+————-+—————+————-+——————–+
-```</p>
-
-<h3 id="density-independence">Density Independence</h3>
++---------+-------------+---------------+-------------+--------------------+
+</code></pre></div>
+<h3>Density Independence</h3>
 
 <p><strong>Screen Density</strong></p>
 
@@ -195,21 +180,15 @@
 <p><strong>Density Bucket</strong></p>
 
 <blockquote>
-  <p>There is a myriad of Android devices with varying screen densities, which can range from 100 dpi to over 480 dpi. In order to optimize images for all these screen densities, images need to be created at different resolutions. However, trying to optimize every image resource for every possible density would be incredibly tedious, cause app sizes to be enormous, and simply is not a feasible solution. As a compromise, Android uses density “buckets” that are used to group devices together within certain screen density ranges. This way, apps are only required to optimize images for each density bucket, instead of every possible density. This keeps the workload reasonable for designers and developer, and also prevents the application size from ballooning. Of course, there is a tradeoff, leading to variance in the physical rendered size of images depending on device density.</p>
+<p>There is a myriad of Android devices with varying screen densities, which can range from 100 dpi to over 480 dpi. In order to optimize images for all these screen densities, images need to be created at different resolutions. However, trying to optimize every image resource for every possible density would be incredibly tedious, cause app sizes to be enormous, and simply is not a feasible solution. As a compromise, Android uses density &quot;buckets&quot; that are used to group devices together within certain screen density ranges. This way, apps are only required to optimize images for each density bucket, instead of every possible density. This keeps the workload reasonable for designers and developer, and also prevents the application size from ballooning. Of course, there is a tradeoff, leading to variance in the physical rendered size of images depending on device density.</p>
 </blockquote>
 
-<h3 id="using-tips">Using Tips:</h3>
+<h3>Using Tips:</h3>
 
 <ul>
-  <li>
-    <p>Try to use dp in xml file as much as possiable.</p>
-  </li>
-  <li>
-    <p>Use sp for font size.</p>
-  </li>
-  <li>
-    <p>Don’t use px as much as possiable.</p>
-  </li>
+<li><p>Try to use dp in xml file as much as possiable.</p></li>
+<li><p>Use sp for font size.</p></li>
+<li><p>Don&#39;t use px as much as possiable.</p></li>
 </ul>
 
 

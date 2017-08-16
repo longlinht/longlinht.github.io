@@ -21,66 +21,42 @@
 	     <p>Install Emacs 25 on Ubuntu from source is very easy, follow these steps below could achieve it.</p>
 
 <ul>
-  <li>Open terminal (Ctrl+Alt+T) and run command to install build tools:</li>
+<li>Open terminal (Ctrl+Alt+T) and run command to install build tools:</li>
 </ul>
-
-<p><code>
-sudo apt install build-essential checkinstall
-</code></p>
-
+<div class="highlight"><pre><code class="language-text" data-lang="text">sudo apt install build-essential checkinstall
+</code></pre></div>
 <ul>
-  <li>Then install the build dependencies via command:</li>
+<li>Then install the build dependencies via command:</li>
 </ul>
-
-<p><code>
-sudo apt-get build-dep emacs24
-</code></p>
-
+<div class="highlight"><pre><code class="language-text" data-lang="text">sudo apt-get build-dep emacs24
+</code></pre></div>
 <ul>
-  <li>
-    <p>Now download the source at ftp.gnu.org/gnu/emacs/, then extract:</p>
-  </li>
-  <li>
-    <p>Open terminal and navigate to the “emacs-25.1” folder via command (or select “Open in terminal” from its context menu):</p>
-  </li>
+<li><p>Now download the source at ftp.gnu.org/gnu/emacs/, then extract:</p></li>
+<li><p>Open terminal and navigate to the &quot;emacs-25.1&quot; folder via command (or select &quot;Open in terminal&quot; from its context menu):</p></li>
 </ul>
-
-<p><code>
-cd ~/Downloads/emacs-25.1
-</code></p>
-
+<div class="highlight"><pre><code class="language-text" data-lang="text">cd ~/Downloads/emacs-25.1
+</code></pre></div>
 <ul>
-  <li>In the same terminal window, once you’re in the source folder, run the commands below one by one:</li>
+<li>In the same terminal window, once you’re in the source folder, run the commands below one by one:</li>
 </ul>
-
-<p><code>
-./configure
+<div class="highlight"><pre><code class="language-text" data-lang="text">./configure
 make
-</code></p>
-
+</code></pre></div>
 <ul>
-  <li>Finally use checkinstall command to create .deb and install Emacs 25.1:</li>
+<li>Finally use checkinstall command to create .deb and install Emacs 25.1:</li>
 </ul>
-
-<p>```
-sudo checkinstall</p>
-
-<p>```</p>
-
+<div class="highlight"><pre><code class="language-text" data-lang="text">sudo checkinstall
+</code></pre></div>
 <p>While running the command, answer on screen questions, e.g., install docs, type package description, change package name, version, etc.</p>
 
 <p>Once done, Emacs is installed on your system and you can remove it anytime by running the command in the prompt with sudo privilege:</p>
 
 <p>In my case it’s:</p>
-
-<p>```
-sudo dpkg -r emacs-25</p>
-
-<p>```
-And the last command create a .deb package in the source folder, and it can be used in another Ubuntu machine to install Emacs(need to manually install dependencies via step 2).</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">sudo dpkg -r emacs-25
+</code></pre></div>
+<p>And the last command create a .deb package in the source folder, and it can be used in another Ubuntu machine to install Emacs(need to manually install dependencies via step 2).</p>
 
 <p>Finally, run command emacs to launch the text editor, or launch it from Unity Dash (App Launcher) at next login (or next boot).</p>
-
 
 	  ]]></description>
 	</item>
@@ -97,199 +73,187 @@ And the last command create a .deb package in the source folder, and it can be u
 View的动画播放时序和旋转轴的问题上，解决了这两个问题后再拿去给设计看的时候，一切都完美了。 现在这个比较好的设计也已上线， 也因为这个调试和验证的过程感觉对
 Android动画的一些细节碰触的较多，所以写下此文记录下这个过程。</p>
 
-<h4 id="section">基本原理</h4>
+<h4>基本原理</h4>
 
 <p>通过<code>ObjectAnimation</code>操作<code>View</code>的<code>RotationY</code>属性，再利用动态改变<code>PivotY</code>的值和动画播放时序的不同来模拟出无限翻页轮播的动画效果</p>
 
-<h4 id="objectanimation">ObjectAnimation</h4>
+<h4>ObjectAnimation</h4>
+<div class="highlight"><pre><code class="language-text" data-lang="text">// 上面的View翻下去的动画
 
-<p>```</p>
+private static ObjectAnimator aboveViewPageDownAnim;
 
-<p>// 上面的View翻下去的动画</p>
+// 下面的View翻上去的动画
 
-<p>private static ObjectAnimator aboveViewPageDownAnim;</p>
+private static ObjectAnimator belowViewPageUpAnim;
 
-<p>// 下面的View翻上去的动画</p>
+// 上面的View翻上去的动画
 
-<p>private static ObjectAnimator belowViewPageUpAnim;</p>
+private static ObjectAnimator aboveViewPageUpAnim;
 
-<p>// 上面的View翻上去的动画</p>
+// 下面的View翻下去的动画
 
-<p>private static ObjectAnimator aboveViewPageUpAnim;</p>
+private static ObjectAnimator belowViewPageDownAnim;
+</code></pre></div>
+<h4>关键的常量</h4>
+<div class="highlight"><pre><code class="language-text" data-lang="text">// 翻页动画的播放时长
 
-<p>// 下面的View翻下去的动画</p>
+private static int pageUpDownDurition = 500;
 
-<p>private static ObjectAnimator belowViewPageDownAnim;</p>
+// 翻下播放结束前100翻上就开始播放
 
-<p>```</p>
+private static int pageUpBeforeDownEnd = 400;
 
-<h4 id="section-1">关键的常量</h4>
+// 翻上播放完后停留时间
 
-<p>```
-// 翻页动画的播放时长</p>
+private static int belowViewStayInterval = 800;
 
-<p>private static int pageUpDownDurition = 500;</p>
+// 在Y轴底部翻转
 
-<p>// 翻下播放结束前100翻上就开始播放</p>
+private static int pageUpPivotY = 100;
 
-<p>private static int pageUpBeforeDownEnd = 400;</p>
+// 在Y近顶部的位置翻转
 
-<p>// 翻上播放完后停留时间</p>
+private static int pageDownPivotY = 70;
+</code></pre></div>
+<h4>具体实现</h4>
+<div class="highlight"><pre><code class="language-text" data-lang="text">public static void startPageUpDownAnimation(final View aboveView, final View belowView) {
 
-<p>private static int belowViewStayInterval = 800;</p>
+    aboveViewPageDownAnim = ObjectAnimator.ofPropertyValuesHolder(aboveView,
+            PropertyValuesHolder.ofFloat(View.ROTATION_X, 0, 90));
 
-<p>// 在Y轴底部翻转</p>
+    aboveViewPageDownAnim.setDuration(pageUpDownDurition);
+    aboveViewPageDownAnim.setInterpolator(new LinearInterpolator());
+    aboveViewPageDownAnim.addListener(new Animator.AnimatorListener() {
+        @Override
+        public void onAnimationStart(Animator animator) {
+            aboveView.setPivotY(pageDownPivotY);
+            belowView.setVisibility(View.GONE);
+            belowView.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    belowViewPageUpAnim.start();
+                }
+            }, pageUpBeforeDownEnd);
+        }
 
-<p>private static int pageUpPivotY = 100;</p>
+        @Override
+        public void onAnimationEnd(Animator animator) {
 
-<p>// 在Y近顶部的位置翻转</p>
+        }
 
-<p>private static int pageDownPivotY = 70;</p>
+        @Override
+        public void onAnimationCancel(Animator animator) {
 
-<p>```</p>
+        }
 
-<h4 id="section-2">具体实现</h4>
+        @Override
+        public void onAnimationRepeat(Animator animator) {
 
-<p>```</p>
+        }
+    });
 
-<p>public static void startPageUpDownAnimation(final View aboveView, final View belowView) {</p>
+    belowViewPageUpAnim = ObjectAnimator.ofPropertyValuesHolder(belowView,
+    PropertyValuesHolder.ofFloat(View.ROTATION_X, -90, 0));
+    belowViewPageUpAnim.setDuration(pageUpDownDurition);
+    belowViewPageUpAnim.setInterpolator(new LinearInterpolator());
+    belowViewPageUpAnim.addListener(new Animator.AnimatorListener() {
+        @Override
+        public void onAnimationStart(Animator animator) {
+            belowView.setVisibility(View.VISIBLE);
+            belowView.setPivotY(pageUpPivotY);
+        }
 
-<pre><code>aboveViewPageDownAnim = ObjectAnimator.ofPropertyValuesHolder(aboveView,
-        PropertyValuesHolder.ofFloat(View.ROTATION_X, 0, 90));
+        @Override
+        public void onAnimationEnd(Animator animator) {
+            belowView.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    belowViewPageDownAnim.start();
+                }
+            }, belowViewStayInterval);
+        }
 
-aboveViewPageDownAnim.setDuration(pageUpDownDurition);
-aboveViewPageDownAnim.setInterpolator(new LinearInterpolator());
-aboveViewPageDownAnim.addListener(new Animator.AnimatorListener() {
-    @Override
-    public void onAnimationStart(Animator animator) {
-        aboveView.setPivotY(pageDownPivotY);
-        belowView.setVisibility(View.GONE);
-        belowView.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                belowViewPageUpAnim.start();
-            }
-        }, pageUpBeforeDownEnd);
-    }
+        @Override
+        public void onAnimationCancel(Animator animator) {
 
-    @Override
-    public void onAnimationEnd(Animator animator) {
+        }
 
-    }
+        @Override
+        public void onAnimationRepeat(Animator animator) {
 
-    @Override
-    public void onAnimationCancel(Animator animator) {
+        }
+    });
 
-    }
+    belowViewPageDownAnim = ObjectAnimator.ofPropertyValuesHolder(belowView,
+            PropertyValuesHolder.ofFloat(View.ROTATION_X, 0, 90));
 
-    @Override
-    public void onAnimationRepeat(Animator animator) {
+    belowViewPageDownAnim.setDuration(pageUpDownDurition);
+    belowViewPageDownAnim.setInterpolator(new LinearInterpolator());
+    belowViewPageDownAnim.addListener(new Animator.AnimatorListener() {
 
-    }
-});
+        @Override
+        public void onAnimationStart(Animator animator) {
+            belowView.setPivotY(pageDownPivotY);
+            aboveView.setVisibility(View.GONE);
+            aboveView.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    aboveViewPageUpAnim.start();
+                }
+            }, pageUpBeforeDownEnd);
+        }
 
-belowViewPageUpAnim = ObjectAnimator.ofPropertyValuesHolder(belowView,
-PropertyValuesHolder.ofFloat(View.ROTATION_X, -90, 0));
-belowViewPageUpAnim.setDuration(pageUpDownDurition);
-belowViewPageUpAnim.setInterpolator(new LinearInterpolator());
-belowViewPageUpAnim.addListener(new Animator.AnimatorListener() {
-    @Override
-    public void onAnimationStart(Animator animator) {
-        belowView.setVisibility(View.VISIBLE);
-        belowView.setPivotY(pageUpPivotY);
-    }
+        @Override
+        public void onAnimationEnd(Animator animator) {
 
-    @Override
-    public void onAnimationEnd(Animator animator) {
-        belowView.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                belowViewPageDownAnim.start();
-            }
-        }, belowViewStayInterval);
-    }
+        }
 
-    @Override
-    public void onAnimationCancel(Animator animator) {
+        @Override
+        public void onAnimationCancel(Animator animator) {
 
-    }
+        }
 
-    @Override
-    public void onAnimationRepeat(Animator animator) {
+        @Override
+        public void onAnimationRepeat(Animator animator) {
 
-    }
-});
+        }
+    });
 
-belowViewPageDownAnim = ObjectAnimator.ofPropertyValuesHolder(belowView,
-        PropertyValuesHolder.ofFloat(View.ROTATION_X, 0, 90));
+    aboveViewPageUpAnim = ObjectAnimator.ofPropertyValuesHolder(aboveView,
+            PropertyValuesHolder.ofFloat(View.ROTATION_X, -90, 0));
+    aboveViewPageUpAnim.setDuration(pageUpDownDurition);
+    aboveViewPageUpAnim.setInterpolator(new LinearInterpolator());
+    aboveViewPageUpAnim.addListener(new Animator.AnimatorListener() {
+        @Override
+        public void onAnimationStart(Animator animator) {
+            aboveView.setVisibility(View.VISIBLE);
+            aboveView.setPivotY(pageUpPivotY);
+        }
 
-belowViewPageDownAnim.setDuration(pageUpDownDurition);
-belowViewPageDownAnim.setInterpolator(new LinearInterpolator());
-belowViewPageDownAnim.addListener(new Animator.AnimatorListener() {
+        @Override
+        public void onAnimationEnd(Animator animator) {
+            aboveView.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    aboveViewPageDownAnim.start();
+                }
+            }, belowViewStayInterval);
+        }
 
-    @Override
-    public void onAnimationStart(Animator animator) {
-        belowView.setPivotY(pageDownPivotY);
-        aboveView.setVisibility(View.GONE);
-        aboveView.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                aboveViewPageUpAnim.start();
-            }
-        }, pageUpBeforeDownEnd);
-    }
+        @Override
+        public void onAnimationCancel(Animator animator) {
 
-    @Override
-    public void onAnimationEnd(Animator animator) {
+        }
 
-    }
+        @Override
+        public void onAnimationRepeat(Animator animator) {
 
-    @Override
-    public void onAnimationCancel(Animator animator) {
+        }
+    });
 
-    }
-
-    @Override
-    public void onAnimationRepeat(Animator animator) {
-
-    }
-});
-
-aboveViewPageUpAnim = ObjectAnimator.ofPropertyValuesHolder(aboveView,
-        PropertyValuesHolder.ofFloat(View.ROTATION_X, -90, 0));
-aboveViewPageUpAnim.setDuration(pageUpDownDurition);
-aboveViewPageUpAnim.setInterpolator(new LinearInterpolator());
-aboveViewPageUpAnim.addListener(new Animator.AnimatorListener() {
-    @Override
-    public void onAnimationStart(Animator animator) {
-        aboveView.setVisibility(View.VISIBLE);
-        aboveView.setPivotY(pageUpPivotY);
-    }
-
-    @Override
-    public void onAnimationEnd(Animator animator) {
-        aboveView.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                aboveViewPageDownAnim.start();
-            }
-        }, belowViewStayInterval);
-    }
-
-    @Override
-    public void onAnimationCancel(Animator animator) {
-
-    }
-
-    @Override
-    public void onAnimationRepeat(Animator animator) {
-
-    }
-});
-
-aboveViewPageDownAnim.start(); } ```
-</code></pre>
-
+    aboveViewPageDownAnim.start();
+}
+</code></pre></div>
 <p>其实这个实现已经是一个基本比较通用的翻页动画了，不仅可以用于TextView，ImageView应该也没有问题。</p>
 
 	  ]]></description>
@@ -314,10 +278,9 @@ aboveViewPageDownAnim.start(); } ```
 
 <p>以上就是一些我截取的一些有意思的观点和想法，可以看出近几年的一些电影和书籍多半不会深入艰深的技术细节，而多是通过对AI未来的畅想和猜测，以及带入AI这个特殊角色后对人类自身的一种反省和思考，我因受这些想法和思考的影响，也时而会在脑中闪出一下奇怪的想法，我甚至也不明白我为什么会产生这些奇思异想。</p>
 
-<p>我竟想到人类的起源和AI的未来可能有某种相似性，怎么说呢？因为我之前看到过一些文章分析人类可能并不是地球上的土著生物，可能真的是被一种神一样的存在所创造的，无中生有的，而这种神一样的存在现在却只留在了人类的神话中，我突然就想到，这种神一样的存在创造了我们，而后被我们所取代，他们存在过的痕迹也就只留在了我们的神话中，也许我们现在之于AI，就是那个神一样的存在，但我们最终会被AI取代，只留在AI的神话中，就跟没存在过一样……</p>
+<p>我竟想到人类的起源和AI的未来可能有某种相似性，怎么说呢？因为我之前看到过一些文章分析人类可能并不是地球上的土著生物，可能真的是被一种神一样的存在所创造的，无中生有的，而这种神一样的存在现在却只留在了人类的神话中，我突然就想到，这种神一样的存在创造了我们，而后被我们所取代，他们存在过的痕迹也就只留在了我们的神话中，也许我们现在之于AI，就是那个神一样的存在，但我们最终会被AI取代，只留在AI的神话中，就跟没存在过一样......</p>
 
 <p>也许人类的真正归宿还真就是以硅为载体，以此长存于世，胡说八道了这么多，可以止笔了，再有臆想，再来码字</p>
-
 
 	  ]]></description>
 	</item>
@@ -331,75 +294,60 @@ aboveViewPageDownAnim.start(); } ```
 	  <description><![CDATA[
 	     <p>When I start develop application for Android, I am confused about the dimension units many times. So I decide to figure out it clearly through this article.</p>
 
-<p>Android is a mobile operating system that compatible many devices, because of its compatibility, we must think about vary size, density, shape of device’s screen. The <strong>density independence</strong> is a important conception here. Later, I will explain detail about it. Now, we need give the defination of the dimension units and explain the relation of them.</p>
+<p>Android is a mobile operating system that compatible many devices, because of its compatibility, we must think about vary size, density, shape of device&#39;s screen. The <strong>density independence</strong> is a important conception here. Later, I will explain detail about it. Now, we need give the defination of the dimension units and explain the relation of them.</p>
 
-<h3 id="dimension-unit">Dimension Unit</h3>
+<h3>Dimension Unit</h3>
 
-<h4 id="defination">Defination</h4>
+<h4>Defination</h4>
 
 <ul>
-  <li>
-    <p><strong>px</strong> - An actual pixel on the screen.</p>
-  </li>
-  <li>
-    <p><strong>in</strong> - A physical inch on the screen.</p>
-  </li>
-  <li>
-    <p><strong>mm</strong> - A physical millimeter on the screen.</p>
-  </li>
-  <li>
-    <p><strong>pt</strong> - A point, a common font size unit, on the screen. </p>
-  </li>
-  <li>
-    <p><strong>dp</strong> - An abstract unit that is based on the physical density of the screen. These units are relative to a 160 dpi (dots per inch) screen, on which 1dp is roughly equal to 1px. </p>
-  </li>
-  <li>
-    <p><strong>sp</strong> - A scale independent pixel, specially designated for text sizes. </p>
-  </li>
+<li><p><strong>px</strong> - An actual pixel on the screen.</p></li>
+<li><p><strong>in</strong> - A physical inch on the screen.</p></li>
+<li><p><strong>mm</strong> - A physical millimeter on the screen.</p></li>
+<li><p><strong>pt</strong> - A point, a common font size unit, on the screen. </p></li>
+<li><p><strong>dp</strong> - An abstract unit that is based on the physical density of the screen. These units are relative to a 160 dpi (dots per inch) screen, on which 1dp is roughly equal to 1px. </p></li>
+<li><p><strong>sp</strong> - A scale independent pixel, specially designated for text sizes. </p></li>
 </ul>
 
-<h4 id="relation">Relation</h4>
-
-<p>```
-+—————-+—————-+—————+——————————-+
+<h4>Relation</h4>
+<div class="highlight"><pre><code class="language-text" data-lang="text">+----------------+----------------+---------------+-------------------------------+
 | Density Bucket | Screen Density | Physical Size | Pixel Size                    | 
-+—————-+—————-+—————+——————————-+
++----------------+----------------+---------------+-------------------------------+
 | ldpi           | 120 dpi        | 0.5 x 0.5 in  | 0.5 in * 120 dpi = 60x60 px   | 
-+—————-+—————-+—————+——————————-+
++----------------+----------------+---------------+-------------------------------+
 | mdpi           | 160 dpi        | 0.5 x 0.5 in  | 0.5 in * 160 dpi = 80x80 px   | 
-+—————-+—————-+—————+——————————-+
++----------------+----------------+---------------+-------------------------------+
 | hdpi           | 240 dpi        | 0.5 x 0.5 in  | 0.5 in * 240 dpi = 120x120 px | 
-+—————-+—————-+—————+——————————-+
++----------------+----------------+---------------+-------------------------------+
 | xhdpi          | 320 dpi        | 0.5 x 0.5 in  | 0.5 in * 320 dpi = 160x160 px | 
-+—————-+—————-+—————+——————————-+
++----------------+----------------+---------------+-------------------------------+
 | xxhdpi         | 480 dpi        | 0.5 x 0.5 in  | 0.5 in * 480 dpi = 240x240 px | 
-+—————-+—————-+—————+——————————-+
++----------------+----------------+---------------+-------------------------------+
 | xxxhdpi        | 640 dpi        | 0.5 x 0.5 in  | 0.5 in * 640 dpi = 320x320 px | 
-+—————-+—————-+—————+——————————-+</p>
++----------------+----------------+---------------+-------------------------------+
 
-<p>+———+————-+—————+————-+——————–+
++---------+-------------+---------------+-------------+--------------------+
 | Unit    | Description | Units Per     | Density     | Same Physical Size | 
 |         |             | Physical Inch | Independent | On Every Screen    | 
-+———+————-+—————+————-+——————–+
++---------+-------------+---------------+-------------+--------------------+
 | px      | Pixels      | Varies        | No          | No                 | 
-+———+————-+—————+————-+——————–+
++---------+-------------+---------------+-------------+--------------------+
 | in      | Inches      | 1             | Yes         | Yes                | 
-+———+————-+—————+————-+——————–+
++---------+-------------+---------------+-------------+--------------------+
 | mm      | Millimeters | 25.4          | Yes         | Yes                | 
-+———+————-+—————+————-+——————–+
++---------+-------------+---------------+-------------+--------------------+
 | pt      | Points      | 72            | Yes         | Yes                | 
-+———+————-+—————+————-+——————–+
++---------+-------------+---------------+-------------+--------------------+
 | dp      | Density     | ~160          | Yes         | No                 | 
 |         | Independent |               |             |                    | 
 |         | Pixels      |               |             |                    | 
-+———+————-+—————+————-+——————–+
++---------+-------------+---------------+-------------+--------------------+
 | sp      | Scale       | ~160          | Yes         | No                 | 
 |         | Independent |               |             |                    | 
 |         | Pixels      |               |             |                    | 
-+———+————-+—————+————-+——————–+
-```</p>
-
-<h3 id="density-independence">Density Independence</h3>
++---------+-------------+---------------+-------------+--------------------+
+</code></pre></div>
+<h3>Density Independence</h3>
 
 <p><strong>Screen Density</strong></p>
 
@@ -410,21 +358,15 @@ aboveViewPageDownAnim.start(); } ```
 <p><strong>Density Bucket</strong></p>
 
 <blockquote>
-  <p>There is a myriad of Android devices with varying screen densities, which can range from 100 dpi to over 480 dpi. In order to optimize images for all these screen densities, images need to be created at different resolutions. However, trying to optimize every image resource for every possible density would be incredibly tedious, cause app sizes to be enormous, and simply is not a feasible solution. As a compromise, Android uses density “buckets” that are used to group devices together within certain screen density ranges. This way, apps are only required to optimize images for each density bucket, instead of every possible density. This keeps the workload reasonable for designers and developer, and also prevents the application size from ballooning. Of course, there is a tradeoff, leading to variance in the physical rendered size of images depending on device density.</p>
+<p>There is a myriad of Android devices with varying screen densities, which can range from 100 dpi to over 480 dpi. In order to optimize images for all these screen densities, images need to be created at different resolutions. However, trying to optimize every image resource for every possible density would be incredibly tedious, cause app sizes to be enormous, and simply is not a feasible solution. As a compromise, Android uses density &quot;buckets&quot; that are used to group devices together within certain screen density ranges. This way, apps are only required to optimize images for each density bucket, instead of every possible density. This keeps the workload reasonable for designers and developer, and also prevents the application size from ballooning. Of course, there is a tradeoff, leading to variance in the physical rendered size of images depending on device density.</p>
 </blockquote>
 
-<h3 id="using-tips">Using Tips:</h3>
+<h3>Using Tips:</h3>
 
 <ul>
-  <li>
-    <p>Try to use dp in xml file as much as possiable.</p>
-  </li>
-  <li>
-    <p>Use sp for font size.</p>
-  </li>
-  <li>
-    <p>Don’t use px as much as possiable.</p>
-  </li>
+<li><p>Try to use dp in xml file as much as possiable.</p></li>
+<li><p>Use sp for font size.</p></li>
+<li><p>Don&#39;t use px as much as possiable.</p></li>
 </ul>
 
 	  ]]></description>
@@ -437,113 +379,91 @@ aboveViewPageDownAnim.start(); } ```
 	  <pubDate>2017-04-02T06:30:12+08:00</pubDate>
 	  <guid>//building-my-own-mac-working-environment</guid>
 	  <description><![CDATA[
-	     <p>In recent 2 years, I have switched my own working environment from Windows to Ubuntu and Mac. For the reason that I switched C/C++ development for Windows to Java development for Android. But I still prefer C++, so I won’t give up C/C++ programming. In this article I will write down detail steps that how I build working environment. This working environment on Mac is a general working environment, not just for Android development but also C/C++ development. Let’s start!</p>
+	     <p>In recent 2 years, I have switched my own working environment from Windows to Ubuntu and Mac. For the reason that I switched C/C++ development for Windows to Java development for Android. But I still prefer C++, so I won&#39;t give up C/C++ programming. In this article I will write down detail steps that how I build working environment. This working environment on Mac is a general working environment, not just for Android development but also C/C++ development. Let&#39;s start!</p>
 
 <p>First, I would install some universal tools.</p>
 
-<h3 id="universal-tools">Universal Tools</h3>
+<h3>Universal Tools</h3>
 
-<h4 id="install-and-configure-oh-my-zsh">Install and configure Oh my zsh</h4>
+<h4>Install and configure Oh my zsh</h4>
 
 <ul>
-  <li>Install via curl or wget</li>
+<li>Install via curl or wget</li>
 </ul>
 
 <p><strong>via curl</strong></p>
-
-<p><code>
-sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
-</code>
-<strong>via wget</strong></p>
-
-<p><code>
-sh -c "$(wget https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh -O -)"
-</code> </p>
-
+<div class="highlight"><pre><code class="language-text" data-lang="text">sh -c &quot;$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)&quot;
+</code></pre></div>
+<p><strong>via wget</strong></p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">sh -c &quot;$(wget https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh -O -)&quot;
+</code></pre></div>
 <ul>
-  <li>Configure my prefer feature via edit .zshrc file</li>
+<li>Configure my prefer feature via edit .zshrc file</li>
 </ul>
 
 <p>Add this line to .zshrc file
 <code>
 plugins=(git vi-mode adb)
-</code>
-#### Install and configure iTerm</p>
+</code></p>
+
+<h4>Install and configure iTerm</h4>
 
 <ul>
-  <li>
-    <p>Install lastest release dmg</p>
-  </li>
-  <li>Clone solarized git project from github and import color scheme for iTerm2
+<li><p>Install lastest release dmg</p></li>
+<li><p>Clone solarized git project from github and import color scheme for iTerm2
 <code>
 git clone https://github.com/altercation/solarized.git
 cd iterm2-colors-solarized
 ./Solarized Dark.itermcolors
-</code>
-#### Install userful command line tools</li>
-  <li>
-    <p>Install brew - <code>ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"</code></p>
-  </li>
-  <li>
-    <p>Install ctags - <code>brew install ctags</code></p>
-  </li>
-  <li>
-    <p>Install cscope - <code>brew install cscope</code></p>
-  </li>
-  <li>
-    <p>Install ag - <code>brew install ag</code></p>
-  </li>
-  <li>Install grip - <code>brew install grip</code></li>
+</code></p>
+
+<h4>Install userful command line tools</h4></li>
+<li><p>Install brew - <code>ruby -e &quot;$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)&quot;</code></p></li>
+<li><p>Install ctags - <code>brew install ctags</code></p></li>
+<li><p>Install cscope - <code>brew install cscope</code></p></li>
+<li><p>Install ag - <code>brew install ag</code></p></li>
+<li><p>Install grip - <code>brew install grip</code></p></li>
 </ul>
 
-<h4 id="install-and-configure-vim">Install and configure Vim</h4>
+<h4>Install and configure Vim</h4>
 
 <ul>
-  <li>Install vim via source
+<li>Install vim via source
 <code>
 git clone https://github.com/vim/vim.git
 cd vim 
-./configure --with-features=huge --enable-gui=gnome2 --enable-pythoninterp=yes --enable-cscope --enable-gui=auto \ --enable-gtk2-check --enable-gnome-check \ --enable-fail-if-missing --enable-multibyte --enable-fontset \ --with-x --with-compiledby="Tao He"
+./configure --with-features=huge --enable-gui=gnome2 --enable-pythoninterp=yes --enable-cscope --enable-gui=auto \ --enable-gtk2-check --enable-gnome-check \ --enable-fail-if-missing --enable-multibyte --enable-fontset \ --with-x --with-compiledby=&quot;Tao He&quot;
 make
 sudo make install
 </code></li>
-  <li>
-    <p>Configure vim
+<li><p>Configure vim
 <code>
 cd ~
 git clone https://github.com/longlinht/vimrc.git ~/.vim_runtime
 sh ~/.vim_runtime/install_awesome_vimrc.sh
-</code>
-### Utilities</p>
-  </li>
-  <li>
-    <p>Install Alfred</p>
-  </li>
-  <li>
-    <p>Install Dropbox</p>
-  </li>
-  <li>Install NutsCloud</li>
+</code></p>
+
+<h3>Utilities</h3></li>
+<li><p>Install Alfred</p></li>
+<li><p>Install Dropbox</p></li>
+<li><p>Install NutsCloud</p></li>
 </ul>
 
-<h3 id="install-ide">Install IDE</h3>
+<h3>Install IDE</h3>
 
-<h4 id="install-and-configure-android-studio">Install and configure Android Studio</h4>
+<h4>Install and configure Android Studio</h4>
 
 <ul>
-  <li>
-    <p>Install Android Studio via dmg</p>
-  </li>
-  <li>
-    <p>Install and configure ideavim plugin 
+<li><p>Install Android Studio via dmg</p></li>
+<li><p>Install and configure ideavim plugin 
 <code>
 Install ideavim in Android Studio
 git clone https://github.com/longlinht/VimForIDEs.git
 In Android Studio -&gt; File -&gt;Import Settings -&gt; Choose VimForIDEs/ideavim/monokai/settings.jar
-</code></p>
-  </li>
+</code></p></li>
 </ul>
 
-<p>There are some userful application I have installed, but I don’t want to list them becasue their easy installation. Until now, I work comfortably in this woking environment. Maybe I will develop a script to automate this process in the future. If I make it done, I would update this article and supply this script.</p>
+<p>There are some userful application I have installed, but I don&#39;t want to list them becasue their easy installation. Until now, I work comfortably in this woking environment. Maybe I will develop a script to automate this process in the future. If I make it done, I would update this article and supply this script.</p>
 
 	  ]]></description>
 	</item>
@@ -555,30 +475,25 @@ In Android Studio -&gt; File -&gt;Import Settings -&gt; Choose VimForIDEs/ideavi
 	  <pubDate>2016-08-10T00:00:00+08:00</pubDate>
 	  <guid>//java-references</guid>
 	  <description><![CDATA[
-	     <p>Before JDK 1.2, if a object isn’t referenced by any variable, it can’t be used any more.Since JDK 1.2, Java has four reference types.In order from strongest to weakest these references are: Strong, Soft, Weak, Phantom. </p>
+	     <p>Before JDK 1.2, if a object isn&#39;t referenced by any variable, it can&#39;t be used any more.Since JDK 1.2, Java has four reference types.In order from strongest to weakest these references are: Strong, Soft, Weak, Phantom. </p>
 
-<h4 id="strong-reference">Strong reference</h4>
+<h4>Strong reference</h4>
 
 <p>Below code is regular object reference:</p>
-
-<p><code>java
-Sample sample = new Sample();
-</code></p>
-
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="n">Sample</span> <span class="n">sample</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">Sample</span><span class="o">();</span>
+</code></pre></div>
 <p>The variable <code>sample</code> holds a strong reference to a Sample object. Before you stop reading there is a point to this: objects that are reachable through any chain of strong references are not eligible for garbage collection. Even JVM throw <code>OutOfMemoryError</code> to terminate the program, it will not to reclaim the memory that strong reference hold.</p>
 
-<h4 id="soft-reference">Soft reference</h4>
+<h4>Soft reference</h4>
 
 <p>Soft references are cleared at the discretion of the garbage collector in response to memory demand. The virtual machine guarantees that all soft references to softly-reachable objects will have been cleared before it would ever throw an <code>OutOfMemoryError</code>.</p>
 
-<h4 id="weak-reference">Weak reference</h4>
+<h4>Weak reference</h4>
 
 <p>This code snippets is regular weak reference:</p>
-
-<p><code>java
-WeakReference&lt;Cacheable&gt; weakData = new WeakReference&lt;Cacheable&gt;(data);
-</code>
-To access data call weakData.get(). This call to get may return <code>null</code> if the weak reference was garbage collected: you must check the returned value to avoid <code>NullPointerException</code>s.</p>
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="n">WeakReference</span><span class="o">&lt;</span><span class="n">Cacheable</span><span class="o">&gt;</span> <span class="n">weakData</span> <span class="o">=</span> <span class="k">new</span> <span class="n">WeakReference</span><span class="o">&lt;</span><span class="n">Cacheable</span><span class="o">&gt;(</span><span class="n">data</span><span class="o">);</span>
+</code></pre></div>
+<p>To access data call weakData.get(). This call to get may return <code>null</code> if the weak reference was garbage collected: you must check the returned value to avoid <code>NullPointerException</code>s.</p>
 
 <p>An object that is identified as only weakly reachable will be collected at the next GC cycle.</p>
 
@@ -587,30 +502,19 @@ To access data call weakData.get(). This call to get may return <code>null</code
 <p>The difference between <code>SoftReference</code> and <code>WeakReference</code> is:</p>
 
 <ul>
-  <li>
-    <p>A soft reference is exactly like a weak reference, except that it is less eager to throw away the object to which it refers. </p>
-  </li>
-  <li>
-    <p>An object which is only weakly reachable (the strongest references to it are WeakReferences) will be discarded at the next garbage collection cycle, but an object which is softly reachable will generally stick around for a while.</p>
-  </li>
-  <li>
-    <p><code>SoftReferences</code> aren’t required to behave any differently than <code>WeakReferences</code>, but in practice softly reachable objects are generally retained as long as memory is in plentiful supply. This makes them an excellent foundation for a cache, such as the image cache described above, since you can let the garbage collector worry about both how reachable the objects are (a strongly reachable object will never be removed from the cache) and how badly it needs the memory they are consuming.</p>
-  </li>
-  <li>
-    <p>Garbage collector uses algorithms to decide whether or not to reclaim a softly reachable object, but always reclaims a weakly reachable object.</p>
-  </li>
+<li><p>A soft reference is exactly like a weak reference, except that it is less eager to throw away the object to which it refers. </p></li>
+<li><p>An object which is only weakly reachable (the strongest references to it are WeakReferences) will be discarded at the next garbage collection cycle, but an object which is softly reachable will generally stick around for a while.</p></li>
+<li><p><code>SoftReferences</code> aren&#39;t required to behave any differently than <code>WeakReferences</code>, but in practice softly reachable objects are generally retained as long as memory is in plentiful supply. This makes them an excellent foundation for a cache, such as the image cache described above, since you can let the garbage collector worry about both how reachable the objects are (a strongly reachable object will never be removed from the cache) and how badly it needs the memory they are consuming.</p></li>
+<li><p>Garbage collector uses algorithms to decide whether or not to reclaim a softly reachable object, but always reclaims a weakly reachable object.</p></li>
 </ul>
 
-<h4 id="phantom-reference">Phantom reference</h4>
+<h4>Phantom reference</h4>
 
 <p>Phantom references are the most tenuous of all reference types: calling get will always return null.
 When you construct a phantom reference you must always pass in a <code>ReferenceQueue</code>. </p>
-
-<p><code>java
-ReferenceQueue queue = new ReferenceQueue ();
-PhantomReference pr = new PhantomReference (object, queue);
-</code></p>
-
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="n">ReferenceQueue</span> <span class="n">queue</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">ReferenceQueue</span> <span class="o">();</span>
+<span class="n">PhantomReference</span> <span class="n">pr</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">PhantomReference</span> <span class="o">(</span><span class="n">object</span><span class="o">,</span> <span class="n">queue</span><span class="o">);</span>
+</code></pre></div>
 <p>This indicates that you can use a phantom reference to see when your object is GC’d. The phantom reference is enqueued after it has been physically removed from memory — as opposed to weak references which are enqueued before they’re finalized or GC’d.</p>
 
 	  ]]></description>
@@ -623,111 +527,68 @@ PhantomReference pr = new PhantomReference (object, queue);
 	  <pubDate>2016-08-06T03:00:00+08:00</pubDate>
 	  <guid>//thread-looper-handler-in-android</guid>
 	  <description><![CDATA[
-	     <p>It’s widely known that it’s illegal to update UI components directly from threads other than main thread in android. This a rule in Android world, we can’t violate it. But, so many situations we need 
+	     <p>It&#39;s widely known that it&#39;s illegal to update UI components directly from threads other than main thread in android. This a rule in Android world, we can&#39;t violate it. But, so many situations we need 
 update UI when we finish something in separated thread. This is a basic problem, it will refer more important concepts related thread.</p>
 
-<h4 id="looper"><code>Looper</code></h4>
+<h4><code>Looper</code></h4>
 
 <ul>
-  <li>
-    <p>Class used to run a message loop for a thread.</p>
-  </li>
-  <li>
-    <p>The <code>Looper</code> class maintains a synchronized <code>MessageQueue</code>, which contains a list messages.It reads and processes items from a <code>MessageQueue</code>.</p>
-  </li>
-  <li>
-    <p>Threads by default do not have a message loop associated with them, to create one, call <code>prepare()</code> in the thread that is to run the loop, and then <code>loop()</code> to have it process messages until the loop is stopped.</p>
-  </li>
-  <li>
-    <p>It’s associated with the thread within which the <code>Looper</code> is created. This association is kept forever and can’t be broken nor changed. Also note that a thread can’t be associated with more than one Looper. </p>
-  </li>
-  <li>
-    <p>The <code>Looper</code> class is usually used in conjunction with a <code>HandlerThread</code> (a subclass of Thread).</p>
-  </li>
-  <li>
-    <p>There are 2 methods to terminate a Looper:</p>
+<li><p>Class used to run a message loop for a thread.</p></li>
+<li><p>The <code>Looper</code> class maintains a synchronized <code>MessageQueue</code>, which contains a list messages.It reads and processes items from a <code>MessageQueue</code>.</p></li>
+<li><p>Threads by default do not have a message loop associated with them, to create one, call <code>prepare()</code> in the thread that is to run the loop, and then <code>loop()</code> to have it process messages until the loop is stopped.</p></li>
+<li><p>It&#39;s associated with the thread within which the <code>Looper</code> is created. This association is kept forever and can&#39;t be broken nor changed. Also note that a thread can&#39;t be associated with more than one Looper. </p></li>
+<li><p>The <code>Looper</code> class is usually used in conjunction with a <code>HandlerThread</code> (a subclass of Thread).</p></li>
+<li><p>There are 2 methods to terminate a Looper:</p>
 
-    <ul>
-      <li>
-        <p>Looper.quit()</p>
-      </li>
-      <li>
-        <p>Looper.quitSafely() </p>
-      </li>
-    </ul>
-  </li>
-  <li>
-    <p>Most interaction with a message loop is through the <code>Handler</code> class.</p>
-  </li>
+<ul>
+<li>Looper.quit()</li>
+<li>Looper.quitSafely() </li>
+</ul></li>
+<li><p>Most interaction with a message loop is through the <code>Handler</code> class.</p></li>
 </ul>
 
-<h4 id="handler"><code>Handler</code></h4>
+<h4><code>Handler</code></h4>
 
 <ul>
-  <li>
-    <p>Allow you send and process <code>Message</code> and <code>Runnable</code> objects associated with a thread’s <code>MessageQueue</code>. </p>
-  </li>
-  <li>
-    <p>Each <code>Handler</code> instance is associated with a single thread and that thread’s message queue. Multiple Handler instances can be bound to the same thread.</p>
-  </li>
-  <li>
-    <p>It is bound to the thread / message queue of the thread that is creating it.</p>
-  </li>
-  <li>
-    <p>There are two main uses for a Handler: </p>
+<li><p>Allow you send and process <code>Message</code> and <code>Runnable</code> objects associated with a thread&#39;s <code>MessageQueue</code>. </p></li>
+<li><p>Each <code>Handler</code> instance is associated with a single thread and that thread&#39;s message queue. Multiple Handler instances can be bound to the same thread.</p></li>
+<li><p>It is bound to the thread / message queue of the thread that is creating it.</p></li>
+<li><p>There are two main uses for a Handler: </p>
 
-    <ul>
-      <li>
-        <p>To schedule messages and runnables to be executed as some point in the future. </p>
-      </li>
-      <li>
-        <p>To enqueue an action to be performed on a different thread than your own.</p>
-      </li>
-    </ul>
-  </li>
+<ul>
+<li>To schedule messages and runnables to be executed as some point in the future. </li>
+<li>To enqueue an action to be performed on a different thread than your own.</li>
+</ul></li>
 </ul>
 
-<h4 id="message"><code>Message</code></h4>
+<h4><code>Message</code></h4>
 
 <ul>
-  <li>
-    <p>Defines a message containing a description and arbitrary data object that can be sent to a Handler. This object contains two extra int fields and an extra object field that allow you to not do allocations in many cases.</p>
-  </li>
-  <li>
-    <p>While the constructor of Message is public, the best way to get one of these is to call <code>Message.obtain()</code> or one of the <code>Handler.obtainMessage()</code> methods, which will pull them from a pool of recycled objects.</p>
-  </li>
+<li><p>Defines a message containing a description and arbitrary data object that can be sent to a Handler. This object contains two extra int fields and an extra object field that allow you to not do allocations in many cases.</p></li>
+<li><p>While the constructor of Message is public, the best way to get one of these is to call <code>Message.obtain()</code> or one of the <code>Handler.obtainMessage()</code> methods, which will pull them from a pool of recycled objects.</p></li>
 </ul>
 
-<h4 id="handlerthread"><code>HandlerThread</code></h4>
+<h4><code>HandlerThread</code></h4>
 
 <ul>
-  <li>
-    <p><code>HandlerThread</code> is a handy class for starting a new thread that has a Looper.prepare(), Looper. </p>
-  </li>
-  <li>
-    <p>You generally need a thread attached with a Looper when you want sequential execution of tasks without race conditions and keep a thread alive even after a particular task is completed so that it can be reused so that you don’t have to create new thread instances.</p>
-  </li>
+<li><p><code>HandlerThread</code> is a handy class for starting a new thread that has a Looper.prepare(), Looper. </p></li>
+<li><p>You generally need a thread attached with a Looper when you want sequential execution of tasks without race conditions and keep a thread alive even after a particular task is completed so that it can be reused so that you don’t have to create new thread instances.</p></li>
 </ul>
 
 <p>Once a HandlerThread is started, it sets up queuing through a Looper and MessageQueue and waits for incoming messages to process:</p>
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="n">HandlerThread</span> <span class="n">handlerThread</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">HandlerThread</span><span class="o">(</span><span class="s">&quot;HandlerThread&quot;</span><span class="o">);</span>
+<span class="n">handlerThread</span><span class="o">.</span><span class="na">start</span><span class="o">();</span>
 
-<p>```java</p>
-
-<p>HandlerThread handlerThread = new HandlerThread(“HandlerThread”);
-handlerThread.start();</p>
-
-<p>// Create a handler attached to the HandlerThread’s Looper
-mHandler = new Handler(handlerThread.getLooper()) {
-    @Override
-    public void handleMessage(Message msg) {
-        // Process messages here
-    }
-};
+<span class="c1">// Create a handler attached to the HandlerThread&#39;s Looper</span>
+<span class="n">mHandler</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">Handler</span><span class="o">(</span><span class="n">handlerThread</span><span class="o">.</span><span class="na">getLooper</span><span class="o">())</span> <span class="o">{</span>
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">handleMessage</span><span class="o">(</span><span class="n">Message</span> <span class="n">msg</span><span class="o">)</span> <span class="o">{</span>
+        <span class="c1">// Process messages here</span>
+    <span class="o">}</span>
+<span class="o">};</span>
  
-// Now send messages using mHandler.sendMessage()</p>
-
-<p>```</p>
-
+<span class="c1">// Now send messages using mHandler.sendMessage()</span>
+</code></pre></div>
 	  ]]></description>
 	</item>
 
@@ -740,95 +601,64 @@ mHandler = new Handler(handlerThread.getLooper()) {
 	  <description><![CDATA[
 	     <p><strong>stop-the-world</strong> Stop-the-world means that the JVM is stopping the application from running to execute a GC. When stop-the-world occurs, every thread except for the threads needed for the GC will stop their tasks. The interrupted tasks will resume only after the GC task has completed. GC tuning often means reducing this stop-the-world time.</p>
 
-<h4 id="generational-garbage-collection">Generational Garbage Collection</h4>
+<h4>Generational Garbage Collection</h4>
 
 <p>Java does not explicitly specify a memory and remove it in the program code.Maybe there is to way to remove the memory explicitly :</p>
 
 <ul>
-  <li>
-    <p>Sets the relevant object to null</p>
-  </li>
-  <li>
-    <p>Use System.gc() method to remove the memory - will affect the system performance drastically</p>
-  </li>
+<li><p>Sets the relevant object to null</p></li>
+<li><p>Use System.gc() method to remove the memory - will affect the system performance drastically</p></li>
 </ul>
 
 <p>But nobody do that. GC responsible to finds the unnecessary objects to remove them. GC created based on the following two preconditions:</p>
 
 <ul>
-  <li>
-    <p>Most objects soon become unreachable.</p>
-  </li>
-  <li>
-    <p>References from old objects to young objects only exist in small numbers.</p>
-  </li>
+<li><p>Most objects soon become unreachable.</p></li>
+<li><p>References from old objects to young objects only exist in small numbers.</p></li>
 </ul>
 
-<h5 id="young-generation">Young generation</h5>
+<h5>Young generation</h5>
 
-<p>Most of the newly created objects are located here. Since most objects soon become unreachable, many objects are created in the young generation, then disappear. When objects disappear from this area, we say a “minor GC” has occurred.</p>
+<p>Most of the newly created objects are located here. Since most objects soon become unreachable, many objects are created in the young generation, then disappear. When objects disappear from this area, we say a &quot;minor GC&quot; has occurred.</p>
 
-<h5 id="old-generation">Old generation</h5>
+<h5>Old generation</h5>
 
-<p>The objects that did not become unreachable and survived from the young generation are copied here. It is generally larger than the young generation. As it is bigger in size, the GC occurs less frequently than in the young generation. When objects disappear from the old generation, we say a “major GC” (or a “full GC”) has occurred.</p>
+<p>The objects that did not become unreachable and survived from the young generation are copied here. It is generally larger than the young generation. As it is bigger in size, the GC occurs less frequently than in the young generation. When objects disappear from the old generation, we say a &quot;major GC&quot; (or a &quot;full GC&quot;) has occurred.</p>
 
-<h5 id="permanent-generation">Permanent generation</h5>
+<h5>Permanent generation</h5>
 
 <p>It stores classes or interned character strings. So, this area is definitely not for objects that survived from the old generation to stay permanently. A GC may occur in this area. The GC that took place here is still counted as a major GC.</p>
 
-<h4 id="composition-of-the-young-generation">Composition of the Young Generation</h4>
+<h4>Composition of the Young Generation</h4>
+
 <p>The young generation is divided into 3 spaces. </p>
 
 <ul>
-  <li>
-    <p>One Eden space</p>
-  </li>
-  <li>
-    <p>Two Survivor spaces</p>
-  </li>
+<li><p>One Eden space</p></li>
+<li><p>Two Survivor spaces</p></li>
 </ul>
 
 <p>There are 3 spaces in total, two of which are Survivor spaces. The order of execution process of each space is as below:</p>
 
 <ul>
-  <li>
-    <p>The majority of newly created objects are located in the Eden space.</p>
-  </li>
-  <li>
-    <p>After one GC in the Eden space, the surviving objects are moved to one of the Survivor spaces. </p>
-  </li>
-  <li>
-    <p>After a GC in the Eden space, the objects are piled up into the Survivor space, where other surviving objects already exist.</p>
-  </li>
-  <li>
-    <p>Once a Survivor space is full, surviving objects are moved to the other Survivor space. Then, the Survivor space that is full will be changed to a state where there is no data at all.</p>
-  </li>
-  <li>
-    <p>The objects that survived these steps that have been repeated a number of times are moved to the old generation.</p>
-  </li>
+<li><p>The majority of newly created objects are located in the Eden space.</p></li>
+<li><p>After one GC in the Eden space, the surviving objects are moved to one of the Survivor spaces. </p></li>
+<li><p>After a GC in the Eden space, the objects are piled up into the Survivor space, where other surviving objects already exist.</p></li>
+<li><p>Once a Survivor space is full, surviving objects are moved to the other Survivor space. Then, the Survivor space that is full will be changed to a state where there is no data at all.</p></li>
+<li><p>The objects that survived these steps that have been repeated a number of times are moved to the old generation.</p></li>
 </ul>
 
-<h5 id="gc-for-the-old-generation">GC for the Old Generation</h5>
+<h5>GC for the Old Generation</h5>
 
 <p>The old generation basically performs a GC when the data is full. The execution procedure varies by the GC type, so it would be easier to understand if you know different types of GC.
 According to JDK 7, there are 5 GC types.</p>
 
 <ul>
-  <li>
-    <p>Serial GC</p>
-  </li>
-  <li>
-    <p>Parallel GC</p>
-  </li>
-  <li>
-    <p>Parallel Old GC (Parallel Compacting GC)</p>
-  </li>
-  <li>
-    <p>Concurrent Mark &amp; Sweep GC (or “CMS”)</p>
-  </li>
-  <li>
-    <p>Garbage First (G1) GC</p>
-  </li>
+<li><p>Serial GC</p></li>
+<li><p>Parallel GC</p></li>
+<li><p>Parallel Old GC (Parallel Compacting GC)</p></li>
+<li><p>Concurrent Mark &amp; Sweep GC (or &quot;CMS&quot;)</p></li>
+<li><p>Garbage First (G1) GC</p></li>
 </ul>
 
 <p>This article will not introduce 5 GCs, if you interested in, please google it.</p>
@@ -843,504 +673,378 @@ According to JDK 7, there are 5 GC types.</p>
 	  <pubDate>2016-08-03T03:00:00+08:00</pubDate>
 	  <guid>//android-binder-mechanism</guid>
 	  <description><![CDATA[
-	     <h4 id="what-is-binder">What is Binder</h4>
+	     <h4>What is Binder</h4>
 
 <ul>
-  <li>The Binder mechanism has started from a simple idea. </li>
+<li>The Binder mechanism has started from a simple idea. </li>
 </ul>
 
 <blockquote>
-  <p>“Let requests and responses be written in an area where all processes can share and let each process refer to the memory address.” </p>
+<p>&quot;Let requests and responses be written in an area where all processes can share and let each process refer to the memory address.&quot; </p>
 </blockquote>
 
 <ul>
-  <li>
-    <p>Binder is a IPC mechanism.</p>
-  </li>
-  <li>
-    <p>Binder implementation is based on <strong>OpenBinder</strong>.</p>
-  </li>
-  <li>
-    <p>Binder refers to a kernel memory which is shared between all processes to minimize the overhead caused by memory copy. </p>
-  </li>
-  <li>
-    <p>It provides the Remote Procedure Call (RPC) framework written in C++ for high productivity.</p>
-  </li>
+<li><p>Binder is a IPC mechanism.</p></li>
+<li><p>Binder implementation is based on <strong>OpenBinder</strong>.</p></li>
+<li><p>Binder refers to a kernel memory which is shared between all processes to minimize the overhead caused by memory copy. </p></li>
+<li><p>It provides the Remote Procedure Call (RPC) framework written in C++ for high productivity.</p></li>
 </ul>
 
-<h4 id="why-need-binder">Why need Binder</h4>
+<h4>Why need Binder</h4>
 
 <ul>
-  <li>
-    <p>Android need IPC mechanism because of its loosely coupled component design. Every application in Android is comprised of some components ,like Activity or Service, they maybe in same process or not. If they are in different process, they need communicate each other.</p>
-  </li>
-  <li>
-    <p>All of the default system functions of Android are provided as the <strong>server process</strong> type. In other words, to use the functions such as <code>SurfaceFlinger</code> or <code>AudioFlinger</code>, a request should be made as a separate process that runs on the user mode. As all system services are provided as a <strong>server process</strong>, a mechanism to send requests and responses to other processes is necessary. In Android it is called the Binder. Android uses functions provided by other processes through Binder.</p>
-  </li>
-  <li>
-    <p>Android is based on Linux, Linux has a lot of IPC mechanism. But, Android didn’t adopted it. Maybe because of performance and low memory of Android device.</p>
-  </li>
+<li><p>Android need IPC mechanism because of its loosely coupled component design. Every application in Android is comprised of some components ,like Activity or Service, they maybe in same process or not. If they are in different process, they need communicate each other.</p></li>
+<li><p>All of the default system functions of Android are provided as the <strong>server process</strong> type. In other words, to use the functions such as <code>SurfaceFlinger</code> or <code>AudioFlinger</code>, a request should be made as a separate process that runs on the user mode. As all system services are provided as a <strong>server process</strong>, a mechanism to send requests and responses to other processes is necessary. In Android it is called the Binder. Android uses functions provided by other processes through Binder.</p></li>
+<li><p>Android is based on Linux, Linux has a lot of IPC mechanism. But, Android didn&#39;t adopted it. Maybe because of performance and low memory of Android device.</p></li>
 </ul>
 
-<h4 id="the-benefits-of-using-binder-mechanism">The Benefits of Using Binder Mechanism</h4>
+<h4>The Benefits of Using Binder Mechanism</h4>
 
 <ul>
-  <li>
-    <p>Easy to expand or remove functions: It is easy to add a new system service or remove an existing function.</p>
-  </li>
-  <li>
-    <p>Easy to port: Porting to a new processor requires few changes. A toolchain for porting is provided.</p>
-  </li>
-  <li>
-    <p>Easy to test: Tests are limited by the component unit, so it is not necessary to test the entire services, and more strict tests are available.</p>
-  </li>
-  <li>
-    <p>Support for distribution system: Process communication is based on the Binder, so it guarantees transparency in location between components.</p>
-  </li>
+<li><p>Easy to expand or remove functions: It is easy to add a new system service or remove an existing function.</p></li>
+<li><p>Easy to port: Porting to a new processor requires few changes. A toolchain for porting is provided.</p></li>
+<li><p>Easy to test: Tests are limited by the component unit, so it is not necessary to test the entire services, and more strict tests are available.</p></li>
+<li><p>Support for distribution system: Process communication is based on the Binder, so it guarantees transparency in location between components.</p></li>
 </ul>
 
-<h4 id="binder-driver">Binder Driver</h4>
+<h4>Binder Driver</h4>
 
 <p>A Binder Driver is implemented to use the kernel space. The role of the Binder driver is to convert the memory address that each process has mapped with the memory address of the kernel space for reference.</p>
 
-<h4 id="understanding-binder-mechanism-through-media-service">Understanding Binder Mechanism through Media Service</h4>
+<h4>Understanding Binder Mechanism through Media Service</h4>
 
-<h5 id="servicemanager"><code>ServiceManager</code></h5>
+<h5><code>ServiceManager</code></h5>
 
 <p>ServiceManager is a system manager which manages all services in Android.</p>
 
-<h5 id="what-is-media-service">What is Media Service</h5>
+<h5>What is Media Service</h5>
 
 <ul>
-  <li>
-    <p>Media Service is a general C++ application, is core of android media.</p>
-  </li>
-  <li>
-    <p>Media Service is a general service Android supplied.</p>
-  </li>
-  <li>
-    <p>Source code location: <em>frameworks/base/media/mediaserver/main_mediaserver.cpp</em></p>
-  </li>
-  <li>
-    <p>Entry point:</p>
-  </li>
+<li><p>Media Service is a general C++ application, is core of android media.</p></li>
+<li><p>Media Service is a general service Android supplied.</p></li>
+<li><p>Source code location: <em>frameworks/base/media/mediaserver/main_mediaserver.cpp</em></p></li>
+<li><p>Entry point:</p></li>
+</ul>
+<div class="highlight"><pre><code class="language-c++" data-lang="c++"><span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span><span class="o">**</span> <span class="n">argv</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="c1">// Require a ServiceManager proxy</span>
+    <span class="n">sp</span><span class="o">&lt;</span><span class="n">ProcessState</span><span class="o">&gt;</span> <span class="n">proc</span><span class="p">(</span><span class="n">ProcessState</span><span class="o">::</span><span class="n">self</span><span class="p">());</span>
+    <span class="n">sp</span><span class="o">&lt;</span><span class="n">IServiceManager</span><span class="o">&gt;</span> <span class="n">sm</span> <span class="o">=</span> <span class="n">defaultServiceManager</span><span class="p">();</span>
+    <span class="n">LOGI</span><span class="p">(</span><span class="s">&quot;ServiceManager: %p&quot;</span><span class="p">,</span> <span class="n">sm</span><span class="p">.</span><span class="n">get</span><span class="p">());</span>
+    <span class="n">AudioFlinger</span><span class="o">::</span><span class="n">instantiate</span><span class="p">();</span>
+    <span class="n">MediaPlayerService</span><span class="o">::</span><span class="n">instantiate</span><span class="p">();</span>
+    <span class="n">CameraService</span><span class="o">::</span><span class="n">instantiate</span><span class="p">();</span>
+    <span class="n">AudioPolicyService</span><span class="o">::</span><span class="n">instantiate</span><span class="p">();</span>
+
+    <span class="c1">// Forever process messages sent from Binder.</span>
+    <span class="n">ProcessState</span><span class="o">::</span><span class="n">self</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">startThreadPool</span><span class="p">();</span>
+    <span class="n">IPCThreadState</span><span class="o">::</span><span class="n">self</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">joinThreadPool</span><span class="p">();</span>
+<span class="p">}</span>
+</code></pre></div>
+<ul>
+<li><p>Media server service has four sub-module.</p>
+
+<ul>
+<li><code>AudioFlinger</code></li>
+<li><code>MediaPlayerService</code></li>
+<li><code>CameraService</code></li>
+<li><code>AudioPolicyService</code></li>
+</ul></li>
 </ul>
 
-<p>```c++
-int main(int argc, char** argv)
-{
-    // Require a ServiceManager proxy
-    sp<processstate> proc(ProcessState::self());
-    sp<iservicemanager> sm = defaultServiceManager();
-    LOGI("ServiceManager: %p", sm.get());
-    AudioFlinger::instantiate();
-    MediaPlayerService::instantiate();
-    CameraService::instantiate();
-    AudioPolicyService::instantiate();</iservicemanager></processstate></p>
-
-<pre><code>// Forever process messages sent from Binder.
-ProcessState::self()-&gt;startThreadPool();
-IPCThreadState::self()-&gt;joinThreadPool(); } ``` * Media server service has four sub-module.
-</code></pre>
+<h5><code>ProcessState</code></h5>
 
 <ul>
-  <li>
-    <p><code>AudioFlinger</code></p>
-  </li>
-  <li>
-    <p><code>MediaPlayerService</code></p>
-  </li>
-  <li>
-    <p><code>CameraService</code></p>
-  </li>
-  <li>
-    <p><code>AudioPolicyService</code></p>
-  </li>
+<li><p>Source code location: <em>frameworks/base/libs/binder/ProcessState.cpp</em></p></li>
+<li><p>Media Service first call <code>ProcessState::self()</code></p></li>
+</ul>
+<div class="highlight"><pre><code class="language-c++" data-lang="c++"><span class="n">sp</span><span class="o">&lt;</span><span class="n">ProcessState</span><span class="o">&gt;</span> <span class="n">ProcessState</span><span class="o">::</span><span class="n">self</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">gProcess</span> <span class="o">!=</span> <span class="nb">NULL</span><span class="p">)</span> <span class="k">return</span> <span class="n">gProcess</span><span class="p">;</span>
+
+    <span class="n">AutoMutex</span> <span class="nf">_l</span><span class="p">(</span><span class="n">gProcessMutex</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">gProcess</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="n">gProcess</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ProcessState</span><span class="p">;</span>
+    <span class="k">return</span> <span class="n">gProcess</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+<ul>
+<li>Then <code>ProcessState::self()</code> call ProcessState constructor</li>
+</ul>
+<div class="highlight"><pre><code class="language-c++" data-lang="c++"><span class="n">ProcessState</span><span class="o">::</span><span class="n">ProcessState</span><span class="p">()</span>
+    <span class="o">:</span> <span class="n">mDriverFD</span><span class="p">(</span><span class="n">open_driver</span><span class="p">())</span>
+    <span class="p">,</span> <span class="n">mVMStart</span><span class="p">(</span><span class="n">MAP_FAILED</span><span class="p">)</span> <span class="c1">// Map the memory start address</span>
+    <span class="p">,</span> <span class="n">mManagesContexts</span><span class="p">(</span><span class="nb">false</span><span class="p">)</span>
+    <span class="p">,</span> <span class="n">mBinderContextCheckFunc</span><span class="p">(</span><span class="nb">NULL</span><span class="p">)</span>
+    <span class="p">,</span> <span class="n">mBinderContextUserData</span><span class="p">(</span><span class="nb">NULL</span><span class="p">)</span>
+    <span class="p">,</span> <span class="n">mThreadPoolStarted</span><span class="p">(</span><span class="nb">false</span><span class="p">)</span>
+    <span class="p">,</span> <span class="n">mThreadPoolSeq</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">mDriverFD</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+        <span class="c1">// XXX Ideally, there should be a specific define for whether we</span>
+        <span class="c1">// have mmap (or whether we could possibly have the kernel module</span>
+        <span class="c1">// availabla).</span>
+<span class="cp">#if !defined(HAVE_WIN32_IPC)</span>
+        <span class="c1">// mmap the binder, providing a chunk of virtual address space to receive transactions.</span>
+        <span class="n">mVMStart</span> <span class="o">=</span> <span class="n">mmap</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">BINDER_VM_SIZE</span><span class="p">,</span> <span class="n">PROT_READ</span><span class="p">,</span> <span class="n">MAP_PRIVATE</span> <span class="o">|</span> <span class="n">MAP_NORESERVE</span><span class="p">,</span> <span class="n">mDriverFD</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">mVMStart</span> <span class="o">==</span> <span class="n">MAP_FAILED</span><span class="p">)</span> <span class="p">{</span>
+            <span class="c1">// *sigh*</span>
+            <span class="n">LOGE</span><span class="p">(</span><span class="s">&quot;Using /dev/binder failed: unable to mmap transaction memory.</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+            <span class="n">close</span><span class="p">(</span><span class="n">mDriverFD</span><span class="p">);</span>
+            <span class="n">mDriverFD</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+        <span class="p">}</span>
+<span class="cp">#else</span>
+        <span class="n">mDriverFD</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+<span class="cp">#endif</span>
+    <span class="p">}</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">mDriverFD</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+        <span class="c1">// Need to run without the driver, starting our own thread pool.</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<ul>
+<li><p><code>open_driver()</code> function</p>
+
+<ul>
+<li>Very important function call to open a virtual device for communication.</li>
+<li>This functon will open this device <strong>/dev/binder</strong>.</li>
+</ul></li>
+<li><p>When <code>ProcessState::self()</code> complete, it had do two important jobs:</p>
+
+<ul>
+<li>Open the virtual device <strong>/dev/binder</strong>, so there has been a channel to communicate with kernel.</li>
+<li>Map <strong>/dev/binder</strong> device&#39;s fd to memory.<br></li>
+</ul></li>
 </ul>
 
-<h5 id="processstate"><code>ProcessState</code></h5>
+<h5><code>defaultServiceManager()</code></h5>
 
 <ul>
-  <li>
-    <p>Source code location: <em>frameworks/base/libs/binder/ProcessState.cpp</em></p>
-  </li>
-  <li>
-    <p>Media Service first call <code>ProcessState::self()</code></p>
-  </li>
+<li><p>Source code location: <em>frameworks/base/libs/binder/IServiceManager.cpp</em></p></li>
+<li><p>Trace the source code call path, finally find that this call <code>sp&lt;IServiceManager&gt; sm = defaultServiceManager()</code> equals <code>gDefaultServiceManager = interface_cast&lt;IServiceManager&gt;(new BpBinder(0))</code>.</p></li>
+<li><p>BpBinder</p>
+
+<ul>
+<li>Source code location: <em>frameworks/base/libs/binder/BpBinder.cpp</em></li>
+<li>BpBinder constructor:</li>
+</ul></li>
+</ul>
+<div class="highlight"><pre><code class="language-c++" data-lang="c++"><span class="n">BpBinder</span><span class="o">::</span><span class="n">BpBinder</span><span class="p">(</span><span class="kt">int32_t</span> <span class="n">handle</span><span class="p">)</span>
+    <span class="o">:</span> <span class="n">mHandle</span><span class="p">(</span><span class="n">handle</span><span class="p">)</span>
+    <span class="p">,</span> <span class="n">mAlive</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    <span class="p">,</span> <span class="n">mObitsSent</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+    <span class="p">,</span> <span class="n">mObituaries</span><span class="p">(</span><span class="nb">NULL</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">LOGV</span><span class="p">(</span><span class="s">&quot;Creating BpBinder %p handle %d</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="k">this</span><span class="p">,</span> <span class="n">mHandle</span><span class="p">);</span>
+
+    <span class="n">extendObjectLifetime</span><span class="p">(</span><span class="n">OBJECT_LIFETIME_WEAK</span><span class="p">);</span>
+    <span class="n">IPCThreadState</span><span class="o">::</span><span class="n">self</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">incWeakHandle</span><span class="p">(</span><span class="n">handle</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div>
+<ul>
+<li><p>What did <code>interface_cast</code> do?</p>
+
+<ul>
+<li><code>interface_cast</code> defined in <em>/home/tao/android_source/frameworks/base/include/binder/IInterface.h</em></li>
+<li><code>interface_cast</code> defination</li>
+</ul></li>
+</ul>
+<div class="highlight"><pre><code class="language-c++" data-lang="c++"><span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">INTERFACE</span><span class="o">&gt;</span>
+<span class="kr">inline</span> <span class="n">sp</span><span class="o">&lt;</span><span class="n">INTERFACE</span><span class="o">&gt;</span> <span class="n">interface_cast</span><span class="p">(</span><span class="k">const</span> <span class="n">sp</span><span class="o">&lt;</span><span class="n">IBinder</span><span class="o">&gt;&amp;</span> <span class="n">obj</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">return</span> <span class="n">INTERFACE</span><span class="o">::</span><span class="n">asInterface</span><span class="p">(</span><span class="n">obj</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div>
+<ul>
+<li>So <code>gDefaultServiceManager = interface_cast&lt;IServiceManager&gt;(new BpBinder(0))</code> statement call <code>interface_cast</code> will equals:</li>
+</ul>
+<div class="highlight"><pre><code class="language-c++" data-lang="c++"><span class="kr">inline</span> <span class="n">sp</span><span class="o">&lt;</span><span class="n">IServiceManager</span><span class="o">&gt;</span> <span class="n">interface_cast</span><span class="p">(</span><span class="k">const</span> <span class="n">sp</span><span class="o">&lt;</span><span class="n">IBinder</span><span class="o">&gt;&amp;</span> <span class="n">obj</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">return</span> <span class="n">IServiceManager</span><span class="o">::</span><span class="n">asInterface</span><span class="p">(</span><span class="n">obj</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div>
+<ul>
+<li><p>We need find clue in <code>IServiceManager</code></p>
+
+<ul>
+<li>Source code location: <em>frameworks/base/include/binder/IInterface.h</em></li>
+<li><code>IServiceManager</code> defination</li>
+</ul></li>
+</ul>
+<div class="highlight"><pre><code class="language-c++" data-lang="c++"><span class="k">class</span> <span class="nc">IServiceManager</span> <span class="o">:</span> <span class="k">public</span> <span class="n">IInterface</span>
+<span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+    <span class="n">DECLARE_META_INTERFACE</span><span class="p">(</span><span class="n">ServiceManager</span><span class="p">);</span>
+
+    <span class="cm">/**</span>
+<span class="cm">     * Retrieve an existing service, blocking for a few seconds</span>
+<span class="cm">     * if it doesn&#39;t yet exist.</span>
+<span class="cm">     */</span>
+    <span class="k">virtual</span> <span class="n">sp</span><span class="o">&lt;</span><span class="n">IBinder</span><span class="o">&gt;</span>         <span class="n">getService</span><span class="p">(</span> <span class="k">const</span> <span class="n">String16</span><span class="o">&amp;</span> <span class="n">name</span><span class="p">)</span> <span class="k">const</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+
+    <span class="cm">/**</span>
+<span class="cm">     * Retrieve an existing service, non-blocking.</span>
+<span class="cm">     */</span>
+    <span class="k">virtual</span> <span class="n">sp</span><span class="o">&lt;</span><span class="n">IBinder</span><span class="o">&gt;</span>         <span class="n">checkService</span><span class="p">(</span> <span class="k">const</span> <span class="n">String16</span><span class="o">&amp;</span> <span class="n">name</span><span class="p">)</span> <span class="k">const</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+
+    <span class="cm">/**</span>
+<span class="cm">     * Register a service.</span>
+<span class="cm">     */</span>
+    <span class="k">virtual</span> <span class="kt">status_t</span>            <span class="n">addService</span><span class="p">(</span> <span class="k">const</span> <span class="n">String16</span><span class="o">&amp;</span> <span class="n">name</span><span class="p">,</span>
+                                            <span class="k">const</span> <span class="n">sp</span><span class="o">&lt;</span><span class="n">IBinder</span><span class="o">&gt;&amp;</span> <span class="n">service</span><span class="p">)</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+
+    <span class="cm">/**</span>
+<span class="cm">     * Return list of all existing services.</span>
+<span class="cm">     */</span>
+    <span class="k">virtual</span> <span class="n">Vector</span><span class="o">&lt;</span><span class="n">String16</span><span class="o">&gt;</span>    <span class="n">listServices</span><span class="p">()</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+
+    <span class="k">enum</span> <span class="p">{</span>
+        <span class="n">GET_SERVICE_TRANSACTION</span> <span class="o">=</span> <span class="n">IBinder</span><span class="o">::</span><span class="n">FIRST_CALL_TRANSACTION</span><span class="p">,</span>
+        <span class="n">CHECK_SERVICE_TRANSACTION</span><span class="p">,</span>
+        <span class="n">ADD_SERVICE_TRANSACTION</span><span class="p">,</span>
+        <span class="n">LIST_SERVICES_TRANSACTION</span><span class="p">,</span>
+    <span class="p">};</span>
+<span class="p">};</span>
+</code></pre></div><div class="highlight"><pre><code class="language-text" data-lang="text">* We need trace this macro `DECLARE_META_INTERFACE(ServiceManager)` 
+</code></pre></div><div class="highlight"><pre><code class="language-c++" data-lang="c++"><span class="cp">#define DECLARE_META_INTERFACE(INTERFACE)                             </span>
+    <span class="k">static</span> <span class="k">const</span> <span class="n">String16</span> <span class="n">descriptor</span><span class="p">;</span>                                 
+    <span class="k">static</span> <span class="n">sp</span><span class="o">&lt;</span><span class="n">I</span><span class="err">##</span><span class="n">INTERFACE</span><span class="o">&gt;</span> <span class="n">asInterface</span><span class="p">(</span><span class="k">const</span> <span class="n">sp</span><span class="o">&lt;</span><span class="n">IBinder</span><span class="o">&gt;&amp;</span> <span class="n">obj</span><span class="p">);</span>      
+    <span class="k">virtual</span> <span class="k">const</span> <span class="n">String16</span><span class="o">&amp;</span> <span class="n">getInterfaceDescriptor</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span>           
+    <span class="n">I</span><span class="err">##</span><span class="n">INTERFACE</span><span class="p">();</span>                                                   
+    <span class="k">virtual</span> <span class="o">~</span><span class="n">I</span><span class="err">##</span><span class="n">INTERFACE</span><span class="p">();</span>                                          
+
+
+<span class="cp">#define IMPLEMENT_META_INTERFACE(INTERFACE, NAME)                     </span>
+    <span class="k">const</span> <span class="n">String16</span> <span class="n">I</span><span class="err">##</span><span class="n">INTERFACE</span><span class="o">::</span><span class="n">descriptor</span><span class="p">(</span><span class="n">NAME</span><span class="p">);</span>                    
+    <span class="k">const</span> <span class="n">String16</span><span class="o">&amp;</span> <span class="n">I</span><span class="err">##</span><span class="n">INTERFACE</span><span class="o">::</span><span class="n">getInterfaceDescriptor</span><span class="p">()</span> <span class="k">const</span> <span class="p">{</span>    
+        <span class="k">return</span> <span class="n">I</span><span class="err">##</span><span class="n">INTERFACE</span><span class="o">::</span><span class="n">descriptor</span><span class="p">;</span>                              
+    <span class="p">}</span>                                                                 
+    <span class="n">sp</span><span class="o">&lt;</span><span class="n">I</span><span class="err">##</span><span class="n">INTERFACE</span><span class="o">&gt;</span> <span class="n">I</span><span class="err">##</span><span class="n">INTERFACE</span><span class="o">::</span><span class="n">asInterface</span><span class="p">(</span><span class="k">const</span> <span class="n">sp</span><span class="o">&lt;</span><span class="n">IBinder</span><span class="o">&gt;&amp;</span> <span class="n">obj</span><span class="p">)</span>
+    <span class="p">{</span>                                                                 
+        <span class="n">sp</span><span class="o">&lt;</span><span class="n">I</span><span class="err">##</span><span class="n">INTERFACE</span><span class="o">&gt;</span> <span class="n">intr</span><span class="p">;</span>                                        
+        <span class="k">if</span> <span class="p">(</span><span class="n">obj</span> <span class="o">!=</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>                                            
+            <span class="n">intr</span> <span class="o">=</span> <span class="k">static_cast</span><span class="o">&lt;</span><span class="n">I</span><span class="err">##</span><span class="n">INTERFACE</span><span class="o">*&gt;</span><span class="p">(</span>                        
+                <span class="n">obj</span><span class="o">-&gt;</span><span class="n">queryLocalInterface</span><span class="p">(</span>                             
+                        <span class="n">I</span><span class="err">##</span><span class="n">INTERFACE</span><span class="o">::</span><span class="n">descriptor</span><span class="p">).</span><span class="n">get</span><span class="p">());</span>             
+            <span class="k">if</span> <span class="p">(</span><span class="n">intr</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>                                       
+                <span class="n">intr</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Bp</span><span class="err">##</span><span class="n">INTERFACE</span><span class="p">(</span><span class="n">obj</span><span class="p">);</span>                        
+            <span class="p">}</span>                                                         
+        <span class="p">}</span>                                                             
+        <span class="k">return</span> <span class="n">intr</span><span class="p">;</span>                                                  
+    <span class="p">}</span>                                                                 
+    <span class="n">I</span><span class="err">##</span><span class="n">INTERFACE</span><span class="o">::</span><span class="n">I</span><span class="err">##</span><span class="n">INTERFACE</span><span class="p">()</span> <span class="p">{</span> <span class="p">}</span>                                  
+    <span class="n">I</span><span class="err">##</span><span class="n">INTERFACE</span><span class="o">::~</span><span class="n">I</span><span class="err">##</span><span class="n">INTERFACE</span><span class="p">()</span> <span class="p">{</span> <span class="p">}</span>                                 
+</code></pre></div>
+<ul>
+<li>Finally, we find that <code>interface_cast&lt;IServiceManager&gt;(new BpBinder(0))</code> statement actually return a <code>BpServiceManager</code> object. It means <code>sp&lt;IServiceManager&gt; sm = defaultServiceManager()</code> acquired a <code>BpServiceManager</code> object.</li>
 </ul>
 
-<p>```c++
-sp<processstate> ProcessState::self()
-{
-    if (gProcess != NULL) return gProcess;</processstate></p>
-
-<pre><code>AutoMutex _l(gProcessMutex);
-if (gProcess == NULL) gProcess = new ProcessState;
-return gProcess; } ```
-</code></pre>
+<h5><code>BpServiceManager</code></h5>
 
 <ul>
-  <li>Then <code>ProcessState::self()</code> call ProcessState constructor</li>
+<li>Bp stands for Binder proxy, it means <code>BpServiceManager</code> is <code>ServiceManager</code>&#39;s proxy to Binder.</li>
 </ul>
 
-<p><code>c++
-ProcessState::ProcessState()
-    : mDriverFD(open_driver())
-    , mVMStart(MAP_FAILED) // Map the memory start address
-    , mManagesContexts(false)
-    , mBinderContextCheckFunc(NULL)
-    , mBinderContextUserData(NULL)
-    , mThreadPoolStarted(false)
-    , mThreadPoolSeq(1)
-{
-    if (mDriverFD &gt;= 0) {
-        // XXX Ideally, there should be a specific define for whether we
-        // have mmap (or whether we could possibly have the kernel module
-        // availabla).
-#if !defined(HAVE_WIN32_IPC)
-        // mmap the binder, providing a chunk of virtual address space to receive transactions.
-        mVMStart = mmap(0, BINDER_VM_SIZE, PROT_READ, MAP_PRIVATE | MAP_NORESERVE, mDriverFD, 0);
-        if (mVMStart == MAP_FAILED) {
-            // *sigh*
-            LOGE("Using /dev/binder failed: unable to mmap transaction memory.\n");
-            close(mDriverFD);
-            mDriverFD = -1;
-        }
-#else
-        mDriverFD = -1;
-#endif
-    }
-    if (mDriverFD &lt; 0) {
-        // Need to run without the driver, starting our own thread pool.
-    }
-}
-</code></p>
+<h5><code>MediaPlayerService</code></h5>
 
 <ul>
-  <li>
-    <p><code>open_driver()</code> function</p>
-
-    <ul>
-      <li>
-        <p>Very important function call to open a virtual device for communication.</p>
-      </li>
-      <li>
-        <p>This functon will open this device <strong>/dev/binder</strong>.</p>
-      </li>
-    </ul>
-  </li>
-  <li>
-    <p>When <code>ProcessState::self()</code> complete, it had do two important jobs:</p>
-
-    <ul>
-      <li>Open the virtual device <strong>/dev/binder</strong>, so there has been a channel to communicate with kernel.</li>
-      <li>Map <strong>/dev/binder</strong> device’s fd to memory.  </li>
-    </ul>
-  </li>
+<li><p>Source code location: <em>frameworks/base/media/libmediaplayerservice/MediaPlayerService.cpp</em></p></li>
+<li><p>Defination and instantiation </p></li>
 </ul>
+<div class="highlight"><pre><code class="language-c++" data-lang="c++"><span class="kt">void</span> <span class="n">MediaPlayerService</span><span class="o">::</span><span class="n">instantiate</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">defaultServiceManager</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">addService</span><span class="p">(</span>
+            <span class="n">String16</span><span class="p">(</span><span class="s">&quot;media.player&quot;</span><span class="p">),</span> <span class="k">new</span> <span class="n">MediaPlayerService</span><span class="p">());</span>
+<span class="p">}</span>
 
-<h5 id="defaultservicemanager"><code>defaultServiceManager()</code></h5>
+<span class="n">MediaPlayerService</span><span class="o">::</span><span class="n">MediaPlayerService</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="n">LOGV</span><span class="p">(</span><span class="s">&quot;MediaPlayerService created&quot;</span><span class="p">);</span>
+    <span class="n">mNextConnId</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+<span class="p">}</span>
 
+<span class="n">MediaPlayerService</span><span class="o">::~</span><span class="n">MediaPlayerService</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="n">LOGV</span><span class="p">(</span><span class="s">&quot;MediaPlayerService destroyed&quot;</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div>
 <ul>
-  <li>
-    <p>Source code location: <em>frameworks/base/libs/binder/IServiceManager.cpp</em></p>
-  </li>
-  <li>
-    <p>Trace the source code call path, finally find that this call <code>sp&lt;IServiceManager&gt; sm = defaultServiceManager()</code> equals <code>gDefaultServiceManager = interface_cast&lt;IServiceManager&gt;(new BpBinder(0))</code>.</p>
-  </li>
-  <li>
-    <p>BpBinder</p>
-
-    <ul>
-      <li>
-        <p>Source code location: <em>frameworks/base/libs/binder/BpBinder.cpp</em></p>
-      </li>
-      <li>
-        <p>BpBinder constructor:</p>
-      </li>
-    </ul>
-  </li>
+<li><p><code>MediaPlayerService</code> derivatived from <code>BnMediaPlayerService</code></p></li>
+<li><p>Bn stands for Binder native.</p></li>
+<li><p>Add <code>MediaPlayerService</code> to <code>ServiceManager</code></p></li>
 </ul>
-
-<p>```c++
-BpBinder::BpBinder(int32_t handle)
-    : mHandle(handle)
-    , mAlive(1)
-    , mObitsSent(0)
-    , mObituaries(NULL)
-{
-    LOGV(“Creating BpBinder %p handle %d\n”, this, mHandle);</p>
-
-<pre><code>extendObjectLifetime(OBJECT_LIFETIME_WEAK);
-IPCThreadState::self()-&gt;incWeakHandle(handle); } ```
-</code></pre>
-
+<div class="highlight"><pre><code class="language-c++" data-lang="c++"><span class="k">virtual</span> <span class="kt">status_t</span> <span class="nf">addService</span><span class="p">(</span><span class="k">const</span> <span class="n">String16</span><span class="o">&amp;</span> <span class="n">name</span><span class="p">,</span> <span class="k">const</span> <span class="n">sp</span><span class="o">&lt;</span><span class="n">IBinder</span><span class="o">&gt;&amp;</span> <span class="n">service</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">Parcel</span> <span class="n">data</span><span class="p">,</span> <span class="n">reply</span><span class="p">;</span>
+    <span class="n">data</span><span class="p">.</span><span class="n">writeInterfaceToken</span><span class="p">(</span><span class="n">IServiceManager</span><span class="o">::</span><span class="n">getInterfaceDescriptor</span><span class="p">());</span>
+    <span class="n">data</span><span class="p">.</span><span class="n">writeString16</span><span class="p">(</span><span class="n">name</span><span class="p">);</span>
+    <span class="n">data</span><span class="p">.</span><span class="n">writeStrongBinder</span><span class="p">(</span><span class="n">service</span><span class="p">);</span>
+    <span class="c1">// remote() return BpBinder object</span>
+    <span class="kt">status_t</span> <span class="n">err</span> <span class="o">=</span> <span class="n">remote</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">transact</span><span class="p">(</span><span class="n">ADD_SERVICE_TRANSACTION</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">reply</span><span class="p">);</span>
+    <span class="k">return</span> <span class="n">err</span> <span class="o">==</span> <span class="n">NO_ERROR</span> <span class="o">?</span> <span class="n">reply</span><span class="p">.</span><span class="n">readInt32</span><span class="p">()</span> <span class="o">:</span> <span class="n">err</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
 <ul>
-  <li>
-    <p>What did <code>interface_cast</code> do?</p>
-
-    <ul>
-      <li>
-        <p><code>interface_cast</code> defined in <em>/home/tao/android_source/frameworks/base/include/binder/IInterface.h</em></p>
-      </li>
-      <li>
-        <p><code>interface_cast</code> defination</p>
-      </li>
-    </ul>
-  </li>
+<li><code>remote()</code> return BpBinder</li>
 </ul>
+<div class="highlight"><pre><code class="language-c++" data-lang="c++"><span class="kt">status_t</span> <span class="n">BpBinder</span><span class="o">::</span><span class="n">transact</span><span class="p">(</span><span class="kt">uint32_t</span> <span class="n">code</span><span class="p">,</span> <span class="k">const</span> <span class="n">Parcel</span><span class="o">&amp;</span> <span class="n">data</span><span class="p">,</span> <span class="n">Parcel</span><span class="o">*</span> <span class="n">reply</span><span class="p">,</span> <span class="kt">uint32_t</span> <span class="n">flags</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="c1">// Once a binder has died, it will never come back to life.</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">mAlive</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kt">status_t</span> <span class="n">status</span> <span class="o">=</span> <span class="n">IPCThreadState</span><span class="o">::</span><span class="n">self</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">transact</span><span class="p">(</span>
+            <span class="n">mHandle</span><span class="p">,</span> <span class="n">code</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">reply</span><span class="p">,</span> <span class="n">flags</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">status</span> <span class="o">==</span> <span class="n">DEAD_OBJECT</span><span class="p">)</span> <span class="n">mAlive</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="k">return</span> <span class="n">status</span><span class="p">;</span>
+    <span class="p">}</span>
 
-<p><code>c++
-template&lt;typename INTERFACE&gt;
-inline sp&lt;INTERFACE&gt; interface_cast(const sp&lt;IBinder&gt;&amp; obj)
-{
-    return INTERFACE::asInterface(obj);
-}
-</code>
-   * So <code>gDefaultServiceManager = interface_cast&lt;IServiceManager&gt;(new BpBinder(0))</code> statement call <code>interface_cast</code> will equals:</p>
-
-<p><code>c++
-inline sp&lt;IServiceManager&gt; interface_cast(const sp&lt;IBinder&gt;&amp; obj)
-{
-    return IServiceManager::asInterface(obj);
-}
-</code></p>
+    <span class="k">return</span> <span class="n">DEAD_OBJECT</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+<ul>
+<li><p><code>IPCThreadState</code> do with transaction, write add service command and wait for response.</p></li>
+<li><p><code>BpServiceManager</code> had sent a add service message, but who receive and process it?</p></li>
+<li><p><code>BnServiceManager</code>? unfortunately it doesn&#39;t exist. service do same job.</p></li>
+<li><p>service</p>
 
 <ul>
-  <li>
-    <p>We need find clue in <code>IServiceManager</code></p>
-
-    <ul>
-      <li>
-        <p>Source code location: <em>frameworks/base/include/binder/IInterface.h</em></p>
-      </li>
-      <li>
-        <p><code>IServiceManager</code> defination</p>
-      </li>
-    </ul>
-  </li>
+<li>service is a general c++ applcation.</li>
+<li>Source code location: <em>frameworks/base/cmds/servicemanager/service_manager.c</em></li>
+<li>Entry point:</li>
+</ul></li>
 </ul>
+<div class="highlight"><pre><code class="language-c++" data-lang="c++"><span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span> <span class="o">**</span><span class="n">argv</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">struct</span> <span class="n">binder_state</span> <span class="o">*</span><span class="n">bs</span><span class="p">;</span>
+    <span class="c1">//  BINDER_SERVICE_MANAGER is NULL, is a magic number</span>
+    <span class="kt">void</span> <span class="o">*</span><span class="n">svcmgr</span> <span class="o">=</span> <span class="n">BINDER_SERVICE_MANAGER</span><span class="p">;</span>
 
-<p>```c++
-class IServiceManager : public IInterface
-{
-public:
-    DECLARE_META_INTERFACE(ServiceManager);</p>
+    <span class="n">bs</span> <span class="o">=</span> <span class="n">binder_open</span><span class="p">(</span><span class="mi">128</span><span class="o">*</span><span class="mi">1024</span><span class="p">);</span>
 
-<pre><code>/**
- * Retrieve an existing service, blocking for a few seconds
- * if it doesn't yet exist.
- */
-virtual sp&lt;IBinder&gt;         getService( const String16&amp; name) const = 0;
+    <span class="k">if</span> <span class="p">(</span><span class="n">binder_become_context_manager</span><span class="p">(</span><span class="n">bs</span><span class="p">))</span> <span class="p">{</span>
+        <span class="n">LOGE</span><span class="p">(</span><span class="s">&quot;cannot become context manager (%s)</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">strerror</span><span class="p">(</span><span class="n">errno</span><span class="p">));</span>
+        <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+    <span class="p">}</span>
 
-/**
- * Retrieve an existing service, non-blocking.
- */
-virtual sp&lt;IBinder&gt;         checkService( const String16&amp; name) const = 0;
+    <span class="n">svcmgr_handle</span> <span class="o">=</span> <span class="n">svcmgr</span><span class="p">;</span>
+    <span class="n">binder_loop</span><span class="p">(</span><span class="n">bs</span><span class="p">,</span> <span class="n">svcmgr_handler</span><span class="p">);</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+<h4>Conclusion</h4>
 
-/**
- * Register a service.
- */
-virtual status_t            addService( const String16&amp; name,
-                                        const sp&lt;IBinder&gt;&amp; service) = 0;
-
-/**
- * Return list of all existing services.
- */
-virtual Vector&lt;String16&gt;    listServices() = 0;
-
-enum {
-    GET_SERVICE_TRANSACTION = IBinder::FIRST_CALL_TRANSACTION,
-    CHECK_SERVICE_TRANSACTION,
-    ADD_SERVICE_TRANSACTION,
-    LIST_SERVICES_TRANSACTION,
-}; }; ```     
-* We need trace this macro `DECLARE_META_INTERFACE(ServiceManager)` 
-</code></pre>
-
-<p>```c++
-#define DECLARE_META_INTERFACE(INTERFACE)                           <br />
-    static const String16 descriptor;                               <br />
-    static sp&lt;I##INTERFACE&gt; asInterface(const sp<ibinder>&amp; obj);      
-    virtual const String16&amp; getInterfaceDescriptor() const;           
-    I##INTERFACE();                                                   
-    virtual ~I##INTERFACE();                                          </ibinder></p>
-
-<h1 id="define-implementmetainterfaceinterface-name">define IMPLEMENT_META_INTERFACE(INTERFACE, NAME)</h1>
-<pre><code>const String16 I##INTERFACE::descriptor(NAME);                    
-const String16&amp; I##INTERFACE::getInterfaceDescriptor() const {    
-    return I##INTERFACE::descriptor;                              
-}                                                                 
-sp&lt;I##INTERFACE&gt; I##INTERFACE::asInterface(const sp&lt;IBinder&gt;&amp; obj)
-{                                                                 
-    sp&lt;I##INTERFACE&gt; intr;                                        
-    if (obj != NULL) {                                            
-        intr = static_cast&lt;I##INTERFACE*&gt;(                        
-            obj-&gt;queryLocalInterface(                             
-                    I##INTERFACE::descriptor).get());             
-        if (intr == NULL) {                                       
-            intr = new Bp##INTERFACE(obj);                        
-        }                                                         
-    }                                                             
-    return intr;                                                  
-}                                                                 
-I##INTERFACE::I##INTERFACE() { }                                  
-I##INTERFACE::~I##INTERFACE() { }                                  ```
-</code></pre>
+<p>Through tracing so many codes, the MediaPlayerService example maybe reveal the Binder&#39;s mysterious veil. We need write down some important conclusions:</p>
 
 <ul>
-  <li>Finally, we find that <code>interface_cast&lt;IServiceManager&gt;(new BpBinder(0))</code> statement actually return a <code>BpServiceManager</code> object. It means <code>sp&lt;IServiceManager&gt; sm = defaultServiceManager()</code> acquired a <code>BpServiceManager</code> object.</li>
-</ul>
-
-<h5 id="bpservicemanager"><code>BpServiceManager</code></h5>
-
-<ul>
-  <li>Bp stands for Binder proxy, it means <code>BpServiceManager</code> is <code>ServiceManager</code>’s proxy to Binder.</li>
-</ul>
-
-<h5 id="mediaplayerservice"><code>MediaPlayerService</code></h5>
-
-<ul>
-  <li>
-    <p>Source code location: <em>frameworks/base/media/libmediaplayerservice/MediaPlayerService.cpp</em></p>
-  </li>
-  <li>
-    <p>Defination and instantiation </p>
-  </li>
-</ul>
-
-<p>```c++
-void MediaPlayerService::instantiate() {
-    defaultServiceManager()-&gt;addService(
-            String16(“media.player”), new MediaPlayerService());
-}</p>
-
-<p>MediaPlayerService::MediaPlayerService()
-{
-    LOGV(“MediaPlayerService created”);
-    mNextConnId = 1;
-}</p>
-
-<p>MediaPlayerService::~MediaPlayerService()
-{
-    LOGV(“MediaPlayerService destroyed”);
-}
-```</p>
-
-<ul>
-  <li>
-    <p><code>MediaPlayerService</code> derivatived from <code>BnMediaPlayerService</code></p>
-  </li>
-  <li>
-    <p>Bn stands for Binder native.</p>
-  </li>
-  <li>
-    <p>Add <code>MediaPlayerService</code> to <code>ServiceManager</code></p>
-  </li>
-</ul>
-
-<p><code>c++
-virtual status_t addService(const String16&amp; name, const sp&lt;IBinder&gt;&amp; service)
-{
-    Parcel data, reply;
-    data.writeInterfaceToken(IServiceManager::getInterfaceDescriptor());
-    data.writeString16(name);
-    data.writeStrongBinder(service);
-    // remote() return BpBinder object
-    status_t err = remote()-&gt;transact(ADD_SERVICE_TRANSACTION, data, &amp;reply);
-    return err == NO_ERROR ? reply.readInt32() : err;
-}
-</code>
-* <code>remote()</code> return BpBinder</p>
-
-<p>```c++
-status_t BpBinder::transact(uint32_t code, const Parcel&amp; data, Parcel* reply, uint32_t flags)
-{
-    // Once a binder has died, it will never come back to life.
-    if (mAlive) {
-        status_t status = IPCThreadState::self()-&gt;transact(
-            mHandle, code, data, reply, flags);
-        if (status == DEAD_OBJECT) mAlive = 0;
-        return status;
-    }</p>
-
-<pre><code>return DEAD_OBJECT; } ```
-</code></pre>
-
-<ul>
-  <li>
-    <p><code>IPCThreadState</code> do with transaction, write add service command and wait for response.</p>
-  </li>
-  <li>
-    <p><code>BpServiceManager</code> had sent a add service message, but who receive and process it?</p>
-  </li>
-  <li>
-    <p><code>BnServiceManager</code>? unfortunately it doesn’t exist. service do same job.</p>
-  </li>
-  <li>
-    <p>service</p>
-    <ul>
-      <li>
-        <p>service is a general c++ applcation.</p>
-      </li>
-      <li>
-        <p>Source code location: <em>frameworks/base/cmds/servicemanager/service_manager.c</em></p>
-      </li>
-      <li>
-        <p>Entry point:</p>
-      </li>
-    </ul>
-  </li>
-</ul>
-
-<p>```c++
-int main(int argc, char **argv)
-{
-    struct binder_state *bs;
-    //  BINDER_SERVICE_MANAGER is NULL, is a magic number
-    void *svcmgr = BINDER_SERVICE_MANAGER;</p>
-
-<pre><code>bs = binder_open(128*1024);
-
-if (binder_become_context_manager(bs)) {
-    LOGE("cannot become context manager (%s)\n", strerror(errno));
-    return -1;
-}
-
-svcmgr_handle = svcmgr;
-binder_loop(bs, svcmgr_handler);
-return 0; } ```
-</code></pre>
-
-<h4 id="conclusion">Conclusion</h4>
-
-<p>Through tracing so many codes, the MediaPlayerService example maybe reveal the Binder’s mysterious veil. We need write down some important conclusions:</p>
-
-<ul>
-  <li>
-    <p>If two processes need communicate each other, one as Client, the other is Server, Server need registered to <code>ServiceManager</code>, if Client want request to Server, it need query Server’s info from <code>ServiceManager</code>, based the qureid info, Client and Server can communicate each other. </p>
-  </li>
-  <li>
-    <p>Client, Server, <code>ServiceManager</code> are implemented in use space, Binder is implemented in kernel space.</p>
-  </li>
-  <li>
-    <p><code>ServiceManager</code> and Binder is implemented by Android, developers need implemente their Client and Server.</p>
-  </li>
-  <li>
-    <p>Binder supplied device file <strong>/dev/binder</strong> communicate to user space. Client, Server and <code>ServiceManager</code> communicated to Binder through <code>open</code> and <code>ioctl</code> file operation function.</p>
-  </li>
-  <li>
-    <p>Client and Server communicate each other immediately through Binder.</p>
-  </li>
-  <li>
-    <p><code>ServiceManager</code> is a daemon process, it manages Server, supply interface to qurey Server function.</p>
-  </li>
+<li><p>If two processes need communicate each other, one as Client, the other is Server, Server need registered to <code>ServiceManager</code>, if Client want request to Server, it need query Server&#39;s info from <code>ServiceManager</code>, based the qureid info, Client and Server can communicate each other. </p></li>
+<li><p>Client, Server, <code>ServiceManager</code> are implemented in use space, Binder is implemented in kernel space.</p></li>
+<li><p><code>ServiceManager</code> and Binder is implemented by Android, developers need implemente their Client and Server.</p></li>
+<li><p>Binder supplied device file <strong>/dev/binder</strong> communicate to user space. Client, Server and <code>ServiceManager</code> communicated to Binder through <code>open</code> and <code>ioctl</code> file operation function.</p></li>
+<li><p>Client and Server communicate each other immediately through Binder.</p></li>
+<li><p><code>ServiceManager</code> is a daemon process, it manages Server, supply interface to qurey Server function.</p></li>
 </ul>
 
 <p>If want to learn Android IPC mechanism deeply, a lot of Android source code need be read. Linus said:</p>
 
 <blockquote>
-  <p>Read The Fucking Source Code.</p>
+<p>Read The Fucking Source Code.</p>
 </blockquote>
 
 	  ]]></description>
@@ -1353,64 +1057,60 @@ return 0; } ```
 	  <pubDate>2016-08-01T22:00:00+08:00</pubDate>
 	  <guid>//memory-leak-in-android-development</guid>
 	  <description><![CDATA[
-	     <p>When programming Android, although java has GC mechanism, some our wrong code way and personal habits still cause memory leak, GC also can’t fix it.</p>
+	     <p>When programming Android, although java has GC mechanism, some our wrong code way and personal habits still cause memory leak, GC also can&#39;t fix it.</p>
 
-<h4 id="senario-1-when-programming-a-single-instance">Senario 1: When programming a single instance</h4>
+<h4>Senario 1: When programming a single instance</h4>
 
 <ul>
-  <li>Error way:</li>
+<li>Error way:</li>
+</ul>
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">Sample</span><span class="o">{</span>      
+    <span class="kd">private</span> <span class="kd">static</span> <span class="n">Sample</span> <span class="n">sample</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="n">Context</span> <span class="n">mContext</span><span class="o">;</span> 
+    <span class="kd">private</span> <span class="nf">Sample</span><span class="o">(</span><span class="n">Context</span> <span class="n">mContext</span><span class="o">){</span>
+         <span class="k">this</span><span class="o">.</span><span class="na">mContext</span> <span class="o">=</span> <span class="n">mContext</span><span class="o">;</span>
+    <span class="o">}</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="n">Sample</span> <span class="nf">getInstance</span><span class="o">(</span><span class="n">Context</span> <span class="n">mContext</span><span class="o">){</span>
+         <span class="k">if</span><span class="o">(</span><span class="n">sample</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span>
+              <span class="n">sample</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">Sample</span><span class="o">(</span><span class="n">mContext</span><span class="o">);</span>
+         <span class="k">return</span> <span class="n">sample</span><span class="o">;</span>
+    <span class="o">}</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">otherAction</span><span class="o">(){</span>
+         <span class="n">mContext</span><span class="o">.</span><span class="na">act</span><span class="o">();</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div>
+<ul>
+<li>Error reason:</li>
 </ul>
 
-<p><code>java
-public class Sample{      
-    private static Sample sample;
-    private Context mContext; 
-    private Sample(Context mContext){
-         this.mContext = mContext;
-    }
-    public static Sample getInstance(Context mContext){
-         if(sample == null)
-              sample = new Sample(mContext);
-         return sample;
-    }
-    public void otherAction(){
-         mContext.act();
-    }
-}
-</code></p>
+<p>If we use <code>Sample.getInstance()</code> in Acitivity A, pass <code>this</code> to Sample&#39;s <code>getInstatnce</code> static method, because Sample is static single instance, it exists untill application exit. But Sample&#39;s member variable still hold reference to Activity A, it causes Activity A can&#39;t be destroied. If we pass applicationContext, it doesn&#39;t cause this problem.</p>
 
 <ul>
-  <li>Error reason:</li>
+<li>Right way:</li>
 </ul>
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">Sample</span><span class="o">{</span>
+     <span class="kd">private</span> <span class="kd">static</span> <span class="n">Sample</span> <span class="n">sample</span><span class="o">;</span>
+     <span class="kd">private</span> <span class="n">Context</span> <span class="n">mContext</span><span class="o">;</span>
+     <span class="kd">private</span> <span class="nf">Sample</span><span class="o">(</span><span class="n">Context</span> <span class="n">mContext</span><span class="o">){</span>
+          <span class="k">this</span><span class="o">.</span><span class="na">mContext</span> <span class="o">=</span> <span class="n">mContext</span><span class="o">;</span>
+     <span class="o">}</span>
+     <span class="kd">public</span> <span class="kd">static</span> <span class="n">Sample</span> <span class="nf">getInstance</span><span class="o">(</span><span class="n">Context</span> <span class="n">mContext</span><span class="o">){</span>
+          <span class="k">if</span><span class="o">(</span><span class="n">sample</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span>
+               <span class="n">sample</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">Sample</span><span class="o">(</span><span class="n">mContext</span><span class="o">.</span><span class="na">getApplicationContext</span><span class="o">());</span>
+          <span class="k">return</span> <span class="n">sample</span><span class="o">;</span>
+     <span class="o">}</span>
+     <span class="kd">public</span> <span class="kt">void</span> <span class="nf">otherAction</span><span class="o">(){</span>
+          <span class="n">mContext</span><span class="o">.</span><span class="na">act</span><span class="o">();</span>
+     <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div>
+<p>     </p>
 
-<p>If we use <code>Sample.getInstance()</code> in Acitivity A, pass <code>this</code> to Sample’s <code>getInstatnce</code> static method, because Sample is static single instance, it exists untill application exit. But Sample’s member variable still hold reference to Activity A, it causes Activity A can’t be destroied. If we pass applicationContext, it doesn’t cause this problem.</p>
-
-<ul>
-  <li>Right way:</li>
-</ul>
-
-<p><code>java
-public class Sample{
-     private static Sample sample;
-     private Context mContext;
-     private Sample(Context mContext){
-          this.mContext = mContext;
-     }
-     public static Sample getInstance(Context mContext){
-          if(sample == null)
-               sample = new Sample(mContext.getApplicationContext());
-          return sample;
-     }
-     public void otherAction(){
-          mContext.act();
-     }
-}
-</code>
-     
-#### Senario 2: When use anonymous inner class</p>
+<h4>Senario 2: When use anonymous inner class</h4>
 
 <ul>
-  <li>Error way:
+<li>Error way:
 ```java
 public class SampleActivity extends Activity{
      private TextView textView;          
@@ -1425,13 +1125,13 @@ public class SampleActivity extends Activity{
 <p>     @override
      public void onCreate(Bundle bundle){
           super.onCreate(bundle);
-          setContextView(R.layout.activity_sample_layout);
+          setContextView(R.layout.activity<em>sample</em>layout);
           textView = (TextView)findViewById(R.id.textView);
           handler.postDelayed(new Runnable(){</p>
 
 <p>               @override
                public void run(){
-                    textView.setText(“ok”);
+                    textView.setText(&quot;ok&quot;);
                };</p>
 
 <p>          },1000 * 60 * 10);
@@ -1440,115 +1140,95 @@ public class SampleActivity extends Activity{
 ```</p>
 
 <ul>
-  <li>Error reason:</li>
+<li>Error reason:</li>
 </ul>
 
-<p>When execute the <code>SampleAcitvity</code>’s <code>finish</code> method, the delayed messages will exist in main thread for 10 minutes before be processed, while this message contains reference to Handler, Handler is a anonymous inner class, it hold reference to external SampleAcivity, so cause SampleAcivity can’t be recycled. Above <code>Runnable</code> also is a anonymous inner class, it also prevent SampleActivity to be recycled.</p>
+<p>When execute the <code>SampleAcitvity</code>&#39;s <code>finish</code> method, the delayed messages will exist in main thread for 10 minutes before be processed, while this message contains reference to Handler, Handler is a anonymous inner class, it hold reference to external SampleAcivity, so cause SampleAcivity can&#39;t be recycled. Above <code>Runnable</code> also is a anonymous inner class, it also prevent SampleActivity to be recycled.</p>
 
 <ul>
-  <li>Right way:</li>
+<li>Right way:</li>
 </ul>
 
 <p><strong>A static anonymous inner class instance will not hold reference to external class.</strong></p>
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">SampleActivity</span> <span class="kd">extends</span> <span class="n">Activity</span><span class="o">{</span>
+     <span class="kd">private</span> <span class="n">TextView</span> <span class="n">textView</span><span class="o">;</span>
+     <span class="kd">private</span> <span class="kd">static</span> <span class="kd">class</span> <span class="nc">MyHandler</span> <span class="kd">extends</span> <span class="n">Handler</span> <span class="o">{</span>
 
-<p>```java
-public class SampleActivity extends Activity{
-     private TextView textView;
-     private static class MyHandler extends Handler {</p>
+     <span class="kd">private</span> <span class="kd">final</span> <span class="n">WeakReference</span><span class="o">&lt;</span><span class="n">SampleActivity</span><span class="o">&gt;</span> <span class="n">mActivity</span><span class="o">;</span>
+     <span class="kd">public</span> <span class="nf">MyHandler</span><span class="o">(</span><span class="n">SampleActivity</span> <span class="n">activity</span><span class="o">)</span> <span class="o">{</span>
+          <span class="n">mActivity</span> <span class="o">=</span> <span class="k">new</span> <span class="n">WeakReference</span><span class="o">&lt;</span><span class="n">SampleActivity</span><span class="o">&gt;(</span><span class="n">activity</span><span class="o">);</span>
+     <span class="o">}</span>
 
-<p>     private final WeakReference<sampleactivity> mActivity;
-     public MyHandler(SampleActivity activity) {
-          mActivity = new WeakReference<sampleactivity>(activity);
-     }</sampleactivity></sampleactivity></p>
+     <span class="nd">@Override</span>
+     <span class="kd">public</span> <span class="kt">void</span> <span class="nf">handleMessage</span><span class="o">(</span><span class="n">Message</span> <span class="n">msg</span><span class="o">)</span> <span class="o">{</span>
+          <span class="n">SampleActivity</span> <span class="n">activity</span> <span class="o">=</span> <span class="n">mActivity</span><span class="o">.</span><span class="na">get</span><span class="o">();</span>
+               <span class="k">if</span> <span class="o">(</span><span class="n">activity</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
 
-<p>     @Override
-     public void handleMessage(Message msg) {
-          SampleActivity activity = mActivity.get();
-               if (activity != null) {</p>
+               <span class="o">}</span>
+          <span class="o">}</span>
+     <span class="o">}</span>
 
-<p>               }
-          }
-     }</p>
+     <span class="kd">private</span> <span class="kd">final</span> <span class="n">MyHandler</span> <span class="n">handler</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">MyHandler</span><span class="o">(</span><span class="k">this</span><span class="o">);</span>
 
-<p>     private final MyHandler handler = new MyHandler(this);</p>
+     <span class="nd">@override</span>
+     <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onCreate</span><span class="o">(</span><span class="n">Bundle</span> <span class="n">bundle</span><span class="o">){</span>
+          <span class="kd">super</span><span class="o">.</span><span class="na">onCreate</span><span class="o">(</span><span class="n">bundle</span><span class="o">);</span>
+          <span class="n">setContextView</span><span class="o">(</span><span class="n">R</span><span class="o">.</span><span class="na">layout</span><span class="o">.</span><span class="na">activity_sample_layout</span><span class="o">);</span>
+          <span class="n">textView</span> <span class="o">=</span> <span class="o">(</span><span class="n">TextView</span><span class="o">)</span><span class="n">findViewById</span><span class="o">(</span><span class="n">R</span><span class="o">.</span><span class="na">id</span><span class="o">.</span><span class="na">textView</span><span class="o">);</span>
+          <span class="n">handler</span><span class="o">.</span><span class="na">postDelayed</span><span class="o">(</span><span class="k">new</span> <span class="nf">MyRunnable</span><span class="o">(</span><span class="n">textView</span><span class="o">),</span><span class="mi">1000</span> <span class="o">*</span> <span class="mi">60</span> <span class="o">*</span> <span class="mi">10</span><span class="o">);</span>
+     <span class="o">}</span>
 
-<p>     @override
-     public void onCreate(Bundle bundle){
-          super.onCreate(bundle);
-          setContextView(R.layout.activity_sample_layout);
-          textView = (TextView)findViewById(R.id.textView);
-          handler.postDelayed(new MyRunnable(textView),1000 * 60 * 10);
-     }</p>
+     <span class="kd">private</span> <span class="kd">static</span> <span class="kd">class</span> <span class="nc">MyRunnable</span> <span class="kd">implements</span> <span class="n">Runnable</span><span class="o">{</span>
 
-<p>     private static class MyRunnable implements Runnable{</p>
+        <span class="c1">// use WeakReference to hold external class&#39;s member variables.</span>
+        <span class="kd">private</span> <span class="n">WeakReference</span><span class="o">&lt;</span><span class="n">TextView</span><span class="o">&gt;</span> <span class="n">textViewWeakReference</span><span class="o">;</span>
+        <span class="kd">public</span> <span class="nf">MyRunnable</span><span class="o">(</span><span class="n">TextView</span> <span class="n">textView</span><span class="o">){</span>
+             <span class="n">textViewWeakReference</span> <span class="o">=</span> <span class="k">new</span> <span class="n">WeakReference</span><span class="o">&lt;</span><span class="n">TextView</span><span class="o">&gt;(</span><span class="n">textView</span><span class="o">);</span>
+        <span class="o">}</span>
 
-<pre><code>    // use WeakReference to hold external class's member variables.         private WeakReference&lt;TextView&gt; textViewWeakReference;         public MyRunnable(TextView textView){              textViewWeakReference = new WeakReference&lt;TextView&gt;(textView);         }
-</code></pre>
+        <span class="nd">@override</span>
+        <span class="kd">public</span> <span class="kt">void</span> <span class="nf">run</span><span class="o">(){</span>
+              <span class="kd">final</span> <span class="n">TextView</span> <span class="n">textView</span> <span class="o">=</span> <span class="n">textViewWeakReference</span><span class="o">.</span><span class="na">get</span><span class="o">();</span>
+              <span class="k">if</span><span class="o">(</span><span class="n">textView</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">){</span>
+                   <span class="n">textView</span><span class="o">.</span><span class="na">setText</span><span class="o">(</span><span class="s">&quot;OK&quot;</span><span class="o">);</span>
+              <span class="o">}</span>
 
-<p>        @override
-        public void run(){
-              final TextView textView = textViewWeakReference.get();
-              if(textView != null){
-                   textView.setText(“OK”);
-              }</p>
-
-<p>        };
-     }
-}
-```</p>
-
-<h4 id="senario-3-forgot-call-removecallbacksandmessages-after-use-handler">Senario 3: Forgot call removeCallbacksAndMessages after use handler</h4>
+        <span class="o">};</span>
+     <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div>
+<h4>Senario 3: Forgot call removeCallbacksAndMessages after use handler</h4>
 
 <ul>
-  <li>Right way:</li>
+<li>Right way:</li>
 </ul>
 
 <p>In onDestroy call this method:</p>
-
-<p><code>java
-     handler.removeCallbacksAndMessages(null);
-</code></p>
-
+<div class="highlight"><pre><code class="language-java" data-lang="java">     <span class="n">handler</span><span class="o">.</span><span class="na">removeCallbacksAndMessages</span><span class="o">(</span><span class="kc">null</span><span class="o">);</span>
+</code></pre></div>
 <p>This call passed null will destroy all Runnable and Message related to handler.</p>
 
-<h4 id="conclude">Conclude</h4>
+<h4>Conclude</h4>
 
 <ul>
-  <li>
-    <p>Don’t let object whose lifecycle longer then Acivity hold reference to Acivity.</p>
-  </li>
-  <li>
-    <p>Prefer to use Application’s Context rather than Activity’s Context.</p>
-  </li>
-  <li>
-    <p>Prefer to use static anonymous inner class rather than non-static.</p>
-  </li>
-  <li>
-    <p>Use weak reference to hold external class’s member variables.</p>
-  </li>
-  <li>
-    <p>GC can’t fix memory leak.</p>
-  </li>
+<li><p>Don&#39;t let object whose lifecycle longer then Acivity hold reference to Acivity.</p></li>
+<li><p>Prefer to use Application&#39;s Context rather than Activity&#39;s Context.</p></li>
+<li><p>Prefer to use static anonymous inner class rather than non-static.</p></li>
+<li><p>Use weak reference to hold external class&#39;s member variables.</p></li>
+<li><p>GC can&#39;t fix memory leak.</p></li>
 </ul>
 
-<h4 id="reference">Reference</h4>
+<h4>Reference</h4>
 
 <blockquote>
-  <p>In Android, Handler classes should be static or leaks might occur, Messages enqueued on the application thread’s MessageQueue also retain their target Handler. If the Handler is an inner class, its outer class will be retained as well. To avoid leaking the outer class, declare the Handler as a static nested class with a WeakReference to its outer class</p>
-</blockquote>
+<p>In Android, Handler classes should be static or leaks might occur, Messages enqueued on the application thread’s MessageQueue also retain their target Handler. If the Handler is an inner class, its outer class will be retained as well. To avoid leaking the outer class, declare the Handler as a static nested class with a WeakReference to its outer class</p>
 
-<blockquote>
-  <p>When an Android application first starts, the framework creates a Looper object for the application’s main thread. A Looper implements a simple message queue, processing Message objects in a loop one after another. All major application framework events (such as Activity lifecycle method calls, button clicks, etc.) are contained inside Message objects, which are added to the Looper’s message queue and are processed one-by-one. The main thread’s Looper exists throughout the application’s lifecycle.</p>
-</blockquote>
+<p>When an Android application first starts, the framework creates a Looper object for the application’s main thread. A Looper implements a simple message queue, processing Message objects in a loop one after another. All major application framework events (such as Activity lifecycle method calls, button clicks, etc.) are contained inside Message objects, which are added to the Looper’s message queue and are processed one-by-one. The main thread’s Looper exists throughout the application’s lifecycle.</p>
 
-<blockquote>
-  <p>When a Handler is instantiated on the main thread, it is associated with the Looper’s message queue. Messages posted to the message queue will hold a reference to the Handler so that the framework can call Handler#handleMessage(Message) when the Looper eventually processes the message.</p>
-</blockquote>
+<p>When a Handler is instantiated on the main thread, it is associated with the Looper’s message queue. Messages posted to the message queue will hold a reference to the Handler so that the framework can call Handler#handleMessage(Message) when the Looper eventually processes the message.</p>
 
-<blockquote>
-  <p>In Java, non-static inner and anonymous classes hold an implicit reference to their outer class. Static inner classes, on the other hand, do not.</p>
+<p>In Java, non-static inner and anonymous classes hold an implicit reference to their outer class. Static inner classes, on the other hand, do not.</p>
 </blockquote>
-
 
 	  ]]></description>
 	</item>

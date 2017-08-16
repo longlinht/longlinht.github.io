@@ -114,75 +114,41 @@
 
         <section class="post-content">
             
-            <p>## </p>
+            <p>Over the years, these are the Android development tools I’ve found most useful. I consistently use these tools to build apps. I recommend you take a look at them and see whether they’re a good fit for your tool chain.</p>
 
-<p>Over the years, these are the Android development tools I’ve found most useful. I consistently use these tools to build apps. I recommend you take a look at them and see whether they’re a good fit for your tool chain.</p>
-
-<h4 id="view-sqlite-log">View SQLite log</h4>
-
-<p>```
-adb shell setprop log.tag.SQLiteLog V
-adb shell setprop log.tag.SQLiteStatements V</p>
-
-<p>```</p>
-
-<h4 id="tcpdump-packet-capture">Tcpdump packet capture</h4>
-
-<p>```
-adb shell /data/local/tcpdump -i any -p -s 0 -w /sdcard/capture.pcap</p>
-
-<p>```</p>
-
-<h4 id="view-signature">View Signature</h4>
-
-<p>```
-keytool -list -v -keystore release.jks</p>
-
-<p>```</p>
-
-<h4 id="view-important-system-log-tag">View Important System Log Tag</h4>
-
-<p>```
-// View Acitivity switch
+<h4>View SQLite log</h4>
+<div class="highlight"><pre><code class="language-text" data-lang="text">adb shell setprop log.tag.SQLiteLog V
+adb shell setprop log.tag.SQLiteStatements V
+</code></pre></div>
+<h4>Tcpdump packet capture</h4>
+<div class="highlight"><pre><code class="language-text" data-lang="text">adb shell /data/local/tcpdump -i any -p -s 0 -w /sdcard/capture.pcap
+</code></pre></div>
+<h4>View Signature</h4>
+<div class="highlight"><pre><code class="language-text" data-lang="text">keytool -list -v -keystore release.jks
+</code></pre></div>
+<h4>View Important System Log Tag</h4>
+<div class="highlight"><pre><code class="language-text" data-lang="text">// View Acitivity switch
 adb logcat -v time | grep ActivityManager
 // View Crash info 
 adb logcat -v time | grep AndroidRuntime
 // View Dalvik info
-adb logcat -v time | grep “D\/Dalvik”
+adb logcat -v time | grep &quot;D\/Dalvik&quot;
 // View art info
-adb logcat -v time | grep “I\/art”</p>
-
-<p>```
-#### View application running time</p>
-
-<p>```
-adb logcat -v time | grep TAG</p>
-
-<p>```</p>
-
-<h4 id="view-sytem-service-and-status">View sytem service and status</h4>
-
-<p>```
-// SERVICE maybe activity, cpuinfo, window, meminfo, alarm, statusbar, usagestatus
-dumpsys | grep “DUMP OF SERVICE”</p>
-
-<p>```</p>
-
-<h4 id="bugreport-command">Bugreport command</h4>
-
-<p>```
-adb bugreport &gt; main.log</p>
-
-<p>```</p>
-
-<h4 id="monkey-parameters">Monkey parameters</h4>
-
-<p>```
-adb shell monkey -p -s 1000 –ignore-crashes –ignore-timeouts –ignore-security-exceptions –pct-trackball 0 –pct-nav 0 –pct-majornav 0 –pct-anyevent 0  -v –throttle 300 1200000000 </p>
-
-<p>```</p>
-
-
+adb logcat -v time | grep &quot;I\/art&quot;
+</code></pre></div>
+<h4>View application running time</h4>
+<div class="highlight"><pre><code class="language-text" data-lang="text">adb logcat -v time | grep TAG
+</code></pre></div>
+<h4>View sytem service and status</h4>
+<div class="highlight"><pre><code class="language-text" data-lang="text">// SERVICE maybe activity, cpuinfo, window, meminfo, alarm, statusbar, usagestatus
+dumpsys | grep &quot;DUMP OF SERVICE&quot;
+</code></pre></div>
+<h4>Bugreport command</h4>
+<div class="highlight"><pre><code class="language-text" data-lang="text">adb bugreport &gt; main.log
+</code></pre></div>
+<h4>Monkey parameters</h4>
+<div class="highlight"><pre><code class="language-text" data-lang="text">adb shell monkey -p -s 1000 --ignore-crashes --ignore-timeouts --ignore-security-exceptions --pct-trackball 0 --pct-nav 0 --pct-majornav 0 --pct-anyevent 0  -v --throttle 300 1200000000 
+</code></pre></div>
 
         </section>
 

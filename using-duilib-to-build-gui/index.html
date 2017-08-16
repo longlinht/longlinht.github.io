@@ -116,162 +116,131 @@
             
             <p>Duilib is a free open source DirectUI library on Windows , because its simple and expandable design and stable and efficient implementation, accepted generally by the major Internet companies  widely used in IM, video client, stock market software, navigation software, mobile phone support Software, security software and many PC client software in other industries. When We developed a IM in a company I worked, we even use this library to replace Qt GUI part we used in our code.</p>
 
-<h4 id="basic-principle">Basic principle</h4>
+<h4>Basic principle</h4>
+
 <p>The native Windows user interface is composed of multiple WND, each WND has its own Handle and WndProc, while the DirectUI is directly drawn on the parent window (Paint on parent DC). That is, the child window is not created in the form of a window handle (windowless), but a logical window, using the GDI function to draw on the parent window. There is no extra WND, so the controls are all virtual, do not have their own message loop, they are using WND message loop. When the WND receives the message, it will locate the control and then passes the message to the specific control, which will response this message.</p>
 
-<h3 id="class-architecture-of-library">Class architecture of library</h3>
-<p><img src="http://wx2.sinaimg.cn/mw690/7033bf1dly1ffbgrdyw59j20zp0pw0zo.jpg" alt="" />
-#### Basic library</p>
+<h3>Class architecture of library</h3>
 
-<h5 id="tool-library">Tool library</h5>
+<p><img src="http://wx2.sinaimg.cn/mw690/7033bf1dly1ffbgrdyw59j20zp0pw0zo.jpg" alt=""></p>
+
+<h4>Basic library</h4>
+
+<h5>Tool library</h5>
 
 <p>DUILib is not depends on any other external library, so it implement basic tool library internally to support this project.</p>
 
 <ul>
-  <li>
-    <p>UI related: CPoint, CSize, CDuiRect</p>
-  </li>
-  <li>
-    <p>Simple Container: CStdPtrArray, CStdValArray, CStdString, CStdStringPtrMap</p>
-  </li>
+<li><p>UI related: CPoint, CSize, CDuiRect</p></li>
+<li><p>Simple Container: CStdPtrArray, CStdValArray, CStdString, CStdStringPtrMap</p></li>
 </ul>
 
-<h5 id="control-library">Control library</h5>
+<h5>Control library</h5>
 
 <p>Control library has two parts to be implemented seperately in DUILib.</p>
 
 <ul>
-  <li>
-    <p>Core - contains common parts all controls used and basic class.</p>
-  </li>
-  <li>
-    <p>Control - contains all real(instantiaed) controls.</p>
-  </li>
+<li><p>Core - contains common parts all controls used and basic class.</p></li>
+<li><p>Control - contains all real(instantiaed) controls.</p></li>
 </ul>
 
-<h3 id="message-process-mechanism">Message process mechanism</h3>
+<h3>Message process mechanism</h3>
 
-<h4 id="basic-process">Basic process</h4>
+<h4>Basic process</h4>
 
-<p><img src="http://wx4.sinaimg.cn/mw690/7033bf1dly1ffbgrdt8bxj20ir0or75f.jpg" alt="" /></p>
+<p><img src="http://wx4.sinaimg.cn/mw690/7033bf1dly1ffbgrdt8bxj20ir0or75f.jpg" alt=""></p>
 
-<p>The DUILib framework’s basic message process similar to create window process in WIN32.</p>
+<p>The DUILib framework&#39;s basic message process similar to create window process in WIN32.</p>
+<div class="highlight"><pre><code class="language-c++" data-lang="c++"><span class="kt">int</span> <span class="n">APIENTRY</span> <span class="nf">WinMain</span><span class="p">(</span><span class="n">HINSTANCE</span> <span class="n">hInstance</span><span class="p">,</span> <span class="n">HINSTANCE</span> <span class="n">hPrevInstance</span><span class="p">,</span> <span class="n">LPSTR</span> <span class="n">lpCmdLine</span><span class="p">,</span> <span class="kt">int</span> <span class="n">nCmdShow</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">CPaintManagerUI</span><span class="o">::</span><span class="n">SetInstance</span><span class="p">(</span><span class="n">hInstance</span><span class="p">);</span>        <span class="c1">// 1, Instantiate handle and attach to render</span>
+    <span class="n">CPaintManagerUI</span><span class="o">::</span><span class="n">SetResourcePath</span><span class="p">(</span><span class="n">CPaintManagerUI</span><span class="o">::</span><span class="n">GetInstancePath</span><span class="p">()</span> <span class="o">+</span> <span class="n">_T</span><span class="p">(</span><span class="s">&quot;skin&quot;</span><span class="p">));</span>
+    <span class="n">HRESULT</span> <span class="n">Hr</span> <span class="o">=</span> <span class="o">::</span><span class="n">CoInitialize</span><span class="p">(</span><span class="nb">NULL</span><span class="p">);</span>              <span class="c1">// 2,Initialize COM, and support to load COM</span>
+    <span class="k">if</span><span class="p">(</span> <span class="n">FAILED</span><span class="p">(</span><span class="n">Hr</span><span class="p">)</span> <span class="p">)</span> <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="n">CMainFrameWnd</span><span class="o">*</span> <span class="n">pFrame</span> <span class="o">=</span> <span class="k">new</span> <span class="n">CMainFrameWnd</span><span class="p">();</span>    <span class="c1">// 3,Create window class</span>
+    <span class="k">if</span><span class="p">(</span> <span class="n">pFrame</span> <span class="o">==</span> <span class="nb">NULL</span> <span class="p">)</span> <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="n">pFrame</span><span class="o">-&gt;</span><span class="n">Create</span><span class="p">(</span><span class="nb">NULL</span><span class="p">,</span> <span class="n">_T</span><span class="p">(</span><span class="s">&quot;Main&quot;</span><span class="p">),</span> <span class="n">UI_WNDSTYLE_FRAME</span><span class="p">,</span> <span class="mi">0L</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">800</span><span class="p">,</span> <span class="mi">600</span><span class="p">);</span> <span class="c1">// 4, Register window class and create window instance.</span>
+    <span class="c1">// Actually call Create to create a Win32 WND, do these operations internally:</span>
+    <span class="c1">//  -&gt; RegisterSuperclass (Register a super class)</span>
+    <span class="c1">//  -&gt; RegisterWindowClass （Register window class）</span>
+    <span class="c1">//  -&gt; ::CreateWindowEx (Create window，trigger WM_CREATE)</span>
+    <span class="c1">//  -&gt; HandleMessage  ( WM_CREATE process OnCreate)</span>
 
-<p>```c++
-int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
-{
-    CPaintManagerUI::SetInstance(hInstance);        // 1, Instantiate handle and attach to render
-    CPaintManagerUI::SetResourcePath(CPaintManagerUI::GetInstancePath() + _T(“skin”));
-    HRESULT Hr = ::CoInitialize(NULL);              // 2,Initialize COM, and support to load COM
-    if( FAILED(Hr) ) return 0;
-    CMainFrameWnd* pFrame = new CMainFrameWnd();    // 3,Create window class
-    if( pFrame == NULL ) return 0;
-    pFrame-&gt;Create(NULL, _T(“Main”), UI_WNDSTYLE_FRAME, 0L, 0, 0, 800, 600); // 4, Register window class and create window instance.
-    // Actually call Create to create a Win32 WND, do these operations internally:
-    //  -&gt; RegisterSuperclass (Register a super class)
-    //  -&gt; RegisterWindowClass （Register window class）
-    //  -&gt; ::CreateWindowEx (Create window，trigger WM_CREATE)
-    //  -&gt; HandleMessage  ( WM_CREATE process OnCreate)</p>
-
-<pre><code>pFrame-&gt;CenterWindow();          // 5, Center window
-::ShowWindow(*pFrame, SW_SHOW);
-CPaintManagerUI::MessageLoop(); // 6, Process message loop
-::CoUninitialize();            // 7, Exit program and release COM
-return 0; } ```
-</code></pre>
+    <span class="n">pFrame</span><span class="o">-&gt;</span><span class="n">CenterWindow</span><span class="p">();</span>          <span class="c1">// 5, Center window</span>
+    <span class="o">::</span><span class="n">ShowWindow</span><span class="p">(</span><span class="o">*</span><span class="n">pFrame</span><span class="p">,</span> <span class="n">SW_SHOW</span><span class="p">);</span>
+    <span class="n">CPaintManagerUI</span><span class="o">::</span><span class="n">MessageLoop</span><span class="p">();</span> <span class="c1">// 6, Process message loop</span>
+    <span class="o">::</span><span class="n">CoUninitialize</span><span class="p">();</span>            <span class="c1">// 7, Exit program and release COM</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+<ul>
+<li>Main message loop - CPaintManagerUI::MessageLoop, message will be first received by CPaintManagerUI&#39;s TranslateMessage.</li>
+</ul>
+<div class="highlight"><pre><code class="language-c++" data-lang="c++"> <span class="kt">void</span> <span class="n">CPaintManagerUI</span><span class="o">::</span><span class="n">MessageLoop</span><span class="p">()</span>
+ <span class="p">{</span>
+     <span class="n">MSG</span> <span class="n">msg</span> <span class="o">=</span> <span class="p">{</span> <span class="mi">0</span> <span class="p">};</span>
+     <span class="k">while</span><span class="p">(</span> <span class="o">::</span><span class="n">GetMessage</span><span class="p">(</span><span class="o">&amp;</span><span class="n">msg</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="p">)</span> <span class="p">{</span>    
+         <span class="k">if</span><span class="p">(</span> <span class="o">!</span><span class="n">CPaintManagerUI</span><span class="o">::</span><span class="n">TranslateMessage</span><span class="p">(</span><span class="o">&amp;</span><span class="n">msg</span><span class="p">)</span> <span class="p">)</span> <span class="p">{</span> 
+             <span class="o">::</span><span class="n">TranslateMessage</span><span class="p">(</span><span class="o">&amp;</span><span class="n">msg</span><span class="p">);</span>
+             <span class="o">::</span><span class="n">DispatchMessage</span><span class="p">(</span><span class="o">&amp;</span><span class="n">msg</span><span class="p">);</span> 
+         <span class="p">}</span>
+     <span class="p">}</span>
+ <span class="p">}</span>
+</code></pre></div>
+<ul>
+<li><p>Create window - call CWindowWnd::Create to create window, and finish operations below:</p>
 
 <ul>
-  <li>Main message loop - CPaintManagerUI::MessageLoop, message will be first received by CPaintManagerUI’s TranslateMessage.</li>
+<li>If subclass system control(not DUILib control), set <code>__ControlProc</code> function as callback function.</li>
+<li>If not subclass, set <code>__WndProc</code> function as callback function.</li>
+<li>Use CreateWindowEx to create window instance.</li>
+</ul></li>
+<li><p><code>__WndProc</code> </p></li>
+</ul>
+<div class="highlight"><pre><code class="language-c++" data-lang="c++"><span class="n">LRESULT</span> <span class="n">CALLBACK</span> <span class="n">CWindowWnd</span><span class="o">::</span><span class="n">__WndProc</span><span class="p">(</span><span class="n">HWND</span> <span class="n">hWnd</span><span class="p">,</span> <span class="n">UINT</span> <span class="n">uMsg</span><span class="p">,</span> <span class="n">WPARAM</span> <span class="n">wParam</span><span class="p">,</span> <span class="n">LPARAM</span> <span class="n">lParam</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">CWindowWnd</span><span class="o">*</span> <span class="n">pThis</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
+    <span class="k">if</span><span class="p">(</span> <span class="n">uMsg</span> <span class="o">==</span> <span class="n">WM_NCCREATE</span> <span class="p">)</span> <span class="p">{</span> <span class="c1">// Bind class and window in this message</span>
+        <span class="n">LPCREATESTRUCT</span> <span class="n">lpcs</span> <span class="o">=</span> <span class="k">reinterpret_cast</span><span class="o">&lt;</span><span class="n">LPCREATESTRUCT</span><span class="o">&gt;</span><span class="p">(</span><span class="n">lParam</span><span class="p">);</span>   <span class="c1">// From CreateWindowEx&#39;s last parameter( ptr to CWindowWnd )</span>
+        <span class="n">pThis</span> <span class="o">=</span> <span class="k">static_cast</span><span class="o">&lt;</span><span class="n">CWindowWnd</span><span class="o">*&gt;</span><span class="p">(</span><span class="n">lpcs</span><span class="o">-&gt;</span><span class="n">lpCreateParams</span><span class="p">);</span>
+        <span class="n">pThis</span><span class="o">-&gt;</span><span class="n">m_hWnd</span> <span class="o">=</span> <span class="n">hWnd</span><span class="p">;</span>
+        <span class="o">::</span><span class="n">SetWindowLongPtr</span><span class="p">(</span><span class="n">hWnd</span><span class="p">,</span> <span class="n">GWLP_USERDATA</span><span class="p">,</span> <span class="k">reinterpret_cast</span><span class="o">&lt;</span><span class="n">LPARAM</span><span class="o">&gt;</span><span class="p">(</span><span class="n">pThis</span><span class="p">));</span> <span class="c1">// Set to window&#39;s user data</span>
+    <span class="p">}</span>
+    <span class="k">else</span> <span class="p">{</span>
+        <span class="n">pThis</span> <span class="o">=</span> <span class="k">reinterpret_cast</span><span class="o">&lt;</span><span class="n">CWindowWnd</span><span class="o">*&gt;</span><span class="p">(</span><span class="o">::</span><span class="n">GetWindowLongPtr</span><span class="p">(</span><span class="n">hWnd</span><span class="p">,</span> <span class="n">GWLP_USERDATA</span><span class="p">));</span>
+        <span class="k">if</span><span class="p">(</span> <span class="n">uMsg</span> <span class="o">==</span> <span class="n">WM_NCDESTROY</span> <span class="o">&amp;&amp;</span> <span class="n">pThis</span> <span class="o">!=</span> <span class="nb">NULL</span> <span class="p">)</span> <span class="p">{</span>
+            <span class="n">LRESULT</span> <span class="n">lRes</span> <span class="o">=</span> <span class="o">::</span><span class="n">CallWindowProc</span><span class="p">(</span><span class="n">pThis</span><span class="o">-&gt;</span><span class="n">m_OldWndProc</span><span class="p">,</span> <span class="n">hWnd</span><span class="p">,</span> <span class="n">uMsg</span><span class="p">,</span> <span class="n">wParam</span><span class="p">,</span> <span class="n">lParam</span><span class="p">);</span>    
+            <span class="o">::</span><span class="n">SetWindowLongPtr</span><span class="p">(</span><span class="n">pThis</span><span class="o">-&gt;</span><span class="n">m_hWnd</span><span class="p">,</span> <span class="n">GWLP_USERDATA</span><span class="p">,</span> <span class="mi">0L</span><span class="p">);</span>    <span class="c1">// Cancel class and window&#39;s bind relation</span>
+            <span class="k">if</span><span class="p">(</span> <span class="n">pThis</span><span class="o">-&gt;</span><span class="n">m_bSubclassed</span> <span class="p">)</span> <span class="n">pThis</span><span class="o">-&gt;</span><span class="n">Unsubclass</span><span class="p">();</span>
+            <span class="n">pThis</span><span class="o">-&gt;</span><span class="n">m_hWnd</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
+            <span class="n">pThis</span><span class="o">-&gt;</span><span class="n">OnFinalMessage</span><span class="p">(</span><span class="n">hWnd</span><span class="p">);</span>
+            <span class="k">return</span> <span class="n">lRes</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">if</span><span class="p">(</span> <span class="n">pThis</span> <span class="o">!=</span> <span class="nb">NULL</span> <span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="n">pThis</span><span class="o">-&gt;</span><span class="n">HandleMessage</span><span class="p">(</span><span class="n">uMsg</span><span class="p">,</span> <span class="n">wParam</span><span class="p">,</span> <span class="n">lParam</span><span class="p">);</span>  <span class="c1">// Call subclass&#39;s messge process function</span>
+    <span class="p">}</span>
+    <span class="k">else</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="o">::</span><span class="n">DefWindowProc</span><span class="p">(</span><span class="n">hWnd</span><span class="p">,</span> <span class="n">uMsg</span><span class="p">,</span> <span class="n">wParam</span><span class="p">,</span> <span class="n">lParam</span><span class="p">);</span> 
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<ul>
+<li><p>Call CWindowWnd virtual function to subclass message.</p></li>
+<li><p>Event - DUILlib encapsulated message to be event and dispatch it to control.</p></li>
+<li><p>Notify - If want window to process some control&#39;s message, call this function, let control notify window, while window will register itself in Notify receiver queue in its OnCreate.</p></li>
 </ul>
 
-<p><code>c++
- void CPaintManagerUI::MessageLoop()
- {
-     MSG msg = { 0 };
-     while( ::GetMessage(&amp;msg, NULL, 0, 0) ) {    
-         if( !CPaintManagerUI::TranslateMessage(&amp;msg) ) { 
-             ::TranslateMessage(&amp;msg);
-             ::DispatchMessage(&amp;msg); 
-         }
-     }
- }
-</code>
-* Create window - call CWindowWnd::Create to create window, and finish operations below:</p>
-
-<pre><code>* If subclass system control(not DUILib control), set `__ControlProc` function as callback function.
-
-* If not subclass, set `__WndProc` function as callback function.
-
-* Use CreateWindowEx to create window instance.
-</code></pre>
+<h3>Using tips</h3>
 
 <ul>
-  <li><code>__WndProc</code> </li>
-</ul>
-
-<p><code>c++
-LRESULT CALLBACK CWindowWnd::__WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
-{
-    CWindowWnd* pThis = NULL;
-    if( uMsg == WM_NCCREATE ) { // Bind class and window in this message
-        LPCREATESTRUCT lpcs = reinterpret_cast&lt;LPCREATESTRUCT&gt;(lParam);   // From CreateWindowEx's last parameter( ptr to CWindowWnd )
-        pThis = static_cast&lt;CWindowWnd*&gt;(lpcs-&gt;lpCreateParams);
-        pThis-&gt;m_hWnd = hWnd;
-        ::SetWindowLongPtr(hWnd, GWLP_USERDATA, reinterpret_cast&lt;LPARAM&gt;(pThis)); // Set to window's user data
-    }
-    else {
-        pThis = reinterpret_cast&lt;CWindowWnd*&gt;(::GetWindowLongPtr(hWnd, GWLP_USERDATA));
-        if( uMsg == WM_NCDESTROY &amp;&amp; pThis != NULL ) {
-            LRESULT lRes = ::CallWindowProc(pThis-&gt;m_OldWndProc, hWnd, uMsg, wParam, lParam);    
-            ::SetWindowLongPtr(pThis-&gt;m_hWnd, GWLP_USERDATA, 0L);    // Cancel class and window's bind relation
-            if( pThis-&gt;m_bSubclassed ) pThis-&gt;Unsubclass();
-            pThis-&gt;m_hWnd = NULL;
-            pThis-&gt;OnFinalMessage(hWnd);
-            return lRes;
-        }
-    }
-    if( pThis != NULL ) {
-        return pThis-&gt;HandleMessage(uMsg, wParam, lParam);  // Call subclass's messge process function
-    }
-    else {
-        return ::DefWindowProc(hWnd, uMsg, wParam, lParam); 
-    }
-}
-</code>
-* Call CWindowWnd virtual function to subclass message.</p>
-
-<ul>
-  <li>
-    <p>Event - DUILlib encapsulated message to be event and dispatch it to control.</p>
-  </li>
-  <li>
-    <p>Notify - If want window to process some control’s message, call this function, let control notify window, while window will register itself in Notify receiver queue in its OnCreate.</p>
-  </li>
-</ul>
-
-<h3 id="using-tips">Using tips</h3>
-<ul>
-  <li>
-    <p>Inheriting the <code>WindowImplBase</code> class, then implement its unimplemented virtual metheds to satify specified situation;</p>
-  </li>
-  <li>
-    <p><code>WindowImplBase</code> class already deal with some windows message by default,if some can’t satify specified situation,override it;</p>
-  </li>
-  <li>
-    <p>If some windows messages have been not dealt with by WindowImplBase class, deal with in <code>HandleCustomMessage</code> method;</p>
-  </li>
-  <li>
-    <p>To use <code>DUI_DECLARE_MESSAGE_MAP</code> macro  map message functon;</p>
-  </li>
-  <li>
-    <p>Using <code>CDialogBuilder</code> to create custom control or container from xml file;</p>
-  </li>
-  <li>
-    <p>Remember this point : Control and custom UI in xml file always a good choice in most of case;</p>
-  </li>
-  <li>
-    <p>Organizing whole UI element in separated xml files and do not conflit with C++ class inheritance through CreateControl method;</p>
-  </li>
+<li><p>Inheriting the <code>WindowImplBase</code> class, then implement its unimplemented virtual metheds to satify specified situation;</p></li>
+<li><p><code>WindowImplBase</code> class already deal with some windows message by default,if some can&#39;t satify specified situation,override it;</p></li>
+<li><p>If some windows messages have been not dealt with by WindowImplBase class, deal with in <code>HandleCustomMessage</code> method;</p></li>
+<li><p>To use <code>DUI_DECLARE_MESSAGE_MAP</code> macro  map message functon;</p></li>
+<li><p>Using <code>CDialogBuilder</code> to create custom control or container from xml file;</p></li>
+<li><p>Remember this point : Control and custom UI in xml file always a good choice in most of case;</p></li>
+<li><p>Organizing whole UI element in separated xml files and do not conflit with C++ class inheritance through CreateControl method;</p></li>
 </ul>
 
 
@@ -368,7 +337,7 @@ LRESULT CALLBACK CWindowWnd::__WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPAR
         <a class="read-next-story prev no-cover" href="http://longlinht.github.io//c-sharp-create-unregular-window">
             <section class="post">
                 <h2>C#创建不规则窗体(控件)</h2>
-                <p><p>创建不规则窗体和控件这个过程包含了大量的图形编程工作，不同的计算机因内存和显卡的不同可能会导致最终的效果有所不同 。创建不规则窗体具体步骤：</p> <h4 id="section">先创建一个具有不规则形状的位图文件</h4> <ol> <li> <p>用任何画图程序创建不规则形状的位图。 </p> </li> <li> <p>用一种颜色画出一个不规则的区域作为程序的窗体，并用另一种颜色画出该位图的背景。</p> </li> </ol> <p>3．保存位图文件。</p> <h4...</p>
+                <p><p>创建不规则窗体和控件这个过程包含了大量的图形编程工作，不同的计算机因内存和显卡的不同可能会导致最终的效果有所不同 。创建不规则窗体具体步骤：</p> <h4>先创建一个具有不规则形状的位图文件</h4> <ol> <li><p>用任何画图程序创建不规则形状的位图。 </p></li> <li><p>用一种颜色画出一个不规则的区域作为程序的窗体，并用另一种颜色画出该位图的背景。</p></li> </ol> <p>3．保存位图文件。</p> <h4>下面创建窗体：在VS.net中创建一个新的工程</h4> <ul> <li><p>首先，设置窗体的背景从而建立窗体形状。</p> <ul> <li>将FormBorderStyle属性设置为None。</li> <li>将BackgroundImage属性设置为你创建的图片文件。</li>...</p>
             </section>
         </a>
     

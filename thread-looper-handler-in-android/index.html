@@ -114,68 +114,111 @@
 
         <section class="post-content">
             
-            <p>It&#39;s widely known that it&#39;s illegal to update UI components directly from threads other than main thread in android. This a rule in Android world, we can&#39;t violate it. But, so many situations we need 
+            <p>It’s widely known that it’s illegal to update UI components directly from threads other than main thread in android. This a rule in Android world, we can’t violate it. But, so many situations we need 
 update UI when we finish something in separated thread. This is a basic problem, it will refer more important concepts related thread.</p>
 
-<h4><code>Looper</code></h4>
+<h4 id="looper"><code>Looper</code></h4>
 
 <ul>
-<li><p>Class used to run a message loop for a thread.</p></li>
-<li><p>The <code>Looper</code> class maintains a synchronized <code>MessageQueue</code>, which contains a list messages.It reads and processes items from a <code>MessageQueue</code>.</p></li>
-<li><p>Threads by default do not have a message loop associated with them, to create one, call <code>prepare()</code> in the thread that is to run the loop, and then <code>loop()</code> to have it process messages until the loop is stopped.</p></li>
-<li><p>It&#39;s associated with the thread within which the <code>Looper</code> is created. This association is kept forever and can&#39;t be broken nor changed. Also note that a thread can&#39;t be associated with more than one Looper. </p></li>
-<li><p>The <code>Looper</code> class is usually used in conjunction with a <code>HandlerThread</code> (a subclass of Thread).</p></li>
-<li><p>There are 2 methods to terminate a Looper:</p>
+  <li>
+    <p>Class used to run a message loop for a thread.</p>
+  </li>
+  <li>
+    <p>The <code>Looper</code> class maintains a synchronized <code>MessageQueue</code>, which contains a list messages.It reads and processes items from a <code>MessageQueue</code>.</p>
+  </li>
+  <li>
+    <p>Threads by default do not have a message loop associated with them, to create one, call <code>prepare()</code> in the thread that is to run the loop, and then <code>loop()</code> to have it process messages until the loop is stopped.</p>
+  </li>
+  <li>
+    <p>It’s associated with the thread within which the <code>Looper</code> is created. This association is kept forever and can’t be broken nor changed. Also note that a thread can’t be associated with more than one Looper. </p>
+  </li>
+  <li>
+    <p>The <code>Looper</code> class is usually used in conjunction with a <code>HandlerThread</code> (a subclass of Thread).</p>
+  </li>
+  <li>
+    <p>There are 2 methods to terminate a Looper:</p>
 
-<ul>
-<li>Looper.quit()</li>
-<li>Looper.quitSafely() </li>
-</ul></li>
-<li><p>Most interaction with a message loop is through the <code>Handler</code> class.</p></li>
+    <ul>
+      <li>
+        <p>Looper.quit()</p>
+      </li>
+      <li>
+        <p>Looper.quitSafely() </p>
+      </li>
+    </ul>
+  </li>
+  <li>
+    <p>Most interaction with a message loop is through the <code>Handler</code> class.</p>
+  </li>
 </ul>
 
-<h4><code>Handler</code></h4>
+<h4 id="handler"><code>Handler</code></h4>
 
 <ul>
-<li><p>Allow you send and process <code>Message</code> and <code>Runnable</code> objects associated with a thread&#39;s <code>MessageQueue</code>. </p></li>
-<li><p>Each <code>Handler</code> instance is associated with a single thread and that thread&#39;s message queue. Multiple Handler instances can be bound to the same thread.</p></li>
-<li><p>It is bound to the thread / message queue of the thread that is creating it.</p></li>
-<li><p>There are two main uses for a Handler: </p>
+  <li>
+    <p>Allow you send and process <code>Message</code> and <code>Runnable</code> objects associated with a thread’s <code>MessageQueue</code>. </p>
+  </li>
+  <li>
+    <p>Each <code>Handler</code> instance is associated with a single thread and that thread’s message queue. Multiple Handler instances can be bound to the same thread.</p>
+  </li>
+  <li>
+    <p>It is bound to the thread / message queue of the thread that is creating it.</p>
+  </li>
+  <li>
+    <p>There are two main uses for a Handler: </p>
 
-<ul>
-<li>To schedule messages and runnables to be executed as some point in the future. </li>
-<li>To enqueue an action to be performed on a different thread than your own.</li>
-</ul></li>
+    <ul>
+      <li>
+        <p>To schedule messages and runnables to be executed as some point in the future. </p>
+      </li>
+      <li>
+        <p>To enqueue an action to be performed on a different thread than your own.</p>
+      </li>
+    </ul>
+  </li>
 </ul>
 
-<h4><code>Message</code></h4>
+<h4 id="message"><code>Message</code></h4>
 
 <ul>
-<li><p>Defines a message containing a description and arbitrary data object that can be sent to a Handler. This object contains two extra int fields and an extra object field that allow you to not do allocations in many cases.</p></li>
-<li><p>While the constructor of Message is public, the best way to get one of these is to call <code>Message.obtain()</code> or one of the <code>Handler.obtainMessage()</code> methods, which will pull them from a pool of recycled objects.</p></li>
+  <li>
+    <p>Defines a message containing a description and arbitrary data object that can be sent to a Handler. This object contains two extra int fields and an extra object field that allow you to not do allocations in many cases.</p>
+  </li>
+  <li>
+    <p>While the constructor of Message is public, the best way to get one of these is to call <code>Message.obtain()</code> or one of the <code>Handler.obtainMessage()</code> methods, which will pull them from a pool of recycled objects.</p>
+  </li>
 </ul>
 
-<h4><code>HandlerThread</code></h4>
+<h4 id="handlerthread"><code>HandlerThread</code></h4>
 
 <ul>
-<li><p><code>HandlerThread</code> is a handy class for starting a new thread that has a Looper.prepare(), Looper. </p></li>
-<li><p>You generally need a thread attached with a Looper when you want sequential execution of tasks without race conditions and keep a thread alive even after a particular task is completed so that it can be reused so that you don’t have to create new thread instances.</p></li>
+  <li>
+    <p><code>HandlerThread</code> is a handy class for starting a new thread that has a Looper.prepare(), Looper. </p>
+  </li>
+  <li>
+    <p>You generally need a thread attached with a Looper when you want sequential execution of tasks without race conditions and keep a thread alive even after a particular task is completed so that it can be reused so that you don’t have to create new thread instances.</p>
+  </li>
 </ul>
 
 <p>Once a HandlerThread is started, it sets up queuing through a Looper and MessageQueue and waits for incoming messages to process:</p>
-<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="n">HandlerThread</span> <span class="n">handlerThread</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">HandlerThread</span><span class="o">(</span><span class="s">&quot;HandlerThread&quot;</span><span class="o">);</span>
-<span class="n">handlerThread</span><span class="o">.</span><span class="na">start</span><span class="o">();</span>
 
-<span class="c1">// Create a handler attached to the HandlerThread&#39;s Looper</span>
-<span class="n">mHandler</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">Handler</span><span class="o">(</span><span class="n">handlerThread</span><span class="o">.</span><span class="na">getLooper</span><span class="o">())</span> <span class="o">{</span>
-    <span class="nd">@Override</span>
-    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">handleMessage</span><span class="o">(</span><span class="n">Message</span> <span class="n">msg</span><span class="o">)</span> <span class="o">{</span>
-        <span class="c1">// Process messages here</span>
-    <span class="o">}</span>
-<span class="o">};</span>
+<p>```java</p>
+
+<p>HandlerThread handlerThread = new HandlerThread(“HandlerThread”);
+handlerThread.start();</p>
+
+<p>// Create a handler attached to the HandlerThread’s Looper
+mHandler = new Handler(handlerThread.getLooper()) {
+    @Override
+    public void handleMessage(Message msg) {
+        // Process messages here
+    }
+};
  
-<span class="c1">// Now send messages using mHandler.sendMessage()</span>
-</code></pre></div>
+// Now send messages using mHandler.sendMessage()</p>
+
+<p>```</p>
+
 
         </section>
 

@@ -114,73 +114,91 @@
 
         <section class="post-content">
             
-            <p>In C++, there is a uncommnon conception named smart pointer, it is rarely seen in other programming lauguages. So, what&#39;s it? We could simply define it. <strong>A smart pointer is a class that wraps a &#39;raw&#39; (or &#39;bare&#39;) C++ pointer, to manage the lifetime of the object being pointed to</strong>.</p>
+            <p>In C++, there is a uncommnon conception named smart pointer, it is rarely seen in other programming lauguages. So, what’s it? We could simply define it. <strong>A smart pointer is a class that wraps a ‘raw’ (or ‘bare’) C++ pointer, to manage the lifetime of the object being pointed to</strong>.</p>
 
 <p>Thinking about this defination for a while, why we need a smart pointer class? Please consider a block code below:</p>
-<div class="highlight"><pre><code class="language-c++" data-lang="c++"><span class="n">MyObject</span><span class="o">*</span> <span class="n">ptr</span> <span class="o">=</span> <span class="k">new</span> <span class="n">MyObject</span><span class="p">();</span> 
-<span class="n">ptr</span><span class="o">-&gt;</span><span class="n">doSomething</span><span class="p">();</span> <span class="c1">// Use the object in some way</span>
-<span class="k">delete</span> <span class="n">ptr</span><span class="p">;</span> <span class="c1">// Destroy the object. Done with it.</span>
-</code></pre></div>
-<p>Most C++ programmer are familiar with this code snippet. Many freshman finish their job like this, they may not recognize that they would be in a trap and danger. Where is danger? Freshman would ask. But I ask them to think about this situation: If the calling <code>ptr-&gt;doSomething</code> throw a exception, the memory will leak, the object <code>ptr</code> point to will never be destroied. How can we avoid this bad result? Maybe we need a class to automatically to destroy the object instead of deleting it explicitly. What&#39;s the class look like? How we design it?  </p>
+
+<p><code>c++ 
+MyObject* ptr = new MyObject(); 
+ptr-&gt;doSomething(); // Use the object in some way
+delete ptr; // Destroy the object. Done with it.
+</code>
+Most C++ programmer are familiar with this code snippet. Many freshman finish their job like this, they may not recognize that they would be in a trap and danger. Where is danger? Freshman would ask. But I ask them to think about this situation: If the calling <code>ptr-&gt;doSomething</code> throw a exception, the memory will leak, the object <code>ptr</code> point to will never be destroied. How can we avoid this bad result? Maybe we need a class to automatically to destroy the object instead of deleting it explicitly. What’s the class look like? How we design it?  </p>
 
 <p>It actually that the STL and Boost provide us smart pointer template class. We could use it convinently. Generally, using smart pointer template class like this:</p>
-<div class="highlight"><pre><code class="language-c++" data-lang="c++"><span class="n">SomeSmartPtr</span><span class="o">&lt;</span><span class="n">MyObject</span><span class="o">&gt;</span> <span class="n">ptr</span><span class="p">(</span><span class="k">new</span> <span class="n">MyObject</span><span class="p">());</span>
-<span class="n">ptr</span><span class="o">-&gt;</span><span class="n">DoSomething</span><span class="p">();</span> <span class="c1">// Use the object in some way.</span>
-</code></pre></div>
-<p>You still have to create the object, but you no longer have to worry about destroying it. Simple and clean code, exception safe. Until here, we must introduce some usefull and smart pointer class.</p>
+
+<p><code>c++
+SomeSmartPtr&lt;MyObject&gt; ptr(new MyObject());
+ptr-&gt;DoSomething(); // Use the object in some way.
+</code>
+You still have to create the object, but you no longer have to worry about destroying it. Simple and clean code, exception safe. Until here, we must introduce some usefull and smart pointer class.</p>
 
 <ul>
-<li><p>Scoped smart pointer  </p>
+  <li>
+    <p>Scoped smart pointer  </p>
 
-<ul>
-<li>it can&#39;t be copied. </li>
-<li>Scoped pointers are useful when you want to tie the lifetime of the object to a particular block of code, or if you embedded it as member data inside another object, the lifetime of that other object. The object exists until the containing block of code is exited, or until the containing object is itself destroyed.</li>
-</ul></li>
+    <ul>
+      <li>
+        <p>it can’t be copied. </p>
+      </li>
+      <li>
+        <p>Scoped pointers are useful when you want to tie the lifetime of the object to a particular block of code, or if you embedded it as member data inside another object, the lifetime of that other object. The object exists until the containing block of code is exited, or until the containing object is itself destroyed.</p>
+      </li>
+    </ul>
+  </li>
 </ul>
 
 <p>Implementations : <code>std::unique_ptr</code>, <code>boost::scoped_ptr</code>. </p>
-<div class="highlight"><pre><code class="language-c++" data-lang="c++"><span class="kt">void</span> <span class="nf">f</span><span class="p">()</span>
-<span class="p">{</span>
-    <span class="p">{</span>
-       <span class="n">boost</span><span class="o">::</span><span class="n">scoped_ptr</span><span class="o">&lt;</span><span class="n">MyObject</span><span class="o">&gt;</span> <span class="n">ptr</span><span class="p">(</span><span class="k">new</span> <span class="n">MyObject</span><span class="p">());</span>
-       <span class="n">ptr</span><span class="o">-&gt;</span><span class="n">doSomethingUseful</span><span class="p">();</span>
-    <span class="p">}</span> <span class="c1">// boost::scopted_ptr goes out of scope -- </span>
-      <span class="c1">// the MyObject is automatically destroyed.</span>
 
-    <span class="c1">// ptr-&gt;doOtherThing(); // Compile error: &quot;ptr&quot; not defined</span>
-                            <span class="c1">// since it is no longer in scope.</span>
-<span class="p">}</span>
-</code></pre></div>
+<p>```c++
+void f()
+{
+    {
+       boost::scoped_ptr<myobject> ptr(new MyObject());
+       ptr-&gt;doSomethingUseful();
+    } // boost::scopted_ptr goes out of scope -- 
+      // the MyObject is automatically destroyed.</myobject></p>
+
+<pre><code>// ptr-&gt;doOtherThing(); // Compile error: "ptr" not defined
+                        // since it is no longer in scope. } ```
+</code></pre>
+
 <ul>
-<li>Reference counting smart pointer </li>
+  <li>Reference counting smart pointer </li>
 </ul>
 
 <p>Implementations: <code>std::share_ptr</code>, <code>boost::share_ptr</code></p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">* It can be copied.
+
+<pre><code>* It can be copied.
 
 * It is very useful when the lifetime of your object is much more complicated, and is not tied directly to a particular section of code or to another object.
 
 * There is one drawback - create the smart pointer on the heap, possibity of creating a dangling reference.
-</code></pre></div><div class="highlight"><pre><code class="language-c++" data-lang="c++"><span class="c1">// Create the smart pointer on the heap</span>
-<span class="n">MyObjectPtr</span><span class="o">*</span> <span class="n">pp</span> <span class="o">=</span> <span class="k">new</span> <span class="n">MyObjectPtr</span><span class="p">(</span><span class="k">new</span> <span class="n">MyObject</span><span class="p">())</span>
-<span class="c1">// Hmm, we forgot to destroy the smart pointer,</span>
-<span class="c1">// because of that, the object is never destroyed!</span>
-</code></pre></div><div class="highlight"><pre><code class="language-text" data-lang="text">* Possibity to create circular reference.
-</code></pre></div><div class="highlight"><pre><code class="language-text" data-lang="text">struct Owner {
-   boost::shared_ptr&lt;Owner&gt; other;
-};
+</code></pre>
 
-boost::shared_ptr&lt;Owner&gt; p1 (new Owner());
-boost::shared_ptr&lt;Owner&gt; p2 (new Owner());
+<p><code>c++
+// Create the smart pointer on the heap
+MyObjectPtr* pp = new MyObjectPtr(new MyObject())
+// Hmm, we forgot to destroy the smart pointer,
+// because of that, the object is never destroyed!
+</code></p>
+
+<pre><code>* Possibity to create circular reference. ``` struct Owner {    boost::shared_ptr&lt;Owner&gt; other; };
+</code></pre>
+
+<p>boost::shared_ptr<owner> p1 (new Owner());
+boost::shared_ptr<owner> p2 (new Owner());
 p1-&gt;other = p2; // p1 references p2
-p2-&gt;other = p1; // p2 references p1
+p2-&gt;other = p1; // p2 references p1</owner></owner></p>
 
-// Oops, the reference count of of p1 and p2 never goes to zero!
+<p>// Oops, the reference count of of p1 and p2 never goes to zero!
 // The objects are never destroyed!
-</code></pre></div>
+```</p>
+
 <p>To work around this problem, both Boost and C++11 have defined a <code>weak_ptr</code> to define a weak (uncounted) reference to a <code>shared_ptr</code>.</p>
 
-<p><strong>Conclusion</strong>: You should favour the use of <code>std::unique_ptr</code>, <code>std::shared_ptr</code> and <code>std::weak_ptr</code>, shouldn&#39;t use <code>std::auto_ptr</code>(deprecated), use the <code>std::unique_ptr</code> instead.</p>
+<p><strong>Conclusion</strong>: You should favour the use of <code>std::unique_ptr</code>, <code>std::shared_ptr</code> and <code>std::weak_ptr</code>, shouldn’t use <code>std::auto_ptr</code>(deprecated), use the <code>std::unique_ptr</code> instead.</p>
+
 
 
         </section>
@@ -276,7 +294,7 @@ p2-&gt;other = p1; // p2 references p1
         <a class="read-next-story prev no-cover" href="http://longlinht.github.io//high-quality-cpp">
             <section class="post">
                 <h2>高质量C++编程注意事项</h2>
-                <p><ul> <li><p>不提倡使用全局变量，尽量不要在头文件中出现象extern int value 这类声明</p></li> <li><p>变量的名字应当使用“名词”或者“形容词＋名词”</p></li> <li><p>全局函数的名字应当使用“动词”或者“动词＋名词”（动宾词组）</p></li> <li><p>不可将布尔变量直接与TRUE、FALSE 或者1、0 进行比较</p></li> <li><p>不可将浮点变量用“==”或“！=”与任何数字比较</p></li> <li><p>在多重循环中，如果有可能，应当将最长的循环放在最内层，最短的循环放在最外层，以减少CPU 跨切循环层的次数</p></li> <li><p>如果循环体内存在逻辑判断，并且循环次数很大，宜将逻辑判断移到循环体的外面</p></li> <li><p>在C++...</p>
+                <p><ul> <li> <p>不提倡使用全局变量，尽量不要在头文件中出现象extern int value 这类声明</p> </li> <li> <p>变量的名字应当使用“名词”或者“形容词＋名词”</p> </li> <li> <p>全局函数的名字应当使用“动词”或者“动词＋名词”（动宾词组）</p> </li> <li> <p>不可将布尔变量直接与TRUE、FALSE...</p>
             </section>
         </a>
     

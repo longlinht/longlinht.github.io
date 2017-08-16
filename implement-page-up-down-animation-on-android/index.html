@@ -119,187 +119,199 @@
 View的动画播放时序和旋转轴的问题上，解决了这两个问题后再拿去给设计看的时候，一切都完美了。 现在这个比较好的设计也已上线， 也因为这个调试和验证的过程感觉对
 Android动画的一些细节碰触的较多，所以写下此文记录下这个过程。</p>
 
-<h4>基本原理</h4>
+<h4 id="section">基本原理</h4>
 
 <p>通过<code>ObjectAnimation</code>操作<code>View</code>的<code>RotationY</code>属性，再利用动态改变<code>PivotY</code>的值和动画播放时序的不同来模拟出无限翻页轮播的动画效果</p>
 
-<h4>ObjectAnimation</h4>
-<div class="highlight"><pre><code class="language-text" data-lang="text">// 上面的View翻下去的动画
+<h4 id="objectanimation">ObjectAnimation</h4>
 
-private static ObjectAnimator aboveViewPageDownAnim;
+<p>```</p>
 
-// 下面的View翻上去的动画
+<p>// 上面的View翻下去的动画</p>
 
-private static ObjectAnimator belowViewPageUpAnim;
+<p>private static ObjectAnimator aboveViewPageDownAnim;</p>
 
-// 上面的View翻上去的动画
+<p>// 下面的View翻上去的动画</p>
 
-private static ObjectAnimator aboveViewPageUpAnim;
+<p>private static ObjectAnimator belowViewPageUpAnim;</p>
 
-// 下面的View翻下去的动画
+<p>// 上面的View翻上去的动画</p>
 
-private static ObjectAnimator belowViewPageDownAnim;
-</code></pre></div>
-<h4>关键的常量</h4>
-<div class="highlight"><pre><code class="language-text" data-lang="text">// 翻页动画的播放时长
+<p>private static ObjectAnimator aboveViewPageUpAnim;</p>
 
-private static int pageUpDownDurition = 500;
+<p>// 下面的View翻下去的动画</p>
 
-// 翻下播放结束前100翻上就开始播放
+<p>private static ObjectAnimator belowViewPageDownAnim;</p>
 
-private static int pageUpBeforeDownEnd = 400;
+<p>```</p>
 
-// 翻上播放完后停留时间
+<h4 id="section-1">关键的常量</h4>
 
-private static int belowViewStayInterval = 800;
+<p>```
+// 翻页动画的播放时长</p>
 
-// 在Y轴底部翻转
+<p>private static int pageUpDownDurition = 500;</p>
 
-private static int pageUpPivotY = 100;
+<p>// 翻下播放结束前100翻上就开始播放</p>
 
-// 在Y近顶部的位置翻转
+<p>private static int pageUpBeforeDownEnd = 400;</p>
 
-private static int pageDownPivotY = 70;
-</code></pre></div>
-<h4>具体实现</h4>
-<div class="highlight"><pre><code class="language-text" data-lang="text">public static void startPageUpDownAnimation(final View aboveView, final View belowView) {
+<p>// 翻上播放完后停留时间</p>
 
-    aboveViewPageDownAnim = ObjectAnimator.ofPropertyValuesHolder(aboveView,
-            PropertyValuesHolder.ofFloat(View.ROTATION_X, 0, 90));
+<p>private static int belowViewStayInterval = 800;</p>
 
-    aboveViewPageDownAnim.setDuration(pageUpDownDurition);
-    aboveViewPageDownAnim.setInterpolator(new LinearInterpolator());
-    aboveViewPageDownAnim.addListener(new Animator.AnimatorListener() {
-        @Override
-        public void onAnimationStart(Animator animator) {
-            aboveView.setPivotY(pageDownPivotY);
-            belowView.setVisibility(View.GONE);
-            belowView.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    belowViewPageUpAnim.start();
-                }
-            }, pageUpBeforeDownEnd);
-        }
+<p>// 在Y轴底部翻转</p>
 
-        @Override
-        public void onAnimationEnd(Animator animator) {
+<p>private static int pageUpPivotY = 100;</p>
 
-        }
+<p>// 在Y近顶部的位置翻转</p>
 
-        @Override
-        public void onAnimationCancel(Animator animator) {
+<p>private static int pageDownPivotY = 70;</p>
 
-        }
+<p>```</p>
 
-        @Override
-        public void onAnimationRepeat(Animator animator) {
+<h4 id="section-2">具体实现</h4>
 
-        }
-    });
+<p>```</p>
 
-    belowViewPageUpAnim = ObjectAnimator.ofPropertyValuesHolder(belowView,
-    PropertyValuesHolder.ofFloat(View.ROTATION_X, -90, 0));
-    belowViewPageUpAnim.setDuration(pageUpDownDurition);
-    belowViewPageUpAnim.setInterpolator(new LinearInterpolator());
-    belowViewPageUpAnim.addListener(new Animator.AnimatorListener() {
-        @Override
-        public void onAnimationStart(Animator animator) {
-            belowView.setVisibility(View.VISIBLE);
-            belowView.setPivotY(pageUpPivotY);
-        }
+<p>public static void startPageUpDownAnimation(final View aboveView, final View belowView) {</p>
 
-        @Override
-        public void onAnimationEnd(Animator animator) {
-            belowView.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    belowViewPageDownAnim.start();
-                }
-            }, belowViewStayInterval);
-        }
+<pre><code>aboveViewPageDownAnim = ObjectAnimator.ofPropertyValuesHolder(aboveView,
+        PropertyValuesHolder.ofFloat(View.ROTATION_X, 0, 90));
 
-        @Override
-        public void onAnimationCancel(Animator animator) {
+aboveViewPageDownAnim.setDuration(pageUpDownDurition);
+aboveViewPageDownAnim.setInterpolator(new LinearInterpolator());
+aboveViewPageDownAnim.addListener(new Animator.AnimatorListener() {
+    @Override
+    public void onAnimationStart(Animator animator) {
+        aboveView.setPivotY(pageDownPivotY);
+        belowView.setVisibility(View.GONE);
+        belowView.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                belowViewPageUpAnim.start();
+            }
+        }, pageUpBeforeDownEnd);
+    }
 
-        }
+    @Override
+    public void onAnimationEnd(Animator animator) {
 
-        @Override
-        public void onAnimationRepeat(Animator animator) {
+    }
 
-        }
-    });
+    @Override
+    public void onAnimationCancel(Animator animator) {
 
-    belowViewPageDownAnim = ObjectAnimator.ofPropertyValuesHolder(belowView,
-            PropertyValuesHolder.ofFloat(View.ROTATION_X, 0, 90));
+    }
 
-    belowViewPageDownAnim.setDuration(pageUpDownDurition);
-    belowViewPageDownAnim.setInterpolator(new LinearInterpolator());
-    belowViewPageDownAnim.addListener(new Animator.AnimatorListener() {
+    @Override
+    public void onAnimationRepeat(Animator animator) {
 
-        @Override
-        public void onAnimationStart(Animator animator) {
-            belowView.setPivotY(pageDownPivotY);
-            aboveView.setVisibility(View.GONE);
-            aboveView.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    aboveViewPageUpAnim.start();
-                }
-            }, pageUpBeforeDownEnd);
-        }
+    }
+});
 
-        @Override
-        public void onAnimationEnd(Animator animator) {
+belowViewPageUpAnim = ObjectAnimator.ofPropertyValuesHolder(belowView,
+PropertyValuesHolder.ofFloat(View.ROTATION_X, -90, 0));
+belowViewPageUpAnim.setDuration(pageUpDownDurition);
+belowViewPageUpAnim.setInterpolator(new LinearInterpolator());
+belowViewPageUpAnim.addListener(new Animator.AnimatorListener() {
+    @Override
+    public void onAnimationStart(Animator animator) {
+        belowView.setVisibility(View.VISIBLE);
+        belowView.setPivotY(pageUpPivotY);
+    }
 
-        }
+    @Override
+    public void onAnimationEnd(Animator animator) {
+        belowView.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                belowViewPageDownAnim.start();
+            }
+        }, belowViewStayInterval);
+    }
 
-        @Override
-        public void onAnimationCancel(Animator animator) {
+    @Override
+    public void onAnimationCancel(Animator animator) {
 
-        }
+    }
 
-        @Override
-        public void onAnimationRepeat(Animator animator) {
+    @Override
+    public void onAnimationRepeat(Animator animator) {
 
-        }
-    });
+    }
+});
 
-    aboveViewPageUpAnim = ObjectAnimator.ofPropertyValuesHolder(aboveView,
-            PropertyValuesHolder.ofFloat(View.ROTATION_X, -90, 0));
-    aboveViewPageUpAnim.setDuration(pageUpDownDurition);
-    aboveViewPageUpAnim.setInterpolator(new LinearInterpolator());
-    aboveViewPageUpAnim.addListener(new Animator.AnimatorListener() {
-        @Override
-        public void onAnimationStart(Animator animator) {
-            aboveView.setVisibility(View.VISIBLE);
-            aboveView.setPivotY(pageUpPivotY);
-        }
+belowViewPageDownAnim = ObjectAnimator.ofPropertyValuesHolder(belowView,
+        PropertyValuesHolder.ofFloat(View.ROTATION_X, 0, 90));
 
-        @Override
-        public void onAnimationEnd(Animator animator) {
-            aboveView.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    aboveViewPageDownAnim.start();
-                }
-            }, belowViewStayInterval);
-        }
+belowViewPageDownAnim.setDuration(pageUpDownDurition);
+belowViewPageDownAnim.setInterpolator(new LinearInterpolator());
+belowViewPageDownAnim.addListener(new Animator.AnimatorListener() {
 
-        @Override
-        public void onAnimationCancel(Animator animator) {
+    @Override
+    public void onAnimationStart(Animator animator) {
+        belowView.setPivotY(pageDownPivotY);
+        aboveView.setVisibility(View.GONE);
+        aboveView.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                aboveViewPageUpAnim.start();
+            }
+        }, pageUpBeforeDownEnd);
+    }
 
-        }
+    @Override
+    public void onAnimationEnd(Animator animator) {
 
-        @Override
-        public void onAnimationRepeat(Animator animator) {
+    }
 
-        }
-    });
+    @Override
+    public void onAnimationCancel(Animator animator) {
 
-    aboveViewPageDownAnim.start();
-}
-</code></pre></div>
+    }
+
+    @Override
+    public void onAnimationRepeat(Animator animator) {
+
+    }
+});
+
+aboveViewPageUpAnim = ObjectAnimator.ofPropertyValuesHolder(aboveView,
+        PropertyValuesHolder.ofFloat(View.ROTATION_X, -90, 0));
+aboveViewPageUpAnim.setDuration(pageUpDownDurition);
+aboveViewPageUpAnim.setInterpolator(new LinearInterpolator());
+aboveViewPageUpAnim.addListener(new Animator.AnimatorListener() {
+    @Override
+    public void onAnimationStart(Animator animator) {
+        aboveView.setVisibility(View.VISIBLE);
+        aboveView.setPivotY(pageUpPivotY);
+    }
+
+    @Override
+    public void onAnimationEnd(Animator animator) {
+        aboveView.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                aboveViewPageDownAnim.start();
+            }
+        }, belowViewStayInterval);
+    }
+
+    @Override
+    public void onAnimationCancel(Animator animator) {
+
+    }
+
+    @Override
+    public void onAnimationRepeat(Animator animator) {
+
+    }
+});
+
+aboveViewPageDownAnim.start(); } ```
+</code></pre>
+
 <p>其实这个实现已经是一个基本比较通用的翻页动画了，不仅可以用于TextView，ImageView应该也没有问题。</p>
 
 
@@ -408,9 +420,10 @@ private static int pageDownPivotY = 70;
 
 <p>以上就是一些我截取的一些有意思的观点和想法，可以看出近几年的一些电影和书籍多半不会深入艰深的技术细节，而多是通过对AI未来的畅想和猜测，以及带入AI这个特殊角色后对人类自身的一种反省和思考，我因受这些想法和思考的影响，也时而会在脑中闪出一下奇怪的想法，我甚至也不明白我为什么会产生这些奇思异想。</p>
 
-<p>我竟想到人类的起源和AI的未来可能有某种相似性，怎么说呢？因为我之前看到过一些文章分析人类可能并不是地球上的土著生物，可能真的是被一种神一样的存在所创造的，无中生有的，而这种神一样的存在现在却只留在了人类的神话中，我突然就想到，这种神一样的存在创造了我们，而后被我们所取代，他们存在过的痕迹也就只留在了我们的神话中，也许我们现在之于AI，就是那个神一样的存在，但我们最终会被AI取代，只留在AI的神话中，就跟没存在过一样......</p>
+<p>我竟想到人类的起源和AI的未来可能有某种相似性，怎么说呢？因为我之前看到过一些文章分析人类可能并不是地球上的土著生物，可能真的是被一种神一样的存在所创造的，无中生有的，而这种神一样的存在现在却只留在了人类的神话中，我突然就想到，这种神一样的存在创造了我们，而后被我们所取代，他们存在过的痕迹也就只留在了我们的神话中，也许我们现在之于AI，就是那个神一样的存在，但我们最终会被AI取代，只留在AI的神话中，就跟没存在过一样……</p>
 
 <p>也许人类的真正归宿还真就是以硅为载体，以此长存于世，胡说八道了这么多，可以止笔了，再有臆想，再来码字</p>
+
 </p>
             </section>
         </a>

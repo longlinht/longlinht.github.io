@@ -115,32 +115,32 @@
         <section class="post-content">
             
             <ul>
-<li><code>static_cast</code></li>
+  <li><code>static_cast</code></li>
 </ul>
 
-<p><code>static_cast</code> is the first cast you should attempt to use. It does things like implicit conversions between types (such as <code>int</code> to <code>float</code>, or pointer to <code>void*</code>), and it can also call explicit conversion functions (or implicit ones). In many cases, explicitly stating <code>static_cast</code> isn&#39;t necessary, but it&#39;s important to note that the T(something) syntax is equivalent to (T)something and should be avoided (more on that later). A <code>T(something, something_else)</code> is safe, however, and guaranteed to call the constructor.</p>
+<p><code>static_cast</code> is the first cast you should attempt to use. It does things like implicit conversions between types (such as <code>int</code> to <code>float</code>, or pointer to <code>void*</code>), and it can also call explicit conversion functions (or implicit ones). In many cases, explicitly stating <code>static_cast</code> isn’t necessary, but it’s important to note that the T(something) syntax is equivalent to (T)something and should be avoided (more on that later). A <code>T(something, something_else)</code> is safe, however, and guaranteed to call the constructor.</p>
 
-<p><code>static_cast</code> can also cast through inheritance hierarchies. It is unnecessary when casting upwards (towards a base class), but when casting downwards it can be used as long as it doesn&#39;t cast through <code>virtual</code> inheritance. It does not do checking, however, and it is undefined behavior to <code>static_cast</code> down a hierarchy to a type that isn&#39;t actually the type of the object.</p>
+<p><code>static_cast</code> can also cast through inheritance hierarchies. It is unnecessary when casting upwards (towards a base class), but when casting downwards it can be used as long as it doesn’t cast through <code>virtual</code> inheritance. It does not do checking, however, and it is undefined behavior to <code>static_cast</code> down a hierarchy to a type that isn’t actually the type of the object.</p>
 
 <ul>
-<li><code>const_cast</code></li>
+  <li><code>const_cast</code></li>
 </ul>
 
-<p><code>const_cast</code> can be used to remove or add const to a variable; no other C++ cast is capable of removing it (not even <code>reinterpret_cast</code>). It is important to note that modifying a formerly const value is only undefined if the original variable is const; if you use it to take the const off a reference to something that wasn&#39;t declared with const, it is safe. This can be useful when overloading member functions based on const, for instance. It can also be used to add const to an object, such as to call a member function overload.</p>
+<p><code>const_cast</code> can be used to remove or add const to a variable; no other C++ cast is capable of removing it (not even <code>reinterpret_cast</code>). It is important to note that modifying a formerly const value is only undefined if the original variable is const; if you use it to take the const off a reference to something that wasn’t declared with const, it is safe. This can be useful when overloading member functions based on const, for instance. It can also be used to add const to an object, such as to call a member function overload.</p>
 
-<p><code>const_cast</code> also works similarly on volatile, though that&#39;s less common.</p>
+<p><code>const_cast</code> also works similarly on volatile, though that’s less common.</p>
 
 <ul>
-<li><code>dynamic_cast</code></li>
+  <li><code>dynamic_cast</code></li>
 </ul>
 
-<p><code>dynamic_cast</code> is almost exclusively used for handling polymorphism. You can cast a pointer or reference to any polymorphic type to any other class type (a polymorphic type has at least one virtual function, declared or inherited). You can use it for more than just casting downwards -- you can cast sideways or even up another chain. The <code>dynamic_cast</code> will seek out the desired object and return it if possible. If it can&#39;t, it will return nullptr in the case of a pointer, or throw <code>std::bad_cast</code> in the case of a reference.</p>
+<p><code>dynamic_cast</code> is almost exclusively used for handling polymorphism. You can cast a pointer or reference to any polymorphic type to any other class type (a polymorphic type has at least one virtual function, declared or inherited). You can use it for more than just casting downwards – you can cast sideways or even up another chain. The <code>dynamic_cast</code> will seek out the desired object and return it if possible. If it can’t, it will return nullptr in the case of a pointer, or throw <code>std::bad_cast</code> in the case of a reference.</p>
 
-<p><code>dynamic_cast</code> has some limitations, though. It doesn&#39;t work if there are multiple objects of the same type in the inheritance hierarchy (the so-called &#39;dreaded diamond&#39;) and you aren&#39;t using virtual inheritance. It also can only go through public inheritance - it will always fail to travel through protected or private inheritance. This is rarely an issue, however, as such forms of inheritance are rare.</p>
+<p><code>dynamic_cast</code> has some limitations, though. It doesn’t work if there are multiple objects of the same type in the inheritance hierarchy (the so-called ‘dreaded diamond’) and you aren’t using virtual inheritance. It also can only go through public inheritance - it will always fail to travel through protected or private inheritance. This is rarely an issue, however, as such forms of inheritance are rare.</p>
 
 <ul>
-<li><code>reinterpret_casti</code>
-<code>reinterpret_cast</code> is the most dangerous cast, and should be used very sparingly. It turns one type directly into another - such as casting the value from one pointer to another, or storing a pointer in an int, or all sorts of other nasty things. Largely, the only guarantee you get with <code>reinterpret_cast</code> is that normally if you cast the result back to the original type, you will get the exact same value (but not if the intermediate type is smaller than the original type). There are a number of conversions that <code>reinterpret_cast</code> cannot do, too. It&#39;s used primarily for particularly weird conversions and bit manipulations, like turning a raw data stream into actual data, or storing data in the low bits of an aligned pointer.</li>
+  <li><code>reinterpret_casti</code>
+<code>reinterpret_cast</code> is the most dangerous cast, and should be used very sparingly. It turns one type directly into another - such as casting the value from one pointer to another, or storing a pointer in an int, or all sorts of other nasty things. Largely, the only guarantee you get with <code>reinterpret_cast</code> is that normally if you cast the result back to the original type, you will get the exact same value (but not if the intermediate type is smaller than the original type). There are a number of conversions that <code>reinterpret_cast</code> cannot do, too. It’s used primarily for particularly weird conversions and bit manipulations, like turning a raw data stream into actual data, or storing data in the low bits of an aligned pointer.</li>
 </ul>
 
 <p>C-style cast and function-style cast are casts using (type)object or type(object), respectively. A C-style cast is defined as the first of the following which succeeds:</p>
@@ -153,6 +153,7 @@
 It can therefore be used as a replacement for other casts in some instances, but can be extremely dangerous because of the ability to devolve into a <code>reinterpret_cast</code>, and the latter should be preferred when explicit casting is needed, unless you are sure <code>static_cast</code> will succeed or <code>reinterpret_cast</code> will fail. Even then, consider the longer, more explicit option.</p>
 
 <p>C-style casts also ignore access control when performing a <code>static_cast</code>, which means that they have the ability to perform an operation that no other cast can. This is mostly a kludge, though, and in my mind is just another reason to avoid C-style casts.</p>
+
 
 
         </section>

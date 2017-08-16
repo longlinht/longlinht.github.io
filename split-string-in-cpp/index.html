@@ -114,24 +114,28 @@
 
         <section class="post-content">
             
-            <p>There are many ways to split a string in C++, but what&#39;s the most elegant way to split a string in C++? May be we can find it step by step. The most simple and direct way is use <code>istringstream</code> to split.</p>
+            <p>There are many ways to split a string in C++, but what’s the most elegant way to split a string in C++? May be we can find it step by step. The most simple and direct way is use <code>istringstream</code> to split.</p>
 
 <p>If the delimiter is whitespace, we could simply code like thie and print substrings:</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">std::string s(&quot;Split a string in C++&quot;);
-std::istringstream iss(s);
 
-do 
+<p>```
+std::string s(“Split a string in C++”);
+std::istringstream iss(s);</p>
+
+<p>do 
 {
     std::string sub;
-    iss &gt;&gt; sub;
+    iss » sub;
     if(!sub.empty())
-        std::cout &lt;&lt; &quot;Substring: &quot; &lt;&lt; sub &lt;&lt; std::endl;
+        std::cout « “Substring: “ « sub « std::endl;
 } while (iss);
-</code></pre></div>
-<p>While when the delimiter is not whitespace, we need think about other way to resolve this problem. If you ever have used vector container in C++ STL, you can combine it figure out more general solution. We could create a function like this:</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">typedef std::vector&lt;std::string&gt; StringVector;
+```
+While when the delimiter is not whitespace, we need think about other way to resolve this problem. If you ever have used vector container in C++ STL, you can combine it figure out more general solution. We could create a function like this:</p>
 
-StringVector&amp; splitString(const std::string &amp;s, char delim, StringVector &amp;elems)
+<p>```
+typedef std::vector<std::string> StringVector;</std::string></p>
+
+<p>StringVector&amp; splitString(const std::string &amp;s, char delim, StringVector &amp;elems)
 {
     std::stringstream ss(s);
     std::string item;
@@ -141,25 +145,26 @@ StringVector&amp; splitString(const std::string &amp;s, char delim, StringVector
     }
     return elems;
 }
-</code></pre></div>
-<p>May be above solution is more elegent then first one, but it still use <code>stringstream</code>, while structure and some string class&#39;s method, the STL&#39;s power is not incarnated. The later solution will embody the elegence and power of STL&#39;s design.
 <code>
-string sentence = &quot;Split a string in C++&quot;;
+May be above solution is more elegent then first one, but it still use `stringstream`, while structure and some string class's method, the STL's power is not incarnated. The later solution will embody the elegence and power of STL's design.
+</code>
+string sentence = “Split a string in C++”;
 istringstream iss(sentence);
-copy(istream_iterator&lt;string&gt;(iss),
-     istream_iterator&lt;string&gt;(),
-     ostream_iterator&lt;string&gt;(cout, &quot;\n&quot;));
-</code>
+copy(istream_iterator<string>(iss),
+     istream_iterator<string>(),
+     ostream_iterator<string>(cout, "\n"));
+```
 Instead of copying the extracted tokens to an output stream, one could insert them into a container, using the same generic copy algorithm.
-<code>
-vector&lt;string&gt; tokens;
-copy(istream_iterator&lt;string&gt;(iss),
-     istream_iterator&lt;string&gt;(),
+```
+vector<string> tokens;
+copy(istream_iterator<string>(iss),
+     istream_iterator<string>(),
      back_inserter(tokens));
-</code>
-So simple code, it seems elegent, but its delimiter must be whitespace, it&#39;s not a general solution.</p>
+```
+So simple code, it seems elegent, but its delimiter must be whitespace, it's not a general solution.</string></string></string></string></string></string></p>
 
 <p>Conclusion: There is not a standard solution in C++, neither in STL, so usual and common operation on string, why C++ not provide a method in string class.</p>
+
 
 
         </section>

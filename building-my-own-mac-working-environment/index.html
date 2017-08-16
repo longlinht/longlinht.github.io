@@ -114,91 +114,113 @@
 
         <section class="post-content">
             
-            <p>In recent 2 years, I have switched my own working environment from Windows to Ubuntu and Mac. For the reason that I switched C/C++ development for Windows to Java development for Android. But I still prefer C++, so I won&#39;t give up C/C++ programming. In this article I will write down detail steps that how I build working environment. This working environment on Mac is a general working environment, not just for Android development but also C/C++ development. Let&#39;s start!</p>
+            <p>In recent 2 years, I have switched my own working environment from Windows to Ubuntu and Mac. For the reason that I switched C/C++ development for Windows to Java development for Android. But I still prefer C++, so I won’t give up C/C++ programming. In this article I will write down detail steps that how I build working environment. This working environment on Mac is a general working environment, not just for Android development but also C/C++ development. Let’s start!</p>
 
 <p>First, I would install some universal tools.</p>
 
-<h3>Universal Tools</h3>
+<h3 id="universal-tools">Universal Tools</h3>
 
-<h4>Install and configure Oh my zsh</h4>
+<h4 id="install-and-configure-oh-my-zsh">Install and configure Oh my zsh</h4>
 
 <ul>
-<li>Install via curl or wget</li>
+  <li>Install via curl or wget</li>
 </ul>
 
 <p><strong>via curl</strong></p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">sh -c &quot;$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)&quot;
-</code></pre></div>
-<p><strong>via wget</strong></p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">sh -c &quot;$(wget https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh -O -)&quot;
-</code></pre></div>
+
+<p><code>
+sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
+</code>
+<strong>via wget</strong></p>
+
+<p><code>
+sh -c "$(wget https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh -O -)"
+</code> </p>
+
 <ul>
-<li>Configure my prefer feature via edit .zshrc file</li>
+  <li>Configure my prefer feature via edit .zshrc file</li>
 </ul>
 
 <p>Add this line to .zshrc file
 <code>
 plugins=(git vi-mode adb)
-</code></p>
-
-<h4>Install and configure iTerm</h4>
+</code>
+#### Install and configure iTerm</p>
 
 <ul>
-<li><p>Install lastest release dmg</p></li>
-<li><p>Clone solarized git project from github and import color scheme for iTerm2
+  <li>
+    <p>Install lastest release dmg</p>
+  </li>
+  <li>Clone solarized git project from github and import color scheme for iTerm2
 <code>
 git clone https://github.com/altercation/solarized.git
 cd iterm2-colors-solarized
 ./Solarized Dark.itermcolors
-</code></p>
-
-<h4>Install userful command line tools</h4></li>
-<li><p>Install brew - <code>ruby -e &quot;$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)&quot;</code></p></li>
-<li><p>Install ctags - <code>brew install ctags</code></p></li>
-<li><p>Install cscope - <code>brew install cscope</code></p></li>
-<li><p>Install ag - <code>brew install ag</code></p></li>
-<li><p>Install grip - <code>brew install grip</code></p></li>
+</code>
+#### Install userful command line tools</li>
+  <li>
+    <p>Install brew - <code>ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"</code></p>
+  </li>
+  <li>
+    <p>Install ctags - <code>brew install ctags</code></p>
+  </li>
+  <li>
+    <p>Install cscope - <code>brew install cscope</code></p>
+  </li>
+  <li>
+    <p>Install ag - <code>brew install ag</code></p>
+  </li>
+  <li>Install grip - <code>brew install grip</code></li>
 </ul>
 
-<h4>Install and configure Vim</h4>
+<h4 id="install-and-configure-vim">Install and configure Vim</h4>
 
 <ul>
-<li>Install vim via source
+  <li>Install vim via source
 <code>
 git clone https://github.com/vim/vim.git
 cd vim 
-./configure --with-features=huge --enable-gui=gnome2 --enable-pythoninterp=yes --enable-cscope --enable-gui=auto \ --enable-gtk2-check --enable-gnome-check \ --enable-fail-if-missing --enable-multibyte --enable-fontset \ --with-x --with-compiledby=&quot;Tao He&quot;
+./configure --with-features=huge --enable-gui=gnome2 --enable-pythoninterp=yes --enable-cscope --enable-gui=auto \ --enable-gtk2-check --enable-gnome-check \ --enable-fail-if-missing --enable-multibyte --enable-fontset \ --with-x --with-compiledby="Tao He"
 make
 sudo make install
 </code></li>
-<li><p>Configure vim
+  <li>
+    <p>Configure vim
 <code>
 cd ~
 git clone https://github.com/longlinht/vimrc.git ~/.vim_runtime
 sh ~/.vim_runtime/install_awesome_vimrc.sh
-</code></p>
-
-<h3>Utilities</h3></li>
-<li><p>Install Alfred</p></li>
-<li><p>Install Dropbox</p></li>
-<li><p>Install NutsCloud</p></li>
+</code>
+### Utilities</p>
+  </li>
+  <li>
+    <p>Install Alfred</p>
+  </li>
+  <li>
+    <p>Install Dropbox</p>
+  </li>
+  <li>Install NutsCloud</li>
 </ul>
 
-<h3>Install IDE</h3>
+<h3 id="install-ide">Install IDE</h3>
 
-<h4>Install and configure Android Studio</h4>
+<h4 id="install-and-configure-android-studio">Install and configure Android Studio</h4>
 
 <ul>
-<li><p>Install Android Studio via dmg</p></li>
-<li><p>Install and configure ideavim plugin 
+  <li>
+    <p>Install Android Studio via dmg</p>
+  </li>
+  <li>
+    <p>Install and configure ideavim plugin 
 <code>
 Install ideavim in Android Studio
 git clone https://github.com/longlinht/VimForIDEs.git
 In Android Studio -&gt; File -&gt;Import Settings -&gt; Choose VimForIDEs/ideavim/monokai/settings.jar
-</code></p></li>
+</code></p>
+  </li>
 </ul>
 
-<p>There are some userful application I have installed, but I don&#39;t want to list them becasue their easy installation. Until now, I work comfortably in this woking environment. Maybe I will develop a script to automate this process in the future. If I make it done, I would update this article and supply this script.</p>
+<p>There are some userful application I have installed, but I don’t want to list them becasue their easy installation. Until now, I work comfortably in this woking environment. Maybe I will develop a script to automate this process in the future. If I make it done, I would update this article and supply this script.</p>
 
 
         </section>
@@ -294,7 +316,7 @@ In Android Studio -&gt; File -&gt;Import Settings -&gt; Choose VimForIDEs/ideavi
         <a class="read-next-story prev no-cover" href="http://longlinht.github.io//java-references">
             <section class="post">
                 <h2>Java References</h2>
-                <p><p>Before JDK 1.2, if a object isn&#39;t referenced by any variable, it can&#39;t be used...</p>
+                <p><p>Before JDK 1.2, if a object isn’t referenced by any variable, it can’t be used...</p>
             </section>
         </a>
     

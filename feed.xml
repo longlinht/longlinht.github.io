@@ -66,40 +66,31 @@ Android动画的一些细节碰触的较多，所以写下此文记录下这个�
 
 &lt;h4&gt;ObjectAnimation&lt;/h4&gt;
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;// 上面的View翻下去的动画
-
 private static ObjectAnimator aboveViewPageDownAnim;
 
 // 下面的View翻上去的动画
-
 private static ObjectAnimator belowViewPageUpAnim;
 
 // 上面的View翻上去的动画
-
 private static ObjectAnimator aboveViewPageUpAnim;
 
 // 下面的View翻下去的动画
-
 private static ObjectAnimator belowViewPageDownAnim;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;h4&gt;关键的常量&lt;/h4&gt;
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;// 翻页动画的播放时长
-
 private static int pageUpDownDurition = 500;
 
 // 翻下播放结束前100翻上就开始播放
-
 private static int pageUpBeforeDownEnd = 400;
 
 // 翻上播放完后停留时间
-
 private static int belowViewStayInterval = 800;
 
 // 在Y轴底部翻转
-
 private static int pageUpPivotY = 100;
 
 // 在Y近顶部的位置翻转
-
 private static int pageDownPivotY = 70;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;h4&gt;具体实现&lt;/h4&gt;

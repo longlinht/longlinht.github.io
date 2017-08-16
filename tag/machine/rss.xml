@@ -24,33 +24,42 @@
 
 <p>通过<code>ObjectAnimation</code>操作<code>View</code>的<code>RotationY</code>属性，再利用动态改变<code>PivotY</code>的值和动画播放时序的不同来模拟出无限翻页轮播的动画效果</p>
 
-<h4>四个ObjectAnimation</h4>
+<h4>ObjectAnimation</h4>
 <div class="highlight"><pre><code class="language-java" data-lang="java"><span class="c1">// 上面的View翻下去的动画</span>
+
 <span class="kd">private</span> <span class="kd">static</span> <span class="n">ObjectAnimator</span> <span class="n">aboveViewPageDownAnim</span><span class="o">;</span>
 
 <span class="c1">// 下面的View翻上去的动画</span>
+
 <span class="kd">private</span> <span class="kd">static</span> <span class="n">ObjectAnimator</span> <span class="n">belowViewPageUpAnim</span><span class="o">;</span>
 
 <span class="c1">// 上面的View翻上去的动画</span>
+
 <span class="kd">private</span> <span class="kd">static</span> <span class="n">ObjectAnimator</span> <span class="n">aboveViewPageUpAnim</span><span class="o">;</span>
 
 <span class="c1">// 下面的View翻下去的动画</span>
+
 <span class="kd">private</span> <span class="kd">static</span> <span class="n">ObjectAnimator</span> <span class="n">belowViewPageDownAnim</span><span class="o">;</span>
 </code></pre></div>
 <h4>关键的常量</h4>
 <div class="highlight"><pre><code class="language-text" data-lang="text">// 翻页动画的播放时长
+
 private static int pageUpDownDurition = 500;
 
 // 翻下播放结束前100翻上就开始播放
+
 private static int pageUpBeforeDownEnd = 400;
 
 // 翻上播放完后停留时间
+
 private static int belowViewStayInterval = 800;
 
 // 在Y轴底部翻转
+
 private static int pageUpPivotY = 100;
 
 // 在Y近顶部的位置翻转
+
 private static int pageDownPivotY = 70;
 </code></pre></div>
 <h4>具体实现</h4>

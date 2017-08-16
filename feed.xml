@@ -14,33 +14,42 @@
 
 &lt;p&gt;通过&lt;code&gt;ObjectAnimation&lt;/code&gt;操作&lt;code&gt;View&lt;/code&gt;的&lt;code&gt;RotationY&lt;/code&gt;属性，再利用动态改变&lt;code&gt;PivotY&lt;/code&gt;的值和动画播放时序的不同来模拟出无限翻页轮播的动画效果&lt;/p&gt;
 
-&lt;h4&gt;四个ObjectAnimation&lt;/h4&gt;
+&lt;h4&gt;ObjectAnimation&lt;/h4&gt;
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-java&quot; data-lang=&quot;java&quot;&gt;&lt;span class=&quot;c1&quot;&gt;// 上面的View翻下去的动画&lt;/span&gt;
+
 &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ObjectAnimator&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;aboveViewPageDownAnim&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
 
 &lt;span class=&quot;c1&quot;&gt;// 下面的View翻上去的动画&lt;/span&gt;
+
 &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ObjectAnimator&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;belowViewPageUpAnim&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
 
 &lt;span class=&quot;c1&quot;&gt;// 上面的View翻上去的动画&lt;/span&gt;
+
 &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ObjectAnimator&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;aboveViewPageUpAnim&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
 
 &lt;span class=&quot;c1&quot;&gt;// 下面的View翻下去的动画&lt;/span&gt;
+
 &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ObjectAnimator&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;belowViewPageDownAnim&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;h4&gt;关键的常量&lt;/h4&gt;
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;// 翻页动画的播放时长
+
 private static int pageUpDownDurition = 500;
 
 // 翻下播放结束前100翻上就开始播放
+
 private static int pageUpBeforeDownEnd = 400;
 
 // 翻上播放完后停留时间
+
 private static int belowViewStayInterval = 800;
 
 // 在Y轴底部翻转
+
 private static int pageUpPivotY = 100;
 
 // 在Y近顶部的位置翻转
+
 private static int pageDownPivotY = 70;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;h4&gt;具体实现&lt;/h4&gt;

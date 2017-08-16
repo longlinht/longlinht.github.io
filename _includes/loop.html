@@ -20,7 +20,7 @@
             <h2 class="post-title"><a href="{{ site.url }}{{ post.url }}">{{ post.title }}</a></h2>
         </header>
         <section class="post-excerpt">
-            <p>{{ post.content | truncatewords: 26 }} <a class="read-more" href="{{ site.url }}{{ post.url }}">&raquo;</a></p>
+            <p>{{ post.content | truncatewords: 6 }} <a class="read-more" href="{{ site.url }}{{ post.url }}">&raquo;</a></p>
         </section>
         <footer class="post-meta">
             {% if site.image %}<img class="author-thumb" src="{{ site.baseurl }}{{ site.image }}" alt="Author image" nopin="nopin" />{% endif %}

@@ -8,16 +8,7 @@
     <title>Dancing with Machine, Human and God</title>
     <link>http://longlinht.github.io/</link>
     <description>World is complex,confusing and wonderful,I will talk about machine,human and god to known it, to reveal it.</description>
-    <pubDate>Thu, 03 Aug 2017 02:30:12 +0800</pubDate>
-    <item>
-      <title>在Android上实现无限翻页轮播动画效果</title>
-      <link>http://longlinht.github.io//implement-page-up-down-animation-on-android</link>
-      <description>最近在工作中遇到一个需求，要求在一个Dialog的标题上显示两行字，但是这行字如果同时出现的话会非常难看，设计出了套方案，类似无限翻页轮播这两行字，要有翻书的效果。刚开始实现的时候，动画的效果也出来了，但是拿去给设计验收的时候设计总感觉怪怪的，始终达不到设计最终想要的结果。后来通过好多次的调试和验证，发现问题出现在两个View的动画播放时序和旋转轴的问题上，解决了这两个问题后再拿去给设计看的时候，一切都完美了。 现在这个比较好的设计也已上线， 也因为这个调试和验证的过程感觉对Android动画的一些细节碰触的较多，所以写下此文记录下这个过程。
-
-</description>
-      <pubDate>Thu, 03 Aug 2017 02:30:12 +0800</pubDate>
-      <dc:date>2017-08-03T02:30:12+08:00</dc:date>
-    </item>
+    <pubDate>Sun, 16 Jul 2017 02:30:12 +0800</pubDate>
     <item>
       <title>Intall Emacs on Ubuntu</title>
       <link>http://longlinht.github.io//install-emacs-on-ubuntu</link>
@@ -26,6 +17,18 @@
 </description>
       <pubDate>Sun, 16 Jul 2017 02:30:12 +0800</pubDate>
       <dc:date>2017-07-16T02:30:12+08:00</dc:date>
+    </item>
+    <item>
+      <title>在Android上实现无限翻页轮播动画效果</title>
+      <link>http://longlinht.github.io//implement-page-up-down-animation-on-android</link>
+      <description>最近在工作中遇到一个需求，要求在一个Dialog的标题上显示两行字，但是这行字如果同时出现的话会非常难看，设计出了套方案，类似无限翻页轮播这两行字，要有翻书的效果。
+刚开始实现的时候，动画的效果也出来了，但是拿去给设计验收的时候设计总感觉怪怪的，始终达不到设计最终想要的结果。后来通过好多次的调试和验证，发现问题出现在两个
+View的动画播放时序和旋转轴的问题上，解决了这两个问题后再拿去给设计看的时候，一切都完美了。 现在这个比较好的设计也已上线， 也因为这个调试和验证的过程感觉对
+Android动画的一些细节碰触的较多，所以写下此文记录下这个过程。
+
+</description>
+      <pubDate>Thu, 13 Jul 2017 02:30:12 +0800</pubDate>
+      <dc:date>2017-07-13T02:30:12+08:00</dc:date>
     </item>
     <item>
       <title>对AI的一些臆想</title>
@@ -238,6 +241,6 @@ update UI when we finish something in separated thread. This is a basic problem,
       <pubDate>Wed, 03 Nov 2010 02:30:12 +0800</pubDate>
       <dc:date>2010-11-03T02:30:12+08:00</dc:date>
     </item>
-    <dc:date>2017-08-03T02:30:12+08:00</dc:date>
+    <dc:date>2017-07-16T02:30:12+08:00</dc:date>
   </channel>
 </rss>

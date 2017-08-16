@@ -7,8 +7,58 @@
     <atom:link href="http://longlinht.github.io//feed.xml" rel="self" type="application/rss+xml" />
     
       <item>
+        <title>Intall Emacs on Ubuntu</title>
+        <description>&lt;p&gt;Install Emacs 25 on Ubuntu from source is very easy, follow these steps below could achieve it.&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Open terminal (Ctrl+Alt+T) and run command to install build tools:&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;sudo apt install build-essential checkinstall
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;ul&gt;
+&lt;li&gt;Then install the build dependencies via command:&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;sudo apt-get build-dep emacs24
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;Now download the source at ftp.gnu.org/gnu/emacs/, then extract:&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Open terminal and navigate to the &amp;quot;emacs-25.1&amp;quot; folder via command (or select &amp;quot;Open in terminal&amp;quot; from its context menu):&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;cd ~/Downloads/emacs-25.1
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;ul&gt;
+&lt;li&gt;In the same terminal window, once you’re in the source folder, run the commands below one by one:&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;./configure
+make
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;ul&gt;
+&lt;li&gt;Finally use checkinstall command to create .deb and install Emacs 25.1:&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;sudo checkinstall
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;While running the command, answer on screen questions, e.g., install docs, type package description, change package name, version, etc.&lt;/p&gt;
+
+&lt;p&gt;Once done, Emacs is installed on your system and you can remove it anytime by running the command in the prompt with sudo privilege:&lt;/p&gt;
+
+&lt;p&gt;In my case it’s:&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;sudo dpkg -r emacs-25
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;And the last command create a .deb package in the source folder, and it can be used in another Ubuntu machine to install Emacs(need to manually install dependencies via step 2).&lt;/p&gt;
+
+&lt;p&gt;Finally, run command emacs to launch the text editor, or launch it from Unity Dash (App Launcher) at next login (or next boot).&lt;/p&gt;
+</description>
+        <pubDate>Sun, 16 Jul 2017 02:30:12 +0800</pubDate>
+        <link>http://longlinht.github.io//install-emacs-on-ubuntu</link>
+        <guid isPermaLink="true">http://longlinht.github.io//install-emacs-on-ubuntu</guid>
+      </item>
+    
+      <item>
         <title>在Android上实现无限翻页轮播动画效果</title>
-        <description>&lt;p&gt;最近在工作中遇到一个需求，要求在一个Dialog的标题上显示两行字，但是这行字如果同时出现的话会非常难看，设计出了套方案，类似无限翻页轮播这两行字，要有翻书的效果。刚开始实现的时候，动画的效果也出来了，但是拿去给设计验收的时候设计总感觉怪怪的，始终达不到设计最终想要的结果。后来通过好多次的调试和验证，发现问题出现在两个View的动画播放时序和旋转轴的问题上，解决了这两个问题后再拿去给设计看的时候，一切都完美了。 现在这个比较好的设计也已上线， 也因为这个调试和验证的过程感觉对Android动画的一些细节碰触的较多，所以写下此文记录下这个过程。&lt;/p&gt;
+        <description>&lt;p&gt;最近在工作中遇到一个需求，要求在一个Dialog的标题上显示两行字，但是这行字如果同时出现的话会非常难看，设计出了套方案，类似无限翻页轮播这两行字，要有翻书的效果。
+刚开始实现的时候，动画的效果也出来了，但是拿去给设计验收的时候设计总感觉怪怪的，始终达不到设计最终想要的结果。后来通过好多次的调试和验证，发现问题出现在两个
+View的动画播放时序和旋转轴的问题上，解决了这两个问题后再拿去给设计看的时候，一切都完美了。 现在这个比较好的设计也已上线， 也因为这个调试和验证的过程感觉对
+Android动画的一些细节碰触的较多，所以写下此文记录下这个过程。&lt;/p&gt;
 
 &lt;h4&gt;基本原理&lt;/h4&gt;
 
@@ -193,56 +243,9 @@ private static int pageDownPivotY = 70;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;p&gt;其实这个实现已经是一个基本比较通用的翻页动画了，不仅可以用于TextView，ImageView应该也没有问题。&lt;/p&gt;
 </description>
-        <pubDate>Thu, 03 Aug 2017 02:30:12 +0800</pubDate>
+        <pubDate>Thu, 13 Jul 2017 02:30:12 +0800</pubDate>
         <link>http://longlinht.github.io//implement-page-up-down-animation-on-android</link>
         <guid isPermaLink="true">http://longlinht.github.io//implement-page-up-down-animation-on-android</guid>
-      </item>
-    
-      <item>
-        <title>Intall Emacs on Ubuntu</title>
-        <description>&lt;p&gt;Install Emacs 25 on Ubuntu from source is very easy, follow these steps below could achieve it.&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;Open terminal (Ctrl+Alt+T) and run command to install build tools:&lt;/li&gt;
-&lt;/ul&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;sudo apt install build-essential checkinstall
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;ul&gt;
-&lt;li&gt;Then install the build dependencies via command:&lt;/li&gt;
-&lt;/ul&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;sudo apt-get build-dep emacs24
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;p&gt;Now download the source at ftp.gnu.org/gnu/emacs/, then extract:&lt;/p&gt;&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;Open terminal and navigate to the &amp;quot;emacs-25.1&amp;quot; folder via command (or select &amp;quot;Open in terminal&amp;quot; from its context menu):&lt;/p&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;cd ~/Downloads/emacs-25.1
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;ul&gt;
-&lt;li&gt;In the same terminal window, once you’re in the source folder, run the commands below one by one:&lt;/li&gt;
-&lt;/ul&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;./configure
-make
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;ul&gt;
-&lt;li&gt;Finally use checkinstall command to create .deb and install Emacs 25.1:&lt;/li&gt;
-&lt;/ul&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;sudo checkinstall
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;p&gt;While running the command, answer on screen questions, e.g., install docs, type package description, change package name, version, etc.&lt;/p&gt;
-
-&lt;p&gt;Once done, Emacs is installed on your system and you can remove it anytime by running the command in the prompt with sudo privilege:&lt;/p&gt;
-
-&lt;p&gt;In my case it’s:&lt;/p&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;sudo dpkg -r emacs-25
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;p&gt;And the last command create a .deb package in the source folder, and it can be used in another Ubuntu machine to install Emacs(need to manually install dependencies via step 2).&lt;/p&gt;
-
-&lt;p&gt;Finally, run command emacs to launch the text editor, or launch it from Unity Dash (App Launcher) at next login (or next boot).&lt;/p&gt;
-</description>
-        <pubDate>Sun, 16 Jul 2017 02:30:12 +0800</pubDate>
-        <link>http://longlinht.github.io//install-emacs-on-ubuntu</link>
-        <guid isPermaLink="true">http://longlinht.github.io//install-emacs-on-ubuntu</guid>
       </item>
     
       <item>

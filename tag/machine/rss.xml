@@ -12,6 +12,192 @@
    <atom:link href="rss" rel="self" type="application/rss+xml" />
    
 	<item>
+	  <title>在Android上实现无限翻页轮播动画效果</title>
+	  <link>//implement-page-up-down-animation-on-android</link>
+	  <author>Tao He</author>
+	  <pubDate>2017-08-03T02:30:12+08:00</pubDate>
+	  <guid>//implement-page-up-down-animation-on-android</guid>
+	  <description><![CDATA[
+	     <p>最近在工作中遇到一个需求，要求在一个Dialog的标题上显示两行字，但是这行字如果同时出现的话会非常难看，设计出了套方案，类似无限翻页轮播这两行字，要有翻书的效果。刚开始实现的时候，动画的效果也出来了，但是拿去给设计验收的时候设计总感觉怪怪的，始终达不到设计最终想要的结果。后来通过好多次的调试和验证，发现问题出现在两个View的动画播放时序和旋转轴的问题上，解决了这两个问题后再拿去给设计看的时候，一切都完美了。 现在这个比较好的设计也已上线， 也因为这个调试和验证的过程感觉对Android动画的一些细节碰触的较多，所以写下此文记录下这个过程。</p>
+
+<h4>基本原理</h4>
+
+<p>通过<code>ObjectAnimation</code>操作<code>View</code>的<code>RotationY</code>属性，再利用动态改变<code>PivotY</code>的值和动画播放时序的不同来模拟出无限翻页轮播的动画效果</p>
+
+<h4>四个ObjectAnimation</h4>
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="c1">// 上面的View翻下去的动画</span>
+<span class="kd">private</span> <span class="kd">static</span> <span class="n">ObjectAnimator</span> <span class="n">aboveViewPageDownAnim</span><span class="o">;</span>
+
+<span class="c1">// 下面的View翻上去的动画</span>
+<span class="kd">private</span> <span class="kd">static</span> <span class="n">ObjectAnimator</span> <span class="n">belowViewPageUpAnim</span><span class="o">;</span>
+
+<span class="c1">// 上面的View翻上去的动画</span>
+<span class="kd">private</span> <span class="kd">static</span> <span class="n">ObjectAnimator</span> <span class="n">aboveViewPageUpAnim</span><span class="o">;</span>
+
+<span class="c1">// 下面的View翻下去的动画</span>
+<span class="kd">private</span> <span class="kd">static</span> <span class="n">ObjectAnimator</span> <span class="n">belowViewPageDownAnim</span><span class="o">;</span>
+</code></pre></div>
+<h4>关键的常量</h4>
+<div class="highlight"><pre><code class="language-text" data-lang="text">// 翻页动画的播放时长
+private static int pageUpDownDurition = 500;
+
+// 翻下播放结束前100翻上就开始播放
+private static int pageUpBeforeDownEnd = 400;
+
+// 翻上播放完后停留时间
+private static int belowViewStayInterval = 800;
+
+// 在Y轴底部翻转
+private static int pageUpPivotY = 100;
+
+// 在Y近顶部的位置翻转
+private static int pageDownPivotY = 70;
+</code></pre></div>
+<h4>具体实现</h4>
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">startPageUpDownAnimation</span><span class="o">(</span><span class="kd">final</span> <span class="n">View</span> <span class="n">aboveView</span><span class="o">,</span> <span class="kd">final</span> <span class="n">View</span> <span class="n">belowView</span><span class="o">)</span> <span class="o">{</span>
+
+    <span class="n">aboveViewPageDownAnim</span> <span class="o">=</span> <span class="n">ObjectAnimator</span><span class="o">.</span><span class="na">ofPropertyValuesHolder</span><span class="o">(</span><span class="n">aboveView</span><span class="o">,</span>
+            <span class="n">PropertyValuesHolder</span><span class="o">.</span><span class="na">ofFloat</span><span class="o">(</span><span class="n">View</span><span class="o">.</span><span class="na">ROTATION_X</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="mi">90</span><span class="o">));</span>
+
+    <span class="n">aboveViewPageDownAnim</span><span class="o">.</span><span class="na">setDuration</span><span class="o">(</span><span class="n">pageUpDownDurition</span><span class="o">);</span>
+    <span class="n">aboveViewPageDownAnim</span><span class="o">.</span><span class="na">setInterpolator</span><span class="o">(</span><span class="k">new</span> <span class="nf">LinearInterpolator</span><span class="o">());</span>
+    <span class="n">aboveViewPageDownAnim</span><span class="o">.</span><span class="na">addListener</span><span class="o">(</span><span class="k">new</span> <span class="n">Animator</span><span class="o">.</span><span class="na">AnimatorListener</span><span class="o">()</span> <span class="o">{</span>
+        <span class="nd">@Override</span>
+        <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onAnimationStart</span><span class="o">(</span><span class="n">Animator</span> <span class="n">animator</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">aboveView</span><span class="o">.</span><span class="na">setPivotY</span><span class="o">(</span><span class="n">pageDownPivotY</span><span class="o">);</span>
+            <span class="n">belowView</span><span class="o">.</span><span class="na">setVisibility</span><span class="o">(</span><span class="n">View</span><span class="o">.</span><span class="na">GONE</span><span class="o">);</span>
+            <span class="n">belowView</span><span class="o">.</span><span class="na">postDelayed</span><span class="o">(</span><span class="k">new</span> <span class="nf">Runnable</span><span class="o">()</span> <span class="o">{</span>
+                <span class="nd">@Override</span>
+                <span class="kd">public</span> <span class="kt">void</span> <span class="nf">run</span><span class="o">()</span> <span class="o">{</span>
+                    <span class="n">belowViewPageUpAnim</span><span class="o">.</span><span class="na">start</span><span class="o">();</span>
+                <span class="o">}</span>
+            <span class="o">},</span> <span class="n">pageUpBeforeDownEnd</span><span class="o">);</span>
+        <span class="o">}</span>
+
+        <span class="nd">@Override</span>
+        <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onAnimationEnd</span><span class="o">(</span><span class="n">Animator</span> <span class="n">animator</span><span class="o">)</span> <span class="o">{</span>
+
+        <span class="o">}</span>
+
+        <span class="nd">@Override</span>
+        <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onAnimationCancel</span><span class="o">(</span><span class="n">Animator</span> <span class="n">animator</span><span class="o">)</span> <span class="o">{</span>
+
+        <span class="o">}</span>
+
+        <span class="nd">@Override</span>
+        <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onAnimationRepeat</span><span class="o">(</span><span class="n">Animator</span> <span class="n">animator</span><span class="o">)</span> <span class="o">{</span>
+
+        <span class="o">}</span>
+    <span class="o">});</span>
+
+    <span class="n">belowViewPageUpAnim</span> <span class="o">=</span> <span class="n">ObjectAnimator</span><span class="o">.</span><span class="na">ofPropertyValuesHolder</span><span class="o">(</span><span class="n">belowView</span><span class="o">,</span>
+    <span class="n">PropertyValuesHolder</span><span class="o">.</span><span class="na">ofFloat</span><span class="o">(</span><span class="n">View</span><span class="o">.</span><span class="na">ROTATION_X</span><span class="o">,</span> <span class="o">-</span><span class="mi">90</span><span class="o">,</span> <span class="mi">0</span><span class="o">));</span>
+    <span class="n">belowViewPageUpAnim</span><span class="o">.</span><span class="na">setDuration</span><span class="o">(</span><span class="n">pageUpDownDurition</span><span class="o">);</span>
+    <span class="n">belowViewPageUpAnim</span><span class="o">.</span><span class="na">setInterpolator</span><span class="o">(</span><span class="k">new</span> <span class="nf">LinearInterpolator</span><span class="o">());</span>
+    <span class="n">belowViewPageUpAnim</span><span class="o">.</span><span class="na">addListener</span><span class="o">(</span><span class="k">new</span> <span class="n">Animator</span><span class="o">.</span><span class="na">AnimatorListener</span><span class="o">()</span> <span class="o">{</span>
+        <span class="nd">@Override</span>
+        <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onAnimationStart</span><span class="o">(</span><span class="n">Animator</span> <span class="n">animator</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">belowView</span><span class="o">.</span><span class="na">setVisibility</span><span class="o">(</span><span class="n">View</span><span class="o">.</span><span class="na">VISIBLE</span><span class="o">);</span>
+            <span class="n">belowView</span><span class="o">.</span><span class="na">setPivotY</span><span class="o">(</span><span class="n">pageUpPivotY</span><span class="o">);</span>
+        <span class="o">}</span>
+
+        <span class="nd">@Override</span>
+        <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onAnimationEnd</span><span class="o">(</span><span class="n">Animator</span> <span class="n">animator</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">belowView</span><span class="o">.</span><span class="na">postDelayed</span><span class="o">(</span><span class="k">new</span> <span class="nf">Runnable</span><span class="o">()</span> <span class="o">{</span>
+                <span class="nd">@Override</span>
+                <span class="kd">public</span> <span class="kt">void</span> <span class="nf">run</span><span class="o">()</span> <span class="o">{</span>
+                    <span class="n">belowViewPageDownAnim</span><span class="o">.</span><span class="na">start</span><span class="o">();</span>
+                <span class="o">}</span>
+            <span class="o">},</span> <span class="n">belowViewStayInterval</span><span class="o">);</span>
+        <span class="o">}</span>
+
+        <span class="nd">@Override</span>
+        <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onAnimationCancel</span><span class="o">(</span><span class="n">Animator</span> <span class="n">animator</span><span class="o">)</span> <span class="o">{</span>
+
+        <span class="o">}</span>
+
+        <span class="nd">@Override</span>
+        <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onAnimationRepeat</span><span class="o">(</span><span class="n">Animator</span> <span class="n">animator</span><span class="o">)</span> <span class="o">{</span>
+
+        <span class="o">}</span>
+    <span class="o">});</span>
+
+    <span class="n">belowViewPageDownAnim</span> <span class="o">=</span> <span class="n">ObjectAnimator</span><span class="o">.</span><span class="na">ofPropertyValuesHolder</span><span class="o">(</span><span class="n">belowView</span><span class="o">,</span>
+            <span class="n">PropertyValuesHolder</span><span class="o">.</span><span class="na">ofFloat</span><span class="o">(</span><span class="n">View</span><span class="o">.</span><span class="na">ROTATION_X</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="mi">90</span><span class="o">));</span>
+
+    <span class="n">belowViewPageDownAnim</span><span class="o">.</span><span class="na">setDuration</span><span class="o">(</span><span class="n">pageUpDownDurition</span><span class="o">);</span>
+    <span class="n">belowViewPageDownAnim</span><span class="o">.</span><span class="na">setInterpolator</span><span class="o">(</span><span class="k">new</span> <span class="nf">LinearInterpolator</span><span class="o">());</span>
+    <span class="n">belowViewPageDownAnim</span><span class="o">.</span><span class="na">addListener</span><span class="o">(</span><span class="k">new</span> <span class="n">Animator</span><span class="o">.</span><span class="na">AnimatorListener</span><span class="o">()</span> <span class="o">{</span>
+
+        <span class="nd">@Override</span>
+        <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onAnimationStart</span><span class="o">(</span><span class="n">Animator</span> <span class="n">animator</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">belowView</span><span class="o">.</span><span class="na">setPivotY</span><span class="o">(</span><span class="n">pageDownPivotY</span><span class="o">);</span>
+            <span class="n">aboveView</span><span class="o">.</span><span class="na">setVisibility</span><span class="o">(</span><span class="n">View</span><span class="o">.</span><span class="na">GONE</span><span class="o">);</span>
+            <span class="n">aboveView</span><span class="o">.</span><span class="na">postDelayed</span><span class="o">(</span><span class="k">new</span> <span class="nf">Runnable</span><span class="o">()</span> <span class="o">{</span>
+                <span class="nd">@Override</span>
+                <span class="kd">public</span> <span class="kt">void</span> <span class="nf">run</span><span class="o">()</span> <span class="o">{</span>
+                    <span class="n">aboveViewPageUpAnim</span><span class="o">.</span><span class="na">start</span><span class="o">();</span>
+                <span class="o">}</span>
+            <span class="o">},</span> <span class="n">pageUpBeforeDownEnd</span><span class="o">);</span>
+        <span class="o">}</span>
+
+        <span class="nd">@Override</span>
+        <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onAnimationEnd</span><span class="o">(</span><span class="n">Animator</span> <span class="n">animator</span><span class="o">)</span> <span class="o">{</span>
+
+        <span class="o">}</span>
+
+        <span class="nd">@Override</span>
+        <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onAnimationCancel</span><span class="o">(</span><span class="n">Animator</span> <span class="n">animator</span><span class="o">)</span> <span class="o">{</span>
+
+        <span class="o">}</span>
+
+        <span class="nd">@Override</span>
+        <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onAnimationRepeat</span><span class="o">(</span><span class="n">Animator</span> <span class="n">animator</span><span class="o">)</span> <span class="o">{</span>
+
+        <span class="o">}</span>
+    <span class="o">});</span>
+
+    <span class="n">aboveViewPageUpAnim</span> <span class="o">=</span> <span class="n">ObjectAnimator</span><span class="o">.</span><span class="na">ofPropertyValuesHolder</span><span class="o">(</span><span class="n">aboveView</span><span class="o">,</span>
+            <span class="n">PropertyValuesHolder</span><span class="o">.</span><span class="na">ofFloat</span><span class="o">(</span><span class="n">View</span><span class="o">.</span><span class="na">ROTATION_X</span><span class="o">,</span> <span class="o">-</span><span class="mi">90</span><span class="o">,</span> <span class="mi">0</span><span class="o">));</span>
+    <span class="n">aboveViewPageUpAnim</span><span class="o">.</span><span class="na">setDuration</span><span class="o">(</span><span class="n">pageUpDownDurition</span><span class="o">);</span>
+    <span class="n">aboveViewPageUpAnim</span><span class="o">.</span><span class="na">setInterpolator</span><span class="o">(</span><span class="k">new</span> <span class="nf">LinearInterpolator</span><span class="o">());</span>
+    <span class="n">aboveViewPageUpAnim</span><span class="o">.</span><span class="na">addListener</span><span class="o">(</span><span class="k">new</span> <span class="n">Animator</span><span class="o">.</span><span class="na">AnimatorListener</span><span class="o">()</span> <span class="o">{</span>
+        <span class="nd">@Override</span>
+        <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onAnimationStart</span><span class="o">(</span><span class="n">Animator</span> <span class="n">animator</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">aboveView</span><span class="o">.</span><span class="na">setVisibility</span><span class="o">(</span><span class="n">View</span><span class="o">.</span><span class="na">VISIBLE</span><span class="o">);</span>
+            <span class="n">aboveView</span><span class="o">.</span><span class="na">setPivotY</span><span class="o">(</span><span class="n">pageUpPivotY</span><span class="o">);</span>
+        <span class="o">}</span>
+
+        <span class="nd">@Override</span>
+        <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onAnimationEnd</span><span class="o">(</span><span class="n">Animator</span> <span class="n">animator</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">aboveView</span><span class="o">.</span><span class="na">postDelayed</span><span class="o">(</span><span class="k">new</span> <span class="nf">Runnable</span><span class="o">()</span> <span class="o">{</span>
+                <span class="nd">@Override</span>
+                <span class="kd">public</span> <span class="kt">void</span> <span class="nf">run</span><span class="o">()</span> <span class="o">{</span>
+                    <span class="n">aboveViewPageDownAnim</span><span class="o">.</span><span class="na">start</span><span class="o">();</span>
+                <span class="o">}</span>
+            <span class="o">},</span> <span class="n">belowViewStayInterval</span><span class="o">);</span>
+        <span class="o">}</span>
+
+        <span class="nd">@Override</span>
+        <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onAnimationCancel</span><span class="o">(</span><span class="n">Animator</span> <span class="n">animator</span><span class="o">)</span> <span class="o">{</span>
+
+        <span class="o">}</span>
+
+        <span class="nd">@Override</span>
+        <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onAnimationRepeat</span><span class="o">(</span><span class="n">Animator</span> <span class="n">animator</span><span class="o">)</span> <span class="o">{</span>
+
+        <span class="o">}</span>
+    <span class="o">});</span>
+
+    <span class="n">aboveViewPageDownAnim</span><span class="o">.</span><span class="na">start</span><span class="o">();</span>
+<span class="o">}</span>
+</code></pre></div>
+<p>其实这个实现已经是一个基本比较通用的翻页动画了，不仅可以用于TextView，ImageView应该也没有问题。</p>
+
+	  ]]></description>
+	</item>
+
+	<item>
 	  <title>Intall Emacs on Ubuntu</title>
 	  <link>//install-emacs-on-ubuntu</link>
 	  <author>Tao He</author>
@@ -1032,51 +1218,6 @@ public class SampleActivity extends Activity{
 <p>In Java, non-static inner and anonymous classes hold an implicit reference to their outer class. Static inner classes, on the other hand, do not.</p>
 </blockquote>
 
-	  ]]></description>
-	</item>
-
-	<item>
-	  <title>Userful command line in Android development</title>
-	  <link>//userful-command-line-in-android-development</link>
-	  <author>Tao He</author>
-	  <pubDate>2016-07-10T02:30:12+08:00</pubDate>
-	  <guid>//userful-command-line-in-android-development</guid>
-	  <description><![CDATA[
-	     <p>Over the years, these are the Android development tools I’ve found most useful. I consistently use these tools to build apps. I recommend you take a look at them and see whether they’re a good fit for your tool chain.</p>
-
-<h4>View SQLite log</h4>
-<div class="highlight"><pre><code class="language-text" data-lang="text">adb shell setprop log.tag.SQLiteLog V
-adb shell setprop log.tag.SQLiteStatements V
-</code></pre></div>
-<h4>Tcpdump packet capture</h4>
-<div class="highlight"><pre><code class="language-text" data-lang="text">adb shell /data/local/tcpdump -i any -p -s 0 -w /sdcard/capture.pcap
-</code></pre></div>
-<h4>View Signature</h4>
-<div class="highlight"><pre><code class="language-text" data-lang="text">keytool -list -v -keystore release.jks
-</code></pre></div>
-<h4>View Important System Log Tag</h4>
-<div class="highlight"><pre><code class="language-text" data-lang="text">// View Acitivity switch
-adb logcat -v time | grep ActivityManager
-// View Crash info 
-adb logcat -v time | grep AndroidRuntime
-// View Dalvik info
-adb logcat -v time | grep &quot;D\/Dalvik&quot;
-// View art info
-adb logcat -v time | grep &quot;I\/art&quot;
-</code></pre></div>
-<h4>View application running time</h4>
-<div class="highlight"><pre><code class="language-text" data-lang="text">adb logcat -v time | grep TAG
-</code></pre></div>
-<h4>View sytem service and status</h4>
-<div class="highlight"><pre><code class="language-text" data-lang="text">// SERVICE maybe activity, cpuinfo, window, meminfo, alarm, statusbar, usagestatus
-dumpsys | grep &quot;DUMP OF SERVICE&quot;
-</code></pre></div>
-<h4>Bugreport command</h4>
-<div class="highlight"><pre><code class="language-text" data-lang="text">adb bugreport &gt; main.log
-</code></pre></div>
-<h4>Monkey parameters</h4>
-<div class="highlight"><pre><code class="language-text" data-lang="text">adb shell monkey -p -s 1000 --ignore-crashes --ignore-timeouts --ignore-security-exceptions --pct-trackball 0 --pct-nav 0 --pct-majornav 0 --pct-anyevent 0  -v --throttle 300 1200000000 
-</code></pre></div>
 	  ]]></description>
 	</item>
 

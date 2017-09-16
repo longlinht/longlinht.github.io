@@ -8,17 +8,15 @@
     <title>Dancing with Machine, Human and God</title>
     <link>http://longlinht.github.io/</link>
     <description>World is complex,confusing and wonderful,I will talk about machine,human and god to known it, to reveal it.</description>
-    <pubDate>Thu, 03 Aug 2017 02:30:12 +0800</pubDate>
+    <pubDate>Mon, 21 Aug 2017 02:30:12 +0800</pubDate>
     <item>
-      <title>捕获Android截屏事件</title>
-      <link>http://longlinht.github.io//capture-screenshot-event-on-android</link>
-      <description>在Android平台上截屏事件没有对应的一个标准的事件和通知，所以应用App无法通过标准或统一的方式去捕获这个事件来满足自己的要求。
-只能通过间接的方式捕获到这个事件，我因为要做一个微信的截屏图片分享的功能，所以对Android截屏事件做了一个调研，并且在开发中 
-选用了其中的一种方式。 大体上，要解决这个问题，大概有以下几种方法，每种方法的可靠性和灵活性都不同。
+      <title>Android开发中二维码库的选用</title>
+      <link>http://longlinht.github.io//select-qrc-code-library-in-andord</link>
+      <description>在现今的移动App开发中，二维码的使用场景变得越来越普遍，最近我要开发的一个需求就必须生成二维码，自然就面临二维码库选用的问题，因为大名鼎鼎的ZXing的存在，这也本不是什么特别需要考虑的问题。但是因为ZXing的大而全，要在一款只是将二维码作为一个特定使用场景下的一个功能的App，完全引入ZXing就有点过了，所以就面临了ZXing库的裁剪问题。但是裁剪这样一个大而全的多平台支持的库也不是什么简单的事情，所以我也顺便调研了其他的二维码库作为参考:
 
 </description>
-      <pubDate>Thu, 03 Aug 2017 02:30:12 +0800</pubDate>
-      <dc:date>2017-08-03T02:30:12+08:00</dc:date>
+      <pubDate>Mon, 21 Aug 2017 02:30:12 +0800</pubDate>
+      <dc:date>2017-08-21T02:30:12+08:00</dc:date>
     </item>
     <item>
       <title>Intall Emacs on Ubuntu</title>
@@ -252,6 +250,6 @@ update UI when we finish something in separated thread. This is a basic problem,
       <pubDate>Wed, 03 Nov 2010 02:30:12 +0800</pubDate>
       <dc:date>2010-11-03T02:30:12+08:00</dc:date>
     </item>
-    <dc:date>2017-08-03T02:30:12+08:00</dc:date>
+    <dc:date>2017-08-21T02:30:12+08:00</dc:date>
   </channel>
 </rss>

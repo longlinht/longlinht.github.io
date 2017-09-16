@@ -235,10 +235,23 @@ make
 
     <!-- [[! next_post ]] -->
     
-        <a class="read-next-story no-cover" href="http://longlinht.github.io//capture-screenshot-event-on-android">
+        <a class="read-next-story no-cover" href="http://longlinht.github.io//select-qrc-code-library-in-andord">
             <section class="post">
-                <h2>捕获Android截屏事件</h2>
-                <p>在Android平台上截屏事件没有对应的一个标准的事件和通知，所以应用App无法通过标准或统一的方式去捕获这个事件来满足自己的要求。 只能通过间接的方式捕获到这个事件，我因为要做一个微信的截屏图片分享的功能，所以对Android截屏事件做了一个调研，并且在开发中 选用了其中的一种方式。 大体上，要解决这个问题，大概有以下几种方法，每种方法的可靠性和灵活性都不同。 #### 通过按键监听捕获截屏事件 这种方式最简单粗暴，但是存在两个巨大的麻烦，不易克服: * Android机器厂商众多，ROM众多，多截屏按键的组合没有统一的标准，如果适配所有机型，几乎是无法完成的任务 * 事件准确捕获后，截屏这个动作完全结束时点需要应用自己去检查和获取 这两件事做起来都不容易，都很容易出错，所以这种方法基本上是四种办法里最不可靠的，基本不推荐这么做。 #### 通过监听系统截屏进程的运行和退出捕获截屏事件 这种方法需要有一个后台线程以一定的频率去检查系统截屏进程是否启动，运行，退出，并作出相应的逻辑，而这个频率其实很难把握，毕竟应用无法预期这个截屏动作，因此这种方法也不推荐，此种方法和上面的那种方法可能只适用于非常特定的场景。...</p>
+                <h2>Android开发中二维码库的选用</h2>
+                <p>在现今的移动App开发中，二维码的使用场景变得越来越普遍，最近我要开发的一个需求就必须生成二维码，自然就面临二维码库选用的问题，因为大名鼎鼎的ZXing的存在，这也本不是什么特别需要考虑的问题。但是因为ZXing的大而全，要在一款只是将二维码作为一个特定使用场景下的一个功能的App，完全引入ZXing就有点过了，所以就面临了ZXing库的裁剪问题。但是裁剪这样一个大而全的多平台支持的库也不是什么简单的事情，所以我也顺便调研了其他的二维码库作为参考:
+
+* OnBarCode http://www.onbarcode.com/products/android_barcode/barcodes/qrcode.html#intro
+
+* Barcode4j http://barcode4j.sourceforge.net/
+
+* QRGenerator 
+
+  * https://github.com/androidmads/QRGenerator
+
+  * https://androidmads.blogspot.com/2016/07/qr-code-generator-library.html
+
+当然了，这些库实现我的需求都是没有问题的，但是最终我还是在我的项目中选用了ZXing,一来是因为它在业界的广泛使用得到了充分的验证，二来是因为我们项目组其他的同事也会在未来的需求中使用到，所以必须选用一个长期的可靠的的解决方案。当然了，我是选用了一版裁剪后的ZXing库。至于这个库的使用其实没有什么好说的，因为使用起来非常简单，简单的几个事例就能明白如何应用。
+</p>
             </section>
         </a>
     
@@ -248,7 +261,7 @@ make
         <a class="read-next-story prev no-cover" href="http://longlinht.github.io//implement-page-up-down-animation-on-android">
             <section class="post">
                 <h2>在Android上实现无限翻页轮播动画效果</h2>
-                <p><p>最近在工作中遇到一个需求，要求在一个Dialog的标题上显示两行字，但是这行字如果同时出现的话会非常难看，设计出了套方案，类似无限翻页轮播这两行字，要有翻书的效果。 刚开始实现的时候，动画的效果也出来了，但是拿去给设计验收的时候设计总感觉怪怪的，始终达不到设计最终想要的结果。后来通过好多次的调试和验证，发现问题出现在两个 View的动画播放时序和旋转轴的问题上，解决了这两个问题后再拿去给设计看的时候，一切都完美了。 现在这个比较好的设计也已上线， 也因为这个调试和验证的过程感觉对 Android动画的一些细节碰触的较多，所以写下此文记录下这个过程。</p> <h4>基本原理</h4> <p>通过<code>ObjectAnimation</code>操作<code>View</code>的<code>RotationY</code>属性，再利用动态改变<code>PivotY</code>的值和动画播放时序的不同来模拟出无限翻页轮播的动画效果</p> <h4>ObjectAnimation</h4> <div class="highlight"><pre><code class="language-java" data-lang="java"><span class="c1">// 上面的View翻下去的动画</span>...</p>
+                <p><p>最近在工作中遇到一个需求，要求在一个Dialog的标题上显示两行字，但是这行字如果同时出现的话会非常难看，设计出了套方案，类似无限翻页轮播这两行字，要有翻书的效果。 刚开始实现的时候，动画的效果也出来了，但是拿去给设计验收的时候设计总感觉怪怪的，始终达不到设计最终想要的结果。后来通过好多次的调试和验证，发现问题出现在两个 View的动画播放时序和旋转轴的问题上，解决了这两个问题后再拿去给设计看的时候，一切都完美了。 现在这个比较好的设计也已上线， 也因为这个调试和验证的过程感觉对 Android动画的一些细节碰触的较多，所以写下此文记录下这个过程。</p> <h4>基本原理</h4> <p>通过<code>ObjectAnimation</code>操作<code>View</code>的<code>RotationY</code>属性，再利用动态改变<code>PivotY</code>的值和动画播放时序的不同来模拟出无限翻页轮播的动画效果</p> <h4>ObjectAnimation</h4> <div class="highlight"><pre><code class="language-text" data-lang="text">// 上面的View翻下去的动画 private...</p>
             </section>
         </a>
     

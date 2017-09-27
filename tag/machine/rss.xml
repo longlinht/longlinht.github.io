@@ -37,6 +37,313 @@
 	</item>
 
 	<item>
+	  <title>捕获Android截屏事件</title>
+	  <link>//capture-screenshot-event-on-android</link>
+	  <author>Tao He</author>
+	  <pubDate>2017-08-03T02:30:12+08:00</pubDate>
+	  <guid>//capture-screenshot-event-on-android</guid>
+	  <description><![CDATA[
+	     <p>在Android平台上截屏事件没有对应的一个标准的事件和通知，所以应用App无法通过标准或统一的方式去捕获这个事件来满足自己的要求。
+只能通过间接的方式捕获到这个事件，我因为要做一个微信的截屏图片分享的功能，所以对Android截屏事件做了一个调研，并且在开发中 
+选用了其中的一种方式。 大体上，要解决这个问题，大概有以下几种方法，每种方法的可靠性和灵活性都不同。</p>
+
+<h4>通过按键监听捕获截屏事件</h4>
+
+<p>这种方式最简单粗暴，但是存在两个巨大的麻烦，不易克服:</p>
+
+<ul>
+<li><p>Android机器厂商众多，ROM众多，多截屏按键的组合没有统一的标准，如果适配所有机型，几乎是无法完成的任务</p></li>
+<li><p>事件准确捕获后，截屏这个动作完全结束时点需要应用自己去检查和获取</p></li>
+</ul>
+
+<p>这两件事做起来都不容易，都很容易出错，所以这种方法基本上是四种办法里最不可靠的，基本不推荐这么做。</p>
+
+<h4>通过监听系统截屏进程的运行和退出捕获截屏事件</h4>
+
+<p>这种方法需要有一个后台线程以一定的频率去检查系统截屏进程是否启动，运行，退出，并作出相应的逻辑，而这个频率其实很难把握，毕竟应用无法预期这个截屏动作，因此这种方法也不推荐，此种方法和上面的那种方法可能只适用于非常特定的场景。</p>
+
+<h4>通过FileObserver间接捕获</h4>
+
+<p>这种方法其实是比较可靠和可控的，就是有一个问题, 一个FileObserver初始化的时候就得决定observe哪个目录，所以适配不同机型的过程就变成了适配所以可能的目录，这个是非常麻烦的事情，不过FileObserver总体来看是可以解决这个问题的，唯一比较难的就是要适配所有可能的机型对应的目录。最开始做这个功能的时候我实现了一版使用FileObserver的实现:</p>
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">ScreenshotObserver</span> <span class="kd">extends</span> <span class="n">FileObserver</span> <span class="o">{</span>
+
+  <span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="n">String</span> <span class="n">TAG</span> <span class="o">=</span> <span class="n">ScreenshotObserver</span><span class="o">.</span><span class="na">class</span><span class="o">.</span><span class="na">getSimpleName</span><span class="o">();</span>
+       <span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="n">String</span> <span class="n">PATH</span> <span class="o">=</span> <span class="n">Environment</span><span class="o">.</span><span class="na">getExternalStorageDirectory</span><span class="o">().</span><span class="na">toString</span><span class="o">()</span> <span class="o">+</span> <span class="s">&quot;/Pictures/Screenshots/&quot;</span><span class="o">;</span>
+
+       <span class="kd">private</span> <span class="n">OnScreenshotTakenListener</span> <span class="n">mListener</span><span class="o">;</span>
+       <span class="kd">private</span> <span class="n">String</span> <span class="n">mLastTakenPath</span><span class="o">;</span>
+
+       <span class="kd">public</span> <span class="nf">ScreenshotObserver</span><span class="o">(</span><span class="n">OnScreenshotTakenListener</span> <span class="n">listener</span><span class="o">)</span> <span class="o">{</span>
+            <span class="kd">super</span><span class="o">(</span><span class="n">PATH</span><span class="o">,</span> <span class="n">FileObserver</span><span class="o">.</span><span class="na">CLOSE_WRITE</span><span class="o">);</span>
+            <span class="n">mListener</span> <span class="o">=</span> <span class="n">listener</span><span class="o">;</span>
+       <span class="o">}</span>
+
+       <span class="nd">@Override</span>
+       <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onEvent</span><span class="o">(</span><span class="kt">int</span> <span class="n">event</span><span class="o">,</span> <span class="n">String</span> <span class="n">path</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">path</span><span class="o">==</span><span class="kc">null</span> <span class="o">||</span> <span class="n">event</span><span class="o">!=</span><span class="n">FileObserver</span><span class="o">.</span><span class="na">CLOSE_WRITE</span><span class="o">)</span>
+                    <span class="n">Log</span><span class="o">.</span><span class="na">d</span><span class="o">(</span><span class="n">TAG</span><span class="o">,</span> <span class="s">&quot;Don&#39;t care.&quot;</span><span class="o">);</span>
+            <span class="k">else</span> <span class="nf">if</span> <span class="o">(</span><span class="n">mLastTakenPath</span><span class="o">!=</span><span class="kc">null</span> <span class="o">&amp;&amp;</span> <span class="n">path</span><span class="o">.</span><span class="na">equalsIgnoreCase</span><span class="o">(</span><span class="n">mLastTakenPath</span><span class="o">))</span>
+                    <span class="n">Log</span><span class="o">.</span><span class="na">d</span><span class="o">(</span><span class="n">TAG</span><span class="o">,</span> <span class="s">&quot;This event has been observed before.&quot;</span><span class="o">);</span>
+            <span class="k">else</span> <span class="o">{</span>
+                    <span class="n">mLastTakenPath</span> <span class="o">=</span> <span class="n">path</span><span class="o">;</span>
+                    <span class="n">File</span> <span class="n">file</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">File</span><span class="o">(</span><span class="n">PATH</span><span class="o">+</span><span class="n">path</span><span class="o">);</span>
+                    <span class="n">mListener</span><span class="o">.</span><span class="na">onScreenshotTaken</span><span class="o">(</span><span class="n">Uri</span><span class="o">.</span><span class="na">fromFile</span><span class="o">(</span><span class="n">file</span><span class="o">));</span>
+                    <span class="n">Log</span><span class="o">.</span><span class="na">d</span><span class="o">(</span><span class="n">TAG</span><span class="o">,</span> <span class="s">&quot;Send event to listener.&quot;</span><span class="o">);</span>
+            <span class="o">}</span>
+       <span class="o">}</span>
+  <span class="o">}</span>
+</code></pre></div>
+<h4>通过ContentObserver间接捕获</h4>
+
+<p>这种方式算是目前最可靠，灵活性最好的方式了。实现起来先对其他几种方式要做的事也先对多一点，一下是我的实现，这个实现针对国内的一些手机做了适配，覆盖到了一些比较极端的情况:</p>
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">ScreenshotManager</span> <span class="o">{</span>
+
+    <span class="kd">private</span> <span class="n">OnScreenshotTakenListener</span> <span class="n">mListener</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="n">String</span> <span class="n">mLastTakenPath</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="n">Context</span> <span class="n">mContext</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="n">Timer</span> <span class="n">mCheckImageTimer</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="kt">int</span> <span class="n">mCount</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+
+    <span class="cm">/**</span>
+<span class="cm">     * Internal storage observer</span>
+<span class="cm">     */</span>
+    <span class="kd">private</span> <span class="n">ScreenshotObserver</span> <span class="n">mInternalObserver</span><span class="o">;</span>
+
+    <span class="cm">/**</span>
+<span class="cm">     * External storage observer</span>
+<span class="cm">     */</span>
+
+    <span class="kd">private</span> <span class="n">ScreenshotObserver</span> <span class="n">mExternalObserver</span><span class="o">;</span>
+
+    <span class="kd">private</span> <span class="n">HandlerThread</span> <span class="n">mHandlerThread</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="n">Handler</span> <span class="n">mContenHandler</span><span class="o">;</span>
+
+
+    <span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="n">String</span><span class="o">[]</span> <span class="n">MEDIA_PROJECTIONS</span> <span class="o">=</span>  <span class="o">{</span>
+            <span class="n">MediaStore</span><span class="o">.</span><span class="na">Images</span><span class="o">.</span><span class="na">ImageColumns</span><span class="o">.</span><span class="na">DATA</span><span class="o">,</span>
+            <span class="n">MediaStore</span><span class="o">.</span><span class="na">Images</span><span class="o">.</span><span class="na">ImageColumns</span><span class="o">.</span><span class="na">DATE_TAKEN</span><span class="o">,</span>
+    <span class="o">};</span>
+
+    <span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="n">String</span><span class="o">[]</span> <span class="n">KEYWORDS</span> <span class="o">=</span> <span class="o">{</span>
+            <span class="s">&quot;screenshot&quot;</span><span class="o">,</span> <span class="s">&quot;screen_shot&quot;</span><span class="o">,</span> <span class="s">&quot;screen-shot&quot;</span><span class="o">,</span> <span class="s">&quot;screen shot&quot;</span><span class="o">,</span>
+            <span class="s">&quot;screencapture&quot;</span><span class="o">,</span> <span class="s">&quot;screen_capture&quot;</span><span class="o">,</span> <span class="s">&quot;screen-capture&quot;</span><span class="o">,</span> <span class="s">&quot;screen capture&quot;</span><span class="o">,</span>
+            <span class="s">&quot;screencap&quot;</span><span class="o">,</span> <span class="s">&quot;screen_cap&quot;</span><span class="o">,</span> <span class="s">&quot;screen-cap&quot;</span><span class="o">,</span> <span class="s">&quot;screen cap&quot;</span><span class="o">,</span> <span class="s">&quot;截屏&quot;</span>
+    <span class="o">};</span>
+
+
+    <span class="kd">public</span> <span class="nf">ScreenshotManager</span><span class="o">(</span><span class="n">Context</span> <span class="n">context</span><span class="o">,</span> <span class="n">OnScreenshotTakenListener</span> <span class="n">listener</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">mContext</span> <span class="o">=</span> <span class="n">context</span><span class="o">;</span>
+        <span class="n">mListener</span> <span class="o">=</span> <span class="n">listener</span><span class="o">;</span>
+        <span class="n">mLastTakenPath</span> <span class="o">=</span> <span class="n">getLastTakenPath</span><span class="o">();</span>
+
+        <span class="n">mHandlerThread</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">HandlerThread</span><span class="o">(</span><span class="s">&quot;Screenshot_Observer&quot;</span><span class="o">);</span>
+        <span class="n">mHandlerThread</span><span class="o">.</span><span class="na">start</span><span class="o">();</span>
+        <span class="n">mContenHandler</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">Handler</span><span class="o">(</span><span class="n">mHandlerThread</span><span class="o">.</span><span class="na">getLooper</span><span class="o">());</span>
+
+        <span class="n">mInternalObserver</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">ScreenshotObserver</span><span class="o">(</span><span class="n">mContenHandler</span><span class="o">,</span> <span class="n">MediaStore</span><span class="o">.</span><span class="na">Images</span><span class="o">.</span><span class="na">Media</span><span class="o">.</span><span class="na">INTERNAL_CONTENT_URI</span><span class="o">);</span>
+        <span class="n">mExternalObserver</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">ScreenshotObserver</span><span class="o">(</span><span class="n">mContenHandler</span><span class="o">,</span> <span class="n">MediaStore</span><span class="o">.</span><span class="na">Images</span><span class="o">.</span><span class="na">Media</span><span class="o">.</span><span class="na">EXTERNAL_CONTENT_URI</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">startScreenshotObserver</span><span class="o">()</span> <span class="o">{</span>
+        <span class="n">mContext</span><span class="o">.</span><span class="na">getContentResolver</span><span class="o">().</span><span class="na">registerContentObserver</span><span class="o">(</span>
+                <span class="n">MediaStore</span><span class="o">.</span><span class="na">Images</span><span class="o">.</span><span class="na">Media</span><span class="o">.</span><span class="na">INTERNAL_CONTENT_URI</span><span class="o">,</span>
+                <span class="kc">false</span><span class="o">,</span>
+                <span class="n">mInternalObserver</span>
+        <span class="o">);</span>
+        <span class="n">mContext</span><span class="o">.</span><span class="na">getContentResolver</span><span class="o">().</span><span class="na">registerContentObserver</span><span class="o">(</span>
+                <span class="n">MediaStore</span><span class="o">.</span><span class="na">Images</span><span class="o">.</span><span class="na">Media</span><span class="o">.</span><span class="na">EXTERNAL_CONTENT_URI</span><span class="o">,</span>
+                <span class="kc">false</span><span class="o">,</span>
+                <span class="n">mExternalObserver</span>
+        <span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">stopScreenshotObserver</span><span class="o">()</span> <span class="o">{</span>
+        <span class="n">mContext</span><span class="o">.</span><span class="na">getContentResolver</span><span class="o">().</span><span class="na">unregisterContentObserver</span><span class="o">(</span><span class="n">mInternalObserver</span><span class="o">);</span>
+        <span class="n">mContext</span><span class="o">.</span><span class="na">getContentResolver</span><span class="o">().</span><span class="na">unregisterContentObserver</span><span class="o">(</span><span class="n">mExternalObserver</span><span class="o">);</span>
+        <span class="n">releaseTimer</span><span class="o">();</span>
+    <span class="o">}</span>
+
+    <span class="kd">private</span> <span class="kt">void</span> <span class="nf">handleMediaContentChange</span><span class="o">(</span><span class="n">Uri</span> <span class="n">contentUri</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">Cursor</span> <span class="n">cursor</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+        <span class="k">try</span> <span class="o">{</span>
+            <span class="c1">// 数据改变时查询数据库中最后加入的一条数据</span>
+            <span class="n">cursor</span> <span class="o">=</span> <span class="n">mContext</span><span class="o">.</span><span class="na">getContentResolver</span><span class="o">().</span><span class="na">query</span><span class="o">(</span>
+                    <span class="n">contentUri</span><span class="o">,</span>
+                    <span class="n">MEDIA_PROJECTIONS</span><span class="o">,</span>
+                    <span class="kc">null</span><span class="o">,</span>
+                    <span class="kc">null</span><span class="o">,</span>
+                    <span class="n">MediaStore</span><span class="o">.</span><span class="na">Images</span><span class="o">.</span><span class="na">ImageColumns</span><span class="o">.</span><span class="na">DATE_ADDED</span> <span class="o">+</span> <span class="s">&quot; desc limit 1&quot;</span>
+            <span class="o">);</span>
+
+            <span class="k">if</span> <span class="o">(</span><span class="n">cursor</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">return</span><span class="o">;</span>
+            <span class="o">}</span>
+            <span class="k">if</span> <span class="o">(!</span><span class="n">cursor</span><span class="o">.</span><span class="na">moveToFirst</span><span class="o">())</span> <span class="o">{</span>
+                <span class="k">return</span><span class="o">;</span>
+            <span class="o">}</span>
+
+            <span class="c1">// 获取各列的索引</span>
+            <span class="kt">int</span> <span class="n">dataIndex</span> <span class="o">=</span> <span class="n">cursor</span><span class="o">.</span><span class="na">getColumnIndex</span><span class="o">(</span><span class="n">MediaStore</span><span class="o">.</span><span class="na">Images</span><span class="o">.</span><span class="na">ImageColumns</span><span class="o">.</span><span class="na">DATA</span><span class="o">);</span>
+            <span class="kt">int</span> <span class="n">dateTakenIndex</span> <span class="o">=</span> <span class="n">cursor</span><span class="o">.</span><span class="na">getColumnIndex</span><span class="o">(</span><span class="n">MediaStore</span><span class="o">.</span><span class="na">Images</span><span class="o">.</span><span class="na">ImageColumns</span><span class="o">.</span><span class="na">DATE_TAKEN</span><span class="o">);</span>
+
+            <span class="c1">// 获取行数据</span>
+            <span class="n">String</span> <span class="n">data</span> <span class="o">=</span> <span class="n">cursor</span><span class="o">.</span><span class="na">getString</span><span class="o">(</span><span class="n">dataIndex</span><span class="o">);</span>
+            <span class="kt">long</span> <span class="n">dateTaken</span> <span class="o">=</span> <span class="n">cursor</span><span class="o">.</span><span class="na">getLong</span><span class="o">(</span><span class="n">dateTakenIndex</span><span class="o">);</span>
+
+            <span class="c1">// 处理获取到的第一行数据</span>
+            <span class="n">handleMediaRowData</span><span class="o">(</span><span class="n">data</span><span class="o">,</span> <span class="n">dateTaken</span><span class="o">);</span>
+
+        <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">Exception</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">e</span><span class="o">.</span><span class="na">printStackTrace</span><span class="o">();</span>
+
+        <span class="o">}</span> <span class="k">finally</span> <span class="o">{</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">cursor</span> <span class="o">!=</span> <span class="kc">null</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="n">cursor</span><span class="o">.</span><span class="na">isClosed</span><span class="o">())</span> <span class="o">{</span>
+                <span class="n">cursor</span><span class="o">.</span><span class="na">close</span><span class="o">();</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+
+    <span class="kd">private</span> <span class="kt">void</span> <span class="nf">handleMediaRowData</span><span class="o">(</span><span class="n">String</span> <span class="n">data</span><span class="o">,</span> <span class="kt">long</span> <span class="n">dateTaken</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">TextUtils</span><span class="o">.</span><span class="na">isEmpty</span><span class="o">(</span><span class="n">data</span><span class="o">))</span>
+            <span class="k">return</span><span class="o">;</span>
+
+        <span class="k">if</span> <span class="o">(</span><span class="n">checkScreenShot</span><span class="o">(</span><span class="n">data</span><span class="o">,</span> <span class="n">dateTaken</span><span class="o">))</span> <span class="o">{</span>
+            <span class="k">if</span> <span class="o">(!</span><span class="n">data</span><span class="o">.</span><span class="na">equals</span><span class="o">(</span><span class="n">mLastTakenPath</span><span class="o">))</span> <span class="o">{</span>
+                <span class="n">mLastTakenPath</span> <span class="o">=</span> <span class="n">data</span><span class="o">;</span>
+                <span class="kd">final</span> <span class="n">File</span> <span class="n">file</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">File</span><span class="o">(</span><span class="n">data</span><span class="o">);</span>
+                <span class="k">if</span><span class="o">(</span><span class="kc">null</span> <span class="o">==</span> <span class="n">BitmapFactory</span><span class="o">.</span><span class="na">decodeFile</span><span class="o">(</span><span class="n">file</span><span class="o">.</span><span class="na">getPath</span><span class="o">()))</span> <span class="o">{</span>
+                    <span class="k">if</span> <span class="o">(</span><span class="n">mCheckImageTimer</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+                        <span class="n">mCheckImageTimer</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">Timer</span><span class="o">();</span>
+                    <span class="o">}</span>
+                    <span class="n">mCheckImageTimer</span><span class="o">.</span><span class="na">schedule</span><span class="o">(</span><span class="k">new</span> <span class="nf">TimerTask</span><span class="o">()</span> <span class="o">{</span>
+                        <span class="nd">@Override</span>
+                        <span class="kd">public</span> <span class="kt">void</span> <span class="nf">run</span><span class="o">()</span> <span class="o">{</span>
+                            <span class="k">if</span> <span class="o">(</span><span class="n">mCount</span> <span class="o">&gt;</span> <span class="mi">10</span><span class="o">)</span> <span class="o">{</span>
+                                <span class="n">mCheckImageTimer</span><span class="o">.</span><span class="na">cancel</span><span class="o">();</span>
+                                <span class="n">mCheckImageTimer</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+                                <span class="k">return</span><span class="o">;</span>
+                            <span class="o">}</span>
+                            <span class="n">Bitmap</span> <span class="n">image</span> <span class="o">=</span> <span class="n">BitmapFactory</span><span class="o">.</span><span class="na">decodeFile</span><span class="o">(</span><span class="n">mLastTakenPath</span><span class="o">);</span>
+                            <span class="k">if</span><span class="o">(</span><span class="n">image</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+                                <span class="n">mListener</span><span class="o">.</span><span class="na">onScreenshotTaken</span><span class="o">(</span><span class="n">mLastTakenPath</span><span class="o">);</span>
+                                <span class="n">mCheckImageTimer</span><span class="o">.</span><span class="na">cancel</span><span class="o">();</span>
+                                <span class="n">mCheckImageTimer</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+                                <span class="n">mCount</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+                            <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+                                <span class="n">mCount</span><span class="o">++;</span>
+                            <span class="o">}</span>
+                        <span class="o">}</span>
+                    <span class="o">},</span> <span class="mi">0</span><span class="o">,</span> <span class="mi">1000</span><span class="o">);</span>
+                <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+                    <span class="n">mListener</span><span class="o">.</span><span class="na">onScreenshotTaken</span><span class="o">(</span><span class="n">mLastTakenPath</span><span class="o">);</span>
+                <span class="o">}</span>
+            <span class="o">}</span>
+            <span class="n">mLastTakenPath</span> <span class="o">=</span> <span class="n">data</span><span class="o">;</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+
+    <span class="kd">private</span> <span class="kt">boolean</span> <span class="nf">checkScreenShot</span><span class="o">(</span><span class="n">String</span> <span class="n">data</span><span class="o">,</span> <span class="kt">long</span> <span class="n">dateTaken</span><span class="o">)</span> <span class="o">{</span>
+
+        <span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="na">toLowerCase</span><span class="o">();</span>
+        <span class="c1">// 判断图片路径是否含有指定的关键字之一, 如果有, 则认为当前截屏了</span>
+        <span class="k">for</span> <span class="o">(</span><span class="n">String</span> <span class="n">keyWork</span> <span class="o">:</span> <span class="n">KEYWORDS</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">data</span><span class="o">.</span><span class="na">contains</span><span class="o">(</span><span class="n">keyWork</span><span class="o">))</span> <span class="o">{</span>
+                <span class="k">return</span> <span class="kc">true</span><span class="o">;</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">private</span> <span class="n">String</span> <span class="nf">getLastTakenPath</span><span class="o">()</span> <span class="o">{</span>
+        <span class="n">Cursor</span> <span class="n">cursor</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+        <span class="n">String</span> <span class="n">path</span> <span class="o">=</span> <span class="s">&quot;&quot;</span><span class="o">;</span>
+        <span class="k">try</span> <span class="o">{</span>
+            <span class="c1">// 数据改变时查询数据库中最后加入的一条数据</span>
+            <span class="n">cursor</span> <span class="o">=</span> <span class="n">mContext</span><span class="o">.</span><span class="na">getContentResolver</span><span class="o">().</span><span class="na">query</span><span class="o">(</span>
+                    <span class="n">MediaStore</span><span class="o">.</span><span class="na">Images</span><span class="o">.</span><span class="na">Media</span><span class="o">.</span><span class="na">INTERNAL_CONTENT_URI</span><span class="o">,</span>
+                    <span class="n">MEDIA_PROJECTIONS</span><span class="o">,</span>
+                    <span class="kc">null</span><span class="o">,</span>
+                    <span class="kc">null</span><span class="o">,</span>
+                    <span class="n">MediaStore</span><span class="o">.</span><span class="na">Images</span><span class="o">.</span><span class="na">ImageColumns</span><span class="o">.</span><span class="na">DATE_ADDED</span> <span class="o">+</span> <span class="s">&quot; desc limit 1&quot;</span>
+            <span class="o">);</span>
+
+            <span class="k">if</span> <span class="o">(</span><span class="n">cursor</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">return</span> <span class="s">&quot;&quot;</span><span class="o">;</span>
+            <span class="o">}</span>
+            <span class="k">if</span> <span class="o">(!</span><span class="n">cursor</span><span class="o">.</span><span class="na">moveToFirst</span><span class="o">())</span> <span class="o">{</span>
+                <span class="k">return</span> <span class="s">&quot;&quot;</span><span class="o">;</span>
+            <span class="o">}</span>
+
+            <span class="kt">int</span> <span class="n">dataIndex</span> <span class="o">=</span> <span class="n">cursor</span><span class="o">.</span><span class="na">getColumnIndex</span><span class="o">(</span><span class="n">MediaStore</span><span class="o">.</span><span class="na">Images</span><span class="o">.</span><span class="na">ImageColumns</span><span class="o">.</span><span class="na">DATA</span><span class="o">);</span>
+            <span class="kt">int</span> <span class="n">dateTakenIndex</span> <span class="o">=</span> <span class="n">cursor</span><span class="o">.</span><span class="na">getColumnIndex</span><span class="o">(</span><span class="n">MediaStore</span><span class="o">.</span><span class="na">Images</span><span class="o">.</span><span class="na">ImageColumns</span><span class="o">.</span><span class="na">DATE_TAKEN</span><span class="o">);</span>
+
+            <span class="n">path</span> <span class="o">=</span> <span class="n">cursor</span><span class="o">.</span><span class="na">getString</span><span class="o">(</span><span class="n">dataIndex</span><span class="o">);</span>
+
+            <span class="n">cursor</span> <span class="o">=</span> <span class="n">mContext</span><span class="o">.</span><span class="na">getContentResolver</span><span class="o">().</span><span class="na">query</span><span class="o">(</span>
+                    <span class="n">MediaStore</span><span class="o">.</span><span class="na">Images</span><span class="o">.</span><span class="na">Media</span><span class="o">.</span><span class="na">EXTERNAL_CONTENT_URI</span><span class="o">,</span>
+                    <span class="n">MEDIA_PROJECTIONS</span><span class="o">,</span>
+                    <span class="kc">null</span><span class="o">,</span>
+                    <span class="kc">null</span><span class="o">,</span>
+                    <span class="n">MediaStore</span><span class="o">.</span><span class="na">Images</span><span class="o">.</span><span class="na">ImageColumns</span><span class="o">.</span><span class="na">DATE_ADDED</span> <span class="o">+</span> <span class="s">&quot; desc limit 1&quot;</span>
+            <span class="o">);</span>
+
+            <span class="k">if</span> <span class="o">(</span><span class="n">cursor</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">return</span> <span class="s">&quot;&quot;</span><span class="o">;</span>
+            <span class="o">}</span>
+            <span class="k">if</span> <span class="o">(!</span><span class="n">cursor</span><span class="o">.</span><span class="na">moveToFirst</span><span class="o">())</span> <span class="o">{</span>
+                <span class="k">return</span> <span class="s">&quot;&quot;</span><span class="o">;</span>
+            <span class="o">}</span>
+
+            <span class="n">dataIndex</span> <span class="o">=</span> <span class="n">cursor</span><span class="o">.</span><span class="na">getColumnIndex</span><span class="o">(</span><span class="n">MediaStore</span><span class="o">.</span><span class="na">Images</span><span class="o">.</span><span class="na">ImageColumns</span><span class="o">.</span><span class="na">DATA</span><span class="o">);</span>
+            <span class="kt">int</span> <span class="n">index</span> <span class="o">=</span> <span class="n">cursor</span><span class="o">.</span><span class="na">getColumnIndex</span><span class="o">(</span><span class="n">MediaStore</span><span class="o">.</span><span class="na">Images</span><span class="o">.</span><span class="na">ImageColumns</span><span class="o">.</span><span class="na">DATE_TAKEN</span><span class="o">);</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">index</span> <span class="o">&gt;</span> <span class="n">dateTakenIndex</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">path</span> <span class="o">=</span> <span class="n">cursor</span><span class="o">.</span><span class="na">getString</span><span class="o">(</span><span class="n">dataIndex</span><span class="o">);</span>
+            <span class="o">}</span>
+
+        <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">Exception</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">e</span><span class="o">.</span><span class="na">printStackTrace</span><span class="o">();</span>
+
+        <span class="o">}</span> <span class="k">finally</span> <span class="o">{</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">cursor</span> <span class="o">!=</span> <span class="kc">null</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="n">cursor</span><span class="o">.</span><span class="na">isClosed</span><span class="o">())</span> <span class="o">{</span>
+                <span class="n">cursor</span><span class="o">.</span><span class="na">close</span><span class="o">();</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">path</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">private</span> <span class="kt">void</span> <span class="nf">releaseTimer</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">mCheckImageTimer</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">mCheckImageTimer</span><span class="o">.</span><span class="na">cancel</span><span class="o">();</span>
+            <span class="n">mCheckImageTimer</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+
+
+    <span class="kd">public</span> <span class="kd">interface</span> <span class="nc">OnScreenshotTakenListener</span> <span class="o">{</span>
+        <span class="kt">void</span> <span class="nf">onScreenshotTaken</span><span class="o">(</span><span class="n">String</span> <span class="n">path</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="kd">private</span> <span class="kd">class</span> <span class="nc">ScreenshotObserver</span> <span class="kd">extends</span> <span class="n">ContentObserver</span> <span class="o">{</span>
+        <span class="kd">private</span> <span class="n">Uri</span> <span class="n">mContentUri</span><span class="o">;</span>
+        <span class="kd">public</span> <span class="nf">ScreenshotObserver</span><span class="o">(</span><span class="n">Handler</span> <span class="n">handler</span><span class="o">,</span> <span class="n">Uri</span> <span class="n">contentUri</span><span class="o">)</span> <span class="o">{</span>
+            <span class="kd">super</span><span class="o">(</span><span class="n">handler</span><span class="o">);</span>
+            <span class="n">mContentUri</span> <span class="o">=</span> <span class="n">contentUri</span><span class="o">;</span>
+        <span class="o">}</span>
+
+        <span class="nd">@Override</span>
+        <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onChange</span><span class="o">(</span><span class="kt">boolean</span> <span class="n">selfChange</span><span class="o">)</span> <span class="o">{</span>
+            <span class="kd">super</span><span class="o">.</span><span class="na">onChange</span><span class="o">(</span><span class="n">selfChange</span><span class="o">);</span>
+            <span class="n">handleMediaContentChange</span><span class="o">(</span><span class="n">mContentUri</span><span class="o">);</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div>
+<p>这种方式比起FileObserver有一个明显的不同，就是FileObserver得在截屏之前就得知道哪些目录需要监听，而ContentObserver则是在文件系统发生变化的时候去查特定的目录和存储位置，适配起来就相对灵活，只要枚举出这些目录即可。综上，ContentObserver应该是最优的一种实现方式。</p>
+
+	  ]]></description>
+	</item>
+
+	<item>
 	  <title>Intall Emacs on Ubuntu</title>
 	  <link>//install-emacs-on-ubuntu</link>
 	  <author>Tao He</author>
@@ -280,6 +587,165 @@ private static int pageDownPivotY = 70;
 }
 </code></pre></div>
 <p>其实这个实现已经是一个基本比较通用的翻页动画了，不仅可以用于TextView，ImageView应该也没有问题。</p>
+
+	  ]]></description>
+	</item>
+
+	<item>
+	  <title>Java中的HashMap</title>
+	  <link>//hashmap-in-java</link>
+	  <author>Tao He</author>
+	  <pubDate>2017-07-11T02:30:12+08:00</pubDate>
+	  <guid>//hashmap-in-java</guid>
+	  <description><![CDATA[
+	     <p>如果你是个Java程序员，那么你不可能对HashMap视而不见，因为你会经常遇到使用它的场景，因此对HashMap的充分了解非常有必要，对我们写出高效可靠的代码很有帮助。</p>
+
+<p>在对HashMap进行深入了解之前，得先清楚HashMap到底是个什么样的存在！</p>
+
+<h4>What&#39;s HashMap</h4>
+
+<p>让我来罗列一些点逐步勾勒出HashMap的轮廓:</p>
+
+<ul>
+<li><p>HashMap就是将key做hash算法，然后将hash所对应的数据映射到内存地址，直接取得key所对应的数据。</p></li>
+<li><p>底层为哈希数组，数组的每个元素都是一个单链表的头结点</p></li>
+<li><p>基于<code>Map</code>接口实现，提供了map操作的泛型类</p></li>
+<li><p>允许<code>null</code> values and the <code>null</code> key </p></li>
+<li><p>实现了Serializable和Cloneable接口，支持序列化，能被克隆</p></li>
+</ul>
+
+<p>轮廓已出，但是仍旧对HashMap感到陌生,甚至都不清楚与Hashtable的区别，因此与Hashtable做一个简单的对比，来辨识出一些HashMap的重要特性。</p>
+
+<h4>HashMap vs. Hashtable</h4>
+
+<ul>
+<li><p>Hashtable是线程安全的，HashMap不是</p></li>
+<li><p>HashMap 允许<code>null</code> values and the <code>null</code> key, Hashtable不允许</p></li>
+<li><p>如果想要预测遍历次序，使用HashMap, Hashtable不易实现</p></li>
+</ul>
+
+<p>通过这些概念和理论的梳理，大概对HashMap有了一定感觉，也肯定能够在正确的场景下使用HashMap，但是要说起对HashMap的很多细节时，光知道这些是不够的，需要刨根问底了。
+要深入了解HashMap，没有比看其原代码更直接的方式了，但是HashMap的源代码是在太长，如果全部贴进来进行分析和解释，实在没有必要，因此只节选部分关键代码来帮助理解
+HashMap的实现和原理。</p>
+
+<h4>HashMap的原理与实现</h4>
+
+<h5>HashMap存储结构</h5>
+
+<p>HashMap的底层存储结构是哈希数组，数组的每个元素都是一个单链表的头节点，链表是用来解决冲突的，如果不同的key映射到了数组的同一位置处，就将其放入单链表中。
+链表中节点的数据结构:</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">static class Entry&lt;K,V&gt; implements Map.Entry&lt;K,V&gt; {    
+    final K key;    
+    V value;    
+    // 指向下一个节点    
+    Entry&lt;K,V&gt; next;    
+    final int hash;    
+
+    // 构造函数。    
+    // 输入参数包括&quot;哈希值(h)&quot;, &quot;键(k)&quot;, &quot;值(v)&quot;, &quot;下一节点(n)&quot;    
+    Entry(int h, K k, V v, Entry&lt;K,V&gt; n) {    
+        value = v;    
+        next = n;    
+        key = k;    
+        hash = h;    
+    }    
+
+    public final K getKey() {    
+        return key;    
+    }    
+
+    public final V getValue() {    
+        return value;    
+    }    
+
+    public final V setValue(V newValue) {    
+        V oldValue = value;    
+        value = newValue;    
+        return oldValue;    
+    }    
+
+    // 判断两个Entry是否相等    
+    // 若两个Entry的“key”和“value”都相等，则返回true。    
+    // 否则，返回false    
+    public final boolean equals(Object o) {    
+        if (!(o instanceof Map.Entry))    
+            return false;    
+        Map.Entry e = (Map.Entry)o;    
+        Object k1 = getKey();    
+        Object k2 = e.getKey();    
+        if (k1 == k2 || (k1 != null &amp;&amp; k1.equals(k2))) {    
+            Object v1 = getValue();    
+            Object v2 = e.getValue();    
+            if (v1 == v2 || (v1 != null &amp;&amp; v1.equals(v2)))    
+                return true;    
+        }    
+        return false;    
+    }    
+
+    // 实现hashCode()    
+    public final int hashCode() {    
+        return (key==null   ? 0 : key.hashCode()) ^    
+               (value==null ? 0 : value.hashCode());    
+    }    
+
+    public final String toString() {    
+        return getKey() + &quot;=&quot; + getValue();    
+    }    
+
+    // 当向HashMap中添加元素时，绘调用recordAccess()。    
+    // 这里不做任何处理    
+    void recordAccess(HashMap&lt;K,V&gt; m) {    
+    }  
+
+    // 当从HashMap中删除元素时，绘调用recordRemoval()。    
+    // 这里不做任何处理    
+    void recordRemoval(HashMap&lt;K,V&gt; m) {    
+    }
+} 
+</code></pre></div>
+<ul>
+<li><p><code>Entry</code>是单向链表</p></li>
+<li><p>它是 <code>HashMap</code>链式存储法对应的链表</p></li>
+</ul>
+
+<h5>HashMap几个重要的属性</h5>
+<div class="highlight"><pre><code class="language-text" data-lang="text">public class HashMap&lt;K,V&gt;    
+    extends AbstractMap&lt;K,V&gt;    
+    implements Map&lt;K,V&gt;, Cloneable, Serializable    
+{    
+
+    static final int DEFAULT_INITIAL_CAPACITY = 16;    
+
+    static final int MAXIMUM_CAPACITY = 1 &lt;&lt; 30;    
+
+    static final float DEFAULT_LOAD_FACTOR = 0.75f;    
+
+    // 存储数据的Entry数组，长度是2的幂。    
+    // HashMap采用链表法解决冲突，每一个Entry本质上是一个单向链表    
+    transient Entry[] table;    
+
+    // HashMap的底层数组中已用槽的数量    
+    transient int size;    
+
+    int threshold;
+
+    final float loadFactor;    
+
+    // HashMap被改变的次数    
+    transient volatile int modCount; 
+
+    ...
+}
+</code></pre></div>
+<ul>
+<li><p><code>DEFAULT_INITIAL_CAPACITY</code> - 默认的初始容量（容量为HashMap中槽的数目）是16，且实际容量必须是2的整数次幂</p></li>
+<li><p><code>MAXIMUM_CAPACITY</code> - 最大容量（必须是2的幂且小于2的30次方，传入容量过大将被这个值替换）</p></li>
+<li><p><code>loadFactor</code> - 加载因子, 默认为0.75</p></li>
+<li><p><code>threshold</code> - HashMap的阈值，用于判断是否需要调整HashMap的容量（threshold = 容量*加载因子）</p></li>
+</ul>
+
+<p>其中初始容量和加载因子是影响HashMap性能的重要参数。如果这两个测试设置得当，则HashMap可以表现出很好的性能。到此，关于HashMap
+的一些关键部分都已和盘托出,更加细节的部分再次就不进一步讨论了。</p>
 
 	  ]]></description>
 	</item>
@@ -614,464 +1080,6 @@ update UI when we finish something in separated thread. This is a basic problem,
  
 <span class="c1">// Now send messages using mHandler.sendMessage()</span>
 </code></pre></div>
-	  ]]></description>
-	</item>
-
-	<item>
-	  <title>Understanding Java Garbage Collection</title>
-	  <link>//java-garbage-collection</link>
-	  <author>Tao He</author>
-	  <pubDate>2016-08-05T00:00:00+08:00</pubDate>
-	  <guid>//java-garbage-collection</guid>
-	  <description><![CDATA[
-	     <p><strong>stop-the-world</strong> Stop-the-world means that the JVM is stopping the application from running to execute a GC. When stop-the-world occurs, every thread except for the threads needed for the GC will stop their tasks. The interrupted tasks will resume only after the GC task has completed. GC tuning often means reducing this stop-the-world time.</p>
-
-<h4>Generational Garbage Collection</h4>
-
-<p>Java does not explicitly specify a memory and remove it in the program code.Maybe there is to way to remove the memory explicitly :</p>
-
-<ul>
-<li><p>Sets the relevant object to null</p></li>
-<li><p>Use System.gc() method to remove the memory - will affect the system performance drastically</p></li>
-</ul>
-
-<p>But nobody do that. GC responsible to finds the unnecessary objects to remove them. GC created based on the following two preconditions:</p>
-
-<ul>
-<li><p>Most objects soon become unreachable.</p></li>
-<li><p>References from old objects to young objects only exist in small numbers.</p></li>
-</ul>
-
-<h5>Young generation</h5>
-
-<p>Most of the newly created objects are located here. Since most objects soon become unreachable, many objects are created in the young generation, then disappear. When objects disappear from this area, we say a &quot;minor GC&quot; has occurred.</p>
-
-<h5>Old generation</h5>
-
-<p>The objects that did not become unreachable and survived from the young generation are copied here. It is generally larger than the young generation. As it is bigger in size, the GC occurs less frequently than in the young generation. When objects disappear from the old generation, we say a &quot;major GC&quot; (or a &quot;full GC&quot;) has occurred.</p>
-
-<h5>Permanent generation</h5>
-
-<p>It stores classes or interned character strings. So, this area is definitely not for objects that survived from the old generation to stay permanently. A GC may occur in this area. The GC that took place here is still counted as a major GC.</p>
-
-<h4>Composition of the Young Generation</h4>
-
-<p>The young generation is divided into 3 spaces. </p>
-
-<ul>
-<li><p>One Eden space</p></li>
-<li><p>Two Survivor spaces</p></li>
-</ul>
-
-<p>There are 3 spaces in total, two of which are Survivor spaces. The order of execution process of each space is as below:</p>
-
-<ul>
-<li><p>The majority of newly created objects are located in the Eden space.</p></li>
-<li><p>After one GC in the Eden space, the surviving objects are moved to one of the Survivor spaces. </p></li>
-<li><p>After a GC in the Eden space, the objects are piled up into the Survivor space, where other surviving objects already exist.</p></li>
-<li><p>Once a Survivor space is full, surviving objects are moved to the other Survivor space. Then, the Survivor space that is full will be changed to a state where there is no data at all.</p></li>
-<li><p>The objects that survived these steps that have been repeated a number of times are moved to the old generation.</p></li>
-</ul>
-
-<h5>GC for the Old Generation</h5>
-
-<p>The old generation basically performs a GC when the data is full. The execution procedure varies by the GC type, so it would be easier to understand if you know different types of GC.
-According to JDK 7, there are 5 GC types.</p>
-
-<ul>
-<li><p>Serial GC</p></li>
-<li><p>Parallel GC</p></li>
-<li><p>Parallel Old GC (Parallel Compacting GC)</p></li>
-<li><p>Concurrent Mark &amp; Sweep GC (or &quot;CMS&quot;)</p></li>
-<li><p>Garbage First (G1) GC</p></li>
-</ul>
-
-<p>This article will not introduce 5 GCs, if you interested in, please google it.</p>
-
-	  ]]></description>
-	</item>
-
-	<item>
-	  <title>Android Binder Mechanism</title>
-	  <link>//android-binder-mechanism</link>
-	  <author>Tao He</author>
-	  <pubDate>2016-08-03T03:00:00+08:00</pubDate>
-	  <guid>//android-binder-mechanism</guid>
-	  <description><![CDATA[
-	     <h4>What is Binder</h4>
-
-<ul>
-<li>The Binder mechanism has started from a simple idea. </li>
-</ul>
-
-<blockquote>
-<p>&quot;Let requests and responses be written in an area where all processes can share and let each process refer to the memory address.&quot; </p>
-</blockquote>
-
-<ul>
-<li><p>Binder is a IPC mechanism.</p></li>
-<li><p>Binder implementation is based on <strong>OpenBinder</strong>.</p></li>
-<li><p>Binder refers to a kernel memory which is shared between all processes to minimize the overhead caused by memory copy. </p></li>
-<li><p>It provides the Remote Procedure Call (RPC) framework written in C++ for high productivity.</p></li>
-</ul>
-
-<h4>Why need Binder</h4>
-
-<ul>
-<li><p>Android need IPC mechanism because of its loosely coupled component design. Every application in Android is comprised of some components ,like Activity or Service, they maybe in same process or not. If they are in different process, they need communicate each other.</p></li>
-<li><p>All of the default system functions of Android are provided as the <strong>server process</strong> type. In other words, to use the functions such as <code>SurfaceFlinger</code> or <code>AudioFlinger</code>, a request should be made as a separate process that runs on the user mode. As all system services are provided as a <strong>server process</strong>, a mechanism to send requests and responses to other processes is necessary. In Android it is called the Binder. Android uses functions provided by other processes through Binder.</p></li>
-<li><p>Android is based on Linux, Linux has a lot of IPC mechanism. But, Android didn&#39;t adopted it. Maybe because of performance and low memory of Android device.</p></li>
-</ul>
-
-<h4>The Benefits of Using Binder Mechanism</h4>
-
-<ul>
-<li><p>Easy to expand or remove functions: It is easy to add a new system service or remove an existing function.</p></li>
-<li><p>Easy to port: Porting to a new processor requires few changes. A toolchain for porting is provided.</p></li>
-<li><p>Easy to test: Tests are limited by the component unit, so it is not necessary to test the entire services, and more strict tests are available.</p></li>
-<li><p>Support for distribution system: Process communication is based on the Binder, so it guarantees transparency in location between components.</p></li>
-</ul>
-
-<h4>Binder Driver</h4>
-
-<p>A Binder Driver is implemented to use the kernel space. The role of the Binder driver is to convert the memory address that each process has mapped with the memory address of the kernel space for reference.</p>
-
-<h4>Understanding Binder Mechanism through Media Service</h4>
-
-<h5><code>ServiceManager</code></h5>
-
-<p>ServiceManager is a system manager which manages all services in Android.</p>
-
-<h5>What is Media Service</h5>
-
-<ul>
-<li><p>Media Service is a general C++ application, is core of android media.</p></li>
-<li><p>Media Service is a general service Android supplied.</p></li>
-<li><p>Source code location: <em>frameworks/base/media/mediaserver/main_mediaserver.cpp</em></p></li>
-<li><p>Entry point:</p></li>
-</ul>
-<div class="highlight"><pre><code class="language-c++" data-lang="c++"><span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span><span class="o">**</span> <span class="n">argv</span><span class="p">)</span>
-<span class="p">{</span>
-    <span class="c1">// Require a ServiceManager proxy</span>
-    <span class="n">sp</span><span class="o">&lt;</span><span class="n">ProcessState</span><span class="o">&gt;</span> <span class="n">proc</span><span class="p">(</span><span class="n">ProcessState</span><span class="o">::</span><span class="n">self</span><span class="p">());</span>
-    <span class="n">sp</span><span class="o">&lt;</span><span class="n">IServiceManager</span><span class="o">&gt;</span> <span class="n">sm</span> <span class="o">=</span> <span class="n">defaultServiceManager</span><span class="p">();</span>
-    <span class="n">LOGI</span><span class="p">(</span><span class="s">&quot;ServiceManager: %p&quot;</span><span class="p">,</span> <span class="n">sm</span><span class="p">.</span><span class="n">get</span><span class="p">());</span>
-    <span class="n">AudioFlinger</span><span class="o">::</span><span class="n">instantiate</span><span class="p">();</span>
-    <span class="n">MediaPlayerService</span><span class="o">::</span><span class="n">instantiate</span><span class="p">();</span>
-    <span class="n">CameraService</span><span class="o">::</span><span class="n">instantiate</span><span class="p">();</span>
-    <span class="n">AudioPolicyService</span><span class="o">::</span><span class="n">instantiate</span><span class="p">();</span>
-
-    <span class="c1">// Forever process messages sent from Binder.</span>
-    <span class="n">ProcessState</span><span class="o">::</span><span class="n">self</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">startThreadPool</span><span class="p">();</span>
-    <span class="n">IPCThreadState</span><span class="o">::</span><span class="n">self</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">joinThreadPool</span><span class="p">();</span>
-<span class="p">}</span>
-</code></pre></div>
-<ul>
-<li><p>Media server service has four sub-module.</p>
-
-<ul>
-<li><code>AudioFlinger</code></li>
-<li><code>MediaPlayerService</code></li>
-<li><code>CameraService</code></li>
-<li><code>AudioPolicyService</code></li>
-</ul></li>
-</ul>
-
-<h5><code>ProcessState</code></h5>
-
-<ul>
-<li><p>Source code location: <em>frameworks/base/libs/binder/ProcessState.cpp</em></p></li>
-<li><p>Media Service first call <code>ProcessState::self()</code></p></li>
-</ul>
-<div class="highlight"><pre><code class="language-c++" data-lang="c++"><span class="n">sp</span><span class="o">&lt;</span><span class="n">ProcessState</span><span class="o">&gt;</span> <span class="n">ProcessState</span><span class="o">::</span><span class="n">self</span><span class="p">()</span>
-<span class="p">{</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">gProcess</span> <span class="o">!=</span> <span class="nb">NULL</span><span class="p">)</span> <span class="k">return</span> <span class="n">gProcess</span><span class="p">;</span>
-
-    <span class="n">AutoMutex</span> <span class="nf">_l</span><span class="p">(</span><span class="n">gProcessMutex</span><span class="p">);</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">gProcess</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="n">gProcess</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ProcessState</span><span class="p">;</span>
-    <span class="k">return</span> <span class="n">gProcess</span><span class="p">;</span>
-<span class="p">}</span>
-</code></pre></div>
-<ul>
-<li>Then <code>ProcessState::self()</code> call ProcessState constructor</li>
-</ul>
-<div class="highlight"><pre><code class="language-c++" data-lang="c++"><span class="n">ProcessState</span><span class="o">::</span><span class="n">ProcessState</span><span class="p">()</span>
-    <span class="o">:</span> <span class="n">mDriverFD</span><span class="p">(</span><span class="n">open_driver</span><span class="p">())</span>
-    <span class="p">,</span> <span class="n">mVMStart</span><span class="p">(</span><span class="n">MAP_FAILED</span><span class="p">)</span> <span class="c1">// Map the memory start address</span>
-    <span class="p">,</span> <span class="n">mManagesContexts</span><span class="p">(</span><span class="nb">false</span><span class="p">)</span>
-    <span class="p">,</span> <span class="n">mBinderContextCheckFunc</span><span class="p">(</span><span class="nb">NULL</span><span class="p">)</span>
-    <span class="p">,</span> <span class="n">mBinderContextUserData</span><span class="p">(</span><span class="nb">NULL</span><span class="p">)</span>
-    <span class="p">,</span> <span class="n">mThreadPoolStarted</span><span class="p">(</span><span class="nb">false</span><span class="p">)</span>
-    <span class="p">,</span> <span class="n">mThreadPoolSeq</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
-<span class="p">{</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">mDriverFD</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
-        <span class="c1">// XXX Ideally, there should be a specific define for whether we</span>
-        <span class="c1">// have mmap (or whether we could possibly have the kernel module</span>
-        <span class="c1">// availabla).</span>
-<span class="cp">#if !defined(HAVE_WIN32_IPC)</span>
-        <span class="c1">// mmap the binder, providing a chunk of virtual address space to receive transactions.</span>
-        <span class="n">mVMStart</span> <span class="o">=</span> <span class="n">mmap</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">BINDER_VM_SIZE</span><span class="p">,</span> <span class="n">PROT_READ</span><span class="p">,</span> <span class="n">MAP_PRIVATE</span> <span class="o">|</span> <span class="n">MAP_NORESERVE</span><span class="p">,</span> <span class="n">mDriverFD</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">mVMStart</span> <span class="o">==</span> <span class="n">MAP_FAILED</span><span class="p">)</span> <span class="p">{</span>
-            <span class="c1">// *sigh*</span>
-            <span class="n">LOGE</span><span class="p">(</span><span class="s">&quot;Using /dev/binder failed: unable to mmap transaction memory.</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
-            <span class="n">close</span><span class="p">(</span><span class="n">mDriverFD</span><span class="p">);</span>
-            <span class="n">mDriverFD</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
-        <span class="p">}</span>
-<span class="cp">#else</span>
-        <span class="n">mDriverFD</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
-<span class="cp">#endif</span>
-    <span class="p">}</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">mDriverFD</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
-        <span class="c1">// Need to run without the driver, starting our own thread pool.</span>
-    <span class="p">}</span>
-<span class="p">}</span>
-</code></pre></div>
-<ul>
-<li><p><code>open_driver()</code> function</p>
-
-<ul>
-<li>Very important function call to open a virtual device for communication.</li>
-<li>This functon will open this device <strong>/dev/binder</strong>.</li>
-</ul></li>
-<li><p>When <code>ProcessState::self()</code> complete, it had do two important jobs:</p>
-
-<ul>
-<li>Open the virtual device <strong>/dev/binder</strong>, so there has been a channel to communicate with kernel.</li>
-<li>Map <strong>/dev/binder</strong> device&#39;s fd to memory.<br></li>
-</ul></li>
-</ul>
-
-<h5><code>defaultServiceManager()</code></h5>
-
-<ul>
-<li><p>Source code location: <em>frameworks/base/libs/binder/IServiceManager.cpp</em></p></li>
-<li><p>Trace the source code call path, finally find that this call <code>sp&lt;IServiceManager&gt; sm = defaultServiceManager()</code> equals <code>gDefaultServiceManager = interface_cast&lt;IServiceManager&gt;(new BpBinder(0))</code>.</p></li>
-<li><p>BpBinder</p>
-
-<ul>
-<li>Source code location: <em>frameworks/base/libs/binder/BpBinder.cpp</em></li>
-<li>BpBinder constructor:</li>
-</ul></li>
-</ul>
-<div class="highlight"><pre><code class="language-c++" data-lang="c++"><span class="n">BpBinder</span><span class="o">::</span><span class="n">BpBinder</span><span class="p">(</span><span class="kt">int32_t</span> <span class="n">handle</span><span class="p">)</span>
-    <span class="o">:</span> <span class="n">mHandle</span><span class="p">(</span><span class="n">handle</span><span class="p">)</span>
-    <span class="p">,</span> <span class="n">mAlive</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
-    <span class="p">,</span> <span class="n">mObitsSent</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
-    <span class="p">,</span> <span class="n">mObituaries</span><span class="p">(</span><span class="nb">NULL</span><span class="p">)</span>
-<span class="p">{</span>
-    <span class="n">LOGV</span><span class="p">(</span><span class="s">&quot;Creating BpBinder %p handle %d</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="k">this</span><span class="p">,</span> <span class="n">mHandle</span><span class="p">);</span>
-
-    <span class="n">extendObjectLifetime</span><span class="p">(</span><span class="n">OBJECT_LIFETIME_WEAK</span><span class="p">);</span>
-    <span class="n">IPCThreadState</span><span class="o">::</span><span class="n">self</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">incWeakHandle</span><span class="p">(</span><span class="n">handle</span><span class="p">);</span>
-<span class="p">}</span>
-</code></pre></div>
-<ul>
-<li><p>What did <code>interface_cast</code> do?</p>
-
-<ul>
-<li><code>interface_cast</code> defined in <em>/home/tao/android_source/frameworks/base/include/binder/IInterface.h</em></li>
-<li><code>interface_cast</code> defination</li>
-</ul></li>
-</ul>
-<div class="highlight"><pre><code class="language-c++" data-lang="c++"><span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">INTERFACE</span><span class="o">&gt;</span>
-<span class="kr">inline</span> <span class="n">sp</span><span class="o">&lt;</span><span class="n">INTERFACE</span><span class="o">&gt;</span> <span class="n">interface_cast</span><span class="p">(</span><span class="k">const</span> <span class="n">sp</span><span class="o">&lt;</span><span class="n">IBinder</span><span class="o">&gt;&amp;</span> <span class="n">obj</span><span class="p">)</span>
-<span class="p">{</span>
-    <span class="k">return</span> <span class="n">INTERFACE</span><span class="o">::</span><span class="n">asInterface</span><span class="p">(</span><span class="n">obj</span><span class="p">);</span>
-<span class="p">}</span>
-</code></pre></div>
-<ul>
-<li>So <code>gDefaultServiceManager = interface_cast&lt;IServiceManager&gt;(new BpBinder(0))</code> statement call <code>interface_cast</code> will equals:</li>
-</ul>
-<div class="highlight"><pre><code class="language-c++" data-lang="c++"><span class="kr">inline</span> <span class="n">sp</span><span class="o">&lt;</span><span class="n">IServiceManager</span><span class="o">&gt;</span> <span class="n">interface_cast</span><span class="p">(</span><span class="k">const</span> <span class="n">sp</span><span class="o">&lt;</span><span class="n">IBinder</span><span class="o">&gt;&amp;</span> <span class="n">obj</span><span class="p">)</span>
-<span class="p">{</span>
-    <span class="k">return</span> <span class="n">IServiceManager</span><span class="o">::</span><span class="n">asInterface</span><span class="p">(</span><span class="n">obj</span><span class="p">);</span>
-<span class="p">}</span>
-</code></pre></div>
-<ul>
-<li><p>We need find clue in <code>IServiceManager</code></p>
-
-<ul>
-<li>Source code location: <em>frameworks/base/include/binder/IInterface.h</em></li>
-<li><code>IServiceManager</code> defination</li>
-</ul></li>
-</ul>
-<div class="highlight"><pre><code class="language-c++" data-lang="c++"><span class="k">class</span> <span class="nc">IServiceManager</span> <span class="o">:</span> <span class="k">public</span> <span class="n">IInterface</span>
-<span class="p">{</span>
-<span class="k">public</span><span class="o">:</span>
-    <span class="n">DECLARE_META_INTERFACE</span><span class="p">(</span><span class="n">ServiceManager</span><span class="p">);</span>
-
-    <span class="cm">/**</span>
-<span class="cm">     * Retrieve an existing service, blocking for a few seconds</span>
-<span class="cm">     * if it doesn&#39;t yet exist.</span>
-<span class="cm">     */</span>
-    <span class="k">virtual</span> <span class="n">sp</span><span class="o">&lt;</span><span class="n">IBinder</span><span class="o">&gt;</span>         <span class="n">getService</span><span class="p">(</span> <span class="k">const</span> <span class="n">String16</span><span class="o">&amp;</span> <span class="n">name</span><span class="p">)</span> <span class="k">const</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-
-    <span class="cm">/**</span>
-<span class="cm">     * Retrieve an existing service, non-blocking.</span>
-<span class="cm">     */</span>
-    <span class="k">virtual</span> <span class="n">sp</span><span class="o">&lt;</span><span class="n">IBinder</span><span class="o">&gt;</span>         <span class="n">checkService</span><span class="p">(</span> <span class="k">const</span> <span class="n">String16</span><span class="o">&amp;</span> <span class="n">name</span><span class="p">)</span> <span class="k">const</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-
-    <span class="cm">/**</span>
-<span class="cm">     * Register a service.</span>
-<span class="cm">     */</span>
-    <span class="k">virtual</span> <span class="kt">status_t</span>            <span class="n">addService</span><span class="p">(</span> <span class="k">const</span> <span class="n">String16</span><span class="o">&amp;</span> <span class="n">name</span><span class="p">,</span>
-                                            <span class="k">const</span> <span class="n">sp</span><span class="o">&lt;</span><span class="n">IBinder</span><span class="o">&gt;&amp;</span> <span class="n">service</span><span class="p">)</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-
-    <span class="cm">/**</span>
-<span class="cm">     * Return list of all existing services.</span>
-<span class="cm">     */</span>
-    <span class="k">virtual</span> <span class="n">Vector</span><span class="o">&lt;</span><span class="n">String16</span><span class="o">&gt;</span>    <span class="n">listServices</span><span class="p">()</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-
-    <span class="k">enum</span> <span class="p">{</span>
-        <span class="n">GET_SERVICE_TRANSACTION</span> <span class="o">=</span> <span class="n">IBinder</span><span class="o">::</span><span class="n">FIRST_CALL_TRANSACTION</span><span class="p">,</span>
-        <span class="n">CHECK_SERVICE_TRANSACTION</span><span class="p">,</span>
-        <span class="n">ADD_SERVICE_TRANSACTION</span><span class="p">,</span>
-        <span class="n">LIST_SERVICES_TRANSACTION</span><span class="p">,</span>
-    <span class="p">};</span>
-<span class="p">};</span>
-</code></pre></div><div class="highlight"><pre><code class="language-text" data-lang="text">* We need trace this macro `DECLARE_META_INTERFACE(ServiceManager)` 
-</code></pre></div><div class="highlight"><pre><code class="language-c++" data-lang="c++"><span class="cp">#define DECLARE_META_INTERFACE(INTERFACE)                             </span>
-    <span class="k">static</span> <span class="k">const</span> <span class="n">String16</span> <span class="n">descriptor</span><span class="p">;</span>                                 
-    <span class="k">static</span> <span class="n">sp</span><span class="o">&lt;</span><span class="n">I</span><span class="err">##</span><span class="n">INTERFACE</span><span class="o">&gt;</span> <span class="n">asInterface</span><span class="p">(</span><span class="k">const</span> <span class="n">sp</span><span class="o">&lt;</span><span class="n">IBinder</span><span class="o">&gt;&amp;</span> <span class="n">obj</span><span class="p">);</span>      
-    <span class="k">virtual</span> <span class="k">const</span> <span class="n">String16</span><span class="o">&amp;</span> <span class="n">getInterfaceDescriptor</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span>           
-    <span class="n">I</span><span class="err">##</span><span class="n">INTERFACE</span><span class="p">();</span>                                                   
-    <span class="k">virtual</span> <span class="o">~</span><span class="n">I</span><span class="err">##</span><span class="n">INTERFACE</span><span class="p">();</span>                                          
-
-
-<span class="cp">#define IMPLEMENT_META_INTERFACE(INTERFACE, NAME)                     </span>
-    <span class="k">const</span> <span class="n">String16</span> <span class="n">I</span><span class="err">##</span><span class="n">INTERFACE</span><span class="o">::</span><span class="n">descriptor</span><span class="p">(</span><span class="n">NAME</span><span class="p">);</span>                    
-    <span class="k">const</span> <span class="n">String16</span><span class="o">&amp;</span> <span class="n">I</span><span class="err">##</span><span class="n">INTERFACE</span><span class="o">::</span><span class="n">getInterfaceDescriptor</span><span class="p">()</span> <span class="k">const</span> <span class="p">{</span>    
-        <span class="k">return</span> <span class="n">I</span><span class="err">##</span><span class="n">INTERFACE</span><span class="o">::</span><span class="n">descriptor</span><span class="p">;</span>                              
-    <span class="p">}</span>                                                                 
-    <span class="n">sp</span><span class="o">&lt;</span><span class="n">I</span><span class="err">##</span><span class="n">INTERFACE</span><span class="o">&gt;</span> <span class="n">I</span><span class="err">##</span><span class="n">INTERFACE</span><span class="o">::</span><span class="n">asInterface</span><span class="p">(</span><span class="k">const</span> <span class="n">sp</span><span class="o">&lt;</span><span class="n">IBinder</span><span class="o">&gt;&amp;</span> <span class="n">obj</span><span class="p">)</span>
-    <span class="p">{</span>                                                                 
-        <span class="n">sp</span><span class="o">&lt;</span><span class="n">I</span><span class="err">##</span><span class="n">INTERFACE</span><span class="o">&gt;</span> <span class="n">intr</span><span class="p">;</span>                                        
-        <span class="k">if</span> <span class="p">(</span><span class="n">obj</span> <span class="o">!=</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>                                            
-            <span class="n">intr</span> <span class="o">=</span> <span class="k">static_cast</span><span class="o">&lt;</span><span class="n">I</span><span class="err">##</span><span class="n">INTERFACE</span><span class="o">*&gt;</span><span class="p">(</span>                        
-                <span class="n">obj</span><span class="o">-&gt;</span><span class="n">queryLocalInterface</span><span class="p">(</span>                             
-                        <span class="n">I</span><span class="err">##</span><span class="n">INTERFACE</span><span class="o">::</span><span class="n">descriptor</span><span class="p">).</span><span class="n">get</span><span class="p">());</span>             
-            <span class="k">if</span> <span class="p">(</span><span class="n">intr</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>                                       
-                <span class="n">intr</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Bp</span><span class="err">##</span><span class="n">INTERFACE</span><span class="p">(</span><span class="n">obj</span><span class="p">);</span>                        
-            <span class="p">}</span>                                                         
-        <span class="p">}</span>                                                             
-        <span class="k">return</span> <span class="n">intr</span><span class="p">;</span>                                                  
-    <span class="p">}</span>                                                                 
-    <span class="n">I</span><span class="err">##</span><span class="n">INTERFACE</span><span class="o">::</span><span class="n">I</span><span class="err">##</span><span class="n">INTERFACE</span><span class="p">()</span> <span class="p">{</span> <span class="p">}</span>                                  
-    <span class="n">I</span><span class="err">##</span><span class="n">INTERFACE</span><span class="o">::~</span><span class="n">I</span><span class="err">##</span><span class="n">INTERFACE</span><span class="p">()</span> <span class="p">{</span> <span class="p">}</span>                                 
-</code></pre></div>
-<ul>
-<li>Finally, we find that <code>interface_cast&lt;IServiceManager&gt;(new BpBinder(0))</code> statement actually return a <code>BpServiceManager</code> object. It means <code>sp&lt;IServiceManager&gt; sm = defaultServiceManager()</code> acquired a <code>BpServiceManager</code> object.</li>
-</ul>
-
-<h5><code>BpServiceManager</code></h5>
-
-<ul>
-<li>Bp stands for Binder proxy, it means <code>BpServiceManager</code> is <code>ServiceManager</code>&#39;s proxy to Binder.</li>
-</ul>
-
-<h5><code>MediaPlayerService</code></h5>
-
-<ul>
-<li><p>Source code location: <em>frameworks/base/media/libmediaplayerservice/MediaPlayerService.cpp</em></p></li>
-<li><p>Defination and instantiation </p></li>
-</ul>
-<div class="highlight"><pre><code class="language-c++" data-lang="c++"><span class="kt">void</span> <span class="n">MediaPlayerService</span><span class="o">::</span><span class="n">instantiate</span><span class="p">()</span> <span class="p">{</span>
-    <span class="n">defaultServiceManager</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">addService</span><span class="p">(</span>
-            <span class="n">String16</span><span class="p">(</span><span class="s">&quot;media.player&quot;</span><span class="p">),</span> <span class="k">new</span> <span class="n">MediaPlayerService</span><span class="p">());</span>
-<span class="p">}</span>
-
-<span class="n">MediaPlayerService</span><span class="o">::</span><span class="n">MediaPlayerService</span><span class="p">()</span>
-<span class="p">{</span>
-    <span class="n">LOGV</span><span class="p">(</span><span class="s">&quot;MediaPlayerService created&quot;</span><span class="p">);</span>
-    <span class="n">mNextConnId</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
-<span class="p">}</span>
-
-<span class="n">MediaPlayerService</span><span class="o">::~</span><span class="n">MediaPlayerService</span><span class="p">()</span>
-<span class="p">{</span>
-    <span class="n">LOGV</span><span class="p">(</span><span class="s">&quot;MediaPlayerService destroyed&quot;</span><span class="p">);</span>
-<span class="p">}</span>
-</code></pre></div>
-<ul>
-<li><p><code>MediaPlayerService</code> derivatived from <code>BnMediaPlayerService</code></p></li>
-<li><p>Bn stands for Binder native.</p></li>
-<li><p>Add <code>MediaPlayerService</code> to <code>ServiceManager</code></p></li>
-</ul>
-<div class="highlight"><pre><code class="language-c++" data-lang="c++"><span class="k">virtual</span> <span class="kt">status_t</span> <span class="nf">addService</span><span class="p">(</span><span class="k">const</span> <span class="n">String16</span><span class="o">&amp;</span> <span class="n">name</span><span class="p">,</span> <span class="k">const</span> <span class="n">sp</span><span class="o">&lt;</span><span class="n">IBinder</span><span class="o">&gt;&amp;</span> <span class="n">service</span><span class="p">)</span>
-<span class="p">{</span>
-    <span class="n">Parcel</span> <span class="n">data</span><span class="p">,</span> <span class="n">reply</span><span class="p">;</span>
-    <span class="n">data</span><span class="p">.</span><span class="n">writeInterfaceToken</span><span class="p">(</span><span class="n">IServiceManager</span><span class="o">::</span><span class="n">getInterfaceDescriptor</span><span class="p">());</span>
-    <span class="n">data</span><span class="p">.</span><span class="n">writeString16</span><span class="p">(</span><span class="n">name</span><span class="p">);</span>
-    <span class="n">data</span><span class="p">.</span><span class="n">writeStrongBinder</span><span class="p">(</span><span class="n">service</span><span class="p">);</span>
-    <span class="c1">// remote() return BpBinder object</span>
-    <span class="kt">status_t</span> <span class="n">err</span> <span class="o">=</span> <span class="n">remote</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">transact</span><span class="p">(</span><span class="n">ADD_SERVICE_TRANSACTION</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">reply</span><span class="p">);</span>
-    <span class="k">return</span> <span class="n">err</span> <span class="o">==</span> <span class="n">NO_ERROR</span> <span class="o">?</span> <span class="n">reply</span><span class="p">.</span><span class="n">readInt32</span><span class="p">()</span> <span class="o">:</span> <span class="n">err</span><span class="p">;</span>
-<span class="p">}</span>
-</code></pre></div>
-<ul>
-<li><code>remote()</code> return BpBinder</li>
-</ul>
-<div class="highlight"><pre><code class="language-c++" data-lang="c++"><span class="kt">status_t</span> <span class="n">BpBinder</span><span class="o">::</span><span class="n">transact</span><span class="p">(</span><span class="kt">uint32_t</span> <span class="n">code</span><span class="p">,</span> <span class="k">const</span> <span class="n">Parcel</span><span class="o">&amp;</span> <span class="n">data</span><span class="p">,</span> <span class="n">Parcel</span><span class="o">*</span> <span class="n">reply</span><span class="p">,</span> <span class="kt">uint32_t</span> <span class="n">flags</span><span class="p">)</span>
-<span class="p">{</span>
-    <span class="c1">// Once a binder has died, it will never come back to life.</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">mAlive</span><span class="p">)</span> <span class="p">{</span>
-        <span class="kt">status_t</span> <span class="n">status</span> <span class="o">=</span> <span class="n">IPCThreadState</span><span class="o">::</span><span class="n">self</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">transact</span><span class="p">(</span>
-            <span class="n">mHandle</span><span class="p">,</span> <span class="n">code</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">reply</span><span class="p">,</span> <span class="n">flags</span><span class="p">);</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">status</span> <span class="o">==</span> <span class="n">DEAD_OBJECT</span><span class="p">)</span> <span class="n">mAlive</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-        <span class="k">return</span> <span class="n">status</span><span class="p">;</span>
-    <span class="p">}</span>
-
-    <span class="k">return</span> <span class="n">DEAD_OBJECT</span><span class="p">;</span>
-<span class="p">}</span>
-</code></pre></div>
-<ul>
-<li><p><code>IPCThreadState</code> do with transaction, write add service command and wait for response.</p></li>
-<li><p><code>BpServiceManager</code> had sent a add service message, but who receive and process it?</p></li>
-<li><p><code>BnServiceManager</code>? unfortunately it doesn&#39;t exist. service do same job.</p></li>
-<li><p>service</p>
-
-<ul>
-<li>service is a general c++ applcation.</li>
-<li>Source code location: <em>frameworks/base/cmds/servicemanager/service_manager.c</em></li>
-<li>Entry point:</li>
-</ul></li>
-</ul>
-<div class="highlight"><pre><code class="language-c++" data-lang="c++"><span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span> <span class="o">**</span><span class="n">argv</span><span class="p">)</span>
-<span class="p">{</span>
-    <span class="k">struct</span> <span class="n">binder_state</span> <span class="o">*</span><span class="n">bs</span><span class="p">;</span>
-    <span class="c1">//  BINDER_SERVICE_MANAGER is NULL, is a magic number</span>
-    <span class="kt">void</span> <span class="o">*</span><span class="n">svcmgr</span> <span class="o">=</span> <span class="n">BINDER_SERVICE_MANAGER</span><span class="p">;</span>
-
-    <span class="n">bs</span> <span class="o">=</span> <span class="n">binder_open</span><span class="p">(</span><span class="mi">128</span><span class="o">*</span><span class="mi">1024</span><span class="p">);</span>
-
-    <span class="k">if</span> <span class="p">(</span><span class="n">binder_become_context_manager</span><span class="p">(</span><span class="n">bs</span><span class="p">))</span> <span class="p">{</span>
-        <span class="n">LOGE</span><span class="p">(</span><span class="s">&quot;cannot become context manager (%s)</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">strerror</span><span class="p">(</span><span class="n">errno</span><span class="p">));</span>
-        <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
-    <span class="p">}</span>
-
-    <span class="n">svcmgr_handle</span> <span class="o">=</span> <span class="n">svcmgr</span><span class="p">;</span>
-    <span class="n">binder_loop</span><span class="p">(</span><span class="n">bs</span><span class="p">,</span> <span class="n">svcmgr_handler</span><span class="p">);</span>
-    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
-<span class="p">}</span>
-</code></pre></div>
-<h4>Conclusion</h4>
-
-<p>Through tracing so many codes, the MediaPlayerService example maybe reveal the Binder&#39;s mysterious veil. We need write down some important conclusions:</p>
-
-<ul>
-<li><p>If two processes need communicate each other, one as Client, the other is Server, Server need registered to <code>ServiceManager</code>, if Client want request to Server, it need query Server&#39;s info from <code>ServiceManager</code>, based the qureid info, Client and Server can communicate each other. </p></li>
-<li><p>Client, Server, <code>ServiceManager</code> are implemented in use space, Binder is implemented in kernel space.</p></li>
-<li><p><code>ServiceManager</code> and Binder is implemented by Android, developers need implemente their Client and Server.</p></li>
-<li><p>Binder supplied device file <strong>/dev/binder</strong> communicate to user space. Client, Server and <code>ServiceManager</code> communicated to Binder through <code>open</code> and <code>ioctl</code> file operation function.</p></li>
-<li><p>Client and Server communicate each other immediately through Binder.</p></li>
-<li><p><code>ServiceManager</code> is a daemon process, it manages Server, supply interface to qurey Server function.</p></li>
-</ul>
-
-<p>If want to learn Android IPC mechanism deeply, a lot of Android source code need be read. Linus said:</p>
-
-<blockquote>
-<p>Read The Fucking Source Code.</p>
-</blockquote>
-
 	  ]]></description>
 	</item>
 

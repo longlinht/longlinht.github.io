@@ -211,10 +211,10 @@
 
     <!-- [[! next_post ]] -->
     
-        <a class="read-next-story no-cover" href="http://longlinht.github.io//implement-page-up-down-animation-on-android">
+        <a class="read-next-story no-cover" href="http://longlinht.github.io//hashmap-in-java">
             <section class="post">
-                <h2>在Android上实现无限翻页轮播动画效果</h2>
-                <p>最近在工作中遇到一个需求，要求在一个Dialog的标题上显示两行字，但是这行字如果同时出现的话会非常难看，设计出了套方案，类似无限翻页轮播这两行字，要有翻书的效果。 刚开始实现的时候，动画的效果也出来了，但是拿去给设计验收的时候设计总感觉怪怪的，始终达不到设计最终想要的结果。后来通过好多次的调试和验证，发现问题出现在两个 View的动画播放时序和旋转轴的问题上，解决了这两个问题后再拿去给设计看的时候，一切都完美了。 现在这个比较好的设计也已上线， 也因为这个调试和验证的过程感觉对 Android动画的一些细节碰触的较多，所以写下此文记录下这个过程。 #### 基本原理 通过`ObjectAnimation`操作`View`的`RotationY`属性，再利用动态改变`PivotY`的值和动画播放时序的不同来模拟出无限翻页轮播的动画效果 #### ObjectAnimation ``` // 上面的View翻下去的动画 private...</p>
+                <h2>Java中的HashMap</h2>
+                <p>如果你是个Java程序员，那么你不可能对HashMap视而不见，因为你会经常遇到使用它的场景，因此对HashMap的充分了解非常有必要，对我们写出高效可靠的代码很有帮助。 在对HashMap进行深入了解之前，得先清楚HashMap到底是个什么样的存在！ #### What's HashMap 让我来罗列一些点逐步勾勒出HashMap的轮廓: * HashMap就是将key做hash算法，然后将hash所对应的数据映射到内存地址，直接取得key所对应的数据。 * 底层为哈希数组，数组的每个元素都是一个单链表的头结点 * 基于`Map`接口实现，提供了map操作的泛型类 * 允许`null` values...</p>
             </section>
         </a>
     

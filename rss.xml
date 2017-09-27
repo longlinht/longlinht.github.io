@@ -19,6 +19,17 @@
       <dc:date>2017-08-21T02:30:12+08:00</dc:date>
     </item>
     <item>
+      <title>捕获Android截屏事件</title>
+      <link>http://longlinht.github.io//capture-screenshot-event-on-android</link>
+      <description>在Android平台上截屏事件没有对应的一个标准的事件和通知，所以应用App无法通过标准或统一的方式去捕获这个事件来满足自己的要求。
+只能通过间接的方式捕获到这个事件，我因为要做一个微信的截屏图片分享的功能，所以对Android截屏事件做了一个调研，并且在开发中 
+选用了其中的一种方式。 大体上，要解决这个问题，大概有以下几种方法，每种方法的可靠性和灵活性都不同。
+
+</description>
+      <pubDate>Thu, 03 Aug 2017 02:30:12 +0800</pubDate>
+      <dc:date>2017-08-03T02:30:12+08:00</dc:date>
+    </item>
+    <item>
       <title>Intall Emacs on Ubuntu</title>
       <link>http://longlinht.github.io//install-emacs-on-ubuntu</link>
       <description>Install Emacs 25 on Ubuntu from source is very easy, follow these steps below could achieve it.
@@ -38,6 +49,15 @@ Android动画的一些细节碰触的较多，所以写下此文记录下这个�
 </description>
       <pubDate>Thu, 13 Jul 2017 02:30:12 +0800</pubDate>
       <dc:date>2017-07-13T02:30:12+08:00</dc:date>
+    </item>
+    <item>
+      <title>Java中的HashMap</title>
+      <link>http://longlinht.github.io//hashmap-in-java</link>
+      <description>如果你是个Java程序员，那么你不可能对HashMap视而不见，因为你会经常遇到使用它的场景，因此对HashMap的充分了解非常有必要，对我们写出高效可靠的代码很有帮助。
+
+</description>
+      <pubDate>Tue, 11 Jul 2017 02:30:12 +0800</pubDate>
+      <dc:date>2017-07-11T02:30:12+08:00</dc:date>
     </item>
     <item>
       <title>对AI的一些臆想</title>

@@ -13,7 +13,7 @@ In C++, references provide many of the same capabilities as pointers. In real de
 * The references can't be re-assigned, but pointers can be.
 
 * A pointer has its own memory address and size on the stack (4 bytes on x86), whereas a reference shares the same memory address (with the original variable) but also takes up some space on the stack. Since a reference has the same address as the original variable itself, it is safe to think of a reference as another name for the same variable. 
-```c++
+```
 int x = 0;
 int &r = x;
 int *p = &x;
@@ -33,7 +33,7 @@ bool equal = p == p2; // equal is true
 * References cannot be stuffed into an array, whereas pointers can be.
 
 * Const references can be bound to temporaries. Pointers cannot (not without some indirection):
-```c++
+```
 const int &x = int(12); //legal C++
 int *y = &int(12); //illegal to dereference a temporary.
 ```

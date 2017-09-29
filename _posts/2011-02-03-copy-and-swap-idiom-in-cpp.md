@@ -18,7 +18,7 @@ categories: 'hetao'
 
 Let's consider a concrete case. 
 
-```c++
+```
 #include <algorithm> // std::copy
 #include <cstddef> // std::size_t
 
@@ -61,7 +61,7 @@ This class almost manages the array successfully, but it needs operator= to work
 
 Here's how a naive implementation might look:
 
-```c++
+```
 // the hard part
 dumb_array& operator=(const dumb_array& other)
 {
@@ -87,7 +87,7 @@ And we say we're finished; this now manages an array, without leaks. However, it
 
 * The second is that it only provides a basic exception guarantee. If new int[mSize] fails,`*this` will have been modified. (Namely, the size is wrong and the data is gone!) For a strong exception guarantee, it would need to be something akin to:
 
-```c++
+```
 dumb_array& operator=(const dumb_array& other)
 {
     if (this != &other) // (1)
@@ -112,8 +112,9 @@ The code has expanded! Which leads us to the third problem: code duplication. Ou
 
 As mentioned, the copy-and-swap idiom will fix all these issues. But right now, we have all the requirements except one: a swap function. While The Rule of Three successfully entails the existence of our copy-constructor, assignment operator, and destructor, it should really be called "The Big Three and A Half": any time your class manages a resource it also makes sense to provide a swap function.
 
-We need to add swap functionality to our class, and we do that as follows†:
-```c++
+We need to add swap functionality to our class, and we do that as follows:
+
+```
 class dumb_array
 {
 public:

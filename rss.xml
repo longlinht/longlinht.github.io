@@ -8,7 +8,18 @@
     <title>Dancing with Machine, Human and God</title>
     <link>http://longlinht.github.io/</link>
     <description>World is complex,confusing and wonderful,I will talk about machine,human and god to known it, to reveal it.</description>
-    <pubDate>Mon, 21 Aug 2017 02:30:12 +0800</pubDate>
+    <pubDate>Fri, 24 Nov 2017 02:20:12 +0800</pubDate>
+    <item>
+      <title>记一次Android系统源代码技术分享</title>
+      <link>http://longlinht.github.io//lecture-on-android-system-source-code</link>
+      <description>今年年后换了工作，决定继续做Android开发，到了公司一段时间后，受架构组同学之邀，做一次技术分享，当时感觉很头疼，因为我在Android技术组，如果分享这几年C++的技术经验，显然不合时宜，也对组里的同事没有什么帮助，如果分享Android应用的开发，貌似又在班门弄斧，自己在Android方面本来就是半路出家，实在没有什么可分享的干货，正在为难之际，突然想到在之前的公司有段时间一直在阅读Android系统源代码，一直试图能更深入的了解系统的结构和原理，因此也有了一些心得，正好可以与同事分享，也对大家的开发有所帮助，所以有了这篇小记。
+   
+这篇小记有点类似一个ppt，其实就是那次分享我用markdown格式写的一个ppt，是一个我要讲述的一个提纲，防止我讲跑题了。
+
+</description>
+      <pubDate>Fri, 24 Nov 2017 02:20:12 +0800</pubDate>
+      <dc:date>2017-11-24T02:20:12+08:00</dc:date>
+    </item>
     <item>
       <title>Android开发中二维码库的选用</title>
       <link>http://longlinht.github.io//select-qrc-code-library-in-andord</link>
@@ -270,6 +281,6 @@ update UI when we finish something in separated thread. This is a basic problem,
       <pubDate>Wed, 03 Nov 2010 02:30:12 +0800</pubDate>
       <dc:date>2010-11-03T02:30:12+08:00</dc:date>
     </item>
-    <dc:date>2017-08-21T02:30:12+08:00</dc:date>
+    <dc:date>2017-11-24T02:20:12+08:00</dc:date>
   </channel>
 </rss>

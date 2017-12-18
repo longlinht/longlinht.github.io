@@ -7,6 +7,19 @@
     <atom:link href="http://longlinht.github.io//feed.xml" rel="self" type="application/rss+xml" />
     
       <item>
+        <title>政策与民意</title>
+        <description>&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;   政策，这个词在我们这个国家被普遍使用，几乎人人理解其含义，就连目不识丁的老农都会说出这样的话：“中央又出新政策了”，这个词我们是如此的熟悉，以至于我们常常都不会去想政策到底是什么，它是如何制定出来的？我们普通老百姓是否影响到了政策的制定？
+   也许一般的理解是老百姓哪能影响到政策的制定，照老农的说法，那是中央出的政策，和我们这些小老百姓有啥关系，这么理解也没错，毕竟在我们这个国家，显然普通民众的权利实在有限，但是此处我并不想讨论政策的制定和出台，只是想探究已出台的，与民生息息相关的这些个政策，到底有没有民意的基础，民意是否影响到了政策的制定？
+   要讨论这个问题，拿北京这几年的一些政策法规的例子最好不过了。先说北京房子的限购，以及相关联的所谓的抑制房价过快上涨的各种政策手段，但凡有点经济学常识的人，都知道这些政策只会让房价更高，增加更多购房成本，但是这些政策还是出来了，政府有什么考虑我们不得而知，但是呼吁出台这些政策的民意绝对是存在的，这种呼声绝对不是少数，甚至有一些经济学家也在为这种政策摇旗呐喊，就无怪乎普通民众有这种诉求了。而这种大多数的诉求就成了普遍的民意基础，使这种违背基本经济学常识的政策不再是空中楼阁。房价的这个例子也许会因房价问题本来就错综复杂而变得更加说不清道不明，那可以再看一例：网约车。
+   在网约车还没有出现之前，我们的选择只有出租车和所谓的黑车，出行体验如何，只要在烈日和寒风中打过出租车的人都应该知道那是一种什么样的服务，自从有了网约车，如滴滴打车后，我们的出行体验有了巨大的改观。那种打车难的时代一去不复返了，但是好景不长，很快政策对网约车出台了一系列不友好政策，之后的打车体验明显不如之前，这种政策也明显违背市场经济规律，但是它照样堂而皇之的出台了，你以为这是出租车利益集团的反扑，但是别忘了，这背后还有很坚实的民意基础，网约车存在的一些问题总是能让很多普通民众认为监管是必须的，政府必须介入才能让他们有安全感，但其实这些问题难道出租车就不存在吗？不希冀于市场竞争，而总幻想依赖政府强力，这种普遍的认知构成了一种可怕的，无望的民意，渗透进我们生活中的方方面面。
+   这种可怕的认知，在今年年底北京出现的两件重要的事情中更是体现的淋漓尽致，也许这些政策普通民众并不能左右，但民众的普遍认知构成了民意基础，因为在大部分人的认知中并没有打成这样的共识：有些事只能交给市场，政府干预只会扰乱市场；私有财产神圣不可侵犯；贩夫走卒，不高端的人群也有公民权；这些在文明社会都普遍达成的共识并未深入人心。这些个看似荒谬的政策既是权力意志的体现，也少不了那可怕民意的影子。
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</description>
+        <pubDate>Fri, 24 Nov 2017 02:20:12 +0800</pubDate>
+        <link>http://longlinht.github.io//policy-and-people-will</link>
+        <guid isPermaLink="true">http://longlinht.github.io//policy-and-people-will</guid>
+      </item>
+    
+      <item>
         <title>记一次Android系统源代码技术分享</title>
         <description>&lt;p&gt;今年年后换了工作，决定继续做Android开发，到了公司一段时间后，受架构组同学之邀，做一次技术分享，当时感觉很头疼，因为我在Android技术组，如果分享这几年C++的技术经验，显然不合时宜，也对组里的同事没有什么帮助，如果分享Android应用的开发，貌似又在班门弄斧，自己在Android方面本来就是半路出家，实在没有什么可分享的干货，正在为难之际，突然想到在之前的公司有段时间一直在阅读Android系统源代码，一直试图能更深入的了解系统的结构和原理，因此也有了一些心得，正好可以与同事分享，也对大家的开发有所帮助，所以有了这篇小记。&lt;/p&gt;
 
@@ -1161,55 +1174,6 @@ In Android Studio -&amp;gt; File -&amp;gt;Import Settings -&amp;gt; Choose VimFo
         <pubDate>Sun, 02 Apr 2017 06:30:12 +0800</pubDate>
         <link>http://longlinht.github.io//building-my-own-mac-working-environment</link>
         <guid isPermaLink="true">http://longlinht.github.io//building-my-own-mac-working-environment</guid>
-      </item>
-    
-      <item>
-        <title>Java References</title>
-        <description>&lt;p&gt;Before JDK 1.2, if a object isn&amp;#39;t referenced by any variable, it can&amp;#39;t be used any more.Since JDK 1.2, Java has four reference types.In order from strongest to weakest these references are: Strong, Soft, Weak, Phantom. &lt;/p&gt;
-
-&lt;h4&gt;Strong reference&lt;/h4&gt;
-
-&lt;p&gt;Below code is regular object reference:&lt;/p&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-java&quot; data-lang=&quot;java&quot;&gt;&lt;span class=&quot;n&quot;&gt;Sample&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;sample&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;Sample&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;p&gt;The variable &lt;code&gt;sample&lt;/code&gt; holds a strong reference to a Sample object. Before you stop reading there is a point to this: objects that are reachable through any chain of strong references are not eligible for garbage collection. Even JVM throw &lt;code&gt;OutOfMemoryError&lt;/code&gt; to terminate the program, it will not to reclaim the memory that strong reference hold.&lt;/p&gt;
-
-&lt;h4&gt;Soft reference&lt;/h4&gt;
-
-&lt;p&gt;Soft references are cleared at the discretion of the garbage collector in response to memory demand. The virtual machine guarantees that all soft references to softly-reachable objects will have been cleared before it would ever throw an &lt;code&gt;OutOfMemoryError&lt;/code&gt;.&lt;/p&gt;
-
-&lt;h4&gt;Weak reference&lt;/h4&gt;
-
-&lt;p&gt;This code snippets is regular weak reference:&lt;/p&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-java&quot; data-lang=&quot;java&quot;&gt;&lt;span class=&quot;n&quot;&gt;WeakReference&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Cacheable&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;weakData&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;WeakReference&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Cacheable&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;data&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;p&gt;To access data call weakData.get(). This call to get may return &lt;code&gt;null&lt;/code&gt; if the weak reference was garbage collected: you must check the returned value to avoid &lt;code&gt;NullPointerException&lt;/code&gt;s.&lt;/p&gt;
-
-&lt;p&gt;An object that is identified as only weakly reachable will be collected at the next GC cycle.&lt;/p&gt;
-
-&lt;p&gt;If you pass a &lt;code&gt;ReferenceQueue&lt;/code&gt; into the constructor for a weak reference then the garbage collector will append that weak reference to the &lt;code&gt;ReferenceQueue&lt;/code&gt; when it is no longer needed. You can periodically process this queue and deal with dead references.&lt;/p&gt;
-
-&lt;p&gt;The difference between &lt;code&gt;SoftReference&lt;/code&gt; and &lt;code&gt;WeakReference&lt;/code&gt; is:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;p&gt;A soft reference is exactly like a weak reference, except that it is less eager to throw away the object to which it refers. &lt;/p&gt;&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;An object which is only weakly reachable (the strongest references to it are WeakReferences) will be discarded at the next garbage collection cycle, but an object which is softly reachable will generally stick around for a while.&lt;/p&gt;&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;&lt;code&gt;SoftReferences&lt;/code&gt; aren&amp;#39;t required to behave any differently than &lt;code&gt;WeakReferences&lt;/code&gt;, but in practice softly reachable objects are generally retained as long as memory is in plentiful supply. This makes them an excellent foundation for a cache, such as the image cache described above, since you can let the garbage collector worry about both how reachable the objects are (a strongly reachable object will never be removed from the cache) and how badly it needs the memory they are consuming.&lt;/p&gt;&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;Garbage collector uses algorithms to decide whether or not to reclaim a softly reachable object, but always reclaims a weakly reachable object.&lt;/p&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h4&gt;Phantom reference&lt;/h4&gt;
-
-&lt;p&gt;Phantom references are the most tenuous of all reference types: calling get will always return null.
-When you construct a phantom reference you must always pass in a &lt;code&gt;ReferenceQueue&lt;/code&gt;. &lt;/p&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-java&quot; data-lang=&quot;java&quot;&gt;&lt;span class=&quot;n&quot;&gt;ReferenceQueue&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;queue&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;ReferenceQueue&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;PhantomReference&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;pr&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;PhantomReference&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;object&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;queue&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;p&gt;This indicates that you can use a phantom reference to see when your object is GC’d. The phantom reference is enqueued after it has been physically removed from memory — as opposed to weak references which are enqueued before they’re finalized or GC’d.&lt;/p&gt;
-</description>
-        <pubDate>Wed, 10 Aug 2016 00:00:00 +0800</pubDate>
-        <link>http://longlinht.github.io//java-references</link>
-        <guid isPermaLink="true">http://longlinht.github.io//java-references</guid>
       </item>
     
   </channel>

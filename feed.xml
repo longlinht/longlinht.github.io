@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Dancing with Machine, Human and God</title>
-    <description>World is complex,confusing and wonderful,I will talk about machine,human and god to known it, to reveal it.</description>
+    <title>与机器，人，神共舞</title>
+    <description>编程，读书，思考，旅行，与机器对话，与人交谈，对神发问，探索，体验人生美丽的风景</description>
     <link>http://longlinht.github.io/</link>
     <atom:link href="http://longlinht.github.io//feed.xml" rel="self" type="application/rss+xml" />
     

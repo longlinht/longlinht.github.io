@@ -12,6 +12,34 @@
    <atom:link href="rss" rel="self" type="application/rss+xml" />
    
 	<item>
+	  <title>踩坑小计-SeekBar宽度显示不全</title>
+	  <link>//seekbar-cant-display-full-width</link>
+	  <author>Tao He</author>
+	  <pubDate>2018-01-21T02:20:12+08:00</pubDate>
+	  <guid>//seekbar-cant-display-full-width</guid>
+	  <description><![CDATA[
+	     <p>最近开始一个全新的项目，突然感觉很多之前忽略掉的一些不大不小的问题和细节渐渐的浮出了水面，虽不是什么大问题，通过搜索，查找，自己判断改进也都能顺利解决，但终归要查，要找，凭空浪费很多时间，于是决定不论多么琐碎的问题，但凡违反一般性，需要特殊处理的都详细记录下来，避免下次忘记时再踩坑。今天就就记录下一个SeekBar的问题，真的算上不上是一个问题，只是SeekBar这个默认显示的宽度的确与一般View的显示结果不同。</p>
+
+<h3>问题描述</h3>
+
+<p>在布局文件里添加这样一个Seekbar,虽然设置了width是<code>match_parent</code>,但是SeekBar得宽度在左右两侧还是留有一定空间,并不是我们直觉所想的那样。当设置了
+<code>android:paddingStart=&quot;0dp&quot;, android:paddingEnd=&quot;0dp&quot;</code> 以后就是我们想要的宽度了。至于这个控件为什么是这样的默认设定，不得而知，查看SeekBar的源码则看到了这样的继承关系：</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">SeekBar -&gt; AbsSeekBar -&gt; ProgressBar
+</code></pre></div>
+<p>并且在ProgressBar的drawTrack方法中有这么一段代码：</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">if (isLayoutRtl() &amp;&amp; mMirrorForRtl) {
+    canvas.translate(getWidth() - mPaddingRight, mPaddingTop);
+    canvas.scale(-1.0f, 1.0f);
+} else {
+    canvas.translate(mPaddingLeft, mPaddingTop);
+}
+</code></pre></div>
+<p>这个问题网上也有人说在xml中设置并不生效，但是在代码中调用<code>seekBar.setPadding(0,0,0,0)</code>就可以,真是一个琐碎的问题，究其原因就是它违反了一般性，让我们错误的认为它应该和其它的View的特性是一样的，都应该是我们去主动的设置Padding.</p>
+
+	  ]]></description>
+	</item>
+
+	<item>
 	  <title>政策与民意</title>
 	  <link>//policy-and-people-will</link>
 	  <author>Tao He</author>
@@ -1055,42 +1083,42 @@ HashMap的实现和原理。</p>
 </ul>
 
 <h4>Relation</h4>
-<div class="highlight"><pre><code class="language-text" data-lang="text">+----------------+----------------+---------------+-------------------------------+
+<div class="highlight"><pre><code class="language-text" data-lang="text">+----------------|----------------|---------------|-------------------------------+
 | Density Bucket | Screen Density | Physical Size | Pixel Size                    | 
-+----------------+----------------+---------------+-------------------------------+
++----------------|----------------|---------------|-------------------------------+
 | ldpi           | 120 dpi        | 0.5 x 0.5 in  | 0.5 in * 120 dpi = 60x60 px   | 
-+----------------+----------------+---------------+-------------------------------+
++----------------|----------------|---------------|-------------------------------+
 | mdpi           | 160 dpi        | 0.5 x 0.5 in  | 0.5 in * 160 dpi = 80x80 px   | 
-+----------------+----------------+---------------+-------------------------------+
++----------------|----------------|---------------|-------------------------------+
 | hdpi           | 240 dpi        | 0.5 x 0.5 in  | 0.5 in * 240 dpi = 120x120 px | 
-+----------------+----------------+---------------+-------------------------------+
++----------------|----------------|---------------|-------------------------------+
 | xhdpi          | 320 dpi        | 0.5 x 0.5 in  | 0.5 in * 320 dpi = 160x160 px | 
-+----------------+----------------+---------------+-------------------------------+
++----------------|----------------|---------------|-------------------------------+
 | xxhdpi         | 480 dpi        | 0.5 x 0.5 in  | 0.5 in * 480 dpi = 240x240 px | 
-+----------------+----------------+---------------+-------------------------------+
++----------------|----------------|---------------|-------------------------------+
 | xxxhdpi        | 640 dpi        | 0.5 x 0.5 in  | 0.5 in * 640 dpi = 320x320 px | 
-+----------------+----------------+---------------+-------------------------------+
++----------------|----------------|---------------|-------------------------------+
 
-+---------+-------------+---------------+-------------+--------------------+
++---------|-------------|---------------|-------------|--------------------+
 | Unit    | Description | Units Per     | Density     | Same Physical Size | 
 |         |             | Physical Inch | Independent | On Every Screen    | 
-+---------+-------------+---------------+-------------+--------------------+
++---------|-------------|---------------|-------------|--------------------+
 | px      | Pixels      | Varies        | No          | No                 | 
-+---------+-------------+---------------+-------------+--------------------+
++---------|-------------|---------------|-------------|--------------------+
 | in      | Inches      | 1             | Yes         | Yes                | 
-+---------+-------------+---------------+-------------+--------------------+
++---------|-------------|---------------|-------------|--------------------+
 | mm      | Millimeters | 25.4          | Yes         | Yes                | 
-+---------+-------------+---------------+-------------+--------------------+
++---------|-------------|---------------|-------------|--------------------+
 | pt      | Points      | 72            | Yes         | Yes                | 
-+---------+-------------+---------------+-------------+--------------------+
++---------|-------------|---------------|-------------|--------------------+
 | dp      | Density     | ~160          | Yes         | No                 | 
 |         | Independent |               |             |                    | 
 |         | Pixels      |               |             |                    | 
-+---------+-------------+---------------+-------------+--------------------+
++---------|-------------|---------------|-------------|--------------------+
 | sp      | Scale       | ~160          | Yes         | No                 | 
 |         | Independent |               |             |                    | 
 |         | Pixels      |               |             |                    | 
-+---------+-------------+---------------+-------------+--------------------+
++---------|-------------|---------------|-------------|--------------------+
 </code></pre></div>
 <h3>Density Independence</h3>
 
@@ -1113,102 +1141,6 @@ HashMap的实现和原理。</p>
 <li><p>Use sp for font size.</p></li>
 <li><p>Don&#39;t use px as much as possiable.</p></li>
 </ul>
-
-	  ]]></description>
-	</item>
-
-	<item>
-	  <title>Building My Own Mac Working Environment</title>
-	  <link>//building-my-own-mac-working-environment</link>
-	  <author>Tao He</author>
-	  <pubDate>2017-04-02T06:30:12+08:00</pubDate>
-	  <guid>//building-my-own-mac-working-environment</guid>
-	  <description><![CDATA[
-	     <p>In recent 2 years, I have switched my own working environment from Windows to Ubuntu and Mac. For the reason that I switched C/C++ development for Windows to Java development for Android. But I still prefer C++, so I won&#39;t give up C/C++ programming. In this article I will write down detail steps that how I build working environment. This working environment on Mac is a general working environment, not just for Android development but also C/C++ development. Let&#39;s start!</p>
-
-<p>First, I would install some universal tools.</p>
-
-<h3>Universal Tools</h3>
-
-<h4>Install and configure Oh my zsh</h4>
-
-<ul>
-<li>Install via curl or wget</li>
-</ul>
-
-<p><strong>via curl</strong></p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">sh -c &quot;$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)&quot;
-</code></pre></div>
-<p><strong>via wget</strong></p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">sh -c &quot;$(wget https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh -O -)&quot;
-</code></pre></div>
-<ul>
-<li>Configure my prefer feature via edit .zshrc file</li>
-</ul>
-
-<p>Add this line to .zshrc file
-<code>
-plugins=(git vi-mode adb)
-</code></p>
-
-<h4>Install and configure iTerm</h4>
-
-<ul>
-<li><p>Install lastest release dmg</p></li>
-<li><p>Clone solarized git project from github and import color scheme for iTerm2
-<code>
-git clone https://github.com/altercation/solarized.git
-cd iterm2-colors-solarized
-./Solarized Dark.itermcolors
-</code></p>
-
-<h4>Install userful command line tools</h4></li>
-<li><p>Install brew - <code>ruby -e &quot;$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)&quot;</code></p></li>
-<li><p>Install ctags - <code>brew install ctags</code></p></li>
-<li><p>Install cscope - <code>brew install cscope</code></p></li>
-<li><p>Install ag - <code>brew install ag</code></p></li>
-<li><p>Install grip - <code>brew install grip</code></p></li>
-</ul>
-
-<h4>Install and configure Vim</h4>
-
-<ul>
-<li>Install vim via source
-<code>
-git clone https://github.com/vim/vim.git
-cd vim 
-./configure --with-features=huge --enable-gui=gnome2 --enable-pythoninterp=yes --enable-cscope --enable-gui=auto \ --enable-gtk2-check --enable-gnome-check \ --enable-fail-if-missing --enable-multibyte --enable-fontset \ --with-x --with-compiledby=&quot;Tao He&quot;
-make
-sudo make install
-</code></li>
-<li><p>Configure vim
-<code>
-cd ~
-git clone https://github.com/longlinht/vimrc.git ~/.vim_runtime
-sh ~/.vim_runtime/install_awesome_vimrc.sh
-</code></p>
-
-<h3>Utilities</h3></li>
-<li><p>Install Alfred</p></li>
-<li><p>Install Dropbox</p></li>
-<li><p>Install NutsCloud</p></li>
-</ul>
-
-<h3>Install IDE</h3>
-
-<h4>Install and configure Android Studio</h4>
-
-<ul>
-<li><p>Install Android Studio via dmg</p></li>
-<li><p>Install and configure ideavim plugin 
-<code>
-Install ideavim in Android Studio
-git clone https://github.com/longlinht/VimForIDEs.git
-In Android Studio -&gt; File -&gt;Import Settings -&gt; Choose VimForIDEs/ideavim/monokai/settings.jar
-</code></p></li>
-</ul>
-
-<p>There are some userful application I have installed, but I don&#39;t want to list them becasue their easy installation. Until now, I work comfortably in this woking environment. Maybe I will develop a script to automate this process in the future. If I make it done, I would update this article and supply this script.</p>
 
 	  ]]></description>
 	</item>

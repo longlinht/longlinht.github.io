@@ -7,6 +7,31 @@
     <atom:link href="http://longlinht.github.io//feed.xml" rel="self" type="application/rss+xml" />
     
       <item>
+        <title>踩坑小计-SeekBar宽度显示不全</title>
+        <description>&lt;p&gt;最近开始一个全新的项目，突然感觉很多之前忽略掉的一些不大不小的问题和细节渐渐的浮出了水面，虽不是什么大问题，通过搜索，查找，自己判断改进也都能顺利解决，但终归要查，要找，凭空浪费很多时间，于是决定不论多么琐碎的问题，但凡违反一般性，需要特殊处理的都详细记录下来，避免下次忘记时再踩坑。今天就就记录下一个SeekBar的问题，真的算上不上是一个问题，只是SeekBar这个默认显示的宽度的确与一般View的显示结果不同。&lt;/p&gt;
+
+&lt;h3&gt;问题描述&lt;/h3&gt;
+
+&lt;p&gt;在布局文件里添加这样一个Seekbar,虽然设置了width是&lt;code&gt;match_parent&lt;/code&gt;,但是SeekBar得宽度在左右两侧还是留有一定空间,并不是我们直觉所想的那样。当设置了
+&lt;code&gt;android:paddingStart=&amp;quot;0dp&amp;quot;, android:paddingEnd=&amp;quot;0dp&amp;quot;&lt;/code&gt; 以后就是我们想要的宽度了。至于这个控件为什么是这样的默认设定，不得而知，查看SeekBar的源码则看到了这样的继承关系：&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;SeekBar -&amp;gt; AbsSeekBar -&amp;gt; ProgressBar
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;并且在ProgressBar的drawTrack方法中有这么一段代码：&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;if (isLayoutRtl() &amp;amp;&amp;amp; mMirrorForRtl) {
+    canvas.translate(getWidth() - mPaddingRight, mPaddingTop);
+    canvas.scale(-1.0f, 1.0f);
+} else {
+    canvas.translate(mPaddingLeft, mPaddingTop);
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;这个问题网上也有人说在xml中设置并不生效，但是在代码中调用&lt;code&gt;seekBar.setPadding(0,0,0,0)&lt;/code&gt;就可以,真是一个琐碎的问题，究其原因就是它违反了一般性，让我们错误的认为它应该和其它的View的特性是一样的，都应该是我们去主动的设置Padding.&lt;/p&gt;
+</description>
+        <pubDate>Sun, 21 Jan 2018 02:20:12 +0800</pubDate>
+        <link>http://longlinht.github.io//seekbar-cant-display-full-width</link>
+        <guid isPermaLink="true">http://longlinht.github.io//seekbar-cant-display-full-width</guid>
+      </item>
+    
+      <item>
         <title>政策与民意</title>
         <description>&lt;p&gt;政策，这个词在我们这个国家被普遍使用，几乎人人理解其含义，就连目不识丁的老农都会说出这样的话：“中央又出新政策了”，这个词我们是如此的熟悉，以至于我们常常都不会去想政策到底是什么，它是如何制定出来的？我们普通老百姓是否影响到了政策的制定？ 也许一般的理解是老百姓哪能影响到政策的制定，照老农的说法，那是中央出的政策，和我们这些小老百姓有啥关系，这么理解也没错，毕竟在我们这个国家，显然普通民众的权利实在有限，但是此处我并不想讨论政策的制定和出台，只是想探究已出台的，与民生息息相关的这些个政策，到底有没有民意的基础，民意是否影响到了政策的制定？ 要讨论这个问题，拿北京这几年的一些政策法规的例子最好不过了。&lt;/p&gt;
 
@@ -1021,42 +1046,42 @@ HashMap的实现和原理。&lt;/p&gt;
 &lt;/ul&gt;
 
 &lt;h4&gt;Relation&lt;/h4&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;+----------------+----------------+---------------+-------------------------------+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;+----------------|----------------|---------------|-------------------------------+
 | Density Bucket | Screen Density | Physical Size | Pixel Size                    | 
-+----------------+----------------+---------------+-------------------------------+
++----------------|----------------|---------------|-------------------------------+
 | ldpi           | 120 dpi        | 0.5 x 0.5 in  | 0.5 in * 120 dpi = 60x60 px   | 
-+----------------+----------------+---------------+-------------------------------+
++----------------|----------------|---------------|-------------------------------+
 | mdpi           | 160 dpi        | 0.5 x 0.5 in  | 0.5 in * 160 dpi = 80x80 px   | 
-+----------------+----------------+---------------+-------------------------------+
++----------------|----------------|---------------|-------------------------------+
 | hdpi           | 240 dpi        | 0.5 x 0.5 in  | 0.5 in * 240 dpi = 120x120 px | 
-+----------------+----------------+---------------+-------------------------------+
++----------------|----------------|---------------|-------------------------------+
 | xhdpi          | 320 dpi        | 0.5 x 0.5 in  | 0.5 in * 320 dpi = 160x160 px | 
-+----------------+----------------+---------------+-------------------------------+
++----------------|----------------|---------------|-------------------------------+
 | xxhdpi         | 480 dpi        | 0.5 x 0.5 in  | 0.5 in * 480 dpi = 240x240 px | 
-+----------------+----------------+---------------+-------------------------------+
++----------------|----------------|---------------|-------------------------------+
 | xxxhdpi        | 640 dpi        | 0.5 x 0.5 in  | 0.5 in * 640 dpi = 320x320 px | 
-+----------------+----------------+---------------+-------------------------------+
++----------------|----------------|---------------|-------------------------------+
 
-+---------+-------------+---------------+-------------+--------------------+
++---------|-------------|---------------|-------------|--------------------+
 | Unit    | Description | Units Per     | Density     | Same Physical Size | 
 |         |             | Physical Inch | Independent | On Every Screen    | 
-+---------+-------------+---------------+-------------+--------------------+
++---------|-------------|---------------|-------------|--------------------+
 | px      | Pixels      | Varies        | No          | No                 | 
-+---------+-------------+---------------+-------------+--------------------+
++---------|-------------|---------------|-------------|--------------------+
 | in      | Inches      | 1             | Yes         | Yes                | 
-+---------+-------------+---------------+-------------+--------------------+
++---------|-------------|---------------|-------------|--------------------+
 | mm      | Millimeters | 25.4          | Yes         | Yes                | 
-+---------+-------------+---------------+-------------+--------------------+
++---------|-------------|---------------|-------------|--------------------+
 | pt      | Points      | 72            | Yes         | Yes                | 
-+---------+-------------+---------------+-------------+--------------------+
++---------|-------------|---------------|-------------|--------------------+
 | dp      | Density     | ~160          | Yes         | No                 | 
 |         | Independent |               |             |                    | 
 |         | Pixels      |               |             |                    | 
-+---------+-------------+---------------+-------------+--------------------+
++---------|-------------|---------------|-------------|--------------------+
 | sp      | Scale       | ~160          | Yes         | No                 | 
 |         | Independent |               |             |                    | 
 |         | Pixels      |               |             |                    | 
-+---------+-------------+---------------+-------------+--------------------+
++---------|-------------|---------------|-------------|--------------------+
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;h3&gt;Density Independence&lt;/h3&gt;
 
@@ -1083,99 +1108,6 @@ HashMap的实现和原理。&lt;/p&gt;
         <pubDate>Fri, 07 Apr 2017 20:30:12 +0800</pubDate>
         <link>http://longlinht.github.io//dimension-units-in-android</link>
         <guid isPermaLink="true">http://longlinht.github.io//dimension-units-in-android</guid>
-      </item>
-    
-      <item>
-        <title>Building My Own Mac Working Environment</title>
-        <description>&lt;p&gt;In recent 2 years, I have switched my own working environment from Windows to Ubuntu and Mac. For the reason that I switched C/C++ development for Windows to Java development for Android. But I still prefer C++, so I won&amp;#39;t give up C/C++ programming. In this article I will write down detail steps that how I build working environment. This working environment on Mac is a general working environment, not just for Android development but also C/C++ development. Let&amp;#39;s start!&lt;/p&gt;
-
-&lt;p&gt;First, I would install some universal tools.&lt;/p&gt;
-
-&lt;h3&gt;Universal Tools&lt;/h3&gt;
-
-&lt;h4&gt;Install and configure Oh my zsh&lt;/h4&gt;
-
-&lt;ul&gt;
-&lt;li&gt;Install via curl or wget&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;strong&gt;via curl&lt;/strong&gt;&lt;/p&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;sh -c &amp;quot;$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)&amp;quot;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;p&gt;&lt;strong&gt;via wget&lt;/strong&gt;&lt;/p&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;sh -c &amp;quot;$(wget https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh -O -)&amp;quot;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;ul&gt;
-&lt;li&gt;Configure my prefer feature via edit .zshrc file&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;Add this line to .zshrc file
-&lt;code&gt;
-plugins=(git vi-mode adb)
-&lt;/code&gt;&lt;/p&gt;
-
-&lt;h4&gt;Install and configure iTerm&lt;/h4&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;p&gt;Install lastest release dmg&lt;/p&gt;&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;Clone solarized git project from github and import color scheme for iTerm2
-&lt;code&gt;
-git clone https://github.com/altercation/solarized.git
-cd iterm2-colors-solarized
-./Solarized Dark.itermcolors
-&lt;/code&gt;&lt;/p&gt;
-
-&lt;h4&gt;Install userful command line tools&lt;/h4&gt;&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;Install brew - &lt;code&gt;ruby -e &amp;quot;$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)&amp;quot;&lt;/code&gt;&lt;/p&gt;&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;Install ctags - &lt;code&gt;brew install ctags&lt;/code&gt;&lt;/p&gt;&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;Install cscope - &lt;code&gt;brew install cscope&lt;/code&gt;&lt;/p&gt;&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;Install ag - &lt;code&gt;brew install ag&lt;/code&gt;&lt;/p&gt;&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;Install grip - &lt;code&gt;brew install grip&lt;/code&gt;&lt;/p&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h4&gt;Install and configure Vim&lt;/h4&gt;
-
-&lt;ul&gt;
-&lt;li&gt;Install vim via source
-&lt;code&gt;
-git clone https://github.com/vim/vim.git
-cd vim 
-./configure --with-features=huge --enable-gui=gnome2 --enable-pythoninterp=yes --enable-cscope --enable-gui=auto \ --enable-gtk2-check --enable-gnome-check \ --enable-fail-if-missing --enable-multibyte --enable-fontset \ --with-x --with-compiledby=&amp;quot;Tao He&amp;quot;
-make
-sudo make install
-&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;Configure vim
-&lt;code&gt;
-cd ~
-git clone https://github.com/longlinht/vimrc.git ~/.vim_runtime
-sh ~/.vim_runtime/install_awesome_vimrc.sh
-&lt;/code&gt;&lt;/p&gt;
-
-&lt;h3&gt;Utilities&lt;/h3&gt;&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;Install Alfred&lt;/p&gt;&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;Install Dropbox&lt;/p&gt;&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;Install NutsCloud&lt;/p&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h3&gt;Install IDE&lt;/h3&gt;
-
-&lt;h4&gt;Install and configure Android Studio&lt;/h4&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;p&gt;Install Android Studio via dmg&lt;/p&gt;&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;Install and configure ideavim plugin 
-&lt;code&gt;
-Install ideavim in Android Studio
-git clone https://github.com/longlinht/VimForIDEs.git
-In Android Studio -&amp;gt; File -&amp;gt;Import Settings -&amp;gt; Choose VimForIDEs/ideavim/monokai/settings.jar
-&lt;/code&gt;&lt;/p&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;There are some userful application I have installed, but I don&amp;#39;t want to list them becasue their easy installation. Until now, I work comfortably in this woking environment. Maybe I will develop a script to automate this process in the future. If I make it done, I would update this article and supply this script.&lt;/p&gt;
-</description>
-        <pubDate>Sun, 02 Apr 2017 06:30:12 +0800</pubDate>
-        <link>http://longlinht.github.io//building-my-own-mac-working-environment</link>
-        <guid isPermaLink="true">http://longlinht.github.io//building-my-own-mac-working-environment</guid>
       </item>
     
   </channel>

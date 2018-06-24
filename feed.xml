@@ -7,8 +7,33 @@
     <atom:link href="http://longlinht.github.io//feed.xml" rel="self" type="application/rss+xml" />
     
       <item>
+        <title>踩坑小计-PopupWindow的isShowing不工作</title>
+        <description>&lt;p&gt;PopupWindow在Android中是比较常用的一种控件，一个成熟的商业级app几乎不可能不用到它,最近在做的一个音乐播放列表的弹窗就是用PopupWindow实现的，做起来也没什么困难，就是有一个恼人的问题，不知道算不算SDK的一个bug.&lt;/p&gt;
+
+&lt;h3&gt;问题描述&lt;/h3&gt;
+
+&lt;p&gt;创建了一个PopuWindow将其show出来以后，调用其isShowing()方法后一直返回false，代码如下：&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-java&quot; data-lang=&quot;java&quot;&gt;&lt;span class=&quot;c1&quot;&gt;// show&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;musicPopup&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;RoomMusicPopupWindow&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;musicPopup&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;show&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;mGameCenter&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+
+
+&lt;span class=&quot;c1&quot;&gt;// want to decide if popup is showing, isShowing always return false&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;if&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kc&quot;&gt;null&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;!=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;musicPopup&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;musicPopup&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;isShowing&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;())&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h3&gt;解决方法&lt;/h3&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-java&quot; data-lang=&quot;java&quot;&gt;&lt;span class=&quot;n&quot;&gt;musicPopup&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;setFocusable&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kc&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</description>
+        <pubDate>Wed, 24 Jan 2018 02:20:12 +0800</pubDate>
+        <link>http://longlinht.github.io//popup-window-is-showing-not-work</link>
+        <guid isPermaLink="true">http://longlinht.github.io//popup-window-is-showing-not-work</guid>
+      </item>
+    
+      <item>
         <title>踩坑小计-SeekBar宽度显示不全</title>
-        <description>&lt;p&gt;最近开始一个全新的项目，突然感觉很多之前忽略掉的一些不大不小的问题和细节渐渐的浮出了水面，虽不是什么大问题，通过搜索，查找，自己判断改进也都能顺利解决，但终归要查，要找，凭空浪费很多时间，于是决定不论多么琐碎的问题，但凡违反一般性，需要特殊处理的都详细记录下来，避免下次忘记时再踩坑。今天就就记录下一个SeekBar的问题，真的算上不上是一个问题，只是SeekBar这个默认显示的宽度的确与一般View的显示结果不同。&lt;/p&gt;
+        <description>&lt;p&gt;最近开始一个全新的Android项目，突然感觉很多之前忽略掉的一些不大不小的问题和细节渐渐的浮出了水面，虽不是什么大问题，通过搜索，查找，自己判断改进也都能顺利解决，但终归要查，要找，凭空浪费很多时间，于是决定不论多么琐碎的问题，但凡违反一般性，需要特殊处理的都详细记录下来，避免下次忘记时再踩坑。今天就就记录下一个SeekBar的问题，真的算上不上是一个问题，只是SeekBar这个默认显示的宽度的确与一般View的显示结果不同。&lt;/p&gt;
 
 &lt;h3&gt;问题描述&lt;/h3&gt;
 
@@ -1038,90 +1063,6 @@ HashMap的实现和原理。&lt;/p&gt;
         <pubDate>Mon, 10 Jul 2017 02:30:12 +0800</pubDate>
         <link>http://longlinht.github.io//think-about-AI</link>
         <guid isPermaLink="true">http://longlinht.github.io//think-about-AI</guid>
-      </item>
-    
-      <item>
-        <title>Dimension Units in Android</title>
-        <description>&lt;p&gt;When I start develop application for Android, I am confused about the dimension units many times. So I decide to figure out it clearly through this article.&lt;/p&gt;
-
-&lt;p&gt;Android is a mobile operating system that compatible many devices, because of its compatibility, we must think about vary size, density, shape of device&amp;#39;s screen. The &lt;strong&gt;density independence&lt;/strong&gt; is a important conception here. Later, I will explain detail about it. Now, we need give the defination of the dimension units and explain the relation of them.&lt;/p&gt;
-
-&lt;h3&gt;Dimension Unit&lt;/h3&gt;
-
-&lt;h4&gt;Defination&lt;/h4&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;p&gt;&lt;strong&gt;px&lt;/strong&gt; - An actual pixel on the screen.&lt;/p&gt;&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;&lt;strong&gt;in&lt;/strong&gt; - A physical inch on the screen.&lt;/p&gt;&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;&lt;strong&gt;mm&lt;/strong&gt; - A physical millimeter on the screen.&lt;/p&gt;&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;&lt;strong&gt;pt&lt;/strong&gt; - A point, a common font size unit, on the screen. &lt;/p&gt;&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;&lt;strong&gt;dp&lt;/strong&gt; - An abstract unit that is based on the physical density of the screen. These units are relative to a 160 dpi (dots per inch) screen, on which 1dp is roughly equal to 1px. &lt;/p&gt;&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;&lt;strong&gt;sp&lt;/strong&gt; - A scale independent pixel, specially designated for text sizes. &lt;/p&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h4&gt;Relation&lt;/h4&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;+----------------|----------------|---------------|-------------------------------+
-| Density Bucket | Screen Density | Physical Size | Pixel Size                    | 
-+----------------|----------------|---------------|-------------------------------+
-| ldpi           | 120 dpi        | 0.5 x 0.5 in  | 0.5 in * 120 dpi = 60x60 px   | 
-+----------------|----------------|---------------|-------------------------------+
-| mdpi           | 160 dpi        | 0.5 x 0.5 in  | 0.5 in * 160 dpi = 80x80 px   | 
-+----------------|----------------|---------------|-------------------------------+
-| hdpi           | 240 dpi        | 0.5 x 0.5 in  | 0.5 in * 240 dpi = 120x120 px | 
-+----------------|----------------|---------------|-------------------------------+
-| xhdpi          | 320 dpi        | 0.5 x 0.5 in  | 0.5 in * 320 dpi = 160x160 px | 
-+----------------|----------------|---------------|-------------------------------+
-| xxhdpi         | 480 dpi        | 0.5 x 0.5 in  | 0.5 in * 480 dpi = 240x240 px | 
-+----------------|----------------|---------------|-------------------------------+
-| xxxhdpi        | 640 dpi        | 0.5 x 0.5 in  | 0.5 in * 640 dpi = 320x320 px | 
-+----------------|----------------|---------------|-------------------------------+
-
-+---------|-------------|---------------|-------------|--------------------+
-| Unit    | Description | Units Per     | Density     | Same Physical Size | 
-|         |             | Physical Inch | Independent | On Every Screen    | 
-+---------|-------------|---------------|-------------|--------------------+
-| px      | Pixels      | Varies        | No          | No                 | 
-+---------|-------------|---------------|-------------|--------------------+
-| in      | Inches      | 1             | Yes         | Yes                | 
-+---------|-------------|---------------|-------------|--------------------+
-| mm      | Millimeters | 25.4          | Yes         | Yes                | 
-+---------|-------------|---------------|-------------|--------------------+
-| pt      | Points      | 72            | Yes         | Yes                | 
-+---------|-------------|---------------|-------------|--------------------+
-| dp      | Density     | ~160          | Yes         | No                 | 
-|         | Independent |               |             |                    | 
-|         | Pixels      |               |             |                    | 
-+---------|-------------|---------------|-------------|--------------------+
-| sp      | Scale       | ~160          | Yes         | No                 | 
-|         | Independent |               |             |                    | 
-|         | Pixels      |               |             |                    | 
-+---------|-------------|---------------|-------------|--------------------+
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;h3&gt;Density Independence&lt;/h3&gt;
-
-&lt;p&gt;&lt;strong&gt;Screen Density&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;Screen density is a ratio of resolution and display size, which can be quantified as dots per inch, or &lt;strong&gt;dpi&lt;/strong&gt;. The higher the dpi, the smaller each individual pixel is, and the greater clarity.&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;Density Independence&lt;/strong&gt; means the physical size of a dimension unit is only approximately the same on every screen density. The &lt;strong&gt;dp, sp, pt, mm, in&lt;/strong&gt; are all density independence. The number of pixels these translate to varies depending on screen density and the &lt;strong&gt;density bucket&lt;/strong&gt; the device falls into.&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;Density Bucket&lt;/strong&gt;&lt;/p&gt;
-
-&lt;blockquote&gt;
-&lt;p&gt;There is a myriad of Android devices with varying screen densities, which can range from 100 dpi to over 480 dpi. In order to optimize images for all these screen densities, images need to be created at different resolutions. However, trying to optimize every image resource for every possible density would be incredibly tedious, cause app sizes to be enormous, and simply is not a feasible solution. As a compromise, Android uses density &amp;quot;buckets&amp;quot; that are used to group devices together within certain screen density ranges. This way, apps are only required to optimize images for each density bucket, instead of every possible density. This keeps the workload reasonable for designers and developer, and also prevents the application size from ballooning. Of course, there is a tradeoff, leading to variance in the physical rendered size of images depending on device density.&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;h3&gt;Using Tips:&lt;/h3&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;p&gt;Try to use dp in xml file as much as possiable.&lt;/p&gt;&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;Use sp for font size.&lt;/p&gt;&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;Don&amp;#39;t use px as much as possiable.&lt;/p&gt;&lt;/li&gt;
-&lt;/ul&gt;
-</description>
-        <pubDate>Fri, 07 Apr 2017 20:30:12 +0800</pubDate>
-        <link>http://longlinht.github.io//dimension-units-in-android</link>
-        <guid isPermaLink="true">http://longlinht.github.io//dimension-units-in-android</guid>
       </item>
     
   </channel>

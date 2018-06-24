@@ -12,13 +12,41 @@
    <atom:link href="rss" rel="self" type="application/rss+xml" />
    
 	<item>
+	  <title>踩坑小计-PopupWindow的isShowing不工作</title>
+	  <link>//popup-window-is-showing-not-work</link>
+	  <author>Tao He</author>
+	  <pubDate>2018-01-24T02:20:12+08:00</pubDate>
+	  <guid>//popup-window-is-showing-not-work</guid>
+	  <description><![CDATA[
+	     <p>PopupWindow在Android中是比较常用的一种控件，一个成熟的商业级app几乎不可能不用到它,最近在做的一个音乐播放列表的弹窗就是用PopupWindow实现的，做起来也没什么困难，就是有一个恼人的问题，不知道算不算SDK的一个bug.</p>
+
+<h3>问题描述</h3>
+
+<p>创建了一个PopuWindow将其show出来以后，调用其isShowing()方法后一直返回false，代码如下：</p>
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="c1">// show</span>
+<span class="n">musicPopup</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">RoomMusicPopupWindow</span><span class="o">(</span><span class="k">this</span><span class="o">);</span>
+<span class="n">musicPopup</span><span class="o">.</span><span class="na">show</span><span class="o">(</span><span class="n">mGameCenter</span><span class="o">);</span>
+
+
+<span class="c1">// want to decide if popup is showing, isShowing always return false</span>
+<span class="k">if</span><span class="o">(</span><span class="kc">null</span> <span class="o">!=</span> <span class="n">musicPopup</span> <span class="o">&amp;&amp;</span> <span class="n">musicPopup</span><span class="o">.</span><span class="na">isShowing</span><span class="o">())</span> <span class="o">{</span>
+
+<span class="o">}</span>
+</code></pre></div>
+<h3>解决方法</h3>
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="n">musicPopup</span><span class="o">.</span><span class="na">setFocusable</span><span class="o">(</span><span class="kc">true</span><span class="o">);</span>
+</code></pre></div>
+	  ]]></description>
+	</item>
+
+	<item>
 	  <title>踩坑小计-SeekBar宽度显示不全</title>
 	  <link>//seekbar-cant-display-full-width</link>
 	  <author>Tao He</author>
 	  <pubDate>2018-01-21T02:20:12+08:00</pubDate>
 	  <guid>//seekbar-cant-display-full-width</guid>
 	  <description><![CDATA[
-	     <p>最近开始一个全新的项目，突然感觉很多之前忽略掉的一些不大不小的问题和细节渐渐的浮出了水面，虽不是什么大问题，通过搜索，查找，自己判断改进也都能顺利解决，但终归要查，要找，凭空浪费很多时间，于是决定不论多么琐碎的问题，但凡违反一般性，需要特殊处理的都详细记录下来，避免下次忘记时再踩坑。今天就就记录下一个SeekBar的问题，真的算上不上是一个问题，只是SeekBar这个默认显示的宽度的确与一般View的显示结果不同。</p>
+	     <p>最近开始一个全新的Android项目，突然感觉很多之前忽略掉的一些不大不小的问题和细节渐渐的浮出了水面，虽不是什么大问题，通过搜索，查找，自己判断改进也都能顺利解决，但终归要查，要找，凭空浪费很多时间，于是决定不论多么琐碎的问题，但凡违反一般性，需要特殊处理的都详细记录下来，避免下次忘记时再踩坑。今天就就记录下一个SeekBar的问题，真的算上不上是一个问题，只是SeekBar这个默认显示的宽度的确与一般View的显示结果不同。</p>
 
 <h3>问题描述</h3>
 
@@ -1068,93 +1096,6 @@ HashMap的实现和原理。</p>
 <p>我竟想到人类的起源和AI的未来可能有某种相似性，怎么说呢？因为我之前看到过一些文章分析人类可能并不是地球上的土著生物，可能真的是被一种神一样的存在所创造的，无中生有的，而这种神一样的存在现在却只留在了人类的神话中，我突然就想到，这种神一样的存在创造了我们，而后被我们所取代，他们存在过的痕迹也就只留在了我们的神话中，也许我们现在之于AI，就是那个神一样的存在，但我们最终会被AI取代，只留在AI的神话中，就跟没存在过一样......</p>
 
 <p>也许人类的真正归宿还真就是以硅为载体，以此长存于世，胡说八道了这么多，可以止笔了，再有臆想，再来码字</p>
-
-	  ]]></description>
-	</item>
-
-	<item>
-	  <title>Dimension Units in Android</title>
-	  <link>//dimension-units-in-android</link>
-	  <author>Tao He</author>
-	  <pubDate>2017-04-07T20:30:12+08:00</pubDate>
-	  <guid>//dimension-units-in-android</guid>
-	  <description><![CDATA[
-	     <p>When I start develop application for Android, I am confused about the dimension units many times. So I decide to figure out it clearly through this article.</p>
-
-<p>Android is a mobile operating system that compatible many devices, because of its compatibility, we must think about vary size, density, shape of device&#39;s screen. The <strong>density independence</strong> is a important conception here. Later, I will explain detail about it. Now, we need give the defination of the dimension units and explain the relation of them.</p>
-
-<h3>Dimension Unit</h3>
-
-<h4>Defination</h4>
-
-<ul>
-<li><p><strong>px</strong> - An actual pixel on the screen.</p></li>
-<li><p><strong>in</strong> - A physical inch on the screen.</p></li>
-<li><p><strong>mm</strong> - A physical millimeter on the screen.</p></li>
-<li><p><strong>pt</strong> - A point, a common font size unit, on the screen. </p></li>
-<li><p><strong>dp</strong> - An abstract unit that is based on the physical density of the screen. These units are relative to a 160 dpi (dots per inch) screen, on which 1dp is roughly equal to 1px. </p></li>
-<li><p><strong>sp</strong> - A scale independent pixel, specially designated for text sizes. </p></li>
-</ul>
-
-<h4>Relation</h4>
-<div class="highlight"><pre><code class="language-text" data-lang="text">+----------------|----------------|---------------|-------------------------------+
-| Density Bucket | Screen Density | Physical Size | Pixel Size                    | 
-+----------------|----------------|---------------|-------------------------------+
-| ldpi           | 120 dpi        | 0.5 x 0.5 in  | 0.5 in * 120 dpi = 60x60 px   | 
-+----------------|----------------|---------------|-------------------------------+
-| mdpi           | 160 dpi        | 0.5 x 0.5 in  | 0.5 in * 160 dpi = 80x80 px   | 
-+----------------|----------------|---------------|-------------------------------+
-| hdpi           | 240 dpi        | 0.5 x 0.5 in  | 0.5 in * 240 dpi = 120x120 px | 
-+----------------|----------------|---------------|-------------------------------+
-| xhdpi          | 320 dpi        | 0.5 x 0.5 in  | 0.5 in * 320 dpi = 160x160 px | 
-+----------------|----------------|---------------|-------------------------------+
-| xxhdpi         | 480 dpi        | 0.5 x 0.5 in  | 0.5 in * 480 dpi = 240x240 px | 
-+----------------|----------------|---------------|-------------------------------+
-| xxxhdpi        | 640 dpi        | 0.5 x 0.5 in  | 0.5 in * 640 dpi = 320x320 px | 
-+----------------|----------------|---------------|-------------------------------+
-
-+---------|-------------|---------------|-------------|--------------------+
-| Unit    | Description | Units Per     | Density     | Same Physical Size | 
-|         |             | Physical Inch | Independent | On Every Screen    | 
-+---------|-------------|---------------|-------------|--------------------+
-| px      | Pixels      | Varies        | No          | No                 | 
-+---------|-------------|---------------|-------------|--------------------+
-| in      | Inches      | 1             | Yes         | Yes                | 
-+---------|-------------|---------------|-------------|--------------------+
-| mm      | Millimeters | 25.4          | Yes         | Yes                | 
-+---------|-------------|---------------|-------------|--------------------+
-| pt      | Points      | 72            | Yes         | Yes                | 
-+---------|-------------|---------------|-------------|--------------------+
-| dp      | Density     | ~160          | Yes         | No                 | 
-|         | Independent |               |             |                    | 
-|         | Pixels      |               |             |                    | 
-+---------|-------------|---------------|-------------|--------------------+
-| sp      | Scale       | ~160          | Yes         | No                 | 
-|         | Independent |               |             |                    | 
-|         | Pixels      |               |             |                    | 
-+---------|-------------|---------------|-------------|--------------------+
-</code></pre></div>
-<h3>Density Independence</h3>
-
-<p><strong>Screen Density</strong></p>
-
-<p>Screen density is a ratio of resolution and display size, which can be quantified as dots per inch, or <strong>dpi</strong>. The higher the dpi, the smaller each individual pixel is, and the greater clarity.</p>
-
-<p><strong>Density Independence</strong> means the physical size of a dimension unit is only approximately the same on every screen density. The <strong>dp, sp, pt, mm, in</strong> are all density independence. The number of pixels these translate to varies depending on screen density and the <strong>density bucket</strong> the device falls into.</p>
-
-<p><strong>Density Bucket</strong></p>
-
-<blockquote>
-<p>There is a myriad of Android devices with varying screen densities, which can range from 100 dpi to over 480 dpi. In order to optimize images for all these screen densities, images need to be created at different resolutions. However, trying to optimize every image resource for every possible density would be incredibly tedious, cause app sizes to be enormous, and simply is not a feasible solution. As a compromise, Android uses density &quot;buckets&quot; that are used to group devices together within certain screen density ranges. This way, apps are only required to optimize images for each density bucket, instead of every possible density. This keeps the workload reasonable for designers and developer, and also prevents the application size from ballooning. Of course, there is a tradeoff, leading to variance in the physical rendered size of images depending on device density.</p>
-</blockquote>
-
-<h3>Using Tips:</h3>
-
-<ul>
-<li><p>Try to use dp in xml file as much as possiable.</p></li>
-<li><p>Use sp for font size.</p></li>
-<li><p>Don&#39;t use px as much as possiable.</p></li>
-</ul>
 
 	  ]]></description>
 	</item>

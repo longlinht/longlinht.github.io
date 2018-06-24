@@ -118,17 +118,31 @@
 
 <h3>问题描述</h3>
 
-<p>在布局文件里添加这样一个Seekbar,虽然设置了width是<code>match_parent</code>,但是SeekBar得宽度在左右两侧还是留有一定空间,并不是我们直觉所想的那样。当设置了
+<p>在布局文件里添加这样一个Seekbar:</p>
+<div class="highlight"><pre><code class="language-xml" data-lang="xml"><span class="nt">&lt;SeekBar</span>
+    <span class="na">android:id=</span><span class="s">&quot;@+id/playlist_seekbar&quot;</span>
+    <span class="na">android:layout_width=</span><span class="s">&quot;match_parent&quot;</span>
+    <span class="na">android:layout_height=</span><span class="s">&quot;wrap_content&quot;</span>
+    <span class="na">android:maxHeight=</span><span class="s">&quot;1dp&quot;</span>
+    <span class="na">android:minHeight=</span><span class="s">&quot;1dp&quot;</span>
+    <span class="na">android:paddingStart=</span><span class="s">&quot;0dp&quot;</span>
+    <span class="na">android:paddingEnd=</span><span class="s">&quot;0dp&quot;</span>
+    <span class="na">android:thumbOffset=</span><span class="s">&quot;0dp&quot;</span>
+    <span class="na">android:progressDrawable=</span><span class="s">&quot;@drawable/playlist_seekbar&quot;</span>
+    <span class="na">android:progress=</span><span class="s">&quot;50&quot;</span>
+    <span class="na">android:thumb=</span><span class="s">&quot;@drawable/seekbar_thumb&quot;</span> <span class="nt">/&gt;</span>
+</code></pre></div>
+<p>虽然设置了width是<code>match_parent</code>,但是SeekBar得宽度在左右两侧还是留有一定空间,并不是我们直觉所想的那样。当设置了
 <code>android:paddingStart=&quot;0dp&quot;, android:paddingEnd=&quot;0dp&quot;</code> 以后就是我们想要的宽度了。至于这个控件为什么是这样的默认设定，不得而知，查看SeekBar的源码则看到了这样的继承关系：</p>
 <div class="highlight"><pre><code class="language-text" data-lang="text">SeekBar -&gt; AbsSeekBar -&gt; ProgressBar
 </code></pre></div>
 <p>并且在ProgressBar的drawTrack方法中有这么一段代码：</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">if (isLayoutRtl() &amp;&amp; mMirrorForRtl) {
-    canvas.translate(getWidth() - mPaddingRight, mPaddingTop);
-    canvas.scale(-1.0f, 1.0f);
-} else {
-    canvas.translate(mPaddingLeft, mPaddingTop);
-}
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="k">if</span> <span class="o">(</span><span class="n">isLayoutRtl</span><span class="o">()</span> <span class="o">&amp;&amp;</span> <span class="n">mMirrorForRtl</span><span class="o">)</span> <span class="o">{</span>
+    <span class="n">canvas</span><span class="o">.</span><span class="na">translate</span><span class="o">(</span><span class="n">getWidth</span><span class="o">()</span> <span class="o">-</span> <span class="n">mPaddingRight</span><span class="o">,</span> <span class="n">mPaddingTop</span><span class="o">);</span>
+    <span class="n">canvas</span><span class="o">.</span><span class="na">scale</span><span class="o">(-</span><span class="mf">1.0f</span><span class="o">,</span> <span class="mf">1.0f</span><span class="o">);</span>
+<span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+    <span class="n">canvas</span><span class="o">.</span><span class="na">translate</span><span class="o">(</span><span class="n">mPaddingLeft</span><span class="o">,</span> <span class="n">mPaddingTop</span><span class="o">);</span>
+<span class="o">}</span>
 </code></pre></div>
 <p>这个问题网上也有人说在xml中设置并不生效，但是在代码中调用<code>seekBar.setPadding(0,0,0,0)</code>就可以,真是一个琐碎的问题，究其原因就是它违反了一般性，让我们错误的认为它应该和其它的View的特性是一样的，都应该是我们去主动的设置Padding.</p>
 

@@ -6,6 +6,7 @@ date:   2016-08-04 16:00:00
 tags: machine
 subclass: 'post tag-machine'
 categories: 'hetao'
+chinese: false
 ---
 
 **stop-the-world** Stop-the-world means that the JVM is stopping the application from running to execute a GC. When stop-the-world occurs, every thread except for the threads needed for the GC will stop their tasks. The interrupted tasks will resume only after the GC task has completed. GC tuning often means reducing this stop-the-world time.

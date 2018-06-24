@@ -6,6 +6,7 @@ date:   2011-03-06 18:30:12
 tags: machine
 subclass: 'post tag-machine'
 categories: 'hetao'
+chinese: false
 ---
 
 In C++, there is a uncommnon conception named smart pointer, it is rarely seen in other programming lauguages. So, what's it? We could simply define it. **A smart pointer is a class that wraps a 'raw' (or 'bare') C++ pointer, to manage the lifetime of the object being pointed to**.

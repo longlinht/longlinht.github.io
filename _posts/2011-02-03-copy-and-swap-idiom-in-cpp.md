@@ -6,6 +6,7 @@ date:   2011-02-03 18:20:12
 tags: machine
 subclass: 'post tag-machine'
 categories: 'hetao'
+chinese: false
 ---
 
 #### Purpose - assists the assignment operator in achieving two things: 

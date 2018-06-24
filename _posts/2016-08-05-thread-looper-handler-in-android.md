@@ -6,6 +6,7 @@ date:   2016-08-05 19:00:00
 tags: machine
 subclass: 'post tag-machine'
 categories: 'hetao'
+chinese: false
 ---
 
 It's widely known that it's illegal to update UI components directly from threads other than main thread in android. This a rule in Android world, we can't violate it. But, so many situations we need 

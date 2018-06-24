@@ -6,6 +6,7 @@ date:   2010-11-02 18:30:12
 tags: machine
 subclass: 'post tag-machine'
 categories: 'hetao'
+chinese: false
 ---
 
 Why need use forward declaration? when we can use it? I will figure out these problem separately.

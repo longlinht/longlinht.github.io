@@ -6,6 +6,7 @@ date:   2016-07-05 18:20:12
 tags: machine
 subclass: 'post tag-machine'
 categories: 'hetao'
+chinese: true
 ---
 
 We can define many useful drawables in Android, in this article, I collected some of definations I ever used.

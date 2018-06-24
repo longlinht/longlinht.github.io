@@ -6,6 +6,7 @@ date:   2017-07-10 18:30:12
 tags: machine
 subclass: 'post tag-machine'
 categories: 'hetao'
+chinese: true
 ---
 
 如果你是个Java程序员，那么你不可能对HashMap视而不见，因为你会经常遇到使用它的场景，因此对HashMap的充分了解非常有必要，对我们写出高效可靠的代码很有帮助。

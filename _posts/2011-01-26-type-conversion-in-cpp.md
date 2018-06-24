@@ -6,6 +6,7 @@ date:   2011-01-26 18:20:12
 tags: machine
 subclass: 'post tag-machine'
 categories: 'hetao'
+chinese: false
 ---
 
 * `static_cast`

@@ -6,6 +6,7 @@ date:   2017-07-12 18:30:12
 tags: machine
 subclass: 'post tag-machine'
 categories: 'hetao'
+chinese: true
 ---
 
 最近在工作中遇到一个需求，要求在一个Dialog的标题上显示两行字，但是这行字如果同时出现的话会非常难看，设计出了套方案，类似无限翻页轮播这两行字，要有翻书的效果。

@@ -6,6 +6,7 @@ date:   2012-09-05 18:30:12
 tags: machine
 subclass: 'post tag-machine'
 categories: 'hetao'
+chinese: true
 ---
 
 创建不规则窗体和控件这个过程包含了大量的图形编程工作，不同的计算机因内存和显卡的不同可能会导致最终的效果有所不同 。创建不规则窗体具体步骤：

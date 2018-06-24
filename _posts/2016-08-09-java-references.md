@@ -6,6 +6,7 @@ date:  2016-08-09 16:00:00
 tags: machine
 subclass: 'post tag-machine'
 categories: 'hetao'
+chinese: false
 ---
 
 Before JDK 1.2, if a object isn't referenced by any variable, it can't be used any more.Since JDK 1.2, Java has four reference types.In order from strongest to weakest these references are: Strong, Soft, Weak, Phantom. 

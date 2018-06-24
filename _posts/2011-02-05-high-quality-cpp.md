@@ -6,6 +6,7 @@ date:   2011-02-05 14:00:00
 tags: machine
 subclass: 'post tag-machine'
 categories: 'hetao'
+chinese: true
 ---
 
 * 不提倡使用全局变量，尽量不要在头文件中出现象extern int value 这类声明

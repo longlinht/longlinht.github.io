@@ -6,6 +6,7 @@ date:   2010-12-28 18:20:12
 tags: machine
 subclass: 'post tag-machine'
 categories: 'hetao'
+chinese: false
 ---
 
 There are many ways to split a string in C++, but what's the most elegant way to split a string in C++? May be we can find it step by step. The most simple and direct way is use `istringstream` to split.

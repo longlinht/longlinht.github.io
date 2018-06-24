@@ -6,6 +6,7 @@ date:   2015-01-03 19:20:00
 tags: machine
 subclass: 'post tag-machine'
 categories: 'hetao'
+chinese: false
 ---
 
 Duilib is a free open source DirectUI library on Windows , because its simple and expandable design and stable and efficient implementation, accepted generally by the major Internet companies  widely used in IM, video client, stock market software, navigation software, mobile phone support Software, security software and many PC client software in other industries. When We developed a IM in a company I worked, we even use this library to replace Qt GUI part we used in our code.

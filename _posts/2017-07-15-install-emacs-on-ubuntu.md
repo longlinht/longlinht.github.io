@@ -6,6 +6,7 @@ date:   2017-07-15 18:30:12
 tags: machine
 subclass: 'post tag-machine'
 categories: 'hetao'
+chinese: false
 ---
 
 Install Emacs 25 on Ubuntu from source is very easy, follow these steps below could achieve it.

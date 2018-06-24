@@ -6,6 +6,7 @@ date:   2016-08-01 14:00:00
 tags: machine
 subclass: 'post tag-machine'
 categories: 'hetao'
+chinese: false
 ---
 
 When programming Android, although java has GC mechanism, some our wrong code way and personal habits still cause memory leak, GC also can't fix it.

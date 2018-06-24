@@ -6,6 +6,7 @@ date:   2012-01-15 14:00:00
 tags: machine
 subclass: 'post tag-machine'
 categories: 'hetao'
+chinese: false
 ---
 
 * Java does not support typedefs, defines, or a preprocessor. 

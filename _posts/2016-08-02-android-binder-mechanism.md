@@ -6,6 +6,7 @@ date:   2016-08-02 19:00:00
 tags: machine
 subclass: 'post tag-machine'
 categories: 'hetao'
+chinese: false
 ---
 
 #### What is Binder

@@ -6,6 +6,7 @@ date:   2011-01-18 19:40:32
 tags: machine
 subclass: 'post tag-machine'
 categories: 'hetao'
+chinese: false
 ---
 
 In C++, references provide many of the same capabilities as pointers. In real development, we prefer to use references to avoid the complex and error prone of pointers. But in some situations, our choices're not clear. As a good C++ developer, we shouldn't ignore this confusion, this hesitation, so we need make it clear, more clear.

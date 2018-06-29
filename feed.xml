@@ -7,6 +7,39 @@
     <atom:link href="http://longlinht.github.io//feed.xml" rel="self" type="application/rss+xml" />
     
       <item>
+        <title>为什么要避免使用Fragment的默认构造函数</title>
+        <description>&lt;p&gt;今天在项目中需要用到Fragment, 但是在代码写完后碰到了这样一个警告:&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;Avoid non-default constructors in fragments: use a default constructor plus Fragment#setArguments(Bundle) instead&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;后来发现是因为自己使用了Fragment的非默认构造函数, 在构造函数里传递了参数, Fragment之前也用了很多次, 可能都忽略了这个警告, 因此并没有发现这个问题, 这次既然遇到了就想一探究竟, 看看到底是为什么. 查看了网上可找到的相关的信息后, 终于明白其中原由, 避免使用默认构造函数的原因如下:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;系统在重新创建Fragment的时候调用的是默认构造函数.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;系统在恢复Fragment的时候会自动恢复你通过&lt;code&gt;setArguments(Bundle bundle)&lt;/code&gt; 传递的&lt;code&gt;bundle&lt;/code&gt;, 你可以在&lt;code&gt;onCreate&lt;/code&gt;, &lt;code&gt;onCreateView&lt;/code&gt;中读取恢复的&lt;code&gt;bundle&lt;/code&gt;中的值,这种方式可以保证正确的恢复你最开始传递的bundle. &lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;因为这是一个警告, 不是错误，所以你也可以使用非默认构造函数，但是你得确保在非默认构造函数中初始化&lt;code&gt;bundle&lt;/code&gt;中的参数,并在&lt;code&gt;onCreate&lt;/code&gt;, &lt;code&gt;onCreateView&lt;/code&gt;读取.&lt;/p&gt;
+
+&lt;p&gt;当然了，创建一个Fragment,并且传递参数的推荐方式是这样的:&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;public static MyFragment newInstance(int someInt) {
+    MyFragment myFragment = new MyFragment();
+
+    Bundle args = new Bundle();
+    args.putInt(&amp;quot;someInt&amp;quot;, someInt);
+    myFragment.setArguments(args);
+
+    return myFragment;
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</description>
+        <pubDate>Wed, 07 Feb 2018 03:25:12 +0800</pubDate>
+        <link>http://longlinht.github.io//avoid-default-constructor-in-fragment</link>
+        <guid isPermaLink="true">http://longlinht.github.io//avoid-default-constructor-in-fragment</guid>
+      </item>
+    
+      <item>
         <title>多样式 TextView 小记</title>
         <description>&lt;p&gt;所谓多样式 &lt;code&gt;TextView&lt;/code&gt;, 就是在同一个 &lt;code&gt;TextView&lt;/code&gt;中不同部分的text展示不同的颜色,字体大小,字体,字体Style,这种需求其实在很多App中都存在, 能够直接的给每一部分Text赋予不同的外观, 既可以在布局中少添加几个&lt;code&gt;TextView&lt;/code&gt;, 也可以使以后需求变动后能够灵活的做出改动, 我在实际的开发中也经常碰到这种需求,很多次都是临时Google下, 实现了以后也就作罢了, 等后面又遇到的时候,貌似又记得不太清楚了, 又需要去查, 很没有效率, 所以写下这篇小记.&lt;/p&gt;
 
@@ -945,162 +978,6 @@ private static int pageDownPivotY = 70;
         <pubDate>Thu, 13 Jul 2017 02:30:12 +0800</pubDate>
         <link>http://longlinht.github.io//implement-page-up-down-animation-on-android</link>
         <guid isPermaLink="true">http://longlinht.github.io//implement-page-up-down-animation-on-android</guid>
-      </item>
-    
-      <item>
-        <title>Java中的HashMap</title>
-        <description>&lt;p&gt;如果你是个Java程序员，那么你不可能对HashMap视而不见，因为你会经常遇到使用它的场景，因此对HashMap的充分了解非常有必要，对我们写出高效可靠的代码很有帮助。&lt;/p&gt;
-
-&lt;p&gt;在对HashMap进行深入了解之前，得先清楚HashMap到底是个什么样的存在！&lt;/p&gt;
-
-&lt;h4&gt;What&amp;#39;s HashMap&lt;/h4&gt;
-
-&lt;p&gt;让我来罗列一些点逐步勾勒出HashMap的轮廓:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;p&gt;HashMap就是将key做hash算法，然后将hash所对应的数据映射到内存地址，直接取得key所对应的数据。&lt;/p&gt;&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;底层为哈希数组，数组的每个元素都是一个单链表的头结点&lt;/p&gt;&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;基于&lt;code&gt;Map&lt;/code&gt;接口实现，提供了map操作的泛型类&lt;/p&gt;&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;允许&lt;code&gt;null&lt;/code&gt; values and the &lt;code&gt;null&lt;/code&gt; key &lt;/p&gt;&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;实现了Serializable和Cloneable接口，支持序列化，能被克隆&lt;/p&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;轮廓已出，但是仍旧对HashMap感到陌生,甚至都不清楚与Hashtable的区别，因此与Hashtable做一个简单的对比，来辨识出一些HashMap的重要特性。&lt;/p&gt;
-
-&lt;h4&gt;HashMap vs. Hashtable&lt;/h4&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;p&gt;Hashtable是线程安全的，HashMap不是&lt;/p&gt;&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;HashMap 允许&lt;code&gt;null&lt;/code&gt; values and the &lt;code&gt;null&lt;/code&gt; key, Hashtable不允许&lt;/p&gt;&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;如果想要预测遍历次序，使用HashMap, Hashtable不易实现&lt;/p&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;通过这些概念和理论的梳理，大概对HashMap有了一定感觉，也肯定能够在正确的场景下使用HashMap，但是要说起对HashMap的很多细节时，光知道这些是不够的，需要刨根问底了。
-要深入了解HashMap，没有比看其原代码更直接的方式了，但是HashMap的源代码是在太长，如果全部贴进来进行分析和解释，实在没有必要，因此只节选部分关键代码来帮助理解
-HashMap的实现和原理。&lt;/p&gt;
-
-&lt;h4&gt;HashMap的原理与实现&lt;/h4&gt;
-
-&lt;h5&gt;HashMap存储结构&lt;/h5&gt;
-
-&lt;p&gt;HashMap的底层存储结构是哈希数组，数组的每个元素都是一个单链表的头节点，链表是用来解决冲突的，如果不同的key映射到了数组的同一位置处，就将其放入单链表中。
-链表中节点的数据结构:&lt;/p&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;static class Entry&amp;lt;K,V&amp;gt; implements Map.Entry&amp;lt;K,V&amp;gt; {    
-    final K key;    
-    V value;    
-    // 指向下一个节点    
-    Entry&amp;lt;K,V&amp;gt; next;    
-    final int hash;    
-
-    // 构造函数。    
-    // 输入参数包括&amp;quot;哈希值(h)&amp;quot;, &amp;quot;键(k)&amp;quot;, &amp;quot;值(v)&amp;quot;, &amp;quot;下一节点(n)&amp;quot;    
-    Entry(int h, K k, V v, Entry&amp;lt;K,V&amp;gt; n) {    
-        value = v;    
-        next = n;    
-        key = k;    
-        hash = h;    
-    }    
-
-    public final K getKey() {    
-        return key;    
-    }    
-
-    public final V getValue() {    
-        return value;    
-    }    
-
-    public final V setValue(V newValue) {    
-        V oldValue = value;    
-        value = newValue;    
-        return oldValue;    
-    }    
-
-    // 判断两个Entry是否相等    
-    // 若两个Entry的“key”和“value”都相等，则返回true。    
-    // 否则，返回false    
-    public final boolean equals(Object o) {    
-        if (!(o instanceof Map.Entry))    
-            return false;    
-        Map.Entry e = (Map.Entry)o;    
-        Object k1 = getKey();    
-        Object k2 = e.getKey();    
-        if (k1 == k2 || (k1 != null &amp;amp;&amp;amp; k1.equals(k2))) {    
-            Object v1 = getValue();    
-            Object v2 = e.getValue();    
-            if (v1 == v2 || (v1 != null &amp;amp;&amp;amp; v1.equals(v2)))    
-                return true;    
-        }    
-        return false;    
-    }    
-
-    // 实现hashCode()    
-    public final int hashCode() {    
-        return (key==null   ? 0 : key.hashCode()) ^    
-               (value==null ? 0 : value.hashCode());    
-    }    
-
-    public final String toString() {    
-        return getKey() + &amp;quot;=&amp;quot; + getValue();    
-    }    
-
-    // 当向HashMap中添加元素时，绘调用recordAccess()。    
-    // 这里不做任何处理    
-    void recordAccess(HashMap&amp;lt;K,V&amp;gt; m) {    
-    }  
-
-    // 当从HashMap中删除元素时，绘调用recordRemoval()。    
-    // 这里不做任何处理    
-    void recordRemoval(HashMap&amp;lt;K,V&amp;gt; m) {    
-    }
-} 
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;p&gt;&lt;code&gt;Entry&lt;/code&gt;是单向链表&lt;/p&gt;&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;它是 &lt;code&gt;HashMap&lt;/code&gt;链式存储法对应的链表&lt;/p&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h5&gt;HashMap几个重要的属性&lt;/h5&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;public class HashMap&amp;lt;K,V&amp;gt;    
-    extends AbstractMap&amp;lt;K,V&amp;gt;    
-    implements Map&amp;lt;K,V&amp;gt;, Cloneable, Serializable    
-{    
-
-    static final int DEFAULT_INITIAL_CAPACITY = 16;    
-
-    static final int MAXIMUM_CAPACITY = 1 &amp;lt;&amp;lt; 30;    
-
-    static final float DEFAULT_LOAD_FACTOR = 0.75f;    
-
-    // 存储数据的Entry数组，长度是2的幂。    
-    // HashMap采用链表法解决冲突，每一个Entry本质上是一个单向链表    
-    transient Entry[] table;    
-
-    // HashMap的底层数组中已用槽的数量    
-    transient int size;    
-
-    int threshold;
-
-    final float loadFactor;    
-
-    // HashMap被改变的次数    
-    transient volatile int modCount; 
-
-    ...
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;p&gt;&lt;code&gt;DEFAULT_INITIAL_CAPACITY&lt;/code&gt; - 默认的初始容量（容量为HashMap中槽的数目）是16，且实际容量必须是2的整数次幂&lt;/p&gt;&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;&lt;code&gt;MAXIMUM_CAPACITY&lt;/code&gt; - 最大容量（必须是2的幂且小于2的30次方，传入容量过大将被这个值替换）&lt;/p&gt;&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;&lt;code&gt;loadFactor&lt;/code&gt; - 加载因子, 默认为0.75&lt;/p&gt;&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;&lt;code&gt;threshold&lt;/code&gt; - HashMap的阈值，用于判断是否需要调整HashMap的容量（threshold = 容量*加载因子）&lt;/p&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;其中初始容量和加载因子是影响HashMap性能的重要参数。如果这两个测试设置得当，则HashMap可以表现出很好的性能。到此，关于HashMap
-的一些关键部分都已和盘托出,更加细节的部分再次就不进一步讨论了。&lt;/p&gt;
-</description>
-        <pubDate>Tue, 11 Jul 2017 02:30:12 +0800</pubDate>
-        <link>http://longlinht.github.io//hashmap-in-java</link>
-        <guid isPermaLink="true">http://longlinht.github.io//hashmap-in-java</guid>
       </item>
     
   </channel>

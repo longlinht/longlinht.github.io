@@ -1,7 +1,7 @@
 ---
 layout: post
 cover: false
-title: 踩坑小计-SeekBar宽度显示不全
+title: 踩坑小计 - SeekBar 宽度显示不全
 date:   2018-01-20 18:20:12
 tags: machine
 subclass: 'post tag-machine'

@@ -1,7 +1,7 @@
 ---
 layout: post
 cover: false
-title: 踩坑小计-PopupWindow的isShowing不工作
+title: 踩坑小计 - PopupWindow 的 isShowing 不工作
 date:   2018-01-23 18:20:12
 tags: machine
 subclass: 'post tag-machine'

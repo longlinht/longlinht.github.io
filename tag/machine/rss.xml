@@ -12,6 +12,132 @@
    <atom:link href="rss" rel="self" type="application/rss+xml" />
    
 	<item>
+	  <title>Android开发中标签指示器的选用</title>
+	  <link>//pager-tab-selection</link>
+	  <author>Tao He</author>
+	  <pubDate>2018-02-13T02:20:12+08:00</pubDate>
+	  <guid>//pager-tab-selection</guid>
+	  <description><![CDATA[
+	     <p>在Android实际的开发过程中,几乎都会用到标签指示器和ViewPager的联动使用,ViewPager,毫无疑问就直接选用系统提供的, 但是和它联动的标签指示器就有非常多的选择, 我在开发的过程中使用了两个比较常见的实现,也是Github上star较多的两个项目.</p>
+
+<h3>PagerSlidingTabTrip</h3>
+
+<p>基本使用:</p>
+
+<ul>
+<li>添加依赖</li>
+</ul>
+<div class="highlight"><pre><code class="language-text" data-lang="text">implementation &#39;com.astuetz:pagerslidingtabstrip:1.0.1&#39;
+</code></pre></div>
+<ul>
+<li>在布局文件中添加<code>PagerSlidingTabTrip</code></li>
+</ul>
+<div class="highlight"><pre><code class="language-xml" data-lang="xml"><span class="nt">&lt;com.astuetz.PagerSlidingTabStrip</span>
+        <span class="na">android:id=</span><span class="s">&quot;@+id/tabs&quot;</span>
+        <span class="na">android:layout_width=</span><span class="s">&quot;match_parent&quot;</span>
+        <span class="na">android:layout_height=</span><span class="s">&quot;48dip&quot;</span>
+        <span class="na">android:layout_gravity=</span><span class="s">&quot;center_horizontal&quot;</span>
+        <span class="na">android:background=</span><span class="s">&quot;@color/tabsBackgroundColor&quot;</span>
+        <span class="na">android:textColor=</span><span class="s">&quot;@color/tabsTextColor&quot;</span>
+        <span class="na">app:pstsIndicatorColor=</span><span class="s">&quot;@color/tabsIndicatorColor&quot;</span><span class="nt">/&gt;</span>
+</code></pre></div>
+<p>在布局文件中设置<code>app:pstsShouldExpand=&quot;true&quot;</code>会导致崩溃,原因是无法inflate,这个问题没有细究</p>
+
+<ul>
+<li>初始化设置</li>
+</ul>
+<div class="highlight"><pre><code class="language-text" data-lang="text">tabs = contentView.findViewById(R.id.tabs);
+tabs.setShouldExpand(true);  //在这里设置就没有问题
+tabs.setIndicatorColorResource(R.color.fp_room_music_tab_indicator);
+tabs.setIndicatorHeight((int)resources.getDimension(R.dimen.room_music_tab_indicator_height));
+tabs.setAllCaps(false);
+tabs.setTextSize((int)resources.getDimension(R.dimen.room_music_tab_text));
+</code></pre></div>
+<p>这个使用起来非常方便,但是有一两个问题:</p>
+
+<ul>
+<li><p>指示器未选中项和选中项文字的颜色不能设置,这个不符合项目的要求</p></li>
+<li><p>在布局文件中设置有些属性的时候不生效, 设置有些属性会导致崩溃(崩溃原因不确定)</p></li>
+</ul>
+
+<p>因为上面的两个问题, 我最后在项目中选用了MagicIndicator</p>
+
+<h3>MagicIndicator</h3>
+
+<p>MagicIndicator可以设置选中和未选中项文字的颜色,并且有些属性的设置相对灵活</p>
+
+<p>基本使用:</p>
+
+<ul>
+<li>添加依赖</li>
+</ul>
+<div class="highlight"><pre><code class="language-text" data-lang="text">implementation &#39;com.github.hackware1993:MagicIndicator:1.5.0&#39;
+</code></pre></div>
+<ul>
+<li>在布局文件中添加</li>
+</ul>
+<div class="highlight"><pre><code class="language-text" data-lang="text">&lt;net.lucode.hackware.magicindicator.MagicIndicator
+            android:id=&quot;@+id/magic_indicator&quot;
+            android:layout_width=&quot;match_parent&quot;
+            android:layout_height=&quot;40dp&quot;
+            android:layout_below=&quot;@id/title&quot;
+            android:layout_marginTop=&quot;14dp&quot;
+            /&gt;
+</code></pre></div>
+<ul>
+<li>初始化</li>
+</ul>
+<div class="highlight"><pre><code class="language-text" data-lang="text">magicIndicator = contentView.findViewById(R.id.magic_indicator);
+commonNavigator = new CommonNavigator(context);
+</code></pre></div>
+<ul>
+<li>数据绑定和属性动态设置</li>
+</ul>
+<div class="highlight"><pre><code class="language-text" data-lang="text">commonNavigator.setAdapter(new CommonNavigatorAdapter() {
+
+          @Override
+          public int getCount() {
+              return mc == null ? 0 : mc.size();
+          }
+
+          @Override
+          public IPagerTitleView getTitleView(Context context, final int index) {
+
+              ColorTransitionPagerTitleView colorTransitionPagerTitleView = new ColorTransitionPagerTitleView(context);
+              colorTransitionPagerTitleView.setNormalColor(resources.getColor(R.color.fp_room_music_tab_text));
+              colorTransitionPagerTitleView.setSelectedColor(resources.getColor(R.color.fp_purple_1st));
+              colorTransitionPagerTitleView.setText(mc.get(index).categoryName);
+              colorTransitionPagerTitleView.setOnClickListener(new View.OnClickListener() {
+                  @Override
+                  public void onClick(View view) {
+                      pager.setCurrentItem(index);
+                  }
+              });
+              return colorTransitionPagerTitleView;
+          }
+
+          @Override
+          public IPagerIndicator getIndicator(Context context) {
+              LinePagerIndicator indicator = new LinePagerIndicator(context);
+              indicator.setMode(LinePagerIndicator.MODE_MATCH_EDGE);
+              indicator.setColors(resources.getColor(R.color.fp_purple_1st));
+              return indicator;
+          }
+      });
+      commonNavigator.setAdjustMode(true);
+      magicIndicator.setNavigator(commonNavigator);
+
+      // pager is a ViewPager
+      ViewPagerHelper.bind(magicIndicator, pager);
+</code></pre></div>
+<p>其中的pager变量是一个ViewPager</p>
+
+<p>MagicIndicator基本满足项目的全部要求,使用的过程中也没有发现什么问题.除了这两个,其他第三方的实现也非常多, 系统提供的TabLayout也同样能实现类似的功能,这里就不一一列举了.</p>
+
+	  ]]></description>
+	</item>
+
+	<item>
 	  <title>为什么要避免使用Fragment的默认构造函数</title>
 	  <link>//avoid-default-constructor-in-fragment</link>
 	  <author>Tao He</author>
@@ -993,165 +1119,6 @@ private static int pageDownPivotY = 70;
 }
 </code></pre></div>
 <p>其实这个实现已经是一个基本比较通用的翻页动画了，不仅可以用于TextView，ImageView应该也没有问题。</p>
-
-	  ]]></description>
-	</item>
-
-	<item>
-	  <title>Java中的HashMap</title>
-	  <link>//hashmap-in-java</link>
-	  <author>Tao He</author>
-	  <pubDate>2017-07-11T02:30:12+08:00</pubDate>
-	  <guid>//hashmap-in-java</guid>
-	  <description><![CDATA[
-	     <p>如果你是个Java程序员，那么你不可能对HashMap视而不见，因为你会经常遇到使用它的场景，因此对HashMap的充分了解非常有必要，对我们写出高效可靠的代码很有帮助。</p>
-
-<p>在对HashMap进行深入了解之前，得先清楚HashMap到底是个什么样的存在！</p>
-
-<h4>What&#39;s HashMap</h4>
-
-<p>让我来罗列一些点逐步勾勒出HashMap的轮廓:</p>
-
-<ul>
-<li><p>HashMap就是将key做hash算法，然后将hash所对应的数据映射到内存地址，直接取得key所对应的数据。</p></li>
-<li><p>底层为哈希数组，数组的每个元素都是一个单链表的头结点</p></li>
-<li><p>基于<code>Map</code>接口实现，提供了map操作的泛型类</p></li>
-<li><p>允许<code>null</code> values and the <code>null</code> key </p></li>
-<li><p>实现了Serializable和Cloneable接口，支持序列化，能被克隆</p></li>
-</ul>
-
-<p>轮廓已出，但是仍旧对HashMap感到陌生,甚至都不清楚与Hashtable的区别，因此与Hashtable做一个简单的对比，来辨识出一些HashMap的重要特性。</p>
-
-<h4>HashMap vs. Hashtable</h4>
-
-<ul>
-<li><p>Hashtable是线程安全的，HashMap不是</p></li>
-<li><p>HashMap 允许<code>null</code> values and the <code>null</code> key, Hashtable不允许</p></li>
-<li><p>如果想要预测遍历次序，使用HashMap, Hashtable不易实现</p></li>
-</ul>
-
-<p>通过这些概念和理论的梳理，大概对HashMap有了一定感觉，也肯定能够在正确的场景下使用HashMap，但是要说起对HashMap的很多细节时，光知道这些是不够的，需要刨根问底了。
-要深入了解HashMap，没有比看其原代码更直接的方式了，但是HashMap的源代码是在太长，如果全部贴进来进行分析和解释，实在没有必要，因此只节选部分关键代码来帮助理解
-HashMap的实现和原理。</p>
-
-<h4>HashMap的原理与实现</h4>
-
-<h5>HashMap存储结构</h5>
-
-<p>HashMap的底层存储结构是哈希数组，数组的每个元素都是一个单链表的头节点，链表是用来解决冲突的，如果不同的key映射到了数组的同一位置处，就将其放入单链表中。
-链表中节点的数据结构:</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">static class Entry&lt;K,V&gt; implements Map.Entry&lt;K,V&gt; {    
-    final K key;    
-    V value;    
-    // 指向下一个节点    
-    Entry&lt;K,V&gt; next;    
-    final int hash;    
-
-    // 构造函数。    
-    // 输入参数包括&quot;哈希值(h)&quot;, &quot;键(k)&quot;, &quot;值(v)&quot;, &quot;下一节点(n)&quot;    
-    Entry(int h, K k, V v, Entry&lt;K,V&gt; n) {    
-        value = v;    
-        next = n;    
-        key = k;    
-        hash = h;    
-    }    
-
-    public final K getKey() {    
-        return key;    
-    }    
-
-    public final V getValue() {    
-        return value;    
-    }    
-
-    public final V setValue(V newValue) {    
-        V oldValue = value;    
-        value = newValue;    
-        return oldValue;    
-    }    
-
-    // 判断两个Entry是否相等    
-    // 若两个Entry的“key”和“value”都相等，则返回true。    
-    // 否则，返回false    
-    public final boolean equals(Object o) {    
-        if (!(o instanceof Map.Entry))    
-            return false;    
-        Map.Entry e = (Map.Entry)o;    
-        Object k1 = getKey();    
-        Object k2 = e.getKey();    
-        if (k1 == k2 || (k1 != null &amp;&amp; k1.equals(k2))) {    
-            Object v1 = getValue();    
-            Object v2 = e.getValue();    
-            if (v1 == v2 || (v1 != null &amp;&amp; v1.equals(v2)))    
-                return true;    
-        }    
-        return false;    
-    }    
-
-    // 实现hashCode()    
-    public final int hashCode() {    
-        return (key==null   ? 0 : key.hashCode()) ^    
-               (value==null ? 0 : value.hashCode());    
-    }    
-
-    public final String toString() {    
-        return getKey() + &quot;=&quot; + getValue();    
-    }    
-
-    // 当向HashMap中添加元素时，绘调用recordAccess()。    
-    // 这里不做任何处理    
-    void recordAccess(HashMap&lt;K,V&gt; m) {    
-    }  
-
-    // 当从HashMap中删除元素时，绘调用recordRemoval()。    
-    // 这里不做任何处理    
-    void recordRemoval(HashMap&lt;K,V&gt; m) {    
-    }
-} 
-</code></pre></div>
-<ul>
-<li><p><code>Entry</code>是单向链表</p></li>
-<li><p>它是 <code>HashMap</code>链式存储法对应的链表</p></li>
-</ul>
-
-<h5>HashMap几个重要的属性</h5>
-<div class="highlight"><pre><code class="language-text" data-lang="text">public class HashMap&lt;K,V&gt;    
-    extends AbstractMap&lt;K,V&gt;    
-    implements Map&lt;K,V&gt;, Cloneable, Serializable    
-{    
-
-    static final int DEFAULT_INITIAL_CAPACITY = 16;    
-
-    static final int MAXIMUM_CAPACITY = 1 &lt;&lt; 30;    
-
-    static final float DEFAULT_LOAD_FACTOR = 0.75f;    
-
-    // 存储数据的Entry数组，长度是2的幂。    
-    // HashMap采用链表法解决冲突，每一个Entry本质上是一个单向链表    
-    transient Entry[] table;    
-
-    // HashMap的底层数组中已用槽的数量    
-    transient int size;    
-
-    int threshold;
-
-    final float loadFactor;    
-
-    // HashMap被改变的次数    
-    transient volatile int modCount; 
-
-    ...
-}
-</code></pre></div>
-<ul>
-<li><p><code>DEFAULT_INITIAL_CAPACITY</code> - 默认的初始容量（容量为HashMap中槽的数目）是16，且实际容量必须是2的整数次幂</p></li>
-<li><p><code>MAXIMUM_CAPACITY</code> - 最大容量（必须是2的幂且小于2的30次方，传入容量过大将被这个值替换）</p></li>
-<li><p><code>loadFactor</code> - 加载因子, 默认为0.75</p></li>
-<li><p><code>threshold</code> - HashMap的阈值，用于判断是否需要调整HashMap的容量（threshold = 容量*加载因子）</p></li>
-</ul>
-
-<p>其中初始容量和加载因子是影响HashMap性能的重要参数。如果这两个测试设置得当，则HashMap可以表现出很好的性能。到此，关于HashMap
-的一些关键部分都已和盘托出,更加细节的部分再次就不进一步讨论了。</p>
 
 	  ]]></description>
 	</item>

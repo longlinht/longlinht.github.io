@@ -12,6 +12,132 @@
    <atom:link href="rss" rel="self" type="application/rss+xml" />
    
 	<item>
+	  <title>Android开发中标签指示器的选用</title>
+	  <link>//pager-tab-selection</link>
+	  <author>Tao He</author>
+	  <pubDate>2018-02-13T02:20:12+08:00</pubDate>
+	  <guid>//pager-tab-selection</guid>
+	  <description><![CDATA[
+	     <p>在Android实际的开发过程中,几乎都会用到标签指示器和ViewPager的联动使用,ViewPager,毫无疑问就直接选用系统提供的, 但是和它联动的标签指示器就有非常多的选择, 我在开发的过程中使用了两个比较常见的实现,也是Github上star较多的两个项目.</p>
+
+<h3>PagerSlidingTabTrip</h3>
+
+<p>基本使用:</p>
+
+<ul>
+<li>添加依赖</li>
+</ul>
+<div class="highlight"><pre><code class="language-text" data-lang="text">implementation &#39;com.astuetz:pagerslidingtabstrip:1.0.1&#39;
+</code></pre></div>
+<ul>
+<li>在布局文件中添加<code>PagerSlidingTabTrip</code></li>
+</ul>
+<div class="highlight"><pre><code class="language-xml" data-lang="xml"><span class="nt">&lt;com.astuetz.PagerSlidingTabStrip</span>
+        <span class="na">android:id=</span><span class="s">&quot;@+id/tabs&quot;</span>
+        <span class="na">android:layout_width=</span><span class="s">&quot;match_parent&quot;</span>
+        <span class="na">android:layout_height=</span><span class="s">&quot;48dip&quot;</span>
+        <span class="na">android:layout_gravity=</span><span class="s">&quot;center_horizontal&quot;</span>
+        <span class="na">android:background=</span><span class="s">&quot;@color/tabsBackgroundColor&quot;</span>
+        <span class="na">android:textColor=</span><span class="s">&quot;@color/tabsTextColor&quot;</span>
+        <span class="na">app:pstsIndicatorColor=</span><span class="s">&quot;@color/tabsIndicatorColor&quot;</span><span class="nt">/&gt;</span>
+</code></pre></div>
+<p>在布局文件中设置<code>app:pstsShouldExpand=&quot;true&quot;</code>会导致崩溃,原因是无法inflate,这个问题没有细究</p>
+
+<ul>
+<li>初始化设置</li>
+</ul>
+<div class="highlight"><pre><code class="language-text" data-lang="text">tabs = contentView.findViewById(R.id.tabs);
+tabs.setShouldExpand(true);  //在这里设置就没有问题
+tabs.setIndicatorColorResource(R.color.fp_room_music_tab_indicator);
+tabs.setIndicatorHeight((int)resources.getDimension(R.dimen.room_music_tab_indicator_height));
+tabs.setAllCaps(false);
+tabs.setTextSize((int)resources.getDimension(R.dimen.room_music_tab_text));
+</code></pre></div>
+<p>这个使用起来非常方便,但是有一两个问题:</p>
+
+<ul>
+<li><p>指示器未选中项和选中项文字的颜色不能设置,这个不符合项目的要求</p></li>
+<li><p>在布局文件中设置有些属性的时候不生效, 设置有些属性会导致崩溃(崩溃原因不确定)</p></li>
+</ul>
+
+<p>因为上面的两个问题, 我最后在项目中选用了MagicIndicator</p>
+
+<h3>MagicIndicator</h3>
+
+<p>MagicIndicator可以设置选中和未选中项文字的颜色,并且有些属性的设置相对灵活</p>
+
+<p>基本使用:</p>
+
+<ul>
+<li>添加依赖</li>
+</ul>
+<div class="highlight"><pre><code class="language-text" data-lang="text">implementation &#39;com.github.hackware1993:MagicIndicator:1.5.0&#39;
+</code></pre></div>
+<ul>
+<li>在布局文件中添加</li>
+</ul>
+<div class="highlight"><pre><code class="language-text" data-lang="text">&lt;net.lucode.hackware.magicindicator.MagicIndicator
+            android:id=&quot;@+id/magic_indicator&quot;
+            android:layout_width=&quot;match_parent&quot;
+            android:layout_height=&quot;40dp&quot;
+            android:layout_below=&quot;@id/title&quot;
+            android:layout_marginTop=&quot;14dp&quot;
+            /&gt;
+</code></pre></div>
+<ul>
+<li>初始化</li>
+</ul>
+<div class="highlight"><pre><code class="language-text" data-lang="text">magicIndicator = contentView.findViewById(R.id.magic_indicator);
+commonNavigator = new CommonNavigator(context);
+</code></pre></div>
+<ul>
+<li>数据绑定和属性动态设置</li>
+</ul>
+<div class="highlight"><pre><code class="language-text" data-lang="text">commonNavigator.setAdapter(new CommonNavigatorAdapter() {
+
+          @Override
+          public int getCount() {
+              return mc == null ? 0 : mc.size();
+          }
+
+          @Override
+          public IPagerTitleView getTitleView(Context context, final int index) {
+
+              ColorTransitionPagerTitleView colorTransitionPagerTitleView = new ColorTransitionPagerTitleView(context);
+              colorTransitionPagerTitleView.setNormalColor(resources.getColor(R.color.fp_room_music_tab_text));
+              colorTransitionPagerTitleView.setSelectedColor(resources.getColor(R.color.fp_purple_1st));
+              colorTransitionPagerTitleView.setText(mc.get(index).categoryName);
+              colorTransitionPagerTitleView.setOnClickListener(new View.OnClickListener() {
+                  @Override
+                  public void onClick(View view) {
+                      pager.setCurrentItem(index);
+                  }
+              });
+              return colorTransitionPagerTitleView;
+          }
+
+          @Override
+          public IPagerIndicator getIndicator(Context context) {
+              LinePagerIndicator indicator = new LinePagerIndicator(context);
+              indicator.setMode(LinePagerIndicator.MODE_MATCH_EDGE);
+              indicator.setColors(resources.getColor(R.color.fp_purple_1st));
+              return indicator;
+          }
+      });
+      commonNavigator.setAdjustMode(true);
+      magicIndicator.setNavigator(commonNavigator);
+
+      // pager is a ViewPager
+      ViewPagerHelper.bind(magicIndicator, pager);
+</code></pre></div>
+<p>其中的pager变量是一个ViewPager</p>
+
+<p>MagicIndicator基本满足项目的全部要求,使用的过程中也没有发现什么问题.除了这两个,其他第三方的实现也非常多, 系统提供的TabLayout也同样能实现类似的功能,这里就不一一列举了.</p>
+
+	  ]]></description>
+	</item>
+
+	<item>
 	  <title>为什么要避免使用Fragment的默认构造函数</title>
 	  <link>//avoid-default-constructor-in-fragment</link>
 	  <author>Tao He</author>
@@ -813,204 +939,6 @@ make
 <p>And the last command create a .deb package in the source folder, and it can be used in another Ubuntu machine to install Emacs(need to manually install dependencies via step 2).</p>
 
 <p>Finally, run command emacs to launch the text editor, or launch it from Unity Dash (App Launcher) at next login (or next boot).</p>
-
-	  ]]></description>
-	</item>
-
-	<item>
-	  <title>在Android上实现无限翻页轮播动画效果</title>
-	  <link>//implement-page-up-down-animation-on-android</link>
-	  <author>Tao He</author>
-	  <pubDate>2017-07-13T02:30:12+08:00</pubDate>
-	  <guid>//implement-page-up-down-animation-on-android</guid>
-	  <description><![CDATA[
-	     <p>最近在工作中遇到一个需求，要求在一个Dialog的标题上显示两行字，但是这行字如果同时出现的话会非常难看，设计出了套方案，类似无限翻页轮播这两行字，要有翻书的效果。
-刚开始实现的时候，动画的效果也出来了，但是拿去给设计验收的时候设计总感觉怪怪的，始终达不到设计最终想要的结果。后来通过好多次的调试和验证，发现问题出现在两个
-View的动画播放时序和旋转轴的问题上，解决了这两个问题后再拿去给设计看的时候，一切都完美了。 现在这个比较好的设计也已上线， 也因为这个调试和验证的过程感觉对
-Android动画的一些细节碰触的较多，所以写下此文记录下这个过程。</p>
-
-<h4>基本原理</h4>
-
-<p>通过<code>ObjectAnimation</code>操作<code>View</code>的<code>RotationY</code>属性，再利用动态改变<code>PivotY</code>的值和动画播放时序的不同来模拟出无限翻页轮播的动画效果</p>
-
-<h4>ObjectAnimation</h4>
-<div class="highlight"><pre><code class="language-text" data-lang="text">// 上面的View翻下去的动画
-
-private static ObjectAnimator aboveViewPageDownAnim;
-
-// 下面的View翻上去的动画
-
-private static ObjectAnimator belowViewPageUpAnim;
-
-// 上面的View翻上去的动画
-
-private static ObjectAnimator aboveViewPageUpAnim;
-
-// 下面的View翻下去的动画
-
-private static ObjectAnimator belowViewPageDownAnim;
-</code></pre></div>
-<h4>关键的常量</h4>
-<div class="highlight"><pre><code class="language-text" data-lang="text">// 翻页动画的播放时长
-
-private static int pageUpDownDurition = 500;
-
-// 翻下播放结束前100翻上就开始播放
-
-private static int pageUpBeforeDownEnd = 400;
-
-// 翻上播放完后停留时间
-
-private static int belowViewStayInterval = 800;
-
-// 在Y轴底部翻转
-
-private static int pageUpPivotY = 100;
-
-// 在Y近顶部的位置翻转
-
-private static int pageDownPivotY = 70;
-</code></pre></div>
-<h4>具体实现</h4>
-<div class="highlight"><pre><code class="language-text" data-lang="text">public static void startPageUpDownAnimation(final View aboveView, final View belowView) {
-
-    aboveViewPageDownAnim = ObjectAnimator.ofPropertyValuesHolder(aboveView,
-            PropertyValuesHolder.ofFloat(View.ROTATION_X, 0, 90));
-
-    aboveViewPageDownAnim.setDuration(pageUpDownDurition);
-    aboveViewPageDownAnim.setInterpolator(new LinearInterpolator());
-    aboveViewPageDownAnim.addListener(new Animator.AnimatorListener() {
-        @Override
-        public void onAnimationStart(Animator animator) {
-            aboveView.setPivotY(pageDownPivotY);
-            belowView.setVisibility(View.GONE);
-            belowView.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    belowViewPageUpAnim.start();
-                }
-            }, pageUpBeforeDownEnd);
-        }
-
-        @Override
-        public void onAnimationEnd(Animator animator) {
-
-        }
-
-        @Override
-        public void onAnimationCancel(Animator animator) {
-
-        }
-
-        @Override
-        public void onAnimationRepeat(Animator animator) {
-
-        }
-    });
-
-    belowViewPageUpAnim = ObjectAnimator.ofPropertyValuesHolder(belowView,
-    PropertyValuesHolder.ofFloat(View.ROTATION_X, -90, 0));
-    belowViewPageUpAnim.setDuration(pageUpDownDurition);
-    belowViewPageUpAnim.setInterpolator(new LinearInterpolator());
-    belowViewPageUpAnim.addListener(new Animator.AnimatorListener() {
-        @Override
-        public void onAnimationStart(Animator animator) {
-            belowView.setVisibility(View.VISIBLE);
-            belowView.setPivotY(pageUpPivotY);
-        }
-
-        @Override
-        public void onAnimationEnd(Animator animator) {
-            belowView.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    belowViewPageDownAnim.start();
-                }
-            }, belowViewStayInterval);
-        }
-
-        @Override
-        public void onAnimationCancel(Animator animator) {
-
-        }
-
-        @Override
-        public void onAnimationRepeat(Animator animator) {
-
-        }
-    });
-
-    belowViewPageDownAnim = ObjectAnimator.ofPropertyValuesHolder(belowView,
-            PropertyValuesHolder.ofFloat(View.ROTATION_X, 0, 90));
-
-    belowViewPageDownAnim.setDuration(pageUpDownDurition);
-    belowViewPageDownAnim.setInterpolator(new LinearInterpolator());
-    belowViewPageDownAnim.addListener(new Animator.AnimatorListener() {
-
-        @Override
-        public void onAnimationStart(Animator animator) {
-            belowView.setPivotY(pageDownPivotY);
-            aboveView.setVisibility(View.GONE);
-            aboveView.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    aboveViewPageUpAnim.start();
-                }
-            }, pageUpBeforeDownEnd);
-        }
-
-        @Override
-        public void onAnimationEnd(Animator animator) {
-
-        }
-
-        @Override
-        public void onAnimationCancel(Animator animator) {
-
-        }
-
-        @Override
-        public void onAnimationRepeat(Animator animator) {
-
-        }
-    });
-
-    aboveViewPageUpAnim = ObjectAnimator.ofPropertyValuesHolder(aboveView,
-            PropertyValuesHolder.ofFloat(View.ROTATION_X, -90, 0));
-    aboveViewPageUpAnim.setDuration(pageUpDownDurition);
-    aboveViewPageUpAnim.setInterpolator(new LinearInterpolator());
-    aboveViewPageUpAnim.addListener(new Animator.AnimatorListener() {
-        @Override
-        public void onAnimationStart(Animator animator) {
-            aboveView.setVisibility(View.VISIBLE);
-            aboveView.setPivotY(pageUpPivotY);
-        }
-
-        @Override
-        public void onAnimationEnd(Animator animator) {
-            aboveView.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    aboveViewPageDownAnim.start();
-                }
-            }, belowViewStayInterval);
-        }
-
-        @Override
-        public void onAnimationCancel(Animator animator) {
-
-        }
-
-        @Override
-        public void onAnimationRepeat(Animator animator) {
-
-        }
-    });
-
-    aboveViewPageDownAnim.start();
-}
-</code></pre></div>
-<p>其实这个实现已经是一个基本比较通用的翻页动画了，不仅可以用于TextView，ImageView应该也没有问题。</p>
 
 	  ]]></description>
 	</item>

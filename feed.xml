@@ -14,7 +14,7 @@
 &lt;p&gt;Configuration on demand is not supported by the current version of the Android Gradle plugin since you are using Gradle version 4.6 or above. Suggestion: disable configuration on demand by setting org.gradle.configureondemand=false in your gradle.properties file or use a Gradle version less than 4.6.&lt;/p&gt;
 &lt;/blockquote&gt;
 
-&lt;p&gt;导致编译不能进行下去, 即使你将&lt;code&gt;org.gradle.configureondemand=false&lt;/code&gt;设置了,  或者使用低版本的Gradle, 这个问题依旧存在.确实很恼人.但是问题终究要解决, 最后在网上在找到解决办法: &lt;strong&gt;并不需要降级Gradle&lt;/strong&gt;, 两步解决:&lt;/p&gt;
+&lt;p&gt;导致编译不能进行下去, 即使你将&lt;code&gt;org.gradle.configureondemand=false&lt;/code&gt;设置了,  或者使用低版本的Gradle, 这个问题依旧存在.确实很恼人.但是问题终究要解决, 最后在网上找到了解决办法: &lt;strong&gt;并不需要降级Gradle&lt;/strong&gt;, 两步解决:&lt;/p&gt;
 
 &lt;ol&gt;
 &lt;li&gt;&lt;p&gt;从gradle.properties 删除 org.gradle.configureondemand.&lt;/p&gt;&lt;/li&gt;

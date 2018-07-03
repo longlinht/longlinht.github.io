@@ -7,6 +7,28 @@
     <atom:link href="http://longlinht.github.io//feed.xml" rel="self" type="application/rss+xml" />
     
       <item>
+        <title>处理Gradle plugin版本问题小记</title>
+        <description>&lt;p&gt;在编译Github上一些Android项目的时候, Gradle sync 总会抛出这样的一个提示:&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;Configuration on demand is not supported by the current version of the Android Gradle plugin since you are using Gradle version 4.6 or above. Suggestion: disable configuration on demand by setting org.gradle.configureondemand=false in your gradle.properties file or use a Gradle version less than 4.6.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;导致编译不能进行下去, 即使你将&lt;code&gt;org.gradle.configureondemand=false&lt;/code&gt;设置了,  或者使用低版本的Gradle, 这个问题依旧存在.确实很恼人.但是问题终究要解决, 最后在网上在找到解决办法: &lt;strong&gt;并不需要降级Gradle&lt;/strong&gt;, 两步解决:&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;&lt;p&gt;从gradle.properties 删除 org.gradle.configureondemand.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;在 Android Studio中,
+如果是 Mac, &lt;code&gt;Preferences &amp;gt; Build, Execution, Deployment &amp;gt; Compiler&lt;/code&gt; 去掉 the configure on demand 选中.
+如果是 Linux/Windows  &lt;code&gt;File &amp;gt; Settings &amp;gt; Build, Execution, Deployment &amp;gt; Compiler&lt;/code&gt; and uncheck the configure on demand.&lt;/p&gt;&lt;/li&gt;
+&lt;/ol&gt;
+</description>
+        <pubDate>Thu, 15 Feb 2018 02:20:12 +0800</pubDate>
+        <link>http://longlinht.github.io//do-with-gradle-error</link>
+        <guid isPermaLink="true">http://longlinht.github.io//do-with-gradle-error</guid>
+      </item>
+    
+      <item>
         <title>Android开发中标签指示器的选用</title>
         <description>&lt;p&gt;在Android实际的开发过程中,几乎都会用到标签指示器和ViewPager的联动使用,ViewPager,毫无疑问就直接选用系统提供的, 但是和它联动的标签指示器就有非常多的选择, 我在开发的过程中使用了两个比较常见的实现,也是Github上star较多的两个项目.&lt;/p&gt;
 
@@ -859,53 +881,6 @@ private static int zygoteSendArgsAndGetPid(ArrayList&amp;lt;String&amp;gt; args)
         <pubDate>Thu, 03 Aug 2017 02:30:12 +0800</pubDate>
         <link>http://longlinht.github.io//capture-screenshot-event-on-android</link>
         <guid isPermaLink="true">http://longlinht.github.io//capture-screenshot-event-on-android</guid>
-      </item>
-    
-      <item>
-        <title>Intall Emacs on Ubuntu</title>
-        <description>&lt;p&gt;Install Emacs 25 on Ubuntu from source is very easy, follow these steps below could achieve it.&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;Open terminal (Ctrl+Alt+T) and run command to install build tools:&lt;/li&gt;
-&lt;/ul&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;sudo apt install build-essential checkinstall
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;ul&gt;
-&lt;li&gt;Then install the build dependencies via command:&lt;/li&gt;
-&lt;/ul&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;sudo apt-get build-dep emacs24
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;p&gt;Now download the source at ftp.gnu.org/gnu/emacs/, then extract:&lt;/p&gt;&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;Open terminal and navigate to the &amp;quot;emacs-25.1&amp;quot; folder via command (or select &amp;quot;Open in terminal&amp;quot; from its context menu):&lt;/p&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;cd ~/Downloads/emacs-25.1
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;ul&gt;
-&lt;li&gt;In the same terminal window, once you’re in the source folder, run the commands below one by one:&lt;/li&gt;
-&lt;/ul&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;./configure
-make
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;ul&gt;
-&lt;li&gt;Finally use checkinstall command to create .deb and install Emacs 25.1:&lt;/li&gt;
-&lt;/ul&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;sudo checkinstall
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;p&gt;While running the command, answer on screen questions, e.g., install docs, type package description, change package name, version, etc.&lt;/p&gt;
-
-&lt;p&gt;Once done, Emacs is installed on your system and you can remove it anytime by running the command in the prompt with sudo privilege:&lt;/p&gt;
-
-&lt;p&gt;In my case it’s:&lt;/p&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;sudo dpkg -r emacs-25
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;p&gt;And the last command create a .deb package in the source folder, and it can be used in another Ubuntu machine to install Emacs(need to manually install dependencies via step 2).&lt;/p&gt;
-
-&lt;p&gt;Finally, run command emacs to launch the text editor, or launch it from Unity Dash (App Launcher) at next login (or next boot).&lt;/p&gt;
-</description>
-        <pubDate>Sun, 16 Jul 2017 02:30:12 +0800</pubDate>
-        <link>http://longlinht.github.io//install-emacs-on-ubuntu</link>
-        <guid isPermaLink="true">http://longlinht.github.io//install-emacs-on-ubuntu</guid>
       </item>
     
   </channel>

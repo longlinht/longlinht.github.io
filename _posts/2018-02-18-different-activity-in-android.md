@@ -9,7 +9,7 @@ categories: 'hetao'
 chinese: true
 ---
 
-`Activity`应该是每一个Android开发者第一个遇到的类吧，后来又看到了`FragmentActivity`，再后来又碰到了`AppCompatActivity`和`ActionBarActivity`，也许我们在开发者中会在不同的场景中使用以上不同的Activity类，但是要让我们清楚的说出它们的联系和区别，可能都会被这个问题懵一下，现在我们就来把他们的关系理清楚.
+Activity应该是每一个Android开发者第一个遇到的类吧，后来又看到了FragmentActivity，再后来又碰到了AppCompatActivity和ActionBarActivity，也许我们在开发者中会在不同的场景中使用以上不同的Activity类，但是要让我们清楚的说出它们的联系和区别，可能都会被这个问题懵一下，现在我们就来把他们的关系理清楚.
 
 这几个类有一个基本的继承关系
 

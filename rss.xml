@@ -8,7 +8,16 @@
     <title>与机器，人，神共舞</title>
     <link>http://longlinht.github.io/</link>
     <description>编程，读书，思考，旅行，与机器对话，与人交谈，对神发问，探索，体验人生美丽的风景</description>
-    <pubDate>Mon, 16 Jul 2018 02:20:12 +0800</pubDate>
+    <pubDate>Fri, 03 Aug 2018 02:20:12 +0800</pubDate>
+    <item>
+      <title>读《Lies My Doctor Told Me》</title>
+      <link>http://longlinht.github.io//reading-lies-my-doctor-told-me</link>
+      <description>&gt;The doctor is more to be feared than the disease.
+
+</description>
+      <pubDate>Fri, 03 Aug 2018 02:20:12 +0800</pubDate>
+      <dc:date>2018-08-03T02:20:12+08:00</dc:date>
+    </item>
     <item>
       <title>读《1984》</title>
       <link>http://longlinht.github.io//reading-1984</link>
@@ -362,6 +371,6 @@ update UI when we finish something in separated thread. This is a basic problem,
       <pubDate>Wed, 03 Nov 2010 02:30:12 +0800</pubDate>
       <dc:date>2010-11-03T02:30:12+08:00</dc:date>
     </item>
-    <dc:date>2018-07-16T02:20:12+08:00</dc:date>
+    <dc:date>2018-08-03T02:20:12+08:00</dc:date>
   </channel>
 </rss>

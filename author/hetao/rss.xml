@@ -12,6 +12,71 @@
    <atom:link href="rss" rel="self" type="application/rss+xml" />
    
 	<item>
+	  <title>MultidexApplication相关的一个crash</title>
+	  <link>//multidex-application-crash</link>
+	  <author>Tao He</author>
+	  <pubDate>2018-11-26T04:20:12+08:00</pubDate>
+	  <guid>//multidex-application-crash</guid>
+	  <description><![CDATA[
+	     <p>最近在内测的一个App在内测开始后有用户反馈启动就crash的问题，后来拿到用户的信息后发现几个crash的机器都是4.4的机器，因为现在真实用户使用4.4系统的用户真的是不多了，就没怎么在意，但是在阿里云移动测试平台进行兼容性测试的时候，这个问题必现，并且都出现在4.4的机器上，查看兼容性测试报告，都是同一个crash，崩溃的堆栈记录了下来:</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">FATAL EXCEPTION: main Process: com.ross.android, PID: 9282 java.lang.RuntimeException: Unable to get provider com.readystatesoftware.chuck.internal.data.ChuckContentProvider: 
+java.lang.ClassNotFoundException: Didn&#39;t find class &quot;com.readystatesoftware.chuck.internal.data.ChuckContentProvider&quot; on path: DexPathList[[zip file &quot;/data/app/com.ross.android-1.apk&quot;],nativeLibraryDirectories=[/data/app-lib/com.ross.android-1, /vendor/lib, /system/lib]] 
+at android.app.ActivityThread.installProvider(ActivityThread.java:5060) 
+at android.app.ActivityThread.installContentProviders(ActivityThread.java:4631) 
+at android.app.ActivityThread.handleBindApplication(ActivityThread.java:4571) 
+at android.app.ActivityThread.access$1500(ActivityThread.java:155) 
+at android.app.ActivityThread$H.handleMessage(ActivityThread.java:1406) 
+at android.os.Handler.dispatchMessage(Handler.java:110) 
+at android.os.Looper.loop(Looper.java:193)
+at android.app.ActivityThread.main(ActivityThread.java:5341) 
+at java.lang.reflect.Method.invokeNative(Native Method) 
+at java.lang.reflect.Method.invoke(Method.java:515) 
+at com.android.internal.os.ZygoteInit$MethodAndArgsCaller.run(ZygoteInit.java:830) 
+at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:646) 
+at dalvik.system.NativeStart.main(Native Method) Caused by: java.lang.ClassNotFoundException: Didn&#39;t find class &quot;com.readystatesoftware.chuck.internal.data.ChuckContentProvider&quot; on path: DexPathList[[zip file &quot;/data/app/com.ross.android-1.apk&quot;],nativeLibraryDirectories=[/data/app-lib/com.ross.android-1, /vendor/lib, /system/lib]] at dalvik.system.BaseDexClassLoader.findClass(BaseDexClassLoader.java:56) 
+at java.lang.ClassLoader.loadClass(ClassLoader.java:497) 
+at java.lang.ClassLoader.loadClass(ClassLoader.java:457)
+at android.app.ActivityThread.installProvider(ActivityThread.java:5045) 
+at android.app.ActivityThread.installContentProviders(ActivityThread.java:4631)
+at android.app.ActivityThread.handleBindApplication(ActivityThread.java:4571) 
+at android.app.ActivityThread.access$1500(ActivityThread.java:155) 
+at android.app.ActivityThread$H.handleMessage(ActivityThread.java:1406) 
+at android.os.Handler.dispatchMessage(Handler.java:110) 
+at android.os.Looper.loop(Looper.java:193) 
+at android.app.ActivityThread.main(ActivityThread.java:5341) 
+at java.lang.reflect.Method.invokeNative(Native Method) at java.lang.reflect.Method.invoke(Method.java:515)
+at com.android.internal.os.ZygoteInit$MethodAndArgsCaller.run(ZygoteInit.java:830) 
+at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:646) 
+at dalvik.system.NativeStart.main(Native Method)
+</code></pre></div>
+<p>看到这个崩溃的记录后，赶紧去查看到了build.gradle中multiDexEnabled选项，果然是true，处于打开状态，然后看了本App的Application竟然并没有继承自<code>MultiDexApplication</code>，在<code>Application</code>的onCreate的方法中也没有调用<code>MultiDex.install(this)</code>, 这也就难怪在4.4中出现这个崩溃了，因为貌似这个崩溃只出现在 api&lt;21 的情况下, 因为我平时的开发机都是8.0的系统，所以这个问题一直没有暴露出来, 直到将这个App安装在用户的机器上，崩溃出现了，这个问题解决起来其实很简单，要么将本App的Application继承自<code>MultiDexApplication</code>, 要么在Application中的onCreate中调用<code>MultiDex.install(this)</code>。就是这么简单,那这么简单的一个问题为什么要专写一篇来记录呢？其实也是因为这次这个内测阶段的crash的问题很典型，它就是在开发工程中被忽略，或者现有环境没有覆盖到，导致崩溃出现在了用户的机器上，其实这类问题是可以在发布版本前就能避免的，算是一次很好的教训。 解决方案再明确下:</p>
+
+<ul>
+<li>方法一 </li>
+</ul>
+<div class="highlight"><pre><code class="language-text" data-lang="text">TestApplcation extends MultiDexApplication {
+
+
+}
+</code></pre></div>
+<ul>
+<li>方法二</li>
+</ul>
+<div class="highlight"><pre><code class="language-text" data-lang="text">TestApplcation extends Application {
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+
+        MultiDex.install(this);
+    }
+
+}
+</code></pre></div>
+	  ]]></description>
+	</item>
+
+	<item>
 	  <title>读《Lies My Doctor Told Me》</title>
 	  <link>//reading-lies-my-doctor-told-me</link>
 	  <author>Tao He</author>
@@ -478,24 +543,6 @@ textView.setText(Html.fromHtml(&quot;&lt;b&gt;&quot; + title + &quot;&lt;/b&gt;&
 <span class="o">}</span>
 </code></pre></div>
 <p>这个问题网上也有人说在xml中设置并不生效，但是在代码中调用<code>seekBar.setPadding(0,0,0,0)</code>就可以,真是一个琐碎的问题，究其原因就是它违反了一般性，让我们错误的认为它应该和其它的View的特性是一样的，都应该是我们去主动的设置Padding.</p>
-
-	  ]]></description>
-	</item>
-
-	<item>
-	  <title>政策与民意</title>
-	  <link>//policy-and-people-will</link>
-	  <author>Tao He</author>
-	  <pubDate>2017-11-24T02:20:12+08:00</pubDate>
-	  <guid>//policy-and-people-will</guid>
-	  <description><![CDATA[
-	     <p>政策，这个词在我们这个国家被普遍使用，几乎人人理解其含义，就连目不识丁的老农都会说出这样的话：“中央又出新政策了”，这个词我们是如此的熟悉，以至于我们常常都不会去想政策到底是什么，它是如何制定出来的？我们普通老百姓是否影响到了政策的制定？ 也许一般的理解是老百姓哪能影响到政策的制定，照老农的说法，那是中央出的政策，和我们这些小老百姓有啥关系，这么理解也没错，毕竟在我们这个国家，显然普通民众的权利实在有限，但是此处我并不想讨论政策的制定和出台，只是想探究已出台的，与民生息息相关的这些个政策，到底有没有民意的基础，民意是否影响到了政策的制定？ 要讨论这个问题，拿北京这几年的一些政策法规的例子最好不过了。</p>
-
-<p>先说北京房子的限购，以及相关联的所谓的抑制房价过快上涨的各种政策手段，但凡有点经济学常识的人，都知道这些政策只会让房价更高，增加更多购房成本，但是这些政策还是出来了，政府有什么考虑我们不得而知，但是呼吁出台这些政策的民意绝对是存在的，这种呼声绝对不是少数，甚至有一些经济学家也在为这种政策摇旗呐喊，就无怪乎普通民众有这种诉求了。而这种大多数的诉求就成了普遍的民意基础，使这种违背基本经济学常识的政策不再是空中楼阁。房价的这个例子也许会因房价问题本来就错综复杂而变得更加说不清道不明，那可以再看一例：网约车。</p>
-
-<p>在网约车还没有出现之前，我们的选择只有出租车和所谓的黑车，出行体验如何，只要在烈日和寒风中打过出租车的人都应该知道那是一种什么样的服务，自从有了网约车，如滴滴打车后，我们的出行体验有了巨大的改观。那种打车难的时代一去不复返了，但是好景不长，很快政策对网约车出台了一系列不友好政策，之后的打车体验明显不如之前，这种政策也明显违背市场经济规律，但是它照样堂而皇之的出台了，你以为这是出租车利益集团的反扑，但是别忘了，这背后还有很坚实的民意基础，网约车存在的一些问题总是能让很多普通民众认为监管是必须的，政府必须介入才能让他们有安全感，但其实这些问题难道出租车就不存在吗？不希冀于市场竞争，而总幻想依赖政府强力，这种普遍的认知构成了一种可怕的，无望的民意，渗透进我们生活中的方方面面。</p>
-
-<p>这种可怕的认知，在今年年底北京出现的两件重要的事情中更是体现的淋漓尽致，也许这些政策普通民众并不能左右，但民众的普遍认知构成了民意基础，因为在大部分人的认知中并没有达成这样的共识：有些事只能交给市场，政府干预只会扰乱市场；私有财产神圣不可侵犯；贩夫走卒，不高端的人群也有公民权；这些在文明社会都普遍达成的共识并未深入人心。这些个看似荒谬的政策既是权力意志的体现，也少不了那可怕民意的影子。</p>
 
 	  ]]></description>
 	</item>

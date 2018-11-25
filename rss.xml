@@ -8,7 +8,16 @@
     <title>与机器，人，神共舞</title>
     <link>http://longlinht.github.io/</link>
     <description>编程，读书，思考，旅行，与机器对话，与人交谈，对神发问，探索，体验人生美丽的风景</description>
-    <pubDate>Fri, 03 Aug 2018 02:20:12 +0800</pubDate>
+    <pubDate>Mon, 26 Nov 2018 04:20:12 +0800</pubDate>
+    <item>
+      <title>MultidexApplication相关的一个crash</title>
+      <link>http://longlinht.github.io//multidex-application-crash</link>
+      <description>最近在内测的一个App在内测开始后有用户反馈启动就crash的问题，后来拿到用户的信息后发现几个crash的机器都是4.4的机器，因为现在真实用户使用4.4系统的用户真的是不多了，就没怎么在意，但是在阿里云移动测试平台进行兼容性测试的时候，这个问题必现，并且都出现在4.4的机器上，查看兼容性测试报告，都是同一个crash，崩溃的堆栈记录了下来:
+
+</description>
+      <pubDate>Mon, 26 Nov 2018 04:20:12 +0800</pubDate>
+      <dc:date>2018-11-26T04:20:12+08:00</dc:date>
+    </item>
     <item>
       <title>读《Lies My Doctor Told Me》</title>
       <link>http://longlinht.github.io//reading-lies-my-doctor-told-me</link>
@@ -371,6 +380,6 @@ update UI when we finish something in separated thread. This is a basic problem,
       <pubDate>Wed, 03 Nov 2010 02:30:12 +0800</pubDate>
       <dc:date>2010-11-03T02:30:12+08:00</dc:date>
     </item>
-    <dc:date>2018-08-03T02:20:12+08:00</dc:date>
+    <dc:date>2018-11-26T04:20:12+08:00</dc:date>
   </channel>
 </rss>

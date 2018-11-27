@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 
     <!-- [[! Page Meta ]] -->
-    <title>MultidexApplication相关的一个crash</title>
+    <title>使用VideoView实现视频开屏页</title>
     <meta name="description" content="与机器，人，神共舞 - 编程，读书，思考，旅行，与机器对话，与人交谈，对神发问，探索，体验人生美丽的风景" />
 
     <meta name="HandheldFriendly" content="True" />
@@ -96,10 +96,10 @@
     <article class="post tag-machine">
 
         <header class="post-header">
-            <h1 class="post-title">MultidexApplication相关的一个crash</h1>
+            <h1 class="post-title">使用VideoView实现视频开屏页</h1>
             <section class="post-meta">
             <!-- <a href='/'>Tao He</a> -->
-            <time class="post-date" datetime="2018-11-26">26 Nov 2018</time>
+            <time class="post-date" datetime="2018-11-28">28 Nov 2018</time>
                 <!-- [[tags prefix=" on "]] -->
                  
                 on 
@@ -114,61 +114,74 @@
 
         <section class="post-content">
             
-            <p>最近在内测的一个App在内测开始后有用户反馈启动就crash的问题，后来拿到用户的信息后发现几个crash的机器都是4.4的机器，因为现在真实用户使用4.4系统的用户真的是不多了，就没怎么在意，但是在阿里云移动测试平台进行兼容性测试的时候，这个问题必现，并且都出现在4.4的机器上，查看兼容性测试报告，都是同一个crash，崩溃的堆栈记录了下来:</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">FATAL EXCEPTION: main Process: com.ross.android, PID: 9282 java.lang.RuntimeException: Unable to get provider com.readystatesoftware.chuck.internal.data.ChuckContentProvider: 
-java.lang.ClassNotFoundException: Didn&#39;t find class &quot;com.readystatesoftware.chuck.internal.data.ChuckContentProvider&quot; on path: DexPathList[[zip file &quot;/data/app/com.ross.android-1.apk&quot;],nativeLibraryDirectories=[/data/app-lib/com.ross.android-1, /vendor/lib, /system/lib]] 
-at android.app.ActivityThread.installProvider(ActivityThread.java:5060) 
-at android.app.ActivityThread.installContentProviders(ActivityThread.java:4631) 
-at android.app.ActivityThread.handleBindApplication(ActivityThread.java:4571) 
-at android.app.ActivityThread.access$1500(ActivityThread.java:155) 
-at android.app.ActivityThread$H.handleMessage(ActivityThread.java:1406) 
-at android.os.Handler.dispatchMessage(Handler.java:110) 
-at android.os.Looper.loop(Looper.java:193)
-at android.app.ActivityThread.main(ActivityThread.java:5341) 
-at java.lang.reflect.Method.invokeNative(Native Method) 
-at java.lang.reflect.Method.invoke(Method.java:515) 
-at com.android.internal.os.ZygoteInit$MethodAndArgsCaller.run(ZygoteInit.java:830) 
-at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:646) 
-at dalvik.system.NativeStart.main(Native Method) Caused by: java.lang.ClassNotFoundException: Didn&#39;t find class &quot;com.readystatesoftware.chuck.internal.data.ChuckContentProvider&quot; on path: DexPathList[[zip file &quot;/data/app/com.ross.android-1.apk&quot;],nativeLibraryDirectories=[/data/app-lib/com.ross.android-1, /vendor/lib, /system/lib]] at dalvik.system.BaseDexClassLoader.findClass(BaseDexClassLoader.java:56) 
-at java.lang.ClassLoader.loadClass(ClassLoader.java:497) 
-at java.lang.ClassLoader.loadClass(ClassLoader.java:457)
-at android.app.ActivityThread.installProvider(ActivityThread.java:5045) 
-at android.app.ActivityThread.installContentProviders(ActivityThread.java:4631)
-at android.app.ActivityThread.handleBindApplication(ActivityThread.java:4571) 
-at android.app.ActivityThread.access$1500(ActivityThread.java:155) 
-at android.app.ActivityThread$H.handleMessage(ActivityThread.java:1406) 
-at android.os.Handler.dispatchMessage(Handler.java:110) 
-at android.os.Looper.loop(Looper.java:193) 
-at android.app.ActivityThread.main(ActivityThread.java:5341) 
-at java.lang.reflect.Method.invokeNative(Native Method) at java.lang.reflect.Method.invoke(Method.java:515)
-at com.android.internal.os.ZygoteInit$MethodAndArgsCaller.run(ZygoteInit.java:830) 
-at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:646) 
-at dalvik.system.NativeStart.main(Native Method)
+            <p>今天PM提了一个视频开屏页的需求，需要在用户第一次使用时播放一个开屏视频，乍一看，挺简单一需求，但是也或多或少碰到了一些坑，也发现了Android资源编译的一个问题，本着研发之事无小事的原则，还是要记录下踩坑经验和发现的问题。整个实现过程一共两三个小时，逐步解决了以下问题:</p>
+
+<h4>视频全屏</h4>
+
+<p>看到这个问题的第一反应就是把<code>VideoView</code> 的宽高设置为<code>match_parent</code>, 并且保证父容器也是<code>match_parent</code> 根布局, 但是事实没那么简单，视频播放后并没有完全全屏，在我的开发机上视频底部有一条细细的白边，很明显视频没有完全全屏。后来又想到设置<code>MediaPlayer</code>的视频缩放模式:</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">mPlayer.setVideoScalingMode(MediaPlayer.VIDEO_SCALING_MODE_SCALE_TO_FIT_WITH_CROPPING);
 </code></pre></div>
-<p>看到这个崩溃的记录后，赶紧去查看到了build.gradle中multiDexEnabled选项，果然是true，处于打开状态，然后看了本App的Application竟然并没有继承自<code>MultiDexApplication</code>，在<code>Application</code>的onCreate的方法中也没有调用<code>MultiDex.install(this)</code>, 这也就难怪在4.4中出现这个崩溃了，因为貌似这个崩溃只出现在 api&lt;21 的情况下, 因为我平时的开发机都是8.0的系统，所以这个问题一直没有暴露出来, 直到将这个App安装在用户的机器上，崩溃出现了，这个问题解决起来其实很简单，要么将本App的Application继承自<code>MultiDexApplication</code>, 要么在Application中的onCreate中调用<code>MultiDex.install(this)</code>。就是这么简单,那这么简单的一个问题为什么要专写一篇来记录呢？其实也是因为这次这个内测阶段的crash的问题很典型，它就是在开发工程中被忽略，或者现有环境没有覆盖到，导致崩溃出现在了用户的机器上，其实这类问题是可以在发布版本前就能避免的，算是一次很好的教训。 解决方案再明确下:</p>
-
-<ul>
-<li>方法一 </li>
-</ul>
-<div class="highlight"><pre><code class="language-text" data-lang="text">TestApplcation extends MultiDexApplication {
-
-
-}
-</code></pre></div>
-<ul>
-<li>方法二</li>
-</ul>
-<div class="highlight"><pre><code class="language-text" data-lang="text">TestApplcation extends Application {
-
-    @Override
-    public void onCreate() {
-        super.onCreate();
-
-        MultiDex.install(this);
+<p>设置了两种模式以后都没有效果，这说明<code>VideoView</code>本身没有全屏，没有铺满整个屏幕，所以需要根据屏幕大小动态设置<code>VideoView</code>的尺寸，所以用自定义View实现。
+自定义一个继承自<code>VideoView</code>的类来满足要求，具体实现如下:</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">public class FullScreenVideoView extends VideoView {
+    public FullScreenVideoView(Context context) {
+        super(context);
     }
 
+    public FullScreenVideoView(Context context, AttributeSet attrs) {
+        super(context, attrs);
+    }
+
+    public FullScreenVideoView(Context context, AttributeSet attrs, int defStyleAttr) {
+        super(context, attrs, defStyleAttr);
+    }
+
+    @Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        int width = getDefaultSize(0, widthMeasureSpec);
+        int height = getDefaultSize(0, heightMeasureSpec);
+        setMeasuredDimension(width, height);
+    }
 }
 </code></pre></div>
+<p>这样比较顺利的实现了全屏，接下来需要解决第二个问题:</p>
+
+<h4>循环播放</h4>
+
+<p>这个比较容易，几乎就是一行代码，是对播放器的设置:</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">mBinding.vvSplash.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+    @Override
+    public void onPrepared(MediaPlayer mp) {
+        mPlayer = mp;
+        mPlayer.setLooping(true);
+        mPlayer.setVideoScalingMode(MediaPlayer.VIDEO_SCALING_MODE_SCALE_TO_FIT_WITH_CROPPING);
+        mPlayer.start();
+
+        mPlayer.setVideoScalingMode();
+    }
+});
+</code></pre></div>
+<p>第三个问题:</p>
+
+<h4>音量切换</h4>
+
+<p>这个问题也比较简单，主要是对播放器的操作，虽然简单但是需要注意以下几个问题:</p>
+
+<ul>
+<li>要保证操作的播放器一直是同一个</li>
+<li>调用setVolume以后不需要再调用start</li>
+<li>恢复音量时最好的方式是通过系统服务(AudioManager)去获取当前音量，但是这个需求只要设置为1就可以了</li>
+</ul>
+
+<p>到此，问题都逐一解决了，最后需要记录下一个Android资源编译的问题，问题如下:</p>
+
+<blockquote>
+<p>我的工程目录res/drawable下有一个图片文件名为splash.png，开屏视频的MP4文件在res/raw下，名为splash.mp4，编译工程运行后一直报错：
+<code>无法播放此视频</code></p>
+</blockquote>
+
+<p>当时还以为我代码哪里写错了，检查发现没有错误，后来怀疑路径是不是错了，但断点调试也没问题，就很纳闷，后来拷贝了其它视频播放，发现是正常的，我才想到可能是资源文件名字冲突了，我给开屏视频文件重命名以后一切OK了，冲突在编译期间竟然没有报错，感觉有点坑，这样看来Android在编译资源时并没有区分res/drawable目录和res/raw目录，这个问题需要重视起来，不然会比较恼人。</p>
+
 
         </section>
 
@@ -199,15 +212,15 @@ at dalvik.system.NativeStart.main(Native Method)
 
             <section class="share">
                 <h4>Share this post</h4>
-                <a class="icon-twitter" href="http://twitter.com/share?text=MultidexApplication相关的一个crash&amp;url=http://longlinht.github.io//multidex-application-crash"
+                <a class="icon-twitter" href="http://twitter.com/share?text=使用VideoView实现视频开屏页&amp;url=http://longlinht.github.io//play-video-in-raw-folder"
                     onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
                     <span class="hidden">Twitter</span>
                 </a>
-                <a class="icon-facebook" href="https://www.facebook.com/sharer/sharer.php?u=http://longlinht.github.io//multidex-application-crash"
+                <a class="icon-facebook" href="https://www.facebook.com/sharer/sharer.php?u=http://longlinht.github.io//play-video-in-raw-folder"
                     onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
                     <span class="hidden">Facebook</span>
                 </a>
-                <a class="icon-google-plus" href="https://plus.google.com/share?url=http://longlinht.github.io//multidex-application-crash"
+                <a class="icon-google-plus" href="https://plus.google.com/share?url=http://longlinht.github.io//play-video-in-raw-folder"
                    onclick="window.open(this.href, 'google-plus-share', 'width=490,height=530');return false;">
                     <span class="hidden">Google+</span>
                 </a>
@@ -250,20 +263,13 @@ at dalvik.system.NativeStart.main(Native Method)
 
     <!-- [[! next_post ]] -->
     
-        <a class="read-next-story no-cover" href="http://longlinht.github.io//play-video-in-raw-folder">
-            <section class="post">
-                <h2>使用VideoView实现视频开屏页</h2>
-                <p>今天PM提了一个视频开屏页的需求，需要在用户第一次使用时播放一个开屏视频，乍一看，挺简单一需求，但是也或多或少碰到了一些坑，也发现了Android资源编译的一个问题，本着研发之事无小事的原则，还是要记录下踩坑经验和发现的问题。整个实现过程一共两三个小时，逐步解决了以下问题: #### 视频全屏 看到这个问题的第一反应就是把`VideoView` 的宽高设置为`match_parent`, 并且保证父容器也是`match_parent` 根布局, 但是事实没那么简单，视频播放后并没有完全全屏，在我的开发机上视频底部有一条细细的白边，很明显视频没有完全全屏。后来又想到设置`MediaPlayer`的视频缩放模式: ``` mPlayer.setVideoScalingMode(MediaPlayer.VIDEO_SCALING_MODE_SCALE_TO_FIT_WITH_CROPPING); ``` 设置了两种模式以后都没有效果，这说明`VideoView`本身没有全屏，没有铺满整个屏幕，所以需要根据屏幕大小动态设置`VideoView`的尺寸，所以用自定义View实现。 自定义一个继承自`VideoView`的类来满足要求，具体实现如下: ``` public...</p>
-            </section>
-        </a>
-    
     <!-- [[! /next_post ]] -->
     <!-- [[! prev_post ]] -->
     
-        <a class="read-next-story prev no-cover" href="http://longlinht.github.io//reading-lies-my-doctor-told-me">
+        <a class="read-next-story prev no-cover" href="http://longlinht.github.io//multidex-application-crash">
             <section class="post">
-                <h2>读《Lies My Doctor Told Me》</h2>
-                <p><blockquote> <p>The doctor is more to be feared than the disease.</p> </blockquote> <p>最近在Telegram上闲逛，无意间看到了这本书，有精排的epub版本，就顺手下载了下来发送到了Kindle上，原本不太可能会读，一来对这类书名的书向来没有好感，二来是英文版，又是关于医药，健康，想到会有众多医学专有名词，有点生畏。但是在地铁上顺手打开看了几页后，感觉书开篇很平实，就接着看了下去，几天地铁的通勤，竟然看完了，算是我看过的英文版书籍里读的最快的了。虽然读得较快，但是给我了我不少启发，也意识到之前自己对医药和健康的一些错误认知。作者在开篇讲到了一些很有意思的观点，值得记录下来：</p> <ul> <li><p>医生和病人的关系不应该是一般的医患关系，病人不应该完全盲信医生，医生也不应该拒绝与病人对病情的探讨，相互的关系应该是一种partner的关系</p></li>...</p>
+                <h2>MultidexApplication相关的一个crash</h2>
+                <p><p>最近在内测的一个App在内测开始后有用户反馈启动就crash的问题，后来拿到用户的信息后发现几个crash的机器都是4.4的机器，因为现在真实用户使用4.4系统的用户真的是不多了，就没怎么在意，但是在阿里云移动测试平台进行兼容性测试的时候，这个问题必现，并且都出现在4.4的机器上，查看兼容性测试报告，都是同一个crash，崩溃的堆栈记录了下来:</p> <div class="highlight"><pre><code class="language-text" data-lang="text">FATAL EXCEPTION: main Process: com.ross.android, PID: 9282 java.lang.RuntimeException: Unable to get...</p>
             </section>
         </a>
     

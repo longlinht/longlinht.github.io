@@ -7,6 +7,81 @@
     <atom:link href="http://longlinht.github.io//feed.xml" rel="self" type="application/rss+xml" />
     
       <item>
+        <title>使用VideoView实现视频开屏页</title>
+        <description>&lt;p&gt;今天PM提了一个视频开屏页的需求，需要在用户第一次使用时播放一个开屏视频，乍一看，挺简单一需求，但是也或多或少碰到了一些坑，也发现了Android资源编译的一个问题，本着研发之事无小事的原则，还是要记录下踩坑经验和发现的问题。整个实现过程一共两三个小时，逐步解决了以下问题:&lt;/p&gt;
+
+&lt;h4&gt;视频全屏&lt;/h4&gt;
+
+&lt;p&gt;看到这个问题的第一反应就是把&lt;code&gt;VideoView&lt;/code&gt; 的宽高设置为&lt;code&gt;match_parent&lt;/code&gt;, 并且保证父容器也是&lt;code&gt;match_parent&lt;/code&gt; 根布局, 但是事实没那么简单，视频播放后并没有完全全屏，在我的开发机上视频底部有一条细细的白边，很明显视频没有完全全屏。后来又想到设置&lt;code&gt;MediaPlayer&lt;/code&gt;的视频缩放模式:&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;mPlayer.setVideoScalingMode(MediaPlayer.VIDEO_SCALING_MODE_SCALE_TO_FIT_WITH_CROPPING);
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;设置了两种模式以后都没有效果，这说明&lt;code&gt;VideoView&lt;/code&gt;本身没有全屏，没有铺满整个屏幕，所以需要根据屏幕大小动态设置&lt;code&gt;VideoView&lt;/code&gt;的尺寸，所以用自定义View实现。
+自定义一个继承自&lt;code&gt;VideoView&lt;/code&gt;的类来满足要求，具体实现如下:&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;public class FullScreenVideoView extends VideoView {
+    public FullScreenVideoView(Context context) {
+        super(context);
+    }
+
+    public FullScreenVideoView(Context context, AttributeSet attrs) {
+        super(context, attrs);
+    }
+
+    public FullScreenVideoView(Context context, AttributeSet attrs, int defStyleAttr) {
+        super(context, attrs, defStyleAttr);
+    }
+
+    @Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        int width = getDefaultSize(0, widthMeasureSpec);
+        int height = getDefaultSize(0, heightMeasureSpec);
+        setMeasuredDimension(width, height);
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;这样比较顺利的实现了全屏，接下来需要解决第二个问题:&lt;/p&gt;
+
+&lt;h4&gt;循环播放&lt;/h4&gt;
+
+&lt;p&gt;这个比较容易，几乎就是一行代码，是对播放器的设置:&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;mBinding.vvSplash.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+    @Override
+    public void onPrepared(MediaPlayer mp) {
+        mPlayer = mp;
+        mPlayer.setLooping(true);
+        mPlayer.setVideoScalingMode(MediaPlayer.VIDEO_SCALING_MODE_SCALE_TO_FIT_WITH_CROPPING);
+        mPlayer.start();
+
+        mPlayer.setVideoScalingMode();
+    }
+});
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;第三个问题:&lt;/p&gt;
+
+&lt;h4&gt;音量切换&lt;/h4&gt;
+
+&lt;p&gt;这个问题也比较简单，主要是对播放器的操作，虽然简单但是需要注意以下几个问题:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;要保证操作的播放器一直是同一个&lt;/li&gt;
+&lt;li&gt;调用setVolume以后不需要再调用start&lt;/li&gt;
+&lt;li&gt;恢复音量时最好的方式是通过系统服务(AudioManager)去获取当前音量，但是这个需求只要设置为1就可以了&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;到此，问题都逐一解决了，最后需要记录下一个Android资源编译的问题，问题如下:&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;我的工程目录res/drawable下有一个图片文件名为splash.png，开屏视频的MP4文件在res/raw下，名为splash.mp4，编译工程运行后一直报错：
+&lt;code&gt;无法播放此视频&lt;/code&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;当时还以为我代码哪里写错了，检查发现没有错误，后来怀疑路径是不是错了，但断点调试也没问题，就很纳闷，后来拷贝了其它视频播放，发现是正常的，我才想到可能是资源文件名字冲突了，我给开屏视频文件重命名以后一切OK了，冲突在编译期间竟然没有报错，感觉有点坑，这样看来Android在编译资源时并没有区分res/drawable目录和res/raw目录，这个问题需要重视起来，不然会比较恼人。&lt;/p&gt;
+</description>
+        <pubDate>Wed, 28 Nov 2018 01:20:12 +0800</pubDate>
+        <link>http://longlinht.github.io//play-video-in-raw-folder</link>
+        <guid isPermaLink="true">http://longlinht.github.io//play-video-in-raw-folder</guid>
+      </item>
+    
+      <item>
         <title>MultidexApplication相关的一个crash</title>
         <description>&lt;p&gt;最近在内测的一个App在内测开始后有用户反馈启动就crash的问题，后来拿到用户的信息后发现几个crash的机器都是4.4的机器，因为现在真实用户使用4.4系统的用户真的是不多了，就没怎么在意，但是在阿里云移动测试平台进行兼容性测试的时候，这个问题必现，并且都出现在4.4的机器上，查看兼容性测试报告，都是同一个crash，崩溃的堆栈记录了下来:&lt;/p&gt;
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;FATAL EXCEPTION: main Process: com.ross.android, PID: 9282 java.lang.RuntimeException: Unable to get provider com.readystatesoftware.chuck.internal.data.ChuckContentProvider: 
@@ -471,45 +546,6 @@ textView.setText(Html.fromHtml(&amp;quot;&amp;lt;b&amp;gt;&amp;quot; + title + &
         <pubDate>Wed, 24 Jan 2018 02:20:12 +0800</pubDate>
         <link>http://longlinht.github.io//popup-window-is-showing-not-work</link>
         <guid isPermaLink="true">http://longlinht.github.io//popup-window-is-showing-not-work</guid>
-      </item>
-    
-      <item>
-        <title>踩坑小计 - SeekBar 宽度显示不全</title>
-        <description>&lt;p&gt;最近开始一个全新的Android项目，突然感觉很多之前忽略掉的一些不大不小的问题和细节渐渐的浮出了水面，虽不是什么大问题，通过搜索，查找，自己判断改进也都能顺利解决，但终归要查，要找，凭空浪费很多时间，于是决定不论多么琐碎的问题，但凡违反一般性，需要特殊处理的都详细记录下来，避免下次忘记时再踩坑。今天就就记录下一个SeekBar的问题，真的算上不上是一个问题，只是SeekBar这个默认显示的宽度的确与一般View的显示结果不同。&lt;/p&gt;
-
-&lt;h3&gt;问题描述&lt;/h3&gt;
-
-&lt;p&gt;在布局文件里添加这样一个Seekbar:&lt;/p&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-xml&quot; data-lang=&quot;xml&quot;&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;SeekBar&lt;/span&gt;
-    &lt;span class=&quot;na&quot;&gt;android:id=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;@+id/playlist_seekbar&amp;quot;&lt;/span&gt;
-    &lt;span class=&quot;na&quot;&gt;android:layout_width=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;match_parent&amp;quot;&lt;/span&gt;
-    &lt;span class=&quot;na&quot;&gt;android:layout_height=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;wrap_content&amp;quot;&lt;/span&gt;
-    &lt;span class=&quot;na&quot;&gt;android:maxHeight=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;1dp&amp;quot;&lt;/span&gt;
-    &lt;span class=&quot;na&quot;&gt;android:minHeight=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;1dp&amp;quot;&lt;/span&gt;
-    &lt;span class=&quot;na&quot;&gt;android:paddingStart=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;0dp&amp;quot;&lt;/span&gt;
-    &lt;span class=&quot;na&quot;&gt;android:paddingEnd=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;0dp&amp;quot;&lt;/span&gt;
-    &lt;span class=&quot;na&quot;&gt;android:thumbOffset=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;0dp&amp;quot;&lt;/span&gt;
-    &lt;span class=&quot;na&quot;&gt;android:progressDrawable=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;@drawable/playlist_seekbar&amp;quot;&lt;/span&gt;
-    &lt;span class=&quot;na&quot;&gt;android:progress=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;50&amp;quot;&lt;/span&gt;
-    &lt;span class=&quot;na&quot;&gt;android:thumb=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;@drawable/seekbar_thumb&amp;quot;&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;p&gt;虽然设置了width是&lt;code&gt;match_parent&lt;/code&gt;,但是SeekBar得宽度在左右两侧还是留有一定空间,并不是我们直觉所想的那样。当设置了
-&lt;code&gt;android:paddingStart=&amp;quot;0dp&amp;quot;, android:paddingEnd=&amp;quot;0dp&amp;quot;&lt;/code&gt; 以后就是我们想要的宽度了。至于这个控件为什么是这样的默认设定，不得而知，查看SeekBar的源码则看到了这样的继承关系：&lt;/p&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;SeekBar -&amp;gt; AbsSeekBar -&amp;gt; ProgressBar
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;p&gt;并且在ProgressBar的drawTrack方法中有这么一段代码：&lt;/p&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-java&quot; data-lang=&quot;java&quot;&gt;&lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;isLayoutRtl&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;mMirrorForRtl&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;canvas&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;translate&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;getWidth&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;mPaddingRight&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;mPaddingTop&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;canvas&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;scale&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(-&lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;1.0f&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;1.0f&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;canvas&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;translate&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;mPaddingLeft&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;mPaddingTop&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;p&gt;这个问题网上也有人说在xml中设置并不生效，但是在代码中调用&lt;code&gt;seekBar.setPadding(0,0,0,0)&lt;/code&gt;就可以,真是一个琐碎的问题，究其原因就是它违反了一般性，让我们错误的认为它应该和其它的View的特性是一样的，都应该是我们去主动的设置Padding.&lt;/p&gt;
-</description>
-        <pubDate>Sun, 21 Jan 2018 02:20:12 +0800</pubDate>
-        <link>http://longlinht.github.io//seekbar-cant-display-full-width</link>
-        <guid isPermaLink="true">http://longlinht.github.io//seekbar-cant-display-full-width</guid>
       </item>
     
   </channel>

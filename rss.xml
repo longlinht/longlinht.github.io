@@ -8,7 +8,16 @@
     <title>与机器，人，神共舞</title>
     <link>http://longlinht.github.io/</link>
     <description>编程，读书，思考，旅行，与机器对话，与人交谈，对神发问，探索，体验人生美丽的风景</description>
-    <pubDate>Wed, 28 Nov 2018 01:20:12 +0800</pubDate>
+    <pubDate>Fri, 30 Nov 2018 04:20:12 +0800</pubDate>
+    <item>
+      <title>记一次看似困难的Debug</title>
+      <link>http://longlinht.github.io//record-a-debug-process</link>
+      <description>今年把自己的手机换成了Android，拿到新机后就想找到一款手写笔记的App，因为在iOS用过一款体验很好，还用那个写了一篇游记，在试用了十几款此类的Andorid App后最终找到了一款名为INKredible的手写笔记App，刚开始用的时候很不顺手，都想卸载了，但是经过一番摸索后找到了技巧，再去试用后有一种惊艳的感觉，今天在地铁通勤的时候竟然用它谢了一篇技术博文，并已图片的形式到了出来，全文如下:(字迹潦草，读者莫怪，其实如果以正楷的形式书写, 效率较差，体验会大打折扣).
+
+</description>
+      <pubDate>Fri, 30 Nov 2018 04:20:12 +0800</pubDate>
+      <dc:date>2018-11-30T04:20:12+08:00</dc:date>
+    </item>
     <item>
       <title>使用VideoView实现视频开屏页</title>
       <link>http://longlinht.github.io//play-video-in-raw-folder</link>
@@ -398,6 +407,6 @@ update UI when we finish something in separated thread. This is a basic problem,
       <pubDate>Wed, 03 Nov 2010 02:30:12 +0800</pubDate>
       <dc:date>2010-11-03T02:30:12+08:00</dc:date>
     </item>
-    <dc:date>2018-11-28T01:20:12+08:00</dc:date>
+    <dc:date>2018-11-30T04:20:12+08:00</dc:date>
   </channel>
 </rss>

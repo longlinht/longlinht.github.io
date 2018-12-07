@@ -12,6 +12,20 @@
    <atom:link href="rss" rel="self" type="application/rss+xml" />
    
 	<item>
+	  <title>记一次看似困难的Debug</title>
+	  <link>//record-a-debug-process</link>
+	  <author>Tao He</author>
+	  <pubDate>2018-11-30T04:20:12+08:00</pubDate>
+	  <guid>//record-a-debug-process</guid>
+	  <description><![CDATA[
+	     <p>今年把自己的手机换成了Android，拿到新机后就想找到一款手写笔记的App，因为在iOS用过一款体验很好，还用那个写了一篇游记，在试用了十几款此类的Andorid App后最终找到了一款名为INKredible的手写笔记App，刚开始用的时候很不顺手，都想卸载了，但是经过一番摸索后找到了技巧，再去试用后有一种惊艳的感觉，今天在地铁通勤的时候竟然用它谢了一篇技术博文，并已图片的形式到了出来，全文如下:(字迹潦草，读者莫怪，其实如果以正楷的形式书写, 效率较差，体验会大打折扣).</p>
+
+<p><img src="https://www.jianguoyun.com/c/tblv2/CKKXGhIgKfHfSQRMQtKR-E0f0_ggyWsz8qZQVKSYyXPTmWZdmkQ/Bt2RU8j9dfI/l" alt=""></p>
+
+	  ]]></description>
+	</item>
+
+	<item>
 	  <title>使用VideoView实现视频开屏页</title>
 	  <link>//play-video-in-raw-folder</link>
 	  <author>Tao He</author>
@@ -793,70 +807,6 @@ commonNavigator = new CommonNavigator(context);
     return myFragment;
 }
 </code></pre></div>
-	  ]]></description>
-	</item>
-
-	<item>
-	  <title>多样式 TextView 小记</title>
-	  <link>//different-portion-different-appearance-in-same-textview</link>
-	  <author>Tao He</author>
-	  <pubDate>2018-02-03T03:25:12+08:00</pubDate>
-	  <guid>//different-portion-different-appearance-in-same-textview</guid>
-	  <description><![CDATA[
-	     <p>所谓多样式 <code>TextView</code>, 就是在同一个 <code>TextView</code>中不同部分的text展示不同的颜色,字体大小,字体,字体Style,这种需求其实在很多App中都存在, 能够直接的给每一部分Text赋予不同的外观, 既可以在布局中少添加几个<code>TextView</code>, 也可以使以后需求变动后能够灵活的做出改动, 我在实际的开发中也经常碰到这种需求,很多次都是临时Google下, 实现了以后也就作罢了, 等后面又遇到的时候,貌似又记得不太清楚了, 又需要去查, 很没有效率, 所以写下这篇小记.</p>
-
-<p>要想给TextView的不同部分设置不同的属性,通常有两种做法:</p>
-
-<h4>使用SpannableString</h4>
-
-<p>这种方法需要用到<code>Spannable</code>借口, 一般做法如下:</p>
-<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="n">String</span> <span class="n">text</span> <span class="o">=</span> <span class="s">&quot;Hello World&quot;</span><span class="o">;</span>
-<span class="n">TextView</span> <span class="n">tvTitle</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">TextView</span><span class="o">(</span><span class="n">context</span><span class="o">);</span>
-
-<span class="n">Spannable</span> <span class="n">spannable</span> <span class="o">=</span> <span class="n">SpannableString</span><span class="o">(</span><span class="n">text</span><span class="o">);</span>
-
-<span class="c1">// set different text color</span>
-<span class="n">spannable</span><span class="o">.</span><span class="na">setSpan</span><span class="o">(</span><span class="k">new</span> <span class="nf">ForegroundColorSpan</span><span class="o">(</span><span class="n">context</span><span class="o">.</span><span class="na">getResouces</span><span class="o">().</span><span class="na">getColor</span><span class="o">(</span><span class="n">android</span><span class="o">.</span><span class="na">R</span><span class="o">.</span><span class="na">color</span><span class="o">.</span><span class="na">black</span><span class="o">)),</span> <span class="mi">0</span><span class="o">,</span> <span class="mi">5</span><span class="o">,</span> <span class="n">Spannable</span><span class="o">.</span><span class="na">SPAN_EXCLUSIVE_EXCLUSIVE</span><span class="o">);</span>
-<span class="n">spannable</span><span class="o">.</span><span class="na">setSpan</span><span class="o">(</span><span class="k">new</span> <span class="nf">ForegroundColorSpan</span><span class="o">(</span><span class="n">context</span><span class="o">.</span><span class="na">getResouces</span><span class="o">().</span><span class="na">getColor</span><span class="o">(</span><span class="n">android</span><span class="o">.</span><span class="na">R</span><span class="o">.</span><span class="na">color</span><span class="o">.</span><span class="na">white</span><span class="o">)),</span> <span class="mi">5</span><span class="o">,</span> <span class="n">text</span><span class="o">.</span><span class="na">length</span><span class="o">(),</span> <span class="n">Spannable</span><span class="o">.</span><span class="na">SPAN_EXCLUSIVE_EXCLUSIVE</span><span class="o">);</span>
-
-<span class="c1">// set different background color</span>
-<span class="n">spannable</span><span class="o">.</span><span class="na">setSpan</span><span class="o">(</span><span class="k">new</span> <span class="nf">BackgroundColorSpan</span><span class="o">(</span><span class="n">android</span><span class="o">.</span><span class="na">R</span><span class="o">.</span><span class="na">color</span><span class="o">.</span><span class="na">black</span><span class="o">),</span> <span class="mi">0</span><span class="o">,</span> <span class="mi">5</span><span class="o">,</span> <span class="n">Spannable</span><span class="o">.</span><span class="na">SPAN_EXCLUSIVE_EXCLUSIVE</span><span class="o">);</span>
-
-<span class="c1">// set different text size</span>
-<span class="kt">int</span> <span class="n">largeSize</span> <span class="o">=</span> <span class="n">getResources</span><span class="o">().</span><span class="na">getDimensionPixelSize</span><span class="o">(</span><span class="n">R</span><span class="o">.</span><span class="na">dimen</span><span class="o">.</span><span class="na">larage</span><span class="o">);</span>
-<span class="kt">int</span> <span class="n">smallSize</span> <span class="o">=</span> <span class="n">getResources</span><span class="o">().</span><span class="na">getDimensionPixelSize</span><span class="o">(</span><span class="n">R</span><span class="o">.</span><span class="na">dimen</span><span class="o">.</span><span class="na">small</span><span class="o">);</span>
-<span class="n">spannable</span><span class="o">.</span><span class="na">setSpan</span><span class="o">(</span><span class="k">new</span> <span class="nf">AbsoluteSizeSpan</span><span class="o">(</span><span class="n">largeSize</span><span class="o">),</span> <span class="mi">0</span><span class="o">,</span> <span class="mi">5</span><span class="o">,</span> <span class="n">Spannable</span><span class="o">.</span><span class="na">SPAN_EXCLUSIVE_EXCLUSIVE</span><span class="o">);</span>
-<span class="n">spannable</span><span class="o">.</span><span class="na">setSpan</span><span class="o">(</span><span class="k">new</span> <span class="nf">AbsoluteSizeSpan</span><span class="o">(</span><span class="n">smallSize</span><span class="o">),</span> <span class="mi">5</span><span class="o">,</span> <span class="n">text</span><span class="o">.</span><span class="na">length</span><span class="o">(),</span> <span class="n">Spannable</span><span class="o">.</span><span class="na">SPAN_EXCLUSIVE_EXCLUSIVE</span><span class="o">);</span>
-
-<span class="c1">// set relative size </span>
-<span class="n">spannable</span><span class="o">.</span><span class="na">setSpan</span><span class="o">(</span><span class="k">new</span> <span class="nf">RelativeSizeSpan</span><span class="o">(</span><span class="mi">2</span><span class="n">f</span><span class="o">),</span> <span class="mi">0</span><span class="o">,</span> <span class="mi">5</span><span class="o">,</span> <span class="n">Spannable</span><span class="o">.</span><span class="na">SPAN_EXCLUSIVE_EXCLUSIVE</span><span class="o">);</span>
-
-<span class="c1">// set different font style</span>
-<span class="n">spannable</span><span class="o">.</span><span class="na">setSpan</span><span class="o">(</span><span class="k">new</span> <span class="nf">StyleSpan</span><span class="o">(</span><span class="n">android</span><span class="o">.</span><span class="na">graphics</span><span class="o">.</span><span class="na">Typeface</span><span class="o">.</span><span class="na">ITALIC</span><span class="o">),</span> <span class="mi">0</span><span class="o">,</span> <span class="mi">5</span><span class="o">,</span> <span class="n">Spannable</span><span class="o">.</span><span class="na">SPAN_EXCLUSIVE_EXCLUSIVE</span><span class="o">);</span>
-<span class="n">spannable</span><span class="o">.</span><span class="na">setSpan</span><span class="o">(</span><span class="k">new</span> <span class="nf">StyleSpan</span><span class="o">(</span><span class="n">android</span><span class="o">.</span><span class="na">graphics</span><span class="o">.</span><span class="na">Typeface</span><span class="o">.</span><span class="na">BOLD</span><span class="o">),</span> <span class="mi">5</span><span class="o">,</span> <span class="n">text</span><span class="o">.</span><span class="na">length</span><span class="o">(),</span> <span class="n">Spannable</span><span class="o">.</span><span class="na">SPAN_EXCLUSIVE_EXCLUSIVE</span><span class="o">);</span>
-<span class="n">tvTitle</span><span class="o">.</span><span class="na">setText</span><span class="o">(</span><span class="n">spannable</span><span class="o">);</span>
-</code></pre></div>
-<p>使用<code>Spannable</code>接口还是比较灵活和已于理解的.</p>
-
-<h4>使用Html Tags</h4>
-
-<p><code>TextView</code>支持常见的Html tags来标记text的外观,一般做法如下：</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">TextView textview = new TextView(context);
-textView.setText(Html.fromHtml(&quot;&lt;b&gt;&quot; + title + &quot;&lt;/b&gt;&quot; +  &quot;&lt;br /&gt;&quot; + 
-            &quot;&lt;small&gt;&quot; + description + &quot;&lt;/small&gt;&quot; + &quot;&lt;br /&gt;&quot; + 
-            &quot;&lt;small&gt;&quot; + DateAdded + &quot;&lt;/small&gt;&quot;));
-</code></pre></div>
-<p>例如也可以在strings.xml中这样定义:</p>
-<div class="highlight"><pre><code class="language-xml" data-lang="xml"><span class="nt">&lt;string</span> <span class="na">name=</span><span class="s">&quot;my_text&quot;</span><span class="nt">&gt;</span>
-  <span class="cp">&lt;![CDATA[</span>
-<span class="cp">    &lt;b&gt;Autor:&lt;/b&gt; Tao&lt;br/&gt;</span>
-<span class="cp">    &lt;b&gt;Contact:&lt;/b&gt; myemail@gmail.com&lt;br/&gt;</span>
-<span class="cp">    &lt;i&gt;Copyright © 2011-2012 &lt;/i&gt;</span>
-<span class="cp">  ]]&gt;</span>
-<span class="nt">&lt;/string&gt;</span> 
-</code></pre></div>
-<p>这样定义就比上面那种方式更好一点,可以对string资源统一管理, 当然了Html的这种方式支持很多其他的tag, 同样可以做到Spannable接口可以做到的, 这里就不一一列举了. 不过有一点需要注意, 就是在<code>setText</code>的时候要调用<code>Html.fromHtml</code>才生效. 这个主题琐碎,但对于工程师来说什么事不琐碎呢? 注意细节, 提高效率, 每次记录下一些需要反复使用到的技术点, 也是一种修行.</p>
-
 	  ]]></description>
 	</item>
 

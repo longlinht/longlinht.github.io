@@ -7,6 +7,79 @@
     <atom:link href="http://longlinht.github.io//feed.xml" rel="self" type="application/rss+xml" />
     
       <item>
+        <title>解决闹人的can not found symbol BR问题</title>
+        <description>&lt;p&gt;最近公司研发的这个App是我从零到一搭建的，在框架搭建时分别使用了Databinding和Room，今天在做新需求时需要向Room中的实体类新添加一个字段，在写完了所有相关的逻辑后，build工程，所有自动生成的Databinding类都报错，build log中并没有指向任何具体报错的Databinding类，这就令人很困惑，因为这个需求的添加并没有改动任何Databinding的类，在不知所以的情况下，那就尝试其他方法解决，之前我在一个技术博客上看到过一个Databinding类的Troubleshooting: &lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Troubleshooting the Issues with Binding Class&lt;/strong&gt;*&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;Make sure you have the proper dataBinding.enabled = true in gradle and trigger &amp;quot;Sync with Gradle&amp;quot;&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Open the layout file and ensure that the XML file is valid and is wrapped in a &lt;layout&gt; tag.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Check the layout file for the correct name i.e activity_main.xml maps to ActivityMainBinding.java.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Run File =&amp;gt; Invalidate Caches  Restart to clear the caches.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Run Project =&amp;gt; Clean and Project =&amp;gt; Re-Build to regenerate the class file.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Restart Android Studio again and then try the above steps again.&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;对这几条Troubleshooting依次尝试后，报错依旧，这就非常恼人，然后我又怀疑是不是build log打印的信息不全，导致跑偏了定位问题的方向，因此在project Gradle中更改了错误信息的条数:&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;allprojects {
+    gradle.projectsEvaluated {
+        tasks.withType(JavaCompile) {
+            options.compilerArgs &amp;lt;&amp;lt; &amp;quot;-Xmaxerrs&amp;quot; &amp;lt;&amp;lt; &amp;quot;4000&amp;quot;
+            options.compilerArgs &amp;lt;&amp;lt; &amp;quot;-Xmaxwarns&amp;quot; &amp;lt;&amp;lt; &amp;quot;4000&amp;quot;
+        }
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;在打印更多错误信息以后，仍旧看不出错误的源头在哪里。排查到这一步，可能就需要最笨的办法了，倒推法，在依次回退了可能导致这个错误的代码后，算是定位到了出错的修改， 就是Room的实体类添加了一个新的字段导致的，这就很奇怪，添加一个字段不是非常正常的操作吗？就算添加的字段不符合规范，那也应该是Room报错，关Databinding什么事，一开始真是一头雾水，但是我猜想可能是Room和Databinding这两类组件都自动生成了很多代码，在生成Room代码的时候的出错导致Databinding类生成失败，所以编译时表现为Databinding类找不到，这下问题变得清晰起来，问题的源头应该还是Room导致的，最后发现其实就是一个小的细节导致的，在给Room实体类添加字段的时候是private的，但是并没有提供getter和setter方法，因此导致编译失败，只是错误的表现误导了我的思路。白白浪费了几个小时排查这种因为违反了组件使用规范的问题，以后必须引以为戒，再次重申这个恼人的细节:&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;@Entity(tableName = &amp;quot;messages&amp;quot;)
+public class ChatMessageEntity {
+
+    @NonNull
+    @PrimaryKey(autoGenerate = true)
+    //common field
+    private int id;
+
+    @SerializedName(&amp;quot;title&amp;quot;)
+    private String title;
+
+    @NonNull
+    public int getId() {
+        return id;
+    }
+
+    public void setId(@NonNull int id) {
+        this.id = id;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getText() {
+        return text;
+    }
+
+    public void setText(String text) {
+        this.text = text;
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;被注解为Entity的实体类添加字段，如果是private的必须提供getter和setter方法，或者修饰为public的&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;如果违反了这个规则，变异错误信息不一定会指向这个错误&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+        <pubDate>Mon, 03 Dec 2018 04:20:12 +0800</pubDate>
+        <link>http://longlinht.github.io//br-not-found</link>
+        <guid isPermaLink="true">http://longlinht.github.io//br-not-found</guid>
+      </item>
+    
+      <item>
         <title>记一次看似困难的Debug</title>
         <description>&lt;p&gt;今年把自己的手机换成了Android，拿到新机后就想找到一款手写笔记的App，因为在iOS用过一款体验很好，还用那个写了一篇游记，在试用了十几款此类的Andorid App后最终找到了一款名为INKredible的手写笔记App，刚开始用的时候很不顺手，都想卸载了，但是经过一番摸索后找到了技巧，再去试用后有一种惊艳的感觉，今天在地铁通勤的时候竟然用它谢了一篇技术博文，并已图片的形式到了出来，全文如下:(字迹潦草，读者莫怪，其实如果以正楷的形式书写, 效率较差，体验会大打折扣).&lt;/p&gt;
 
@@ -740,39 +813,6 @@ commonNavigator = new CommonNavigator(context);
         <pubDate>Tue, 13 Feb 2018 02:20:12 +0800</pubDate>
         <link>http://longlinht.github.io//pager-tab-selection</link>
         <guid isPermaLink="true">http://longlinht.github.io//pager-tab-selection</guid>
-      </item>
-    
-      <item>
-        <title>为什么要避免使用Fragment的默认构造函数</title>
-        <description>&lt;p&gt;今天在项目中需要用到Fragment, 但是在代码写完后碰到了这样一个警告:&lt;/p&gt;
-
-&lt;blockquote&gt;
-&lt;p&gt;Avoid non-default constructors in fragments: use a default constructor plus Fragment#setArguments(Bundle) instead&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;后来发现是因为自己使用了Fragment的非默认构造函数, 在构造函数里传递了参数, Fragment之前也用了很多次, 可能都忽略了这个警告, 因此并没有发现这个问题, 这次既然遇到了就想一探究竟, 看看到底是为什么. 查看了网上可找到的相关的信息后, 终于明白其中原由, 避免使用默认构造函数的原因如下:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;p&gt;系统在重新创建Fragment的时候调用的是默认构造函数.&lt;/p&gt;&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;系统在恢复Fragment的时候会自动恢复你通过&lt;code&gt;setArguments(Bundle bundle)&lt;/code&gt; 传递的&lt;code&gt;bundle&lt;/code&gt;, 你可以在&lt;code&gt;onCreate&lt;/code&gt;, &lt;code&gt;onCreateView&lt;/code&gt;中读取恢复的&lt;code&gt;bundle&lt;/code&gt;中的值,这种方式可以保证正确的恢复你最开始传递的bundle. &lt;/p&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;因为这是一个警告, 不是错误，所以你也可以使用非默认构造函数，但是你得确保在非默认构造函数中初始化&lt;code&gt;bundle&lt;/code&gt;中的参数,并在&lt;code&gt;onCreate&lt;/code&gt;, &lt;code&gt;onCreateView&lt;/code&gt;读取.&lt;/p&gt;
-
-&lt;p&gt;当然了，创建一个Fragment,并且传递参数的推荐方式是这样的:&lt;/p&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;public static MyFragment newInstance(int someInt) {
-    MyFragment myFragment = new MyFragment();
-
-    Bundle args = new Bundle();
-    args.putInt(&amp;quot;someInt&amp;quot;, someInt);
-    myFragment.setArguments(args);
-
-    return myFragment;
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</description>
-        <pubDate>Wed, 07 Feb 2018 03:25:12 +0800</pubDate>
-        <link>http://longlinht.github.io//avoid-default-constructor-in-fragment</link>
-        <guid isPermaLink="true">http://longlinht.github.io//avoid-default-constructor-in-fragment</guid>
       </item>
     
   </channel>

@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 
     <!-- [[! Page Meta ]] -->
-    <title>解决闹人的can not found symbol BR问题</title>
+    <title>解决ScrollView内容显示不全</title>
     <meta name="description" content="与机器，人，神共舞 - 编程，读书，思考，旅行，与机器对话，与人交谈，对神发问，探索，体验人生美丽的风景" />
 
     <meta name="HandheldFriendly" content="True" />
@@ -96,10 +96,10 @@
     <article class="post tag-machine">
 
         <header class="post-header">
-            <h1 class="post-title">解决闹人的can not found symbol BR问题</h1>
+            <h1 class="post-title">解决ScrollView内容显示不全</h1>
             <section class="post-meta">
             <!-- <a href='/'>Tao He</a> -->
-            <time class="post-date" datetime="2018-12-03">03 Dec 2018</time>
+            <time class="post-date" datetime="2018-12-05">05 Dec 2018</time>
                 <!-- [[tags prefix=" on "]] -->
                  
                 on 
@@ -114,71 +114,71 @@
 
         <section class="post-content">
             
-            <p>最近公司研发的这个App是我从零到一搭建的，在框架搭建时分别使用了Databinding和Room，今天在做新需求时需要向Room中的实体类新添加一个字段，在写完了所有相关的逻辑后，build工程，所有自动生成的Databinding类都报错，build log中并没有指向任何具体报错的Databinding类，这就令人很困惑，因为这个需求的添加并没有改动任何Databinding的类，在不知所以的情况下，那就尝试其他方法解决，之前我在一个技术博客上看到过一个Databinding类的Troubleshooting: </p>
+            <p>这个问题其实只要使用过<code>ScrollView</code>，可能都有机会遇到，问题的表现就是<code>ScrollView</code>包裹内容的高度超过<code>ScrollView</code>可视高度的话，被包裹的内容就会显示不全，最底部的内容永远也看不到了，这种情况肯定是无法接受的， 解决这个问题比较简单，其实就是简单的一句设置语句:</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">android:fillViewport=&quot;true&quot;
+</code></pre></div>
+<p>虽然这样可以解决问题，但是还是心中还有疑惑，我放在<code>ScrollView</code>中的<code>LinearLayout</code>是的高度是设置了<code>mactch_parent</code> 属性的，现在看来并没有生效，我猜测可能是<code>ScrollView</code>重写了测量方法导致的，于是去看<code>ScrollView</code>的<code>onMeasure</code> 方法:</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">@Override
+protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+  super.onMeasure(widthMeasureSpec, heightMeasureSpec);
 
-<p><strong>Troubleshooting the Issues with Binding Class</strong></p>
+  if (!mFillViewport) {
+      return;
+  }
 
-<ul>
-<li><p>Make sure you have the proper dataBinding.enabled = true in gradle and trigger &quot;Sync with Gradle&quot;</p></li>
-<li><p>Open the layout file and ensure that the XML file is valid and is wrapped in a <layout> tag.</p></li>
-<li><p>Check the layout file for the correct name i.e activity_main.xml maps to ActivityMainBinding.java.</p></li>
-<li><p>Run File =&gt; Invalidate Caches  Restart to clear the caches.</p></li>
-<li><p>Run Project =&gt; Clean and Project =&gt; Re-Build to regenerate the class file.</p></li>
-<li><p>Restart Android Studio again and then try the above steps again.</p></li>
-</ul>
+  final int heightMode = MeasureSpec.getMode(heightMeasureSpec);
+  if (heightMode == MeasureSpec.UNSPECIFIED) {
+      return;
+  }
 
-<p>对这几条Troubleshooting依次尝试后，报错依旧，这就非常恼人，然后我又怀疑是不是build log打印的信息不全，导致跑偏了定位问题的方向，因此在project Gradle中更改了错误信息的条数:</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">allprojects {
-    gradle.projectsEvaluated {
-        tasks.withType(JavaCompile) {
-            options.compilerArgs &lt;&lt; &quot;-Xmaxerrs&quot; &lt;&lt; &quot;4000&quot;
-            options.compilerArgs &lt;&lt; &quot;-Xmaxwarns&quot; &lt;&lt; &quot;4000&quot;
-        }
-    }
+  if (getChildCount() &gt; 0) {
+      final View child = getChildAt(0);
+      final int widthPadding;
+      final int heightPadding;
+      final int targetSdkVersion = getContext().getApplicationInfo().targetSdkVersion;
+      final FrameLayout.LayoutParams lp = (LayoutParams) child.getLayoutParams();
+      if (targetSdkVersion &gt;= VERSION_CODES.M) {
+          widthPadding = mPaddingLeft + mPaddingRight + lp.leftMargin + lp.rightMargin;
+          heightPadding = mPaddingTop + mPaddingBottom + lp.topMargin + lp.bottomMargin;
+      } else {
+          widthPadding = mPaddingLeft + mPaddingRight;
+          heightPadding = mPaddingTop + mPaddingBottom;
+      }
+
+      final int desiredHeight = getMeasuredHeight() - heightPadding;
+      if (child.getMeasuredHeight() &lt; desiredHeight) {
+          final int childWidthMeasureSpec = getChildMeasureSpec(
+                  widthMeasureSpec, widthPadding, lp.width);
+          final int childHeightMeasureSpec = MeasureSpec.makeMeasureSpec(
+                  desiredHeight, MeasureSpec.EXACTLY);
+          child.measure(childWidthMeasureSpec, childHeightMeasureSpec);
+      }
+  }
 }
 </code></pre></div>
-<p>在打印更多错误信息以后，仍旧看不出错误的源头在哪里。排查到这一步，可能就需要最笨的办法了，倒推法，在依次回退了可能导致这个错误的代码后，算是定位到了出错的修改， 就是Room的实体类添加了一个新的字段导致的，这就很奇怪，添加一个字段不是非常正常的操作吗？就算添加的字段不符合规范，那也应该是Room报错，关Databinding什么事，一开始真是一头雾水，但是我猜想可能是Room和Databinding这两类组件都自动生成了很多代码，在生成Room代码的时候的出错导致Databinding类生成失败，所以编译时表现为Databinding类找不到，这下问题变得清晰起来，问题的源头应该还是Room导致的，最后发现其实就是一个小的细节导致的，在给Room实体类添加字段的时候是private的，但是并没有提供getter和setter方法，因此导致编译失败，只是错误的表现误导了我的思路。白白浪费了几个小时排查这种因为违反了组件使用规范的问题，以后必须引以为戒，再次重申这个恼人的细节:</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">@Entity(tableName = &quot;messages&quot;)
-public class ChatMessageEntity {
+<p>很明显，在没有设置fillViewport属性为true时，<code>ScrollView</code>并没有去测量子View的高度，这就导致超过一屏内容的<code>View</code>的高度无法正确测量。解决了这个问题以后PM又提了一个底部内容有一部分被遮挡，滑不出的问题，布局代码是这样的:</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">&lt;ScrollView
+    android:layout_width=&quot;match_parent&quot;
+    android:layout_height=&quot;wrap_content&quot;
+    android:fillViewport=&quot;true&quot;
+    android:layout_below=&quot;@id/tv_title&quot;
+    android:layout_marginBottom=&quot;84dp&quot;
+    &gt;
 
-    @NonNull
-    @PrimaryKey(autoGenerate = true)
-    //common field
-    private int id;
+  &lt;com.zhy.view.flowlayout.TagFlowLayout
+      android:id=&quot;@+id/tfl_label&quot;
+      zhy:max_select=&quot;-1&quot;
+      android:layout_width=&quot;match_parent&quot;
+      android:layout_height=&quot;wrap_content&quot;
+      android:layout_marginTop=&quot;14dp&quot;
+      android:layout_marginStart=&quot;12dp&quot;
+      android:layout_marginEnd=&quot;12dp&quot;
+      &gt;
+  &lt;/com.zhy.view.flowlayout.TagFlowLayout&gt;
 
-    @SerializedName(&quot;title&quot;)
-    private String title;
-
-    @NonNull
-    public int getId() {
-        return id;
-    }
-
-    public void setId(@NonNull int id) {
-        this.id = id;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getText() {
-        return text;
-    }
-
-    public void setText(String text) {
-        this.text = text;
-    }
-}
+&lt;/ScrollView&gt;
 </code></pre></div>
-<ul>
-<li><p>被注解为Entity的实体类添加字段，如果是private的必须提供getter和setter方法，或者修饰为public的</p></li>
-<li><p>如果违反了这个规则，变异错误信息不一定会指向这个错误</p></li>
-</ul>
+<p>看了代码后发现被遮挡区域的高度差不多就是这个<code>TagFlowLayout</code>的<code>layout_marginTop</code>的值，当我去掉这个属性的设置后，遮挡的问题没有了，换作<code>paddingTop</code>后也没有问题，就是不能用<code>marginTop</code>，好吧，这个<code>ScrollView</code>的默认设定也是很奇葩啊！</p>
 
 
         </section>
@@ -210,15 +210,15 @@ public class ChatMessageEntity {
 
             <section class="share">
                 <h4>Share this post</h4>
-                <a class="icon-twitter" href="http://twitter.com/share?text=解决闹人的can not found symbol BR问题&amp;url=http://longlinht.github.io//br-not-found"
+                <a class="icon-twitter" href="http://twitter.com/share?text=解决ScrollView内容显示不全&amp;url=http://longlinht.github.io//scrollview-can-not-display-whole-content"
                     onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
                     <span class="hidden">Twitter</span>
                 </a>
-                <a class="icon-facebook" href="https://www.facebook.com/sharer/sharer.php?u=http://longlinht.github.io//br-not-found"
+                <a class="icon-facebook" href="https://www.facebook.com/sharer/sharer.php?u=http://longlinht.github.io//scrollview-can-not-display-whole-content"
                     onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
                     <span class="hidden">Facebook</span>
                 </a>
-                <a class="icon-google-plus" href="https://plus.google.com/share?url=http://longlinht.github.io//br-not-found"
+                <a class="icon-google-plus" href="https://plus.google.com/share?url=http://longlinht.github.io//scrollview-can-not-display-whole-content"
                    onclick="window.open(this.href, 'google-plus-share', 'width=490,height=530');return false;">
                     <span class="hidden">Google+</span>
                 </a>
@@ -261,23 +261,13 @@ public class ChatMessageEntity {
 
     <!-- [[! next_post ]] -->
     
-        <a class="read-next-story no-cover" href="http://longlinht.github.io//scrollview-can-not-display-whole-content">
-            <section class="post">
-                <h2>解决ScrollView内容显示不全</h2>
-                <p>这个问题其实只要使用过`ScrollView`，可能都有机会遇到，问题的表现就是`ScrollView`包裹内容的高度超过`ScrollView`可视高度的话，被包裹的内容就会显示不全，最底部的内容永远也看不到了，这种情况肯定是无法接受的， 解决这个问题比较简单，其实就是简单的一句设置语句: ``` android:fillViewport="true" ``` 虽然这样可以解决问题，但是还是心中还有疑惑，我放在`ScrollView`中的`LinearLayout`是的高度是设置了`mactch_parent` 属性的，现在看来并没有生效，我猜测可能是`ScrollView`重写了测量方法导致的，于是去看`ScrollView`的`onMeasure` 方法: ``` @Override protected void onMeasure(int widthMeasureSpec, int...</p>
-            </section>
-        </a>
-    
     <!-- [[! /next_post ]] -->
     <!-- [[! prev_post ]] -->
     
-        <a class="read-next-story prev no-cover" href="http://longlinht.github.io//record-a-debug-process">
+        <a class="read-next-story prev no-cover" href="http://longlinht.github.io//br-not-found">
             <section class="post">
-                <h2>记一次看似困难的Debug</h2>
-                <p><p>今年把自己的手机换成了Android，拿到新机后就想找到一款手写笔记的App，因为在iOS用过一款体验很好，还用那个写了一篇游记，在试用了十几款此类的Andorid App后最终找到了一款名为INKredible的手写笔记App，刚开始用的时候很不顺手，都想卸载了，但是经过一番摸索后找到了技巧，再去试用后有一种惊艳的感觉，今天在地铁通勤的时候竟然用它谢了一篇技术博文，并已图片的形式到了出来，全文如下:(字迹潦草，读者莫怪，其实如果以正楷的形式书写, 效率较差，体验会大打折扣).</p>
-
-<p><img src="https://www.jianguoyun.com/c/tblv2/CKKXGhIgKfHfSQRMQtKR-E0f0_ggyWsz8qZQVKSYyXPTmWZdmkQ/Bt2RU8j9dfI/l" alt=""></p>
-</p>
+                <h2>解决闹人的can not found symbol BR问题</h2>
+                <p><p>最近公司研发的这个App是我从零到一搭建的，在框架搭建时分别使用了Databinding和Room，今天在做新需求时需要向Room中的实体类新添加一个字段，在写完了所有相关的逻辑后，build工程，所有自动生成的Databinding类都报错，build log中并没有指向任何具体报错的Databinding类，这就令人很困惑，因为这个需求的添加并没有改动任何Databinding的类，在不知所以的情况下，那就尝试其他方法解决，之前我在一个技术博客上看到过一个Databinding类的Troubleshooting: </p> <p><strong>Troubleshooting the Issues with Binding Class</strong></p> <ul> <li><p>Make sure you have the...</p>
             </section>
         </a>
     

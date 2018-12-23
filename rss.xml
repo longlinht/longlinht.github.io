@@ -8,7 +8,16 @@
     <title>与机器，人，神共舞</title>
     <link>http://longlinht.github.io/</link>
     <description>编程，读书，思考，旅行，与机器对话，与人交谈，对神发问，探索，体验人生美丽的风景</description>
-    <pubDate>Mon, 03 Dec 2018 04:20:12 +0800</pubDate>
+    <pubDate>Wed, 05 Dec 2018 04:20:12 +0800</pubDate>
+    <item>
+      <title>解决ScrollView内容显示不全</title>
+      <link>http://longlinht.github.io//scrollview-can-not-display-whole-content</link>
+      <description>这个问题其实只要使用过`ScrollView`，可能都有机会遇到，问题的表现就是`ScrollView`包裹内容的高度超过`ScrollView`可视高度的话，被包裹的内容就会显示不全，最底部的内容永远也看不到了，这种情况肯定是无法接受的， 解决这个问题比较简单，其实就是简单的一句设置语句:
+
+</description>
+      <pubDate>Wed, 05 Dec 2018 04:20:12 +0800</pubDate>
+      <dc:date>2018-12-05T04:20:12+08:00</dc:date>
+    </item>
     <item>
       <title>解决闹人的can not found symbol BR问题</title>
       <link>http://longlinht.github.io//br-not-found</link>
@@ -416,6 +425,6 @@ update UI when we finish something in separated thread. This is a basic problem,
       <pubDate>Wed, 03 Nov 2010 02:30:12 +0800</pubDate>
       <dc:date>2010-11-03T02:30:12+08:00</dc:date>
     </item>
-    <dc:date>2018-12-03T04:20:12+08:00</dc:date>
+    <dc:date>2018-12-05T04:20:12+08:00</dc:date>
   </channel>
 </rss>

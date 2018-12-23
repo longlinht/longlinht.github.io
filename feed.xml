@@ -7,6 +7,79 @@
     <atom:link href="http://longlinht.github.io//feed.xml" rel="self" type="application/rss+xml" />
     
       <item>
+        <title>解决ScrollView内容显示不全</title>
+        <description>&lt;p&gt;这个问题其实只要使用过&lt;code&gt;ScrollView&lt;/code&gt;，可能都有机会遇到，问题的表现就是&lt;code&gt;ScrollView&lt;/code&gt;包裹内容的高度超过&lt;code&gt;ScrollView&lt;/code&gt;可视高度的话，被包裹的内容就会显示不全，最底部的内容永远也看不到了，这种情况肯定是无法接受的， 解决这个问题比较简单，其实就是简单的一句设置语句:&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;android:fillViewport=&amp;quot;true&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;虽然这样可以解决问题，但是还是心中还有疑惑，我放在&lt;code&gt;ScrollView&lt;/code&gt;中的&lt;code&gt;LinearLayout&lt;/code&gt;是的高度是设置了&lt;code&gt;mactch_parent&lt;/code&gt; 属性的，现在看来并没有生效，我猜测可能是&lt;code&gt;ScrollView&lt;/code&gt;重写了测量方法导致的，于是去看&lt;code&gt;ScrollView&lt;/code&gt;的&lt;code&gt;onMeasure&lt;/code&gt; 方法:&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;@Override
+protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+  super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+
+  if (!mFillViewport) {
+      return;
+  }
+
+  final int heightMode = MeasureSpec.getMode(heightMeasureSpec);
+  if (heightMode == MeasureSpec.UNSPECIFIED) {
+      return;
+  }
+
+  if (getChildCount() &amp;gt; 0) {
+      final View child = getChildAt(0);
+      final int widthPadding;
+      final int heightPadding;
+      final int targetSdkVersion = getContext().getApplicationInfo().targetSdkVersion;
+      final FrameLayout.LayoutParams lp = (LayoutParams) child.getLayoutParams();
+      if (targetSdkVersion &amp;gt;= VERSION_CODES.M) {
+          widthPadding = mPaddingLeft + mPaddingRight + lp.leftMargin + lp.rightMargin;
+          heightPadding = mPaddingTop + mPaddingBottom + lp.topMargin + lp.bottomMargin;
+      } else {
+          widthPadding = mPaddingLeft + mPaddingRight;
+          heightPadding = mPaddingTop + mPaddingBottom;
+      }
+
+      final int desiredHeight = getMeasuredHeight() - heightPadding;
+      if (child.getMeasuredHeight() &amp;lt; desiredHeight) {
+          final int childWidthMeasureSpec = getChildMeasureSpec(
+                  widthMeasureSpec, widthPadding, lp.width);
+          final int childHeightMeasureSpec = MeasureSpec.makeMeasureSpec(
+                  desiredHeight, MeasureSpec.EXACTLY);
+          child.measure(childWidthMeasureSpec, childHeightMeasureSpec);
+      }
+  }
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;很明显，在没有设置fillViewport属性为true时，&lt;code&gt;ScrollView&lt;/code&gt;并没有去测量子View的高度，这就导致超过一屏内容的&lt;code&gt;View&lt;/code&gt;的高度无法正确测量。解决了这个问题以后PM又提了一个底部内容有一部分被遮挡，滑不出的问题，布局代码是这样的:&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;&amp;lt;ScrollView
+    android:layout_width=&amp;quot;match_parent&amp;quot;
+    android:layout_height=&amp;quot;wrap_content&amp;quot;
+    android:fillViewport=&amp;quot;true&amp;quot;
+    android:layout_below=&amp;quot;@id/tv_title&amp;quot;
+    android:layout_marginBottom=&amp;quot;84dp&amp;quot;
+    &amp;gt;
+
+  &amp;lt;com.zhy.view.flowlayout.TagFlowLayout
+      android:id=&amp;quot;@+id/tfl_label&amp;quot;
+      zhy:max_select=&amp;quot;-1&amp;quot;
+      android:layout_width=&amp;quot;match_parent&amp;quot;
+      android:layout_height=&amp;quot;wrap_content&amp;quot;
+      android:layout_marginTop=&amp;quot;14dp&amp;quot;
+      android:layout_marginStart=&amp;quot;12dp&amp;quot;
+      android:layout_marginEnd=&amp;quot;12dp&amp;quot;
+      &amp;gt;
+  &amp;lt;/com.zhy.view.flowlayout.TagFlowLayout&amp;gt;
+
+&amp;lt;/ScrollView&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;看了代码后发现被遮挡区域的高度差不多就是这个&lt;code&gt;TagFlowLayout&lt;/code&gt;的&lt;code&gt;layout_marginTop&lt;/code&gt;的值，当我去掉这个属性的设置后，遮挡的问题没有了，换作&lt;code&gt;paddingTop&lt;/code&gt;后也没有问题，就是不能用&lt;code&gt;marginTop&lt;/code&gt;，好吧，这个&lt;code&gt;ScrollView&lt;/code&gt;的默认设定也是很奇葩啊！&lt;/p&gt;
+</description>
+        <pubDate>Wed, 05 Dec 2018 04:20:12 +0800</pubDate>
+        <link>http://longlinht.github.io//scrollview-can-not-display-whole-content</link>
+        <guid isPermaLink="true">http://longlinht.github.io//scrollview-can-not-display-whole-content</guid>
+      </item>
+    
+      <item>
         <title>解决闹人的can not found symbol BR问题</title>
         <description>&lt;p&gt;最近公司研发的这个App是我从零到一搭建的，在框架搭建时分别使用了Databinding和Room，今天在做新需求时需要向Room中的实体类新添加一个字段，在写完了所有相关的逻辑后，build工程，所有自动生成的Databinding类都报错，build log中并没有指向任何具体报错的Databinding类，这就令人很困惑，因为这个需求的添加并没有改动任何Databinding的类，在不知所以的情况下，那就尝试其他方法解决，之前我在一个技术博客上看到过一个Databinding类的Troubleshooting: &lt;/p&gt;
 
@@ -690,129 +763,6 @@ Winston had never been able to feel sure — even after this morning&amp;#39;s f
         <pubDate>Thu, 15 Feb 2018 02:20:12 +0800</pubDate>
         <link>http://longlinht.github.io//do-with-gradle-error</link>
         <guid isPermaLink="true">http://longlinht.github.io//do-with-gradle-error</guid>
-      </item>
-    
-      <item>
-        <title>Android开发中标签指示器的选用</title>
-        <description>&lt;p&gt;在Android实际的开发过程中,几乎都会用到标签指示器和ViewPager的联动使用,ViewPager,毫无疑问就直接选用系统提供的, 但是和它联动的标签指示器就有非常多的选择, 我在开发的过程中使用了两个比较常见的实现,也是Github上star较多的两个项目.&lt;/p&gt;
-
-&lt;h3&gt;PagerSlidingTabTrip&lt;/h3&gt;
-
-&lt;p&gt;基本使用:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;添加依赖&lt;/li&gt;
-&lt;/ul&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;implementation &amp;#39;com.astuetz:pagerslidingtabstrip:1.0.1&amp;#39;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;ul&gt;
-&lt;li&gt;在布局文件中添加&lt;code&gt;PagerSlidingTabTrip&lt;/code&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-xml&quot; data-lang=&quot;xml&quot;&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;com.astuetz.PagerSlidingTabStrip&lt;/span&gt;
-        &lt;span class=&quot;na&quot;&gt;android:id=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;@+id/tabs&amp;quot;&lt;/span&gt;
-        &lt;span class=&quot;na&quot;&gt;android:layout_width=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;match_parent&amp;quot;&lt;/span&gt;
-        &lt;span class=&quot;na&quot;&gt;android:layout_height=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;48dip&amp;quot;&lt;/span&gt;
-        &lt;span class=&quot;na&quot;&gt;android:layout_gravity=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;center_horizontal&amp;quot;&lt;/span&gt;
-        &lt;span class=&quot;na&quot;&gt;android:background=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;@color/tabsBackgroundColor&amp;quot;&lt;/span&gt;
-        &lt;span class=&quot;na&quot;&gt;android:textColor=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;@color/tabsTextColor&amp;quot;&lt;/span&gt;
-        &lt;span class=&quot;na&quot;&gt;app:pstsIndicatorColor=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;@color/tabsIndicatorColor&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;p&gt;在布局文件中设置&lt;code&gt;app:pstsShouldExpand=&amp;quot;true&amp;quot;&lt;/code&gt;会导致崩溃,原因是无法inflate,这个问题没有细究&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;初始化设置&lt;/li&gt;
-&lt;/ul&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;tabs = contentView.findViewById(R.id.tabs);
-tabs.setShouldExpand(true);  //在这里设置就没有问题
-tabs.setIndicatorColorResource(R.color.fp_room_music_tab_indicator);
-tabs.setIndicatorHeight((int)resources.getDimension(R.dimen.room_music_tab_indicator_height));
-tabs.setAllCaps(false);
-tabs.setTextSize((int)resources.getDimension(R.dimen.room_music_tab_text));
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;p&gt;这个使用起来非常方便,但是有一两个问题:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;p&gt;指示器未选中项和选中项文字的颜色不能设置,这个不符合项目的要求&lt;/p&gt;&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;在布局文件中设置有些属性的时候不生效, 设置有些属性会导致崩溃(崩溃原因不确定)&lt;/p&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;因为上面的两个问题, 我最后在项目中选用了MagicIndicator&lt;/p&gt;
-
-&lt;h3&gt;MagicIndicator&lt;/h3&gt;
-
-&lt;p&gt;MagicIndicator可以设置选中和未选中项文字的颜色,并且有些属性的设置相对灵活&lt;/p&gt;
-
-&lt;p&gt;基本使用:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;添加依赖&lt;/li&gt;
-&lt;/ul&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;implementation &amp;#39;com.github.hackware1993:MagicIndicator:1.5.0&amp;#39;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;ul&gt;
-&lt;li&gt;在布局文件中添加&lt;/li&gt;
-&lt;/ul&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;&amp;lt;net.lucode.hackware.magicindicator.MagicIndicator
-            android:id=&amp;quot;@+id/magic_indicator&amp;quot;
-            android:layout_width=&amp;quot;match_parent&amp;quot;
-            android:layout_height=&amp;quot;40dp&amp;quot;
-            android:layout_below=&amp;quot;@id/title&amp;quot;
-            android:layout_marginTop=&amp;quot;14dp&amp;quot;
-            /&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;ul&gt;
-&lt;li&gt;初始化&lt;/li&gt;
-&lt;/ul&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;magicIndicator = contentView.findViewById(R.id.magic_indicator);
-commonNavigator = new CommonNavigator(context);
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;ul&gt;
-&lt;li&gt;数据绑定和属性动态设置&lt;/li&gt;
-&lt;/ul&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;commonNavigator.setAdapter(new CommonNavigatorAdapter() {
-
-          @Override
-          public int getCount() {
-              return mc == null ? 0 : mc.size();
-          }
-
-          @Override
-          public IPagerTitleView getTitleView(Context context, final int index) {
-
-              ColorTransitionPagerTitleView colorTransitionPagerTitleView = new ColorTransitionPagerTitleView(context);
-              colorTransitionPagerTitleView.setNormalColor(resources.getColor(R.color.fp_room_music_tab_text));
-              colorTransitionPagerTitleView.setSelectedColor(resources.getColor(R.color.fp_purple_1st));
-              colorTransitionPagerTitleView.setText(mc.get(index).categoryName);
-              colorTransitionPagerTitleView.setOnClickListener(new View.OnClickListener() {
-                  @Override
-                  public void onClick(View view) {
-                      pager.setCurrentItem(index);
-                  }
-              });
-              return colorTransitionPagerTitleView;
-          }
-
-          @Override
-          public IPagerIndicator getIndicator(Context context) {
-              LinePagerIndicator indicator = new LinePagerIndicator(context);
-              indicator.setMode(LinePagerIndicator.MODE_MATCH_EDGE);
-              indicator.setColors(resources.getColor(R.color.fp_purple_1st));
-              return indicator;
-          }
-      });
-      commonNavigator.setAdjustMode(true);
-      magicIndicator.setNavigator(commonNavigator);
-
-      // pager is a ViewPager
-      ViewPagerHelper.bind(magicIndicator, pager);
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;p&gt;其中的pager变量是一个ViewPager&lt;/p&gt;
-
-&lt;p&gt;MagicIndicator基本满足项目的全部要求,使用的过程中也没有发现什么问题.除了这两个,其他第三方的实现也非常多, 系统提供的TabLayout也同样能实现类似的功能,这里就不一一列举了.&lt;/p&gt;
-</description>
-        <pubDate>Tue, 13 Feb 2018 02:20:12 +0800</pubDate>
-        <link>http://longlinht.github.io//pager-tab-selection</link>
-        <guid isPermaLink="true">http://longlinht.github.io//pager-tab-selection</guid>
       </item>
     
   </channel>

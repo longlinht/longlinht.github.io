@@ -12,6 +12,82 @@
    <atom:link href="rss" rel="self" type="application/rss+xml" />
    
 	<item>
+	  <title>解决ScrollView内容显示不全</title>
+	  <link>//scrollview-can-not-display-whole-content</link>
+	  <author>Tao He</author>
+	  <pubDate>2018-12-05T04:20:12+08:00</pubDate>
+	  <guid>//scrollview-can-not-display-whole-content</guid>
+	  <description><![CDATA[
+	     <p>这个问题其实只要使用过<code>ScrollView</code>，可能都有机会遇到，问题的表现就是<code>ScrollView</code>包裹内容的高度超过<code>ScrollView</code>可视高度的话，被包裹的内容就会显示不全，最底部的内容永远也看不到了，这种情况肯定是无法接受的， 解决这个问题比较简单，其实就是简单的一句设置语句:</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">android:fillViewport=&quot;true&quot;
+</code></pre></div>
+<p>虽然这样可以解决问题，但是还是心中还有疑惑，我放在<code>ScrollView</code>中的<code>LinearLayout</code>是的高度是设置了<code>mactch_parent</code> 属性的，现在看来并没有生效，我猜测可能是<code>ScrollView</code>重写了测量方法导致的，于是去看<code>ScrollView</code>的<code>onMeasure</code> 方法:</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">@Override
+protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+  super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+
+  if (!mFillViewport) {
+      return;
+  }
+
+  final int heightMode = MeasureSpec.getMode(heightMeasureSpec);
+  if (heightMode == MeasureSpec.UNSPECIFIED) {
+      return;
+  }
+
+  if (getChildCount() &gt; 0) {
+      final View child = getChildAt(0);
+      final int widthPadding;
+      final int heightPadding;
+      final int targetSdkVersion = getContext().getApplicationInfo().targetSdkVersion;
+      final FrameLayout.LayoutParams lp = (LayoutParams) child.getLayoutParams();
+      if (targetSdkVersion &gt;= VERSION_CODES.M) {
+          widthPadding = mPaddingLeft + mPaddingRight + lp.leftMargin + lp.rightMargin;
+          heightPadding = mPaddingTop + mPaddingBottom + lp.topMargin + lp.bottomMargin;
+      } else {
+          widthPadding = mPaddingLeft + mPaddingRight;
+          heightPadding = mPaddingTop + mPaddingBottom;
+      }
+
+      final int desiredHeight = getMeasuredHeight() - heightPadding;
+      if (child.getMeasuredHeight() &lt; desiredHeight) {
+          final int childWidthMeasureSpec = getChildMeasureSpec(
+                  widthMeasureSpec, widthPadding, lp.width);
+          final int childHeightMeasureSpec = MeasureSpec.makeMeasureSpec(
+                  desiredHeight, MeasureSpec.EXACTLY);
+          child.measure(childWidthMeasureSpec, childHeightMeasureSpec);
+      }
+  }
+}
+</code></pre></div>
+<p>很明显，在没有设置fillViewport属性为true时，<code>ScrollView</code>并没有去测量子View的高度，这就导致超过一屏内容的<code>View</code>的高度无法正确测量。解决了这个问题以后PM又提了一个底部内容有一部分被遮挡，滑不出的问题，布局代码是这样的:</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">&lt;ScrollView
+    android:layout_width=&quot;match_parent&quot;
+    android:layout_height=&quot;wrap_content&quot;
+    android:fillViewport=&quot;true&quot;
+    android:layout_below=&quot;@id/tv_title&quot;
+    android:layout_marginBottom=&quot;84dp&quot;
+    &gt;
+
+  &lt;com.zhy.view.flowlayout.TagFlowLayout
+      android:id=&quot;@+id/tfl_label&quot;
+      zhy:max_select=&quot;-1&quot;
+      android:layout_width=&quot;match_parent&quot;
+      android:layout_height=&quot;wrap_content&quot;
+      android:layout_marginTop=&quot;14dp&quot;
+      android:layout_marginStart=&quot;12dp&quot;
+      android:layout_marginEnd=&quot;12dp&quot;
+      &gt;
+  &lt;/com.zhy.view.flowlayout.TagFlowLayout&gt;
+
+&lt;/ScrollView&gt;
+</code></pre></div>
+<p>看了代码后发现被遮挡区域的高度差不多就是这个<code>TagFlowLayout</code>的<code>layout_marginTop</code>的值，当我去掉这个属性的设置后，遮挡的问题没有了，换作<code>paddingTop</code>后也没有问题，就是不能用<code>marginTop</code>，好吧，这个<code>ScrollView</code>的默认设定也是很奇葩啊！</p>
+
+	  ]]></description>
+	</item>
+
+	<item>
 	  <title>解决闹人的can not found symbol BR问题</title>
 	  <link>//br-not-found</link>
 	  <author>Tao He</author>
@@ -521,70 +597,6 @@ commonNavigator = new CommonNavigator(context);
     return myFragment;
 }
 </code></pre></div>
-	  ]]></description>
-	</item>
-
-	<item>
-	  <title>多样式 TextView 小记</title>
-	  <link>//different-portion-different-appearance-in-same-textview</link>
-	  <author>Tao He</author>
-	  <pubDate>2018-02-03T03:25:12+08:00</pubDate>
-	  <guid>//different-portion-different-appearance-in-same-textview</guid>
-	  <description><![CDATA[
-	     <p>所谓多样式 <code>TextView</code>, 就是在同一个 <code>TextView</code>中不同部分的text展示不同的颜色,字体大小,字体,字体Style,这种需求其实在很多App中都存在, 能够直接的给每一部分Text赋予不同的外观, 既可以在布局中少添加几个<code>TextView</code>, 也可以使以后需求变动后能够灵活的做出改动, 我在实际的开发中也经常碰到这种需求,很多次都是临时Google下, 实现了以后也就作罢了, 等后面又遇到的时候,貌似又记得不太清楚了, 又需要去查, 很没有效率, 所以写下这篇小记.</p>
-
-<p>要想给TextView的不同部分设置不同的属性,通常有两种做法:</p>
-
-<h4>使用SpannableString</h4>
-
-<p>这种方法需要用到<code>Spannable</code>借口, 一般做法如下:</p>
-<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="n">String</span> <span class="n">text</span> <span class="o">=</span> <span class="s">&quot;Hello World&quot;</span><span class="o">;</span>
-<span class="n">TextView</span> <span class="n">tvTitle</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">TextView</span><span class="o">(</span><span class="n">context</span><span class="o">);</span>
-
-<span class="n">Spannable</span> <span class="n">spannable</span> <span class="o">=</span> <span class="n">SpannableString</span><span class="o">(</span><span class="n">text</span><span class="o">);</span>
-
-<span class="c1">// set different text color</span>
-<span class="n">spannable</span><span class="o">.</span><span class="na">setSpan</span><span class="o">(</span><span class="k">new</span> <span class="nf">ForegroundColorSpan</span><span class="o">(</span><span class="n">context</span><span class="o">.</span><span class="na">getResouces</span><span class="o">().</span><span class="na">getColor</span><span class="o">(</span><span class="n">android</span><span class="o">.</span><span class="na">R</span><span class="o">.</span><span class="na">color</span><span class="o">.</span><span class="na">black</span><span class="o">)),</span> <span class="mi">0</span><span class="o">,</span> <span class="mi">5</span><span class="o">,</span> <span class="n">Spannable</span><span class="o">.</span><span class="na">SPAN_EXCLUSIVE_EXCLUSIVE</span><span class="o">);</span>
-<span class="n">spannable</span><span class="o">.</span><span class="na">setSpan</span><span class="o">(</span><span class="k">new</span> <span class="nf">ForegroundColorSpan</span><span class="o">(</span><span class="n">context</span><span class="o">.</span><span class="na">getResouces</span><span class="o">().</span><span class="na">getColor</span><span class="o">(</span><span class="n">android</span><span class="o">.</span><span class="na">R</span><span class="o">.</span><span class="na">color</span><span class="o">.</span><span class="na">white</span><span class="o">)),</span> <span class="mi">5</span><span class="o">,</span> <span class="n">text</span><span class="o">.</span><span class="na">length</span><span class="o">(),</span> <span class="n">Spannable</span><span class="o">.</span><span class="na">SPAN_EXCLUSIVE_EXCLUSIVE</span><span class="o">);</span>
-
-<span class="c1">// set different background color</span>
-<span class="n">spannable</span><span class="o">.</span><span class="na">setSpan</span><span class="o">(</span><span class="k">new</span> <span class="nf">BackgroundColorSpan</span><span class="o">(</span><span class="n">android</span><span class="o">.</span><span class="na">R</span><span class="o">.</span><span class="na">color</span><span class="o">.</span><span class="na">black</span><span class="o">),</span> <span class="mi">0</span><span class="o">,</span> <span class="mi">5</span><span class="o">,</span> <span class="n">Spannable</span><span class="o">.</span><span class="na">SPAN_EXCLUSIVE_EXCLUSIVE</span><span class="o">);</span>
-
-<span class="c1">// set different text size</span>
-<span class="kt">int</span> <span class="n">largeSize</span> <span class="o">=</span> <span class="n">getResources</span><span class="o">().</span><span class="na">getDimensionPixelSize</span><span class="o">(</span><span class="n">R</span><span class="o">.</span><span class="na">dimen</span><span class="o">.</span><span class="na">larage</span><span class="o">);</span>
-<span class="kt">int</span> <span class="n">smallSize</span> <span class="o">=</span> <span class="n">getResources</span><span class="o">().</span><span class="na">getDimensionPixelSize</span><span class="o">(</span><span class="n">R</span><span class="o">.</span><span class="na">dimen</span><span class="o">.</span><span class="na">small</span><span class="o">);</span>
-<span class="n">spannable</span><span class="o">.</span><span class="na">setSpan</span><span class="o">(</span><span class="k">new</span> <span class="nf">AbsoluteSizeSpan</span><span class="o">(</span><span class="n">largeSize</span><span class="o">),</span> <span class="mi">0</span><span class="o">,</span> <span class="mi">5</span><span class="o">,</span> <span class="n">Spannable</span><span class="o">.</span><span class="na">SPAN_EXCLUSIVE_EXCLUSIVE</span><span class="o">);</span>
-<span class="n">spannable</span><span class="o">.</span><span class="na">setSpan</span><span class="o">(</span><span class="k">new</span> <span class="nf">AbsoluteSizeSpan</span><span class="o">(</span><span class="n">smallSize</span><span class="o">),</span> <span class="mi">5</span><span class="o">,</span> <span class="n">text</span><span class="o">.</span><span class="na">length</span><span class="o">(),</span> <span class="n">Spannable</span><span class="o">.</span><span class="na">SPAN_EXCLUSIVE_EXCLUSIVE</span><span class="o">);</span>
-
-<span class="c1">// set relative size </span>
-<span class="n">spannable</span><span class="o">.</span><span class="na">setSpan</span><span class="o">(</span><span class="k">new</span> <span class="nf">RelativeSizeSpan</span><span class="o">(</span><span class="mi">2</span><span class="n">f</span><span class="o">),</span> <span class="mi">0</span><span class="o">,</span> <span class="mi">5</span><span class="o">,</span> <span class="n">Spannable</span><span class="o">.</span><span class="na">SPAN_EXCLUSIVE_EXCLUSIVE</span><span class="o">);</span>
-
-<span class="c1">// set different font style</span>
-<span class="n">spannable</span><span class="o">.</span><span class="na">setSpan</span><span class="o">(</span><span class="k">new</span> <span class="nf">StyleSpan</span><span class="o">(</span><span class="n">android</span><span class="o">.</span><span class="na">graphics</span><span class="o">.</span><span class="na">Typeface</span><span class="o">.</span><span class="na">ITALIC</span><span class="o">),</span> <span class="mi">0</span><span class="o">,</span> <span class="mi">5</span><span class="o">,</span> <span class="n">Spannable</span><span class="o">.</span><span class="na">SPAN_EXCLUSIVE_EXCLUSIVE</span><span class="o">);</span>
-<span class="n">spannable</span><span class="o">.</span><span class="na">setSpan</span><span class="o">(</span><span class="k">new</span> <span class="nf">StyleSpan</span><span class="o">(</span><span class="n">android</span><span class="o">.</span><span class="na">graphics</span><span class="o">.</span><span class="na">Typeface</span><span class="o">.</span><span class="na">BOLD</span><span class="o">),</span> <span class="mi">5</span><span class="o">,</span> <span class="n">text</span><span class="o">.</span><span class="na">length</span><span class="o">(),</span> <span class="n">Spannable</span><span class="o">.</span><span class="na">SPAN_EXCLUSIVE_EXCLUSIVE</span><span class="o">);</span>
-<span class="n">tvTitle</span><span class="o">.</span><span class="na">setText</span><span class="o">(</span><span class="n">spannable</span><span class="o">);</span>
-</code></pre></div>
-<p>使用<code>Spannable</code>接口还是比较灵活和已于理解的.</p>
-
-<h4>使用Html Tags</h4>
-
-<p><code>TextView</code>支持常见的Html tags来标记text的外观,一般做法如下：</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">TextView textview = new TextView(context);
-textView.setText(Html.fromHtml(&quot;&lt;b&gt;&quot; + title + &quot;&lt;/b&gt;&quot; +  &quot;&lt;br /&gt;&quot; + 
-            &quot;&lt;small&gt;&quot; + description + &quot;&lt;/small&gt;&quot; + &quot;&lt;br /&gt;&quot; + 
-            &quot;&lt;small&gt;&quot; + DateAdded + &quot;&lt;/small&gt;&quot;));
-</code></pre></div>
-<p>例如也可以在strings.xml中这样定义:</p>
-<div class="highlight"><pre><code class="language-xml" data-lang="xml"><span class="nt">&lt;string</span> <span class="na">name=</span><span class="s">&quot;my_text&quot;</span><span class="nt">&gt;</span>
-  <span class="cp">&lt;![CDATA[</span>
-<span class="cp">    &lt;b&gt;Autor:&lt;/b&gt; Tao&lt;br/&gt;</span>
-<span class="cp">    &lt;b&gt;Contact:&lt;/b&gt; myemail@gmail.com&lt;br/&gt;</span>
-<span class="cp">    &lt;i&gt;Copyright © 2011-2012 &lt;/i&gt;</span>
-<span class="cp">  ]]&gt;</span>
-<span class="nt">&lt;/string&gt;</span> 
-</code></pre></div>
-<p>这样定义就比上面那种方式更好一点,可以对string资源统一管理, 当然了Html的这种方式支持很多其他的tag, 同样可以做到Spannable接口可以做到的, 这里就不一一列举了. 不过有一点需要注意, 就是在<code>setText</code>的时候要调用<code>Html.fromHtml</code>才生效. 这个主题琐碎,但对于工程师来说什么事不琐碎呢? 注意细节, 提高效率, 每次记录下一些需要反复使用到的技术点, 也是一种修行.</p>
-
 	  ]]></description>
 	</item>
 

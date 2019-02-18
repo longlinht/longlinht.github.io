@@ -8,7 +8,16 @@
     <title>与机器，人，神共舞</title>
     <link>http://longlinht.github.io/</link>
     <description>编程，读书，思考，旅行，与机器对话，与人交谈，对神发问，探索，体验人生美丽的风景</description>
-    <pubDate>Wed, 05 Dec 2018 04:20:12 +0800</pubDate>
+    <pubDate>Tue, 19 Feb 2019 04:20:12 +0800</pubDate>
+    <item>
+      <title>移动应用中的典型页面</title>
+      <link>http://longlinht.github.io//typical-pages-in-mobile-app</link>
+      <description>今天这篇文章不做具体技术细节的探讨，而是来观察诸多移动应用中反复出现，具有典型特征和重要作用的一些页面来一窥一般移动应用的基本结构。这些反复出现的页面原型可以归纳为如下六类:
+
+</description>
+      <pubDate>Tue, 19 Feb 2019 04:20:12 +0800</pubDate>
+      <dc:date>2019-02-19T04:20:12+08:00</dc:date>
+    </item>
     <item>
       <title>解决ScrollView内容显示不全</title>
       <link>http://longlinht.github.io//scrollview-can-not-display-whole-content</link>
@@ -425,6 +434,6 @@ update UI when we finish something in separated thread. This is a basic problem,
       <pubDate>Wed, 03 Nov 2010 02:30:12 +0800</pubDate>
       <dc:date>2010-11-03T02:30:12+08:00</dc:date>
     </item>
-    <dc:date>2018-12-05T04:20:12+08:00</dc:date>
+    <dc:date>2019-02-19T04:20:12+08:00</dc:date>
   </channel>
 </rss>

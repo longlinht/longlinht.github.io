@@ -7,6 +7,179 @@
     <atom:link href="http://longlinht.github.io//feed.xml" rel="self" type="application/rss+xml" />
     
       <item>
+        <title>加速Gradle构建</title>
+        <description>&lt;p&gt;最近刚换工作，来这家新公司没几天，还在熟悉和适应阶段，leader也没安排什么特别的事情，只是说有空可以看看我们工程Gradle Build速度慢的问题。总算接到一个方向比较明确的任务，正好可以从工程的构建流程入手，可以一窥整个工程的结构和依赖。因为Gradle构建速度慢这个问题，其实有一些常见的排查方法，解决问题第一步，还是用最快的排查法，首先排除一些最常见的造成构建速度缓慢的原因。但是要找出构建速度慢的问题也需要将问题分情况来看，分两种情况，一种是在开发过程中的构建和正式发版上线的构建，这两种构建通常是相同的，但有时为了节约开发过程中的构建时间，会做一些特殊的设置和开启关闭一些选项来加速开发过程中的构建，因此，这两种情况面临的问题其实是类似的，因为还不是很清楚leader更在意的是开发过程中的构建时间还是发布上线的构建，因此我决定把这两种情况合二为一，罗列出所有的加速建议:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;检查是否使用了最新的Android Gradle Plugin&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;当然了，这个排查不是硬性的，得看实际情况，但是如果能升到最新的插件版本，建议升级，随着插件的逐步完善，性能也会有很大提升&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;尽量少用Module&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;有技术博文称Module的构建时间可能是jar和aar的4倍（有待验证）&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;使用Property选项&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;在gradle.property文件中添加如下两行代码：&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;org.gradle.daemon=true
+org.gradle.parallel=true
+org.gradle.configureondemand=true
+
+// 这些值可以按实际情况设置
+org.gradle.jvmargs=-Xmx2048m -XX:MaxPermSize=512m -XX:+HeapDumpOnOutOfMemoryError -Dfile.encoding=UTF-8
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;避免在 minSdkVersion &amp;lt; 21 时使用Multidex&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Disable Multi-APK(限开发中的构建)&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;如果你没有使用ABI或者Density splits， 你可以略过，如果你使用了，可以通过在Gradle文件里添加如下代码关闭这个选项，可以节省开发中的很多构建时间:&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;android {
+   if (project.hasProperty(‘devBuild’)){
+      splits.abi.enable = false
+      splits.density.enable = false
+   }
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;ul&gt;
+&lt;li&gt;最小化打包资源(限开发中的构建)&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;在开发过程中，其实没必要打包所有App用到的资源，我们可以通过配置来控制开发构建中要打包的资源, 可在Gradle文件中加入如下代码:&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;productFlavors {
+  development {
+    minSdkVersion 21
+    //only package english translations, and xxhdpi resources   
+    resConfigs (“en”, “xxhdpi”)
+  }
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;别小看这点改动，可能节省你很多开发中的构建时间&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Disable PNG 优化 &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;PNG优化是默认开启的，但是在开发中的构建没什么必要，建议关闭 :&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;android {
+  if (project.hasProperty(‘devBuild’)){
+    aaptOptions.cruncherEnabled = false
+  }
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;ul&gt;
+&lt;li&gt;使用Instant Run&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;虽然这个功能有时会有一些问题，但是在加速构建方面还是很有用的&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;避免很耗时的计算&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;def buildDateTime = new Date().format(‘yyMMddHHmm’).toInteger()
+android {
+  defaultConfig {
+    versionCode buildDateTime
+ }
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;这种代码在开发构建种就不要出现了， 因为每次构建都要重新一次额外的处理和打包，可以改为这样:&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;def buildDateTime = project.hasProperty(‘devBuild’) ? 100 : new Date().format(‘yyMMddHHmm’).toInteger()
+android {
+  defaultConfig {
+    versionCode buildDateTime
+ }
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;还有一个陷阱是Crashlytics build IDs, Crashlytics在每一次构建时都会产生一个新的id，一行代码就可将这个选项关闭:&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;apply plugin: ‘io.fabric’
+android {
+  buildTypes {
+    debug {
+      ext.alwaysUpdateBuildId = false
+    }
+  }
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;ul&gt;
+&lt;li&gt;避免使用动态的依赖版本号&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;使用动态的依赖版本号会导致Gradle检查新的依赖版本，导致解析时间加长, 严重拖慢构建速度&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;开启Gradle Cache&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;org.gradle.caching=true
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;在将这些建议和排查方法逐一的排查验证了一遍以后，发现这些Tips公司的工程都已采纳，一些坑也都完美的躲过，要想在这种情况下再去加速Gradle的构建速度，可就没那么容易了，必须通过一些方法，细化整个构建过程，找出一些耗时过长的操作，幸运的是，Gradle已经提供了这种功能，可以输出一个Gradle构建的profile报告，只要在苟建时添加一个参数即可。&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;./gradlew :android:assembleDebug --profile
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;构建结束后会在build的子目录下生成一个html文件的报告：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;https://wx2.sinaimg.cn/mw690/7033bf1dly1g295fu83jyj20lz0ccabp.jpg&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
+
+&lt;p&gt;整个报告里面会比较详细的列出构建过程中Configuration，Dependency Resolution， Task Execution的具体耗时，非常详细和直观，有助于分析构建每个阶段的耗时。建议在分析构建过程的时候用起来。我就用这个选项也为公司的工程打了这样一份报告出来，并没有什么特别的发现，主要的耗时还好在app模块。那这样下去还是不能解决问题，因为我们的发布和上线构建是在Jekins上打包，看了打包脚本也并没有太多特殊的地方，于是我想到用Gradle build scan插件来进一步审视构建内部的情况。&lt;/p&gt;
+
+&lt;p&gt;为自己的工程创建build scan其实比较简单，具体步骤如下:&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;在Project的build.gradle文件添加下面几行代码：&lt;/li&gt;
+&lt;/ol&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;buildscript {
+    repositories {
+        google()
+        jcenter()
+    }
+    dependencies {
+        classpath &amp;#39;com.android.tools.build:gradle:3.0.0&amp;#39;
+
+        // NOTE: Do not place your application dependencies here; they belong
+        // in the individual module build.gradle files
+    }
+}
+
+// 这7行是添加的
+plugins {
+    id &amp;#39;com.gradle.build-scan&amp;#39; version &amp;#39;1.16&amp;#39;
+}
+buildScan {                     
+    licenseAgreementUrl = &amp;#39;https://gradle.com/terms-of-service&amp;#39;
+    licenseAgree = &amp;#39;yes&amp;#39;
+}
+
+allprojects {
+    repositories {
+        google()
+        jcenter()
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;ol&gt;
+&lt;li&gt;在控制台执行命令 &lt;/li&gt;
+&lt;/ol&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;./gradlew build --scan
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;ol&gt;
+&lt;li&gt;命令执行完后会给出一个网址，打开网址根据提示就可以得到相应的构建审核内容，如下图:&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;&lt;img src=&quot;https://wx1.sinaimg.cn/mw690/7033bf1dly1g297i2yza3j20zh0ff41e.jpg&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
+
+&lt;p&gt;经过这个插件工具的分析，也仍旧没有发现什么异常，看来公司的工程就是因为太大了，每个版本的自然增长导致当前的构建比很早一个版本的慢，虽然这次的调研没有提升打包速度，但是整个调研的构成让我了解了很多与Gradle有关的东西，也算是收获不少, 没有白忙活。&lt;/p&gt;
+</description>
+        <pubDate>Sat, 09 Mar 2019 20:20:12 +0000</pubDate>
+        <link>http://longlinht.github.io//speed-up-gradle-build</link>
+        <guid isPermaLink="true">http://longlinht.github.io//speed-up-gradle-build</guid>
+      </item>
+    
+      <item>
         <title>移动应用中的典型页面</title>
         <description>&lt;p&gt;今天这篇文章不做具体技术细节的探讨，而是来观察诸多移动应用中反复出现，具有典型特征和重要作用的一些页面来一窥一般移动应用的基本结构。这些反复出现的页面原型可以归纳为如下六类:&lt;/p&gt;
 
@@ -32,7 +205,7 @@
 
 &lt;p&gt;所有App，无论规模大小，其实都是这些典型页面的组合构建出来的，所以在开发过程中需要注意你所开发的页面是不是这些典型页面中的一种，如果不是，需要你反思这个页面是否需要，设计是否合理。虽然国内一些超级App已经变得非常巨大和复杂，但是也并没有标新立异，超出这些典型页面的范围，一来需要追求用户体验的一致性，二来这种做法已经成了一个大家默认遵守的规范。所以用户在使用不同的App时没有强烈的陌生感，就如同一个会开车的人，换辆其他品牌的车他仍旧会开，并不会产生疏离感。如果细细观察下来，一些扩展页面的情况会很多，但是主要的典型页面应该不会超过如上的六种。&lt;/p&gt;
 </description>
-        <pubDate>Tue, 19 Feb 2019 04:20:12 +0800</pubDate>
+        <pubDate>Mon, 18 Feb 2019 20:20:12 +0000</pubDate>
         <link>http://longlinht.github.io//typical-pages-in-mobile-app</link>
         <guid isPermaLink="true">http://longlinht.github.io//typical-pages-in-mobile-app</guid>
       </item>
@@ -105,7 +278,7 @@ protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;p&gt;看了代码后发现被遮挡区域的高度差不多就是这个&lt;code&gt;TagFlowLayout&lt;/code&gt;的&lt;code&gt;layout_marginTop&lt;/code&gt;的值，当我去掉这个属性的设置后，遮挡的问题没有了，换作&lt;code&gt;paddingTop&lt;/code&gt;后也没有问题，就是不能用&lt;code&gt;marginTop&lt;/code&gt;，好吧，这个&lt;code&gt;ScrollView&lt;/code&gt;的默认设定也是很奇葩啊！&lt;/p&gt;
 </description>
-        <pubDate>Wed, 05 Dec 2018 04:20:12 +0800</pubDate>
+        <pubDate>Tue, 04 Dec 2018 20:20:12 +0000</pubDate>
         <link>http://longlinht.github.io//scrollview-can-not-display-whole-content</link>
         <guid isPermaLink="true">http://longlinht.github.io//scrollview-can-not-display-whole-content</guid>
       </item>
@@ -178,7 +351,7 @@ public class ChatMessageEntity {
 &lt;li&gt;&lt;p&gt;如果违反了这个规则，变异错误信息不一定会指向这个错误&lt;/p&gt;&lt;/li&gt;
 &lt;/ul&gt;
 </description>
-        <pubDate>Mon, 03 Dec 2018 04:20:12 +0800</pubDate>
+        <pubDate>Sun, 02 Dec 2018 20:20:12 +0000</pubDate>
         <link>http://longlinht.github.io//br-not-found</link>
         <guid isPermaLink="true">http://longlinht.github.io//br-not-found</guid>
       </item>
@@ -189,7 +362,7 @@ public class ChatMessageEntity {
 
 &lt;p&gt;&lt;img src=&quot;https://wx3.sinaimg.cn/mw690/7033bf1dly1g0aqh53p3dj20m80zkdlh.jpg&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
 </description>
-        <pubDate>Fri, 30 Nov 2018 04:20:12 +0800</pubDate>
+        <pubDate>Thu, 29 Nov 2018 20:20:12 +0000</pubDate>
         <link>http://longlinht.github.io//record-a-debug-process</link>
         <guid isPermaLink="true">http://longlinht.github.io//record-a-debug-process</guid>
       </item>
@@ -264,7 +437,7 @@ public class ChatMessageEntity {
 
 &lt;p&gt;当时还以为我代码哪里写错了，检查发现没有错误，后来怀疑路径是不是错了，但断点调试也没问题，就很纳闷，后来拷贝了其它视频播放，发现是正常的，我才想到可能是资源文件名字冲突了，我给开屏视频文件重命名以后一切OK了，冲突在编译期间竟然没有报错，感觉有点坑，这样看来Android在编译资源时并没有区分res/drawable目录和res/raw目录，这个问题需要重视起来，不然会比较恼人。&lt;/p&gt;
 </description>
-        <pubDate>Wed, 28 Nov 2018 01:20:12 +0800</pubDate>
+        <pubDate>Tue, 27 Nov 2018 17:20:12 +0000</pubDate>
         <link>http://longlinht.github.io//play-video-in-raw-folder</link>
         <guid isPermaLink="true">http://longlinht.github.io//play-video-in-raw-folder</guid>
       </item>
@@ -326,7 +499,7 @@ at dalvik.system.NativeStart.main(Native Method)
 
 }
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</description>
-        <pubDate>Mon, 26 Nov 2018 04:20:12 +0800</pubDate>
+        <pubDate>Sun, 25 Nov 2018 20:20:12 +0000</pubDate>
         <link>http://longlinht.github.io//multidex-application-crash</link>
         <guid isPermaLink="true">http://longlinht.github.io//multidex-application-crash</guid>
       </item>
@@ -628,7 +801,7 @@ at dalvik.system.NativeStart.main(Native Method)
 &lt;li&gt;&lt;p&gt;“流程”并非富有魅力，但它所能提供的信心却是珍贵的。&lt;/p&gt;&lt;/li&gt;
 &lt;/ul&gt;
 </description>
-        <pubDate>Tue, 16 Oct 2018 02:20:12 +0800</pubDate>
+        <pubDate>Mon, 15 Oct 2018 18:20:12 +0000</pubDate>
         <link>http://longlinht.github.io//read-make-a-better-decision</link>
         <guid isPermaLink="true">http://longlinht.github.io//read-make-a-better-decision</guid>
       </item>
@@ -682,7 +855,7 @@ at dalvik.system.NativeStart.main(Native Method)
 
 &lt;p&gt;以上是作者用很多篇幅证伪的一些比较典型的谎言，其实生活中充斥着很多传播甚广，根本没有根据的观念和判断，顽固的留在很多人的大脑里，久久不肯离去，也许人的认知真的是一个很复杂和奇特的系统，有时令人叹为观止，有时又啼笑皆非。这本书虽然谈的是医药，健康，但是揭示的一些造成认知偏差的原因却适用于很多领域，值得回味，反思。&lt;/p&gt;
 </description>
-        <pubDate>Fri, 03 Aug 2018 02:20:12 +0800</pubDate>
+        <pubDate>Thu, 02 Aug 2018 18:20:12 +0000</pubDate>
         <link>http://longlinht.github.io//reading-lies-my-doctor-told-me</link>
         <guid isPermaLink="true">http://longlinht.github.io//reading-lies-my-doctor-told-me</guid>
       </item>
@@ -745,33 +918,9 @@ Winston had never been able to feel sure — even after this morning&amp;#39;s f
 
 &lt;p&gt;He had won the victory over himself. He loved Big Brother.&lt;/p&gt;
 </description>
-        <pubDate>Mon, 16 Jul 2018 02:20:12 +0800</pubDate>
+        <pubDate>Sun, 15 Jul 2018 18:20:12 +0000</pubDate>
         <link>http://longlinht.github.io//reading-1984</link>
         <guid isPermaLink="true">http://longlinht.github.io//reading-1984</guid>
-      </item>
-    
-      <item>
-        <title>Activity vs FragmentActivity vs AppCompatActivity</title>
-        <description>&lt;p&gt;Activity应该是每一个Android开发者第一个遇到的类吧，后来又看到了FragmentActivity，再后来又碰到了AppCompatActivity和ActionBarActivity，也许我们在开发者中会在不同的场景中使用以上不同的Activity类，但是要让我们清楚的说出它们的联系和区别，可能都会被这个问题懵一下，现在我们就来把他们的关系理清楚.&lt;/p&gt;
-
-&lt;p&gt;这几个类有一个基本的继承关系&lt;/p&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-java&quot; data-lang=&quot;java&quot;&gt;&lt;span class=&quot;n&quot;&gt;Activity&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;FragmentActivity&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;AppCompatActivity&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ActionBarActivity&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;p&gt;需要注意的是&lt;code&gt;ActionBarActivity&lt;/code&gt;已经废弃了. 从上面的这个继承关系也大概可以了解这几个类的基本关系，&lt;code&gt;Activity&lt;/code&gt; 是以上这各类的基类，所有的&lt;code&gt;Activity&lt;/code&gt;子类都直接或间接的继承自&lt;code&gt;Activity&lt;/code&gt;类.&lt;/p&gt;
-
-&lt;p&gt;&lt;code&gt;FragmentActivity&lt;/code&gt; 是在support-v4和support-v13库中用来向后兼容&lt;code&gt;Fragment&lt;/code&gt;的.&lt;code&gt;AppCompatActivity&lt;/code&gt; 是在appcompat-v7库, 原则上它提供了对action bar的向后兼容. 在考虑什么场景具体使用哪个类时可以参考一下三个原则:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;p&gt;如果你想向后兼容Material Design的外观，继承&lt;code&gt;AppCompatActivity&lt;/code&gt;.&lt;/p&gt;&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;如果不考虑Material Design，但是你想使用嵌套的&lt;code&gt;Fragment&lt;/code&gt;, 继承&lt;code&gt;FragmentActivity&lt;/code&gt;.&lt;/p&gt;&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;如果没有以上需求，则继承&lt;code&gt;Activity&lt;/code&gt;.&lt;/p&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;因为&lt;code&gt;AppCompatActivity&lt;/code&gt; 继承自&lt;code&gt;FragmentActivity&lt;/code&gt; ,如果你需要&lt;code&gt;FragmentActivity&lt;/code&gt;的特性，原则上都可以使用&lt;code&gt;AppCompatActivity&lt;/code&gt;.&lt;/p&gt;
-</description>
-        <pubDate>Mon, 19 Feb 2018 02:20:12 +0800</pubDate>
-        <link>http://longlinht.github.io//different-activity-in-android</link>
-        <guid isPermaLink="true">http://longlinht.github.io//different-activity-in-android</guid>
       </item>
     
   </channel>

@@ -12,10 +12,186 @@
    <atom:link href="rss" rel="self" type="application/rss+xml" />
    
 	<item>
+	  <title>加速Gradle构建</title>
+	  <link>//speed-up-gradle-build</link>
+	  <author>Tao He</author>
+	  <pubDate>2019-03-09T20:20:12+00:00</pubDate>
+	  <guid>//speed-up-gradle-build</guid>
+	  <description><![CDATA[
+	     <p>最近刚换工作，来这家新公司没几天，还在熟悉和适应阶段，leader也没安排什么特别的事情，只是说有空可以看看我们工程Gradle Build速度慢的问题。总算接到一个方向比较明确的任务，正好可以从工程的构建流程入手，可以一窥整个工程的结构和依赖。因为Gradle构建速度慢这个问题，其实有一些常见的排查方法，解决问题第一步，还是用最快的排查法，首先排除一些最常见的造成构建速度缓慢的原因。但是要找出构建速度慢的问题也需要将问题分情况来看，分两种情况，一种是在开发过程中的构建和正式发版上线的构建，这两种构建通常是相同的，但有时为了节约开发过程中的构建时间，会做一些特殊的设置和开启关闭一些选项来加速开发过程中的构建，因此，这两种情况面临的问题其实是类似的，因为还不是很清楚leader更在意的是开发过程中的构建时间还是发布上线的构建，因此我决定把这两种情况合二为一，罗列出所有的加速建议:</p>
+
+<ul>
+<li>检查是否使用了最新的Android Gradle Plugin</li>
+</ul>
+
+<p>当然了，这个排查不是硬性的，得看实际情况，但是如果能升到最新的插件版本，建议升级，随着插件的逐步完善，性能也会有很大提升</p>
+
+<ul>
+<li>尽量少用Module</li>
+</ul>
+
+<p>有技术博文称Module的构建时间可能是jar和aar的4倍（有待验证）</p>
+
+<ul>
+<li>使用Property选项</li>
+</ul>
+
+<p>在gradle.property文件中添加如下两行代码：</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">org.gradle.daemon=true
+org.gradle.parallel=true
+org.gradle.configureondemand=true
+
+// 这些值可以按实际情况设置
+org.gradle.jvmargs=-Xmx2048m -XX:MaxPermSize=512m -XX:+HeapDumpOnOutOfMemoryError -Dfile.encoding=UTF-8
+</code></pre></div>
+<ul>
+<li><p>避免在 minSdkVersion &lt; 21 时使用Multidex</p></li>
+<li><p>Disable Multi-APK(限开发中的构建)</p></li>
+</ul>
+
+<p>如果你没有使用ABI或者Density splits， 你可以略过，如果你使用了，可以通过在Gradle文件里添加如下代码关闭这个选项，可以节省开发中的很多构建时间:</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">android {
+   if (project.hasProperty(‘devBuild’)){
+      splits.abi.enable = false
+      splits.density.enable = false
+   }
+}
+</code></pre></div>
+<ul>
+<li>最小化打包资源(限开发中的构建)</li>
+</ul>
+
+<p>在开发过程中，其实没必要打包所有App用到的资源，我们可以通过配置来控制开发构建中要打包的资源, 可在Gradle文件中加入如下代码:</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">productFlavors {
+  development {
+    minSdkVersion 21
+    //only package english translations, and xxhdpi resources   
+    resConfigs (“en”, “xxhdpi”)
+  }
+}
+</code></pre></div>
+<p>别小看这点改动，可能节省你很多开发中的构建时间</p>
+
+<ul>
+<li>Disable PNG 优化 </li>
+</ul>
+
+<p>PNG优化是默认开启的，但是在开发中的构建没什么必要，建议关闭 :</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">android {
+  if (project.hasProperty(‘devBuild’)){
+    aaptOptions.cruncherEnabled = false
+  }
+}
+</code></pre></div>
+<ul>
+<li>使用Instant Run</li>
+</ul>
+
+<p>虽然这个功能有时会有一些问题，但是在加速构建方面还是很有用的</p>
+
+<ul>
+<li>避免很耗时的计算</li>
+</ul>
+<div class="highlight"><pre><code class="language-text" data-lang="text">def buildDateTime = new Date().format(‘yyMMddHHmm’).toInteger()
+android {
+  defaultConfig {
+    versionCode buildDateTime
+ }
+}
+</code></pre></div>
+<p>这种代码在开发构建种就不要出现了， 因为每次构建都要重新一次额外的处理和打包，可以改为这样:</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">def buildDateTime = project.hasProperty(‘devBuild’) ? 100 : new Date().format(‘yyMMddHHmm’).toInteger()
+android {
+  defaultConfig {
+    versionCode buildDateTime
+ }
+}
+</code></pre></div>
+<p>还有一个陷阱是Crashlytics build IDs, Crashlytics在每一次构建时都会产生一个新的id，一行代码就可将这个选项关闭:</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">apply plugin: ‘io.fabric’
+android {
+  buildTypes {
+    debug {
+      ext.alwaysUpdateBuildId = false
+    }
+  }
+}
+</code></pre></div>
+<ul>
+<li>避免使用动态的依赖版本号</li>
+</ul>
+
+<p>使用动态的依赖版本号会导致Gradle检查新的依赖版本，导致解析时间加长, 严重拖慢构建速度</p>
+
+<ul>
+<li>开启Gradle Cache</li>
+</ul>
+<div class="highlight"><pre><code class="language-text" data-lang="text">org.gradle.caching=true
+</code></pre></div>
+<p>在将这些建议和排查方法逐一的排查验证了一遍以后，发现这些Tips公司的工程都已采纳，一些坑也都完美的躲过，要想在这种情况下再去加速Gradle的构建速度，可就没那么容易了，必须通过一些方法，细化整个构建过程，找出一些耗时过长的操作，幸运的是，Gradle已经提供了这种功能，可以输出一个Gradle构建的profile报告，只要在苟建时添加一个参数即可。</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">./gradlew :android:assembleDebug --profile
+</code></pre></div>
+<p>构建结束后会在build的子目录下生成一个html文件的报告：</p>
+
+<p><img src="https://wx2.sinaimg.cn/mw690/7033bf1dly1g295fu83jyj20lz0ccabp.jpg" alt=""></p>
+
+<p>整个报告里面会比较详细的列出构建过程中Configuration，Dependency Resolution， Task Execution的具体耗时，非常详细和直观，有助于分析构建每个阶段的耗时。建议在分析构建过程的时候用起来。我就用这个选项也为公司的工程打了这样一份报告出来，并没有什么特别的发现，主要的耗时还好在app模块。那这样下去还是不能解决问题，因为我们的发布和上线构建是在Jekins上打包，看了打包脚本也并没有太多特殊的地方，于是我想到用Gradle build scan插件来进一步审视构建内部的情况。</p>
+
+<p>为自己的工程创建build scan其实比较简单，具体步骤如下:</p>
+
+<ol>
+<li>在Project的build.gradle文件添加下面几行代码：</li>
+</ol>
+<div class="highlight"><pre><code class="language-text" data-lang="text">buildscript {
+    repositories {
+        google()
+        jcenter()
+    }
+    dependencies {
+        classpath &#39;com.android.tools.build:gradle:3.0.0&#39;
+
+        // NOTE: Do not place your application dependencies here; they belong
+        // in the individual module build.gradle files
+    }
+}
+
+// 这7行是添加的
+plugins {
+    id &#39;com.gradle.build-scan&#39; version &#39;1.16&#39;
+}
+buildScan {                     
+    licenseAgreementUrl = &#39;https://gradle.com/terms-of-service&#39;
+    licenseAgree = &#39;yes&#39;
+}
+
+allprojects {
+    repositories {
+        google()
+        jcenter()
+    }
+}
+</code></pre></div>
+<ol>
+<li>在控制台执行命令 </li>
+</ol>
+<div class="highlight"><pre><code class="language-text" data-lang="text">./gradlew build --scan
+</code></pre></div>
+<ol>
+<li>命令执行完后会给出一个网址，打开网址根据提示就可以得到相应的构建审核内容，如下图:</li>
+</ol>
+
+<p><img src="https://wx1.sinaimg.cn/mw690/7033bf1dly1g297i2yza3j20zh0ff41e.jpg" alt=""></p>
+
+<p>经过这个插件工具的分析，也仍旧没有发现什么异常，看来公司的工程就是因为太大了，每个版本的自然增长导致当前的构建比很早一个版本的慢，虽然这次的调研没有提升打包速度，但是整个调研的构成让我了解了很多与Gradle有关的东西，也算是收获不少, 没有白忙活。</p>
+
+	  ]]></description>
+	</item>
+
+	<item>
 	  <title>移动应用中的典型页面</title>
 	  <link>//typical-pages-in-mobile-app</link>
 	  <author>Tao He</author>
-	  <pubDate>2019-02-19T04:20:12+08:00</pubDate>
+	  <pubDate>2019-02-18T20:20:12+00:00</pubDate>
 	  <guid>//typical-pages-in-mobile-app</guid>
 	  <description><![CDATA[
 	     <p>今天这篇文章不做具体技术细节的探讨，而是来观察诸多移动应用中反复出现，具有典型特征和重要作用的一些页面来一窥一般移动应用的基本结构。这些反复出现的页面原型可以归纳为如下六类:</p>
@@ -49,7 +225,7 @@
 	  <title>解决ScrollView内容显示不全</title>
 	  <link>//scrollview-can-not-display-whole-content</link>
 	  <author>Tao He</author>
-	  <pubDate>2018-12-05T04:20:12+08:00</pubDate>
+	  <pubDate>2018-12-04T20:20:12+00:00</pubDate>
 	  <guid>//scrollview-can-not-display-whole-content</guid>
 	  <description><![CDATA[
 	     <p>这个问题其实只要使用过<code>ScrollView</code>，可能都有机会遇到，问题的表现就是<code>ScrollView</code>包裹内容的高度超过<code>ScrollView</code>可视高度的话，被包裹的内容就会显示不全，最底部的内容永远也看不到了，这种情况肯定是无法接受的， 解决这个问题比较简单，其实就是简单的一句设置语句:</p>
@@ -125,7 +301,7 @@ protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
 	  <title>解决闹人的can not found symbol BR问题</title>
 	  <link>//br-not-found</link>
 	  <author>Tao He</author>
-	  <pubDate>2018-12-03T04:20:12+08:00</pubDate>
+	  <pubDate>2018-12-02T20:20:12+00:00</pubDate>
 	  <guid>//br-not-found</guid>
 	  <description><![CDATA[
 	     <p>最近公司研发的这个App是我从零到一搭建的，在框架搭建时分别使用了Databinding和Room，今天在做新需求时需要向Room中的实体类新添加一个字段，在写完了所有相关的逻辑后，build工程，所有自动生成的Databinding类都报错，build log中并没有指向任何具体报错的Databinding类，这就令人很困惑，因为这个需求的添加并没有改动任何Databinding的类，在不知所以的情况下，那就尝试其他方法解决，之前我在一个技术博客上看到过一个Databinding类的Troubleshooting: </p>
@@ -201,7 +377,7 @@ public class ChatMessageEntity {
 	  <title>记一次看似困难的Debug</title>
 	  <link>//record-a-debug-process</link>
 	  <author>Tao He</author>
-	  <pubDate>2018-11-30T04:20:12+08:00</pubDate>
+	  <pubDate>2018-11-29T20:20:12+00:00</pubDate>
 	  <guid>//record-a-debug-process</guid>
 	  <description><![CDATA[
 	     <p>今年把自己的手机换成了Android，拿到新机后就想找到一款手写笔记的App，因为在iOS用过一款体验很好，还用那个写了一篇游记，在试用了十几款此类的Andorid App后最终找到了一款名为INKredible的手写笔记App，刚开始用的时候很不顺手，都想卸载了，但是经过一番摸索后找到了技巧，再去试用后有一种惊艳的感觉，今天在地铁通勤的时候竟然用它谢了一篇技术博文，并已图片的形式到了出来，全文如下:(字迹潦草，读者莫怪，其实如果以正楷的形式书写, 效率较差，体验会大打折扣).</p>
@@ -215,7 +391,7 @@ public class ChatMessageEntity {
 	  <title>使用VideoView实现视频开屏页</title>
 	  <link>//play-video-in-raw-folder</link>
 	  <author>Tao He</author>
-	  <pubDate>2018-11-28T01:20:12+08:00</pubDate>
+	  <pubDate>2018-11-27T17:20:12+00:00</pubDate>
 	  <guid>//play-video-in-raw-folder</guid>
 	  <description><![CDATA[
 	     <p>今天PM提了一个视频开屏页的需求，需要在用户第一次使用时播放一个开屏视频，乍一看，挺简单一需求，但是也或多或少碰到了一些坑，也发现了Android资源编译的一个问题，本着研发之事无小事的原则，还是要记录下踩坑经验和发现的问题。整个实现过程一共两三个小时，逐步解决了以下问题:</p>
@@ -293,7 +469,7 @@ public class ChatMessageEntity {
 	  <title>MultidexApplication相关的一个crash</title>
 	  <link>//multidex-application-crash</link>
 	  <author>Tao He</author>
-	  <pubDate>2018-11-26T04:20:12+08:00</pubDate>
+	  <pubDate>2018-11-25T20:20:12+00:00</pubDate>
 	  <guid>//multidex-application-crash</guid>
 	  <description><![CDATA[
 	     <p>最近在内测的一个App在内测开始后有用户反馈启动就crash的问题，后来拿到用户的信息后发现几个crash的机器都是4.4的机器，因为现在真实用户使用4.4系统的用户真的是不多了，就没怎么在意，但是在阿里云移动测试平台进行兼容性测试的时候，这个问题必现，并且都出现在4.4的机器上，查看兼容性测试报告，都是同一个crash，崩溃的堆栈记录了下来:</p>
@@ -358,7 +534,7 @@ at dalvik.system.NativeStart.main(Native Method)
 	  <title>读《1984》</title>
 	  <link>//reading-1984</link>
 	  <author>Tao He</author>
-	  <pubDate>2018-07-16T02:20:12+08:00</pubDate>
+	  <pubDate>2018-07-15T18:20:12+00:00</pubDate>
 	  <guid>//reading-1984</guid>
 	  <description><![CDATA[
 	     <p>1984应该是我读的第一本英文原版小说，我其实不太喜欢看小说，汉语的我也很少看，但竟然每天在地铁上看，一个月下来竟然看完了，期间总会遇到生词，看不懂的长句，但竟然读出了惊叹，大有拍案叫绝的冲动，感受得到人物的绝望，恐惧，第一次，读着非母语写成的文字，生出了喟叹，感动。这些英文单词变得不那么疏离，它所描绘的情景人物变得栩栩如生，人物的落寞与心死都可透出纸面，感染到我。也许好的文字无论用什么语言表达都能直直抵人心吧！</p>
@@ -424,7 +600,7 @@ Winston had never been able to feel sure — even after this morning&#39;s flash
 	  <title>Activity vs FragmentActivity vs AppCompatActivity</title>
 	  <link>//different-activity-in-android</link>
 	  <author>Tao He</author>
-	  <pubDate>2018-02-19T02:20:12+08:00</pubDate>
+	  <pubDate>2018-02-18T18:20:12+00:00</pubDate>
 	  <guid>//different-activity-in-android</guid>
 	  <description><![CDATA[
 	     <p>Activity应该是每一个Android开发者第一个遇到的类吧，后来又看到了FragmentActivity，再后来又碰到了AppCompatActivity和ActionBarActivity，也许我们在开发者中会在不同的场景中使用以上不同的Activity类，但是要让我们清楚的说出它们的联系和区别，可能都会被这个问题懵一下，现在我们就来把他们的关系理清楚.</p>
@@ -451,7 +627,7 @@ Winston had never been able to feel sure — even after this morning&#39;s flash
 	  <title>处理Gradle plugin版本问题小记</title>
 	  <link>//do-with-gradle-error</link>
 	  <author>Tao He</author>
-	  <pubDate>2018-02-15T02:20:12+08:00</pubDate>
+	  <pubDate>2018-02-14T18:20:12+00:00</pubDate>
 	  <guid>//do-with-gradle-error</guid>
 	  <description><![CDATA[
 	     <p>在编译Github上一些Android项目的时候, Gradle sync 总会抛出这样的一个提示:</p>
@@ -468,132 +644,6 @@ Winston had never been able to feel sure — even after this morning&#39;s flash
 如果是 Mac, <code>Preferences &gt; Build, Execution, Deployment &gt; Compiler</code> 去掉 the configure on demand 选中.
 如果是 Linux/Windows  <code>File &gt; Settings &gt; Build, Execution, Deployment &gt; Compiler</code> and uncheck the configure on demand.</p></li>
 </ol>
-
-	  ]]></description>
-	</item>
-
-	<item>
-	  <title>Android开发中标签指示器的选用</title>
-	  <link>//pager-tab-selection</link>
-	  <author>Tao He</author>
-	  <pubDate>2018-02-13T02:20:12+08:00</pubDate>
-	  <guid>//pager-tab-selection</guid>
-	  <description><![CDATA[
-	     <p>在Android实际的开发过程中,几乎都会用到标签指示器和ViewPager的联动使用,ViewPager,毫无疑问就直接选用系统提供的, 但是和它联动的标签指示器就有非常多的选择, 我在开发的过程中使用了两个比较常见的实现,也是Github上star较多的两个项目.</p>
-
-<h3>PagerSlidingTabTrip</h3>
-
-<p>基本使用:</p>
-
-<ul>
-<li>添加依赖</li>
-</ul>
-<div class="highlight"><pre><code class="language-text" data-lang="text">implementation &#39;com.astuetz:pagerslidingtabstrip:1.0.1&#39;
-</code></pre></div>
-<ul>
-<li>在布局文件中添加<code>PagerSlidingTabTrip</code></li>
-</ul>
-<div class="highlight"><pre><code class="language-xml" data-lang="xml"><span class="nt">&lt;com.astuetz.PagerSlidingTabStrip</span>
-        <span class="na">android:id=</span><span class="s">&quot;@+id/tabs&quot;</span>
-        <span class="na">android:layout_width=</span><span class="s">&quot;match_parent&quot;</span>
-        <span class="na">android:layout_height=</span><span class="s">&quot;48dip&quot;</span>
-        <span class="na">android:layout_gravity=</span><span class="s">&quot;center_horizontal&quot;</span>
-        <span class="na">android:background=</span><span class="s">&quot;@color/tabsBackgroundColor&quot;</span>
-        <span class="na">android:textColor=</span><span class="s">&quot;@color/tabsTextColor&quot;</span>
-        <span class="na">app:pstsIndicatorColor=</span><span class="s">&quot;@color/tabsIndicatorColor&quot;</span><span class="nt">/&gt;</span>
-</code></pre></div>
-<p>在布局文件中设置<code>app:pstsShouldExpand=&quot;true&quot;</code>会导致崩溃,原因是无法inflate,这个问题没有细究</p>
-
-<ul>
-<li>初始化设置</li>
-</ul>
-<div class="highlight"><pre><code class="language-text" data-lang="text">tabs = contentView.findViewById(R.id.tabs);
-tabs.setShouldExpand(true);  //在这里设置就没有问题
-tabs.setIndicatorColorResource(R.color.fp_room_music_tab_indicator);
-tabs.setIndicatorHeight((int)resources.getDimension(R.dimen.room_music_tab_indicator_height));
-tabs.setAllCaps(false);
-tabs.setTextSize((int)resources.getDimension(R.dimen.room_music_tab_text));
-</code></pre></div>
-<p>这个使用起来非常方便,但是有一两个问题:</p>
-
-<ul>
-<li><p>指示器未选中项和选中项文字的颜色不能设置,这个不符合项目的要求</p></li>
-<li><p>在布局文件中设置有些属性的时候不生效, 设置有些属性会导致崩溃(崩溃原因不确定)</p></li>
-</ul>
-
-<p>因为上面的两个问题, 我最后在项目中选用了MagicIndicator</p>
-
-<h3>MagicIndicator</h3>
-
-<p>MagicIndicator可以设置选中和未选中项文字的颜色,并且有些属性的设置相对灵活</p>
-
-<p>基本使用:</p>
-
-<ul>
-<li>添加依赖</li>
-</ul>
-<div class="highlight"><pre><code class="language-text" data-lang="text">implementation &#39;com.github.hackware1993:MagicIndicator:1.5.0&#39;
-</code></pre></div>
-<ul>
-<li>在布局文件中添加</li>
-</ul>
-<div class="highlight"><pre><code class="language-text" data-lang="text">&lt;net.lucode.hackware.magicindicator.MagicIndicator
-            android:id=&quot;@+id/magic_indicator&quot;
-            android:layout_width=&quot;match_parent&quot;
-            android:layout_height=&quot;40dp&quot;
-            android:layout_below=&quot;@id/title&quot;
-            android:layout_marginTop=&quot;14dp&quot;
-            /&gt;
-</code></pre></div>
-<ul>
-<li>初始化</li>
-</ul>
-<div class="highlight"><pre><code class="language-text" data-lang="text">magicIndicator = contentView.findViewById(R.id.magic_indicator);
-commonNavigator = new CommonNavigator(context);
-</code></pre></div>
-<ul>
-<li>数据绑定和属性动态设置</li>
-</ul>
-<div class="highlight"><pre><code class="language-text" data-lang="text">commonNavigator.setAdapter(new CommonNavigatorAdapter() {
-
-          @Override
-          public int getCount() {
-              return mc == null ? 0 : mc.size();
-          }
-
-          @Override
-          public IPagerTitleView getTitleView(Context context, final int index) {
-
-              ColorTransitionPagerTitleView colorTransitionPagerTitleView = new ColorTransitionPagerTitleView(context);
-              colorTransitionPagerTitleView.setNormalColor(resources.getColor(R.color.fp_room_music_tab_text));
-              colorTransitionPagerTitleView.setSelectedColor(resources.getColor(R.color.fp_purple_1st));
-              colorTransitionPagerTitleView.setText(mc.get(index).categoryName);
-              colorTransitionPagerTitleView.setOnClickListener(new View.OnClickListener() {
-                  @Override
-                  public void onClick(View view) {
-                      pager.setCurrentItem(index);
-                  }
-              });
-              return colorTransitionPagerTitleView;
-          }
-
-          @Override
-          public IPagerIndicator getIndicator(Context context) {
-              LinePagerIndicator indicator = new LinePagerIndicator(context);
-              indicator.setMode(LinePagerIndicator.MODE_MATCH_EDGE);
-              indicator.setColors(resources.getColor(R.color.fp_purple_1st));
-              return indicator;
-          }
-      });
-      commonNavigator.setAdjustMode(true);
-      magicIndicator.setNavigator(commonNavigator);
-
-      // pager is a ViewPager
-      ViewPagerHelper.bind(magicIndicator, pager);
-</code></pre></div>
-<p>其中的pager变量是一个ViewPager</p>
-
-<p>MagicIndicator基本满足项目的全部要求,使用的过程中也没有发现什么问题.除了这两个,其他第三方的实现也非常多, 系统提供的TabLayout也同样能实现类似的功能,这里就不一一列举了.</p>
 
 	  ]]></description>
 	</item>

@@ -12,10 +12,87 @@
    <atom:link href="rss" rel="self" type="application/rss+xml" />
    
 	<item>
+	  <title>优化App网络连通性问题</title>
+	  <link>//connectivity-in-android</link>
+	  <author>Tao He</author>
+	  <pubDate>2019-05-29T04:20:12+08:00</pubDate>
+	  <guid>//connectivity-in-android</guid>
+	  <description><![CDATA[
+	     <p>最近遇到一个棘手的问题，我们开发的一款App在中东那边出现大量的<code>UnknownHostException</code>, 导致App在中东那边体验很糟，很快这个问题就被抛给了我们技术优化组，我和另外一名同事就开始定位问题的原因并且试图提出一个可行的解决方案。一般理解，出现<code>UnkownHostException</code>就是DNS失败了，在我们开始解决这个问题的时候，App的网络库已逐渐开始使用OkHttp，我们想到自定义DNS过程，在系统DNS失败的情况下再尝试其他DNS方式，降低<code>UnknownHostException</code>出现的频率，优化App网络连通性。
+为了实现我们的技术方案，我们针对OkHttp的DNS做了如下几件事:</p>
+
+<ul>
+<li>创建OkHttpClient时自定义DNS</li>
+</ul>
+<div class="highlight"><pre><code class="language-text" data-lang="text">OkHttpClient.Builder builder = new OkHttpClient.Builder()
+    // 实现OKHttp DNS接口, 改变默认的DNS行为
+    .dns(OkHttpDns.getInstance())
+</code></pre></div>
+<p>上面的OkHttpDns须实现Dns接口</p>
+
+<ul>
+<li>实现自定义DNS</li>
+</ul>
+
+<p>目前我们的设计是使用责任链模式实现四层DNS的lookup: </p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">Local Cache --&gt; System DNS --&gt; GA --&gt; Google DNS
+</code></pre></div>
+<p>其中第一层是本地DNS缓存(Local Cache)，整个缓存只是内存缓存，DNS过程开始时，先去本地缓存找，如果在缓存中没有命中，就走系统DNS， 系统DNS如果也失败，整个链条就继续往下，到GA，到Google DNS，如果到Google DNS还没有解析成功，仍旧抛出<code>UnknownHostException</code>，DNS过程失败。基本的代码逻辑如下:</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">private OkHttpDns() {
+
+  //使用责任链模式实现四层DNS的lookup: Local Cache --&gt; System DNS --&gt; GA --&gt; Google DNS
+  mDnsChain = new CacheDnsHandler();
+
+  SystemDnsHandler okhttp = new SystemDnsHandler();
+  GADnsHandler ga = new GADnsHandler();
+  GoogleHttpDnsHandler google = new GoogleHttpDnsHandler();
+
+  mDnsChain.setTarget(okhttp);
+  okhttp.setTarget(ga);
+  ga.setTarget(google);
+}
+
+@Override
+public List&lt;InetAddress&gt; lookup(String hostname) throws UnknownHostException {
+  // IP直连的情况,直接返回
+  if (InetAddressValidator.isIPAddress(hostname)) {
+      return Arrays.asList(InetAddress.getAllByName(hostname));
+  }
+
+  List&lt;InetAddress&gt; allDNSResult = new ArrayList&lt;&gt;();
+  List&lt;InetAddress&gt; list = mDnsChain.lookup(hostname, allDNSResult);
+
+  if (list == null) {
+
+      // DNS完全失败后,清空黑名单,删除local cache相应的条目
+      IPStatusCache.getInstance().clear();
+
+      if (allDNSResult.isEmpty()) {
+          throw new UnknownHostException(&quot;Broken system behaviour for dns lookup of &quot; + hostname);
+      } else {
+          return allDNSResult;
+      }
+  }
+  return list;
+}
+</code></pre></div>
+<ul>
+<li><p>添加黑名单机制，进一步优化DNS
+一次连接成功后缓存DNS结果，host+ip为key，IPStatus为value，连接失败后会更新DNS缓存的失败次数，超过5次则认为进入了黑名单，在每次DNS完全失败后清空本地DNS缓存，防止所有的缓存都进入黑名单，缓存失效。</p></li>
+<li><p>处理IP直连的情况
+这种情况的处理很简单，检查传入的host是不是ip，如果是就直接返回。</p></li>
+</ul>
+
+<p>经过这样的优化以后，<code>UnknownHostException</code>在请求失败中的比重和请求的总失败率大幅下降，验证了我们这个技术方案的合理性，可以说网络连通性大大提高，再次回顾这个方案，突然发现它其实一个通用的解决方案，虽然我们这次解决的是海外，如中东地区的连通性问题，其实这个方案完全可以移植到国内，只要将Google HttpDNS换成国内的HttpDNS即可，整体的DNS流程可以不做任何改动即可成为一个完整的App DNS解决方案。</p>
+
+	  ]]></description>
+	</item>
+
+	<item>
 	  <title>加速Gradle构建</title>
 	  <link>//speed-up-gradle-build</link>
 	  <author>Tao He</author>
-	  <pubDate>2019-03-09T20:20:12+00:00</pubDate>
+	  <pubDate>2019-03-10T04:20:12+08:00</pubDate>
 	  <guid>//speed-up-gradle-build</guid>
 	  <description><![CDATA[
 	     <p>最近刚换工作，来这家新公司没几天，还在熟悉和适应阶段，leader也没安排什么特别的事情，只是说有空可以看看我们工程Gradle Build速度慢的问题。总算接到一个方向比较明确的任务，正好可以从工程的构建流程入手，可以一窥整个工程的结构和依赖。因为Gradle构建速度慢这个问题，其实有一些常见的排查方法，解决问题第一步，还是用最快的排查法，首先排除一些最常见的造成构建速度缓慢的原因。但是要找出构建速度慢的问题也需要将问题分情况来看，分两种情况，一种是在开发过程中的构建和正式发版上线的构建，这两种构建通常是相同的，但有时为了节约开发过程中的构建时间，会做一些特殊的设置和开启关闭一些选项来加速开发过程中的构建，因此，这两种情况面临的问题其实是类似的，因为还不是很清楚leader更在意的是开发过程中的构建时间还是发布上线的构建，因此我决定把这两种情况合二为一，罗列出所有的加速建议:</p>
@@ -191,7 +268,7 @@ allprojects {
 	  <title>移动应用中的典型页面</title>
 	  <link>//typical-pages-in-mobile-app</link>
 	  <author>Tao He</author>
-	  <pubDate>2019-02-18T20:20:12+00:00</pubDate>
+	  <pubDate>2019-02-19T04:20:12+08:00</pubDate>
 	  <guid>//typical-pages-in-mobile-app</guid>
 	  <description><![CDATA[
 	     <p>今天这篇文章不做具体技术细节的探讨，而是来观察诸多移动应用中反复出现，具有典型特征和重要作用的一些页面来一窥一般移动应用的基本结构。这些反复出现的页面原型可以归纳为如下六类:</p>
@@ -225,7 +302,7 @@ allprojects {
 	  <title>解决ScrollView内容显示不全</title>
 	  <link>//scrollview-can-not-display-whole-content</link>
 	  <author>Tao He</author>
-	  <pubDate>2018-12-04T20:20:12+00:00</pubDate>
+	  <pubDate>2018-12-05T04:20:12+08:00</pubDate>
 	  <guid>//scrollview-can-not-display-whole-content</guid>
 	  <description><![CDATA[
 	     <p>这个问题其实只要使用过<code>ScrollView</code>，可能都有机会遇到，问题的表现就是<code>ScrollView</code>包裹内容的高度超过<code>ScrollView</code>可视高度的话，被包裹的内容就会显示不全，最底部的内容永远也看不到了，这种情况肯定是无法接受的， 解决这个问题比较简单，其实就是简单的一句设置语句:</p>
@@ -301,7 +378,7 @@ protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
 	  <title>解决闹人的can not found symbol BR问题</title>
 	  <link>//br-not-found</link>
 	  <author>Tao He</author>
-	  <pubDate>2018-12-02T20:20:12+00:00</pubDate>
+	  <pubDate>2018-12-03T04:20:12+08:00</pubDate>
 	  <guid>//br-not-found</guid>
 	  <description><![CDATA[
 	     <p>最近公司研发的这个App是我从零到一搭建的，在框架搭建时分别使用了Databinding和Room，今天在做新需求时需要向Room中的实体类新添加一个字段，在写完了所有相关的逻辑后，build工程，所有自动生成的Databinding类都报错，build log中并没有指向任何具体报错的Databinding类，这就令人很困惑，因为这个需求的添加并没有改动任何Databinding的类，在不知所以的情况下，那就尝试其他方法解决，之前我在一个技术博客上看到过一个Databinding类的Troubleshooting: </p>
@@ -377,7 +454,7 @@ public class ChatMessageEntity {
 	  <title>记一次看似困难的Debug</title>
 	  <link>//record-a-debug-process</link>
 	  <author>Tao He</author>
-	  <pubDate>2018-11-29T20:20:12+00:00</pubDate>
+	  <pubDate>2018-11-30T04:20:12+08:00</pubDate>
 	  <guid>//record-a-debug-process</guid>
 	  <description><![CDATA[
 	     <p>今年把自己的手机换成了Android，拿到新机后就想找到一款手写笔记的App，因为在iOS用过一款体验很好，还用那个写了一篇游记，在试用了十几款此类的Andorid App后最终找到了一款名为INKredible的手写笔记App，刚开始用的时候很不顺手，都想卸载了，但是经过一番摸索后找到了技巧，再去试用后有一种惊艳的感觉，今天在地铁通勤的时候竟然用它谢了一篇技术博文，并已图片的形式到了出来，全文如下:(字迹潦草，读者莫怪，其实如果以正楷的形式书写, 效率较差，体验会大打折扣).</p>
@@ -391,7 +468,7 @@ public class ChatMessageEntity {
 	  <title>使用VideoView实现视频开屏页</title>
 	  <link>//play-video-in-raw-folder</link>
 	  <author>Tao He</author>
-	  <pubDate>2018-11-27T17:20:12+00:00</pubDate>
+	  <pubDate>2018-11-28T01:20:12+08:00</pubDate>
 	  <guid>//play-video-in-raw-folder</guid>
 	  <description><![CDATA[
 	     <p>今天PM提了一个视频开屏页的需求，需要在用户第一次使用时播放一个开屏视频，乍一看，挺简单一需求，但是也或多或少碰到了一些坑，也发现了Android资源编译的一个问题，本着研发之事无小事的原则，还是要记录下踩坑经验和发现的问题。整个实现过程一共两三个小时，逐步解决了以下问题:</p>
@@ -469,7 +546,7 @@ public class ChatMessageEntity {
 	  <title>MultidexApplication相关的一个crash</title>
 	  <link>//multidex-application-crash</link>
 	  <author>Tao He</author>
-	  <pubDate>2018-11-25T20:20:12+00:00</pubDate>
+	  <pubDate>2018-11-26T04:20:12+08:00</pubDate>
 	  <guid>//multidex-application-crash</guid>
 	  <description><![CDATA[
 	     <p>最近在内测的一个App在内测开始后有用户反馈启动就crash的问题，后来拿到用户的信息后发现几个crash的机器都是4.4的机器，因为现在真实用户使用4.4系统的用户真的是不多了，就没怎么在意，但是在阿里云移动测试平台进行兼容性测试的时候，这个问题必现，并且都出现在4.4的机器上，查看兼容性测试报告，都是同一个crash，崩溃的堆栈记录了下来:</p>
@@ -534,7 +611,7 @@ at dalvik.system.NativeStart.main(Native Method)
 	  <title>读《1984》</title>
 	  <link>//reading-1984</link>
 	  <author>Tao He</author>
-	  <pubDate>2018-07-15T18:20:12+00:00</pubDate>
+	  <pubDate>2018-07-16T02:20:12+08:00</pubDate>
 	  <guid>//reading-1984</guid>
 	  <description><![CDATA[
 	     <p>1984应该是我读的第一本英文原版小说，我其实不太喜欢看小说，汉语的我也很少看，但竟然每天在地铁上看，一个月下来竟然看完了，期间总会遇到生词，看不懂的长句，但竟然读出了惊叹，大有拍案叫绝的冲动，感受得到人物的绝望，恐惧，第一次，读着非母语写成的文字，生出了喟叹，感动。这些英文单词变得不那么疏离，它所描绘的情景人物变得栩栩如生，人物的落寞与心死都可透出纸面，感染到我。也许好的文字无论用什么语言表达都能直直抵人心吧！</p>
@@ -600,7 +677,7 @@ Winston had never been able to feel sure — even after this morning&#39;s flash
 	  <title>Activity vs FragmentActivity vs AppCompatActivity</title>
 	  <link>//different-activity-in-android</link>
 	  <author>Tao He</author>
-	  <pubDate>2018-02-18T18:20:12+00:00</pubDate>
+	  <pubDate>2018-02-19T02:20:12+08:00</pubDate>
 	  <guid>//different-activity-in-android</guid>
 	  <description><![CDATA[
 	     <p>Activity应该是每一个Android开发者第一个遇到的类吧，后来又看到了FragmentActivity，再后来又碰到了AppCompatActivity和ActionBarActivity，也许我们在开发者中会在不同的场景中使用以上不同的Activity类，但是要让我们清楚的说出它们的联系和区别，可能都会被这个问题懵一下，现在我们就来把他们的关系理清楚.</p>
@@ -619,31 +696,6 @@ Winston had never been able to feel sure — even after this morning&#39;s flash
 </ul>
 
 <p>因为<code>AppCompatActivity</code> 继承自<code>FragmentActivity</code> ,如果你需要<code>FragmentActivity</code>的特性，原则上都可以使用<code>AppCompatActivity</code>.</p>
-
-	  ]]></description>
-	</item>
-
-	<item>
-	  <title>处理Gradle plugin版本问题小记</title>
-	  <link>//do-with-gradle-error</link>
-	  <author>Tao He</author>
-	  <pubDate>2018-02-14T18:20:12+00:00</pubDate>
-	  <guid>//do-with-gradle-error</guid>
-	  <description><![CDATA[
-	     <p>在编译Github上一些Android项目的时候, Gradle sync 总会抛出这样的一个提示:</p>
-
-<blockquote>
-<p>Configuration on demand is not supported by the current version of the Android Gradle plugin since you are using Gradle version 4.6 or above. Suggestion: disable configuration on demand by setting org.gradle.configureondemand=false in your gradle.properties file or use a Gradle version less than 4.6.</p>
-</blockquote>
-
-<p>导致编译不能进行下去, 即使你将<code>org.gradle.configureondemand=false</code>设置了,  或者使用低版本的Gradle, 这个问题依旧存在.确实很恼人.但是问题终究要解决, 最后在网上找到了解决办法: <strong>并不需要降级Gradle</strong>, 两步解决:</p>
-
-<ol>
-<li><p>从gradle.properties 删除 org.gradle.configureondemand.</p></li>
-<li><p>在 Android Studio中,
-如果是 Mac, <code>Preferences &gt; Build, Execution, Deployment &gt; Compiler</code> 去掉 the configure on demand 选中.
-如果是 Linux/Windows  <code>File &gt; Settings &gt; Build, Execution, Deployment &gt; Compiler</code> and uncheck the configure on demand.</p></li>
-</ol>
 
 	  ]]></description>
 	</item>

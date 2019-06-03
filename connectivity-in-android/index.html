@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 
     <!-- [[! Page Meta ]] -->
-    <title>为什么要避免使用Fragment的默认构造函数</title>
+    <title>优化App网络连通性问题</title>
     <meta name="description" content="与机器，人，神共舞 - 编程，读书，思考，旅行，与机器对话，与人交谈，对神发问，探索，体验人生美丽的风景" />
 
     <meta name="HandheldFriendly" content="True" />
@@ -96,10 +96,10 @@
     <article class="post tag-machine">
 
         <header class="post-header">
-            <h1 class="post-title">为什么要避免使用Fragment的默认构造函数</h1>
+            <h1 class="post-title">优化App网络连通性问题</h1>
             <section class="post-meta">
             <!-- <a href='/'>Tao He</a> -->
-            <time class="post-date" datetime="2018-02-07">07 Feb 2018</time>
+            <time class="post-date" datetime="2019-05-29">29 May 2019</time>
                 <!-- [[tags prefix=" on "]] -->
                  
                 on 
@@ -114,32 +114,73 @@
 
         <section class="post-content">
             
-            <p>今天在项目中需要用到Fragment, 但是在代码写完后碰到了这样一个警告:</p>
-
-<blockquote>
-<p>Avoid non-default constructors in fragments: use a default constructor plus Fragment#setArguments(Bundle) instead</p>
-</blockquote>
-
-<p>后来发现是因为自己使用了Fragment的非默认构造函数, 在构造函数里传递了参数, Fragment之前也用了很多次, 可能都忽略了这个警告, 因此并没有发现这个问题, 这次既然遇到了就想一探究竟, 看看到底是为什么. 查看了网上可找到的相关的信息后, 终于明白其中原由, 避免使用默认构造函数的原因如下:</p>
+            <p>最近遇到一个棘手的问题，我们开发的一款App在中东那边出现大量的<code>UnknownHostException</code>, 导致App在中东那边体验很糟，很快这个问题就被抛给了我们技术优化组，我和另外一名同事就开始定位问题的原因并且试图提出一个可行的解决方案。一般理解，出现<code>UnkownHostException</code>就是DNS失败了，在我们开始解决这个问题的时候，App的网络库已逐渐开始使用OkHttp，我们想到自定义DNS过程，在系统DNS失败的情况下再尝试其他DNS方式，降低<code>UnknownHostException</code>出现的频率，优化App网络连通性。
+为了实现我们的技术方案，我们针对OkHttp的DNS做了如下几件事:</p>
 
 <ul>
-<li><p>系统在重新创建Fragment的时候调用的是默认构造函数.</p></li>
-<li><p>系统在恢复Fragment的时候会自动恢复你通过<code>setArguments(Bundle bundle)</code> 传递的<code>bundle</code>, 你可以在<code>onCreate</code>, <code>onCreateView</code>中读取恢复的<code>bundle</code>中的值,这种方式可以保证正确的恢复你最开始传递的bundle. </p></li>
+<li>创建OkHttpClient时自定义DNS</li>
+</ul>
+<div class="highlight"><pre><code class="language-text" data-lang="text">OkHttpClient.Builder builder = new OkHttpClient.Builder()
+    // 实现OKHttp DNS接口, 改变默认的DNS行为
+    .dns(OkHttpDns.getInstance())
+</code></pre></div>
+<p>上面的OkHttpDns须实现Dns接口</p>
+
+<ul>
+<li>实现自定义DNS</li>
 </ul>
 
-<p>因为这是一个警告, 不是错误，所以你也可以使用非默认构造函数，但是你得确保在非默认构造函数中初始化<code>bundle</code>中的参数,并在<code>onCreate</code>, <code>onCreateView</code>读取.</p>
+<p>目前我们的设计是使用责任链模式实现四层DNS的lookup: </p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">Local Cache --&gt; System DNS --&gt; GA --&gt; Google DNS
+</code></pre></div>
+<p>其中第一层是本地DNS缓存(Local Cache)，整个缓存只是内存缓存，DNS过程开始时，先去本地缓存找，如果在缓存中没有命中，就走系统DNS， 系统DNS如果也失败，整个链条就继续往下，到GA，到Google DNS，如果到Google DNS还没有解析成功，仍旧抛出<code>UnknownHostException</code>，DNS过程失败。基本的代码逻辑如下:</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">private OkHttpDns() {
 
-<p>当然了，创建一个Fragment,并且传递参数的推荐方式是这样的:</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">public static MyFragment newInstance(int someInt) {
-    MyFragment myFragment = new MyFragment();
+  //使用责任链模式实现四层DNS的lookup: Local Cache --&gt; System DNS --&gt; GA --&gt; Google DNS
+  mDnsChain = new CacheDnsHandler();
 
-    Bundle args = new Bundle();
-    args.putInt(&quot;someInt&quot;, someInt);
-    myFragment.setArguments(args);
+  SystemDnsHandler okhttp = new SystemDnsHandler();
+  GADnsHandler ga = new GADnsHandler();
+  GoogleHttpDnsHandler google = new GoogleHttpDnsHandler();
 
-    return myFragment;
+  mDnsChain.setTarget(okhttp);
+  okhttp.setTarget(ga);
+  ga.setTarget(google);
+}
+
+@Override
+public List&lt;InetAddress&gt; lookup(String hostname) throws UnknownHostException {
+  // IP直连的情况,直接返回
+  if (InetAddressValidator.isIPAddress(hostname)) {
+      return Arrays.asList(InetAddress.getAllByName(hostname));
+  }
+
+  List&lt;InetAddress&gt; allDNSResult = new ArrayList&lt;&gt;();
+  List&lt;InetAddress&gt; list = mDnsChain.lookup(hostname, allDNSResult);
+
+  if (list == null) {
+
+      // DNS完全失败后,清空黑名单,删除local cache相应的条目
+      IPStatusCache.getInstance().clear();
+
+      if (allDNSResult.isEmpty()) {
+          throw new UnknownHostException(&quot;Broken system behaviour for dns lookup of &quot; + hostname);
+      } else {
+          return allDNSResult;
+      }
+  }
+  return list;
 }
 </code></pre></div>
+<ul>
+<li><p>添加黑名单机制，进一步优化DNS
+一次连接成功后缓存DNS结果，host+ip为key，IPStatus为value，连接失败后会更新DNS缓存的失败次数，超过5次则认为进入了黑名单，在每次DNS完全失败后清空本地DNS缓存，防止所有的缓存都进入黑名单，缓存失效。</p></li>
+<li><p>处理IP直连的情况
+这种情况的处理很简单，检查传入的host是不是ip，如果是就直接返回。</p></li>
+</ul>
+
+<p>经过这样的优化以后，<code>UnknownHostException</code>在请求失败中的比重和请求的总失败率大幅下降，验证了我们这个技术方案的合理性，可以说网络连通性大大提高，再次回顾这个方案，突然发现它其实一个通用的解决方案，虽然我们这次解决的是海外，如中东地区的连通性问题，其实这个方案完全可以移植到国内，只要将Google HttpDNS换成国内的HttpDNS即可，整体的DNS流程可以不做任何改动即可成为一个完整的App DNS解决方案。</p>
+
 
         </section>
 
@@ -170,15 +211,15 @@
 
             <section class="share">
                 <h4>Share this post</h4>
-                <a class="icon-twitter" href="http://twitter.com/share?text=为什么要避免使用Fragment的默认构造函数&amp;url=http://longlinht.github.io//avoid-default-constructor-in-fragment"
+                <a class="icon-twitter" href="http://twitter.com/share?text=优化App网络连通性问题&amp;url=http://longlinht.github.io//connectivity-in-android"
                     onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
                     <span class="hidden">Twitter</span>
                 </a>
-                <a class="icon-facebook" href="https://www.facebook.com/sharer/sharer.php?u=http://longlinht.github.io//avoid-default-constructor-in-fragment"
+                <a class="icon-facebook" href="https://www.facebook.com/sharer/sharer.php?u=http://longlinht.github.io//connectivity-in-android"
                     onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
                     <span class="hidden">Facebook</span>
                 </a>
-                <a class="icon-google-plus" href="https://plus.google.com/share?url=http://longlinht.github.io//avoid-default-constructor-in-fragment"
+                <a class="icon-google-plus" href="https://plus.google.com/share?url=http://longlinht.github.io//connectivity-in-android"
                    onclick="window.open(this.href, 'google-plus-share', 'width=490,height=530');return false;">
                     <span class="hidden">Google+</span>
                 </a>
@@ -221,20 +262,13 @@
 
     <!-- [[! next_post ]] -->
     
-        <a class="read-next-story no-cover" href="http://longlinht.github.io//pager-tab-selection">
-            <section class="post">
-                <h2>Android开发中标签指示器的选用</h2>
-                <p>在Android实际的开发过程中,几乎都会用到标签指示器和ViewPager的联动使用,ViewPager,毫无疑问就直接选用系统提供的, 但是和它联动的标签指示器就有非常多的选择, 我在开发的过程中使用了两个比较常见的实现,也是Github上star较多的两个项目. ### PagerSlidingTabTrip 基本使用: * 添加依赖 ``` implementation 'com.astuetz:pagerslidingtabstrip:1.0.1' ``` * 在布局文件中添加`PagerSlidingTabTrip` ```xml...</p>
-            </section>
-        </a>
-    
     <!-- [[! /next_post ]] -->
     <!-- [[! prev_post ]] -->
     
-        <a class="read-next-story prev no-cover" href="http://longlinht.github.io//different-portion-different-appearance-in-same-textview">
+        <a class="read-next-story prev no-cover" href="http://longlinht.github.io//speed-up-gradle-build">
             <section class="post">
-                <h2>多样式 TextView 小记</h2>
-                <p><p>所谓多样式 <code>TextView</code>, 就是在同一个 <code>TextView</code>中不同部分的text展示不同的颜色,字体大小,字体,字体Style,这种需求其实在很多App中都存在, 能够直接的给每一部分Text赋予不同的外观, 既可以在布局中少添加几个<code>TextView</code>, 也可以使以后需求变动后能够灵活的做出改动, 我在实际的开发中也经常碰到这种需求,很多次都是临时Google下, 实现了以后也就作罢了, 等后面又遇到的时候,貌似又记得不太清楚了, 又需要去查, 很没有效率, 所以写下这篇小记.</p> <p>要想给TextView的不同部分设置不同的属性,通常有两种做法:</p> <h4>使用SpannableString</h4>...</p>
+                <h2>加速Gradle构建</h2>
+                <p><p>最近刚换工作，来这家新公司没几天，还在熟悉和适应阶段，leader也没安排什么特别的事情，只是说有空可以看看我们工程Gradle Build速度慢的问题。总算接到一个方向比较明确的任务，正好可以从工程的构建流程入手，可以一窥整个工程的结构和依赖。因为Gradle构建速度慢这个问题，其实有一些常见的排查方法，解决问题第一步，还是用最快的排查法，首先排除一些最常见的造成构建速度缓慢的原因。但是要找出构建速度慢的问题也需要将问题分情况来看，分两种情况，一种是在开发过程中的构建和正式发版上线的构建，这两种构建通常是相同的，但有时为了节约开发过程中的构建时间，会做一些特殊的设置和开启关闭一些选项来加速开发过程中的构建，因此，这两种情况面临的问题其实是类似的，因为还不是很清楚leader更在意的是开发过程中的构建时间还是发布上线的构建，因此我决定把这两种情况合二为一，罗列出所有的加速建议:</p> <ul> <li>检查是否使用了最新的Android Gradle Plugin</li> </ul> <p>当然了，这个排查不是硬性的，得看实际情况，但是如果能升到最新的插件版本，建议升级，随着插件的逐步完善，性能也会有很大提升</p> <ul> <li>尽量少用Module</li> </ul> <p>有技术博文称Module的构建时间可能是jar和aar的4倍（有待验证）</p> <ul> <li>使用Property选项</li> </ul>...</p>
             </section>
         </a>
     

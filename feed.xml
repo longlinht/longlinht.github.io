@@ -81,6 +81,250 @@ public List&amp;lt;InetAddress&amp;gt; lookup(String hostname) throws UnknownHos
       </item>
     
       <item>
+        <title>三星折叠屏适配小计</title>
+        <description>&lt;p&gt;三星要在近期发布折叠屏手机，消息一出，我们就得抓紧做适配，也没有什么现成的经验作参考，尤其令人头疼的是还没有真机供我们测试。没办法，兵来将挡，水来土掩，进过一周多的调研和开发，终于做完了大部分App页面的适配工作，也因为做这个适配的过程踩了很多坑，特写下这篇小记。&lt;/p&gt;
+
+&lt;p&gt;在我们开始做适配前，首先要解决没有真机可做测试的问题，无法验证适配的效果，还好三星也想到了这个问题，在官网提供了一个模拟器应用，Foldable Emulator， 通过这个模拟器App可以在Fold和Unfold模式之间自由切换，验证适配效果。当我们适配工作结束后在真机上测试时发现，这个模拟器的仿真度极高，基本没有出现和真机上效果有出入的地方。&lt;/p&gt;
+
+&lt;p&gt;在解决了没有真机的问题之后，我们就开始着手真正的适配工作。首先遇到的问题就是折叠屏手机需要在Fold和Unfold之间频繁切换，而这种切换的效果和横竖屏切换是一样的，默认都会导致Activity重建，而Activity重建又会导致一系列的连锁反应，如需要恢复大量数据、重新建立网络连接或执行其他密集操作，因此在适配前就需要规划哪些页面(Activity)需要重建，哪些不需要重建，所以需要按Activity是否重建这两种情况来分析切屏的后果和应对方法。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;重建Activity&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;因配置变更而引起的完全重启可能会给用户留下应用运行缓慢的体验。 此外，依靠系统通过onSaveInstanceState() 回调保存的 Bundle，可能无法完全恢复 Activity 状态，因为它并非设计用于携带大型对象（例如位图），而且其中的数据必须先序列化，再进行反序列化，这可能会消耗大量内存并使得配置变更速度缓慢。 在这种情况下，如果 Activity 因配置变更而重启，则可通过保留 Fragment 来减轻重新初始化 Activity 的负担。当 Android 系统因配置变更而关闭 Activity 时，不会销毁已标记为要保留的 Activity 的片段。 可以将此类片段添加到 Activity 以保留有状态的对象。
+要在运行时配置变更期间将有状态的对象保留在片段中，请执行以下操作：&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;扩展 Fragment 类并声明对有状态对象的引用&lt;/li&gt;
+&lt;li&gt;在创建片段后调用 setRetainInstance(boolean)&lt;/li&gt;
+&lt;li&gt;将片段添加到 Activity&lt;/li&gt;
+&lt;li&gt;重启 Activity 后，使用 FragmentManager 检索片段&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;例如，按如下方式定义片段：&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;public class RetainedFragment extends Fragment {
+
+    // 想要保存的数据
+    private MyDataObject data;
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        // 保存这个fragment
+        setRetainInstance(true);
+    }
+    public void setData(MyDataObject data) {
+        this.data = data;
+    }
+
+    public MyDataObject getData() {
+        return data;
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;然后，使用 &lt;code&gt;FragmentManager&lt;/code&gt; 将片段添加到 &lt;code&gt;Activity&lt;/code&gt;。在运行时配置变更期间再次启动 &lt;code&gt;Activity&lt;/code&gt; 时，可以获得片段中的数据对象。 例如，按如下方式定义 Activity：&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;public class MyActivity extends Activity {
+    private RetainedFragment retainedFragment;
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.main);
+        // 在activity重启后，获取保留的fragment
+        FragmentManager fm = getFragmentManager();
+        retainedFragment = (RetainedFragment) fm.findFragmentByTag(“data”);
+        // 首次创建
+        if (retainedFragment == null) {
+            // 添加fragment
+            retainedFragment = new RetainedFragment();
+            fm.beginTransaction().add(retainedFragment, “data”).commit();
+            // 从网络获取data
+            retainedFragment.setData(loadMyData());
+        }
+        // retainedFragment.getData()获取的数据可用
+        ...
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        // store the data in the fragment
+        retainedFragment.setData(collectMyLoadedData());
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;onCreate() 添加了一个片段或恢复了对它的引用。此外，onCreate() 还将有状态的对象存储在片段实例内部。&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;尽管Fragment内部可以存储任何对象，但是切勿传递与 Activity 绑定的对象，例如，Drawable、Adapter、View 或其他任何与 Context 关联的对象。否则，它将泄漏原始 Activity 实例的所有视图和资源。&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;ul&gt;
+&lt;li&gt;不重建Activity&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;如果想不重新启动的情况下处理配置更改，则需要在清单中添加一个android：configChanges属性，例如：&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;&amp;lt;activity
+    android:name=&amp;quot;......CMVideoPlayerActivity&amp;quot;
+    android:configChanges=&amp;quot;screenSize|smallestScreenSize|screenLayout&amp;quot;
+/&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;需要手动更新视图布局并在onConfigurationChaged（）中重新加载资源&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;@Override
+public void onConfigurationChanged(Configuration newConfig) {
+   super.onConfigurationChanged(newConfig);
+   if ((newConfig.screenLayout &amp;amp; Configuration.SCREENLAYOUT_LONG_MASK) == Configuration.SCREENLAYOUT_LONG_YES) {
+
+   }
+   if ((newConfig.screenLayout &amp;amp; Configuration.SCREENLAYOUT_LONG_MASK ) == Configuration.SCREENLAYOUT_LONG_NO) {
+
+   }
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;在遵循上述基本原则以后，就要应对实际的适配问题了，整个适配的工作主要涉及以下几个问题的解决:&lt;/p&gt;
+
+&lt;h4&gt;检测设备是否可折叠,当前是Fold状态还是Unfold，并且能够在切屏时通知到需要对切屏事件作出处理的页面&lt;/h4&gt;
+
+&lt;p&gt;为了统一解决这个问题，设计了一个单例类来统一管理&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;public class FoldObserable extends Observable {
+
+    public static final int SCREEN_LARGE_WIDTH = 1536;
+
+    public static final int SCREEN_LARGE = 0;
+    public static final int SCREEN_SMALL = 1;
+
+    private static class SINGLE {
+        public static FoldObserable INSTANCE = new FoldObserable();
+    }
+
+    private FoldObserable() {
+        String model = android.os.Build.MODEL;
+        if (model.contains(&amp;quot;SM-F9000&amp;quot;)) {
+            canFlod = true;
+            if (isLargeScreen()) {
+                screenType = SCREEN_LARGE;
+            } else {
+                screenType = SCREEN_SMALL;
+            }
+        }
+    }
+    //大屏无statusbar 小屏有statusbar，根据此来判断是是否减bar
+    private int screenType;
+    private boolean canFlod;
+
+    public static FoldObserable getInstance() {
+        return SINGLE.INSTANCE;
+    }
+
+    public void setScreenType(int screenType) {
+        this.screenType = screenType;
+        setChanged();
+        notifyObservers();
+    }
+
+    public int getScreenType() {
+        return screenType;
+    }
+
+    /**
+     * 是否是折叠屏
+     * @return
+     */
+    public boolean getCanFlod() {
+        return canFlod;
+    }
+
+    private boolean isLargeScreen() {
+        WindowManager wm = (WindowManager) BloodEyeApplication.getInstance().getSystemService(Context.WINDOW_SERVICE);
+        Display display = wm.getDefaultDisplay();
+        Point pp = new Point();
+        display.getSize(pp);
+        return pp.x == FoldObserable.SCREEN_LARGE_WIDTH;
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;因为要通过这个单例还通知需要响应切屏事件的页面，所以需要在App的所有Activity基类的onConfigurationChanged中调用setScreenType来通知所有的观察者，这些观察者就是需要相应切屏事件的Activigty和Fragment。代码如下:&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;@Override
+public void onConfigurationChanged(Configuration newConfig) {
+    super.onConfigurationChanged(newConfig);
+    if (FoldObserable.getInstance().getCanFlod()) {
+        UiProcessTask.updateScreenSize();
+        boolean isLargeScreen = isLargeScreen();
+        if (isLargeScreen) {
+            FoldObserable.getInstance().setScreenType(FoldObserable.SCREEN_LARGE);
+        } else {
+            FoldObserable.getInstance().setScreenType(FoldObserable.SCREEN_SMALL);
+        }
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;将需要响应切屏的页面注册为观察者:&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;@Override
+public void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    FoldObserable.getInstance().addObserver(this);
+}
+
+@Override
+public void onDestroy() {
+  super.onDestroy();
+  FoldObserable.getInstance().deleteObserver(this);
+}
+
+// 处理切屏事件
+@Override
+public void update(Observable o, Object arg) {
+  if (o instanceof FoldObserable) {
+      mAdapter.notifyDataSetChanged();
+  }
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h4&gt;处理实际的可能因为各种原因导致的适配问题&lt;/h4&gt;
+
+&lt;p&gt;经过模拟器的测试发现App种有很多页面在Fold和Unfold切换后出现适配问题，总结起来有如下几种情况:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;代码中为了提高测量和绘制View的性能，缓存了屏幕的宽度，导致一些用了屏幕宽度的地方使用了切换前的屏幕宽度的旧值，导致宽度适配错误。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;解决方法：在屏幕切换的时候更新缓存&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;有些没有重建的页面，RecyclerView的Adapter在Fold和Unfold切换以后没有重新回调onBindView，导致Item的大小适配错误。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;解决方法: 在屏幕切换时手动调用Adapter的notifyDataSetChanged()去刷新列表&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;布局xml文件中写死了一些控件的宽度，导致适配问题&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;解决方法：尽量不要使用写死的值，推荐使用match_parent + margin或padding来应对这种情况&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;在切屏时未能及时更新与界面宽高相关的全局变量&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;解决办法: 在Application的onConfigurationChanged中更新相关变量&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;public static void updateScreenSize() {
+
+}
+
+
+// 在Application中调用
+@Override
+public void onConfigurationChanged(Configuration newConfig) {
+    super.onConfigurationChanged(newConfig);
+    updateScreenSize();
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;在适配的过程中具体的问题可能都不一样，但是都跑不出这几类，只要抓住本质，一般都能得到很好的解决。比较麻烦的适配工作可算搞完了，第二天就得到三星跳票的消息，也是服气！&lt;/p&gt;
+</description>
+        <pubDate>Wed, 10 Apr 2019 04:20:12 +0800</pubDate>
+        <link>http://longlinht.github.io//sumsung-foldable-adapt</link>
+        <guid isPermaLink="true">http://longlinht.github.io//sumsung-foldable-adapt</guid>
+      </item>
+    
+      <item>
         <title>加速Gradle构建</title>
         <description>&lt;p&gt;最近刚换工作，来这家新公司没几天，还在熟悉和适应阶段，leader也没安排什么特别的事情，只是说有空可以看看我们工程Gradle Build速度慢的问题。总算接到一个方向比较明确的任务，正好可以从工程的构建流程入手，可以一窥整个工程的结构和依赖。因为Gradle构建速度慢这个问题，其实有一些常见的排查方法，解决问题第一步，还是用最快的排查法，首先排除一些最常见的造成构建速度缓慢的原因。但是要找出构建速度慢的问题也需要将问题分情况来看，分两种情况，一种是在开发过程中的构建和正式发版上线的构建，这两种构建通常是相同的，但有时为了节约开发过程中的构建时间，会做一些特殊的设置和开启关闭一些选项来加速开发过程中的构建，因此，这两种情况面临的问题其实是类似的，因为还不是很清楚leader更在意的是开发过程中的构建时间还是发布上线的构建，因此我决定把这两种情况合二为一，罗列出所有的加速建议:&lt;/p&gt;
 
@@ -878,60 +1122,6 @@ at dalvik.system.NativeStart.main(Native Method)
         <pubDate>Tue, 16 Oct 2018 02:20:12 +0800</pubDate>
         <link>http://longlinht.github.io//read-make-a-better-decision</link>
         <guid isPermaLink="true">http://longlinht.github.io//read-make-a-better-decision</guid>
-      </item>
-    
-      <item>
-        <title>读《Lies My Doctor Told Me》</title>
-        <description>&lt;blockquote&gt;
-&lt;p&gt;The doctor is more to be feared than the disease.&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;最近在Telegram上闲逛，无意间看到了这本书，有精排的epub版本，就顺手下载了下来发送到了Kindle上，原本不太可能会读，一来对这类书名的书向来没有好感，二来是英文版，又是关于医药，健康，想到会有众多医学专有名词，有点生畏。但是在地铁上顺手打开看了几页后，感觉书开篇很平实，就接着看了下去，几天地铁的通勤，竟然看完了，算是我看过的英文版书籍里读的最快的了。虽然读得较快，但是给我了我不少启发，也意识到之前自己对医药和健康的一些错误认知。作者在开篇讲到了一些很有意思的观点，值得记录下来：&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;p&gt;医生和病人的关系不应该是一般的医患关系，病人不应该完全盲信医生，医生也不应该拒绝与病人对病情的探讨，相互的关系应该是一种partner的关系&lt;/p&gt;&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;医生不应该不经研究和验证而盲目相信制药企业的产品，甚至也不应该盲从医疗科研机构的结论&lt;/p&gt;&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;医生应该时刻更新自己的知识体系，跟上最新医疗成果和研究方向，使自己的病人能够享受到最新最好的医疗方案&lt;/p&gt;&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;医生也是人，也会懒惰，也会对新事物，新观念迟钝，不要仰视盲从医生，病人自己也要积极对待自己的病情&lt;/p&gt;&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;医药领域的探索研究得出的一些结论可能是片面的，需要甄别对待，不能盲从制药企业和研究机构&lt;/p&gt;&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;人性都是一样的，这同样适用于医生，因为这是人的思维惯性，很难避免&lt;/p&gt;&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;当你唯一的工具是锤子时，所有东西看起来都像钉子。当医生只有听诊器的时候，什么病他可能都用听诊器。&lt;/p&gt;&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;当你的收入取决于相信某件事时，你倾向于相信它&lt;/p&gt;&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;人类(医生)总是在生活的各个方面寻找捷径&lt;/p&gt;&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;仅仅因为两件事之间有关联并不意味着其中一件事会导致另一件事发生。医生也不能避免这种思维惯性&lt;/p&gt;&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;当某件事听起来是真的，我们通常会开始相信它是真的(甚至医生也会这么做)。 &lt;/p&gt;&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;一个谎言在社会中不断重复，即使它被证明是假的。医生也不能抗拒&lt;/p&gt;&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;如果某样东西不那么糟糕，那么它一定是好的。&lt;/p&gt;&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;愚蠢的重复谎言会让人相信。&lt;/p&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;这些根植于人性中的思维范式，作用于一般人，也同样作用于医生，成为医药健康领域中众多谎言和神话的土壤，这些谎言是那么广为人知，使人深信不疑，即使官方和研究机构一再的向公众阐明那是谎言，是错误认知，都不能改变人们的习惯认知。我觉得我有必要记下这些长久以来的谎言和错误认知：&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;p&gt;吃脂肪，尤其是饱和脂肪，会导致高胆固醇和肥胖和心脏疾病&lt;/p&gt;&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;喝牛奶对你有益，可以使你的骨骼保持强壮&lt;/p&gt;&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;血液中的高胆固醇水平是危险的，会增加心脏病发作的风险。如果你的胆固醇水平高于正常水平，你应该少吃饱和脂肪，并服用胆固醇药物。&lt;/p&gt;&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;小麦是一种对身体非常有益的健康食品。每个人都应该每天吃多份全麦食品。&lt;/p&gt;&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;美国农业部的食物金字塔提供了最健康的方式来选择食物。如果你遵循它，你会有更好的健康。&lt;/p&gt;&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;如果你多运动，你就会减肥。&lt;/p&gt;&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;爆米花、坚果和种子会引起憩室炎。&lt;/p&gt;&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;给男性注射睾丸素会导致前列腺癌。&lt;/p&gt;&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;更年期的女性通常不需要孕激素，也不需要睾丸激素。他们只需要合成雌激素来控制潮热，如果有的话。&lt;/p&gt;&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;你流鼻涕/耳朵疼/咳嗽不会好起来的，除非你服用抗生素。&lt;/p&gt;&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;吃盐会增加你患高血压的风险，因此会增加你患心脏病和中风的风险。为了预防心脏病，你应该尽可能多地吃低盐饮食。&lt;/p&gt;&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;一卡路里就是一卡路里;无论是生日蛋糕还是西兰花。你可以想吃什么就吃什么，只要你限制总热量摄入。你会苗条健康，但要计算卡路里，因为所有的卡路里都是一样的。如果你想减肥，那么你应该燃烧比你吃的更多的卡路里。&lt;/p&gt;&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;吃或喝太多的钙会导致肾结石。或者，如果你有肾结石，你应该减少钙的摄入量，这样你就不会再得了。&lt;/p&gt;&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;一项名为TSH(促甲状腺素刺激激素)的实验室测试是你检查甲状腺功能是否正常所需要的。如果TSH在正常范围内，那么你的甲状腺正常，你的症状都在你的大脑里。&lt;/p&gt;&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;你的饮食中有足够的维生素D。你没有佝偻病(小孩骨头容易弯曲)或骨软化(大人骨头脆弱疼痛)，这证明你已经够了。不需要服用维生素D补充剂。&lt;/p&gt;&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;人类母乳缺乏维生素D。纯母乳喂养的婴儿应补充维生素D滴剂。&lt;/p&gt;&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;暴露在阳光下会导致皮肤癌。为了降低患皮肤癌的风险，你应该尽可能远离太阳。如果你一定要去晒太阳，那么你应该涂抹高防晒系数的防晒霜来保护自己。&lt;/p&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;以上是作者用很多篇幅证伪的一些比较典型的谎言，其实生活中充斥着很多传播甚广，根本没有根据的观念和判断，顽固的留在很多人的大脑里，久久不肯离去，也许人的认知真的是一个很复杂和奇特的系统，有时令人叹为观止，有时又啼笑皆非。这本书虽然谈的是医药，健康，但是揭示的一些造成认知偏差的原因却适用于很多领域，值得回味，反思。&lt;/p&gt;
-</description>
-        <pubDate>Fri, 03 Aug 2018 02:20:12 +0800</pubDate>
-        <link>http://longlinht.github.io//reading-lies-my-doctor-told-me</link>
-        <guid isPermaLink="true">http://longlinht.github.io//reading-lies-my-doctor-told-me</guid>
       </item>
     
   </channel>

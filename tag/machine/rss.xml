@@ -12,6 +12,132 @@
    <atom:link href="rss" rel="self" type="application/rss+xml" />
    
 	<item>
+	  <title>HTTP/2 从初探到实际场景的运用</title>
+	  <link>//upgrade-to-http2</link>
+	  <author>Tao He</author>
+	  <pubDate>2019-06-05T04:20:12+08:00</pubDate>
+	  <guid>//upgrade-to-http2</guid>
+	  <description><![CDATA[
+	     <p>HTTP/2其实出来已经很长时间了，但是一个新的协议，新的标准从出现到大量被采用，总是会经历一个过程。我们的产品最近基于网络请求优化的要求，需要将之前的HTTP/1都升级到支持HTTP/2，这个事情其实需要两方同时进行，服务端和客服端需要同时支持HTT/2。在做这个事情之前需要首先调研HTTP/2，了解它的特性和优缺点。</p>
+
+<p>对HTTP2的基本的调研结果如下:</p>
+
+<h4>HTTP/2的由来</h4>
+
+<p>HTTP/2 的前身是 SPDY协议，第一版草稿就是基于 SPDY3 规范修改制定而来。HTTP/2维持了原来 HTTP 的范式（不改动 HTTP/1.x 的语义、方法、状态码、URI 以及首部字段等等）</p>
+
+<h4>为什么是HTTP/2</h4>
+
+<ul>
+<li><p>连接次数减少 
+理想情况下，单个域名对应一条链接，如果此链接一直保持有数据传输，则类似一个长链接，不会建立多条链接，HTTP/1.1虽然也可以通过keep-alive做到类似的效果，但是无法做到请求并发，这也是HTTP/2不同于HTTP/1.x的一个重要方面</p></li>
+<li><p>并发发送请求 
+发送请求不再是串行, 提高了发送效率,同一时间可同时发出多个请求。</p></li>
+<li><p>流量节省 
+由于 HTTP/2的发送协议的修改和优化，流量的表现也有明显提升。</p></li>
+</ul>
+
+<h4>HTTP/2的特性</h4>
+
+<ul>
+<li><p>二进制分帧
+HTTP/2 在维持原有 HTTP 范式的前提下，实现突破性能限制，改进传输性能，实现低延迟和高吞吐量的其中一个关键是：在应用层（HTTP2）和传输层（TCP or
+UDP）之间增加了二进制分帧层</p></li>
+<li><p>多路复用</p>
+
+<ul>
+<li>同一个流中的帧是交错传输的！</li>
+<li>Header 帧必须在 data 帧前面，因为无论是客户端还是服务端，都依赖 header 帧的信息解析 data 帧的数据！</li>
+<li>先到的帧不一定先返回，快的可以先返回！ </li>
+</ul></li>
+<li><p>头压缩</p></li>
+</ul>
+
+<p>通过HPACK 压缩算法，HTTP2 在户端和服务器端使用“首部表”来跟踪和存储之前发送的键-值对，对于相同的数据，不再通过每次请求和响应发送；通信期间几乎不会改变的通用键-值对（用户代理、可接受的媒体类型，等等）只需发送一次</p>
+
+<ul>
+<li><p>服务器推送</p></li>
+<li><p>送优先级与依赖性</p></li>
+<li><p>可重置</p></li>
+<li><p>流量控制</p></li>
+<li><p>HTTPS RFC 规范并没有要求 HTTP2 强制使用 TLS，但是目前世界所有浏览器和服务器实现都基于 HTTPS 来实现 HTTP/2</p></li>
+</ul>
+
+<p>以上是在支持HTTP/2前所做的一些调研，一些HTTP/2的特性，略显简略，因为此文的重点并不是介绍协议特性，因此就不赘述了。接下我想具体谈谈我们在支持HTTP/2的过程中所做的事，所遇到的问题和解决方法。</p>
+
+<h4>在现有工程支持HTTP/2</h4>
+
+<ul>
+<li><p>使用大名鼎鼎的OkHttp来替换原有使用HttpURLConnection封装的网络基础模块，因为OkHttp原生支持HTTP/2，实际上我们不需要自己去实现HTTP/2协议，更不需要去设计和管理复杂的网络基础设施。</p></li>
+<li><p>对现有代码逻辑的兼容</p></li>
+</ul>
+
+<p>因为现有代码中很多不那么规范的写法，例如文件上传，将参数拼接和文件内容的字节流写在了一起，这类网络请求本来也不是HTTP/2的优势场景，因此还是走HTTP/1.x协议，因此我们设计了一个网络请求协议分派的管理类，在这个类里面统一做网络请求协议的分发。这样做的另一个考量是如果支持HTTP/2协议的这个版本在上线后出现大面积问题的话，可以迅速再切回HTTP/1.x。</p>
+
+<ul>
+<li>加入顺延心跳</li>
+</ul>
+
+<p>HTTP/2的理想情况下有点类似长连接，但是毕竟不是长连接，在一定的时间段如果没有请求的话，连接一样会断开，因为我们App的大部分业务请求其实都对应一个域名，所以保持这条连接一直不断就变得比较有意义，所有我们加入了心跳机制，心跳间隔以顺延的方式，进一步减少不必要的心跳，这样一来既不会有过多的心跳，也保证了连接不会频繁断开。</p>
+
+<ul>
+<li>DNS 优化</li>
+</ul>
+
+<p>这个在上一篇讨论连通性的文章中已经讨论过了，这里就不再详述。</p>
+
+<h4>如何衡量HTTP/2带来的提升</h4>
+
+<p>有的时候衡量你做的事的结果比起做事本省可能还要难，这次支持HTTP/2和优化连通性的工作就属于此类，做本身真不是很难，可预见的问题也都在可控范围之内，但是要衡量它的效果，或者说带来的提升和优化，这就需要设计一整套的衡量指标了，并且这些指标也都需要在这个支持HTTP/2的版本上线前就准备好。为此，我们也是调研了很多资料，结合我们能通过上报的数据，最终定下了如下几个指标来衡量:</p>
+
+<ul>
+<li>RTT - 完成整个事件的时间</li>
+</ul>
+
+<p>这个数据我们为了和没有支持HTTP/2的版本作比较，将上报的数据做了分区间整理，也就是将耗时从<200ms, 200~500ms, 500~700ms, 700~1000ms, >1000ms做了五个区间来统计每个区间的请求数在总请求数中的占比，通过两个版本的数据来验证HTTP/2的优化和提升，这个指标是最直观的。为了避免一些脏数据导致的数据偏差，我们还针对单个接口进行了数据分析。</p>
+
+<ul>
+<li>请求失败率 </li>
+</ul>
+
+<p>这个比率是有所下降的，尤其UnknownHostException异常导致的失败在总失败中所占比重明显下降，这个数据的提升得益于上篇文章中对连通性的优化。</p>
+
+<ul>
+<li>请求各个阶段的耗时 </li>
+</ul>
+
+<p>这个数据做了上报和统计，但是并没有去细致的分析各个阶段的耗时，不过的确可以作为一个参考。</p>
+
+<ul>
+<li>观察并发请求下的表现</li>
+</ul>
+
+<p>因为我们做的是直播业务，在进入直播间的一瞬间，可能会有非常多的并发请求，这种场景就体现出了HTTP/2并发发送请求的特性，可以说提升非常可观。</p>
+
+<h4>如何测试HTTP/2</h4>
+
+<p>如果在有限的资源条件下测试和验证HTTP/2，可能最先想到的就是要进行弱网环境测试:</p>
+
+<p>如何进行弱网测试:</p>
+
+<ul>
+<li><p>SIM卡的网络切换,手机-设置-移动网络设置-网络类型选择3G,4G卡都可以设置关闭3G/4G，只走2G网络</p></li>
+<li><p>使用虚拟机模拟网络速度,如用树莓派搭建的弱网测试仪</p></li>
+<li><p>使用软件进行网络代理,模拟不同的网络带宽、延时率、丢包率</p>
+
+<ul>
+<li>Charles</li>
+<li>Chrome的webview调试工具</li>
+<li>iOS自带Network Linker Conditioner</li>
+</ul></li>
+</ul>
+
+<p>以上就是我们在支持HTTP/2过程中的一些调研结果和实际工作中的经验总结。</p>
+
+	  ]]></description>
+	</item>
+
+	<item>
 	  <title>优化App网络连通性问题</title>
 	  <link>//connectivity-in-android</link>
 	  <author>Tao He</author>
@@ -851,72 +977,6 @@ at dalvik.system.NativeStart.main(Native Method)
 
 }
 </code></pre></div>
-	  ]]></description>
-	</item>
-
-	<item>
-	  <title>读《1984》</title>
-	  <link>//reading-1984</link>
-	  <author>Tao He</author>
-	  <pubDate>2018-07-16T02:20:12+08:00</pubDate>
-	  <guid>//reading-1984</guid>
-	  <description><![CDATA[
-	     <p>1984应该是我读的第一本英文原版小说，我其实不太喜欢看小说，汉语的我也很少看，但竟然每天在地铁上看，一个月下来竟然看完了，期间总会遇到生词，看不懂的长句，但竟然读出了惊叹，大有拍案叫绝的冲动，感受得到人物的绝望，恐惧，第一次，读着非母语写成的文字，生出了喟叹，感动。这些英文单词变得不那么疏离，它所描绘的情景人物变得栩栩如生，人物的落寞与心死都可透出纸面，感染到我。也许好的文字无论用什么语言表达都能直直抵人心吧！</p>
-
-<p>有一些段落我在读的过程中记录了下来，现摘录如下：</p>
-
-<p>BIG BROTHER IS WATCHING YOU</p>
-
-<p>The telescreen received and transmitted simultaneously. Any sound that Winston made, above the level of a very low whisper, would be picked up by it, moreover, so long as he remained within the field of vision which the metal plaque commanded, he could be seen as well as heard. There was of course no way of knowing whether you were being watched at any given moment. How often, or on what system, the Thought Police plugged in on any individual wire was guesswork. It was even conceivable that they watched everybody all the time. But at any rate they could plug in your wire whenever they wanted to. You had to live—did live, from habit that became instinct—in the assumption that every sound you made was overheard, and, except in darkness, every movement scrutinized.</p>
-
-<p>WAR IS PEACE
-FREEDOM IS SLAVERY 
-IGNORANCE IS STRENGTH</p>
-
-<p>This was not illegal ( nothing was illegal, since there were no longer any laws), but if detected it was reasonably certain that it would be punished by death, or at least by twenty-five years in a forced-labor camp.</p>
-
-<p>The horrible thing about the Two Minutes Hate was not that one was obliged to act a part, but, on the contrary,that it was impossible to avoid joining in. Within thirty seconds any pretence was always unnecessary. A hideous ecstasy of fear and vindictiveness, a desire to kill, to torture, to smash faces in with a sledge-hammer, seemed to flow through the whole group of people like an electric current, turning one even against one&#39;s will into a grimacing, screaming lunatic. And yet the rage that one felt was an abstract, undirected emotion which could be switched from one object to another like the flame of a blow lamp. </p>
-
-<p>Nearly all children nowadays were horrible.What was worst of all was that by means of such organizations as the Spies they were systematically turned into ungovernable little savages, and yet this produced in them no tendency whatever to rebel against the discipline of the Party. On the contrary, they adored the Party and everything connected with it. The songs, the processions, the banners, the hiking, the drilling with dummy rifles, the yelling of slogans, the worship of Big Brother--it was all a sort of glorious game to them. All their ferocity was turned outwards, against the enemies of the State, against foreigners, traitors, saboteurs, thought-criminals. It was almost normal for people over thirty to be frightened of their own children. And with good reason, for hardly a week passed in which The Times did not carry a paragraph describing how some eavesdropping little sneak -- &quot;child hero&quot; was the phrase generally used — had overheardsome compromising remark and denounced its parents to the Thought Police.</p>
-
-<p>Years ago — how long was it? Seven years it must be — he had dreamed that he was walking through a pitch-dark room. And someone sitting to one side of him had said as he passed: &quot;We shall meet in the place where there is no darkness.&quot; It was said very quietly, almost casually — a statement, not a command. He had walked on without pausing. What was curious was that at the time, in the dream, the words had not made much impression on him. It was only later and by degrees that they had seemed to take on significance. He could not now remember whether it was before or after having the dream that he had seen O&#39;Brien for the first time, nor could he remember when he had first identified the voice as O&#39;Brien&#39;s. But at any rate the identification existed. It was O&#39;Brien who had spoken to him out of the dark.
-Winston had never been able to feel sure — even after this morning&#39;s flash of the eyes it was still impossible to be sure whether O&#39;Brien was a friend or an enemy. Nor did it even seem to matter greatly. There was a link of understanding between them, more important than affection or partisanship.&quot;We shall meet in the place where there is no darkness,&quot; he had said. Winston did not know what it meant, only that in some way or another it would come true.</p>
-
-<p>It was always at night. The arrests invariably happened at night. The sudden jerk out of sleep, the rough hand shaking your shoulder, the lights glaring in your eyes, the ring of hard faces round the bed. In the vast majority of cases there was no trial, no report of the arrest. People simply disappeared, always during the night. Your name was removed from the registers, every record of everything you had ever done was wiped out, your one-time existence was denied and then forgotten. You were abolished, annihilated: vaporized was the usual word. </p>
-
-<p>Thoughtcrime does not entail death: thoughtcrime IS death. </p>
-
-<p>Tragedy,he perceived,belonged to the ancient time,to a time when there were still privacy,love and friendship,and when the members of a family stood by one another without needing to know the reason.</p>
-
-<p>Who controls the past controls the future, who controls the present controls the past.</p>
-
-<p>“Don&#39;t you see that the whole aim of Newspeak is to narrow the range of thought?In the end we shall make thought-crime literally impossible, beacuse there will be no words in which to express it. Every concept that can ever be needed will be expressed by exactly one word, with its meaning rigidly defined and all its subsidiary meanings rubbed out and forgotten. Already,in the Eleventh Edition, we&#39;re not far from that point. But the process will still be continuing long after you and I are dead. Every year fewer and fewer words,and the range of consciousness always alittle smaller. Even now, of course there&#39;s no reason or excuse for committing thought-crime. It&#39;s merely a question of self-discipline, reality-control. But in the end there won&#39;t be any need even for that. The Revolution will be complete when the language is perfect. Nespeak is Ingsoc and Ingsoc is Newspeak,” he added with a sort of mystical satisfaction. &quot;Has it ever occurred to you, Winston, that by the year2050, at the very latest, not a single human being will be alive who could understant such a conversation as we are having now?&quot;</p>
-
-<p>In some ways she was far more acute than Winston, and far less susceptible to Party propaganda. Once when he happened in some connexion to mention the war against Eurasia, she startled him by saying casually that in her opinion the war was not happening. The rocket bombs which fell daily on London were probably fired by the Government of Oceania itself, “just to keep people frightened”. </p>
-
-<p>&#39;You&#39;re only a rebel from the waist downwards,&#39; he told her.</p>
-
-<p>Throughout recorded time, and probably since the end of the Neolithic Age, there have been three kinds of people in the world, the High, the Middle, and the Low. They have been subdivided in many ways, they have borne countless different names, and their relative numbers, as well as their attitude towards one another, have varied from age to age: but the essential structure of society has never altered. Even after enormous upheavals and seemingly irrevocable changes, the same pattern has always reasserted itself, just as a gyroscope will always return to equilibrium, however far it is pushed one way or the other.</p>
-
-<p>In one combination or another, these three super-states are permanently at war, and have been so for the past twenty-five years. War, however, is no longer the desperate, annihilating struggle that it was in the early decades of the twentieth century. It is a warfare of limited aims between combatants who are unable to destroy one another, have no material cause for fighting and are not divided by any genuine ideological difference This is not to say that either the conduct of war, or the prevailing attitude towards it, has become less bloodthirsty or more chivalrous. On the contrary, war hysteria is continuous and universal in all countries, and such acts as raping, looting, the slaughter of children, the reduction of whole populations to slavery, and reprisals against prisoners which extend even to boiling and burying alive, are looked upon as normal, and, when they are committed by one&#39;s own side and not by the enemy, meritorious. But in a physical sense war involves very small numbers of people, mostly highly-trained specialists, and causes comparatively few casualties. The fighting, when there is any, takes place on the vague frontiers whose whereabouts the average man can only guess at, or round the Floating Fortresses which guard strategic spots on the sea lanes. In the centres of civilization war means no more than a continuous shortage of consumption goods, and the occasional crash of a rocket bomb which may cause a few scores of deaths. War has in fact changed its character. </p>
-
-<p>The war, therefore, if we judge it by the standards of previous wars, is merely an imposture. It is like the battles between certain ruminant animals whose horns are set at such an angle that they are incapable of hurting one another. But though it is unreal it is not meaningless. It eats up the surplus of consumable goods, and it helps to preserve the special mental atmosphere that a hierarchical society needs. War, it will be seen, is now a purely internal affair. In the past, the ruling groups of all countries, although they might recognize their common interest and therefore limit the destructiveness of war, did fight against one another, and the victor always plundered the vanquished. In our own day they are not fighting against one another at all. The war is waged by each ruling group against its own subjects, and the object of the war is not to make or prevent conquests of territory, but to keep the structure of society intact. The very word &#39;war&#39;, therefore, has become misleading. It would probably be accurate to say that by becoming continuous war has ceased to exist. The peculiar pressure that it exerted on human beings between the Neolithic Age and the early twentieth century has disappeared and been replaced by something quite different. The effect would be much the same if the three super-states, instead of fighting one another, should agree to live in perpetual peace, each inviolate within its own boundaries. For in that case each would still be a self-contained universe, freed for ever from the sobering influence of external danger. A peace that was truly permanent would be the same as a permanent war. This -- although the vast majority of Party members understand it only in a shallower sense -- is the inner meaning of the Party slogan: War is Peace</p>
-
-<p>Between life and death, and between physical pleasure and physical pain, there is still a distinction, but that is all. Cut off from contact with the outer world, and with the past, the citizen of Oceania is like a man in interstellar space, who has no way of knowing which direction is up and which is down. The rulers of such a state are absolute, as the Pharaohs or the Caesars could not be. They are obliged to prevent their followers from starving to death in numbers large enough to be inconvenient, and they are obliged to remain at the same low level of military technique as their rivals; but once that minimum is achieved, they can twist reality into whatever shape they choose.</p>
-
-<p>War, it will be seen, is now a purely internal affair. In the past, the ruling groups of all countries, although they might recognize their common interest and therefore limit the destructiveness of war, did fight against one another, and the victor always plundered the vanquished. In our own day they are not fighting against one another at all. The war is waged by each ruling group against its own subjects, and the object of the war is not to make</p>
-
-<p>The aims of these three groups are entirely irreconcilable. The aim of the High is to remain where they are. The aim of the Middle is to change places with the High. The aim of the Low, when they have an aim — for it is an abiding characteristic of the Low that they are too much crushed by drudgery to be more than intermittently conscious of anything outside their daily lives —is to abolish all distinctions and create a society in which all men shall be equal. Thus throughout history a struggle which is the same in its main outlines recurs over and over again. For long periods the High seem to be securely in power, but sooner or later there always comes a moment when they lose either their belief in themselves or their capacity to govern efficiently, or both. They are then overthrown by the Middle, who enlist the Low on their side by pretending to them that they are fighting for liberty and justice. As soon as they have reached their objective, the Middle thrust the Low back into their old position of servitude, and themselves become the High. Presently a new Middle group splits off from one of the other groups, or from both of them, and the struggle begins over again. Of the three groups, only the Low are never even temporarily successful in achieving their aims. It would be an exaggeration to say that throughout history there has been no progress of a material kind. Even today, in a period of decline, the average human being is physically better off than he was a few centuries ago. But no advance in wealth, no softening of manners,no reform or revolution has ever brought human equality a millimetre nearer. From the point of view of the Low, no historic change has ever meant much more than a change in the name of their masters.</p>
-
-<p>Part of the reason for this was that in the past no government had the power to keep its citizens under constant surveillance. The invention of print, however, made it easier to manipulate public opinion, and the film and the radio carried the process further. With the development of television, and the technical advance which made it possible to receive and transmit simultaneously on the same instrument, private life came to an end. Every citizen, or at least every citizen important enough to be worth watching, could be kept for twentyfour hours a day under the eyes of the police and in the sound of official propaganda, with all other channels of communication closed. The possibility of enforcing not only complete obedience to the will of the State, but complete uniformity of opinion on all subjects, now existed for the first time.</p>
-
-<p>It had long been realized that the only secure basis for oligarchy is collectivism. Wealth and privilege are most easily defended when they are possessed jointly. The so-called &quot;abolition of private property&quot; which took place in the middle years of the century meant, in effect, the concentration of property in far fewer hands than before: but with this difference, that the new owners were a group instead of a mass of individuals. Individually, no member of the Party owns anything, except petty personal belongings. Collectively, the Partyowns everything in Oceania, because it controls everything, and disposes of the products as it thinks fit.</p>
-
-<p>&quot; When you make love you&#39;re using up energy; and afterwards you feel happy and don&#39;t give a damn for anything. They can&#39;t bear you to feel like that. They want you to be bursting with energy all the time. All this marching up and down and cheering and waving flags is simply sex gone sour.&quot; ... There was a direct, intimate connection between chastity and political orthodoxy. 
-...The family could not actually be abolished, and, indeed, people were encouraged to be fond of their children in an almost the old-fashioned way. The children, on the other hand, were systematically turned against their parents and taught to spy on them and report their deviations...It was a device by means of which everyone could be surrounded night and day by informers who knew him intimately.</p>
-
-<p>He had won the victory over himself. He loved Big Brother.</p>
-
 	  ]]></description>
 	</item>
 

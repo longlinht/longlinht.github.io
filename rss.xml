@@ -8,7 +8,16 @@
     <title>与机器，人，神共舞</title>
     <link>http://longlinht.github.io/</link>
     <description>编程，读书，思考，旅行，与机器对话，与人交谈，对神发问，探索，体验人生美丽的风景</description>
-    <pubDate>Wed, 05 Jun 2019 04:20:12 +0800</pubDate>
+    <pubDate>Sat, 29 Jun 2019 04:20:12 +0800</pubDate>
+    <item>
+      <title>在WebView中调用Android相机拍照录像</title>
+      <link>http://longlinht.github.io//operate-camera-in-webview</link>
+      <description>最近公司App需要以H5的方式接入七鱼客服，根据他们的开发文档接入起来还是很容易，成本很低。理论上如果以native的方式接入的话，用户体验会更好，但是接入后增加的包体积是无法接受的，遂改用H5的方式，整个接入过程还算顺利，有相对详尽的接入文档和demo，只是在最后接入完成后，因为沟通不畅，忽略了客服聊天界面在Android上无法发图片和发视频的问题。同一份html，iOS就是正常的，Android上就死活没反应。后来才恍然大悟，WebView是不支持JS去直接操作Android相机的，必须通过回调到native，由native完成照片的选择，拍摄和录像后将数据返回给JS才能完成一次照片和视频的发送。清楚了问题所在，就需要实现WebView的标准接口来实现这个回调到native的功能，在代码实现前，需要先厘清一些WebView的基本概念和原理。
+
+</description>
+      <pubDate>Sat, 29 Jun 2019 04:20:12 +0800</pubDate>
+      <dc:date>2019-06-29T04:20:12+08:00</dc:date>
+    </item>
     <item>
       <title>HTTP/2 从初探到实际场景的运用</title>
       <link>http://longlinht.github.io//upgrade-to-http2</link>
@@ -482,6 +491,6 @@ update UI when we finish something in separated thread. This is a basic problem,
       <pubDate>Wed, 03 Nov 2010 02:30:12 +0800</pubDate>
       <dc:date>2010-11-03T02:30:12+08:00</dc:date>
     </item>
-    <dc:date>2019-06-05T04:20:12+08:00</dc:date>
+    <dc:date>2019-06-29T04:20:12+08:00</dc:date>
   </channel>
 </rss>

@@ -1,13 +1,12 @@
 ---
 layout: post
 cover: false
-title: 解决WebView中视频全屏的问题
-date:   2019-07-01 20:20:12
+title: 在WebView中支持视频全屏
+date:   2019-07-10 20:20:12
 tags: machine
 subclass: 'post tag-machine'
 categories: 'hetao'
 chinese: true
 ---
-
 
 

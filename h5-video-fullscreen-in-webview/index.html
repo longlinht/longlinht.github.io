@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 
     <!-- [[! Page Meta ]] -->
-    <title>在WebView中调用Android相机拍照录像</title>
+    <title>在WebView中支持视频全屏</title>
     <meta name="description" content="与机器，人，神共舞 - 编程，读书，思考，旅行，与机器对话，与人交谈，对神发问，探索，体验人生美丽的风景" />
 
     <meta name="HandheldFriendly" content="True" />
@@ -96,10 +96,10 @@
     <article class="post tag-machine">
 
         <header class="post-header">
-            <h1 class="post-title">在WebView中调用Android相机拍照录像</h1>
+            <h1 class="post-title">在WebView中支持视频全屏</h1>
             <section class="post-meta">
             <!-- <a href='/'>Tao He</a> -->
-            <time class="post-date" datetime="2019-06-29">29 Jun 2019</time>
+            <time class="post-date" datetime="2019-07-11">11 Jul 2019</time>
                 <!-- [[tags prefix=" on "]] -->
                  
                 on 
@@ -114,80 +114,65 @@
 
         <section class="post-content">
             
-            <p>最近公司App需要以H5的方式接入七鱼客服，根据他们的开发文档接入起来还是很容易，成本很低。理论上如果以native的方式接入的话，用户体验会更好，但是接入后增加的包体积是无法接受的，遂改用H5的方式，整个接入过程还算顺利，有相对详尽的接入文档和demo，只是在最后接入完成后，因为沟通不畅，忽略了客服聊天界面在Android上无法发图片和发视频的问题。同一份html，iOS就是正常的，Android上就死活没反应。后来才恍然大悟，WebView是不支持JS去直接操作Android相机的，必须通过回调到native，由native完成照片的选择，拍摄和录像后将数据返回给JS才能完成一次照片和视频的发送。清楚了问题所在，就需要实现WebView的标准接口来实现这个回调到native的功能，在代码实现前，需要先厘清一些WebView的基本概念和原理。</p>
+            <p>最近感觉和WebView杠上了，刚解决完在WebView中使用Android相机拍照和录像的问题，又遇到在WebView中视频无法全屏，和之前相机拍照和视频的问题一样，iOS和其他浏览器都没有问题，独WebView出错。通过网上查阅一些资料，最终顺利解决，虽不是什么难搞的东西，但是真要弄起来，也需要一些心力，所以通过此篇记录下整个过程。</p>
 
-<p>像发送图片和视频这样的操作，涉及到了定制WebView的一些默认行为，理论上如果要做定制，就需要了解WebSettings、JavaScriptInterface、WebViewClient以及WebChromeClient，一般而言，通过配置WebSettings，使用JavasScriptInterface，重写WebViewClient和WebChromeClient对象的相关方法，就可以实现一些我们想要的行为。发图片和发视频就是通过重写WebChromeClient对象的几个方法来实现的。</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">// 重写WebChromeClient的特定方法来实现图片和视频的发送
-mWebView.setWebChromeClient(new WebChromeClient() {
-    // For Android &gt;=3.0
-    public void openFileChooser(ValueCallback&lt;Uri&gt; uploadMsg, String acceptType) {
-        if(acceptType.equals(&quot;image/*&quot;)) {
-            if (mUploadMessage != null) {
-                mUploadMessage.onReceiveValue(null);
-                return;
-            }
-            mUploadMessage = uploadMsg;
-            selectImage();
-        } else {
-            onReceiveValue();
-        }
-    }
+<p>解决整个问题其实很程式化，先按部就班保证视频能够正常播放:</p>
 
-    // For Android &lt; 3.0
-    public void openFileChooser(ValueCallback&lt;Uri&gt; uploadMsg) {
-        openFileChooser(uploadMsg, &quot;image/*&quot;);
-    }
-
-    // For Android  &gt;= 4.1.1
-    public void openFileChooser(ValueCallback&lt;Uri&gt; uploadMsg, String acceptType, String capture) {
-        openFileChooser(uploadMsg, acceptType);
-    }
-
-    // For Android  &gt;= 5.0
-    @Override
-    @SuppressLint(&quot;NewApi&quot;)
-    public boolean onShowFileChooser(WebView webView, ValueCallback&lt;Uri[]&gt; filePathCallback, FileChooserParams fileChooserParams) {
-        if (fileChooserParams != null &amp;&amp; fileChooserParams.getAcceptTypes() != null
-                &amp;&amp; fileChooserParams.getAcceptTypes().length &gt; 0 &amp;&amp; fileChooserParams.getAcceptTypes()[0].equals(&quot;image/*&quot;)) {
-            if (mUploadMessageArray != null) {
-                mUploadMessageArray.onReceiveValue(null);
-            }
-            mUploadMessageArray = filePathCallback;
-            selectImage();
-        } else if (fileChooserParams != null &amp;&amp; fileChooserParams.getAcceptTypes() != null
-                &amp;&amp; fileChooserParams.getAcceptTypes().length &gt; 0 &amp;&amp; fileChooserParams.getAcceptTypes()[0].equals(&quot;video/*&quot;)){
-
-            if (mUploadMessageArray != null) {
-                mUploadMessageArray.onReceiveValue(null);
-            }
-            mUploadMessageArray = filePathCallback;
-            PermissionUtil.requestPermission(QiyuWebViewActivity.this, PermissionUtil.PERMISSIONS_CAMERA_RECORD_AUDIO, PermissionUtil.REQUEST_CAMERA_RECORD_AUDIO);
-        } else {
-            onReceiveValue();
-        }
-        return true;
-    }
-});
+<ol>
+<li>在AndroidManifest.xml中声明hardwareAccelerate属性</li>
+</ol>
+<div class="highlight"><pre><code class="language-text" data-lang="text"> &lt;application android:hardwareAccelerated =&quot;true&quot;&gt;
 </code></pre></div>
-<p>需要注意的是，这几个回调方法，需要针对不同Android版本分别做处理，在onShowFileChooser方法中需要区分是图片还是视频，并且无论是在相册中选取还是拍摄照片，录像都需要申请相应的权限，这个一定不能少，网上很多的demo都是没有权限申请环节的，代码根本不可用。</p>
-
-<p>在正确的回调到onShowFileChooser后，就要区分图片和视频的情况下走正常的选取，拍照，录像的流程，并且把获取到的图片，视频数据回传给JS调用，这样就完成了桥接调用。虽然现在看起来挺简单的，但是还是有些点容易成为坑点，让人走很多弯路:</p>
-
-<ul>
-<li>需要的配置一定要设定</li>
-</ul>
-<div class="highlight"><pre><code class="language-text" data-lang="text">mWebView.getSettings().setJavaScriptEnabled(true);
-mWebView.getSettings().setDomStorageEnabled(true);
+<ol>
+<li>在Activity中声明</li>
+</ol>
+<div class="highlight"><pre><code class="language-text" data-lang="text">&lt;activity android:hardwareAccelerated=&quot;true&quot; &gt;
 </code></pre></div>
-<ul>
-<li><p>动态权限申请一定不能少</p></li>
-<li><p>正确区分图片和视频</p></li>
-</ul>
-<div class="highlight"><pre><code class="language-text" data-lang="text">// &quot;video/* 为视频&quot;
-fileChooserParams.getAcceptTypes()[0].equals(&quot;image/*&quot;)
+<ol>
+<li>在代码中设置</li>
+</ol>
+<div class="highlight"><pre><code class="language-text" data-lang="text">getWindow.setFlags(WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED,
+WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED);
 </code></pre></div>
-<p>总结一下，在WebView的JS调用系统相机的关键是重写WebChromeClient的特定方法来实现的。</p>
+<p>然后来实现全屏, 而能够全屏的关键在于重写WebChromeClient的onShowCustomView()和onHideCustomView()方法, 在Activity中实现自定义的WebChromeClient，在onShowCustomView中横屏，隐藏WebView,并将得到的View添加到FrameLayout中显示。在onHideCustomView中隐藏View，显示WebView，并竖屏.</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">private View mCustomView;
+private WebChromeClient.CustomViewCallback mCustomViewCallback;
 
+@Override
+public void onShowCustomView(View view, WebChromeClient.CustomViewCallback callback) {
+    if (mCustomView != null) {
+        callback.onCustomViewHidden();
+        return;
+    }
+    mCustomView = view;
+    webViewContainer.addView(mCustomView);
+    mCustomViewCallback = callback;
+    mWebView.setVisibility(View.GONE);
+    mTitle.setVisibility(View.GONE);
+    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+}
+
+@Override
+public void onHideCustomView() {
+    mWebView.setVisibility(View.VISIBLE);
+    mTitle.setVisibility(View.VISIBLE);
+    if (mCustomView == null) {
+        return;
+    }
+    mCustomView.setVisibility(View.GONE);
+    webViewContainer.removeView(mCustomView);
+    mCustomViewCallback.onCustomViewHidden();
+    mCustomView = null;
+    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+}
+</code></pre></div>
+<p>代码中mCustomView和 mCustomViewCallback 需要保存下来，WebView的父容器在实现中也很重要。</p>
+
+<p>需要注意的问题</p>
+
+<p>如果H5工程师在html中使用了iframe, 那需要H5工程师配合在其中中加入一些属性才能对视频进行操作，</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">allowfullscreen=&quot;true&quot; webkitallowfullscreen=&quot;true&quot; mozallowfullscreen=&quot;true&quot;
+</code></pre></div>
 
         </section>
 
@@ -218,15 +203,15 @@ fileChooserParams.getAcceptTypes()[0].equals(&quot;image/*&quot;)
 
             <section class="share">
                 <h4>Share this post</h4>
-                <a class="icon-twitter" href="http://twitter.com/share?text=在WebView中调用Android相机拍照录像&amp;url=http://longlinht.github.io//operate-camera-in-webview"
+                <a class="icon-twitter" href="http://twitter.com/share?text=在WebView中支持视频全屏&amp;url=http://longlinht.github.io//h5-video-fullscreen-in-webview"
                     onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
                     <span class="hidden">Twitter</span>
                 </a>
-                <a class="icon-facebook" href="https://www.facebook.com/sharer/sharer.php?u=http://longlinht.github.io//operate-camera-in-webview"
+                <a class="icon-facebook" href="https://www.facebook.com/sharer/sharer.php?u=http://longlinht.github.io//h5-video-fullscreen-in-webview"
                     onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
                     <span class="hidden">Facebook</span>
                 </a>
-                <a class="icon-google-plus" href="https://plus.google.com/share?url=http://longlinht.github.io//operate-camera-in-webview"
+                <a class="icon-google-plus" href="https://plus.google.com/share?url=http://longlinht.github.io//h5-video-fullscreen-in-webview"
                    onclick="window.open(this.href, 'google-plus-share', 'width=490,height=530');return false;">
                     <span class="hidden">Google+</span>
                 </a>
@@ -269,20 +254,13 @@ fileChooserParams.getAcceptTypes()[0].equals(&quot;image/*&quot;)
 
     <!-- [[! next_post ]] -->
     
-        <a class="read-next-story no-cover" href="http://longlinht.github.io//fix-anr-related-sharedpreferences">
-            <section class="post">
-                <h2>解决SharedPreferences导致的ANR</h2>
-                <p>这几天在Google Play的ANR实时报告中看到很多貌似与SharedPreferences相关的ANR，看了历史版本后发现，这个已经是一个老问题了，在历次版班的ANR中居高不下。今天实在忍不了，决定对这个问题一探究竟。 ``` at java.lang.Object.wait! (Native method) - waiting on <0x0a351954> (a java.lang.Object) at java.lang.Thread.parkFor$...</p>
-            </section>
-        </a>
-    
     <!-- [[! /next_post ]] -->
     <!-- [[! prev_post ]] -->
     
-        <a class="read-next-story prev no-cover" href="http://longlinht.github.io//upgrade-to-http2">
+        <a class="read-next-story prev no-cover" href="http://longlinht.github.io//fix-anr-related-sharedpreferences">
             <section class="post">
-                <h2>HTTP/2 从初探到实际场景的运用</h2>
-                <p><p>HTTP/2其实出来已经很长时间了，但是一个新的协议，新的标准从出现到大量被采用，总是会经历一个过程。我们的产品最近基于网络请求优化的要求，需要将之前的HTTP/1都升级到支持HTTP/2，这个事情其实需要两方同时进行，服务端和客服端需要同时支持HTT/2。在做这个事情之前需要首先调研HTTP/2，了解它的特性和优缺点。</p> <p>对HTTP2的基本的调研结果如下:</p> <h4>HTTP/2的由来</h4> <p>HTTP/2 的前身是 SPDY协议，第一版草稿就是基于 SPDY3 规范修改制定而来。HTTP/2维持了原来 HTTP 的范式（不改动 HTTP/1.x 的语义、方法、状态码、URI 以及首部字段等等）</p> <h4>为什么是HTTP/2</h4> <ul>...</p>
+                <h2>解决SharedPreferences导致的ANR</h2>
+                <p><p>这几天在Google Play的ANR实时报告中看到很多貌似与SharedPreferences相关的ANR，看了历史版本后发现，这个已经是一个老问题了，在历次版班的ANR中居高不下。今天实在忍不了，决定对这个问题一探究竟。</p> <div class="highlight"><pre><code class="language-text" data-lang="text"> at java.lang.Object.wait! (Native method) - waiting on &lt;0x0a351954&gt; (a...</p>
             </section>
         </a>
     

@@ -12,6 +12,401 @@
    <atom:link href="rss" rel="self" type="application/rss+xml" />
    
 	<item>
+	  <title>在WebView中支持视频全屏</title>
+	  <link>//h5-video-fullscreen-in-webview</link>
+	  <author>Tao He</author>
+	  <pubDate>2019-07-11T04:20:12+08:00</pubDate>
+	  <guid>//h5-video-fullscreen-in-webview</guid>
+	  <description><![CDATA[
+	     <p>最近感觉和WebView杠上了，刚解决完在WebView中使用Android相机拍照和录像的问题，又遇到在WebView中视频无法全屏，和之前相机拍照和视频的问题一样，iOS和其他浏览器都没有问题，独WebView出错。通过网上查阅一些资料，最终顺利解决，虽不是什么难搞的东西，但是真要弄起来，也需要一些心力，所以通过此篇记录下整个过程。</p>
+
+<p>解决整个问题其实很程式化，先按部就班保证视频能够正常播放:</p>
+
+<ol>
+<li>在AndroidManifest.xml中声明hardwareAccelerate属性</li>
+</ol>
+<div class="highlight"><pre><code class="language-text" data-lang="text"> &lt;application android:hardwareAccelerated =&quot;true&quot;&gt;
+</code></pre></div>
+<ol>
+<li>在Activity中声明</li>
+</ol>
+<div class="highlight"><pre><code class="language-text" data-lang="text">&lt;activity android:hardwareAccelerated=&quot;true&quot; &gt;
+</code></pre></div>
+<ol>
+<li>在代码中设置</li>
+</ol>
+<div class="highlight"><pre><code class="language-text" data-lang="text">getWindow.setFlags(WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED,
+WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED);
+</code></pre></div>
+<p>然后来实现全屏, 而能够全屏的关键在于重写WebChromeClient的onShowCustomView()和onHideCustomView()方法, 在Activity中实现自定义的WebChromeClient，在onShowCustomView中横屏，隐藏WebView,并将得到的View添加到FrameLayout中显示。在onHideCustomView中隐藏View，显示WebView，并竖屏.</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">private View mCustomView;
+private WebChromeClient.CustomViewCallback mCustomViewCallback;
+
+@Override
+public void onShowCustomView(View view, WebChromeClient.CustomViewCallback callback) {
+    if (mCustomView != null) {
+        callback.onCustomViewHidden();
+        return;
+    }
+    mCustomView = view;
+    webViewContainer.addView(mCustomView);
+    mCustomViewCallback = callback;
+    mWebView.setVisibility(View.GONE);
+    mTitle.setVisibility(View.GONE);
+    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+}
+
+@Override
+public void onHideCustomView() {
+    mWebView.setVisibility(View.VISIBLE);
+    mTitle.setVisibility(View.VISIBLE);
+    if (mCustomView == null) {
+        return;
+    }
+    mCustomView.setVisibility(View.GONE);
+    webViewContainer.removeView(mCustomView);
+    mCustomViewCallback.onCustomViewHidden();
+    mCustomView = null;
+    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+}
+</code></pre></div>
+<p>代码中mCustomView和 mCustomViewCallback 需要保存下来，WebView的父容器在实现中也很重要。</p>
+
+<p>需要注意的问题</p>
+
+<p>如果H5工程师在html中使用了iframe, 那需要H5工程师配合在其中中加入一些属性才能对视频进行操作，</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">allowfullscreen=&quot;true&quot; webkitallowfullscreen=&quot;true&quot; mozallowfullscreen=&quot;true&quot;
+</code></pre></div>
+	  ]]></description>
+	</item>
+
+	<item>
+	  <title>解决SharedPreferences导致的ANR</title>
+	  <link>//fix-anr-related-sharedpreferences</link>
+	  <author>Tao He</author>
+	  <pubDate>2019-07-10T04:20:12+08:00</pubDate>
+	  <guid>//fix-anr-related-sharedpreferences</guid>
+	  <description><![CDATA[
+	     <p>这几天在Google Play的ANR实时报告中看到很多貌似与SharedPreferences相关的ANR，看了历史版本后发现，这个已经是一个老问题了，在历次版班的ANR中居高不下。今天实在忍不了，决定对这个问题一探究竟。</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text"> at java.lang.Object.wait! (Native method)
+- waiting on &lt;0x0a351954&gt; (a java.lang.Object)
+  at java.lang.Thread.parkFor$ (Thread.java:1220)
+- locked &lt;0x0a351954&gt; (a java.lang.Object)
+  at sun.misc.Unsafe.park (Unsafe.java:299)
+  at java.util.concurrent.locks.LockSupport.park (LockSupport.java:158)
+  at java.util.concurrent.locks.AbstractQueuedSynchronizer.parkAndCheckInterrupt (AbstractQueuedSynchronizer.java:810)
+  at java.util.concurrent.locks.AbstractQueuedSynchronizer.doAcquireSharedInterruptibly (AbstractQueuedSynchronizer.java:970)
+  at java.util.concurrent.locks.AbstractQueuedSynchronizer.acquireSharedInterruptibly (AbstractQueuedSynchronizer.java:1278)
+  at java.util.concurrent.CountDownLatch.await (CountDownLatch.java:203)
+  at android.app.SharedPreferencesImpl$EditorImpl$1.run (SharedPreferencesImpl.java:366)
+  at android.app.QueuedWork.waitToFinish (QueuedWork.java:88)
+  at android.app.ActivityThread.handleServiceArgs (ActivityThread.java:3029)
+  at android.app.ActivityThread.access$2200 (ActivityThread.java:155)
+  at android.app.ActivityThread$H.handleMessage (ActivityThread.java:1450)
+  at android.os.Handler.dispatchMessage (Handler.java:102)
+  at android.os.Looper.loop (Looper.java:175)
+  at android.app.ActivityThread.main (ActivityThread.java:5430)
+  at java.lang.reflect.Method.invoke! (Native method)
+  at com.android.internal.os.ZygoteInit$MethodAndArgsCaller.run (ZygoteInit.java:726)
+  at com.android.internal.os.ZygoteInit.main (ZygoteInit.java:616)
+</code></pre></div>
+<p>这事Google Play提供的堆栈信息，信息非常有限，但是还是能观察到SharedPreferences的身影的，这个 <code>waitToFinish</code> 非常可疑，追踪到代码:</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">/**
+ * Finishes or waits for async operations to complete.
+ * (e.g. SharedPreferences$Editor#startCommit writes)
+ *
+ * Is called from the Activity base class&#39;s onPause(), after
+ * BroadcastReceiver&#39;s onReceive, after Service command handling,
+ * etc. (so async work is never lost)
+ */
+public static void waitToFinish() {
+    Runnable toFinish;
+    while ((toFinish = sPendingWorkFinishers.poll()) != null) {
+        toFinish.run();
+    }
+}
+</code></pre></div>
+<p>这个方法的注释已经很清楚了，如果我们使用SharedPreference的apply方法, 虽然该方法可以很快返回， 并在其它线程里将键值对写入到文件系统， 但是当Activity, BroadcastReceiver和Service的一些回调方法被调用时，会等待写入到文件系统的任务完成，如果写入比较慢，主线程就会出现ANR问题。</p>
+
+<p>另外，SharedPreference除了提供apply外还提供commit方法，源码如下所示，该方法直接在调用线程中执行，不会转入后台，但如果我们在UI线程commit，且磁盘写入较慢的情况下，ANR依然会发生。行文至此，问题应该描述的比较清楚了，可以理解为SharedPreferences的机制导致系统组件回调过程中的阻塞，触发了ANR。可以将这个问题视为Android一个bug，也可以将问题归咎于为使用SharedPreferences不当(在SharedPreferences里读写数据量太大), 但是问题终究要解决，所以下面提出解决方案，并且记录下解决过程中的实践经验。</p>
+
+<ul>
+<li>方案一</li>
+</ul>
+
+<p>考虑启动一个线程commit，不使用apply</p>
+
+<ul>
+<li>方案二</li>
+</ul>
+
+<p>Hook ActivityThread，拿到Handler变量，在调用QueuedWork.waitToFinish()之前，将其中保存的队列清空，防止ANR的发生</p>
+
+<ul>
+<li>方案三</li>
+</ul>
+
+<p>使用MMKV替代SharedPrferences</p>
+
+<p>最后我们选用了第三种方案，对于我们现有的代码改动量最小。第一种方案可行，但是也有问题，会有线程同步，仍然需要管理其他线程，保证读写的一致性。第二种方案不好验证它的副作用，因此也没有采纳。</p>
+
+<p>选用MMKV后也有一个问题需要解决，那就是数据迁移，因为不可能针对之前所有使用SharedPreferences的地方逐一进行迁移，因此写了一个MMKV的封装类来统一对外提供数据迁移和读写的接口，可以实现对现已代码最小改动的情况下完成替换和迁移。封装类如下:</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">public class SharedPreferencesStore {
+    public static final String TAG = SharedPreferencesStore.class.getSimpleName();
+
+    private MMKV mMMKV;
+
+    private SharedPreferencesStore(MMKV mmkv) {
+        mMMKV = mmkv;
+    }
+
+    // 初始化，必须在使用前调用
+    public static void initialize(Context context) {
+        String rootDir = MMKV.initialize(context);
+        ApplicationDelegate.log(TAG + &quot; MMKV root directory=&quot; + rootDir);
+    }
+
+    // 获取全局SharedPreferencesStore, 不需要迁移老的SharedPreferences数据的情况下调用
+    public static SharedPreferencesStore getGlobal() {
+        MMKV mmkv = MMKV.defaultMMKV();
+        return new SharedPreferencesStore(mmkv);
+    }
+
+    // 获取全局SharedPreferencesStore, 需要迁移老的SharedPreferences数据的情况下调用
+    public static SharedPreferencesStore getGlobalWithMigration(Context context) {
+        MMKV mmkv = MMKV.defaultMMKV();
+        importFromDefaultSharePreferences(mmkv, context);
+        return new SharedPreferencesStore(mmkv);
+    }
+
+    // 获取特定SharedPreferencesStore, 不需要迁移老的SharedPreferences数据的情况下调用
+    public static SharedPreferencesStore getByName(final String name) {
+        MMKV mmkv = MMKV.mmkvWithID(name);
+        return new SharedPreferencesStore(mmkv);
+    }
+
+    // 获取特定SharedPreferencesStore, 需要迁移老的SharedPreferences数据的情况下调用
+    public static SharedPreferencesStore getByNameWithMigration(Context context, final String name) {
+        MMKV mmkv = MMKV.mmkvWithID(name);
+        importFromSharePreferences(mmkv, context, name);
+        return new SharedPreferencesStore(mmkv);
+    }
+
+    // 需要多进程访问, 不需要迁移老的SharedPreferences数据的情况下调用
+    public static SharedPreferencesStore getMultiProcessByName(final String name) {
+        MMKV mmkv = MMKV.mmkvWithID(name, MMKV.MULTI_PROCESS_MODE);
+        return new SharedPreferencesStore(mmkv);
+    }
+
+    // 需要多进程访问, 需要迁移老的SharedPreferences数据的情况下调用
+    public static SharedPreferencesStore getMultiProcessByNameWithMigration(Context context, final String name) {
+        MMKV mmkv = MMKV.mmkvWithID(name, MMKV.MULTI_PROCESS_MODE);
+        importFromSharePreferencesMultiProcess(mmkv, context, name);
+        return new SharedPreferencesStore(mmkv);
+    }
+
+    public void put(final String key, boolean value) {
+        mMMKV.encode(key, value);
+    }
+
+    public boolean getBoolean(final String key, boolean defValue) {
+        return mMMKV.decodeBool(key, defValue);
+    }
+
+    public void put(final String key, int value) {
+        mMMKV.encode(key, value);
+    }
+
+    public int getInt(final String key, int defValue) {
+        return mMMKV.decodeInt(key, defValue);
+    }
+
+    public void put(final String key, long value) {
+        mMMKV.encode(key, value);
+    }
+
+    public long getLong(final String key, long defValue) {
+        return mMMKV.decodeLong(key, defValue);
+    }
+
+    public void put(final String key, float value) {
+        mMMKV.encode(key, value);
+    }
+
+    public float getFloat(final String key, float defValue) {
+        return mMMKV.decodeFloat(key, defValue);
+    }
+
+    public void put(final String key, double value) {
+        mMMKV.encode(key, value);
+    }
+
+    public double getDouble(final String key, double defValue) {
+        return mMMKV.decodeDouble(key, defValue);
+    }
+
+    public void put(final String key, final String value) {
+        mMMKV.encode(key, value);
+    }
+
+    public String getString(final String key, final String defValue) {
+        return mMMKV.decodeString(key, defValue);
+    }
+
+    public void put(final String key, final byte[] value) {
+        mMMKV.encode(key, value);
+    }
+
+    public byte[] getBytes(final String key) {
+        return mMMKV.decodeBytes(key);
+    }
+
+    public Map&lt;String, ?&gt; getAll() {
+        return mMMKV.getAll();
+    }
+
+    public void remove(final String key) {
+        mMMKV.remove(key);
+    }
+
+    public void removeForKey(final String key) {
+        mMMKV.removeValueForKey(key);
+    }
+
+    public void removeForKeys(final String[] keys) {
+        mMMKV.removeValuesForKeys(keys);
+    }
+
+    public boolean contains(final String key) {
+        return mMMKV.contains(key);
+    }
+
+    public boolean containsKey(final String key) {
+        return mMMKV.containsKey(key);
+    }
+
+    public SharedPreferences.Editor edit() {
+        return mMMKV.edit();
+    }
+
+    public static void importFromSharePreferences(MMKV mmkv, final Context context, final String name) {
+        if (null == context) {
+            return;
+        }
+        SharedPreferences sp = context.getSharedPreferences(name, Context.MODE_PRIVATE);
+        doImport(mmkv, sp, name);
+    }
+
+    public static void importFromSharePreferencesMultiProcess(MMKV mmkv, final Context context, final String name) {
+        if (context == null) {
+            return;
+        }
+        SharedPreferences sp = context.getSharedPreferences(name, Context.MODE_MULTI_PROCESS);
+        doImport(mmkv, sp, name);
+    }
+
+    public static void importFromDefaultSharePreferences(MMKV mmkv, final Context context) {
+        if (context == null) {
+            return;
+        }
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
+        doImport(mmkv, sp, context.getPackageName() + &quot;_preferences&quot;);
+    }
+
+    private static void doImport(MMKV mmkv, SharedPreferences sp, final String name) {
+        ApplicationDelegate.log(TAG + &quot; ------&quot; + name + &quot;-----SharedPreferences迁移开始-----------&quot;);
+        if (sp.getAll() == null || sp.getAll().size() == 0) {
+            ApplicationDelegate.log(TAG + &quot; &quot; + name + &quot; SharedPreferences 为空，不需要迁移&quot;);
+            return;
+        }
+
+        int oldSize = sp.getAll().size();
+        ApplicationDelegate.log(TAG + &quot; old size: &quot; + oldSize);
+
+        Map&lt;String, ?&gt; map = sp.getAll();
+
+        Map&lt;String, String&gt; keyTypes = new HashMap&lt;&gt;();
+
+        ApplicationDelegate.log(TAG + &quot; ---old data: &quot;);
+        for (Map.Entry&lt;String, ?&gt; entry : map.entrySet()) {
+            Object obj = entry.getValue();
+            if (obj instanceof Boolean) {
+                keyTypes.put(entry.getKey(), &quot;Boolean&quot;);
+            } else if (obj instanceof Integer) {
+                keyTypes.put(entry.getKey(), &quot;Integer&quot;);
+            } else if (obj instanceof Long) {
+                keyTypes.put(entry.getKey(), &quot;Long&quot;);
+            } else if (obj instanceof Float) {
+                keyTypes.put(entry.getKey(), &quot;Float&quot;);
+            } else if (obj instanceof Double) {
+                keyTypes.put(entry.getKey(), &quot;Double&quot;);
+            } else if (obj instanceof String) {
+                keyTypes.put(entry.getKey(), &quot;String&quot;);
+            }
+            ApplicationDelegate.log(TAG + &quot; key: &quot; + entry.getKey() + &quot; value: &quot; + entry.getValue());
+        }
+
+
+        int imported = mmkv.importFromSharedPreferences(sp);
+        ApplicationDelegate.log(TAG + &quot; imported size: &quot; + imported);
+
+        if (BuildConfig.DEBUG) {
+            ApplicationDelegate.log(TAG +  &quot; ---imported data: &quot;);
+
+            String[] keys = mmkv.allKeys();
+            for (int i = 0; i &lt; keys.length; i++) {
+
+                String type = keyTypes.get(keys[i]);
+                if (type == null) {
+                    continue;
+                }
+
+                switch (type) {
+                    case &quot;Boolean&quot;:
+                        ApplicationDelegate.log(TAG + &quot; key: &quot; + keys[i] + &quot; value: &quot; + mmkv.decodeBool(keys[i]));
+                        break;
+                    case &quot;Integer&quot;:
+                        ApplicationDelegate.log(TAG + &quot; key: &quot; + keys[i] + &quot; value: &quot; + mmkv.decodeInt(keys[i]));
+                        break;
+                    case &quot;Long&quot;:
+                        ApplicationDelegate.log(TAG + &quot; key: &quot; + keys[i] + &quot; value: &quot; + mmkv.decodeLong(keys[i]));
+                        break;
+                    case &quot;Float&quot;:
+                        ApplicationDelegate.log(TAG + &quot; key: &quot; + keys[i] + &quot; value: &quot; + mmkv.decodeFloat(keys[i]));
+                        break;
+                    case &quot;Double&quot;:
+                        ApplicationDelegate.log(TAG + &quot; key: &quot; + keys[i] + &quot; value: &quot; + mmkv.decodeDouble(keys[i]));
+                        break;
+                    case &quot;String&quot;:
+                        ApplicationDelegate.log(TAG + &quot; key: &quot; + keys[i] + &quot; value: &quot; + mmkv.decodeString(keys[i]));
+                        break;
+                    default:
+                        ApplicationDelegate.log(TAG + &quot; key: &quot; + keys[i] + &quot; value: unknown type&quot;);
+                        break;
+                }
+            }
+        }
+
+
+        if (imported &gt; 0 &amp;&amp; oldSize == imported) {
+            sp.edit().clear().apply();
+        }
+
+        if (oldSize != imported) {
+            ApplicationDelegate.log(TAG + &quot; SharedPreferences 迁移失败, name=&quot; + name);
+            ApplicationDelegate.bugTrace(ApplicationDelegate.MAIN_CODE_MMKV_IMPORT_FAIL, 0,
+                    &quot;name=&quot; + name + &quot;, old size=&quot; + oldSize + &quot;, import size=&quot; + imported);
+        }
+        ApplicationDelegate.log(TAG +  &quot; ------&quot; + name + &quot;-----SharedPreferences迁移结束-----------&quot;);
+    }
+}
+</code></pre></div>
+<p>这次替换和迁移目前已经上线验证 ，目前只发现在API 19的机器上出现崩溃，报java.lang.UnsatisfiedLinkError，MMKV的官网上有次问题的解答，可以参考解决。</p>
+
+	  ]]></description>
+	</item>
+
+	<item>
 	  <title>在WebView中调用Android相机拍照录像</title>
 	  <link>//operate-camera-in-webview</link>
 	  <author>Tao He</author>
@@ -903,98 +1298,6 @@ public class ChatMessageEntity {
 <li><p>被注解为Entity的实体类添加字段，如果是private的必须提供getter和setter方法，或者修饰为public的</p></li>
 <li><p>如果违反了这个规则，变异错误信息不一定会指向这个错误</p></li>
 </ul>
-
-	  ]]></description>
-	</item>
-
-	<item>
-	  <title>记一次看似困难的Debug</title>
-	  <link>//record-a-debug-process</link>
-	  <author>Tao He</author>
-	  <pubDate>2018-11-30T04:20:12+08:00</pubDate>
-	  <guid>//record-a-debug-process</guid>
-	  <description><![CDATA[
-	     <p>今年把自己的手机换成了Android，拿到新机后就想找到一款手写笔记的App，因为在iOS用过一款体验很好，还用那个写了一篇游记，在试用了十几款此类的Andorid App后最终找到了一款名为INKredible的手写笔记App，刚开始用的时候很不顺手，都想卸载了，但是经过一番摸索后找到了技巧，再去试用后有一种惊艳的感觉，今天在地铁通勤的时候竟然用它谢了一篇技术博文，并已图片的形式到了出来，全文如下:(字迹潦草，读者莫怪，其实如果以正楷的形式书写, 效率较差，体验会大打折扣).</p>
-
-<p><img src="https://wx3.sinaimg.cn/mw690/7033bf1dly1g0aqh53p3dj20m80zkdlh.jpg" alt=""></p>
-
-	  ]]></description>
-	</item>
-
-	<item>
-	  <title>使用VideoView实现视频开屏页</title>
-	  <link>//play-video-in-raw-folder</link>
-	  <author>Tao He</author>
-	  <pubDate>2018-11-28T01:20:12+08:00</pubDate>
-	  <guid>//play-video-in-raw-folder</guid>
-	  <description><![CDATA[
-	     <p>今天PM提了一个视频开屏页的需求，需要在用户第一次使用时播放一个开屏视频，乍一看，挺简单一需求，但是也或多或少碰到了一些坑，也发现了Android资源编译的一个问题，本着研发之事无小事的原则，还是要记录下踩坑经验和发现的问题。整个实现过程一共两三个小时，逐步解决了以下问题:</p>
-
-<h4>视频全屏</h4>
-
-<p>看到这个问题的第一反应就是把<code>VideoView</code> 的宽高设置为<code>match_parent</code>, 并且保证父容器也是<code>match_parent</code> 根布局, 但是事实没那么简单，视频播放后并没有完全全屏，在我的开发机上视频底部有一条细细的白边，很明显视频没有完全全屏。后来又想到设置<code>MediaPlayer</code>的视频缩放模式:</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">mPlayer.setVideoScalingMode(MediaPlayer.VIDEO_SCALING_MODE_SCALE_TO_FIT_WITH_CROPPING);
-</code></pre></div>
-<p>设置了两种模式以后都没有效果，这说明<code>VideoView</code>本身没有全屏，没有铺满整个屏幕，所以需要根据屏幕大小动态设置<code>VideoView</code>的尺寸，所以用自定义View实现。
-自定义一个继承自<code>VideoView</code>的类来满足要求，具体实现如下:</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">public class FullScreenVideoView extends VideoView {
-    public FullScreenVideoView(Context context) {
-        super(context);
-    }
-
-    public FullScreenVideoView(Context context, AttributeSet attrs) {
-        super(context, attrs);
-    }
-
-    public FullScreenVideoView(Context context, AttributeSet attrs, int defStyleAttr) {
-        super(context, attrs, defStyleAttr);
-    }
-
-    @Override
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        int width = getDefaultSize(0, widthMeasureSpec);
-        int height = getDefaultSize(0, heightMeasureSpec);
-        setMeasuredDimension(width, height);
-    }
-}
-</code></pre></div>
-<p>这样比较顺利的实现了全屏，接下来需要解决第二个问题:</p>
-
-<h4>循环播放</h4>
-
-<p>这个比较容易，几乎就是一行代码，是对播放器的设置:</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">mBinding.vvSplash.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-    @Override
-    public void onPrepared(MediaPlayer mp) {
-        mPlayer = mp;
-        mPlayer.setLooping(true);
-        mPlayer.setVideoScalingMode(MediaPlayer.VIDEO_SCALING_MODE_SCALE_TO_FIT_WITH_CROPPING);
-        mPlayer.start();
-
-        mPlayer.setVideoScalingMode();
-    }
-});
-</code></pre></div>
-<p>第三个问题:</p>
-
-<h4>音量切换</h4>
-
-<p>这个问题也比较简单，主要是对播放器的操作，虽然简单但是需要注意以下几个问题:</p>
-
-<ul>
-<li>要保证操作的播放器一直是同一个</li>
-<li>调用setVolume以后不需要再调用start</li>
-<li>恢复音量时最好的方式是通过系统服务(AudioManager)去获取当前音量，但是这个需求只要设置为1就可以了</li>
-</ul>
-
-<p>到此，问题都逐一解决了，最后需要记录下一个Android资源编译的问题，问题如下:</p>
-
-<blockquote>
-<p>我的工程目录res/drawable下有一个图片文件名为splash.png，开屏视频的MP4文件在res/raw下，名为splash.mp4，编译工程运行后一直报错：
-<code>无法播放此视频</code></p>
-</blockquote>
-
-<p>当时还以为我代码哪里写错了，检查发现没有错误，后来怀疑路径是不是错了，但断点调试也没问题，就很纳闷，后来拷贝了其它视频播放，发现是正常的，我才想到可能是资源文件名字冲突了，我给开屏视频文件重命名以后一切OK了，冲突在编译期间竟然没有报错，感觉有点坑，这样看来Android在编译资源时并没有区分res/drawable目录和res/raw目录，这个问题需要重视起来，不然会比较恼人。</p>
 
 	  ]]></description>
 	</item>

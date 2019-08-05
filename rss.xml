@@ -8,7 +8,25 @@
     <title>与机器，人，神共舞</title>
     <link>http://longlinht.github.io/</link>
     <description>编程，读书，思考，旅行，与机器对话，与人交谈，对神发问，探索，体验人生美丽的风景</description>
-    <pubDate>Sat, 29 Jun 2019 04:20:12 +0800</pubDate>
+    <pubDate>Thu, 11 Jul 2019 04:20:12 +0800</pubDate>
+    <item>
+      <title>在WebView中支持视频全屏</title>
+      <link>http://longlinht.github.io//h5-video-fullscreen-in-webview</link>
+      <description>最近感觉和WebView杠上了，刚解决完在WebView中使用Android相机拍照和录像的问题，又遇到在WebView中视频无法全屏，和之前相机拍照和视频的问题一样，iOS和其他浏览器都没有问题，独WebView出错。通过网上查阅一些资料，最终顺利解决，虽不是什么难搞的东西，但是真要弄起来，也需要一些心力，所以通过此篇记录下整个过程。
+
+</description>
+      <pubDate>Thu, 11 Jul 2019 04:20:12 +0800</pubDate>
+      <dc:date>2019-07-11T04:20:12+08:00</dc:date>
+    </item>
+    <item>
+      <title>解决SharedPreferences导致的ANR</title>
+      <link>http://longlinht.github.io//fix-anr-related-sharedpreferences</link>
+      <description>这几天在Google Play的ANR实时报告中看到很多貌似与SharedPreferences相关的ANR，看了历史版本后发现，这个已经是一个老问题了，在历次版班的ANR中居高不下。今天实在忍不了，决定对这个问题一探究竟。
+
+</description>
+      <pubDate>Wed, 10 Jul 2019 04:20:12 +0800</pubDate>
+      <dc:date>2019-07-10T04:20:12+08:00</dc:date>
+    </item>
     <item>
       <title>在WebView中调用Android相机拍照录像</title>
       <link>http://longlinht.github.io//operate-camera-in-webview</link>
@@ -491,6 +509,6 @@ update UI when we finish something in separated thread. This is a basic problem,
       <pubDate>Wed, 03 Nov 2010 02:30:12 +0800</pubDate>
       <dc:date>2010-11-03T02:30:12+08:00</dc:date>
     </item>
-    <dc:date>2019-06-29T04:20:12+08:00</dc:date>
+    <dc:date>2019-07-11T04:20:12+08:00</dc:date>
   </channel>
 </rss>

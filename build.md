@@ -1,6 +1,6 @@
 # Build step:
 
-1. install bundler and jekyll
+1. sudo install bundler and jekyll
 
 ```
 gem install bundler jekyll

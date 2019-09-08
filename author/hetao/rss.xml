@@ -12,10 +12,165 @@
    <atom:link href="rss" rel="self" type="application/rss+xml" />
    
 	<item>
+	  <title>Android防空指南</title>
+	  <link>//guide-to-prevent-null-in-android-project</link>
+	  <author>Tao He</author>
+	  <pubDate>2019-09-06T20:20:12+00:00</pubDate>
+	  <guid>//guide-to-prevent-null-in-android-project</guid>
+	  <description><![CDATA[
+	     <p>最近集中进行了一段时间降低公司App崩溃率的工作，现在App的崩溃率控制在了万一与万三之间，整体来说还比较顺利，有必要将其中的方法和经验做一个沉淀。由于空指针异常导致的崩溃对App整体的崩溃率贡献巨大，日常的崩溃修复总是少不了几个空指针异常，虽然明显的空指针异常修复很容易，但是发出去的版本会持续崩溃，影响留存和体验，因此在积极修复空指针崩溃的同时也需要未雨绸缪，在开发阶段就把空指针拒之门外，对于事前防空的讨论非常多，也有大量的文章总结和分析这件事情，此文可能会提及这些讨论，但是主要还是总结我实践过的一些防空措施：</p>
+
+<h3>编写不空的代码</h3>
+
+<p>这个是基础，也是第一道防线，如果这一步没有做好，后面的一些措施可能负担更重。编写不空的代码其实就是要求我们在编写具体的方法和接口时尽量保证不返回null值，以及一些编程语言特性来避免空指针，也就是从根源上杜绝client代码不经意间去dereference一个空对象，具体的办法，或者说一些规约如下：</p>
+
+<ul>
+<li>对于数组，比如Point，返回空对象，return new Point[0];</li>
+<li>对于容器，比如ArraryList,返回空对象。如果需要泛型支持，retrun Collections.emptyList(); 如果不需要泛型支持，则 return Collections.EMPTY_LIST;</li>
+<li>对于字符串String,返回空对象， return “”; 而不是return null;</li>
+<li>这一条用语言不好表达，直接看代码</li>
+</ul>
+<div class="highlight"><pre><code class="language-text" data-lang="text">// wrong way - may cause NullPointerException
+if (unknownObj.equals(&quot;unknownObj&quot;)) {
+}
+// right way - avoid NPE even if unknownObj is null
+if (&quot;unknownObj&quot;.equals(unknownObj) {
+}
+</code></pre></div>
+<ul>
+<li>更加偏好使用valueOf()，而不是toString()</li>
+<li>避免没有必要的boxing和unboxing</li>
+<li>遵守约定，定义有意义的default(初始)对象</li>
+<li>如果必须返回null值，则用@Nullable注解标注，并在Android Studio中打开此类注解的警告开关，如遇警告，积极修复此类警告后再继续编码。</li>
+<li>进行双重入参校验</li>
+<li>使用Java8新特性，Optional</li>
+</ul>
+
+<p>以上这些措施需要在代码编写时真正去遵守和实践，长期坚持下来会有不错的效果。如果以上措施是事前，那下面的措施就算是事后防空屏障了。</p>
+
+<h3>通过静态检测工具检查编译阶段代码</h3>
+
+<p>在不胜其烦的修复了很多Bugly上的空指针以后，我决定一定要找出一个能在编译阶段就能发现空指针风险的办法，于是就想到了通过静态代码检测工具来做这个事情。最先想到的就是findbugs，还找到了一个叫SpotBug的插件，但是这两个插件都没有针对性，毕竟我最优先要解决的是空指针异常的问题。又开始重新找寻，最后找到了由Uber公司研发的Nullaway检查器，它需要配合ErrorProne插件一起使用。因为Nullaway在Gradle里的配置，github上的README有点语焉不详，至少下面两个问题就很让人疑惑:
+* 那些配置语句到底写在project的build.gradle文件里还是app下的build.gradle？ （当然如果你的工程只有一个app模块的话不存在这个问题)
+* 在多模块的情况下是否可以统一在project的build.gradle文件里配置，还是需要在每个模块里配置一遍？</p>
+
+<p>所以我决定记录下我的采坑过程:  </p>
+
+<h4>配置ErrorProne插件和Nullaway检查器</h4>
+<div class="highlight"><pre><code class="language-text" data-lang="text">//build.gradle
+
+buildscript {
+    dependencies {
+        classpath deps.gradlePlugin
+        classpath deps.butterKnife
+        classpath deps.wallePlugin
+        classpath deps.sensorsPlugin
+
+        classpath deps.realmPlugin
+
+        // 配置ErrorProne插件和Nullaway检查器
+        classpath deps.spotBugPlugin
+        classpath deps.errorPronePlugin
+    }
+    repositories {
+        google()
+        jcenter()
+    }
+}
+
+
+// check.gradle
+
+apply plugin: &#39;net.ltgt.errorprone&#39;
+tasks.withType(JavaCompile) {
+    // remove the if condition if you want to run NullAway on test code
+    if (!name.toLowerCase().contains(&quot;test&quot;)) {
+        // remove &quot;-Xep:NullAway:ERROR&quot; to have NullAway only emit warnings
+        options.compilerArgs += [&quot;-Xep:NullAway:WARN&quot;,
+                                 //&quot;-XepAllErrorsAsWarnings&quot;,
+                                 &quot;-XepExcludedPaths:.*/build/generated/.*&quot;,
+                                 &quot;-Xep:UnusedVariable:OFF&quot;,
+                                 &quot;-Xep:UnusedMethod:OFF&quot;,
+                                 &quot;-Xep:UnnecessaryParentheses:OFF&quot;,
+                                 &quot;-Xep:CatchAndPrintStackTrace:OFF&quot;,
+                                 &quot;-Xep:DefaultCharset:OFF&quot;,
+                                 &quot;-Xep:JdkObsolete:OFF&quot;,
+                                 &quot;-Xep:ClassCanBeStatic:OFF&quot;,
+                                 &quot;-Xep:MissingOverride:OFF&quot;,
+                                 &quot;-Xep:FragmentNotInstantiable:OFF&quot;,
+                                 &quot;-Xep:VariableNameSameAsType:OFF&quot;,
+                                 &quot;-Xep:FallThrough:OFF&quot;,
+                                 &quot;-Xep:FutureReturnValueIgnored:OFF&quot;,
+                                 &quot;-Xep:OperatorPrecedence:OFF&quot;,
+                                 &quot;-Xep:UndefinedEquals:OFF&quot;,
+                                 &quot;-Xep:RxReturnValueIgnored:OFF&quot;,
+                                 &quot;-Xep:StringSplitter:OFF&quot;,
+                                 &quot;-Xep:EqualsHashCode:OFF&quot;,
+                                 &quot;-Xep:EqualsGetClass:OFF&quot;,
+                                 &quot;-Xep:ComplexBooleanConstant:OFF&quot;,
+                                 &quot;-Xep:DoubleBraceInitialization:OFF&quot;,
+                                 &quot;-Xep:InconsistentCapitalization:OFF&quot;,
+                                 &quot;-Xep:HidingField:OFF&quot;,
+                                 &quot;-Xep:EqualsUnsafeCast:OFF&quot;,
+                                 &quot;-XepOpt:NullAway:AnnotatedPackages=com.inyuapp,io.liuliu&quot;]
+    }
+}
+
+// 因为我们的工程有很多个模块，因此我在每个module的build.gradle如下配置:
+
+apply plugin: &#39;com.android.library&#39;
+apply from: &#39;../../check.gradle&#39;
+</code></pre></div>
+<p>这个配置之后基本就可以正常使用了，但是还是需要特别注意几个问题，也是我在集成的过程中踩过的坑:</p>
+
+<ul>
+<li>在project的build.gradle中统一配置的方式会报Nullaway找不到的问题，这个目前无解，就只能通过在每个module分别配置，不过可以通过统一写一个check.gradle，在每个module的build.gradle中apply，如上</li>
+<li>可以配置ErrorProne每个检查器的编译错误级别，分别有ERROR，WARN，OFF，如果某个检查器配置为ERROR级别，那么此检查器如果在代码中发现此类问题，就会导致整个build失败，如果对特定的错误很关注，可设为ERROR级别，限制处理完此类问题才能build成功。</li>
+<li>Nullaway检查器需要配置要检查的包，多个源代码包可通过”,&quot;分割</li>
+<li>Nullaway的检查都是基于@Nullable注解，因此在类中的字段，方法返回值，入参上适当使用@Nullable才能使Nullaway检查器很好工作</li>
+<li>此类代码不会通过Nullaway检查</li>
+</ul>
+<div class="highlight"><pre><code class="language-text" data-lang="text">if (ControllerHelper.getTopLineModel() != null) {
+    ControllerHelper.getTopLineModel().setUserLifeShow(false);
+    ControllerHelper.getTopLineModel().setCoinNumberShow(true);
+}
+</code></pre></div>
+<p>在开启了ErrorProne和Nullable检查器后，公司的工程出现了大量无法通过检查器的代码，出现问题最多的错误如下：</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">dereferenced expression is @Nullable
+</code></pre></div>
+<p>而此类错误就是很多Bugly上空指针异常的罪魁祸首，需重点排查。</p>
+
+<p>实际上Nullaway可以检查很多情况的问题，Nullaway的文档显示有诸如以下致空的情况：</p>
+
+<ul>
+<li>dereferenced expression is @Nullable</li>
+<li>returning @Nullable expression from method with @NonNull return type</li>
+<li>passing @Nullable parameter where @NonNull is required</li>
+<li>assigning @Nullable expression to @NonNull field</li>
+<li>method returns @Nullable, but superclass method returns @NonNull</li>
+<li>referenced method returns @Nullable, but functional interface method returns @NonNull</li>
+<li>parameter is @NonNull, but parameter in superclass method is @Nullable</li>
+<li>parameter is @NonNull, but parameter in functional interface method is @Nullable</li>
+<li>unbound instance method reference cannot be used, as first parameter of functional interface method is @Nullable</li>
+<li>initializer method does not guarantee @NonNull field is initialized / @NonNull field not initialized</li>
+<li>read of @NonNull field before initialization</li>
+</ul>
+
+<p>现在公司的工程只开启了两个module作为试点，如果能有好的防空效果，会逐步应用到整个工程。目前的主要防空措施就是这些，当然在调研的过程中也引入了一个类似findbugs的工具SpotBug，此插件也已集成好，只要通过一个简单的命令即可开始一次检查</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">./gradlew check
+</code></pre></div>
+<p>检查的结果可以通过输出的本地html文件查看</p>
+
+<p>用了这么多工具，又是插件，又是检查器，又是注解，说以前道一万，这些都是辅助措施，要真正减少空指针，降低崩溃率，还是要通过编写高质量的代码来实现，上面提到的那个代码片段，实在不能容忍，肯定要喷，必须要改，共勉！</p>
+
+	  ]]></description>
+	</item>
+
+	<item>
 	  <title>在WebView中支持视频全屏</title>
 	  <link>//h5-video-fullscreen-in-webview</link>
 	  <author>Tao He</author>
-	  <pubDate>2019-07-11T04:20:12+08:00</pubDate>
+	  <pubDate>2019-07-10T20:20:12+00:00</pubDate>
 	  <guid>//h5-video-fullscreen-in-webview</guid>
 	  <description><![CDATA[
 	     <p>最近感觉和WebView杠上了，刚解决完在WebView中使用Android相机拍照和录像的问题，又遇到在WebView中视频无法全屏，和之前相机拍照和视频的问题一样，iOS和其他浏览器都没有问题，独WebView出错。通过网上查阅一些资料，最终顺利解决，虽不是什么难搞的东西，但是真要弄起来，也需要一些心力，所以通过此篇记录下整个过程。</p>
@@ -84,7 +239,7 @@ public void onHideCustomView() {
 	  <title>解决SharedPreferences导致的ANR</title>
 	  <link>//fix-anr-related-sharedpreferences</link>
 	  <author>Tao He</author>
-	  <pubDate>2019-07-10T04:20:12+08:00</pubDate>
+	  <pubDate>2019-07-09T20:20:12+00:00</pubDate>
 	  <guid>//fix-anr-related-sharedpreferences</guid>
 	  <description><![CDATA[
 	     <p>这几天在Google Play的ANR实时报告中看到很多貌似与SharedPreferences相关的ANR，看了历史版本后发现，这个已经是一个老问题了，在历次版班的ANR中居高不下。今天实在忍不了，决定对这个问题一探究竟。</p>
@@ -410,7 +565,7 @@ public static void waitToFinish() {
 	  <title>在WebView中调用Android相机拍照录像</title>
 	  <link>//operate-camera-in-webview</link>
 	  <author>Tao He</author>
-	  <pubDate>2019-06-29T04:20:12+08:00</pubDate>
+	  <pubDate>2019-06-28T20:20:12+00:00</pubDate>
 	  <guid>//operate-camera-in-webview</guid>
 	  <description><![CDATA[
 	     <p>最近公司App需要以H5的方式接入七鱼客服，根据他们的开发文档接入起来还是很容易，成本很低。理论上如果以native的方式接入的话，用户体验会更好，但是接入后增加的包体积是无法接受的，遂改用H5的方式，整个接入过程还算顺利，有相对详尽的接入文档和demo，只是在最后接入完成后，因为沟通不畅，忽略了客服聊天界面在Android上无法发图片和发视频的问题。同一份html，iOS就是正常的，Android上就死活没反应。后来才恍然大悟，WebView是不支持JS去直接操作Android相机的，必须通过回调到native，由native完成照片的选择，拍摄和录像后将数据返回给JS才能完成一次照片和视频的发送。清楚了问题所在，就需要实现WebView的标准接口来实现这个回调到native的功能，在代码实现前，需要先厘清一些WebView的基本概念和原理。</p>
@@ -494,7 +649,7 @@ fileChooserParams.getAcceptTypes()[0].equals(&quot;image/*&quot;)
 	  <title>HTTP/2 从初探到实际场景的运用</title>
 	  <link>//upgrade-to-http2</link>
 	  <author>Tao He</author>
-	  <pubDate>2019-06-05T04:20:12+08:00</pubDate>
+	  <pubDate>2019-06-04T20:20:12+00:00</pubDate>
 	  <guid>//upgrade-to-http2</guid>
 	  <description><![CDATA[
 	     <p>HTTP/2其实出来已经很长时间了，但是一个新的协议，新的标准从出现到大量被采用，总是会经历一个过程。我们的产品最近基于网络请求优化的要求，需要将之前的HTTP/1都升级到支持HTTP/2，这个事情其实需要两方同时进行，服务端和客服端需要同时支持HTT/2。在做这个事情之前需要首先调研HTTP/2，了解它的特性和优缺点。</p>
@@ -620,7 +775,7 @@ UDP）之间增加了二进制分帧层</p></li>
 	  <title>优化App网络连通性问题</title>
 	  <link>//connectivity-in-android</link>
 	  <author>Tao He</author>
-	  <pubDate>2019-05-29T04:20:12+08:00</pubDate>
+	  <pubDate>2019-05-28T20:20:12+00:00</pubDate>
 	  <guid>//connectivity-in-android</guid>
 	  <description><![CDATA[
 	     <p>最近遇到一个棘手的问题，我们开发的一款App在中东那边出现大量的<code>UnknownHostException</code>, 导致App在中东那边体验很糟，很快这个问题就被抛给了我们技术优化组，我和另外一名同事就开始定位问题的原因并且试图提出一个可行的解决方案。一般理解，出现<code>UnkownHostException</code>就是DNS失败了，在我们开始解决这个问题的时候，App的网络库已逐渐开始使用OkHttp，我们想到自定义DNS过程，在系统DNS失败的情况下再尝试其他DNS方式，降低<code>UnknownHostException</code>出现的频率，优化App网络连通性。
@@ -697,7 +852,7 @@ public List&lt;InetAddress&gt; lookup(String hostname) throws UnknownHostExcepti
 	  <title>三星折叠屏适配小计</title>
 	  <link>//sumsung-foldable-adapt</link>
 	  <author>Tao He</author>
-	  <pubDate>2019-04-10T04:20:12+08:00</pubDate>
+	  <pubDate>2019-04-09T20:20:12+00:00</pubDate>
 	  <guid>//sumsung-foldable-adapt</guid>
 	  <description><![CDATA[
 	     <p>三星要在近期发布折叠屏手机，消息一出，我们就得抓紧做适配，也没有什么现成的经验作参考，尤其令人头疼的是还没有真机供我们测试。没办法，兵来将挡，水来土掩，进过一周多的调研和开发，终于做完了大部分App页面的适配工作，也因为做这个适配的过程踩了很多坑，特写下这篇小记。</p>
@@ -944,7 +1099,7 @@ public void onConfigurationChanged(Configuration newConfig) {
 	  <title>加速Gradle构建</title>
 	  <link>//speed-up-gradle-build</link>
 	  <author>Tao He</author>
-	  <pubDate>2019-03-10T04:20:12+08:00</pubDate>
+	  <pubDate>2019-03-09T20:20:12+00:00</pubDate>
 	  <guid>//speed-up-gradle-build</guid>
 	  <description><![CDATA[
 	     <p>最近刚换工作，来这家新公司没几天，还在熟悉和适应阶段，leader也没安排什么特别的事情，只是说有空可以看看我们工程Gradle Build速度慢的问题。总算接到一个方向比较明确的任务，正好可以从工程的构建流程入手，可以一窥整个工程的结构和依赖。因为Gradle构建速度慢这个问题，其实有一些常见的排查方法，解决问题第一步，还是用最快的排查法，首先排除一些最常见的造成构建速度缓慢的原因。但是要找出构建速度慢的问题也需要将问题分情况来看，分两种情况，一种是在开发过程中的构建和正式发版上线的构建，这两种构建通常是相同的，但有时为了节约开发过程中的构建时间，会做一些特殊的设置和开启关闭一些选项来加速开发过程中的构建，因此，这两种情况面临的问题其实是类似的，因为还不是很清楚leader更在意的是开发过程中的构建时间还是发布上线的构建，因此我决定把这两种情况合二为一，罗列出所有的加速建议:</p>
@@ -1120,7 +1275,7 @@ allprojects {
 	  <title>移动应用中的典型页面</title>
 	  <link>//typical-pages-in-mobile-app</link>
 	  <author>Tao He</author>
-	  <pubDate>2019-02-19T04:20:12+08:00</pubDate>
+	  <pubDate>2019-02-18T20:20:12+00:00</pubDate>
 	  <guid>//typical-pages-in-mobile-app</guid>
 	  <description><![CDATA[
 	     <p>今天这篇文章不做具体技术细节的探讨，而是来观察诸多移动应用中反复出现，具有典型特征和重要作用的一些页面来一窥一般移动应用的基本结构。这些反复出现的页面原型可以归纳为如下六类:</p>
@@ -1154,7 +1309,7 @@ allprojects {
 	  <title>解决ScrollView内容显示不全</title>
 	  <link>//scrollview-can-not-display-whole-content</link>
 	  <author>Tao He</author>
-	  <pubDate>2018-12-05T04:20:12+08:00</pubDate>
+	  <pubDate>2018-12-04T20:20:12+00:00</pubDate>
 	  <guid>//scrollview-can-not-display-whole-content</guid>
 	  <description><![CDATA[
 	     <p>这个问题其实只要使用过<code>ScrollView</code>，可能都有机会遇到，问题的表现就是<code>ScrollView</code>包裹内容的高度超过<code>ScrollView</code>可视高度的话，被包裹的内容就会显示不全，最底部的内容永远也看不到了，这种情况肯定是无法接受的， 解决这个问题比较简单，其实就是简单的一句设置语句:</p>
@@ -1222,82 +1377,6 @@ protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
 &lt;/ScrollView&gt;
 </code></pre></div>
 <p>看了代码后发现被遮挡区域的高度差不多就是这个<code>TagFlowLayout</code>的<code>layout_marginTop</code>的值，当我去掉这个属性的设置后，遮挡的问题没有了，换作<code>paddingTop</code>后也没有问题，就是不能用<code>marginTop</code>，好吧，这个<code>ScrollView</code>的默认设定也是很奇葩啊！</p>
-
-	  ]]></description>
-	</item>
-
-	<item>
-	  <title>解决闹人的can not found symbol BR问题</title>
-	  <link>//br-not-found</link>
-	  <author>Tao He</author>
-	  <pubDate>2018-12-03T04:20:12+08:00</pubDate>
-	  <guid>//br-not-found</guid>
-	  <description><![CDATA[
-	     <p>最近公司研发的这个App是我从零到一搭建的，在框架搭建时分别使用了Databinding和Room，今天在做新需求时需要向Room中的实体类新添加一个字段，在写完了所有相关的逻辑后，build工程，所有自动生成的Databinding类都报错，build log中并没有指向任何具体报错的Databinding类，这就令人很困惑，因为这个需求的添加并没有改动任何Databinding的类，在不知所以的情况下，那就尝试其他方法解决，之前我在一个技术博客上看到过一个Databinding类的Troubleshooting: </p>
-
-<p><strong>Troubleshooting the Issues with Binding Class</strong></p>
-
-<ul>
-<li><p>Make sure you have the proper dataBinding.enabled = true in gradle and trigger &quot;Sync with Gradle&quot;</p></li>
-<li><p>Open the layout file and ensure that the XML file is valid and is wrapped in a <layout> tag.</p></li>
-<li><p>Check the layout file for the correct name i.e activity_main.xml maps to ActivityMainBinding.java.</p></li>
-<li><p>Run File =&gt; Invalidate Caches  Restart to clear the caches.</p></li>
-<li><p>Run Project =&gt; Clean and Project =&gt; Re-Build to regenerate the class file.</p></li>
-<li><p>Restart Android Studio again and then try the above steps again.</p></li>
-</ul>
-
-<p>对这几条Troubleshooting依次尝试后，报错依旧，这就非常恼人，然后我又怀疑是不是build log打印的信息不全，导致跑偏了定位问题的方向，因此在project Gradle中更改了错误信息的条数:</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">allprojects {
-    gradle.projectsEvaluated {
-        tasks.withType(JavaCompile) {
-            options.compilerArgs &lt;&lt; &quot;-Xmaxerrs&quot; &lt;&lt; &quot;4000&quot;
-            options.compilerArgs &lt;&lt; &quot;-Xmaxwarns&quot; &lt;&lt; &quot;4000&quot;
-        }
-    }
-}
-</code></pre></div>
-<p>在打印更多错误信息以后，仍旧看不出错误的源头在哪里。排查到这一步，可能就需要最笨的办法了，倒推法，在依次回退了可能导致这个错误的代码后，算是定位到了出错的修改， 就是Room的实体类添加了一个新的字段导致的，这就很奇怪，添加一个字段不是非常正常的操作吗？就算添加的字段不符合规范，那也应该是Room报错，关Databinding什么事，一开始真是一头雾水，但是我猜想可能是Room和Databinding这两类组件都自动生成了很多代码，在生成Room代码的时候的出错导致Databinding类生成失败，所以编译时表现为Databinding类找不到，这下问题变得清晰起来，问题的源头应该还是Room导致的，最后发现其实就是一个小的细节导致的，在给Room实体类添加字段的时候是private的，但是并没有提供getter和setter方法，因此导致编译失败，只是错误的表现误导了我的思路。白白浪费了几个小时排查这种因为违反了组件使用规范的问题，以后必须引以为戒，再次重申这个恼人的细节:</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">@Entity(tableName = &quot;messages&quot;)
-public class ChatMessageEntity {
-
-    @NonNull
-    @PrimaryKey(autoGenerate = true)
-    //common field
-    private int id;
-
-    @SerializedName(&quot;title&quot;)
-    private String title;
-
-    @NonNull
-    public int getId() {
-        return id;
-    }
-
-    public void setId(@NonNull int id) {
-        this.id = id;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getText() {
-        return text;
-    }
-
-    public void setText(String text) {
-        this.text = text;
-    }
-}
-</code></pre></div>
-<ul>
-<li><p>被注解为Entity的实体类添加字段，如果是private的必须提供getter和setter方法，或者修饰为public的</p></li>
-<li><p>如果违反了这个规则，变异错误信息不一定会指向这个错误</p></li>
-</ul>
 
 	  ]]></description>
 	</item>

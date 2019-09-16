@@ -7,6 +7,181 @@
     <atom:link href="http://longlinht.github.io//feed.xml" rel="self" type="application/rss+xml" />
     
       <item>
+        <title>修复崩溃ANR小记</title>
+        <description>&lt;p&gt;最近一直在集中精力解决Bugly的崩溃，到现在基本上把可以解决的已经都解决完了，剩下的都是一些特定系统版本和特定机型的崩溃，暂时没有太好的思路去排查，其中系统4.4版本的崩溃尤为特殊，有几个崩溃几乎都只出现在4.4版本的机器上，这些特定版本和特定机型的问题暂不谈论，下面来小结一下最近成功解决过的一些崩溃和ANR。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;复写父类方法要当心，注意父类的方法约定(崩溃)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;# main(1)
+java.lang.NullPointerException
+Attempt to invoke virtual method &amp;#39;android.graphics.Rect android.graphics.drawable.Drawable.getBounds()&amp;#39; on a null object reference
+1 android.text.style.DynamicDrawableSpan.getSize(DynamicDrawableSpan.java:78)
+2 android.text.TextLine.handleReplacement(TextLine.java:813)
+3 android.text.TextLine.handleRun(TextLine.java:908)
+4 android.text.TextLine.measureRun(TextLine.java:387)
+5 android.text.TextLine.measure(TextLine.java:277)
+
+...
+
+暂略
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;堆栈太长，底下的暂略，这个崩溃乍一看，没啥线索，崩到了系统类DynamicDrawableSpan，然后就看工程中有没有用到DynamicDrawableSpan，果然发现我们的类EmojiTextSpan继承了这个类，那可以缩小问题范围了，从崩溃处逆推调用栈，可以发现我们的类复写了：&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;private Drawable getCachedDrawable() {
+    if (mDrawableRef == null || mDrawableRef.get() == null) {
+        mDrawableRef = new WeakReference&amp;lt;Drawable&amp;gt;(getDrawable());
+    }
+    return mDrawableRef.get();
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;而DynamicDrawableSpan的方法实现如下:&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;private Drawable getCachedDrawable() {
+    WeakReference&amp;lt;Drawable&amp;gt; wr = mDrawableRef;
+    Drawable d = null;
+
+    if (wr != null) {
+        d = wr.get();
+    }
+
+    if (d == null) {
+        d = getDrawable();
+        mDrawableRef = new WeakReference&amp;lt;Drawable&amp;gt;(d);
+    }
+
+    return d;
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;很明显我们的类做了一个蠢事，其实不用去复写父类的方法，反而不会有问题，这个问题的根本原因是我们没有详细了解这个类，至少是没有了解这个方法的约定。只要删除我们的复写方法即可解决问题。当然，系统代码也不严谨，drawable在调用getBounds方法时没有判空。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;主线程切不可进行IO操作(ANR)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;public class GameBgmService extends Service {
+
+    ...
+    ...
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        ...
+        ...
+
+        PathUtil.findAllKV(BGM_PATH, mBgmMap);
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;根据ANR的堆栈，可以追踪到是&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;PathUtil.findAllKV(BGM_PATH, mBgmMap);
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;的调用导致了ANR，而这个方法是一个典型的IO操作，而这种操作不应该在系统组件的生命周期方法里调用。解决方法也很简单，就是将这种操作放到子线程去。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;有时需要频繁IO操作，可考虑建立内存缓存，避免ANR&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;这个ANR和上面的类似，也是要进行一个IO操作，并且和上面不一样的是，这个操作需要同步进行，不能异步，因此我们采取建立内存缓存的方式来解决。这个IO操作其实是通过解析文件中的json，创建出一个对象列表返回，而这个操作在App进入首页的时候就在子线程中操作过一次，但是并没有在这个时机去建立内存缓存，因此这个问题的最简单解决方式就是建立内存缓存，在之前需要IO操作的地方直接操作内存，并且保证文件和内存的内容一致即可。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;使用RxJava需要注意Backpressure(崩溃)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;# main(1)
+
+io.reactivex.exceptions.MissingBackpressureException
+
+Can&amp;#39;t deliver value 9440 due to lack of requests
+
+1 io.liuliu.music.repair.CrashUtil$Up1Throwable:io.reactivex.exceptions.OnErrorNotImplementedException: The exception was not handled due to missing onError handler in the subscribe() method call. Further reading: https://github.com/ReactiveX/RxJava/wiki/Error-Handling | io.reactivex.exceptions.MissingBackpressureException: Can&amp;#39;t deliver value 9440 due to lack of requests
+2 io.liuliu.music.repair.CrashUtil.lambda$initRxCrash$0(CrashUtil.java:160)
+3 ......
+4 Caused by:
+5 io.reactivex.exceptions.MissingBackpressureException:Can&amp;#39;t deliver value 9440 due to lack of requests
+6 io.reactivex.internal.operators.flowable.FlowableIntervalRange$IntervalRangeSubscriber.run(FlowableIntervalRange.java:117)
+7 io.reactivex.internal.schedulers.ScheduledDirectPeriodicTask.run(ScheduledDirectPeriodicTask.java:38)
+8 java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:458)
+9 java.util.concurrent.FutureTask.runAndReset(FutureTask.java:307)
+10 java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:302)
+11 java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1167)
+12 java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:641)
+13 java.lang.Thread.run(Thread.java:784)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;这个崩溃根据堆栈可追溯到RxJava中的intervalRange操作符，工程中有多处使用，找到一个典型使用:&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;private void startCountDown(String order, String text, long time) {
+    if (time &amp;gt; 0) {
+        if (mDisposable != null &amp;amp;&amp;amp; !mDisposable.isDisposed()) {
+            mDisposable.dispose();
+            mDisposable = null;
+        }
+        mDisposable = Flowable.intervalRange(0, time + 1, 0, 1, TimeUnit.SECONDS)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer&amp;lt;Long&amp;gt;() {
+                    @Override
+                    public void accept(Long aLong) throws Exception {
+                        if (mKillerAreaTop != null) {
+                            if (aLong == time) {
+                                mKillerAreaTop.setText(String.format(&amp;quot;【%s号】%s&amp;quot;, order, text));
+                            } else {
+                                mKillerAreaTop.setText(String.format(Locale.CHINA,
+                                        &amp;quot;【%s号】%s(%d)&amp;quot;, order, text, time - aLong));
+                            }
+                        }
+                    }
+                });
+
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;这个问题RxJava在GitHub上的issue已解决，添加流量控制，在调用intervalRange后紧接着调用onBackpressDrop即可。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;RxJava和ButterKnife混用时先clear disposable后unbind&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;# main(1)
+
+java.lang.NullPointerException
+
+Attempt to invoke virtual method &amp;#39;void io.liuliu.music.widget.resource.ResourceView.setVisibility(int)&amp;#39; on a null object reference
+
+1 io.liuliu.music.repair.CrashUtil$Up1Throwable:java.lang.NullPointerException: Attempt to invoke virtual method &amp;#39;void io.liuliu.music.widget.resource.ResourceView.setVisibility(int)&amp;#39; on a null object reference
+2 io.liuliu.music.repair.CrashUtil.lambda$initRxCrash$0(CrashUtil.java:160)
+3 ......
+4 Caused by:
+5 java.lang.NullPointerException:Attempt to invoke virtual method &amp;#39;void io.liuliu.music.widget.resource.ResourceView.setVisibility(int)&amp;#39; on a null object reference
+6 io.liuliu.music.hall.hall.widget.UserInfoView$1.onStartDownload(UserInfoView.java:159)
+7 io.liuliu.music.resource.GoodsResProvider.lambda$startEffect$3(GoodsResProvider.java:121)
+8 io.liuliu.music.resource.-$$Lambda$GoodsResProvider$o_C6H-o_OQTCEa45A-3wRHNQygg.accept(Unknown Source:10)
+9 io.reactivex.internal.observers.ConsumerSingleObserver.onSuccess(ConsumerSingleObserver.java:62)
+
+......
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;看似一个很普通的一个崩溃，对这个View对象使用前判空就完事了，但是实际问题没那么简单，很多页面使用了这个机制，难道要每个页面的每个View在使用前都要判空吗？必须从机制上保证在RxJava的异步回调中View对象不为空，检查代码后发现的确是有这个保证的，就是在View要销毁时clear掉RxJava的异步回调，问题出在先后顺序上，写代码时并没有注意到这个先后顺序，unbind都在clear disposable之前，导致了这种崩溃有概率发生。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Fragment has not been attached yet 崩溃&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;这个崩溃时因为Fragmegnt还没有Attach到Activity就调用了getChildFragmnetManager()导致，可通过添加isAdded判断，或在attach和detach时加一个标志来判断当前fragment的状态。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;多线程没有同步导致的崩溃&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;这种问题比较常见了，虽然一个移动端App不需要很大量的并发，但是多个线程同时存在，并且操作共享变量的情况也不少，在这次修复崩溃的过程中就遇到很多例，都是因为对共享变量没有保护，导致其中一个线程已经把变量置空，而其他线程还在dereference这个变量而导致崩溃。这类问题，可根据实际情况采取不同的同步策略。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;在UI线程中start，reset，release MediaPlayer导致的ANR&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;只要用到MediaPlayer的工程可能都避免不了这个问题吧，最好的解决办法就是将这些操作都放在一个非UI线程里，而把一些事件回调调度回UI线程，这样既不会有ANR，也将MediaPlayer的使用变得比较简单。典型的做法是对MediaPlayer进行封装，使用两个Handler和一个HandlerThread，将对MediaPlayer的操作都放在HandlerThread中，事件回调都通过其中一个Handler调度回主线程。&lt;/p&gt;
+
+&lt;p&gt;以上就是最近解决的一些典型的崩溃和ANR，作此小计，积跬步。&lt;/p&gt;
+</description>
+        <pubDate>Wed, 11 Sep 2019 02:30:12 +0800</pubDate>
+        <link>http://longlinht.github.io//fix-crash-and-anr</link>
+        <guid isPermaLink="true">http://longlinht.github.io//fix-crash-and-anr</guid>
+      </item>
+    
+      <item>
         <title>Android防空指南</title>
         <description>&lt;p&gt;最近集中进行了一段时间降低公司App崩溃率的工作，现在App的崩溃率控制在了万一与万三之间，整体来说还比较顺利，有必要将其中的方法和经验做一个沉淀。由于空指针异常导致的崩溃对App整体的崩溃率贡献巨大，日常的崩溃修复总是少不了几个空指针异常，虽然明显的空指针异常修复很容易，但是发出去的版本会持续崩溃，影响留存和体验，因此在积极修复空指针崩溃的同时也需要未雨绸缪，在开发阶段就把空指针拒之门外，对于事前防空的讨论非常多，也有大量的文章总结和分析这件事情，此文可能会提及这些讨论，但是主要还是总结我实践过的一些防空措施：&lt;/p&gt;
 
@@ -153,7 +328,7 @@ apply from: &amp;#39;../../check.gradle&amp;#39;
 
 &lt;p&gt;用了这么多工具，又是插件，又是检查器，又是注解，说以前道一万，这些都是辅助措施，要真正减少空指针，降低崩溃率，还是要通过编写高质量的代码来实现，上面提到的那个代码片段，实在不能容忍，肯定要喷，必须要改，共勉！&lt;/p&gt;
 </description>
-        <pubDate>Fri, 06 Sep 2019 20:20:12 +0000</pubDate>
+        <pubDate>Sat, 07 Sep 2019 04:20:12 +0800</pubDate>
         <link>http://longlinht.github.io//guide-to-prevent-null-in-android-project</link>
         <guid isPermaLink="true">http://longlinht.github.io//guide-to-prevent-null-in-android-project</guid>
       </item>
@@ -219,7 +394,7 @@ public void onHideCustomView() {
 &lt;p&gt;如果H5工程师在html中使用了iframe, 那需要H5工程师配合在其中中加入一些属性才能对视频进行操作，&lt;/p&gt;
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;allowfullscreen=&amp;quot;true&amp;quot; webkitallowfullscreen=&amp;quot;true&amp;quot; mozallowfullscreen=&amp;quot;true&amp;quot;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</description>
-        <pubDate>Wed, 10 Jul 2019 20:20:12 +0000</pubDate>
+        <pubDate>Thu, 11 Jul 2019 04:20:12 +0800</pubDate>
         <link>http://longlinht.github.io//h5-video-fullscreen-in-webview</link>
         <guid isPermaLink="true">http://longlinht.github.io//h5-video-fullscreen-in-webview</guid>
       </item>
@@ -542,7 +717,7 @@ public static void waitToFinish() {
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;p&gt;这次替换和迁移目前已经上线验证 ，目前只发现在API 19的机器上出现崩溃，报java.lang.UnsatisfiedLinkError，MMKV的官网上有次问题的解答，可以参考解决。&lt;/p&gt;
 </description>
-        <pubDate>Tue, 09 Jul 2019 20:20:12 +0000</pubDate>
+        <pubDate>Wed, 10 Jul 2019 04:20:12 +0800</pubDate>
         <link>http://longlinht.github.io//fix-anr-related-sharedpreferences</link>
         <guid isPermaLink="true">http://longlinht.github.io//fix-anr-related-sharedpreferences</guid>
       </item>
@@ -623,7 +798,7 @@ fileChooserParams.getAcceptTypes()[0].equals(&amp;quot;image/*&amp;quot;)
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;p&gt;总结一下，在WebView的JS调用系统相机的关键是重写WebChromeClient的特定方法来实现的。&lt;/p&gt;
 </description>
-        <pubDate>Fri, 28 Jun 2019 20:20:12 +0000</pubDate>
+        <pubDate>Sat, 29 Jun 2019 04:20:12 +0800</pubDate>
         <link>http://longlinht.github.io//operate-camera-in-webview</link>
         <guid isPermaLink="true">http://longlinht.github.io//operate-camera-in-webview</guid>
       </item>
@@ -746,7 +921,7 @@ UDP）之间增加了二进制分帧层&lt;/p&gt;&lt;/li&gt;
 
 &lt;p&gt;以上就是我们在支持HTTP/2过程中的一些调研结果和实际工作中的经验总结。&lt;/p&gt;
 </description>
-        <pubDate>Tue, 04 Jun 2019 20:20:12 +0000</pubDate>
+        <pubDate>Wed, 05 Jun 2019 04:20:12 +0800</pubDate>
         <link>http://longlinht.github.io//upgrade-to-http2</link>
         <guid isPermaLink="true">http://longlinht.github.io//upgrade-to-http2</guid>
       </item>
@@ -820,7 +995,7 @@ public List&amp;lt;InetAddress&amp;gt; lookup(String hostname) throws UnknownHos
 
 &lt;p&gt;经过这样的优化以后，&lt;code&gt;UnknownHostException&lt;/code&gt;在请求失败中的比重和请求的总失败率大幅下降，验证了我们这个技术方案的合理性，可以说网络连通性大大提高，再次回顾这个方案，突然发现它其实一个通用的解决方案，虽然我们这次解决的是海外，如中东地区的连通性问题，其实这个方案完全可以移植到国内，只要将Google HttpDNS换成国内的HttpDNS即可，整体的DNS流程可以不做任何改动即可成为一个完整的App DNS解决方案。&lt;/p&gt;
 </description>
-        <pubDate>Tue, 28 May 2019 20:20:12 +0000</pubDate>
+        <pubDate>Wed, 29 May 2019 04:20:12 +0800</pubDate>
         <link>http://longlinht.github.io//connectivity-in-android</link>
         <guid isPermaLink="true">http://longlinht.github.io//connectivity-in-android</guid>
       </item>
@@ -1064,7 +1239,7 @@ public void onConfigurationChanged(Configuration newConfig) {
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;p&gt;在适配的过程中具体的问题可能都不一样，但是都跑不出这几类，只要抓住本质，一般都能得到很好的解决。比较麻烦的适配工作可算搞完了，第二天就得到三星跳票的消息，也是服气！&lt;/p&gt;
 </description>
-        <pubDate>Tue, 09 Apr 2019 20:20:12 +0000</pubDate>
+        <pubDate>Wed, 10 Apr 2019 04:20:12 +0800</pubDate>
         <link>http://longlinht.github.io//sumsung-foldable-adapt</link>
         <guid isPermaLink="true">http://longlinht.github.io//sumsung-foldable-adapt</guid>
       </item>
@@ -1237,7 +1412,7 @@ allprojects {
 
 &lt;p&gt;经过这个插件工具的分析，也仍旧没有发现什么异常，看来公司的工程就是因为太大了，每个版本的自然增长导致当前的构建比很早一个版本的慢，虽然这次的调研没有提升打包速度，但是整个调研的构成让我了解了很多与Gradle有关的东西，也算是收获不少, 没有白忙活。&lt;/p&gt;
 </description>
-        <pubDate>Sat, 09 Mar 2019 20:20:12 +0000</pubDate>
+        <pubDate>Sun, 10 Mar 2019 04:20:12 +0800</pubDate>
         <link>http://longlinht.github.io//speed-up-gradle-build</link>
         <guid isPermaLink="true">http://longlinht.github.io//speed-up-gradle-build</guid>
       </item>
@@ -1268,82 +1443,9 @@ allprojects {
 
 &lt;p&gt;所有App，无论规模大小，其实都是这些典型页面的组合构建出来的，所以在开发过程中需要注意你所开发的页面是不是这些典型页面中的一种，如果不是，需要你反思这个页面是否需要，设计是否合理。虽然国内一些超级App已经变得非常巨大和复杂，但是也并没有标新立异，超出这些典型页面的范围，一来需要追求用户体验的一致性，二来这种做法已经成了一个大家默认遵守的规范。所以用户在使用不同的App时没有强烈的陌生感，就如同一个会开车的人，换辆其他品牌的车他仍旧会开，并不会产生疏离感。如果细细观察下来，一些扩展页面的情况会很多，但是主要的典型页面应该不会超过如上的六种。&lt;/p&gt;
 </description>
-        <pubDate>Mon, 18 Feb 2019 20:20:12 +0000</pubDate>
+        <pubDate>Tue, 19 Feb 2019 04:20:12 +0800</pubDate>
         <link>http://longlinht.github.io//typical-pages-in-mobile-app</link>
         <guid isPermaLink="true">http://longlinht.github.io//typical-pages-in-mobile-app</guid>
-      </item>
-    
-      <item>
-        <title>解决ScrollView内容显示不全</title>
-        <description>&lt;p&gt;这个问题其实只要使用过&lt;code&gt;ScrollView&lt;/code&gt;，可能都有机会遇到，问题的表现就是&lt;code&gt;ScrollView&lt;/code&gt;包裹内容的高度超过&lt;code&gt;ScrollView&lt;/code&gt;可视高度的话，被包裹的内容就会显示不全，最底部的内容永远也看不到了，这种情况肯定是无法接受的， 解决这个问题比较简单，其实就是简单的一句设置语句:&lt;/p&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;android:fillViewport=&amp;quot;true&amp;quot;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;p&gt;虽然这样可以解决问题，但是还是心中还有疑惑，我放在&lt;code&gt;ScrollView&lt;/code&gt;中的&lt;code&gt;LinearLayout&lt;/code&gt;是的高度是设置了&lt;code&gt;mactch_parent&lt;/code&gt; 属性的，现在看来并没有生效，我猜测可能是&lt;code&gt;ScrollView&lt;/code&gt;重写了测量方法导致的，于是去看&lt;code&gt;ScrollView&lt;/code&gt;的&lt;code&gt;onMeasure&lt;/code&gt; 方法:&lt;/p&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;@Override
-protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-  super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-
-  if (!mFillViewport) {
-      return;
-  }
-
-  final int heightMode = MeasureSpec.getMode(heightMeasureSpec);
-  if (heightMode == MeasureSpec.UNSPECIFIED) {
-      return;
-  }
-
-  if (getChildCount() &amp;gt; 0) {
-      final View child = getChildAt(0);
-      final int widthPadding;
-      final int heightPadding;
-      final int targetSdkVersion = getContext().getApplicationInfo().targetSdkVersion;
-      final FrameLayout.LayoutParams lp = (LayoutParams) child.getLayoutParams();
-      if (targetSdkVersion &amp;gt;= VERSION_CODES.M) {
-          widthPadding = mPaddingLeft + mPaddingRight + lp.leftMargin + lp.rightMargin;
-          heightPadding = mPaddingTop + mPaddingBottom + lp.topMargin + lp.bottomMargin;
-      } else {
-          widthPadding = mPaddingLeft + mPaddingRight;
-          heightPadding = mPaddingTop + mPaddingBottom;
-      }
-
-      final int desiredHeight = getMeasuredHeight() - heightPadding;
-      if (child.getMeasuredHeight() &amp;lt; desiredHeight) {
-          final int childWidthMeasureSpec = getChildMeasureSpec(
-                  widthMeasureSpec, widthPadding, lp.width);
-          final int childHeightMeasureSpec = MeasureSpec.makeMeasureSpec(
-                  desiredHeight, MeasureSpec.EXACTLY);
-          child.measure(childWidthMeasureSpec, childHeightMeasureSpec);
-      }
-  }
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;p&gt;很明显，在没有设置fillViewport属性为true时，&lt;code&gt;ScrollView&lt;/code&gt;并没有去测量子View的高度，这就导致超过一屏内容的&lt;code&gt;View&lt;/code&gt;的高度无法正确测量。解决了这个问题以后PM又提了一个底部内容有一部分被遮挡，滑不出的问题，布局代码是这样的:&lt;/p&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;&amp;lt;ScrollView
-    android:layout_width=&amp;quot;match_parent&amp;quot;
-    android:layout_height=&amp;quot;wrap_content&amp;quot;
-    android:fillViewport=&amp;quot;true&amp;quot;
-    android:layout_below=&amp;quot;@id/tv_title&amp;quot;
-    android:layout_marginBottom=&amp;quot;84dp&amp;quot;
-    &amp;gt;
-
-  &amp;lt;com.zhy.view.flowlayout.TagFlowLayout
-      android:id=&amp;quot;@+id/tfl_label&amp;quot;
-      zhy:max_select=&amp;quot;-1&amp;quot;
-      android:layout_width=&amp;quot;match_parent&amp;quot;
-      android:layout_height=&amp;quot;wrap_content&amp;quot;
-      android:layout_marginTop=&amp;quot;14dp&amp;quot;
-      android:layout_marginStart=&amp;quot;12dp&amp;quot;
-      android:layout_marginEnd=&amp;quot;12dp&amp;quot;
-      &amp;gt;
-  &amp;lt;/com.zhy.view.flowlayout.TagFlowLayout&amp;gt;
-
-&amp;lt;/ScrollView&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;p&gt;看了代码后发现被遮挡区域的高度差不多就是这个&lt;code&gt;TagFlowLayout&lt;/code&gt;的&lt;code&gt;layout_marginTop&lt;/code&gt;的值，当我去掉这个属性的设置后，遮挡的问题没有了，换作&lt;code&gt;paddingTop&lt;/code&gt;后也没有问题，就是不能用&lt;code&gt;marginTop&lt;/code&gt;，好吧，这个&lt;code&gt;ScrollView&lt;/code&gt;的默认设定也是很奇葩啊！&lt;/p&gt;
-</description>
-        <pubDate>Tue, 04 Dec 2018 20:20:12 +0000</pubDate>
-        <link>http://longlinht.github.io//scrollview-can-not-display-whole-content</link>
-        <guid isPermaLink="true">http://longlinht.github.io//scrollview-can-not-display-whole-content</guid>
       </item>
     
   </channel>

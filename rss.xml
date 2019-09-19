@@ -8,7 +8,16 @@
     <title>与机器，人，神共舞</title>
     <link>http://longlinht.github.io/</link>
     <description>编程，读书，思考，旅行，与机器对话，与人交谈，对神发问，探索，体验人生美丽的风景</description>
-    <pubDate>Wed, 11 Sep 2019 02:30:12 +0800</pubDate>
+    <pubDate>Thu, 19 Sep 2019 02:30:12 +0800</pubDate>
+    <item>
+      <title>Parcelable vs Serializable</title>
+      <link>http://longlinht.github.io//serializable-vs-parcelable</link>
+      <description>在实际的Android开发中Serializable和Parcelable我们都会用到，只是需要区分使用场景。刚开始遇到这两个接口的时候比较疑惑，貌似都是用来做序列化的，虽然能分得清什么时候用哪个，但是对这两个接口并没有清晰的认识，要是冷不丁的问我这俩有什么区别，可能还无法清晰的界定和阐述。因此有必要用一篇文章来彻底捋清这些东西。
+
+</description>
+      <pubDate>Thu, 19 Sep 2019 02:30:12 +0800</pubDate>
+      <dc:date>2019-09-19T02:30:12+08:00</dc:date>
+    </item>
     <item>
       <title>修复崩溃ANR小记</title>
       <link>http://longlinht.github.io//fix-crash-and-anr</link>
@@ -527,6 +536,6 @@ update UI when we finish something in separated thread. This is a basic problem,
       <pubDate>Wed, 03 Nov 2010 02:30:12 +0800</pubDate>
       <dc:date>2010-11-03T02:30:12+08:00</dc:date>
     </item>
-    <dc:date>2019-09-11T02:30:12+08:00</dc:date>
+    <dc:date>2019-09-19T02:30:12+08:00</dc:date>
   </channel>
 </rss>

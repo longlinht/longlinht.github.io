@@ -8,7 +8,16 @@
     <title>与机器，人，神共舞</title>
     <link>http://longlinht.github.io/</link>
     <description>编程，读书，思考，旅行，与机器对话，与人交谈，对神发问，探索，体验人生美丽的风景</description>
-    <pubDate>Thu, 19 Sep 2019 02:30:12 +0800</pubDate>
+    <pubDate>Sat, 21 Sep 2019 02:30:12 +0800</pubDate>
+    <item>
+      <title>修复VideoView引起的内存泄露小计</title>
+      <link>http://longlinht.github.io//fix-video-view-leak</link>
+      <description>最近写了非常简单的新手引导视频页面，逻辑很简单，就是新手用户在第一次使用App时可以点击引导视频入口，然后进入一个视频播放页面，为了快速实现功能，就直接使用了VideoView，从需求开发到交付也都没什么问题，需求上线后我打开LeakCanary，想观察下最近有没有新增的内存泄露，竟然发现这个视频页面竟然泄露了。排查了一圈也没有发现有什么会阻止Activity销毁。但是LeakCanary打出了引用链，发现和VideoView有关，通过Google发现，竟然是VideoView自身的bug！这种情况也不是第一次遇见，那也得解决啊，所以开始想办法。
+
+</description>
+      <pubDate>Sat, 21 Sep 2019 02:30:12 +0800</pubDate>
+      <dc:date>2019-09-21T02:30:12+08:00</dc:date>
+    </item>
     <item>
       <title>Parcelable vs Serializable</title>
       <link>http://longlinht.github.io//serializable-vs-parcelable</link>
@@ -536,6 +545,6 @@ update UI when we finish something in separated thread. This is a basic problem,
       <pubDate>Wed, 03 Nov 2010 02:30:12 +0800</pubDate>
       <dc:date>2010-11-03T02:30:12+08:00</dc:date>
     </item>
-    <dc:date>2019-09-19T02:30:12+08:00</dc:date>
+    <dc:date>2019-09-21T02:30:12+08:00</dc:date>
   </channel>
 </rss>

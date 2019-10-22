@@ -24,7 +24,7 @@ disqus: taospage
 baseurl: '/'
 
 
-# url: 'http://localhost:4000/'
+url: 'http://localhost:4000/'
 
 # Permalinks
 permalink: /:title

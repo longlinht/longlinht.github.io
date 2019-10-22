@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 
     <!-- [[! Page Meta ]] -->
-    <title>政策与民意</title>
+    <title>ImageSpan的定制使用</title>
     <meta name="description" content="与机器，人，神共舞 - 编程，读书，思考，旅行，与机器对话，与人交谈，对神发问，探索，体验人生美丽的风景" />
 
     <meta name="HandheldFriendly" content="True" />
@@ -93,19 +93,19 @@
 
 <main class="content" role="main">
 
-    <article class="post tag-god">
+    <article class="post tag-machine">
 
         <header class="post-header">
-            <h1 class="post-title">政策与民意</h1>
+            <h1 class="post-title">ImageSpan的定制使用</h1>
             <section class="post-meta">
             <!-- <a href='/'>Tao He</a> -->
-            <time class="post-date" datetime="2017-11-24">24 Nov 2017</time>
+            <time class="post-date" datetime="2019-10-19">19 Oct 2019</time>
                 <!-- [[tags prefix=" on "]] -->
                  
                 on 
                 
                     
-                       <a href='/tag/god'>God</a>
+                       <a href='/tag/machine'>Machine</a>
                        
                 
                 
@@ -114,13 +114,125 @@
 
         <section class="post-content">
             
-            <p>政策，这个词在我们这个国家被普遍使用，几乎人人理解其含义，就连目不识丁的老农都会说出这样的话：“中央又出新政策了”，这个词我们是如此的熟悉，以至于我们常常都不会去想政策到底是什么，它是如何制定出来的？我们普通老百姓是否影响到了政策的制定？ 也许一般的理解是老百姓哪能影响到政策的制定，照老农的说法，那是中央出的政策，和我们这些小老百姓有啥关系，这么理解也没错，毕竟在我们这个国家，显然普通民众的权利实在有限，但是此处我并不想讨论政策的制定和出台，只是想探究已出台的，与民生息息相关的这些个政策，到底有没有民意的基础，民意是否影响到了政策的制定？ 要讨论这个问题，拿北京这几年的一些政策法规的例子最好不过了。</p>
+            <p>最近在做一个具体业务需求时，为了实现UI设计的要求，需要实现在同一段文字中，有一段文字是需要有形状的背景色，有一段文字中还有网络图片的插入，如果要达到这两个要求，简单的使用SpannableStringBuilder肯定是达不到要求的，虽然SpannableStringBuilder可以设置背景色，但是并不能绘制形状，说白了就是只能设置颜色，不能设置文字的背景图片。想要在文字中插入图片，可以直接使用ImageSpan，但是ImageSpan并不能加载网络图片。因此这种简单的使用方式都是行不通的，需要考虑去定制ImageSpan实现我们特殊的要求。</p>
 
-<p>先说北京房子的限购，以及相关联的所谓的抑制房价过快上涨的各种政策手段，但凡有点经济学常识的人，都知道这些政策只会让房价更高，增加更多购房成本，但是这些政策还是出来了，政府有什么考虑我们不得而知，但是呼吁出台这些政策的民意绝对是存在的，这种呼声绝对不是少数，甚至有一些经济学家也在为这种政策摇旗呐喊，就无怪乎普通民众有这种诉求了。而这种大多数的诉求就成了普遍的民意基础，使这种违背基本经济学常识的政策不再是空中楼阁。房价的这个例子也许会因房价问题本来就错综复杂而变得更加说不清道不明，那可以再看一例：网约车。</p>
+<ul>
+<li>实现给同一段文字的一部分文字区域设置背景图片</li>
+</ul>
 
-<p>在网约车还没有出现之前，我们的选择只有出租车和所谓的黑车，出行体验如何，只要在烈日和寒风中打过出租车的人都应该知道那是一种什么样的服务，自从有了网约车，如滴滴打车后，我们的出行体验有了巨大的改观。那种打车难的时代一去不复返了，但是好景不长，很快政策对网约车出台了一系列不友好政策，之后的打车体验明显不如之前，这种政策也明显违背市场经济规律，但是它照样堂而皇之的出台了，你以为这是出租车利益集团的反扑，但是别忘了，这背后还有很坚实的民意基础，网约车存在的一些问题总是能让很多普通民众认为监管是必须的，政府必须介入才能让他们有安全感，但其实这些问题难道出租车就不存在吗？不希冀于市场竞争，而总幻想依赖政府强力，这种普遍的认知构成了一种可怕的，无望的民意，渗透进我们生活中的方方面面。</p>
+<p>这个功能的实现还是要继承ImageSpan，将我们的背景图片传进去，并且override ImageSpan的draw方法，根据对文字区域的测量，分别绘制出背景和文字。实现代码如下:</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">// BgImageSpan
 
-<p>这种可怕的认知，在今年年底北京出现的两件重要的事情中更是体现的淋漓尽致，也许这些政策普通民众并不能左右，但民众的普遍认知构成了民意基础，因为在大部分人的认知中并没有达成这样的共识：有些事只能交给市场，政府干预只会扰乱市场；私有财产神圣不可侵犯；贩夫走卒，不高端的人群也有公民权；这些在文明社会都普遍达成的共识并未深入人心。这些个看似荒谬的政策既是权力意志的体现，也少不了那可怕民意的影子。</p>
+public class BgImageSpan extends ImageSpan {
+
+    private int textSize = 20;
+    private int color = Color.GRAY;
+    private TextView mTextView;
+    static float textboundhight;
+    static float textY;
+    String mText;
+
+    public BgImageSpan(Drawable d, TextView tv, String text) {
+        super(d);
+        mTextView = tv;
+        mText = text;
+        textSize = (int) mTextView.getTextSize();
+    }
+
+
+    @Override
+    public void draw(Canvas canvas, CharSequence text, int start, int end, float x, int top, int y,
+                     int bottom, Paint paint) {
+
+        String str = mText;
+        Rect bounds = new Rect();
+        paint.setTextSize(textSize);
+        paint.getTextBounds(str, 0, str.length(), bounds);
+        int textHeight = bounds.height();
+        int textWidth = bounds.width();
+
+        getDrawable().setBounds(0, top, (int)(bounds.width() * 1.3) , bottom);
+        super.draw(canvas, str, start, end, x, top, y, bottom, paint);
+        paint.setColor(mTextView.getTextColors().getDefaultColor());
+        paint.setTypeface(Typeface.create(&quot;normal&quot;, Typeface.NORMAL));
+
+        Rect bounds1 = getDrawable().getBounds();
+
+        float textX = x + bounds1.width() / 2 - bounds.width() / 2;
+        if (textboundhight == 0) {
+            textboundhight = bounds.height();
+            textY = (bounds1.height()) / 2 + textboundhight / 2;
+        }
+        canvas.drawText(str, textX, textY, paint);
+    }
+}
+</code></pre></div>
+<p>使用方法和ImageSpan并没有什么区别:</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">String username = &quot;用户名：&quot;;
+String message = &quot;哈哈，我是一个天才&quot;;
+
+SpannableStringBuilder ssb = new SpannableStringBuilder(username);
+ssb.append(message);
+
+Rect bounds = new Rect();
+Paint paint = mContent.getPaint();
+paint.getTextBounds(username, 0, username.length(), bounds);
+
+Drawable bgDrawable = getDrawable(R.drawable.round_rect);
+bgDrawable.setBounds(0, 0, (int)(bounds.width() * 1.3), bounds.height());
+
+ImageSpan nameBgSpan = new BgImageSpan(bgDrawable, mContent, username);
+ssb.setSpan(nameBgSpan, 0, username.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+ForegroundColorSpan contentColorSpan = new ForegroundColorSpan(Color.parseColor(&quot;#ffc800&quot;));
+ssb.setSpan(contentColorSpan, username.length(), username.length() + message.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+mContent.setText(ssb);
+mContent.postInvalidate();
+</code></pre></div>
+<p>使用代码需要注意一下几点:</p>
+
+<ol>
+<li>传给BgImageSpan的Drawable需要设置Bounds，然后再传进去，否则可能会出现字符重叠的问题。</li>
+<li>如果设置了Bounds还有字符重叠错乱的问题，可以调用TextView的postInvalidate重绘。</li>
+</ol>
+
+<ul>
+<li>实现一段文字中插入网络图片</li>
+</ul>
+
+<p>插入网络图片和插入本地图片其实没有本质区别，要插入网络图片，就得先获取到网络图片后再设置到ImageSpan中去。代码如下：</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">String url = &quot;http://img2.imgtn.bdimg.com/it/u=1467875646,1039972052&amp;fm=26&amp;gp=0.jpg&quot;;
+RequestOptions options = new RequestOptions()
+        .dontAnimate()
+        .diskCacheStrategy(DiskCacheStrategy.NONE);
+
+Glide.with(this)
+        .load(url)
+        .apply(options)
+        .into(new CustomTarget&lt;Drawable&gt;() {
+            @Override
+            public void onResourceReady(@NonNull Drawable resource, @Nullable Transition&lt;? super Drawable&gt; transition) {
+                if (resource instanceof BitmapDrawable) {
+                    resource.setBounds(0, 0, 50, 50);
+
+                    ImageSpan iconSpan = new ImageSpan(resource);
+                    ssb.setSpan(iconSpan, username.length(), username.length() + 2, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+                    mContent.setText(ssb);
+                    mContent.postInvalidate();
+                }
+            }
+
+            @Override
+            public void onLoadCleared(@Nullable Drawable placeholder) {
+
+            }
+        });
+</code></pre></div>
+<p>使用起来需要注意的问题和上面的BgImageSpan相同，也是先要设置Drawable的Bounds。</p>
+
+<p>虽然这两个实现看起来也没有什么难度，但是还是需要把这种解决过的，不那么常规的方法记录下来，以后遇到同样的问题可节省很多调研和调试的事件。</p>
 
 
         </section>
@@ -152,15 +264,15 @@
 
             <section class="share">
                 <h4>Share this post</h4>
-                <a class="icon-twitter" href="http://twitter.com/share?text=政策与民意&amp;url=http://localhost:4000//policy-and-people-will"
+                <a class="icon-twitter" href="http://twitter.com/share?text=ImageSpan的定制使用&amp;url=http://localhost:4000//custom-image-span"
                     onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
                     <span class="hidden">Twitter</span>
                 </a>
-                <a class="icon-facebook" href="https://www.facebook.com/sharer/sharer.php?u=http://localhost:4000//policy-and-people-will"
+                <a class="icon-facebook" href="https://www.facebook.com/sharer/sharer.php?u=http://localhost:4000//custom-image-span"
                     onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
                     <span class="hidden">Facebook</span>
                 </a>
-                <a class="icon-google-plus" href="https://plus.google.com/share?url=http://localhost:4000//policy-and-people-will"
+                <a class="icon-google-plus" href="https://plus.google.com/share?url=http://localhost:4000//custom-image-span"
                    onclick="window.open(this.href, 'google-plus-share', 'width=490,height=530');return false;">
                     <span class="hidden">Google+</span>
                 </a>
@@ -203,20 +315,13 @@
 
     <!-- [[! next_post ]] -->
     
-        <a class="read-next-story no-cover" href="http://localhost:4000//seekbar-cant-display-full-width">
-            <section class="post">
-                <h2>踩坑小计 - SeekBar 宽度显示不全</h2>
-                <p>最近开始一个全新的Android项目，突然感觉很多之前忽略掉的一些不大不小的问题和细节渐渐的浮出了水面，虽不是什么大问题，通过搜索，查找，自己判断改进也都能顺利解决，但终归要查，要找，凭空浪费很多时间，于是决定不论多么琐碎的问题，但凡违反一般性，需要特殊处理的都详细记录下来，避免下次忘记时再踩坑。今天就就记录下一个SeekBar的问题，真的算上不上是一个问题，只是SeekBar这个默认显示的宽度的确与一般View的显示结果不同。 ### 问题描述 在布局文件里添加这样一个Seekbar: ```xml <SeekBar android:id="@+id/playlist_seekbar" android:layout_width="match_parent" android:layout_height="wrap_content" android:maxHeight="1dp" android:minHeight="1dp" android:paddingStart="0dp" android:paddingEnd="0dp" android:thumbOffset="0dp" android:progressDrawable="@drawable/playlist_seekbar"...</p>
-            </section>
-        </a>
-    
     <!-- [[! /next_post ]] -->
     <!-- [[! prev_post ]] -->
     
-        <a class="read-next-story prev no-cover" href="http://localhost:4000//lecture-on-android-system-source-code">
+        <a class="read-next-story prev no-cover" href="http://localhost:4000//fix-video-view-leak">
             <section class="post">
-                <h2>记一次Android系统源代码技术分享</h2>
-                <p><p>今年年后换了工作，决定继续做Android开发，到了公司一段时间后，受架构组同学之邀，做一次技术分享，当时感觉很头疼，因为我在Android技术组，如果分享这几年C++的技术经验，显然不合时宜，也对组里的同事没有什么帮助，如果分享Android应用的开发，貌似又在班门弄斧，自己在Android方面本来就是半路出家，实在没有什么可分享的干货，正在为难之际，突然想到在之前的公司有段时间一直在阅读Android系统源代码，一直试图能更深入的了解系统的结构和原理，因此也有了一些心得，正好可以与同事分享，也对大家的开发有所帮助，所以有了这篇小记。</p> <p>这篇小记有点类似一个ppt，其实就是那次分享我用markdown格式写的一个ppt，是一个我要讲述的一个提纲，防止我讲跑题了。</p> <h3>如何概览？</h3> <ul> <li><p>要见代码 - 要了解如何通过源代码构建Android系统, 了解Android系统的一些基础设施</p></li> <li><p>要读代码 - 通过阅读代码，理解Android系统的基本结构和特点</p></li> </ul> <blockquote> <p>Reading the...</p>
+                <h2>修复VideoView引起的内存泄露小计</h2>
+                <p><p>最近写了非常简单的新手引导视频页面，逻辑很简单，就是新手用户在第一次使用App时可以点击引导视频入口，然后进入一个视频播放页面，为了快速实现功能，就直接使用了VideoView，从需求开发到交付也都没什么问题，需求上线后我打开LeakCanary，想观察下最近有没有新增的内存泄露，竟然发现这个视频页面竟然泄露了。排查了一圈也没有发现有什么会阻止Activity销毁。但是LeakCanary打出了引用链，发现和VideoView有关，通过Google发现，竟然是VideoView自身的bug！这种情况也不是第一次遇见，那也得解决啊，所以开始想办法。</p> <p>首先显明确是谁导致了Activity的销毁，通过查看VideoView的源码，发现罪魁祸首是AudioManager，它可能会长期持有Context(即泄露的Activity)。很明显是因为生命周期不一致导致的泄露，因此最先想到的就是在创建VideoView时不要传Activity的Context，传给它ApplicationContext。当然了，在布局中创建的VideoView传入的就是Activity的Context，所以需要用代码动态创建:</p> <div class="highlight"><pre><code class="language-text" data-lang="text">mVideoView = new VideoView(getApplicationContext()); RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams( RelativeLayout.LayoutParams.MATCH_PARENT,...</p>
             </section>
         </a>
     

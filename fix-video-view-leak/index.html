@@ -188,7 +188,7 @@ protected void attachBaseContext(Context newBase) {
                 
                 <div class="author-meta">
                     <span class="author-location icon-location"> Beijing, China</span> 
-                    <span class="author-link icon-link"><a href="http://longlinht.github.io/"> longlinht.github.io/</a></span> 
+                    <span class="author-link icon-link"><a href="http://localhost:4000/"> longlinht.github.io/</a></span> 
                 </div>
             </section>
 
@@ -196,15 +196,15 @@ protected void attachBaseContext(Context newBase) {
 
             <section class="share">
                 <h4>Share this post</h4>
-                <a class="icon-twitter" href="http://twitter.com/share?text=修复VideoView引起的内存泄露小计&amp;url=http://longlinht.github.io//fix-video-view-leak"
+                <a class="icon-twitter" href="http://twitter.com/share?text=修复VideoView引起的内存泄露小计&amp;url=http://localhost:4000//fix-video-view-leak"
                     onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
                     <span class="hidden">Twitter</span>
                 </a>
-                <a class="icon-facebook" href="https://www.facebook.com/sharer/sharer.php?u=http://longlinht.github.io//fix-video-view-leak"
+                <a class="icon-facebook" href="https://www.facebook.com/sharer/sharer.php?u=http://localhost:4000//fix-video-view-leak"
                     onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
                     <span class="hidden">Facebook</span>
                 </a>
-                <a class="icon-google-plus" href="https://plus.google.com/share?url=http://longlinht.github.io//fix-video-view-leak"
+                <a class="icon-google-plus" href="https://plus.google.com/share?url=http://localhost:4000//fix-video-view-leak"
                    onclick="window.open(this.href, 'google-plus-share', 'width=490,height=530');return false;">
                     <span class="hidden">Google+</span>
                 </a>
@@ -247,10 +247,17 @@ protected void attachBaseContext(Context newBase) {
 
     <!-- [[! next_post ]] -->
     
+        <a class="read-next-story no-cover" href="http://localhost:4000//custom-image-span">
+            <section class="post">
+                <h2>ImageSpan的定制使用</h2>
+                <p>最近在做一个具体业务需求时，为了实现UI设计的要求，需要实现在同一段文字中，有一段文字是需要有形状的背景色，有一段文字中还有网络图片的插入，如果要达到这两个要求，简单的使用SpannableStringBuilder肯定是达不到要求的，虽然SpannableStringBuilder可以设置背景色，但是并不能绘制形状，说白了就是只能设置颜色，不能设置文字的背景图片。想要在文字中插入图片，可以直接使用ImageSpan，但是ImageSpan并不能加载网络图片。因此这种简单的使用方式都是行不通的，需要考虑去定制ImageSpan实现我们特殊的要求。 * 实现给同一段文字的一部分文字区域设置背景图片 这个功能的实现还是要继承ImageSpan，将我们的背景图片传进去，并且override ImageSpan的draw方法，根据对文字区域的测量，分别绘制出背景和文字。实现代码如下: ``` // BgImageSpan public class BgImageSpan extends ImageSpan { private...</p>
+            </section>
+        </a>
+    
     <!-- [[! /next_post ]] -->
     <!-- [[! prev_post ]] -->
     
-        <a class="read-next-story prev no-cover" href="http://longlinht.github.io//serializable-vs-parcelable">
+        <a class="read-next-story prev no-cover" href="http://localhost:4000//serializable-vs-parcelable">
             <section class="post">
                 <h2>Parcelable vs Serializable</h2>
                 <p><p>在实际的Android开发中Serializable和Parcelable我们都会用到，只是需要区分使用场景。刚开始遇到这两个接口的时候比较疑惑，貌似都是用来做序列化的，虽然能分得清什么时候用哪个，但是对这两个接口并没有清晰的认识，要是冷不丁的问我这俩有什么区别，可能还无法清晰的界定和阐述。因此有必要用一篇文章来彻底捋清这些东西。</p> <h3>相同点</h3> <p>相同点其实很明显，主要有如下两点:</p> <ul> <li><p>都可以序列化反序列化</p></li> <li><p>都可以通过Intent传递</p></li> </ul> <h3>区别</h3> <ul> <li><p>Serializable是Java API，Parcelable是Android SDK API，设计目的不同。Serializable是一个通用的序列化机制，通过将文件保存到本地文件、网络流等实现便数据的传递，这种数据传递不仅可以在单个程序中进行，也可以在两个不同的程序中进行；Parcelable是Android SDK API,为了在同个程序的不同组件之间和不同程序（AIDL）之间高效的传输数据，是通过IBinder通信的消息的载体。从设计目的上可以看出Parcelable就是为了Android高效传输数据而生的。</p></li>...</p>

@@ -3,8 +3,135 @@
   <channel>
     <title>与机器，人，神共舞</title>
     <description>编程，读书，思考，旅行，与机器对话，与人交谈，对神发问，探索，体验人生美丽的风景</description>
-    <link>http://longlinht.github.io/</link>
-    <atom:link href="http://longlinht.github.io//feed.xml" rel="self" type="application/rss+xml" />
+    <link>http://localhost:4000/</link>
+    <atom:link href="http://localhost:4000//feed.xml" rel="self" type="application/rss+xml" />
+    
+      <item>
+        <title>ImageSpan的定制使用</title>
+        <description>&lt;p&gt;最近在做一个具体业务需求时，为了实现UI设计的要求，需要实现在同一段文字中，有一段文字是需要有形状的背景色，有一段文字中还有网络图片的插入，如果要达到这两个要求，简单的使用SpannableStringBuilder肯定是达不到要求的，虽然SpannableStringBuilder可以设置背景色，但是并不能绘制形状，说白了就是只能设置颜色，不能设置文字的背景图片。想要在文字中插入图片，可以直接使用ImageSpan，但是ImageSpan并不能加载网络图片。因此这种简单的使用方式都是行不通的，需要考虑去定制ImageSpan实现我们特殊的要求。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;实现给同一段文字的一部分文字区域设置背景图片&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;这个功能的实现还是要继承ImageSpan，将我们的背景图片传进去，并且override ImageSpan的draw方法，根据对文字区域的测量，分别绘制出背景和文字。实现代码如下:&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;// BgImageSpan
+
+public class BgImageSpan extends ImageSpan {
+
+    private int textSize = 20;
+    private int color = Color.GRAY;
+    private TextView mTextView;
+    static float textboundhight;
+    static float textY;
+    String mText;
+
+    public BgImageSpan(Drawable d, TextView tv, String text) {
+        super(d);
+        mTextView = tv;
+        mText = text;
+        textSize = (int) mTextView.getTextSize();
+    }
+
+
+    @Override
+    public void draw(Canvas canvas, CharSequence text, int start, int end, float x, int top, int y,
+                     int bottom, Paint paint) {
+
+        String str = mText;
+        Rect bounds = new Rect();
+        paint.setTextSize(textSize);
+        paint.getTextBounds(str, 0, str.length(), bounds);
+        int textHeight = bounds.height();
+        int textWidth = bounds.width();
+
+        getDrawable().setBounds(0, top, (int)(bounds.width() * 1.3) , bottom);
+        super.draw(canvas, str, start, end, x, top, y, bottom, paint);
+        paint.setColor(mTextView.getTextColors().getDefaultColor());
+        paint.setTypeface(Typeface.create(&amp;quot;normal&amp;quot;, Typeface.NORMAL));
+
+        Rect bounds1 = getDrawable().getBounds();
+
+        float textX = x + bounds1.width() / 2 - bounds.width() / 2;
+        if (textboundhight == 0) {
+            textboundhight = bounds.height();
+            textY = (bounds1.height()) / 2 + textboundhight / 2;
+        }
+        canvas.drawText(str, textX, textY, paint);
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;使用方法和ImageSpan并没有什么区别:&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;String username = &amp;quot;用户名：&amp;quot;;
+String message = &amp;quot;哈哈，我是一个天才&amp;quot;;
+
+SpannableStringBuilder ssb = new SpannableStringBuilder(username);
+ssb.append(message);
+
+Rect bounds = new Rect();
+Paint paint = mContent.getPaint();
+paint.getTextBounds(username, 0, username.length(), bounds);
+
+Drawable bgDrawable = getDrawable(R.drawable.round_rect);
+bgDrawable.setBounds(0, 0, (int)(bounds.width() * 1.3), bounds.height());
+
+ImageSpan nameBgSpan = new BgImageSpan(bgDrawable, mContent, username);
+ssb.setSpan(nameBgSpan, 0, username.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+ForegroundColorSpan contentColorSpan = new ForegroundColorSpan(Color.parseColor(&amp;quot;#ffc800&amp;quot;));
+ssb.setSpan(contentColorSpan, username.length(), username.length() + message.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+mContent.setText(ssb);
+mContent.postInvalidate();
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;使用代码需要注意一下几点:&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;传给BgImageSpan的Drawable需要设置Bounds，然后再传进去，否则可能会出现字符重叠的问题。&lt;/li&gt;
+&lt;li&gt;如果设置了Bounds还有字符重叠错乱的问题，可以调用TextView的postInvalidate重绘。&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;ul&gt;
+&lt;li&gt;实现一段文字中插入网络图片&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;插入网络图片和插入本地图片其实没有本质区别，要插入网络图片，就得先获取到网络图片后再设置到ImageSpan中去。代码如下：&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;String url = &amp;quot;http://img2.imgtn.bdimg.com/it/u=1467875646,1039972052&amp;amp;fm=26&amp;amp;gp=0.jpg&amp;quot;;
+RequestOptions options = new RequestOptions()
+        .dontAnimate()
+        .diskCacheStrategy(DiskCacheStrategy.NONE);
+
+Glide.with(this)
+        .load(url)
+        .apply(options)
+        .into(new CustomTarget&amp;lt;Drawable&amp;gt;() {
+            @Override
+            public void onResourceReady(@NonNull Drawable resource, @Nullable Transition&amp;lt;? super Drawable&amp;gt; transition) {
+                if (resource instanceof BitmapDrawable) {
+                    resource.setBounds(0, 0, 50, 50);
+
+                    ImageSpan iconSpan = new ImageSpan(resource);
+                    ssb.setSpan(iconSpan, username.length(), username.length() + 2, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+                    mContent.setText(ssb);
+                    mContent.postInvalidate();
+                }
+            }
+
+            @Override
+            public void onLoadCleared(@Nullable Drawable placeholder) {
+
+            }
+        });
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;使用起来需要注意的问题和上面的BgImageSpan相同，也是先要设置Drawable的Bounds。&lt;/p&gt;
+
+&lt;p&gt;虽然这两个实现看起来也没有什么难度，但是还是需要把这种解决过的，不那么常规的方法记录下来，以后遇到同样的问题可节省很多调研和调试的事件。&lt;/p&gt;
+</description>
+        <pubDate>Sat, 19 Oct 2019 04:54:12 +0800</pubDate>
+        <link>http://localhost:4000//custom-image-span</link>
+        <guid isPermaLink="true">http://localhost:4000//custom-image-span</guid>
+      </item>
     
       <item>
         <title>修复VideoView引起的内存泄露小计</title>
@@ -61,8 +188,8 @@ protected void attachBaseContext(Context newBase) {
 &lt;p&gt;去规避系统API的bug真是很烦人的一件事，既不优雅，也不安全！&lt;/p&gt;
 </description>
         <pubDate>Sat, 21 Sep 2019 02:30:12 +0800</pubDate>
-        <link>http://longlinht.github.io//fix-video-view-leak</link>
-        <guid isPermaLink="true">http://longlinht.github.io//fix-video-view-leak</guid>
+        <link>http://localhost:4000//fix-video-view-leak</link>
+        <guid isPermaLink="true">http://localhost:4000//fix-video-view-leak</guid>
       </item>
     
       <item>
@@ -95,8 +222,8 @@ protected void attachBaseContext(Context newBase) {
 &lt;p&gt;这样一一列举了两者的相同点和区别，对两者的认识清晰了很多！积跬步，共勉！&lt;/p&gt;
 </description>
         <pubDate>Thu, 19 Sep 2019 02:30:12 +0800</pubDate>
-        <link>http://longlinht.github.io//serializable-vs-parcelable</link>
-        <guid isPermaLink="true">http://longlinht.github.io//serializable-vs-parcelable</guid>
+        <link>http://localhost:4000//serializable-vs-parcelable</link>
+        <guid isPermaLink="true">http://localhost:4000//serializable-vs-parcelable</guid>
       </item>
     
       <item>
@@ -270,8 +397,8 @@ Attempt to invoke virtual method &amp;#39;void io.liuliu.music.widget.resource.R
 &lt;p&gt;以上就是最近解决的一些典型的崩溃和ANR，作此小计，积跬步。&lt;/p&gt;
 </description>
         <pubDate>Wed, 11 Sep 2019 02:30:12 +0800</pubDate>
-        <link>http://longlinht.github.io//fix-crash-and-anr</link>
-        <guid isPermaLink="true">http://longlinht.github.io//fix-crash-and-anr</guid>
+        <link>http://localhost:4000//fix-crash-and-anr</link>
+        <guid isPermaLink="true">http://localhost:4000//fix-crash-and-anr</guid>
       </item>
     
       <item>
@@ -422,8 +549,8 @@ apply from: &amp;#39;../../check.gradle&amp;#39;
 &lt;p&gt;用了这么多工具，又是插件，又是检查器，又是注解，说以前道一万，这些都是辅助措施，要真正减少空指针，降低崩溃率，还是要通过编写高质量的代码来实现，上面提到的那个代码片段，实在不能容忍，肯定要喷，必须要改，共勉！&lt;/p&gt;
 </description>
         <pubDate>Sat, 07 Sep 2019 04:20:12 +0800</pubDate>
-        <link>http://longlinht.github.io//guide-to-prevent-null-in-android-project</link>
-        <guid isPermaLink="true">http://longlinht.github.io//guide-to-prevent-null-in-android-project</guid>
+        <link>http://localhost:4000//guide-to-prevent-null-in-android-project</link>
+        <guid isPermaLink="true">http://localhost:4000//guide-to-prevent-null-in-android-project</guid>
       </item>
     
       <item>
@@ -488,8 +615,8 @@ public void onHideCustomView() {
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;allowfullscreen=&amp;quot;true&amp;quot; webkitallowfullscreen=&amp;quot;true&amp;quot; mozallowfullscreen=&amp;quot;true&amp;quot;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</description>
         <pubDate>Thu, 11 Jul 2019 04:20:12 +0800</pubDate>
-        <link>http://longlinht.github.io//h5-video-fullscreen-in-webview</link>
-        <guid isPermaLink="true">http://longlinht.github.io//h5-video-fullscreen-in-webview</guid>
+        <link>http://localhost:4000//h5-video-fullscreen-in-webview</link>
+        <guid isPermaLink="true">http://localhost:4000//h5-video-fullscreen-in-webview</guid>
       </item>
     
       <item>
@@ -811,8 +938,8 @@ public static void waitToFinish() {
 &lt;p&gt;这次替换和迁移目前已经上线验证 ，目前只发现在API 19的机器上出现崩溃，报java.lang.UnsatisfiedLinkError，MMKV的官网上有次问题的解答，可以参考解决。&lt;/p&gt;
 </description>
         <pubDate>Wed, 10 Jul 2019 04:20:12 +0800</pubDate>
-        <link>http://longlinht.github.io//fix-anr-related-sharedpreferences</link>
-        <guid isPermaLink="true">http://longlinht.github.io//fix-anr-related-sharedpreferences</guid>
+        <link>http://localhost:4000//fix-anr-related-sharedpreferences</link>
+        <guid isPermaLink="true">http://localhost:4000//fix-anr-related-sharedpreferences</guid>
       </item>
     
       <item>
@@ -892,8 +1019,8 @@ fileChooserParams.getAcceptTypes()[0].equals(&amp;quot;image/*&amp;quot;)
 &lt;p&gt;总结一下，在WebView的JS调用系统相机的关键是重写WebChromeClient的特定方法来实现的。&lt;/p&gt;
 </description>
         <pubDate>Sat, 29 Jun 2019 04:20:12 +0800</pubDate>
-        <link>http://longlinht.github.io//operate-camera-in-webview</link>
-        <guid isPermaLink="true">http://longlinht.github.io//operate-camera-in-webview</guid>
+        <link>http://localhost:4000//operate-camera-in-webview</link>
+        <guid isPermaLink="true">http://localhost:4000//operate-camera-in-webview</guid>
       </item>
     
       <item>
@@ -1015,8 +1142,8 @@ UDP）之间增加了二进制分帧层&lt;/p&gt;&lt;/li&gt;
 &lt;p&gt;以上就是我们在支持HTTP/2过程中的一些调研结果和实际工作中的经验总结。&lt;/p&gt;
 </description>
         <pubDate>Wed, 05 Jun 2019 04:20:12 +0800</pubDate>
-        <link>http://longlinht.github.io//upgrade-to-http2</link>
-        <guid isPermaLink="true">http://longlinht.github.io//upgrade-to-http2</guid>
+        <link>http://localhost:4000//upgrade-to-http2</link>
+        <guid isPermaLink="true">http://localhost:4000//upgrade-to-http2</guid>
       </item>
     
       <item>
@@ -1089,252 +1216,8 @@ public List&amp;lt;InetAddress&amp;gt; lookup(String hostname) throws UnknownHos
 &lt;p&gt;经过这样的优化以后，&lt;code&gt;UnknownHostException&lt;/code&gt;在请求失败中的比重和请求的总失败率大幅下降，验证了我们这个技术方案的合理性，可以说网络连通性大大提高，再次回顾这个方案，突然发现它其实一个通用的解决方案，虽然我们这次解决的是海外，如中东地区的连通性问题，其实这个方案完全可以移植到国内，只要将Google HttpDNS换成国内的HttpDNS即可，整体的DNS流程可以不做任何改动即可成为一个完整的App DNS解决方案。&lt;/p&gt;
 </description>
         <pubDate>Wed, 29 May 2019 04:20:12 +0800</pubDate>
-        <link>http://longlinht.github.io//connectivity-in-android</link>
-        <guid isPermaLink="true">http://longlinht.github.io//connectivity-in-android</guid>
-      </item>
-    
-      <item>
-        <title>三星折叠屏适配小计</title>
-        <description>&lt;p&gt;三星要在近期发布折叠屏手机，消息一出，我们就得抓紧做适配，也没有什么现成的经验作参考，尤其令人头疼的是还没有真机供我们测试。没办法，兵来将挡，水来土掩，进过一周多的调研和开发，终于做完了大部分App页面的适配工作，也因为做这个适配的过程踩了很多坑，特写下这篇小记。&lt;/p&gt;
-
-&lt;p&gt;在我们开始做适配前，首先要解决没有真机可做测试的问题，无法验证适配的效果，还好三星也想到了这个问题，在官网提供了一个模拟器应用，Foldable Emulator， 通过这个模拟器App可以在Fold和Unfold模式之间自由切换，验证适配效果。当我们适配工作结束后在真机上测试时发现，这个模拟器的仿真度极高，基本没有出现和真机上效果有出入的地方。&lt;/p&gt;
-
-&lt;p&gt;在解决了没有真机的问题之后，我们就开始着手真正的适配工作。首先遇到的问题就是折叠屏手机需要在Fold和Unfold之间频繁切换，而这种切换的效果和横竖屏切换是一样的，默认都会导致Activity重建，而Activity重建又会导致一系列的连锁反应，如需要恢复大量数据、重新建立网络连接或执行其他密集操作，因此在适配前就需要规划哪些页面(Activity)需要重建，哪些不需要重建，所以需要按Activity是否重建这两种情况来分析切屏的后果和应对方法。&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;重建Activity&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;因配置变更而引起的完全重启可能会给用户留下应用运行缓慢的体验。 此外，依靠系统通过onSaveInstanceState() 回调保存的 Bundle，可能无法完全恢复 Activity 状态，因为它并非设计用于携带大型对象（例如位图），而且其中的数据必须先序列化，再进行反序列化，这可能会消耗大量内存并使得配置变更速度缓慢。 在这种情况下，如果 Activity 因配置变更而重启，则可通过保留 Fragment 来减轻重新初始化 Activity 的负担。当 Android 系统因配置变更而关闭 Activity 时，不会销毁已标记为要保留的 Activity 的片段。 可以将此类片段添加到 Activity 以保留有状态的对象。
-要在运行时配置变更期间将有状态的对象保留在片段中，请执行以下操作：&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;扩展 Fragment 类并声明对有状态对象的引用&lt;/li&gt;
-&lt;li&gt;在创建片段后调用 setRetainInstance(boolean)&lt;/li&gt;
-&lt;li&gt;将片段添加到 Activity&lt;/li&gt;
-&lt;li&gt;重启 Activity 后，使用 FragmentManager 检索片段&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;例如，按如下方式定义片段：&lt;/p&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;public class RetainedFragment extends Fragment {
-
-    // 想要保存的数据
-    private MyDataObject data;
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        // 保存这个fragment
-        setRetainInstance(true);
-    }
-    public void setData(MyDataObject data) {
-        this.data = data;
-    }
-
-    public MyDataObject getData() {
-        return data;
-    }
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;p&gt;然后，使用 &lt;code&gt;FragmentManager&lt;/code&gt; 将片段添加到 &lt;code&gt;Activity&lt;/code&gt;。在运行时配置变更期间再次启动 &lt;code&gt;Activity&lt;/code&gt; 时，可以获得片段中的数据对象。 例如，按如下方式定义 Activity：&lt;/p&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;public class MyActivity extends Activity {
-    private RetainedFragment retainedFragment;
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.main);
-        // 在activity重启后，获取保留的fragment
-        FragmentManager fm = getFragmentManager();
-        retainedFragment = (RetainedFragment) fm.findFragmentByTag(“data”);
-        // 首次创建
-        if (retainedFragment == null) {
-            // 添加fragment
-            retainedFragment = new RetainedFragment();
-            fm.beginTransaction().add(retainedFragment, “data”).commit();
-            // 从网络获取data
-            retainedFragment.setData(loadMyData());
-        }
-        // retainedFragment.getData()获取的数据可用
-        ...
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        // store the data in the fragment
-        retainedFragment.setData(collectMyLoadedData());
-    }
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;p&gt;onCreate() 添加了一个片段或恢复了对它的引用。此外，onCreate() 还将有状态的对象存储在片段实例内部。&lt;/p&gt;
-
-&lt;blockquote&gt;
-&lt;p&gt;尽管Fragment内部可以存储任何对象，但是切勿传递与 Activity 绑定的对象，例如，Drawable、Adapter、View 或其他任何与 Context 关联的对象。否则，它将泄漏原始 Activity 实例的所有视图和资源。&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;ul&gt;
-&lt;li&gt;不重建Activity&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;如果想不重新启动的情况下处理配置更改，则需要在清单中添加一个android：configChanges属性，例如：&lt;/p&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;&amp;lt;activity
-    android:name=&amp;quot;......CMVideoPlayerActivity&amp;quot;
-    android:configChanges=&amp;quot;screenSize|smallestScreenSize|screenLayout&amp;quot;
-/&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;p&gt;需要手动更新视图布局并在onConfigurationChaged（）中重新加载资源&lt;/p&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;@Override
-public void onConfigurationChanged(Configuration newConfig) {
-   super.onConfigurationChanged(newConfig);
-   if ((newConfig.screenLayout &amp;amp; Configuration.SCREENLAYOUT_LONG_MASK) == Configuration.SCREENLAYOUT_LONG_YES) {
-
-   }
-   if ((newConfig.screenLayout &amp;amp; Configuration.SCREENLAYOUT_LONG_MASK ) == Configuration.SCREENLAYOUT_LONG_NO) {
-
-   }
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;p&gt;在遵循上述基本原则以后，就要应对实际的适配问题了，整个适配的工作主要涉及以下几个问题的解决:&lt;/p&gt;
-
-&lt;h4&gt;检测设备是否可折叠,当前是Fold状态还是Unfold，并且能够在切屏时通知到需要对切屏事件作出处理的页面&lt;/h4&gt;
-
-&lt;p&gt;为了统一解决这个问题，设计了一个单例类来统一管理&lt;/p&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;public class FoldObserable extends Observable {
-
-    public static final int SCREEN_LARGE_WIDTH = 1536;
-
-    public static final int SCREEN_LARGE = 0;
-    public static final int SCREEN_SMALL = 1;
-
-    private static class SINGLE {
-        public static FoldObserable INSTANCE = new FoldObserable();
-    }
-
-    private FoldObserable() {
-        String model = android.os.Build.MODEL;
-        if (model.contains(&amp;quot;SM-F9000&amp;quot;)) {
-            canFlod = true;
-            if (isLargeScreen()) {
-                screenType = SCREEN_LARGE;
-            } else {
-                screenType = SCREEN_SMALL;
-            }
-        }
-    }
-    //大屏无statusbar 小屏有statusbar，根据此来判断是是否减bar
-    private int screenType;
-    private boolean canFlod;
-
-    public static FoldObserable getInstance() {
-        return SINGLE.INSTANCE;
-    }
-
-    public void setScreenType(int screenType) {
-        this.screenType = screenType;
-        setChanged();
-        notifyObservers();
-    }
-
-    public int getScreenType() {
-        return screenType;
-    }
-
-    /**
-     * 是否是折叠屏
-     * @return
-     */
-    public boolean getCanFlod() {
-        return canFlod;
-    }
-
-    private boolean isLargeScreen() {
-        WindowManager wm = (WindowManager) BloodEyeApplication.getInstance().getSystemService(Context.WINDOW_SERVICE);
-        Display display = wm.getDefaultDisplay();
-        Point pp = new Point();
-        display.getSize(pp);
-        return pp.x == FoldObserable.SCREEN_LARGE_WIDTH;
-    }
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;p&gt;因为要通过这个单例还通知需要响应切屏事件的页面，所以需要在App的所有Activity基类的onConfigurationChanged中调用setScreenType来通知所有的观察者，这些观察者就是需要相应切屏事件的Activigty和Fragment。代码如下:&lt;/p&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;@Override
-public void onConfigurationChanged(Configuration newConfig) {
-    super.onConfigurationChanged(newConfig);
-    if (FoldObserable.getInstance().getCanFlod()) {
-        UiProcessTask.updateScreenSize();
-        boolean isLargeScreen = isLargeScreen();
-        if (isLargeScreen) {
-            FoldObserable.getInstance().setScreenType(FoldObserable.SCREEN_LARGE);
-        } else {
-            FoldObserable.getInstance().setScreenType(FoldObserable.SCREEN_SMALL);
-        }
-    }
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;p&gt;将需要响应切屏的页面注册为观察者:&lt;/p&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;@Override
-public void onCreate(Bundle savedInstanceState) {
-    super.onCreate(savedInstanceState);
-    FoldObserable.getInstance().addObserver(this);
-}
-
-@Override
-public void onDestroy() {
-  super.onDestroy();
-  FoldObserable.getInstance().deleteObserver(this);
-}
-
-// 处理切屏事件
-@Override
-public void update(Observable o, Object arg) {
-  if (o instanceof FoldObserable) {
-      mAdapter.notifyDataSetChanged();
-  }
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;h4&gt;处理实际的可能因为各种原因导致的适配问题&lt;/h4&gt;
-
-&lt;p&gt;经过模拟器的测试发现App种有很多页面在Fold和Unfold切换后出现适配问题，总结起来有如下几种情况:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;代码中为了提高测量和绘制View的性能，缓存了屏幕的宽度，导致一些用了屏幕宽度的地方使用了切换前的屏幕宽度的旧值，导致宽度适配错误。&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;解决方法：在屏幕切换的时候更新缓存&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;有些没有重建的页面，RecyclerView的Adapter在Fold和Unfold切换以后没有重新回调onBindView，导致Item的大小适配错误。&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;解决方法: 在屏幕切换时手动调用Adapter的notifyDataSetChanged()去刷新列表&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;布局xml文件中写死了一些控件的宽度，导致适配问题&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;解决方法：尽量不要使用写死的值，推荐使用match_parent + margin或padding来应对这种情况&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;在切屏时未能及时更新与界面宽高相关的全局变量&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;解决办法: 在Application的onConfigurationChanged中更新相关变量&lt;/p&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;public static void updateScreenSize() {
-
-}
-
-
-// 在Application中调用
-@Override
-public void onConfigurationChanged(Configuration newConfig) {
-    super.onConfigurationChanged(newConfig);
-    updateScreenSize();
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;p&gt;在适配的过程中具体的问题可能都不一样，但是都跑不出这几类，只要抓住本质，一般都能得到很好的解决。比较麻烦的适配工作可算搞完了，第二天就得到三星跳票的消息，也是服气！&lt;/p&gt;
-</description>
-        <pubDate>Wed, 10 Apr 2019 04:20:12 +0800</pubDate>
-        <link>http://longlinht.github.io//sumsung-foldable-adapt</link>
-        <guid isPermaLink="true">http://longlinht.github.io//sumsung-foldable-adapt</guid>
+        <link>http://localhost:4000//connectivity-in-android</link>
+        <guid isPermaLink="true">http://localhost:4000//connectivity-in-android</guid>
       </item>
     
   </channel>

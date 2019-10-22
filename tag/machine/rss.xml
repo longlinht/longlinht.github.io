@@ -102,6 +102,24 @@ mContent.postInvalidate();
 </ol>
 
 <ul>
+<li>第二种实现同一段文字的一部分文字区域设置背景图片</li>
+</ul>
+
+<p>这种实现的思路很简单，就是通过inflate一个单独的布局，然后用这个inflate好的view生成图片，然后传给一个ImageSpan，即可完成，代码如下:</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">View view = LayoutInflater.from(this).inflate(R.layout.container, null);
+TextView textView = view.findViewById(R.id.tv_value);
+textView.setText(username);
+
+view.measure(View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED),
+        View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
+view.layout(0, 0, view.getMeasuredWidth(), view.getMeasuredHeight());
+view.buildDrawingCache();
+Bitmap bitmap = view.getDrawingCache();
+
+ImageSpan nameBgSpan = new ImageSpan(this, bitmap);
+ssb.setSpan(nameBgSpan, 0, username.length(), Spanned.SPAN_EXCLUSIVE_INCLUSIVE);
+</code></pre></div>
+<ul>
 <li>实现一段文字中插入网络图片</li>
 </ul>
 

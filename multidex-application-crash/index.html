@@ -191,7 +191,7 @@ at dalvik.system.NativeStart.main(Native Method)
                 
                 <div class="author-meta">
                     <span class="author-location icon-location"> Beijing, China</span> 
-                    <span class="author-link icon-link"><a href="http://localhost:4000/"> longlinht.github.io/</a></span> 
+                    <span class="author-link icon-link"><a href="http://longlinht.github.io/"> longlinht.github.io/</a></span> 
                 </div>
             </section>
 
@@ -199,15 +199,15 @@ at dalvik.system.NativeStart.main(Native Method)
 
             <section class="share">
                 <h4>Share this post</h4>
-                <a class="icon-twitter" href="http://twitter.com/share?text=MultidexApplication相关的一个crash&amp;url=http://localhost:4000//multidex-application-crash"
+                <a class="icon-twitter" href="http://twitter.com/share?text=MultidexApplication相关的一个crash&amp;url=http://longlinht.github.io//multidex-application-crash"
                     onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
                     <span class="hidden">Twitter</span>
                 </a>
-                <a class="icon-facebook" href="https://www.facebook.com/sharer/sharer.php?u=http://localhost:4000//multidex-application-crash"
+                <a class="icon-facebook" href="https://www.facebook.com/sharer/sharer.php?u=http://longlinht.github.io//multidex-application-crash"
                     onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
                     <span class="hidden">Facebook</span>
                 </a>
-                <a class="icon-google-plus" href="https://plus.google.com/share?url=http://localhost:4000//multidex-application-crash"
+                <a class="icon-google-plus" href="https://plus.google.com/share?url=http://longlinht.github.io//multidex-application-crash"
                    onclick="window.open(this.href, 'google-plus-share', 'width=490,height=530');return false;">
                     <span class="hidden">Google+</span>
                 </a>
@@ -250,7 +250,7 @@ at dalvik.system.NativeStart.main(Native Method)
 
     <!-- [[! next_post ]] -->
     
-        <a class="read-next-story no-cover" href="http://localhost:4000//play-video-in-raw-folder">
+        <a class="read-next-story no-cover" href="http://longlinht.github.io//play-video-in-raw-folder">
             <section class="post">
                 <h2>使用VideoView实现视频开屏页</h2>
                 <p>今天PM提了一个视频开屏页的需求，需要在用户第一次使用时播放一个开屏视频，乍一看，挺简单一需求，但是也或多或少碰到了一些坑，也发现了Android资源编译的一个问题，本着研发之事无小事的原则，还是要记录下踩坑经验和发现的问题。整个实现过程一共两三个小时，逐步解决了以下问题: #### 视频全屏 看到这个问题的第一反应就是把`VideoView` 的宽高设置为`match_parent`, 并且保证父容器也是`match_parent` 根布局, 但是事实没那么简单，视频播放后并没有完全全屏，在我的开发机上视频底部有一条细细的白边，很明显视频没有完全全屏。后来又想到设置`MediaPlayer`的视频缩放模式: ``` mPlayer.setVideoScalingMode(MediaPlayer.VIDEO_SCALING_MODE_SCALE_TO_FIT_WITH_CROPPING); ``` 设置了两种模式以后都没有效果，这说明`VideoView`本身没有全屏，没有铺满整个屏幕，所以需要根据屏幕大小动态设置`VideoView`的尺寸，所以用自定义View实现。 自定义一个继承自`VideoView`的类来满足要求，具体实现如下: ``` public...</p>
@@ -260,7 +260,7 @@ at dalvik.system.NativeStart.main(Native Method)
     <!-- [[! /next_post ]] -->
     <!-- [[! prev_post ]] -->
     
-        <a class="read-next-story prev no-cover" href="http://localhost:4000//read-make-a-better-decision">
+        <a class="read-next-story prev no-cover" href="http://longlinht.github.io//read-make-a-better-decision">
             <section class="post">
                 <h2>读《决断力》</h2>
                 <p><p>今年可能年景不好，运气不佳，再加上自己昏招频频，感觉今年非常不顺，也发现自己很不会决策，没有很好的决断力。于是就想找一本决断力相关的书来看看，找了一下，还果然有这个书名的一本书，而且豆瓣上评价不错，于是发送到Kindle，趁着地铁通勤的时间很快看完了，因为是中文版，看起来比较快，感觉正本书还是比较平实的，很多决策的方法可操作性强，因为这次使用了Kindle自带的标注功能，在看的过程中随手标注了重点和一些精彩的段落，整本书看完后，对标注和笔记做了整理，现记录出来：</p> <p><strong>正常情况下，你的思维几乎会对所有发生的事情做出直觉反应并形成某种看法。</strong></p> <ul> <li><p>在你的精神世界里，很显然，你极少被某个问题难住。</p></li> <li><p>在尚未熟悉某个人之前，你已经产生了喜欢或厌恶的感觉；</p></li> <li><p>当然，你也可能不知道为什么自己会信任或怀疑陌生人；</p></li> <li><p>或是在未对某一公司做出任何分析评估的情况下就认定它一定会成功。</p></li> </ul> <p><strong>聚光效应</strong></p> <blockquote> <p>卡尼曼认为，人们匆忙做出结论，是由于我们对眼前的信息关注过多，却对视线之外的信息不加考量。</p> </blockquote> <p>从本质上来讲，这又恰恰是决策的核心难题：灯光内的东西很少会是我们做出一个好的决定所需要的全部,但我们时常会忘了调整聚光灯的方向。 人们在决策时遇到的难题，即主观偏见和非逻辑性。</p> <p><strong>研究人员通过对比发现&quot;决策流程更为重要——比分析重要...</p>

@@ -6,12 +6,12 @@
   xmlns:trackback="http://madskills.com/public/xml/rss/module/trackback/">
   <channel>
     <title>与机器，人，神共舞</title>
-    <link>http://localhost:4000/</link>
+    <link>http://longlinht.github.io/</link>
     <description>编程，读书，思考，旅行，与机器对话，与人交谈，对神发问，探索，体验人生美丽的风景</description>
     <pubDate>Sat, 19 Oct 2019 04:54:12 +0800</pubDate>
     <item>
       <title>ImageSpan的定制使用</title>
-      <link>http://localhost:4000//custom-image-span</link>
+      <link>http://longlinht.github.io//custom-image-span</link>
       <description>最近在做一个具体业务需求时，为了实现UI设计的要求，需要实现在同一段文字中，有一段文字是需要有形状的背景色，有一段文字中还有网络图片的插入，如果要达到这两个要求，简单的使用SpannableStringBuilder肯定是达不到要求的，虽然SpannableStringBuilder可以设置背景色，但是并不能绘制形状，说白了就是只能设置颜色，不能设置文字的背景图片。想要在文字中插入图片，可以直接使用ImageSpan，但是ImageSpan并不能加载网络图片。因此这种简单的使用方式都是行不通的，需要考虑去定制ImageSpan实现我们特殊的要求。
 
 </description>
@@ -20,7 +20,7 @@
     </item>
     <item>
       <title>修复VideoView引起的内存泄露小计</title>
-      <link>http://localhost:4000//fix-video-view-leak</link>
+      <link>http://longlinht.github.io//fix-video-view-leak</link>
       <description>最近写了非常简单的新手引导视频页面，逻辑很简单，就是新手用户在第一次使用App时可以点击引导视频入口，然后进入一个视频播放页面，为了快速实现功能，就直接使用了VideoView，从需求开发到交付也都没什么问题，需求上线后我打开LeakCanary，想观察下最近有没有新增的内存泄露，竟然发现这个视频页面竟然泄露了。排查了一圈也没有发现有什么会阻止Activity销毁。但是LeakCanary打出了引用链，发现和VideoView有关，通过Google发现，竟然是VideoView自身的bug！这种情况也不是第一次遇见，那也得解决啊，所以开始想办法。
 
 </description>
@@ -29,7 +29,7 @@
     </item>
     <item>
       <title>Parcelable vs Serializable</title>
-      <link>http://localhost:4000//serializable-vs-parcelable</link>
+      <link>http://longlinht.github.io//serializable-vs-parcelable</link>
       <description>在实际的Android开发中Serializable和Parcelable我们都会用到，只是需要区分使用场景。刚开始遇到这两个接口的时候比较疑惑，貌似都是用来做序列化的，虽然能分得清什么时候用哪个，但是对这两个接口并没有清晰的认识，要是冷不丁的问我这俩有什么区别，可能还无法清晰的界定和阐述。因此有必要用一篇文章来彻底捋清这些东西。
 
 </description>
@@ -38,7 +38,7 @@
     </item>
     <item>
       <title>修复崩溃ANR小记</title>
-      <link>http://localhost:4000//fix-crash-and-anr</link>
+      <link>http://longlinht.github.io//fix-crash-and-anr</link>
       <description>最近一直在集中精力解决Bugly的崩溃，到现在基本上把可以解决的已经都解决完了，剩下的都是一些特定系统版本和特定机型的崩溃，暂时没有太好的思路去排查，其中系统4.4版本的崩溃尤为特殊，有几个崩溃几乎都只出现在4.4版本的机器上，这些特定版本和特定机型的问题暂不谈论，下面来小结一下最近成功解决过的一些崩溃和ANR。
 
 </description>
@@ -47,7 +47,7 @@
     </item>
     <item>
       <title>Android防空指南</title>
-      <link>http://localhost:4000//guide-to-prevent-null-in-android-project</link>
+      <link>http://longlinht.github.io//guide-to-prevent-null-in-android-project</link>
       <description>最近集中进行了一段时间降低公司App崩溃率的工作，现在App的崩溃率控制在了万一与万三之间，整体来说还比较顺利，有必要将其中的方法和经验做一个沉淀。由于空指针异常导致的崩溃对App整体的崩溃率贡献巨大，日常的崩溃修复总是少不了几个空指针异常，虽然明显的空指针异常修复很容易，但是发出去的版本会持续崩溃，影响留存和体验，因此在积极修复空指针崩溃的同时也需要未雨绸缪，在开发阶段就把空指针拒之门外，对于事前防空的讨论非常多，也有大量的文章总结和分析这件事情，此文可能会提及这些讨论，但是主要还是总结我实践过的一些防空措施：
 
 </description>
@@ -56,7 +56,7 @@
     </item>
     <item>
       <title>在WebView中支持视频全屏</title>
-      <link>http://localhost:4000//h5-video-fullscreen-in-webview</link>
+      <link>http://longlinht.github.io//h5-video-fullscreen-in-webview</link>
       <description>最近感觉和WebView杠上了，刚解决完在WebView中使用Android相机拍照和录像的问题，又遇到在WebView中视频无法全屏，和之前相机拍照和视频的问题一样，iOS和其他浏览器都没有问题，独WebView出错。通过网上查阅一些资料，最终顺利解决，虽不是什么难搞的东西，但是真要弄起来，也需要一些心力，所以通过此篇记录下整个过程。
 
 </description>
@@ -65,7 +65,7 @@
     </item>
     <item>
       <title>解决SharedPreferences导致的ANR</title>
-      <link>http://localhost:4000//fix-anr-related-sharedpreferences</link>
+      <link>http://longlinht.github.io//fix-anr-related-sharedpreferences</link>
       <description>这几天在Google Play的ANR实时报告中看到很多貌似与SharedPreferences相关的ANR，看了历史版本后发现，这个已经是一个老问题了，在历次版班的ANR中居高不下。今天实在忍不了，决定对这个问题一探究竟。
 
 </description>
@@ -74,7 +74,7 @@
     </item>
     <item>
       <title>在WebView中调用Android相机拍照录像</title>
-      <link>http://localhost:4000//operate-camera-in-webview</link>
+      <link>http://longlinht.github.io//operate-camera-in-webview</link>
       <description>最近公司App需要以H5的方式接入七鱼客服，根据他们的开发文档接入起来还是很容易，成本很低。理论上如果以native的方式接入的话，用户体验会更好，但是接入后增加的包体积是无法接受的，遂改用H5的方式，整个接入过程还算顺利，有相对详尽的接入文档和demo，只是在最后接入完成后，因为沟通不畅，忽略了客服聊天界面在Android上无法发图片和发视频的问题。同一份html，iOS就是正常的，Android上就死活没反应。后来才恍然大悟，WebView是不支持JS去直接操作Android相机的，必须通过回调到native，由native完成照片的选择，拍摄和录像后将数据返回给JS才能完成一次照片和视频的发送。清楚了问题所在，就需要实现WebView的标准接口来实现这个回调到native的功能，在代码实现前，需要先厘清一些WebView的基本概念和原理。
 
 </description>
@@ -83,7 +83,7 @@
     </item>
     <item>
       <title>HTTP/2 从初探到实际场景的运用</title>
-      <link>http://localhost:4000//upgrade-to-http2</link>
+      <link>http://longlinht.github.io//upgrade-to-http2</link>
       <description>HTTP/2其实出来已经很长时间了，但是一个新的协议，新的标准从出现到大量被采用，总是会经历一个过程。我们的产品最近基于网络请求优化的要求，需要将之前的HTTP/1都升级到支持HTTP/2，这个事情其实需要两方同时进行，服务端和客服端需要同时支持HTT/2。在做这个事情之前需要首先调研HTTP/2，了解它的特性和优缺点。
 
 </description>
@@ -92,7 +92,7 @@
     </item>
     <item>
       <title>优化App网络连通性问题</title>
-      <link>http://localhost:4000//connectivity-in-android</link>
+      <link>http://longlinht.github.io//connectivity-in-android</link>
       <description>最近遇到一个棘手的问题，我们开发的一款App在中东那边出现大量的`UnknownHostException`, 导致App在中东那边体验很糟，很快这个问题就被抛给了我们技术优化组，我和另外一名同事就开始定位问题的原因并且试图提出一个可行的解决方案。一般理解，出现`UnkownHostException`就是DNS失败了，在我们开始解决这个问题的时候，App的网络库已逐渐开始使用OkHttp，我们想到自定义DNS过程，在系统DNS失败的情况下再尝试其他DNS方式，降低`UnknownHostException`出现的频率，优化App网络连通性。
 为了实现我们的技术方案，我们针对OkHttp的DNS做了如下几件事:
 
@@ -102,7 +102,7 @@
     </item>
     <item>
       <title>三星折叠屏适配小计</title>
-      <link>http://localhost:4000//sumsung-foldable-adapt</link>
+      <link>http://longlinht.github.io//sumsung-foldable-adapt</link>
       <description>三星要在近期发布折叠屏手机，消息一出，我们就得抓紧做适配，也没有什么现成的经验作参考，尤其令人头疼的是还没有真机供我们测试。没办法，兵来将挡，水来土掩，进过一周多的调研和开发，终于做完了大部分App页面的适配工作，也因为做这个适配的过程踩了很多坑，特写下这篇小记。
 
 </description>
@@ -111,7 +111,7 @@
     </item>
     <item>
       <title>加速Gradle构建</title>
-      <link>http://localhost:4000//speed-up-gradle-build</link>
+      <link>http://longlinht.github.io//speed-up-gradle-build</link>
       <description>  最近刚换工作，来这家新公司没几天，还在熟悉和适应阶段，leader也没安排什么特别的事情，只是说有空可以看看我们工程Gradle Build速度慢的问题。总算接到一个方向比较明确的任务，正好可以从工程的构建流程入手，可以一窥整个工程的结构和依赖。因为Gradle构建速度慢这个问题，其实有一些常见的排查方法，解决问题第一步，还是用最快的排查法，首先排除一些最常见的造成构建速度缓慢的原因。但是要找出构建速度慢的问题也需要将问题分情况来看，分两种情况，一种是在开发过程中的构建和正式发版上线的构建，这两种构建通常是相同的，但有时为了节约开发过程中的构建时间，会做一些特殊的设置和开启关闭一些选项来加速开发过程中的构建，因此，这两种情况面临的问题其实是类似的，因为还不是很清楚leader更在意的是开发过程中的构建时间还是发布上线的构建，因此我决定把这两种情况合二为一，罗列出所有的加速建议:
   
 * 检查是否使用了最新的Android Gradle Plugin
@@ -122,7 +122,7 @@
     </item>
     <item>
       <title>移动应用中的典型页面</title>
-      <link>http://localhost:4000//typical-pages-in-mobile-app</link>
+      <link>http://longlinht.github.io//typical-pages-in-mobile-app</link>
       <description>今天这篇文章不做具体技术细节的探讨，而是来观察诸多移动应用中反复出现，具有典型特征和重要作用的一些页面来一窥一般移动应用的基本结构。这些反复出现的页面原型可以归纳为如下六类:
 
 </description>
@@ -131,7 +131,7 @@
     </item>
     <item>
       <title>解决ScrollView内容显示不全</title>
-      <link>http://localhost:4000//scrollview-can-not-display-whole-content</link>
+      <link>http://longlinht.github.io//scrollview-can-not-display-whole-content</link>
       <description>这个问题其实只要使用过`ScrollView`，可能都有机会遇到，问题的表现就是`ScrollView`包裹内容的高度超过`ScrollView`可视高度的话，被包裹的内容就会显示不全，最底部的内容永远也看不到了，这种情况肯定是无法接受的， 解决这个问题比较简单，其实就是简单的一句设置语句:
 
 </description>
@@ -140,7 +140,7 @@
     </item>
     <item>
       <title>解决闹人的can not found symbol BR问题</title>
-      <link>http://localhost:4000//br-not-found</link>
+      <link>http://longlinht.github.io//br-not-found</link>
       <description>最近公司研发的这个App是我从零到一搭建的，在框架搭建时分别使用了Databinding和Room，今天在做新需求时需要向Room中的实体类新添加一个字段，在写完了所有相关的逻辑后，build工程，所有自动生成的Databinding类都报错，build log中并没有指向任何具体报错的Databinding类，这就令人很困惑，因为这个需求的添加并没有改动任何Databinding的类，在不知所以的情况下，那就尝试其他方法解决，之前我在一个技术博客上看到过一个Databinding类的Troubleshooting: 
 
 </description>
@@ -149,7 +149,7 @@
     </item>
     <item>
       <title>记一次看似困难的Debug</title>
-      <link>http://localhost:4000//record-a-debug-process</link>
+      <link>http://longlinht.github.io//record-a-debug-process</link>
       <description>今年把自己的手机换成了Android，拿到新机后就想找到一款手写笔记的App，因为在iOS用过一款体验很好，还用那个写了一篇游记，在试用了十几款此类的Andorid App后最终找到了一款名为INKredible的手写笔记App，刚开始用的时候很不顺手，都想卸载了，但是经过一番摸索后找到了技巧，再去试用后有一种惊艳的感觉，今天在地铁通勤的时候竟然用它谢了一篇技术博文，并已图片的形式到了出来，全文如下:(字迹潦草，读者莫怪，其实如果以正楷的形式书写, 效率较差，体验会大打折扣).
 
 </description>
@@ -158,7 +158,7 @@
     </item>
     <item>
       <title>使用VideoView实现视频开屏页</title>
-      <link>http://localhost:4000//play-video-in-raw-folder</link>
+      <link>http://longlinht.github.io//play-video-in-raw-folder</link>
       <description>今天PM提了一个视频开屏页的需求，需要在用户第一次使用时播放一个开屏视频，乍一看，挺简单一需求，但是也或多或少碰到了一些坑，也发现了Android资源编译的一个问题，本着研发之事无小事的原则，还是要记录下踩坑经验和发现的问题。整个实现过程一共两三个小时，逐步解决了以下问题:
 
 </description>
@@ -167,7 +167,7 @@
     </item>
     <item>
       <title>MultidexApplication相关的一个crash</title>
-      <link>http://localhost:4000//multidex-application-crash</link>
+      <link>http://longlinht.github.io//multidex-application-crash</link>
       <description>最近在内测的一个App在内测开始后有用户反馈启动就crash的问题，后来拿到用户的信息后发现几个crash的机器都是4.4的机器，因为现在真实用户使用4.4系统的用户真的是不多了，就没怎么在意，但是在阿里云移动测试平台进行兼容性测试的时候，这个问题必现，并且都出现在4.4的机器上，查看兼容性测试报告，都是同一个crash，崩溃的堆栈记录了下来:
 
 </description>
@@ -176,7 +176,7 @@
     </item>
     <item>
       <title>读《决断力》</title>
-      <link>http://localhost:4000//read-make-a-better-decision</link>
+      <link>http://longlinht.github.io//read-make-a-better-decision</link>
       <description>今年可能年景不好，运气不佳，再加上自己昏招频频，感觉今年非常不顺，也发现自己很不会决策，没有很好的决断力。于是就想找一本决断力相关的书来看看，找了一下，还果然有这个书名的一本书，而且豆瓣上评价不错，于是发送到Kindle，趁着地铁通勤的时间很快看完了，因为是中文版，看起来比较快，感觉正本书还是比较平实的，很多决策的方法可操作性强，因为这次使用了Kindle自带的标注功能，在看的过程中随手标注了重点和一些精彩的段落，整本书看完后，对标注和笔记做了整理，现记录出来：
 
 </description>
@@ -185,7 +185,7 @@
     </item>
     <item>
       <title>读《Lies My Doctor Told Me》</title>
-      <link>http://localhost:4000//reading-lies-my-doctor-told-me</link>
+      <link>http://longlinht.github.io//reading-lies-my-doctor-told-me</link>
       <description>&gt;The doctor is more to be feared than the disease.
 
 </description>
@@ -194,7 +194,7 @@
     </item>
     <item>
       <title>读《1984》</title>
-      <link>http://localhost:4000//reading-1984</link>
+      <link>http://longlinht.github.io//reading-1984</link>
       <description>1984应该是我读的第一本英文原版小说，我其实不太喜欢看小说，汉语的我也很少看，但竟然每天在地铁上看，一个月下来竟然看完了，期间总会遇到生词，看不懂的长句，但竟然读出了惊叹，大有拍案叫绝的冲动，感受得到人物的绝望，恐惧，第一次，读着非母语写成的文字，生出了喟叹，感动。这些英文单词变得不那么疏离，它所描绘的情景人物变得栩栩如生，人物的落寞与心死都可透出纸面，感染到我。也许好的文字无论用什么语言表达都能直直抵人心吧！
 
 </description>
@@ -203,7 +203,7 @@
     </item>
     <item>
       <title>Activity vs FragmentActivity vs AppCompatActivity</title>
-      <link>http://localhost:4000//different-activity-in-android</link>
+      <link>http://longlinht.github.io//different-activity-in-android</link>
       <description>Activity应该是每一个Android开发者第一个遇到的类吧，后来又看到了FragmentActivity，再后来又碰到了AppCompatActivity和ActionBarActivity，也许我们在开发者中会在不同的场景中使用以上不同的Activity类，但是要让我们清楚的说出它们的联系和区别，可能都会被这个问题懵一下，现在我们就来把他们的关系理清楚.
 
 </description>
@@ -212,7 +212,7 @@
     </item>
     <item>
       <title>处理Gradle plugin版本问题小记</title>
-      <link>http://localhost:4000//do-with-gradle-error</link>
+      <link>http://longlinht.github.io//do-with-gradle-error</link>
       <description>在编译Github上一些Android项目的时候, Gradle sync 总会抛出这样的一个提示:
 
 </description>
@@ -221,7 +221,7 @@
     </item>
     <item>
       <title>Android开发中标签指示器的选用</title>
-      <link>http://localhost:4000//pager-tab-selection</link>
+      <link>http://longlinht.github.io//pager-tab-selection</link>
       <description>在Android实际的开发过程中,几乎都会用到标签指示器和ViewPager的联动使用,ViewPager,毫无疑问就直接选用系统提供的, 但是和它联动的标签指示器就有非常多的选择, 我在开发的过程中使用了两个比较常见的实现,也是Github上star较多的两个项目.
 
 </description>
@@ -230,7 +230,7 @@
     </item>
     <item>
       <title>为什么要避免使用Fragment的默认构造函数</title>
-      <link>http://localhost:4000//avoid-default-constructor-in-fragment</link>
+      <link>http://longlinht.github.io//avoid-default-constructor-in-fragment</link>
       <description>今天在项目中需要用到Fragment, 但是在代码写完后碰到了这样一个警告:
 
 </description>
@@ -239,7 +239,7 @@
     </item>
     <item>
       <title>多样式 TextView 小记</title>
-      <link>http://localhost:4000//different-portion-different-appearance-in-same-textview</link>
+      <link>http://longlinht.github.io//different-portion-different-appearance-in-same-textview</link>
       <description>所谓多样式 `TextView`, 就是在同一个 `TextView`中不同部分的text展示不同的颜色,字体大小,字体,字体Style,这种需求其实在很多App中都存在, 能够直接的给每一部分Text赋予不同的外观, 既可以在布局中少添加几个`TextView`, 也可以使以后需求变动后能够灵活的做出改动, 我在实际的开发中也经常碰到这种需求,很多次都是临时Google下, 实现了以后也就作罢了, 等后面又遇到的时候,貌似又记得不太清楚了, 又需要去查, 很没有效率, 所以写下这篇小记.
 
 </description>
@@ -248,7 +248,7 @@
     </item>
     <item>
       <title>踩坑小计 - PopupWindow 的 isShowing 不工作</title>
-      <link>http://localhost:4000//popup-window-is-showing-not-work</link>
+      <link>http://longlinht.github.io//popup-window-is-showing-not-work</link>
       <description>PopupWindow在Android中是比较常用的一种控件，一个成熟的商业级app几乎不可能不用到它,最近在做的一个音乐播放列表的弹窗就是用PopupWindow实现的，做起来也没什么困难，就是有一个恼人的问题，不知道算不算SDK的一个bug.
 
 </description>
@@ -257,7 +257,7 @@
     </item>
     <item>
       <title>踩坑小计 - SeekBar 宽度显示不全</title>
-      <link>http://localhost:4000//seekbar-cant-display-full-width</link>
+      <link>http://longlinht.github.io//seekbar-cant-display-full-width</link>
       <description>最近开始一个全新的Android项目，突然感觉很多之前忽略掉的一些不大不小的问题和细节渐渐的浮出了水面，虽不是什么大问题，通过搜索，查找，自己判断改进也都能顺利解决，但终归要查，要找，凭空浪费很多时间，于是决定不论多么琐碎的问题，但凡违反一般性，需要特殊处理的都详细记录下来，避免下次忘记时再踩坑。今天就就记录下一个SeekBar的问题，真的算上不上是一个问题，只是SeekBar这个默认显示的宽度的确与一般View的显示结果不同。
 
 </description>
@@ -266,7 +266,7 @@
     </item>
     <item>
       <title>政策与民意</title>
-      <link>http://localhost:4000//policy-and-people-will</link>
+      <link>http://longlinht.github.io//policy-and-people-will</link>
       <description>政策，这个词在我们这个国家被普遍使用，几乎人人理解其含义，就连目不识丁的老农都会说出这样的话：“中央又出新政策了”，这个词我们是如此的熟悉，以至于我们常常都不会去想政策到底是什么，它是如何制定出来的？我们普通老百姓是否影响到了政策的制定？ 也许一般的理解是老百姓哪能影响到政策的制定，照老农的说法，那是中央出的政策，和我们这些小老百姓有啥关系，这么理解也没错，毕竟在我们这个国家，显然普通民众的权利实在有限，但是此处我并不想讨论政策的制定和出台，只是想探究已出台的，与民生息息相关的这些个政策，到底有没有民意的基础，民意是否影响到了政策的制定？ 要讨论这个问题，拿北京这几年的一些政策法规的例子最好不过了。
 
 </description>
@@ -275,7 +275,7 @@
     </item>
     <item>
       <title>记一次Android系统源代码技术分享</title>
-      <link>http://localhost:4000//lecture-on-android-system-source-code</link>
+      <link>http://longlinht.github.io//lecture-on-android-system-source-code</link>
       <description>今年年后换了工作，决定继续做Android开发，到了公司一段时间后，受架构组同学之邀，做一次技术分享，当时感觉很头疼，因为我在Android技术组，如果分享这几年C++的技术经验，显然不合时宜，也对组里的同事没有什么帮助，如果分享Android应用的开发，貌似又在班门弄斧，自己在Android方面本来就是半路出家，实在没有什么可分享的干货，正在为难之际，突然想到在之前的公司有段时间一直在阅读Android系统源代码，一直试图能更深入的了解系统的结构和原理，因此也有了一些心得，正好可以与同事分享，也对大家的开发有所帮助，所以有了这篇小记。
    
 这篇小记有点类似一个ppt，其实就是那次分享我用markdown格式写的一个ppt，是一个我要讲述的一个提纲，防止我讲跑题了。
@@ -286,7 +286,7 @@
     </item>
     <item>
       <title>Android开发中二维码库的选用</title>
-      <link>http://localhost:4000//select-qrc-code-library-in-andord</link>
+      <link>http://longlinht.github.io//select-qrc-code-library-in-andord</link>
       <description>在现今的移动App开发中，二维码的使用场景变得越来越普遍，最近我要开发的一个需求就必须生成二维码，自然就面临二维码库选用的问题，因为大名鼎鼎的ZXing的存在，这也本不是什么特别需要考虑的问题。但是因为ZXing的大而全，要在一款只是将二维码作为一个特定使用场景下的一个功能的App，完全引入ZXing就有点过了，所以就面临了ZXing库的裁剪问题。但是裁剪这样一个大而全的多平台支持的库也不是什么简单的事情，所以我也顺便调研了其他的二维码库作为参考:
 
 </description>
@@ -295,7 +295,7 @@
     </item>
     <item>
       <title>捕获Android截屏事件</title>
-      <link>http://localhost:4000//capture-screenshot-event-on-android</link>
+      <link>http://longlinht.github.io//capture-screenshot-event-on-android</link>
       <description>在Android平台上截屏事件没有对应的一个标准的事件和通知，所以应用App无法通过标准或统一的方式去捕获这个事件来满足自己的要求。
 只能通过间接的方式捕获到这个事件，我因为要做一个微信的截屏图片分享的功能，所以对Android截屏事件做了一个调研，并且在开发中 
 选用了其中的一种方式。 大体上，要解决这个问题，大概有以下几种方法，每种方法的可靠性和灵活性都不同。
@@ -306,7 +306,7 @@
     </item>
     <item>
       <title>Intall Emacs on Ubuntu</title>
-      <link>http://localhost:4000//install-emacs-on-ubuntu</link>
+      <link>http://longlinht.github.io//install-emacs-on-ubuntu</link>
       <description>Install Emacs 25 on Ubuntu from source is very easy, follow these steps below could achieve it.
 
 </description>
@@ -315,7 +315,7 @@
     </item>
     <item>
       <title>在Android上实现无限翻页轮播动画效果</title>
-      <link>http://localhost:4000//implement-page-up-down-animation-on-android</link>
+      <link>http://longlinht.github.io//implement-page-up-down-animation-on-android</link>
       <description>最近在工作中遇到一个需求，要求在一个Dialog的标题上显示两行字，但是这行字如果同时出现的话会非常难看，设计出了套方案，类似无限翻页轮播这两行字，要有翻书的效果。
 刚开始实现的时候，动画的效果也出来了，但是拿去给设计验收的时候设计总感觉怪怪的，始终达不到设计最终想要的结果。后来通过好多次的调试和验证，发现问题出现在两个
 View的动画播放时序和旋转轴的问题上，解决了这两个问题后再拿去给设计看的时候，一切都完美了。 现在这个比较好的设计也已上线， 也因为这个调试和验证的过程感觉对
@@ -327,7 +327,7 @@ Android动画的一些细节碰触的较多，所以写下此文记录下这个�
     </item>
     <item>
       <title>Java中的HashMap</title>
-      <link>http://localhost:4000//hashmap-in-java</link>
+      <link>http://longlinht.github.io//hashmap-in-java</link>
       <description>如果你是个Java程序员，那么你不可能对HashMap视而不见，因为你会经常遇到使用它的场景，因此对HashMap的充分了解非常有必要，对我们写出高效可靠的代码很有帮助。
 
 </description>
@@ -336,7 +336,7 @@ Android动画的一些细节碰触的较多，所以写下此文记录下这个�
     </item>
     <item>
       <title>对AI的一些臆想</title>
-      <link>http://localhost:4000//think-about-AI</link>
+      <link>http://longlinht.github.io//think-about-AI</link>
       <description>   作为一个码农，长期从事应用研发的工作，于当下热门的人工智能其实一点都没有交集，既不了解机器学习，也没有接触过计算机神经网络，甚至没有使用过Hadoop这种技术，可谓对AI相关的领域所知甚少，但这并不阻碍我对AI产生一些思考和想法，而这些思考和想法的缘起竟然都是这一两年上映的几部AI相关的电影和相关的几本畅销书，其中所涉及的技术和思想也都相对易懂，和机器学习类的书籍形成鲜明对比。
    
 
@@ -346,7 +346,7 @@ Android动画的一些细节碰触的较多，所以写下此文记录下这个�
     </item>
     <item>
       <title>Dimension Units in Android</title>
-      <link>http://localhost:4000//dimension-units-in-android</link>
+      <link>http://longlinht.github.io//dimension-units-in-android</link>
       <description>When I start develop application for Android, I am confused about the dimension units many times. So I decide to figure out it clearly through this article.
 
 </description>
@@ -355,7 +355,7 @@ Android动画的一些细节碰触的较多，所以写下此文记录下这个�
     </item>
     <item>
       <title>Building My Own Mac Working Environment</title>
-      <link>http://localhost:4000//building-my-own-mac-working-environment</link>
+      <link>http://longlinht.github.io//building-my-own-mac-working-environment</link>
       <description>In recent 2 years, I have switched my own working environment from Windows to Ubuntu and Mac. For the reason that I switched C/C++ development for Windows to Java development for Android. But I still prefer C++, so I won't give up C/C++ programming. In this article I will write down detail steps that how I build working environment. This working environment on Mac is a general working environment, not just for Android development but also C/C++ development. Let's start!
 
 </description>
@@ -364,7 +364,7 @@ Android动画的一些细节碰触的较多，所以写下此文记录下这个�
     </item>
     <item>
       <title>Java References</title>
-      <link>http://localhost:4000//java-references</link>
+      <link>http://longlinht.github.io//java-references</link>
       <description>Before JDK 1.2, if a object isn't referenced by any variable, it can't be used any more.Since JDK 1.2, Java has four reference types.In order from strongest to weakest these references are: Strong, Soft, Weak, Phantom. 
 
 </description>
@@ -373,7 +373,7 @@ Android动画的一些细节碰触的较多，所以写下此文记录下这个�
     </item>
     <item>
       <title>Android Thread Related Stuff</title>
-      <link>http://localhost:4000//thread-looper-handler-in-android</link>
+      <link>http://longlinht.github.io//thread-looper-handler-in-android</link>
       <description>It's widely known that it's illegal to update UI components directly from threads other than main thread in android. This a rule in Android world, we can't violate it. But, so many situations we need 
 update UI when we finish something in separated thread. This is a basic problem, it will refer more important concepts related thread.
 
@@ -383,7 +383,7 @@ update UI when we finish something in separated thread. This is a basic problem,
     </item>
     <item>
       <title>Understanding Java Garbage Collection</title>
-      <link>http://localhost:4000//java-garbage-collection</link>
+      <link>http://longlinht.github.io//java-garbage-collection</link>
       <description>**stop-the-world** Stop-the-world means that the JVM is stopping the application from running to execute a GC. When stop-the-world occurs, every thread except for the threads needed for the GC will stop their tasks. The interrupted tasks will resume only after the GC task has completed. GC tuning often means reducing this stop-the-world time.
 
 </description>
@@ -392,7 +392,7 @@ update UI when we finish something in separated thread. This is a basic problem,
     </item>
     <item>
       <title>Android Binder Mechanism</title>
-      <link>http://localhost:4000//android-binder-mechanism</link>
+      <link>http://longlinht.github.io//android-binder-mechanism</link>
       <description>#### What is Binder
 
 </description>
@@ -401,7 +401,7 @@ update UI when we finish something in separated thread. This is a basic problem,
     </item>
     <item>
       <title>Memory Leak in Android Development</title>
-      <link>http://localhost:4000//memory-leak-in-android-development</link>
+      <link>http://longlinht.github.io//memory-leak-in-android-development</link>
       <description>When programming Android, although java has GC mechanism, some our wrong code way and personal habits still cause memory leak, GC also can't fix it.
 
 </description>
@@ -410,7 +410,7 @@ update UI when we finish something in separated thread. This is a basic problem,
     </item>
     <item>
       <title>Userful command line in Android development</title>
-      <link>http://localhost:4000//userful-command-line-in-android-development</link>
+      <link>http://longlinht.github.io//userful-command-line-in-android-development</link>
       <description>## 
 
 </description>
@@ -419,7 +419,7 @@ update UI when we finish something in separated thread. This is a basic problem,
     </item>
     <item>
       <title>Define Userful Android Drawables</title>
-      <link>http://localhost:4000//define-userful-android-drawables</link>
+      <link>http://longlinht.github.io//define-userful-android-drawables</link>
       <description>We can define many useful drawables in Android, in this article, I collected some of definations I ever used.
 
 </description>
@@ -428,7 +428,7 @@ update UI when we finish something in separated thread. This is a basic problem,
     </item>
     <item>
       <title>I Do Not Know What I May Appear To The World</title>
-      <link>http://localhost:4000//I-do-not-know-what-I-may-appear-to-the-world</link>
+      <link>http://longlinht.github.io//I-do-not-know-what-I-may-appear-to-the-world</link>
       <description>作为“God”板块的第一篇，引用牛顿爵士的一段话来开启。
 
 </description>
@@ -437,7 +437,7 @@ update UI when we finish something in separated thread. This is a basic problem,
     </item>
     <item>
       <title>Easy doesn't enter into grown-up life</title>
-      <link>http://localhost:4000//easy-doesnt-enter-into-grown-up-life</link>
+      <link>http://longlinht.github.io//easy-doesnt-enter-into-grown-up-life</link>
       <description>这是我“Human”目录的第一篇文章，我以一句电影里的台词作为题目，“成年人的生活里没有容易二字”。这个板块其实我更不知道写什么，不过倒是可以借此文来解释一下那个奇怪的目录名称，其实这个奇怪的名称源于我几年前写
 的一句话“ 茕茕孑力，与机器，人，神共舞”。此文止,期待后续的文章。
 
@@ -448,7 +448,7 @@ update UI when we finish something in separated thread. This is a basic problem,
     </item>
     <item>
       <title>Hello World</title>
-      <link>http://localhost:4000//hello-world</link>
+      <link>http://longlinht.github.io//hello-world</link>
       <description>This is my first post for Machine category, I named it 'Hello World' to start my blog. Because many developers start their first program with a single line code to print 'Hello World'. Certainly my first line code also is 'Hello World' in C programming language. I hope this will be a good start!
 
 </description>
@@ -457,7 +457,7 @@ update UI when we finish something in separated thread. This is a basic problem,
     </item>
     <item>
       <title>Android开发中的Java最佳实践</title>
-      <link>http://localhost:4000//effective-java-for-android</link>
+      <link>http://longlinht.github.io//effective-java-for-android</link>
       <description>我本人其实是不想把这种在开发中的实践经验称作最佳实践的，英文叫做effective，不过国内翻译的很多技术类书籍也都这么翻译，就权且这样说吧。笔者之前一直在Windows下用C++做应用开发，最近已经转战大热的移动开发，一不小心已经做了快三个多月的Android开发了。作为一个技术转型的老C++程序员，想谈谈Java在Android开发中的一些实践经验，虽然Java之于我也是一门新的编程语言，但是并没那么陌生，相近的语言类型和语法习惯，还是非常容易上手，并且作为一个新手，可能还可以看到一些老Java程序员看到不到的地方，话不多说，下面就开始一些经验之谈。
 
 </description>
@@ -466,7 +466,7 @@ update UI when we finish something in separated thread. This is a basic problem,
     </item>
     <item>
       <title>Using Duilib to build GUI</title>
-      <link>http://localhost:4000//using-duilib-to-build-gui</link>
+      <link>http://longlinht.github.io//using-duilib-to-build-gui</link>
       <description>Duilib is a free open source DirectUI library on Windows , because its simple and expandable design and stable and efficient implementation, accepted generally by the major Internet companies  widely used in IM, video client, stock market software, navigation software, mobile phone support Software, security software and many PC client software in other industries. When We developed a IM in a company I worked, we even use this library to replace Qt GUI part we used in our code.
 
 </description>
@@ -475,7 +475,7 @@ update UI when we finish something in separated thread. This is a basic problem,
     </item>
     <item>
       <title>C#创建不规则窗体(控件)</title>
-      <link>http://localhost:4000//c-sharp-create-unregular-window</link>
+      <link>http://longlinht.github.io//c-sharp-create-unregular-window</link>
       <description>创建不规则窗体和控件这个过程包含了大量的图形编程工作，不同的计算机因内存和显卡的不同可能会导致最终的效果有所不同 。创建不规则窗体具体步骤：
 
 </description>
@@ -484,7 +484,7 @@ update UI when we finish something in separated thread. This is a basic problem,
     </item>
     <item>
       <title>Similarities and Differences between Java and C++</title>
-      <link>http://localhost:4000//similarities-and-differences-between-java-and-cpp</link>
+      <link>http://longlinht.github.io//similarities-and-differences-between-java-and-cpp</link>
       <description>* Java does not support typedefs, defines, or a preprocessor. 
 
 </description>
@@ -493,7 +493,7 @@ update UI when we finish something in separated thread. This is a basic problem,
     </item>
     <item>
       <title>Smart Pointer in C++</title>
-      <link>http://localhost:4000//smart-pointer-in-cpp</link>
+      <link>http://longlinht.github.io//smart-pointer-in-cpp</link>
       <description>In C++, there is a uncommnon conception named smart pointer, it is rarely seen in other programming lauguages. So, what's it? We could simply define it. **A smart pointer is a class that wraps a 'raw' (or 'bare') C++ pointer, to manage the lifetime of the object being pointed to**.
 
 </description>
@@ -502,7 +502,7 @@ update UI when we finish something in separated thread. This is a basic problem,
     </item>
     <item>
       <title>高质量C++编程注意事项</title>
-      <link>http://localhost:4000//high-quality-cpp</link>
+      <link>http://longlinht.github.io//high-quality-cpp</link>
       <description>* 不提倡使用全局变量，尽量不要在头文件中出现象extern int value 这类声明
 
 </description>
@@ -511,7 +511,7 @@ update UI when we finish something in separated thread. This is a basic problem,
     </item>
     <item>
       <title>Copy and swap idiom in C++</title>
-      <link>http://localhost:4000//copy-and-swap-idiom-in-cpp</link>
+      <link>http://longlinht.github.io//copy-and-swap-idiom-in-cpp</link>
       <description>#### Purpose - assists the assignment operator in achieving two things: 
 
 </description>
@@ -520,7 +520,7 @@ update UI when we finish something in separated thread. This is a basic problem,
     </item>
     <item>
       <title>Type conversion in C++</title>
-      <link>http://localhost:4000//type-conversion-in-cpp</link>
+      <link>http://longlinht.github.io//type-conversion-in-cpp</link>
       <description>* `static_cast`
 
 </description>
@@ -529,7 +529,7 @@ update UI when we finish something in separated thread. This is a basic problem,
     </item>
     <item>
       <title>References vs. Pointers in C++</title>
-      <link>http://localhost:4000//pointers-vs-references-in-cpp</link>
+      <link>http://longlinht.github.io//pointers-vs-references-in-cpp</link>
       <description>In C++, references provide many of the same capabilities as pointers. In real development, we prefer to use references to avoid the complex and error prone of pointers. But in some situations, our choices're not clear. As a good C++ developer, we shouldn't ignore this confusion, this hesitation, so we need make it clear, more clear.
 
 </description>
@@ -538,7 +538,7 @@ update UI when we finish something in separated thread. This is a basic problem,
     </item>
     <item>
       <title>Split a String in C++</title>
-      <link>http://localhost:4000//split-string-in-cpp</link>
+      <link>http://longlinht.github.io//split-string-in-cpp</link>
       <description>There are many ways to split a string in C++, but what's the most elegant way to split a string in C++? May be we can find it step by step. The most simple and direct way is use `istringstream` to split.
 
 </description>
@@ -547,7 +547,7 @@ update UI when we finish something in separated thread. This is a basic problem,
     </item>
     <item>
       <title>Forward declaration in C++</title>
-      <link>http://localhost:4000//forward-declaration-in-cpp</link>
+      <link>http://longlinht.github.io//forward-declaration-in-cpp</link>
       <description>Why need use forward declaration? when we can use it? I will figure out these problem separately.
 
 </description>

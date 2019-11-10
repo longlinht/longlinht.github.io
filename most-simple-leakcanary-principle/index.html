@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 
     <!-- [[! Page Meta ]] -->
-    <title>修复VideoView引起的内存泄露小计</title>
+    <title>最简LeakCanary原理解析</title>
     <meta name="description" content="与机器，人，神共舞 - 编程，读书，思考，旅行，与机器对话，与人交谈，对神发问，探索，体验人生美丽的风景" />
 
     <meta name="HandheldFriendly" content="True" />
@@ -96,10 +96,10 @@
     <article class="post tag-machine">
 
         <header class="post-header">
-            <h1 class="post-title">修复VideoView引起的内存泄露小计</h1>
+            <h1 class="post-title">最简LeakCanary原理解析</h1>
             <section class="post-meta">
             <!-- <a href='/'>Tao He</a> -->
-            <time class="post-date" datetime="2019-09-21">21 Sep 2019</time>
+            <time class="post-date" datetime="2019-11-11">11 Nov 2019</time>
                 <!-- [[tags prefix=" on "]] -->
                  
                 on 
@@ -114,57 +114,37 @@
 
         <section class="post-content">
             
-            <p>最近写了非常简单的新手引导视频页面，逻辑很简单，就是新手用户在第一次使用App时可以点击引导视频入口，然后进入一个视频播放页面，为了快速实现功能，就直接使用了VideoView，从需求开发到交付也都没什么问题，需求上线后我打开LeakCanary，想观察下最近有没有新增的内存泄露，竟然发现这个视频页面竟然泄露了。排查了一圈也没有发现有什么会阻止Activity销毁。但是LeakCanary打出了引用链，发现和VideoView有关，通过Google发现，竟然是VideoView自身的bug！这种情况也不是第一次遇见，那也得解决啊，所以开始想办法。</p>
+            <p>LeakCanary现在几乎成了Android开发过程中的一个标配，使用起来非常简单，能够帮助开发者发现和规避大部分的内存泄露问题。虽然大部分的开发者都或多或少，或深或浅的接触过LeakCanary，说起来是比较熟悉的一个第三方框架了，但是谈到LeakCanary的原理可能就会陌生很多。虽然网上也有非常多的讲解LeakCanary的文章，但是很多博文要么陷入无止境的代码细节中，要么就泛泛而谈，都不能很清楚的将LeakCanary的原理讲清楚。这篇文章尽力规避前两种文章的问题，用最小的篇幅把LeakCanary的原理讲清楚。</p>
 
-<p>首先显明确是谁导致了Activity的销毁，通过查看VideoView的源码，发现罪魁祸首是AudioManager，它可能会长期持有Context(即泄露的Activity)。很明显是因为生命周期不一致导致的泄露，因此最先想到的就是在创建VideoView时不要传Activity的Context，传给它ApplicationContext。当然了，在布局中创建的VideoView传入的就是Activity的Context，所以需要用代码动态创建:</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">mVideoView = new VideoView(getApplicationContext());
-RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(
-        RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+<h4>LeakCanary到底是怎么工作的?</h4>
 
-layoutParams.addRule(RelativeLayout.CENTER_IN_PARENT);
-mContainer.addView(mVideoView, layoutParams);
-</code></pre></div>
-<p>这样修改后还是会有内存泄露，只是引用链变了，需要在Activity的onDestroy回调中做一些处理</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">@Override
-protected void onDestroy() {
-  super.onDestroy();
-
-  if (mVideoView != null) {
-      mVideoView.stopPlayback();
-      mVideoView.setOnCompletionListener(null);
-      mVideoView.setOnPreparedListener(null);
-      mVideoView.setOnErrorListener(null);
-      mVideoView = null;
-  }
-
-  if (mContainer != null) {
-      mContainer.removeAllViews();
-  }
-</code></pre></div>
-<p>以上解决办法需要注意三点：</p>
+<p>LeakCanary能够准确，及时地检测到内存泄露，有以下几个关键点</p>
 
 <ul>
-<li>给VideoView设置的Listener都要分别置空，否则仍然会泄露</li>
-<li>VideoView的父容器要删掉VideoView，光置空VideoView不够</li>
-<li>需设置VideoView的OnErrorListener且返回true，防止弹出弹窗使用ApplicationContext导致崩溃 </li>
+<li>检测保留的实例</li>
 </ul>
 
-<p>传递ApplicationContext还有人提出另一种方法，但是我test发现没有效果，这种方法我也贴出来:</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">// Override Activity的attachBaseContext的行为
-@Override
-protected void attachBaseContext(Context newBase) {
-    super.attachBaseContext(new ContextWrapper(newBase){
-        @Override
-        public Object getSystemService(String name) {
-            if(Context.AUDIO_SERVICE.equals(name)){
-                return getApplicationContext().getSystemService(name);
-            }
-            return super.getSystemService(name);
-        }
-    });
-}
-</code></pre></div>
-<p>去规避系统API的bug真是很烦人的一件事，既不优雅，也不安全！</p>
+<p>LeakCanary能够工作的基石是一个叫做ObjectWatcher的库，它hook了Android中Activity和Fragment的生命周期，能够自动检测到Activity和Fragment的销毁和将要被GC，这些被检测到的Activity和Fragment的实例被传给了<code>ObjectWatcher</code>，<code>ObjectWatcher</code>以WeakReference持有他们。如果这些WeakReference在5秒后或者一次GC周期以后还没有被清理，那么LeakCanary认为这些实例被保留了，没有被回收，泄露发生了。检测没有被回收的实例是LeakCanary能够工作起来的基石，也是后续处理的基础，这一点非常重要。</p>
+
+<ul>
+<li>Dump 堆</li>
+</ul>
+
+<p>这一步需要对检测到的泄露进行处理，当然也不是检测到一个实例就会触发dump，而是有一个阈值，当达到一定数量实例的泄露后就会触发LeakCanary将Java堆内存dump到<code>.hprof</code>文件中去，当然了，这个文件存储在Android文件系统中。这个触发dump的阈值是如何确定的呢？如果App还可见，那这个阈值默认是5，如果App不可见，阈值默认是1。</p>
+
+<ul>
+<li>分析Java 堆</li>
+</ul>
+
+<p>LeakCanary使用<code>Shark</code>来分析<code>.hprof</code>文件，找出阻止实例被回收的引用链:leak trace.其实leak trace的另一个名字是GC Root到被引用实例的最短强引用路径。一旦leak trace确定了，LeakCanary会根据内置的对Android的知识库来推断出leak trace上哪个实例泄露了。</p>
+
+<ul>
+<li>Leak分组</li>
+</ul>
+
+<p>LeakCanary使用泄露的状态信息，将引用链缩小为可能引起泄露的子引用链，并且在界面上显示出来，也就是我们在LeakCanary界面上看到的信息。有的泄露可能不相关，但是引用链相同，也会被认为是同一个引用链，所以泄露会根据相同的子引用链分组。</p>
+
+<p>以上就是LeakCanary基本原理的关键点，相信也是最简单的对LeakCanary原理的描述了吧!</p>
 
 
         </section>
@@ -196,15 +176,15 @@ protected void attachBaseContext(Context newBase) {
 
             <section class="share">
                 <h4>Share this post</h4>
-                <a class="icon-twitter" href="http://twitter.com/share?text=修复VideoView引起的内存泄露小计&amp;url=http://longlinht.github.io//fix-video-view-leak"
+                <a class="icon-twitter" href="http://twitter.com/share?text=最简LeakCanary原理解析&amp;url=http://longlinht.github.io//most-simple-leakcanary-principle"
                     onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
                     <span class="hidden">Twitter</span>
                 </a>
-                <a class="icon-facebook" href="https://www.facebook.com/sharer/sharer.php?u=http://longlinht.github.io//fix-video-view-leak"
+                <a class="icon-facebook" href="https://www.facebook.com/sharer/sharer.php?u=http://longlinht.github.io//most-simple-leakcanary-principle"
                     onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
                     <span class="hidden">Facebook</span>
                 </a>
-                <a class="icon-google-plus" href="https://plus.google.com/share?url=http://longlinht.github.io//fix-video-view-leak"
+                <a class="icon-google-plus" href="https://plus.google.com/share?url=http://longlinht.github.io//most-simple-leakcanary-principle"
                    onclick="window.open(this.href, 'google-plus-share', 'width=490,height=530');return false;">
                     <span class="hidden">Google+</span>
                 </a>
@@ -247,20 +227,13 @@ protected void attachBaseContext(Context newBase) {
 
     <!-- [[! next_post ]] -->
     
-        <a class="read-next-story no-cover" href="http://longlinht.github.io//custom-image-span">
-            <section class="post">
-                <h2>ImageSpan的定制使用</h2>
-                <p>最近在做一个具体业务需求时，为了实现UI设计的要求，需要实现在同一段文字中，有一段文字是需要有形状的背景色，有一段文字中还有网络图片的插入，如果要达到这两个要求，简单的使用SpannableStringBuilder肯定是达不到要求的，虽然SpannableStringBuilder可以设置背景色，但是并不能绘制形状，说白了就是只能设置颜色，不能设置文字的背景图片。想要在文字中插入图片，可以直接使用ImageSpan，但是ImageSpan并不能加载网络图片。因此这种简单的使用方式都是行不通的，需要考虑去定制ImageSpan实现我们特殊的要求。 * 实现给同一段文字的一部分文字区域设置背景图片 这个功能的实现还是要继承ImageSpan，将我们的背景图片传进去，并且override ImageSpan的draw方法，根据对文字区域的测量，分别绘制出背景和文字。实现代码如下: ``` // BgImageSpan public class BgImageSpan extends ImageSpan { private...</p>
-            </section>
-        </a>
-    
     <!-- [[! /next_post ]] -->
     <!-- [[! prev_post ]] -->
     
-        <a class="read-next-story prev no-cover" href="http://longlinht.github.io//serializable-vs-parcelable">
+        <a class="read-next-story prev no-cover" href="http://longlinht.github.io//custom-image-span">
             <section class="post">
-                <h2>Parcelable vs Serializable</h2>
-                <p><p>在实际的Android开发中Serializable和Parcelable我们都会用到，只是需要区分使用场景。刚开始遇到这两个接口的时候比较疑惑，貌似都是用来做序列化的，虽然能分得清什么时候用哪个，但是对这两个接口并没有清晰的认识，要是冷不丁的问我这俩有什么区别，可能还无法清晰的界定和阐述。因此有必要用一篇文章来彻底捋清这些东西。</p> <h3>相同点</h3> <p>相同点其实很明显，主要有如下两点:</p> <ul> <li><p>都可以序列化反序列化</p></li> <li><p>都可以通过Intent传递</p></li> </ul> <h3>区别</h3> <ul> <li><p>Serializable是Java API，Parcelable是Android SDK API，设计目的不同。Serializable是一个通用的序列化机制，通过将文件保存到本地文件、网络流等实现便数据的传递，这种数据传递不仅可以在单个程序中进行，也可以在两个不同的程序中进行；Parcelable是Android SDK API,为了在同个程序的不同组件之间和不同程序（AIDL）之间高效的传输数据，是通过IBinder通信的消息的载体。从设计目的上可以看出Parcelable就是为了Android高效传输数据而生的。</p></li>...</p>
+                <h2>ImageSpan的定制使用</h2>
+                <p><p>最近在做一个具体业务需求时，为了实现UI设计的要求，需要实现在同一段文字中，有一段文字是需要有形状的背景色，有一段文字中还有网络图片的插入，如果要达到这两个要求，简单的使用SpannableStringBuilder肯定是达不到要求的，虽然SpannableStringBuilder可以设置背景色，但是并不能绘制形状，说白了就是只能设置颜色，不能设置文字的背景图片。想要在文字中插入图片，可以直接使用ImageSpan，但是ImageSpan并不能加载网络图片。因此这种简单的使用方式都是行不通的，需要考虑去定制ImageSpan实现我们特殊的要求。</p> <ul> <li>实现给同一段文字的一部分文字区域设置背景图片</li> </ul> <p>这个功能的实现还是要继承ImageSpan，将我们的背景图片传进去，并且override ImageSpan的draw方法，根据对文字区域的测量，分别绘制出背景和文字。实现代码如下:</p> <div class="highlight"><pre><code class="language-text" data-lang="text">// BgImageSpan public class BgImageSpan extends...</p>
             </section>
         </a>
     

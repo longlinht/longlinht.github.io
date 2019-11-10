@@ -12,6 +12,196 @@
    <atom:link href="rss" rel="self" type="application/rss+xml" />
    
 	<item>
+	  <title>最简LeakCanary原理解析</title>
+	  <link>//most-simple-leakcanary-principle</link>
+	  <author>Tao He</author>
+	  <pubDate>2019-11-11T04:54:12+08:00</pubDate>
+	  <guid>//most-simple-leakcanary-principle</guid>
+	  <description><![CDATA[
+	     <p>LeakCanary现在几乎成了Android开发过程中的一个标配，使用起来非常简单，能够帮助开发者发现和规避大部分的内存泄露问题。虽然大部分的开发者都或多或少，或深或浅的接触过LeakCanary，说起来是比较熟悉的一个第三方框架了，但是谈到LeakCanary的原理可能就会陌生很多。虽然网上也有非常多的讲解LeakCanary的文章，但是很多博文要么陷入无止境的代码细节中，要么就泛泛而谈，都不能很清楚的将LeakCanary的原理讲清楚。这篇文章尽力规避前两种文章的问题，用最小的篇幅把LeakCanary的原理讲清楚。</p>
+
+<h4>LeakCanary到底是怎么工作的?</h4>
+
+<p>LeakCanary能够准确，及时地检测到内存泄露，有以下几个关键点</p>
+
+<ul>
+<li>检测保留的实例</li>
+</ul>
+
+<p>LeakCanary能够工作的基石是一个叫做ObjectWatcher的库，它hook了Android中Activity和Fragment的生命周期，能够自动检测到Activity和Fragment的销毁和将要被GC，这些被检测到的Activity和Fragment的实例被传给了<code>ObjectWatcher</code>，<code>ObjectWatcher</code>以WeakReference持有他们。如果这些WeakReference在5秒后或者一次GC周期以后还没有被清理，那么LeakCanary认为这些实例被保留了，没有被回收，泄露发生了。检测没有被回收的实例是LeakCanary能够工作起来的基石，也是后续处理的基础，这一点非常重要。</p>
+
+<ul>
+<li>Dump 堆</li>
+</ul>
+
+<p>这一步需要对检测到的泄露进行处理，当然也不是检测到一个实例就会触发dump，而是有一个阈值，当达到一定数量实例的泄露后就会触发LeakCanary将Java堆内存dump到<code>.hprof</code>文件中去，当然了，这个文件存储在Android文件系统中。这个触发dump的阈值是如何确定的呢？如果App还可见，那这个阈值默认是5，如果App不可见，阈值默认是1。</p>
+
+<ul>
+<li>分析Java 堆</li>
+</ul>
+
+<p>LeakCanary使用<code>Shark</code>来分析<code>.hprof</code>文件，找出阻止实例被回收的引用链:leak trace.其实leak trace的另一个名字是GC Root到被引用实例的最短强引用路径。一旦leak trace确定了，LeakCanary会根据内置的对Android的知识库来推断出leak trace上哪个实例泄露了。</p>
+
+<ul>
+<li>Leak分组</li>
+</ul>
+
+<p>LeakCanary使用泄露的状态信息，将引用链缩小为可能引起泄露的子引用链，并且在界面上显示出来，也就是我们在LeakCanary界面上看到的信息。有的泄露可能不相关，但是引用链相同，也会被认为是同一个引用链，所以泄露会根据相同的子引用链分组。</p>
+
+<p>以上就是LeakCanary基本原理的关键点，相信也是最简单的对LeakCanary原理的描述了吧!</p>
+
+	  ]]></description>
+	</item>
+
+	<item>
+	  <title>ImageSpan的定制使用</title>
+	  <link>//custom-image-span</link>
+	  <author>Tao He</author>
+	  <pubDate>2019-10-19T04:54:12+08:00</pubDate>
+	  <guid>//custom-image-span</guid>
+	  <description><![CDATA[
+	     <p>最近在做一个具体业务需求时，为了实现UI设计的要求，需要实现在同一段文字中，有一段文字是需要有形状的背景色，有一段文字中还有网络图片的插入，如果要达到这两个要求，简单的使用SpannableStringBuilder肯定是达不到要求的，虽然SpannableStringBuilder可以设置背景色，但是并不能绘制形状，说白了就是只能设置颜色，不能设置文字的背景图片。想要在文字中插入图片，可以直接使用ImageSpan，但是ImageSpan并不能加载网络图片。因此这种简单的使用方式都是行不通的，需要考虑去定制ImageSpan实现我们特殊的要求。</p>
+
+<ul>
+<li>实现给同一段文字的一部分文字区域设置背景图片</li>
+</ul>
+
+<p>这个功能的实现还是要继承ImageSpan，将我们的背景图片传进去，并且override ImageSpan的draw方法，根据对文字区域的测量，分别绘制出背景和文字。实现代码如下:</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">// BgImageSpan
+
+public class BgImageSpan extends ImageSpan {
+
+    private int textSize = 20;
+    private int color = Color.GRAY;
+    private TextView mTextView;
+    static float textboundhight;
+    static float textY;
+    String mText;
+
+    public BgImageSpan(Drawable d, TextView tv, String text) {
+        super(d);
+        mTextView = tv;
+        mText = text;
+        textSize = (int) mTextView.getTextSize();
+    }
+
+
+    @Override
+    public void draw(Canvas canvas, CharSequence text, int start, int end, float x, int top, int y,
+                     int bottom, Paint paint) {
+
+        String str = mText;
+        Rect bounds = new Rect();
+        paint.setTextSize(textSize);
+        paint.getTextBounds(str, 0, str.length(), bounds);
+        int textHeight = bounds.height();
+        int textWidth = bounds.width();
+
+        getDrawable().setBounds(0, top, (int)(bounds.width() * 1.3) , bottom);
+        super.draw(canvas, str, start, end, x, top, y, bottom, paint);
+        paint.setColor(mTextView.getTextColors().getDefaultColor());
+        paint.setTypeface(Typeface.create(&quot;normal&quot;, Typeface.NORMAL));
+
+        Rect bounds1 = getDrawable().getBounds();
+
+        float textX = x + bounds1.width() / 2 - bounds.width() / 2;
+        if (textboundhight == 0) {
+            textboundhight = bounds.height();
+            textY = (bounds1.height()) / 2 + textboundhight / 2;
+        }
+        canvas.drawText(str, textX, textY, paint);
+    }
+}
+</code></pre></div>
+<p>使用方法和ImageSpan并没有什么区别:</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">String username = &quot;用户名：&quot;;
+String message = &quot;哈哈，我是一个天才&quot;;
+
+SpannableStringBuilder ssb = new SpannableStringBuilder(username);
+ssb.append(message);
+
+Rect bounds = new Rect();
+Paint paint = mContent.getPaint();
+paint.getTextBounds(username, 0, username.length(), bounds);
+
+Drawable bgDrawable = getDrawable(R.drawable.round_rect);
+bgDrawable.setBounds(0, 0, (int)(bounds.width() * 1.3), bounds.height());
+
+ImageSpan nameBgSpan = new BgImageSpan(bgDrawable, mContent, username);
+ssb.setSpan(nameBgSpan, 0, username.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+ForegroundColorSpan contentColorSpan = new ForegroundColorSpan(Color.parseColor(&quot;#ffc800&quot;));
+ssb.setSpan(contentColorSpan, username.length(), username.length() + message.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+mContent.setText(ssb);
+mContent.postInvalidate();
+</code></pre></div>
+<p>使用代码需要注意一下几点:</p>
+
+<ol>
+<li>传给BgImageSpan的Drawable需要设置Bounds，然后再传进去，否则可能会出现字符重叠的问题。</li>
+<li>如果设置了Bounds还有字符重叠错乱的问题，可以调用TextView的postInvalidate重绘。</li>
+</ol>
+
+<ul>
+<li>第二种实现同一段文字的一部分文字区域设置背景图片</li>
+</ul>
+
+<p>这种实现的思路很简单，就是通过inflate一个单独的布局，然后用这个inflate好的view生成图片，然后传给一个ImageSpan，即可完成，代码如下:</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">View view = LayoutInflater.from(this).inflate(R.layout.container, null);
+TextView textView = view.findViewById(R.id.tv_value);
+textView.setText(username);
+
+view.measure(View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED),
+        View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
+view.layout(0, 0, view.getMeasuredWidth(), view.getMeasuredHeight());
+view.buildDrawingCache();
+Bitmap bitmap = view.getDrawingCache();
+
+ImageSpan nameBgSpan = new ImageSpan(this, bitmap);
+ssb.setSpan(nameBgSpan, 0, username.length(), Spanned.SPAN_EXCLUSIVE_INCLUSIVE);
+</code></pre></div>
+<ul>
+<li>实现一段文字中插入网络图片</li>
+</ul>
+
+<p>插入网络图片和插入本地图片其实没有本质区别，要插入网络图片，就得先获取到网络图片后再设置到ImageSpan中去。代码如下：</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">String url = &quot;http://img2.imgtn.bdimg.com/it/u=1467875646,1039972052&amp;fm=26&amp;gp=0.jpg&quot;;
+RequestOptions options = new RequestOptions()
+        .dontAnimate()
+        .diskCacheStrategy(DiskCacheStrategy.NONE);
+
+Glide.with(this)
+        .load(url)
+        .apply(options)
+        .into(new CustomTarget&lt;Drawable&gt;() {
+            @Override
+            public void onResourceReady(@NonNull Drawable resource, @Nullable Transition&lt;? super Drawable&gt; transition) {
+                if (resource instanceof BitmapDrawable) {
+                    resource.setBounds(0, 0, 50, 50);
+
+                    ImageSpan iconSpan = new ImageSpan(resource);
+                    ssb.setSpan(iconSpan, username.length(), username.length() + 2, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+                    mContent.setText(ssb);
+                    mContent.postInvalidate();
+                }
+            }
+
+            @Override
+            public void onLoadCleared(@Nullable Drawable placeholder) {
+
+            }
+        });
+</code></pre></div>
+<p>使用起来需要注意的问题和上面的BgImageSpan相同，也是先要设置Drawable的Bounds。</p>
+
+<p>虽然这两个实现看起来也没有什么难度，但是还是需要把这种解决过的，不那么常规的方法记录下来，以后遇到同样的问题可节省很多调研和调试的事件。</p>
+
+	  ]]></description>
+	</item>
+
+	<item>
 	  <title>修复VideoView引起的内存泄露小计</title>
 	  <link>//fix-video-view-leak</link>
 	  <author>Tao He</author>
@@ -1044,330 +1234,6 @@ UDP）之间增加了二进制分帧层</p></li>
 </ul>
 
 <p>以上就是我们在支持HTTP/2过程中的一些调研结果和实际工作中的经验总结。</p>
-
-	  ]]></description>
-	</item>
-
-	<item>
-	  <title>优化App网络连通性问题</title>
-	  <link>//connectivity-in-android</link>
-	  <author>Tao He</author>
-	  <pubDate>2019-05-29T04:20:12+08:00</pubDate>
-	  <guid>//connectivity-in-android</guid>
-	  <description><![CDATA[
-	     <p>最近遇到一个棘手的问题，我们开发的一款App在中东那边出现大量的<code>UnknownHostException</code>, 导致App在中东那边体验很糟，很快这个问题就被抛给了我们技术优化组，我和另外一名同事就开始定位问题的原因并且试图提出一个可行的解决方案。一般理解，出现<code>UnkownHostException</code>就是DNS失败了，在我们开始解决这个问题的时候，App的网络库已逐渐开始使用OkHttp，我们想到自定义DNS过程，在系统DNS失败的情况下再尝试其他DNS方式，降低<code>UnknownHostException</code>出现的频率，优化App网络连通性。
-为了实现我们的技术方案，我们针对OkHttp的DNS做了如下几件事:</p>
-
-<ul>
-<li>创建OkHttpClient时自定义DNS</li>
-</ul>
-<div class="highlight"><pre><code class="language-text" data-lang="text">OkHttpClient.Builder builder = new OkHttpClient.Builder()
-    // 实现OKHttp DNS接口, 改变默认的DNS行为
-    .dns(OkHttpDns.getInstance())
-</code></pre></div>
-<p>上面的OkHttpDns须实现Dns接口</p>
-
-<ul>
-<li>实现自定义DNS</li>
-</ul>
-
-<p>目前我们的设计是使用责任链模式实现四层DNS的lookup: </p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">Local Cache --&gt; System DNS --&gt; GA --&gt; Google DNS
-</code></pre></div>
-<p>其中第一层是本地DNS缓存(Local Cache)，整个缓存只是内存缓存，DNS过程开始时，先去本地缓存找，如果在缓存中没有命中，就走系统DNS， 系统DNS如果也失败，整个链条就继续往下，到GA，到Google DNS，如果到Google DNS还没有解析成功，仍旧抛出<code>UnknownHostException</code>，DNS过程失败。基本的代码逻辑如下:</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">private OkHttpDns() {
-
-  //使用责任链模式实现四层DNS的lookup: Local Cache --&gt; System DNS --&gt; GA --&gt; Google DNS
-  mDnsChain = new CacheDnsHandler();
-
-  SystemDnsHandler okhttp = new SystemDnsHandler();
-  GADnsHandler ga = new GADnsHandler();
-  GoogleHttpDnsHandler google = new GoogleHttpDnsHandler();
-
-  mDnsChain.setTarget(okhttp);
-  okhttp.setTarget(ga);
-  ga.setTarget(google);
-}
-
-@Override
-public List&lt;InetAddress&gt; lookup(String hostname) throws UnknownHostException {
-  // IP直连的情况,直接返回
-  if (InetAddressValidator.isIPAddress(hostname)) {
-      return Arrays.asList(InetAddress.getAllByName(hostname));
-  }
-
-  List&lt;InetAddress&gt; allDNSResult = new ArrayList&lt;&gt;();
-  List&lt;InetAddress&gt; list = mDnsChain.lookup(hostname, allDNSResult);
-
-  if (list == null) {
-
-      // DNS完全失败后,清空黑名单,删除local cache相应的条目
-      IPStatusCache.getInstance().clear();
-
-      if (allDNSResult.isEmpty()) {
-          throw new UnknownHostException(&quot;Broken system behaviour for dns lookup of &quot; + hostname);
-      } else {
-          return allDNSResult;
-      }
-  }
-  return list;
-}
-</code></pre></div>
-<ul>
-<li><p>添加黑名单机制，进一步优化DNS
-一次连接成功后缓存DNS结果，host+ip为key，IPStatus为value，连接失败后会更新DNS缓存的失败次数，超过5次则认为进入了黑名单，在每次DNS完全失败后清空本地DNS缓存，防止所有的缓存都进入黑名单，缓存失效。</p></li>
-<li><p>处理IP直连的情况
-这种情况的处理很简单，检查传入的host是不是ip，如果是就直接返回。</p></li>
-</ul>
-
-<p>经过这样的优化以后，<code>UnknownHostException</code>在请求失败中的比重和请求的总失败率大幅下降，验证了我们这个技术方案的合理性，可以说网络连通性大大提高，再次回顾这个方案，突然发现它其实一个通用的解决方案，虽然我们这次解决的是海外，如中东地区的连通性问题，其实这个方案完全可以移植到国内，只要将Google HttpDNS换成国内的HttpDNS即可，整体的DNS流程可以不做任何改动即可成为一个完整的App DNS解决方案。</p>
-
-	  ]]></description>
-	</item>
-
-	<item>
-	  <title>三星折叠屏适配小计</title>
-	  <link>//sumsung-foldable-adapt</link>
-	  <author>Tao He</author>
-	  <pubDate>2019-04-10T04:20:12+08:00</pubDate>
-	  <guid>//sumsung-foldable-adapt</guid>
-	  <description><![CDATA[
-	     <p>三星要在近期发布折叠屏手机，消息一出，我们就得抓紧做适配，也没有什么现成的经验作参考，尤其令人头疼的是还没有真机供我们测试。没办法，兵来将挡，水来土掩，进过一周多的调研和开发，终于做完了大部分App页面的适配工作，也因为做这个适配的过程踩了很多坑，特写下这篇小记。</p>
-
-<p>在我们开始做适配前，首先要解决没有真机可做测试的问题，无法验证适配的效果，还好三星也想到了这个问题，在官网提供了一个模拟器应用，Foldable Emulator， 通过这个模拟器App可以在Fold和Unfold模式之间自由切换，验证适配效果。当我们适配工作结束后在真机上测试时发现，这个模拟器的仿真度极高，基本没有出现和真机上效果有出入的地方。</p>
-
-<p>在解决了没有真机的问题之后，我们就开始着手真正的适配工作。首先遇到的问题就是折叠屏手机需要在Fold和Unfold之间频繁切换，而这种切换的效果和横竖屏切换是一样的，默认都会导致Activity重建，而Activity重建又会导致一系列的连锁反应，如需要恢复大量数据、重新建立网络连接或执行其他密集操作，因此在适配前就需要规划哪些页面(Activity)需要重建，哪些不需要重建，所以需要按Activity是否重建这两种情况来分析切屏的后果和应对方法。</p>
-
-<ul>
-<li>重建Activity</li>
-</ul>
-
-<p>因配置变更而引起的完全重启可能会给用户留下应用运行缓慢的体验。 此外，依靠系统通过onSaveInstanceState() 回调保存的 Bundle，可能无法完全恢复 Activity 状态，因为它并非设计用于携带大型对象（例如位图），而且其中的数据必须先序列化，再进行反序列化，这可能会消耗大量内存并使得配置变更速度缓慢。 在这种情况下，如果 Activity 因配置变更而重启，则可通过保留 Fragment 来减轻重新初始化 Activity 的负担。当 Android 系统因配置变更而关闭 Activity 时，不会销毁已标记为要保留的 Activity 的片段。 可以将此类片段添加到 Activity 以保留有状态的对象。
-要在运行时配置变更期间将有状态的对象保留在片段中，请执行以下操作：</p>
-
-<ul>
-<li>扩展 Fragment 类并声明对有状态对象的引用</li>
-<li>在创建片段后调用 setRetainInstance(boolean)</li>
-<li>将片段添加到 Activity</li>
-<li>重启 Activity 后，使用 FragmentManager 检索片段</li>
-</ul>
-
-<p>例如，按如下方式定义片段：</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">public class RetainedFragment extends Fragment {
-
-    // 想要保存的数据
-    private MyDataObject data;
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        // 保存这个fragment
-        setRetainInstance(true);
-    }
-    public void setData(MyDataObject data) {
-        this.data = data;
-    }
-
-    public MyDataObject getData() {
-        return data;
-    }
-}
-</code></pre></div>
-<p>然后，使用 <code>FragmentManager</code> 将片段添加到 <code>Activity</code>。在运行时配置变更期间再次启动 <code>Activity</code> 时，可以获得片段中的数据对象。 例如，按如下方式定义 Activity：</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">public class MyActivity extends Activity {
-    private RetainedFragment retainedFragment;
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.main);
-        // 在activity重启后，获取保留的fragment
-        FragmentManager fm = getFragmentManager();
-        retainedFragment = (RetainedFragment) fm.findFragmentByTag(“data”);
-        // 首次创建
-        if (retainedFragment == null) {
-            // 添加fragment
-            retainedFragment = new RetainedFragment();
-            fm.beginTransaction().add(retainedFragment, “data”).commit();
-            // 从网络获取data
-            retainedFragment.setData(loadMyData());
-        }
-        // retainedFragment.getData()获取的数据可用
-        ...
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        // store the data in the fragment
-        retainedFragment.setData(collectMyLoadedData());
-    }
-}
-</code></pre></div>
-<p>onCreate() 添加了一个片段或恢复了对它的引用。此外，onCreate() 还将有状态的对象存储在片段实例内部。</p>
-
-<blockquote>
-<p>尽管Fragment内部可以存储任何对象，但是切勿传递与 Activity 绑定的对象，例如，Drawable、Adapter、View 或其他任何与 Context 关联的对象。否则，它将泄漏原始 Activity 实例的所有视图和资源。</p>
-</blockquote>
-
-<ul>
-<li>不重建Activity</li>
-</ul>
-
-<p>如果想不重新启动的情况下处理配置更改，则需要在清单中添加一个android：configChanges属性，例如：</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">&lt;activity
-    android:name=&quot;......CMVideoPlayerActivity&quot;
-    android:configChanges=&quot;screenSize|smallestScreenSize|screenLayout&quot;
-/&gt;
-</code></pre></div>
-<p>需要手动更新视图布局并在onConfigurationChaged（）中重新加载资源</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">@Override
-public void onConfigurationChanged(Configuration newConfig) {
-   super.onConfigurationChanged(newConfig);
-   if ((newConfig.screenLayout &amp; Configuration.SCREENLAYOUT_LONG_MASK) == Configuration.SCREENLAYOUT_LONG_YES) {
-
-   }
-   if ((newConfig.screenLayout &amp; Configuration.SCREENLAYOUT_LONG_MASK ) == Configuration.SCREENLAYOUT_LONG_NO) {
-
-   }
-}
-</code></pre></div>
-<p>在遵循上述基本原则以后，就要应对实际的适配问题了，整个适配的工作主要涉及以下几个问题的解决:</p>
-
-<h4>检测设备是否可折叠,当前是Fold状态还是Unfold，并且能够在切屏时通知到需要对切屏事件作出处理的页面</h4>
-
-<p>为了统一解决这个问题，设计了一个单例类来统一管理</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">public class FoldObserable extends Observable {
-
-    public static final int SCREEN_LARGE_WIDTH = 1536;
-
-    public static final int SCREEN_LARGE = 0;
-    public static final int SCREEN_SMALL = 1;
-
-    private static class SINGLE {
-        public static FoldObserable INSTANCE = new FoldObserable();
-    }
-
-    private FoldObserable() {
-        String model = android.os.Build.MODEL;
-        if (model.contains(&quot;SM-F9000&quot;)) {
-            canFlod = true;
-            if (isLargeScreen()) {
-                screenType = SCREEN_LARGE;
-            } else {
-                screenType = SCREEN_SMALL;
-            }
-        }
-    }
-    //大屏无statusbar 小屏有statusbar，根据此来判断是是否减bar
-    private int screenType;
-    private boolean canFlod;
-
-    public static FoldObserable getInstance() {
-        return SINGLE.INSTANCE;
-    }
-
-    public void setScreenType(int screenType) {
-        this.screenType = screenType;
-        setChanged();
-        notifyObservers();
-    }
-
-    public int getScreenType() {
-        return screenType;
-    }
-
-    /**
-     * 是否是折叠屏
-     * @return
-     */
-    public boolean getCanFlod() {
-        return canFlod;
-    }
-
-    private boolean isLargeScreen() {
-        WindowManager wm = (WindowManager) BloodEyeApplication.getInstance().getSystemService(Context.WINDOW_SERVICE);
-        Display display = wm.getDefaultDisplay();
-        Point pp = new Point();
-        display.getSize(pp);
-        return pp.x == FoldObserable.SCREEN_LARGE_WIDTH;
-    }
-}
-</code></pre></div>
-<p>因为要通过这个单例还通知需要响应切屏事件的页面，所以需要在App的所有Activity基类的onConfigurationChanged中调用setScreenType来通知所有的观察者，这些观察者就是需要相应切屏事件的Activigty和Fragment。代码如下:</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">@Override
-public void onConfigurationChanged(Configuration newConfig) {
-    super.onConfigurationChanged(newConfig);
-    if (FoldObserable.getInstance().getCanFlod()) {
-        UiProcessTask.updateScreenSize();
-        boolean isLargeScreen = isLargeScreen();
-        if (isLargeScreen) {
-            FoldObserable.getInstance().setScreenType(FoldObserable.SCREEN_LARGE);
-        } else {
-            FoldObserable.getInstance().setScreenType(FoldObserable.SCREEN_SMALL);
-        }
-    }
-}
-</code></pre></div>
-<p>将需要响应切屏的页面注册为观察者:</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">@Override
-public void onCreate(Bundle savedInstanceState) {
-    super.onCreate(savedInstanceState);
-    FoldObserable.getInstance().addObserver(this);
-}
-
-@Override
-public void onDestroy() {
-  super.onDestroy();
-  FoldObserable.getInstance().deleteObserver(this);
-}
-
-// 处理切屏事件
-@Override
-public void update(Observable o, Object arg) {
-  if (o instanceof FoldObserable) {
-      mAdapter.notifyDataSetChanged();
-  }
-}
-</code></pre></div>
-<h4>处理实际的可能因为各种原因导致的适配问题</h4>
-
-<p>经过模拟器的测试发现App种有很多页面在Fold和Unfold切换后出现适配问题，总结起来有如下几种情况:</p>
-
-<ul>
-<li>代码中为了提高测量和绘制View的性能，缓存了屏幕的宽度，导致一些用了屏幕宽度的地方使用了切换前的屏幕宽度的旧值，导致宽度适配错误。</li>
-</ul>
-
-<p>解决方法：在屏幕切换的时候更新缓存</p>
-
-<ul>
-<li>有些没有重建的页面，RecyclerView的Adapter在Fold和Unfold切换以后没有重新回调onBindView，导致Item的大小适配错误。</li>
-</ul>
-
-<p>解决方法: 在屏幕切换时手动调用Adapter的notifyDataSetChanged()去刷新列表</p>
-
-<ul>
-<li>布局xml文件中写死了一些控件的宽度，导致适配问题</li>
-</ul>
-
-<p>解决方法：尽量不要使用写死的值，推荐使用match_parent + margin或padding来应对这种情况</p>
-
-<ul>
-<li>在切屏时未能及时更新与界面宽高相关的全局变量</li>
-</ul>
-
-<p>解决办法: 在Application的onConfigurationChanged中更新相关变量</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">public static void updateScreenSize() {
-
-}
-
-
-// 在Application中调用
-@Override
-public void onConfigurationChanged(Configuration newConfig) {
-    super.onConfigurationChanged(newConfig);
-    updateScreenSize();
-}
-</code></pre></div>
-<p>在适配的过程中具体的问题可能都不一样，但是都跑不出这几类，只要抓住本质，一般都能得到很好的解决。比较麻烦的适配工作可算搞完了，第二天就得到三星跳票的消息，也是服气！</p>
 
 	  ]]></description>
 	</item>

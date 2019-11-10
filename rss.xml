@@ -8,7 +8,25 @@
     <title>与机器，人，神共舞</title>
     <link>http://longlinht.github.io/</link>
     <description>编程，读书，思考，旅行，与机器对话，与人交谈，对神发问，探索，体验人生美丽的风景</description>
-    <pubDate>Sat, 21 Sep 2019 02:30:12 +0800</pubDate>
+    <pubDate>Mon, 11 Nov 2019 04:54:12 +0800</pubDate>
+    <item>
+      <title>最简LeakCanary原理解析</title>
+      <link>http://longlinht.github.io//most-simple-leakcanary-principle</link>
+      <description>LeakCanary现在几乎成了Android开发过程中的一个标配，使用起来非常简单，能够帮助开发者发现和规避大部分的内存泄露问题。虽然大部分的开发者都或多或少，或深或浅的接触过LeakCanary，说起来是比较熟悉的一个第三方框架了，但是谈到LeakCanary的原理可能就会陌生很多。虽然网上也有非常多的讲解LeakCanary的文章，但是很多博文要么陷入无止境的代码细节中，要么就泛泛而谈，都不能很清楚的将LeakCanary的原理讲清楚。这篇文章尽力规避前两种文章的问题，用最小的篇幅把LeakCanary的原理讲清楚。
+
+</description>
+      <pubDate>Mon, 11 Nov 2019 04:54:12 +0800</pubDate>
+      <dc:date>2019-11-11T04:54:12+08:00</dc:date>
+    </item>
+    <item>
+      <title>ImageSpan的定制使用</title>
+      <link>http://longlinht.github.io//custom-image-span</link>
+      <description>最近在做一个具体业务需求时，为了实现UI设计的要求，需要实现在同一段文字中，有一段文字是需要有形状的背景色，有一段文字中还有网络图片的插入，如果要达到这两个要求，简单的使用SpannableStringBuilder肯定是达不到要求的，虽然SpannableStringBuilder可以设置背景色，但是并不能绘制形状，说白了就是只能设置颜色，不能设置文字的背景图片。想要在文字中插入图片，可以直接使用ImageSpan，但是ImageSpan并不能加载网络图片。因此这种简单的使用方式都是行不通的，需要考虑去定制ImageSpan实现我们特殊的要求。
+
+</description>
+      <pubDate>Sat, 19 Oct 2019 04:54:12 +0800</pubDate>
+      <dc:date>2019-10-19T04:54:12+08:00</dc:date>
+    </item>
     <item>
       <title>修复VideoView引起的内存泄露小计</title>
       <link>http://longlinht.github.io//fix-video-view-leak</link>
@@ -545,6 +563,6 @@ update UI when we finish something in separated thread. This is a basic problem,
       <pubDate>Wed, 03 Nov 2010 02:30:12 +0800</pubDate>
       <dc:date>2010-11-03T02:30:12+08:00</dc:date>
     </item>
-    <dc:date>2019-09-21T02:30:12+08:00</dc:date>
+    <dc:date>2019-11-11T04:54:12+08:00</dc:date>
   </channel>
 </rss>

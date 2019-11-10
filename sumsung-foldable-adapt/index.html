@@ -373,7 +373,7 @@ public void onConfigurationChanged(Configuration newConfig) {
                 
                 <div class="author-meta">
                     <span class="author-location icon-location"> Beijing, China</span> 
-                    <span class="author-link icon-link"><a href="http://longlinht.github.io/"> longlinht.github.io/</a></span> 
+                    <span class="author-link icon-link"><a href="http://localhost:4000/"> longlinht.github.io/</a></span> 
                 </div>
             </section>
 
@@ -381,15 +381,15 @@ public void onConfigurationChanged(Configuration newConfig) {
 
             <section class="share">
                 <h4>Share this post</h4>
-                <a class="icon-twitter" href="http://twitter.com/share?text=三星折叠屏适配小计&amp;url=http://longlinht.github.io//sumsung-foldable-adapt"
+                <a class="icon-twitter" href="http://twitter.com/share?text=三星折叠屏适配小计&amp;url=http://localhost:4000//sumsung-foldable-adapt"
                     onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
                     <span class="hidden">Twitter</span>
                 </a>
-                <a class="icon-facebook" href="https://www.facebook.com/sharer/sharer.php?u=http://longlinht.github.io//sumsung-foldable-adapt"
+                <a class="icon-facebook" href="https://www.facebook.com/sharer/sharer.php?u=http://localhost:4000//sumsung-foldable-adapt"
                     onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
                     <span class="hidden">Facebook</span>
                 </a>
-                <a class="icon-google-plus" href="https://plus.google.com/share?url=http://longlinht.github.io//sumsung-foldable-adapt"
+                <a class="icon-google-plus" href="https://plus.google.com/share?url=http://localhost:4000//sumsung-foldable-adapt"
                    onclick="window.open(this.href, 'google-plus-share', 'width=490,height=530');return false;">
                     <span class="hidden">Google+</span>
                 </a>
@@ -432,7 +432,7 @@ public void onConfigurationChanged(Configuration newConfig) {
 
     <!-- [[! next_post ]] -->
     
-        <a class="read-next-story no-cover" href="http://longlinht.github.io//connectivity-in-android">
+        <a class="read-next-story no-cover" href="http://localhost:4000//connectivity-in-android">
             <section class="post">
                 <h2>优化App网络连通性问题</h2>
                 <p>最近遇到一个棘手的问题，我们开发的一款App在中东那边出现大量的`UnknownHostException`, 导致App在中东那边体验很糟，很快这个问题就被抛给了我们技术优化组，我和另外一名同事就开始定位问题的原因并且试图提出一个可行的解决方案。一般理解，出现`UnkownHostException`就是DNS失败了，在我们开始解决这个问题的时候，App的网络库已逐渐开始使用OkHttp，我们想到自定义DNS过程，在系统DNS失败的情况下再尝试其他DNS方式，降低`UnknownHostException`出现的频率，优化App网络连通性。 为了实现我们的技术方案，我们针对OkHttp的DNS做了如下几件事: * 创建OkHttpClient时自定义DNS ``` OkHttpClient.Builder builder = new OkHttpClient.Builder() // 实现OKHttp DNS接口, 改变默认的DNS行为...</p>
@@ -442,7 +442,7 @@ public void onConfigurationChanged(Configuration newConfig) {
     <!-- [[! /next_post ]] -->
     <!-- [[! prev_post ]] -->
     
-        <a class="read-next-story prev no-cover" href="http://longlinht.github.io//speed-up-gradle-build">
+        <a class="read-next-story prev no-cover" href="http://localhost:4000//speed-up-gradle-build">
             <section class="post">
                 <h2>加速Gradle构建</h2>
                 <p><p>最近刚换工作，来这家新公司没几天，还在熟悉和适应阶段，leader也没安排什么特别的事情，只是说有空可以看看我们工程Gradle Build速度慢的问题。总算接到一个方向比较明确的任务，正好可以从工程的构建流程入手，可以一窥整个工程的结构和依赖。因为Gradle构建速度慢这个问题，其实有一些常见的排查方法，解决问题第一步，还是用最快的排查法，首先排除一些最常见的造成构建速度缓慢的原因。但是要找出构建速度慢的问题也需要将问题分情况来看，分两种情况，一种是在开发过程中的构建和正式发版上线的构建，这两种构建通常是相同的，但有时为了节约开发过程中的构建时间，会做一些特殊的设置和开启关闭一些选项来加速开发过程中的构建，因此，这两种情况面临的问题其实是类似的，因为还不是很清楚leader更在意的是开发过程中的构建时间还是发布上线的构建，因此我决定把这两种情况合二为一，罗列出所有的加速建议:</p> <ul> <li>检查是否使用了最新的Android Gradle Plugin</li> </ul> <p>当然了，这个排查不是硬性的，得看实际情况，但是如果能升到最新的插件版本，建议升级，随着插件的逐步完善，性能也会有很大提升</p> <ul> <li>尽量少用Module</li> </ul> <p>有技术博文称Module的构建时间可能是jar和aar的4倍（有待验证）</p> <ul> <li>使用Property选项</li> </ul>...</p>

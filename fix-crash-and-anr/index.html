@@ -304,7 +304,7 @@ Attempt to invoke virtual method &#39;void io.liuliu.music.widget.resource.Resou
                 
                 <div class="author-meta">
                     <span class="author-location icon-location"> Beijing, China</span> 
-                    <span class="author-link icon-link"><a href="http://longlinht.github.io/"> longlinht.github.io/</a></span> 
+                    <span class="author-link icon-link"><a href="http://localhost:4000/"> longlinht.github.io/</a></span> 
                 </div>
             </section>
 
@@ -312,15 +312,15 @@ Attempt to invoke virtual method &#39;void io.liuliu.music.widget.resource.Resou
 
             <section class="share">
                 <h4>Share this post</h4>
-                <a class="icon-twitter" href="http://twitter.com/share?text=修复崩溃ANR小记&amp;url=http://longlinht.github.io//fix-crash-and-anr"
+                <a class="icon-twitter" href="http://twitter.com/share?text=修复崩溃ANR小记&amp;url=http://localhost:4000//fix-crash-and-anr"
                     onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
                     <span class="hidden">Twitter</span>
                 </a>
-                <a class="icon-facebook" href="https://www.facebook.com/sharer/sharer.php?u=http://longlinht.github.io//fix-crash-and-anr"
+                <a class="icon-facebook" href="https://www.facebook.com/sharer/sharer.php?u=http://localhost:4000//fix-crash-and-anr"
                     onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
                     <span class="hidden">Facebook</span>
                 </a>
-                <a class="icon-google-plus" href="https://plus.google.com/share?url=http://longlinht.github.io//fix-crash-and-anr"
+                <a class="icon-google-plus" href="https://plus.google.com/share?url=http://localhost:4000//fix-crash-and-anr"
                    onclick="window.open(this.href, 'google-plus-share', 'width=490,height=530');return false;">
                     <span class="hidden">Google+</span>
                 </a>
@@ -363,7 +363,7 @@ Attempt to invoke virtual method &#39;void io.liuliu.music.widget.resource.Resou
 
     <!-- [[! next_post ]] -->
     
-        <a class="read-next-story no-cover" href="http://longlinht.github.io//serializable-vs-parcelable">
+        <a class="read-next-story no-cover" href="http://localhost:4000//serializable-vs-parcelable">
             <section class="post">
                 <h2>Parcelable vs Serializable</h2>
                 <p>在实际的Android开发中Serializable和Parcelable我们都会用到，只是需要区分使用场景。刚开始遇到这两个接口的时候比较疑惑，貌似都是用来做序列化的，虽然能分得清什么时候用哪个，但是对这两个接口并没有清晰的认识，要是冷不丁的问我这俩有什么区别，可能还无法清晰的界定和阐述。因此有必要用一篇文章来彻底捋清这些东西。 ### 相同点 相同点其实很明显，主要有如下两点: * 都可以序列化反序列化 * 都可以通过Intent传递 ### 区别 * Serializable是Java API，Parcelable是Android SDK API，设计目的不同。Serializable是一个通用的序列化机制，通过将文件保存到本地文件、网络流等实现便数据的传递，这种数据传递不仅可以在单个程序中进行，也可以在两个不同的程序中进行；Parcelable是Android...</p>
@@ -373,7 +373,7 @@ Attempt to invoke virtual method &#39;void io.liuliu.music.widget.resource.Resou
     <!-- [[! /next_post ]] -->
     <!-- [[! prev_post ]] -->
     
-        <a class="read-next-story prev no-cover" href="http://longlinht.github.io//guide-to-prevent-null-in-android-project">
+        <a class="read-next-story prev no-cover" href="http://localhost:4000//guide-to-prevent-null-in-android-project">
             <section class="post">
                 <h2>Android防空指南</h2>
                 <p><p>最近集中进行了一段时间降低公司App崩溃率的工作，现在App的崩溃率控制在了万一与万三之间，整体来说还比较顺利，有必要将其中的方法和经验做一个沉淀。由于空指针异常导致的崩溃对App整体的崩溃率贡献巨大，日常的崩溃修复总是少不了几个空指针异常，虽然明显的空指针异常修复很容易，但是发出去的版本会持续崩溃，影响留存和体验，因此在积极修复空指针崩溃的同时也需要未雨绸缪，在开发阶段就把空指针拒之门外，对于事前防空的讨论非常多，也有大量的文章总结和分析这件事情，此文可能会提及这些讨论，但是主要还是总结我实践过的一些防空措施：</p> <h3>编写不空的代码</h3> <p>这个是基础，也是第一道防线，如果这一步没有做好，后面的一些措施可能负担更重。编写不空的代码其实就是要求我们在编写具体的方法和接口时尽量保证不返回null值，以及一些编程语言特性来避免空指针，也就是从根源上杜绝client代码不经意间去dereference一个空对象，具体的办法，或者说一些规约如下：</p> <ul> <li>对于数组，比如Point，返回空对象，return new Point[0];</li> <li>对于容器，比如ArraryList,返回空对象。如果需要泛型支持，retrun Collections.emptyList(); 如果不需要泛型支持，则 return Collections.EMPTY_LIST;</li> <li>对于字符串String,返回空对象， return “”;...</p>

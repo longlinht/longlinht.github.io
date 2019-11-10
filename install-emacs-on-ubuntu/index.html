@@ -176,7 +176,7 @@ make
                 
                 <div class="author-meta">
                     <span class="author-location icon-location"> Beijing, China</span> 
-                    <span class="author-link icon-link"><a href="http://longlinht.github.io/"> longlinht.github.io/</a></span> 
+                    <span class="author-link icon-link"><a href="http://localhost:4000/"> longlinht.github.io/</a></span> 
                 </div>
             </section>
 
@@ -184,15 +184,15 @@ make
 
             <section class="share">
                 <h4>Share this post</h4>
-                <a class="icon-twitter" href="http://twitter.com/share?text=Intall Emacs on Ubuntu&amp;url=http://longlinht.github.io//install-emacs-on-ubuntu"
+                <a class="icon-twitter" href="http://twitter.com/share?text=Intall Emacs on Ubuntu&amp;url=http://localhost:4000//install-emacs-on-ubuntu"
                     onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
                     <span class="hidden">Twitter</span>
                 </a>
-                <a class="icon-facebook" href="https://www.facebook.com/sharer/sharer.php?u=http://longlinht.github.io//install-emacs-on-ubuntu"
+                <a class="icon-facebook" href="https://www.facebook.com/sharer/sharer.php?u=http://localhost:4000//install-emacs-on-ubuntu"
                     onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
                     <span class="hidden">Facebook</span>
                 </a>
-                <a class="icon-google-plus" href="https://plus.google.com/share?url=http://longlinht.github.io//install-emacs-on-ubuntu"
+                <a class="icon-google-plus" href="https://plus.google.com/share?url=http://localhost:4000//install-emacs-on-ubuntu"
                    onclick="window.open(this.href, 'google-plus-share', 'width=490,height=530');return false;">
                     <span class="hidden">Google+</span>
                 </a>
@@ -235,7 +235,7 @@ make
 
     <!-- [[! next_post ]] -->
     
-        <a class="read-next-story no-cover" href="http://longlinht.github.io//capture-screenshot-event-on-android">
+        <a class="read-next-story no-cover" href="http://localhost:4000//capture-screenshot-event-on-android">
             <section class="post">
                 <h2>捕获Android截屏事件</h2>
                 <p>在Android平台上截屏事件没有对应的一个标准的事件和通知，所以应用App无法通过标准或统一的方式去捕获这个事件来满足自己的要求。 只能通过间接的方式捕获到这个事件，我因为要做一个微信的截屏图片分享的功能，所以对Android截屏事件做了一个调研，并且在开发中 选用了其中的一种方式。 大体上，要解决这个问题，大概有以下几种方法，每种方法的可靠性和灵活性都不同。 #### 通过按键监听捕获截屏事件 这种方式最简单粗暴，但是存在两个巨大的麻烦，不易克服: * Android机器厂商众多，ROM众多，多截屏按键的组合没有统一的标准，如果适配所有机型，几乎是无法完成的任务 * 事件准确捕获后，截屏这个动作完全结束时点需要应用自己去检查和获取 这两件事做起来都不容易，都很容易出错，所以这种方法基本上是四种办法里最不可靠的，基本不推荐这么做。 #### 通过监听系统截屏进程的运行和退出捕获截屏事件 这种方法需要有一个后台线程以一定的频率去检查系统截屏进程是否启动，运行，退出，并作出相应的逻辑，而这个频率其实很难把握，毕竟应用无法预期这个截屏动作，因此这种方法也不推荐，此种方法和上面的那种方法可能只适用于非常特定的场景。...</p>
@@ -245,7 +245,7 @@ make
     <!-- [[! /next_post ]] -->
     <!-- [[! prev_post ]] -->
     
-        <a class="read-next-story prev no-cover" href="http://longlinht.github.io//implement-page-up-down-animation-on-android">
+        <a class="read-next-story prev no-cover" href="http://localhost:4000//implement-page-up-down-animation-on-android">
             <section class="post">
                 <h2>在Android上实现无限翻页轮播动画效果</h2>
                 <p><p>最近在工作中遇到一个需求，要求在一个Dialog的标题上显示两行字，但是这行字如果同时出现的话会非常难看，设计出了套方案，类似无限翻页轮播这两行字，要有翻书的效果。 刚开始实现的时候，动画的效果也出来了，但是拿去给设计验收的时候设计总感觉怪怪的，始终达不到设计最终想要的结果。后来通过好多次的调试和验证，发现问题出现在两个 View的动画播放时序和旋转轴的问题上，解决了这两个问题后再拿去给设计看的时候，一切都完美了。 现在这个比较好的设计也已上线， 也因为这个调试和验证的过程感觉对 Android动画的一些细节碰触的较多，所以写下此文记录下这个过程。</p> <h4>基本原理</h4> <p>通过<code>ObjectAnimation</code>操作<code>View</code>的<code>RotationY</code>属性，再利用动态改变<code>PivotY</code>的值和动画播放时序的不同来模拟出无限翻页轮播的动画效果</p> <h4>ObjectAnimation</h4> <div class="highlight"><pre><code class="language-text" data-lang="text">// 上面的View翻下去的动画 private...</p>

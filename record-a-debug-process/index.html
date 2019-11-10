@@ -140,7 +140,7 @@
                 
                 <div class="author-meta">
                     <span class="author-location icon-location"> Beijing, China</span> 
-                    <span class="author-link icon-link"><a href="http://longlinht.github.io/"> longlinht.github.io/</a></span> 
+                    <span class="author-link icon-link"><a href="http://localhost:4000/"> longlinht.github.io/</a></span> 
                 </div>
             </section>
 
@@ -148,15 +148,15 @@
 
             <section class="share">
                 <h4>Share this post</h4>
-                <a class="icon-twitter" href="http://twitter.com/share?text=记一次看似困难的Debug&amp;url=http://longlinht.github.io//record-a-debug-process"
+                <a class="icon-twitter" href="http://twitter.com/share?text=记一次看似困难的Debug&amp;url=http://localhost:4000//record-a-debug-process"
                     onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
                     <span class="hidden">Twitter</span>
                 </a>
-                <a class="icon-facebook" href="https://www.facebook.com/sharer/sharer.php?u=http://longlinht.github.io//record-a-debug-process"
+                <a class="icon-facebook" href="https://www.facebook.com/sharer/sharer.php?u=http://localhost:4000//record-a-debug-process"
                     onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
                     <span class="hidden">Facebook</span>
                 </a>
-                <a class="icon-google-plus" href="https://plus.google.com/share?url=http://longlinht.github.io//record-a-debug-process"
+                <a class="icon-google-plus" href="https://plus.google.com/share?url=http://localhost:4000//record-a-debug-process"
                    onclick="window.open(this.href, 'google-plus-share', 'width=490,height=530');return false;">
                     <span class="hidden">Google+</span>
                 </a>
@@ -199,7 +199,7 @@
 
     <!-- [[! next_post ]] -->
     
-        <a class="read-next-story no-cover" href="http://longlinht.github.io//br-not-found">
+        <a class="read-next-story no-cover" href="http://localhost:4000//br-not-found">
             <section class="post">
                 <h2>解决闹人的can not found symbol BR问题</h2>
                 <p>最近公司研发的这个App是我从零到一搭建的，在框架搭建时分别使用了Databinding和Room，今天在做新需求时需要向Room中的实体类新添加一个字段，在写完了所有相关的逻辑后，build工程，所有自动生成的Databinding类都报错，build log中并没有指向任何具体报错的Databinding类，这就令人很困惑，因为这个需求的添加并没有改动任何Databinding的类，在不知所以的情况下，那就尝试其他方法解决，之前我在一个技术博客上看到过一个Databinding类的Troubleshooting: **Troubleshooting the Issues with Binding Class** - Make sure you have the proper...</p>
@@ -209,7 +209,7 @@
     <!-- [[! /next_post ]] -->
     <!-- [[! prev_post ]] -->
     
-        <a class="read-next-story prev no-cover" href="http://longlinht.github.io//play-video-in-raw-folder">
+        <a class="read-next-story prev no-cover" href="http://localhost:4000//play-video-in-raw-folder">
             <section class="post">
                 <h2>使用VideoView实现视频开屏页</h2>
                 <p><p>今天PM提了一个视频开屏页的需求，需要在用户第一次使用时播放一个开屏视频，乍一看，挺简单一需求，但是也或多或少碰到了一些坑，也发现了Android资源编译的一个问题，本着研发之事无小事的原则，还是要记录下踩坑经验和发现的问题。整个实现过程一共两三个小时，逐步解决了以下问题:</p> <h4>视频全屏</h4> <p>看到这个问题的第一反应就是把<code>VideoView</code> 的宽高设置为<code>match_parent</code>, 并且保证父容器也是<code>match_parent</code> 根布局, 但是事实没那么简单，视频播放后并没有完全全屏，在我的开发机上视频底部有一条细细的白边，很明显视频没有完全全屏。后来又想到设置<code>MediaPlayer</code>的视频缩放模式:</p> <div class="highlight"><pre><code class="language-text" data-lang="text">mPlayer.setVideoScalingMode(MediaPlayer.VIDEO_SCALING_MODE_SCALE_TO_FIT_WITH_CROPPING); </code></pre></div> <p>设置了两种模式以后都没有效果，这说明<code>VideoView</code>本身没有全屏，没有铺满整个屏幕，所以需要根据屏幕大小动态设置<code>VideoView</code>的尺寸，所以用自定义View实现。 自定义一个继承自<code>VideoView</code>的类来满足要求，具体实现如下:</p> <div...</p>

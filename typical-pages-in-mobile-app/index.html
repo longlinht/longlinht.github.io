@@ -160,7 +160,7 @@
                 
                 <div class="author-meta">
                     <span class="author-location icon-location"> Beijing, China</span> 
-                    <span class="author-link icon-link"><a href="http://longlinht.github.io/"> longlinht.github.io/</a></span> 
+                    <span class="author-link icon-link"><a href="http://localhost:4000/"> longlinht.github.io/</a></span> 
                 </div>
             </section>
 
@@ -168,15 +168,15 @@
 
             <section class="share">
                 <h4>Share this post</h4>
-                <a class="icon-twitter" href="http://twitter.com/share?text=移动应用中的典型页面&amp;url=http://longlinht.github.io//typical-pages-in-mobile-app"
+                <a class="icon-twitter" href="http://twitter.com/share?text=移动应用中的典型页面&amp;url=http://localhost:4000//typical-pages-in-mobile-app"
                     onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
                     <span class="hidden">Twitter</span>
                 </a>
-                <a class="icon-facebook" href="https://www.facebook.com/sharer/sharer.php?u=http://longlinht.github.io//typical-pages-in-mobile-app"
+                <a class="icon-facebook" href="https://www.facebook.com/sharer/sharer.php?u=http://localhost:4000//typical-pages-in-mobile-app"
                     onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
                     <span class="hidden">Facebook</span>
                 </a>
-                <a class="icon-google-plus" href="https://plus.google.com/share?url=http://longlinht.github.io//typical-pages-in-mobile-app"
+                <a class="icon-google-plus" href="https://plus.google.com/share?url=http://localhost:4000//typical-pages-in-mobile-app"
                    onclick="window.open(this.href, 'google-plus-share', 'width=490,height=530');return false;">
                     <span class="hidden">Google+</span>
                 </a>
@@ -219,7 +219,7 @@
 
     <!-- [[! next_post ]] -->
     
-        <a class="read-next-story no-cover" href="http://longlinht.github.io//speed-up-gradle-build">
+        <a class="read-next-story no-cover" href="http://localhost:4000//speed-up-gradle-build">
             <section class="post">
                 <h2>加速Gradle构建</h2>
                 <p>最近刚换工作，来这家新公司没几天，还在熟悉和适应阶段，leader也没安排什么特别的事情，只是说有空可以看看我们工程Gradle Build速度慢的问题。总算接到一个方向比较明确的任务，正好可以从工程的构建流程入手，可以一窥整个工程的结构和依赖。因为Gradle构建速度慢这个问题，其实有一些常见的排查方法，解决问题第一步，还是用最快的排查法，首先排除一些最常见的造成构建速度缓慢的原因。但是要找出构建速度慢的问题也需要将问题分情况来看，分两种情况，一种是在开发过程中的构建和正式发版上线的构建，这两种构建通常是相同的，但有时为了节约开发过程中的构建时间，会做一些特殊的设置和开启关闭一些选项来加速开发过程中的构建，因此，这两种情况面临的问题其实是类似的，因为还不是很清楚leader更在意的是开发过程中的构建时间还是发布上线的构建，因此我决定把这两种情况合二为一，罗列出所有的加速建议: * 检查是否使用了最新的Android Gradle Plugin 当然了，这个排查不是硬性的，得看实际情况，但是如果能升到最新的插件版本，建议升级，随着插件的逐步完善，性能也会有很大提升 * 尽量少用Module 有技术博文称Module的构建时间可能是jar和aar的4倍（有待验证） * 使用Property选项 在gradle.property文件中添加如下两行代码： ``` org.gradle.daemon=true...</p>
@@ -229,7 +229,7 @@
     <!-- [[! /next_post ]] -->
     <!-- [[! prev_post ]] -->
     
-        <a class="read-next-story prev no-cover" href="http://longlinht.github.io//scrollview-can-not-display-whole-content">
+        <a class="read-next-story prev no-cover" href="http://localhost:4000//scrollview-can-not-display-whole-content">
             <section class="post">
                 <h2>解决ScrollView内容显示不全</h2>
                 <p><p>这个问题其实只要使用过<code>ScrollView</code>，可能都有机会遇到，问题的表现就是<code>ScrollView</code>包裹内容的高度超过<code>ScrollView</code>可视高度的话，被包裹的内容就会显示不全，最底部的内容永远也看不到了，这种情况肯定是无法接受的， 解决这个问题比较简单，其实就是简单的一句设置语句:</p> <div class="highlight"><pre><code class="language-text" data-lang="text">android:fillViewport=&quot;true&quot; </code></pre></div> <p>虽然这样可以解决问题，但是还是心中还有疑惑，我放在<code>ScrollView</code>中的<code>LinearLayout</code>是的高度是设置了<code>mactch_parent</code> 属性的，现在看来并没有生效，我猜测可能是<code>ScrollView</code>重写了测量方法导致的，于是去看<code>ScrollView</code>的<code>onMeasure</code> 方法:</p> <div class="highlight"><pre><code class="language-text" data-lang="text">@Override protected...</p>

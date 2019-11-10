@@ -3,8 +3,8 @@
   <channel>
     <title>与机器，人，神共舞</title>
     <description>编程，读书，思考，旅行，与机器对话，与人交谈，对神发问，探索，体验人生美丽的风景</description>
-    <link>http://longlinht.github.io/</link>
-    <atom:link href="http://longlinht.github.io//feed.xml" rel="self" type="application/rss+xml" />
+    <link>http://localhost:4000/</link>
+    <atom:link href="http://localhost:4000//feed.xml" rel="self" type="application/rss+xml" />
     
       <item>
         <title>ImageSpan的定制使用</title>
@@ -147,8 +147,8 @@ Glide.with(this)
 &lt;p&gt;虽然这两个实现看起来也没有什么难度，但是还是需要把这种解决过的，不那么常规的方法记录下来，以后遇到同样的问题可节省很多调研和调试的事件。&lt;/p&gt;
 </description>
         <pubDate>Sat, 19 Oct 2019 04:54:12 +0800</pubDate>
-        <link>http://longlinht.github.io//custom-image-span</link>
-        <guid isPermaLink="true">http://longlinht.github.io//custom-image-span</guid>
+        <link>http://localhost:4000//custom-image-span</link>
+        <guid isPermaLink="true">http://localhost:4000//custom-image-span</guid>
       </item>
     
       <item>
@@ -206,8 +206,8 @@ protected void attachBaseContext(Context newBase) {
 &lt;p&gt;去规避系统API的bug真是很烦人的一件事，既不优雅，也不安全！&lt;/p&gt;
 </description>
         <pubDate>Sat, 21 Sep 2019 02:30:12 +0800</pubDate>
-        <link>http://longlinht.github.io//fix-video-view-leak</link>
-        <guid isPermaLink="true">http://longlinht.github.io//fix-video-view-leak</guid>
+        <link>http://localhost:4000//fix-video-view-leak</link>
+        <guid isPermaLink="true">http://localhost:4000//fix-video-view-leak</guid>
       </item>
     
       <item>
@@ -240,8 +240,8 @@ protected void attachBaseContext(Context newBase) {
 &lt;p&gt;这样一一列举了两者的相同点和区别，对两者的认识清晰了很多！积跬步，共勉！&lt;/p&gt;
 </description>
         <pubDate>Thu, 19 Sep 2019 02:30:12 +0800</pubDate>
-        <link>http://longlinht.github.io//serializable-vs-parcelable</link>
-        <guid isPermaLink="true">http://longlinht.github.io//serializable-vs-parcelable</guid>
+        <link>http://localhost:4000//serializable-vs-parcelable</link>
+        <guid isPermaLink="true">http://localhost:4000//serializable-vs-parcelable</guid>
       </item>
     
       <item>
@@ -415,8 +415,8 @@ Attempt to invoke virtual method &amp;#39;void io.liuliu.music.widget.resource.R
 &lt;p&gt;以上就是最近解决的一些典型的崩溃和ANR，作此小计，积跬步。&lt;/p&gt;
 </description>
         <pubDate>Wed, 11 Sep 2019 02:30:12 +0800</pubDate>
-        <link>http://longlinht.github.io//fix-crash-and-anr</link>
-        <guid isPermaLink="true">http://longlinht.github.io//fix-crash-and-anr</guid>
+        <link>http://localhost:4000//fix-crash-and-anr</link>
+        <guid isPermaLink="true">http://localhost:4000//fix-crash-and-anr</guid>
       </item>
     
       <item>
@@ -567,8 +567,8 @@ apply from: &amp;#39;../../check.gradle&amp;#39;
 &lt;p&gt;用了这么多工具，又是插件，又是检查器，又是注解，说以前道一万，这些都是辅助措施，要真正减少空指针，降低崩溃率，还是要通过编写高质量的代码来实现，上面提到的那个代码片段，实在不能容忍，肯定要喷，必须要改，共勉！&lt;/p&gt;
 </description>
         <pubDate>Sat, 07 Sep 2019 04:20:12 +0800</pubDate>
-        <link>http://longlinht.github.io//guide-to-prevent-null-in-android-project</link>
-        <guid isPermaLink="true">http://longlinht.github.io//guide-to-prevent-null-in-android-project</guid>
+        <link>http://localhost:4000//guide-to-prevent-null-in-android-project</link>
+        <guid isPermaLink="true">http://localhost:4000//guide-to-prevent-null-in-android-project</guid>
       </item>
     
       <item>
@@ -633,8 +633,8 @@ public void onHideCustomView() {
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;allowfullscreen=&amp;quot;true&amp;quot; webkitallowfullscreen=&amp;quot;true&amp;quot; mozallowfullscreen=&amp;quot;true&amp;quot;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</description>
         <pubDate>Thu, 11 Jul 2019 04:20:12 +0800</pubDate>
-        <link>http://longlinht.github.io//h5-video-fullscreen-in-webview</link>
-        <guid isPermaLink="true">http://longlinht.github.io//h5-video-fullscreen-in-webview</guid>
+        <link>http://localhost:4000//h5-video-fullscreen-in-webview</link>
+        <guid isPermaLink="true">http://localhost:4000//h5-video-fullscreen-in-webview</guid>
       </item>
     
       <item>
@@ -956,8 +956,8 @@ public static void waitToFinish() {
 &lt;p&gt;这次替换和迁移目前已经上线验证 ，目前只发现在API 19的机器上出现崩溃，报java.lang.UnsatisfiedLinkError，MMKV的官网上有次问题的解答，可以参考解决。&lt;/p&gt;
 </description>
         <pubDate>Wed, 10 Jul 2019 04:20:12 +0800</pubDate>
-        <link>http://longlinht.github.io//fix-anr-related-sharedpreferences</link>
-        <guid isPermaLink="true">http://longlinht.github.io//fix-anr-related-sharedpreferences</guid>
+        <link>http://localhost:4000//fix-anr-related-sharedpreferences</link>
+        <guid isPermaLink="true">http://localhost:4000//fix-anr-related-sharedpreferences</guid>
       </item>
     
       <item>
@@ -1037,8 +1037,8 @@ fileChooserParams.getAcceptTypes()[0].equals(&amp;quot;image/*&amp;quot;)
 &lt;p&gt;总结一下，在WebView的JS调用系统相机的关键是重写WebChromeClient的特定方法来实现的。&lt;/p&gt;
 </description>
         <pubDate>Sat, 29 Jun 2019 04:20:12 +0800</pubDate>
-        <link>http://longlinht.github.io//operate-camera-in-webview</link>
-        <guid isPermaLink="true">http://longlinht.github.io//operate-camera-in-webview</guid>
+        <link>http://localhost:4000//operate-camera-in-webview</link>
+        <guid isPermaLink="true">http://localhost:4000//operate-camera-in-webview</guid>
       </item>
     
       <item>
@@ -1160,8 +1160,8 @@ UDP）之间增加了二进制分帧层&lt;/p&gt;&lt;/li&gt;
 &lt;p&gt;以上就是我们在支持HTTP/2过程中的一些调研结果和实际工作中的经验总结。&lt;/p&gt;
 </description>
         <pubDate>Wed, 05 Jun 2019 04:20:12 +0800</pubDate>
-        <link>http://longlinht.github.io//upgrade-to-http2</link>
-        <guid isPermaLink="true">http://longlinht.github.io//upgrade-to-http2</guid>
+        <link>http://localhost:4000//upgrade-to-http2</link>
+        <guid isPermaLink="true">http://localhost:4000//upgrade-to-http2</guid>
       </item>
     
       <item>
@@ -1234,8 +1234,8 @@ public List&amp;lt;InetAddress&amp;gt; lookup(String hostname) throws UnknownHos
 &lt;p&gt;经过这样的优化以后，&lt;code&gt;UnknownHostException&lt;/code&gt;在请求失败中的比重和请求的总失败率大幅下降，验证了我们这个技术方案的合理性，可以说网络连通性大大提高，再次回顾这个方案，突然发现它其实一个通用的解决方案，虽然我们这次解决的是海外，如中东地区的连通性问题，其实这个方案完全可以移植到国内，只要将Google HttpDNS换成国内的HttpDNS即可，整体的DNS流程可以不做任何改动即可成为一个完整的App DNS解决方案。&lt;/p&gt;
 </description>
         <pubDate>Wed, 29 May 2019 04:20:12 +0800</pubDate>
-        <link>http://longlinht.github.io//connectivity-in-android</link>
-        <guid isPermaLink="true">http://longlinht.github.io//connectivity-in-android</guid>
+        <link>http://localhost:4000//connectivity-in-android</link>
+        <guid isPermaLink="true">http://localhost:4000//connectivity-in-android</guid>
       </item>
     
   </channel>

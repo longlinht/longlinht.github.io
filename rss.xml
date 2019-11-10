@@ -8,7 +8,19 @@
     <title>与机器，人，神共舞</title>
     <link>http://longlinht.github.io/</link>
     <description>编程，读书，思考，旅行，与机器对话，与人交谈，对神发问，探索，体验人生美丽的风景</description>
-    <pubDate>Sat, 21 Sep 2019 02:30:12 +0800</pubDate>
+    <pubDate>Sun, 22 Sep 2019 02:30:12 +0800</pubDate>
+    <item>
+      <title>测试插入图片</title>
+      <link>http://longlinht.github.io//test</link>
+      <description>测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试
+测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试
+测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试
+测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试
+
+</description>
+      <pubDate>Sun, 22 Sep 2019 02:30:12 +0800</pubDate>
+      <dc:date>2019-09-22T02:30:12+08:00</dc:date>
+    </item>
     <item>
       <title>修复VideoView引起的内存泄露小计</title>
       <link>http://longlinht.github.io//fix-video-view-leak</link>
@@ -545,6 +557,6 @@ update UI when we finish something in separated thread. This is a basic problem,
       <pubDate>Wed, 03 Nov 2010 02:30:12 +0800</pubDate>
       <dc:date>2010-11-03T02:30:12+08:00</dc:date>
     </item>
-    <dc:date>2019-09-21T02:30:12+08:00</dc:date>
+    <dc:date>2019-09-22T02:30:12+08:00</dc:date>
   </channel>
 </rss>

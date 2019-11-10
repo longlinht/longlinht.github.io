@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 
     <!-- [[! Page Meta ]] -->
-    <title>修复VideoView引起的内存泄露小计</title>
+    <title>测试插入图片</title>
     <meta name="description" content="与机器，人，神共舞 - 编程，读书，思考，旅行，与机器对话，与人交谈，对神发问，探索，体验人生美丽的风景" />
 
     <meta name="HandheldFriendly" content="True" />
@@ -96,10 +96,10 @@
     <article class="post tag-machine">
 
         <header class="post-header">
-            <h1 class="post-title">修复VideoView引起的内存泄露小计</h1>
+            <h1 class="post-title">测试插入图片</h1>
             <section class="post-meta">
             <!-- <a href='/'>Tao He</a> -->
-            <time class="post-date" datetime="2019-09-21">21 Sep 2019</time>
+            <time class="post-date" datetime="2019-09-22">22 Sep 2019</time>
                 <!-- [[tags prefix=" on "]] -->
                  
                 on 
@@ -114,57 +114,12 @@
 
         <section class="post-content">
             
-            <p>最近写了非常简单的新手引导视频页面，逻辑很简单，就是新手用户在第一次使用App时可以点击引导视频入口，然后进入一个视频播放页面，为了快速实现功能，就直接使用了VideoView，从需求开发到交付也都没什么问题，需求上线后我打开LeakCanary，想观察下最近有没有新增的内存泄露，竟然发现这个视频页面竟然泄露了。排查了一圈也没有发现有什么会阻止Activity销毁。但是LeakCanary打出了引用链，发现和VideoView有关，通过Google发现，竟然是VideoView自身的bug！这种情况也不是第一次遇见，那也得解决啊，所以开始想办法。</p>
+            <p>测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试
+测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试
+测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试
+测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试</p>
 
-<p>首先显明确是谁导致了Activity的销毁，通过查看VideoView的源码，发现罪魁祸首是AudioManager，它可能会长期持有Context(即泄露的Activity)。很明显是因为生命周期不一致导致的泄露，因此最先想到的就是在创建VideoView时不要传Activity的Context，传给它ApplicationContext。当然了，在布局中创建的VideoView传入的就是Activity的Context，所以需要用代码动态创建:</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">mVideoView = new VideoView(getApplicationContext());
-RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(
-        RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-
-layoutParams.addRule(RelativeLayout.CENTER_IN_PARENT);
-mContainer.addView(mVideoView, layoutParams);
-</code></pre></div>
-<p>这样修改后还是会有内存泄露，只是引用链变了，需要在Activity的onDestroy回调中做一些处理</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">@Override
-protected void onDestroy() {
-  super.onDestroy();
-
-  if (mVideoView != null) {
-      mVideoView.stopPlayback();
-      mVideoView.setOnCompletionListener(null);
-      mVideoView.setOnPreparedListener(null);
-      mVideoView.setOnErrorListener(null);
-      mVideoView = null;
-  }
-
-  if (mContainer != null) {
-      mContainer.removeAllViews();
-  }
-</code></pre></div>
-<p>以上解决办法需要注意三点：</p>
-
-<ul>
-<li>给VideoView设置的Listener都要分别置空，否则仍然会泄露</li>
-<li>VideoView的父容器要删掉VideoView，光置空VideoView不够</li>
-<li>需设置VideoView的OnErrorListener且返回true，防止弹出弹窗使用ApplicationContext导致崩溃 </li>
-</ul>
-
-<p>传递ApplicationContext还有人提出另一种方法，但是我test发现没有效果，这种方法我也贴出来:</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">// Override Activity的attachBaseContext的行为
-@Override
-protected void attachBaseContext(Context newBase) {
-    super.attachBaseContext(new ContextWrapper(newBase){
-        @Override
-        public Object getSystemService(String name) {
-            if(Context.AUDIO_SERVICE.equals(name)){
-                return getApplicationContext().getSystemService(name);
-            }
-            return super.getSystemService(name);
-        }
-    });
-}
-</code></pre></div>
-<p>去规避系统API的bug真是很烦人的一件事，既不优雅，也不安全！</p>
+<p><a href="//"><img src="//images/404.jpg" alt="Constructocat by https://github.com/jasoncostello" style="width: 400px;"/></a></p>
 
 
         </section>
@@ -196,15 +151,15 @@ protected void attachBaseContext(Context newBase) {
 
             <section class="share">
                 <h4>Share this post</h4>
-                <a class="icon-twitter" href="http://twitter.com/share?text=修复VideoView引起的内存泄露小计&amp;url=http://longlinht.github.io//fix-video-view-leak"
+                <a class="icon-twitter" href="http://twitter.com/share?text=测试插入图片&amp;url=http://longlinht.github.io//test"
                     onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
                     <span class="hidden">Twitter</span>
                 </a>
-                <a class="icon-facebook" href="https://www.facebook.com/sharer/sharer.php?u=http://longlinht.github.io//fix-video-view-leak"
+                <a class="icon-facebook" href="https://www.facebook.com/sharer/sharer.php?u=http://longlinht.github.io//test"
                     onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
                     <span class="hidden">Facebook</span>
                 </a>
-                <a class="icon-google-plus" href="https://plus.google.com/share?url=http://longlinht.github.io//fix-video-view-leak"
+                <a class="icon-google-plus" href="https://plus.google.com/share?url=http://longlinht.github.io//test"
                    onclick="window.open(this.href, 'google-plus-share', 'width=490,height=530');return false;">
                     <span class="hidden">Google+</span>
                 </a>
@@ -247,20 +202,13 @@ protected void attachBaseContext(Context newBase) {
 
     <!-- [[! next_post ]] -->
     
-        <a class="read-next-story no-cover" href="http://longlinht.github.io//test">
-            <section class="post">
-                <h2>测试插入图片</h2>
-                <p>测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试 测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试 测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试 测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试 [<img src="{{ site.baseurl }}/images/404.jpg" alt="Constructocat by https://github.com/jasoncostello" style="width: 400px;"/>]({{ site.baseurl }}/)...</p>
-            </section>
-        </a>
-    
     <!-- [[! /next_post ]] -->
     <!-- [[! prev_post ]] -->
     
-        <a class="read-next-story prev no-cover" href="http://longlinht.github.io//serializable-vs-parcelable">
+        <a class="read-next-story prev no-cover" href="http://longlinht.github.io//fix-video-view-leak">
             <section class="post">
-                <h2>Parcelable vs Serializable</h2>
-                <p><p>在实际的Android开发中Serializable和Parcelable我们都会用到，只是需要区分使用场景。刚开始遇到这两个接口的时候比较疑惑，貌似都是用来做序列化的，虽然能分得清什么时候用哪个，但是对这两个接口并没有清晰的认识，要是冷不丁的问我这俩有什么区别，可能还无法清晰的界定和阐述。因此有必要用一篇文章来彻底捋清这些东西。</p> <h3>相同点</h3> <p>相同点其实很明显，主要有如下两点:</p> <ul> <li><p>都可以序列化反序列化</p></li> <li><p>都可以通过Intent传递</p></li> </ul> <h3>区别</h3> <ul> <li><p>Serializable是Java API，Parcelable是Android SDK API，设计目的不同。Serializable是一个通用的序列化机制，通过将文件保存到本地文件、网络流等实现便数据的传递，这种数据传递不仅可以在单个程序中进行，也可以在两个不同的程序中进行；Parcelable是Android SDK API,为了在同个程序的不同组件之间和不同程序（AIDL）之间高效的传输数据，是通过IBinder通信的消息的载体。从设计目的上可以看出Parcelable就是为了Android高效传输数据而生的。</p></li>...</p>
+                <h2>修复VideoView引起的内存泄露小计</h2>
+                <p><p>最近写了非常简单的新手引导视频页面，逻辑很简单，就是新手用户在第一次使用App时可以点击引导视频入口，然后进入一个视频播放页面，为了快速实现功能，就直接使用了VideoView，从需求开发到交付也都没什么问题，需求上线后我打开LeakCanary，想观察下最近有没有新增的内存泄露，竟然发现这个视频页面竟然泄露了。排查了一圈也没有发现有什么会阻止Activity销毁。但是LeakCanary打出了引用链，发现和VideoView有关，通过Google发现，竟然是VideoView自身的bug！这种情况也不是第一次遇见，那也得解决啊，所以开始想办法。</p> <p>首先显明确是谁导致了Activity的销毁，通过查看VideoView的源码，发现罪魁祸首是AudioManager，它可能会长期持有Context(即泄露的Activity)。很明显是因为生命周期不一致导致的泄露，因此最先想到的就是在创建VideoView时不要传Activity的Context，传给它ApplicationContext。当然了，在布局中创建的VideoView传入的就是Activity的Context，所以需要用代码动态创建:</p> <div class="highlight"><pre><code class="language-text" data-lang="text">mVideoView = new VideoView(getApplicationContext()); RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams( RelativeLayout.LayoutParams.MATCH_PARENT,...</p>
             </section>
         </a>
     

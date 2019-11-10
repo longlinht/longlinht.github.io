@@ -7,17 +7,6 @@
     <atom:link href="http://longlinht.github.io//feed.xml" rel="self" type="application/rss+xml" />
     
       <item>
-        <title>测试插入图片</title>
-        <description>&lt;p&gt;测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试&lt;/p&gt;
-
-&lt;p&gt;[&lt;img src=&quot;//images/404.jpg&quot; /&gt;]&lt;/p&gt;
-</description>
-        <pubDate>Sun, 22 Sep 2019 02:30:12 +0800</pubDate>
-        <link>http://longlinht.github.io//test</link>
-        <guid isPermaLink="true">http://longlinht.github.io//test</guid>
-      </item>
-    
-      <item>
         <title>修复VideoView引起的内存泄露小计</title>
         <description>&lt;p&gt;最近写了非常简单的新手引导视频页面，逻辑很简单，就是新手用户在第一次使用App时可以点击引导视频入口，然后进入一个视频播放页面，为了快速实现功能，就直接使用了VideoView，从需求开发到交付也都没什么问题，需求上线后我打开LeakCanary，想观察下最近有没有新增的内存泄露，竟然发现这个视频页面竟然泄露了。排查了一圈也没有发现有什么会阻止Activity销毁。但是LeakCanary打出了引用链，发现和VideoView有关，通过Google发现，竟然是VideoView自身的bug！这种情况也不是第一次遇见，那也得解决啊，所以开始想办法。&lt;/p&gt;
 
@@ -1102,6 +1091,250 @@ public List&amp;lt;InetAddress&amp;gt; lookup(String hostname) throws UnknownHos
         <pubDate>Wed, 29 May 2019 04:20:12 +0800</pubDate>
         <link>http://longlinht.github.io//connectivity-in-android</link>
         <guid isPermaLink="true">http://longlinht.github.io//connectivity-in-android</guid>
+      </item>
+    
+      <item>
+        <title>三星折叠屏适配小计</title>
+        <description>&lt;p&gt;三星要在近期发布折叠屏手机，消息一出，我们就得抓紧做适配，也没有什么现成的经验作参考，尤其令人头疼的是还没有真机供我们测试。没办法，兵来将挡，水来土掩，进过一周多的调研和开发，终于做完了大部分App页面的适配工作，也因为做这个适配的过程踩了很多坑，特写下这篇小记。&lt;/p&gt;
+
+&lt;p&gt;在我们开始做适配前，首先要解决没有真机可做测试的问题，无法验证适配的效果，还好三星也想到了这个问题，在官网提供了一个模拟器应用，Foldable Emulator， 通过这个模拟器App可以在Fold和Unfold模式之间自由切换，验证适配效果。当我们适配工作结束后在真机上测试时发现，这个模拟器的仿真度极高，基本没有出现和真机上效果有出入的地方。&lt;/p&gt;
+
+&lt;p&gt;在解决了没有真机的问题之后，我们就开始着手真正的适配工作。首先遇到的问题就是折叠屏手机需要在Fold和Unfold之间频繁切换，而这种切换的效果和横竖屏切换是一样的，默认都会导致Activity重建，而Activity重建又会导致一系列的连锁反应，如需要恢复大量数据、重新建立网络连接或执行其他密集操作，因此在适配前就需要规划哪些页面(Activity)需要重建，哪些不需要重建，所以需要按Activity是否重建这两种情况来分析切屏的后果和应对方法。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;重建Activity&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;因配置变更而引起的完全重启可能会给用户留下应用运行缓慢的体验。 此外，依靠系统通过onSaveInstanceState() 回调保存的 Bundle，可能无法完全恢复 Activity 状态，因为它并非设计用于携带大型对象（例如位图），而且其中的数据必须先序列化，再进行反序列化，这可能会消耗大量内存并使得配置变更速度缓慢。 在这种情况下，如果 Activity 因配置变更而重启，则可通过保留 Fragment 来减轻重新初始化 Activity 的负担。当 Android 系统因配置变更而关闭 Activity 时，不会销毁已标记为要保留的 Activity 的片段。 可以将此类片段添加到 Activity 以保留有状态的对象。
+要在运行时配置变更期间将有状态的对象保留在片段中，请执行以下操作：&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;扩展 Fragment 类并声明对有状态对象的引用&lt;/li&gt;
+&lt;li&gt;在创建片段后调用 setRetainInstance(boolean)&lt;/li&gt;
+&lt;li&gt;将片段添加到 Activity&lt;/li&gt;
+&lt;li&gt;重启 Activity 后，使用 FragmentManager 检索片段&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;例如，按如下方式定义片段：&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;public class RetainedFragment extends Fragment {
+
+    // 想要保存的数据
+    private MyDataObject data;
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        // 保存这个fragment
+        setRetainInstance(true);
+    }
+    public void setData(MyDataObject data) {
+        this.data = data;
+    }
+
+    public MyDataObject getData() {
+        return data;
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;然后，使用 &lt;code&gt;FragmentManager&lt;/code&gt; 将片段添加到 &lt;code&gt;Activity&lt;/code&gt;。在运行时配置变更期间再次启动 &lt;code&gt;Activity&lt;/code&gt; 时，可以获得片段中的数据对象。 例如，按如下方式定义 Activity：&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;public class MyActivity extends Activity {
+    private RetainedFragment retainedFragment;
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.main);
+        // 在activity重启后，获取保留的fragment
+        FragmentManager fm = getFragmentManager();
+        retainedFragment = (RetainedFragment) fm.findFragmentByTag(“data”);
+        // 首次创建
+        if (retainedFragment == null) {
+            // 添加fragment
+            retainedFragment = new RetainedFragment();
+            fm.beginTransaction().add(retainedFragment, “data”).commit();
+            // 从网络获取data
+            retainedFragment.setData(loadMyData());
+        }
+        // retainedFragment.getData()获取的数据可用
+        ...
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        // store the data in the fragment
+        retainedFragment.setData(collectMyLoadedData());
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;onCreate() 添加了一个片段或恢复了对它的引用。此外，onCreate() 还将有状态的对象存储在片段实例内部。&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;尽管Fragment内部可以存储任何对象，但是切勿传递与 Activity 绑定的对象，例如，Drawable、Adapter、View 或其他任何与 Context 关联的对象。否则，它将泄漏原始 Activity 实例的所有视图和资源。&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;ul&gt;
+&lt;li&gt;不重建Activity&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;如果想不重新启动的情况下处理配置更改，则需要在清单中添加一个android：configChanges属性，例如：&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;&amp;lt;activity
+    android:name=&amp;quot;......CMVideoPlayerActivity&amp;quot;
+    android:configChanges=&amp;quot;screenSize|smallestScreenSize|screenLayout&amp;quot;
+/&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;需要手动更新视图布局并在onConfigurationChaged（）中重新加载资源&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;@Override
+public void onConfigurationChanged(Configuration newConfig) {
+   super.onConfigurationChanged(newConfig);
+   if ((newConfig.screenLayout &amp;amp; Configuration.SCREENLAYOUT_LONG_MASK) == Configuration.SCREENLAYOUT_LONG_YES) {
+
+   }
+   if ((newConfig.screenLayout &amp;amp; Configuration.SCREENLAYOUT_LONG_MASK ) == Configuration.SCREENLAYOUT_LONG_NO) {
+
+   }
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;在遵循上述基本原则以后，就要应对实际的适配问题了，整个适配的工作主要涉及以下几个问题的解决:&lt;/p&gt;
+
+&lt;h4&gt;检测设备是否可折叠,当前是Fold状态还是Unfold，并且能够在切屏时通知到需要对切屏事件作出处理的页面&lt;/h4&gt;
+
+&lt;p&gt;为了统一解决这个问题，设计了一个单例类来统一管理&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;public class FoldObserable extends Observable {
+
+    public static final int SCREEN_LARGE_WIDTH = 1536;
+
+    public static final int SCREEN_LARGE = 0;
+    public static final int SCREEN_SMALL = 1;
+
+    private static class SINGLE {
+        public static FoldObserable INSTANCE = new FoldObserable();
+    }
+
+    private FoldObserable() {
+        String model = android.os.Build.MODEL;
+        if (model.contains(&amp;quot;SM-F9000&amp;quot;)) {
+            canFlod = true;
+            if (isLargeScreen()) {
+                screenType = SCREEN_LARGE;
+            } else {
+                screenType = SCREEN_SMALL;
+            }
+        }
+    }
+    //大屏无statusbar 小屏有statusbar，根据此来判断是是否减bar
+    private int screenType;
+    private boolean canFlod;
+
+    public static FoldObserable getInstance() {
+        return SINGLE.INSTANCE;
+    }
+
+    public void setScreenType(int screenType) {
+        this.screenType = screenType;
+        setChanged();
+        notifyObservers();
+    }
+
+    public int getScreenType() {
+        return screenType;
+    }
+
+    /**
+     * 是否是折叠屏
+     * @return
+     */
+    public boolean getCanFlod() {
+        return canFlod;
+    }
+
+    private boolean isLargeScreen() {
+        WindowManager wm = (WindowManager) BloodEyeApplication.getInstance().getSystemService(Context.WINDOW_SERVICE);
+        Display display = wm.getDefaultDisplay();
+        Point pp = new Point();
+        display.getSize(pp);
+        return pp.x == FoldObserable.SCREEN_LARGE_WIDTH;
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;因为要通过这个单例还通知需要响应切屏事件的页面，所以需要在App的所有Activity基类的onConfigurationChanged中调用setScreenType来通知所有的观察者，这些观察者就是需要相应切屏事件的Activigty和Fragment。代码如下:&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;@Override
+public void onConfigurationChanged(Configuration newConfig) {
+    super.onConfigurationChanged(newConfig);
+    if (FoldObserable.getInstance().getCanFlod()) {
+        UiProcessTask.updateScreenSize();
+        boolean isLargeScreen = isLargeScreen();
+        if (isLargeScreen) {
+            FoldObserable.getInstance().setScreenType(FoldObserable.SCREEN_LARGE);
+        } else {
+            FoldObserable.getInstance().setScreenType(FoldObserable.SCREEN_SMALL);
+        }
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;将需要响应切屏的页面注册为观察者:&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;@Override
+public void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    FoldObserable.getInstance().addObserver(this);
+}
+
+@Override
+public void onDestroy() {
+  super.onDestroy();
+  FoldObserable.getInstance().deleteObserver(this);
+}
+
+// 处理切屏事件
+@Override
+public void update(Observable o, Object arg) {
+  if (o instanceof FoldObserable) {
+      mAdapter.notifyDataSetChanged();
+  }
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h4&gt;处理实际的可能因为各种原因导致的适配问题&lt;/h4&gt;
+
+&lt;p&gt;经过模拟器的测试发现App种有很多页面在Fold和Unfold切换后出现适配问题，总结起来有如下几种情况:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;代码中为了提高测量和绘制View的性能，缓存了屏幕的宽度，导致一些用了屏幕宽度的地方使用了切换前的屏幕宽度的旧值，导致宽度适配错误。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;解决方法：在屏幕切换的时候更新缓存&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;有些没有重建的页面，RecyclerView的Adapter在Fold和Unfold切换以后没有重新回调onBindView，导致Item的大小适配错误。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;解决方法: 在屏幕切换时手动调用Adapter的notifyDataSetChanged()去刷新列表&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;布局xml文件中写死了一些控件的宽度，导致适配问题&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;解决方法：尽量不要使用写死的值，推荐使用match_parent + margin或padding来应对这种情况&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;在切屏时未能及时更新与界面宽高相关的全局变量&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;解决办法: 在Application的onConfigurationChanged中更新相关变量&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;public static void updateScreenSize() {
+
+}
+
+
+// 在Application中调用
+@Override
+public void onConfigurationChanged(Configuration newConfig) {
+    super.onConfigurationChanged(newConfig);
+    updateScreenSize();
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;在适配的过程中具体的问题可能都不一样，但是都跑不出这几类，只要抓住本质，一般都能得到很好的解决。比较麻烦的适配工作可算搞完了，第二天就得到三星跳票的消息，也是服气！&lt;/p&gt;
+</description>
+        <pubDate>Wed, 10 Apr 2019 04:20:12 +0800</pubDate>
+        <link>http://longlinht.github.io//sumsung-foldable-adapt</link>
+        <guid isPermaLink="true">http://longlinht.github.io//sumsung-foldable-adapt</guid>
       </item>
     
   </channel>

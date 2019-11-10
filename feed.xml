@@ -7,45 +7,6 @@
     <atom:link href="http://longlinht.github.io//feed.xml" rel="self" type="application/rss+xml" />
     
       <item>
-        <title>最简LeakCanary原理解析</title>
-        <description>&lt;p&gt;LeakCanary现在几乎成了Android开发过程中的一个标配，使用起来非常简单，能够帮助开发者发现和规避大部分的内存泄露问题。虽然大部分的开发者都或多或少，或深或浅的接触过LeakCanary，说起来是比较熟悉的一个第三方框架了，但是谈到LeakCanary的原理可能就会陌生很多。虽然网上也有非常多的讲解LeakCanary的文章，但是很多博文要么陷入无止境的代码细节中，要么就泛泛而谈，都不能很清楚的将LeakCanary的原理讲清楚。这篇文章尽力规避前两种文章的问题，用最小的篇幅把LeakCanary的原理讲清楚。&lt;/p&gt;
-
-&lt;h4&gt;LeakCanary到底是怎么工作的?&lt;/h4&gt;
-
-&lt;p&gt;LeakCanary能够准确，及时地检测到内存泄露，有以下几个关键点&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;检测保留的实例&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;LeakCanary能够工作的基石是一个叫做ObjectWatcher的库，它hook了Android中Activity和Fragment的生命周期，能够自动检测到Activity和Fragment的销毁和将要被GC，这些被检测到的Activity和Fragment的实例被传给了&lt;code&gt;ObjectWatcher&lt;/code&gt;，&lt;code&gt;ObjectWatcher&lt;/code&gt;以WeakReference持有他们。如果这些WeakReference在5秒后或者一次GC周期以后还没有被清理，那么LeakCanary认为这些实例被保留了，没有被回收，泄露发生了。检测没有被回收的实例是LeakCanary能够工作起来的基石，也是后续处理的基础，这一点非常重要。&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;Dump 堆&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;这一步需要对检测到的泄露进行处理，当然也不是检测到一个实例就会触发dump，而是有一个阈值，当达到一定数量实例的泄露后就会触发LeakCanary将Java堆内存dump到&lt;code&gt;.hprof&lt;/code&gt;文件中去，当然了，这个文件存储在Android文件系统中。这个触发dump的阈值是如何确定的呢？如果App还可见，那这个阈值默认是5，如果App不可见，阈值默认是1。&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;分析Java 堆&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;LeakCanary使用&lt;code&gt;Shark&lt;/code&gt;来分析&lt;code&gt;.hprof&lt;/code&gt;文件，找出阻止实例被回收的引用链:leak trace.其实leak trace的另一个名字是GC Root到被引用实例的最短强引用路径。一旦leak trace确定了，LeakCanary会根据内置的对Android的知识库来推断出leak trace上哪个实例泄露了。&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;Leak分组&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;LeakCanary使用泄露的状态信息，将引用链缩小为可能引起泄露的子引用链，并且在界面上显示出来，也就是我们在LeakCanary界面上看到的信息。有的泄露可能不相关，但是引用链相同，也会被认为是同一个引用链，所以泄露会根据相同的子引用链分组。&lt;/p&gt;
-
-&lt;p&gt;以上就是LeakCanary基本原理的关键点，相信也是最简单的对LeakCanary原理的描述了吧!&lt;/p&gt;
-</description>
-        <pubDate>Mon, 11 Nov 2019 04:54:12 +0800</pubDate>
-        <link>http://longlinht.github.io//most-simple-leakcanary-principle</link>
-        <guid isPermaLink="true">http://longlinht.github.io//most-simple-leakcanary-principle</guid>
-      </item>
-    
-      <item>
         <title>ImageSpan的定制使用</title>
         <description>&lt;p&gt;最近在做一个具体业务需求时，为了实现UI设计的要求，需要实现在同一段文字中，有一段文字是需要有形状的背景色，有一段文字中还有网络图片的插入，如果要达到这两个要求，简单的使用SpannableStringBuilder肯定是达不到要求的，虽然SpannableStringBuilder可以设置背景色，但是并不能绘制形状，说白了就是只能设置颜色，不能设置文字的背景图片。想要在文字中插入图片，可以直接使用ImageSpan，但是ImageSpan并不能加载网络图片。因此这种简单的使用方式都是行不通的，需要考虑去定制ImageSpan实现我们特殊的要求。&lt;/p&gt;
 
@@ -1201,6 +1162,80 @@ UDP）之间增加了二进制分帧层&lt;/p&gt;&lt;/li&gt;
         <pubDate>Wed, 05 Jun 2019 04:20:12 +0800</pubDate>
         <link>http://longlinht.github.io//upgrade-to-http2</link>
         <guid isPermaLink="true">http://longlinht.github.io//upgrade-to-http2</guid>
+      </item>
+    
+      <item>
+        <title>优化App网络连通性问题</title>
+        <description>&lt;p&gt;最近遇到一个棘手的问题，我们开发的一款App在中东那边出现大量的&lt;code&gt;UnknownHostException&lt;/code&gt;, 导致App在中东那边体验很糟，很快这个问题就被抛给了我们技术优化组，我和另外一名同事就开始定位问题的原因并且试图提出一个可行的解决方案。一般理解，出现&lt;code&gt;UnkownHostException&lt;/code&gt;就是DNS失败了，在我们开始解决这个问题的时候，App的网络库已逐渐开始使用OkHttp，我们想到自定义DNS过程，在系统DNS失败的情况下再尝试其他DNS方式，降低&lt;code&gt;UnknownHostException&lt;/code&gt;出现的频率，优化App网络连通性。
+为了实现我们的技术方案，我们针对OkHttp的DNS做了如下几件事:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;创建OkHttpClient时自定义DNS&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;OkHttpClient.Builder builder = new OkHttpClient.Builder()
+    // 实现OKHttp DNS接口, 改变默认的DNS行为
+    .dns(OkHttpDns.getInstance())
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;上面的OkHttpDns须实现Dns接口&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;实现自定义DNS&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;目前我们的设计是使用责任链模式实现四层DNS的lookup: &lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;Local Cache --&amp;gt; System DNS --&amp;gt; GA --&amp;gt; Google DNS
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;其中第一层是本地DNS缓存(Local Cache)，整个缓存只是内存缓存，DNS过程开始时，先去本地缓存找，如果在缓存中没有命中，就走系统DNS， 系统DNS如果也失败，整个链条就继续往下，到GA，到Google DNS，如果到Google DNS还没有解析成功，仍旧抛出&lt;code&gt;UnknownHostException&lt;/code&gt;，DNS过程失败。基本的代码逻辑如下:&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;private OkHttpDns() {
+
+  //使用责任链模式实现四层DNS的lookup: Local Cache --&amp;gt; System DNS --&amp;gt; GA --&amp;gt; Google DNS
+  mDnsChain = new CacheDnsHandler();
+
+  SystemDnsHandler okhttp = new SystemDnsHandler();
+  GADnsHandler ga = new GADnsHandler();
+  GoogleHttpDnsHandler google = new GoogleHttpDnsHandler();
+
+  mDnsChain.setTarget(okhttp);
+  okhttp.setTarget(ga);
+  ga.setTarget(google);
+}
+
+@Override
+public List&amp;lt;InetAddress&amp;gt; lookup(String hostname) throws UnknownHostException {
+  // IP直连的情况,直接返回
+  if (InetAddressValidator.isIPAddress(hostname)) {
+      return Arrays.asList(InetAddress.getAllByName(hostname));
+  }
+
+  List&amp;lt;InetAddress&amp;gt; allDNSResult = new ArrayList&amp;lt;&amp;gt;();
+  List&amp;lt;InetAddress&amp;gt; list = mDnsChain.lookup(hostname, allDNSResult);
+
+  if (list == null) {
+
+      // DNS完全失败后,清空黑名单,删除local cache相应的条目
+      IPStatusCache.getInstance().clear();
+
+      if (allDNSResult.isEmpty()) {
+          throw new UnknownHostException(&amp;quot;Broken system behaviour for dns lookup of &amp;quot; + hostname);
+      } else {
+          return allDNSResult;
+      }
+  }
+  return list;
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;添加黑名单机制，进一步优化DNS
+一次连接成功后缓存DNS结果，host+ip为key，IPStatus为value，连接失败后会更新DNS缓存的失败次数，超过5次则认为进入了黑名单，在每次DNS完全失败后清空本地DNS缓存，防止所有的缓存都进入黑名单，缓存失效。&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;处理IP直连的情况
+这种情况的处理很简单，检查传入的host是不是ip，如果是就直接返回。&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;经过这样的优化以后，&lt;code&gt;UnknownHostException&lt;/code&gt;在请求失败中的比重和请求的总失败率大幅下降，验证了我们这个技术方案的合理性，可以说网络连通性大大提高，再次回顾这个方案，突然发现它其实一个通用的解决方案，虽然我们这次解决的是海外，如中东地区的连通性问题，其实这个方案完全可以移植到国内，只要将Google HttpDNS换成国内的HttpDNS即可，整体的DNS流程可以不做任何改动即可成为一个完整的App DNS解决方案。&lt;/p&gt;
+</description>
+        <pubDate>Wed, 29 May 2019 04:20:12 +0800</pubDate>
+        <link>http://longlinht.github.io//connectivity-in-android</link>
+        <guid isPermaLink="true">http://longlinht.github.io//connectivity-in-android</guid>
       </item>
     
   </channel>

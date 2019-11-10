@@ -8,7 +8,16 @@
     <title>与机器，人，神共舞</title>
     <link>http://longlinht.github.io/</link>
     <description>编程，读书，思考，旅行，与机器对话，与人交谈，对神发问，探索，体验人生美丽的风景</description>
-    <pubDate>Sat, 19 Oct 2019 04:54:12 +0800</pubDate>
+    <pubDate>Mon, 11 Nov 2019 04:54:12 +0800</pubDate>
+    <item>
+      <title>最简LeakCanary原理解析</title>
+      <link>http://longlinht.github.io//most-simple-leakcanary-principle</link>
+      <description>LeakCanary现在几乎成了Android开发过程中的一个标配，使用起来非常简单，能够帮助开发者发现和规避大部分的内存泄露问题。虽然大部分的开发者都或多或少，或深或浅的接触过LeakCanary，说起来是比较熟悉的一个第三方框架了，但是谈到LeakCanary的原理可能就会陌生很多。虽然网上也有非常多的讲解LeakCanary的文章，但是很多博文要么陷入无止境的代码细节中，要么就泛泛而谈，都不能很清楚的将LeakCanary的原理讲清楚。这篇文章尽力规避前两种文章的问题，用最小的篇幅把LeakCanary的原理讲清楚。
+
+</description>
+      <pubDate>Mon, 11 Nov 2019 04:54:12 +0800</pubDate>
+      <dc:date>2019-11-11T04:54:12+08:00</dc:date>
+    </item>
     <item>
       <title>ImageSpan的定制使用</title>
       <link>http://longlinht.github.io//custom-image-span</link>
@@ -554,6 +563,6 @@ update UI when we finish something in separated thread. This is a basic problem,
       <pubDate>Wed, 03 Nov 2010 02:30:12 +0800</pubDate>
       <dc:date>2010-11-03T02:30:12+08:00</dc:date>
     </item>
-    <dc:date>2019-10-19T04:54:12+08:00</dc:date>
+    <dc:date>2019-11-11T04:54:12+08:00</dc:date>
   </channel>
 </rss>

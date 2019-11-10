@@ -12,6 +12,48 @@
    <atom:link href="rss" rel="self" type="application/rss+xml" />
    
 	<item>
+	  <title>最简LeakCanary原理解析</title>
+	  <link>//most-simple-leakcanary-principle</link>
+	  <author>Tao He</author>
+	  <pubDate>2019-11-11T04:54:12+08:00</pubDate>
+	  <guid>//most-simple-leakcanary-principle</guid>
+	  <description><![CDATA[
+	     <p>LeakCanary现在几乎成了Android开发过程中的一个标配，使用起来非常简单，能够帮助开发者发现和规避大部分的内存泄露问题。虽然大部分的开发者都或多或少，或深或浅的接触过LeakCanary，说起来是比较熟悉的一个第三方框架了，但是谈到LeakCanary的原理可能就会陌生很多。虽然网上也有非常多的讲解LeakCanary的文章，但是很多博文要么陷入无止境的代码细节中，要么就泛泛而谈，都不能很清楚的将LeakCanary的原理讲清楚。这篇文章尽力规避前两种文章的问题，用最小的篇幅把LeakCanary的原理讲清楚。</p>
+
+<h4>LeakCanary到底是怎么工作的?</h4>
+
+<p>LeakCanary能够准确，及时地检测到内存泄露，有以下几个关键点</p>
+
+<ul>
+<li>检测保留的实例</li>
+</ul>
+
+<p>LeakCanary能够工作的基石是一个叫做ObjectWatcher的库，它hook了Android中Activity和Fragment的生命周期，能够自动检测到Activity和Fragment的销毁和将要被GC，这些被检测到的Activity和Fragment的实例被传给了<code>ObjectWatcher</code>，<code>ObjectWatcher</code>以WeakReference持有他们。如果这些WeakReference在5秒后或者一次GC周期以后还没有被清理，那么LeakCanary认为这些实例被保留了，没有被回收，泄露发生了。检测没有被回收的实例是LeakCanary能够工作起来的基石，也是后续处理的基础，这一点非常重要。</p>
+
+<ul>
+<li>Dump 堆</li>
+</ul>
+
+<p>这一步需要对检测到的泄露进行处理，当然也不是检测到一个实例就会触发dump，而是有一个阈值，当达到一定数量实例的泄露后就会触发LeakCanary将Java堆内存dump到<code>.hprof</code>文件中去，当然了，这个文件存储在Android文件系统中。这个触发dump的阈值是如何确定的呢？如果App还可见，那这个阈值默认是5，如果App不可见，阈值默认是1。</p>
+
+<ul>
+<li>分析Java 堆</li>
+</ul>
+
+<p>LeakCanary使用<code>Shark</code>来分析<code>.hprof</code>文件，找出阻止实例被回收的引用链:leak trace.其实leak trace的另一个名字是GC Root到被引用实例的最短强引用路径。一旦leak trace确定了，LeakCanary会根据内置的对Android的知识库来推断出leak trace上哪个实例泄露了。</p>
+
+<ul>
+<li>Leak分组</li>
+</ul>
+
+<p>LeakCanary使用泄露的状态信息，将引用链缩小为可能引起泄露的子引用链，并且在界面上显示出来，也就是我们在LeakCanary界面上看到的信息。有的泄露可能不相关，但是引用链相同，也会被认为是同一个引用链，所以泄露会根据相同的子引用链分组。</p>
+
+<p>以上就是LeakCanary基本原理的关键点，相信也是最简单的对LeakCanary原理的描述了吧!</p>
+
+	  ]]></description>
+	</item>
+
+	<item>
 	  <title>ImageSpan的定制使用</title>
 	  <link>//custom-image-span</link>
 	  <author>Tao He</author>
@@ -1192,83 +1234,6 @@ UDP）之间增加了二进制分帧层</p></li>
 </ul>
 
 <p>以上就是我们在支持HTTP/2过程中的一些调研结果和实际工作中的经验总结。</p>
-
-	  ]]></description>
-	</item>
-
-	<item>
-	  <title>优化App网络连通性问题</title>
-	  <link>//connectivity-in-android</link>
-	  <author>Tao He</author>
-	  <pubDate>2019-05-29T04:20:12+08:00</pubDate>
-	  <guid>//connectivity-in-android</guid>
-	  <description><![CDATA[
-	     <p>最近遇到一个棘手的问题，我们开发的一款App在中东那边出现大量的<code>UnknownHostException</code>, 导致App在中东那边体验很糟，很快这个问题就被抛给了我们技术优化组，我和另外一名同事就开始定位问题的原因并且试图提出一个可行的解决方案。一般理解，出现<code>UnkownHostException</code>就是DNS失败了，在我们开始解决这个问题的时候，App的网络库已逐渐开始使用OkHttp，我们想到自定义DNS过程，在系统DNS失败的情况下再尝试其他DNS方式，降低<code>UnknownHostException</code>出现的频率，优化App网络连通性。
-为了实现我们的技术方案，我们针对OkHttp的DNS做了如下几件事:</p>
-
-<ul>
-<li>创建OkHttpClient时自定义DNS</li>
-</ul>
-<div class="highlight"><pre><code class="language-text" data-lang="text">OkHttpClient.Builder builder = new OkHttpClient.Builder()
-    // 实现OKHttp DNS接口, 改变默认的DNS行为
-    .dns(OkHttpDns.getInstance())
-</code></pre></div>
-<p>上面的OkHttpDns须实现Dns接口</p>
-
-<ul>
-<li>实现自定义DNS</li>
-</ul>
-
-<p>目前我们的设计是使用责任链模式实现四层DNS的lookup: </p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">Local Cache --&gt; System DNS --&gt; GA --&gt; Google DNS
-</code></pre></div>
-<p>其中第一层是本地DNS缓存(Local Cache)，整个缓存只是内存缓存，DNS过程开始时，先去本地缓存找，如果在缓存中没有命中，就走系统DNS， 系统DNS如果也失败，整个链条就继续往下，到GA，到Google DNS，如果到Google DNS还没有解析成功，仍旧抛出<code>UnknownHostException</code>，DNS过程失败。基本的代码逻辑如下:</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">private OkHttpDns() {
-
-  //使用责任链模式实现四层DNS的lookup: Local Cache --&gt; System DNS --&gt; GA --&gt; Google DNS
-  mDnsChain = new CacheDnsHandler();
-
-  SystemDnsHandler okhttp = new SystemDnsHandler();
-  GADnsHandler ga = new GADnsHandler();
-  GoogleHttpDnsHandler google = new GoogleHttpDnsHandler();
-
-  mDnsChain.setTarget(okhttp);
-  okhttp.setTarget(ga);
-  ga.setTarget(google);
-}
-
-@Override
-public List&lt;InetAddress&gt; lookup(String hostname) throws UnknownHostException {
-  // IP直连的情况,直接返回
-  if (InetAddressValidator.isIPAddress(hostname)) {
-      return Arrays.asList(InetAddress.getAllByName(hostname));
-  }
-
-  List&lt;InetAddress&gt; allDNSResult = new ArrayList&lt;&gt;();
-  List&lt;InetAddress&gt; list = mDnsChain.lookup(hostname, allDNSResult);
-
-  if (list == null) {
-
-      // DNS完全失败后,清空黑名单,删除local cache相应的条目
-      IPStatusCache.getInstance().clear();
-
-      if (allDNSResult.isEmpty()) {
-          throw new UnknownHostException(&quot;Broken system behaviour for dns lookup of &quot; + hostname);
-      } else {
-          return allDNSResult;
-      }
-  }
-  return list;
-}
-</code></pre></div>
-<ul>
-<li><p>添加黑名单机制，进一步优化DNS
-一次连接成功后缓存DNS结果，host+ip为key，IPStatus为value，连接失败后会更新DNS缓存的失败次数，超过5次则认为进入了黑名单，在每次DNS完全失败后清空本地DNS缓存，防止所有的缓存都进入黑名单，缓存失效。</p></li>
-<li><p>处理IP直连的情况
-这种情况的处理很简单，检查传入的host是不是ip，如果是就直接返回。</p></li>
-</ul>
-
-<p>经过这样的优化以后，<code>UnknownHostException</code>在请求失败中的比重和请求的总失败率大幅下降，验证了我们这个技术方案的合理性，可以说网络连通性大大提高，再次回顾这个方案，突然发现它其实一个通用的解决方案，虽然我们这次解决的是海外，如中东地区的连通性问题，其实这个方案完全可以移植到国内，只要将Google HttpDNS换成国内的HttpDNS即可，整体的DNS流程可以不做任何改动即可成为一个完整的App DNS解决方案。</p>
 
 	  ]]></description>
 	</item>

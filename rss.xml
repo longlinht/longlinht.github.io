@@ -184,6 +184,15 @@
       <dc:date>2018-11-26T04:20:12+08:00</dc:date>
     </item>
     <item>
+      <title>用枚举注解替代枚举</title>
+      <link>http://longlinht.github.io//replace-enums-with-enumerated-annotations</link>
+      <description>在日常的Java开发中使用enum是很稀松平常的事，但是在Android应用的开发中使用enum时事情就没那么简单了。以下是Google官方给出的建议:
+
+</description>
+      <pubDate>Wed, 17 Oct 2018 04:20:12 +0800</pubDate>
+      <dc:date>2018-10-17T04:20:12+08:00</dc:date>
+    </item>
+    <item>
       <title>读《决断力》</title>
       <link>http://longlinht.github.io//read-make-a-better-decision</link>
       <description>今年可能年景不好，运气不佳，再加上自己昏招频频，感觉今年非常不顺，也发现自己很不会决策，没有很好的决断力。于是就想找一本决断力相关的书来看看，找了一下，还果然有这个书名的一本书，而且豆瓣上评价不错，于是发送到Kindle，趁着地铁通勤的时间很快看完了，因为是中文版，看起来比较快，感觉正本书还是比较平实的，很多决策的方法可操作性强，因为这次使用了Kindle自带的标注功能，在看的过程中随手标注了重点和一些精彩的段落，整本书看完后，对标注和笔记做了整理，现记录出来：

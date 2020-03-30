@@ -81,6 +81,18 @@
 	  ]]></description>
 	</item>
 
+	<item>
+	  <title>随笔段落</title>
+	  <link>//normal-write-paragraph</link>
+	  <author>Tao He</author>
+	  <pubDate>2011-07-25T02:30:12+08:00</pubDate>
+	  <guid>//normal-write-paragraph</guid>
+	  <description><![CDATA[
+	     <p><img src="/assets/images/2011-07-24.png" /></p>
+
+	  ]]></description>
+	</item>
+
 
 </channel>
 </rss>

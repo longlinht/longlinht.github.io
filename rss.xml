@@ -8,7 +8,16 @@
     <title>与机器，人，神共舞</title>
     <link>http://longlinht.github.io/</link>
     <description>编程，读书，思考，旅行，与机器对话，与人交谈，对神发问，探索，体验人生美丽的风景</description>
-    <pubDate>Mon, 11 Nov 2019 04:54:12 +0800</pubDate>
+    <pubDate>Wed, 22 Apr 2020 04:54:12 +0800</pubDate>
+    <item>
+      <title>解决TextView中emoji被截断的问题</title>
+      <link>http://longlinht.github.io//fix-textview-emoji-problem</link>
+      <description>理论上TextView中包含emoji显示是没有问题的，问题出在如果TextView限制了宽度，且末尾包含了emoji字符，但是又不够显示，则会出现乱码的情况，原因是单个emoji由两个字符组成，TextView在截断字符时按单个字符截断，所以就有emoji的两个字符被截断后显示的情况，TexView自然无法正常显示。网上有很多解决办法，思路都是通过改变TextView的行为来规避这个问题，但都不理想，在一些特殊情况下仍然有问题。后来我改变了思路，不对TextView做任何更改，而是通过保证emoji本身不被截断来解决问题。
+
+</description>
+      <pubDate>Wed, 22 Apr 2020 04:54:12 +0800</pubDate>
+      <dc:date>2020-04-22T04:54:12+08:00</dc:date>
+    </item>
     <item>
       <title>最简LeakCanary原理解析</title>
       <link>http://longlinht.github.io//most-simple-leakcanary-principle</link>
@@ -590,6 +599,6 @@ update UI when we finish something in separated thread. This is a basic problem,
       <pubDate>Wed, 03 Nov 2010 02:30:12 +0800</pubDate>
       <dc:date>2010-11-03T02:30:12+08:00</dc:date>
     </item>
-    <dc:date>2019-11-11T04:54:12+08:00</dc:date>
+    <dc:date>2020-04-22T04:54:12+08:00</dc:date>
   </channel>
 </rss>

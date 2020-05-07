@@ -8,7 +8,16 @@
     <title>与机器，人，神共舞</title>
     <link>http://longlinht.github.io/</link>
     <description>编程，读书，思考，旅行，与机器对话，与人交谈，对神发问，探索，体验人生美丽的风景</description>
-    <pubDate>Wed, 22 Apr 2020 04:54:12 +0800</pubDate>
+    <pubDate>Fri, 08 May 2020 04:54:12 +0800</pubDate>
+    <item>
+      <title>为什么学习设计模式</title>
+      <link>http://longlinht.github.io//why-learn-design-pattern</link>
+      <description>设计模式，可能是每一个程序员都绕不过去的话题，有人认为特别重要，有人对其嗤之以鼻，也有人并不是很确定它的重要性。为什么要学习设计模式，这么多年以来其实我也没又看到一个很好的回答，前一阵在Youtube看到一个讲Android系统开发的youtuber的主页，发现他的一篇很短的文章探讨了这个问题，看完后感觉醍醐灌顶，因此有冲动翻译并记录下其主要的观点。
+
+</description>
+      <pubDate>Fri, 08 May 2020 04:54:12 +0800</pubDate>
+      <dc:date>2020-05-08T04:54:12+08:00</dc:date>
+    </item>
     <item>
       <title>解决TextView中emoji被截断的问题</title>
       <link>http://longlinht.github.io//fix-textview-emoji-problem</link>
@@ -599,6 +608,6 @@ update UI when we finish something in separated thread. This is a basic problem,
       <pubDate>Wed, 03 Nov 2010 02:30:12 +0800</pubDate>
       <dc:date>2010-11-03T02:30:12+08:00</dc:date>
     </item>
-    <dc:date>2020-04-22T04:54:12+08:00</dc:date>
+    <dc:date>2020-05-08T04:54:12+08:00</dc:date>
   </channel>
 </rss>

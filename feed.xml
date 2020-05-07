@@ -7,6 +7,27 @@
     <atom:link href="http://longlinht.github.io//feed.xml" rel="self" type="application/rss+xml" />
     
       <item>
+        <title>为什么学习设计模式</title>
+        <description>&lt;p&gt;设计模式，可能是每一个程序员都绕不过去的话题，有人认为特别重要，有人对其嗤之以鼻，也有人并不是很确定它的重要性。为什么要学习设计模式，这么多年以来其实我也没又看到一个很好的回答，前一阵在Youtube看到一个讲Android系统开发的youtuber的主页，发现他的一篇很短的文章探讨了这个问题，看完后感觉醍醐灌顶，因此有冲动翻译并记录下其主要的观点。&lt;/p&gt;
+
+&lt;p&gt;编程如下棋，一个新手刚开始接触时，首先要了解能够正常下棋的要素，如棋子，棋盘，要熟悉棋子移动，吃子，将军的规则，等这些都了解了以后，就可以正常下棋了，虽然可能下的不好，但是渐渐的，开始领会一些这个游戏的基本规律，如何占取优势，如何使用策略，通过一次次的棋局，逐步的识别出一些可能是很愚蠢的错误，并在以后的棋局中尽量避免，一个新手也可能下棋下的越来越好。&lt;/p&gt;
+
+&lt;p&gt;但是一个人如果想成为下棋的大师，却需要学习大师们所下过的棋局。隐藏在这些棋局中的模式必须通过理解，记忆，反复应用，最后成为一个人的本能。这些模式可能是成千上万的，开放模式更是繁多，以至于有很多关于其变化的书籍。 游戏中模式和结束模式也很普遍，作为大师们必须熟悉它们。&lt;/p&gt;
+
+&lt;p&gt;编程也一样，首先学习规则，学习算法，数据结构，熟悉了这些后就可以编程了，尽管所写的代码会比较蹩脚。之后，开始学习软件设计的原则，如结构化编程，模块化编程，面向对象编程，如高内聚低耦合的重要性，如信息隐藏和依赖管理。等这些都学习了以后，一个人要想成为真正的编程大师，还是需要学习大师们的设计，并深入这些设计，举一反三，这些模式必须被理解，记忆，反复应用，最后成为一个人的本能。&lt;/p&gt;
+
+&lt;p&gt;这篇文章本来就很短，但是我依旧要提炼出本文要划重点的句子:&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;一个人要想成为真正的编程大师，还是需要学习大师们的设计，并深入这些设计，举一反三，这些模式必须被理解，记忆，反复应用，最后成为一个人的本能。&lt;/p&gt;
+&lt;/blockquote&gt;
+</description>
+        <pubDate>Fri, 08 May 2020 04:54:12 +0800</pubDate>
+        <link>http://longlinht.github.io//why-learn-design-pattern</link>
+        <guid isPermaLink="true">http://longlinht.github.io//why-learn-design-pattern</guid>
+      </item>
+    
+      <item>
         <title>解决TextView中emoji被截断的问题</title>
         <description>&lt;p&gt;理论上TextView中包含emoji显示是没有问题的，问题出在如果TextView限制了宽度，且末尾包含了emoji字符，但是又不够显示，则会出现乱码的情况，原因是单个emoji由两个字符组成，TextView在截断字符时按单个字符截断，所以就有emoji的两个字符被截断后显示的情况，TexView自然无法正常显示。网上有很多解决办法，思路都是通过改变TextView的行为来规避这个问题，但都不理想，在一些特殊情况下仍然有问题。后来我改变了思路，不对TextView做任何更改，而是通过保证emoji本身不被截断来解决问题。&lt;/p&gt;
 
@@ -1148,87 +1169,6 @@ public static void waitToFinish() {
         <pubDate>Wed, 10 Jul 2019 04:20:12 +0800</pubDate>
         <link>http://longlinht.github.io//fix-anr-related-sharedpreferences</link>
         <guid isPermaLink="true">http://longlinht.github.io//fix-anr-related-sharedpreferences</guid>
-      </item>
-    
-      <item>
-        <title>在WebView中调用Android相机拍照录像</title>
-        <description>&lt;p&gt;最近公司App需要以H5的方式接入七鱼客服，根据他们的开发文档接入起来还是很容易，成本很低。理论上如果以native的方式接入的话，用户体验会更好，但是接入后增加的包体积是无法接受的，遂改用H5的方式，整个接入过程还算顺利，有相对详尽的接入文档和demo，只是在最后接入完成后，因为沟通不畅，忽略了客服聊天界面在Android上无法发图片和发视频的问题。同一份html，iOS就是正常的，Android上就死活没反应。后来才恍然大悟，WebView是不支持JS去直接操作Android相机的，必须通过回调到native，由native完成照片的选择，拍摄和录像后将数据返回给JS才能完成一次照片和视频的发送。清楚了问题所在，就需要实现WebView的标准接口来实现这个回调到native的功能，在代码实现前，需要先厘清一些WebView的基本概念和原理。&lt;/p&gt;
-
-&lt;p&gt;像发送图片和视频这样的操作，涉及到了定制WebView的一些默认行为，理论上如果要做定制，就需要了解WebSettings、JavaScriptInterface、WebViewClient以及WebChromeClient，一般而言，通过配置WebSettings，使用JavasScriptInterface，重写WebViewClient和WebChromeClient对象的相关方法，就可以实现一些我们想要的行为。发图片和发视频就是通过重写WebChromeClient对象的几个方法来实现的。&lt;/p&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;// 重写WebChromeClient的特定方法来实现图片和视频的发送
-mWebView.setWebChromeClient(new WebChromeClient() {
-    // For Android &amp;gt;=3.0
-    public void openFileChooser(ValueCallback&amp;lt;Uri&amp;gt; uploadMsg, String acceptType) {
-        if(acceptType.equals(&amp;quot;image/*&amp;quot;)) {
-            if (mUploadMessage != null) {
-                mUploadMessage.onReceiveValue(null);
-                return;
-            }
-            mUploadMessage = uploadMsg;
-            selectImage();
-        } else {
-            onReceiveValue();
-        }
-    }
-
-    // For Android &amp;lt; 3.0
-    public void openFileChooser(ValueCallback&amp;lt;Uri&amp;gt; uploadMsg) {
-        openFileChooser(uploadMsg, &amp;quot;image/*&amp;quot;);
-    }
-
-    // For Android  &amp;gt;= 4.1.1
-    public void openFileChooser(ValueCallback&amp;lt;Uri&amp;gt; uploadMsg, String acceptType, String capture) {
-        openFileChooser(uploadMsg, acceptType);
-    }
-
-    // For Android  &amp;gt;= 5.0
-    @Override
-    @SuppressLint(&amp;quot;NewApi&amp;quot;)
-    public boolean onShowFileChooser(WebView webView, ValueCallback&amp;lt;Uri[]&amp;gt; filePathCallback, FileChooserParams fileChooserParams) {
-        if (fileChooserParams != null &amp;amp;&amp;amp; fileChooserParams.getAcceptTypes() != null
-                &amp;amp;&amp;amp; fileChooserParams.getAcceptTypes().length &amp;gt; 0 &amp;amp;&amp;amp; fileChooserParams.getAcceptTypes()[0].equals(&amp;quot;image/*&amp;quot;)) {
-            if (mUploadMessageArray != null) {
-                mUploadMessageArray.onReceiveValue(null);
-            }
-            mUploadMessageArray = filePathCallback;
-            selectImage();
-        } else if (fileChooserParams != null &amp;amp;&amp;amp; fileChooserParams.getAcceptTypes() != null
-                &amp;amp;&amp;amp; fileChooserParams.getAcceptTypes().length &amp;gt; 0 &amp;amp;&amp;amp; fileChooserParams.getAcceptTypes()[0].equals(&amp;quot;video/*&amp;quot;)){
-
-            if (mUploadMessageArray != null) {
-                mUploadMessageArray.onReceiveValue(null);
-            }
-            mUploadMessageArray = filePathCallback;
-            PermissionUtil.requestPermission(QiyuWebViewActivity.this, PermissionUtil.PERMISSIONS_CAMERA_RECORD_AUDIO, PermissionUtil.REQUEST_CAMERA_RECORD_AUDIO);
-        } else {
-            onReceiveValue();
-        }
-        return true;
-    }
-});
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;p&gt;需要注意的是，这几个回调方法，需要针对不同Android版本分别做处理，在onShowFileChooser方法中需要区分是图片还是视频，并且无论是在相册中选取还是拍摄照片，录像都需要申请相应的权限，这个一定不能少，网上很多的demo都是没有权限申请环节的，代码根本不可用。&lt;/p&gt;
-
-&lt;p&gt;在正确的回调到onShowFileChooser后，就要区分图片和视频的情况下走正常的选取，拍照，录像的流程，并且把获取到的图片，视频数据回传给JS调用，这样就完成了桥接调用。虽然现在看起来挺简单的，但是还是有些点容易成为坑点，让人走很多弯路:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;需要的配置一定要设定&lt;/li&gt;
-&lt;/ul&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;mWebView.getSettings().setJavaScriptEnabled(true);
-mWebView.getSettings().setDomStorageEnabled(true);
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;p&gt;动态权限申请一定不能少&lt;/p&gt;&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;正确区分图片和视频&lt;/p&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;// &amp;quot;video/* 为视频&amp;quot;
-fileChooserParams.getAcceptTypes()[0].equals(&amp;quot;image/*&amp;quot;)
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;p&gt;总结一下，在WebView的JS调用系统相机的关键是重写WebChromeClient的特定方法来实现的。&lt;/p&gt;
-</description>
-        <pubDate>Sat, 29 Jun 2019 04:20:12 +0800</pubDate>
-        <link>http://longlinht.github.io//operate-camera-in-webview</link>
-        <guid isPermaLink="true">http://longlinht.github.io//operate-camera-in-webview</guid>
       </item>
     
   </channel>

@@ -8,7 +8,17 @@
     <title>与机器，人，神共舞</title>
     <link>http://longlinht.github.io/</link>
     <description>编程，读书，思考，旅行，与机器对话，与人交谈，对神发问，探索，体验人生美丽的风景</description>
-    <pubDate>Fri, 08 May 2020 04:54:12 +0800</pubDate>
+    <pubDate>Wed, 29 Jul 2020 04:54:12 +0800</pubDate>
+    <item>
+      <title>基于DrawerLayout实现直播抽屉</title>
+      <link>http://longlinht.github.io//implement-live-drawer</link>
+      <description>  直播间里右侧的滑出抽屉现在几乎成了主流直播的标配，无论是映客还是Bigo，都很早就上线了抽屉。我所在的这个产品最近也要上同样的功能，因此需要简单实现一个。
+  要实现一个简单的侧滑抽屉，最先想到的就是直接使用`DrawerLayout`，但是无法满足产品的一个手势要求: 在屏幕任何位置都可以调出和收起抽屉。`DrawerLayout` 的默认行为是只能从屏幕边缘调出。因此需要改变DrawerLayout的默认行为，使期能够从屏幕任何位置调出，这就需要通过反射修改drawerlayout的edgesize属性，因为drawerlayout还可以通过长按调出，我们的产品需求并不需要这个行为，因此也需要屏蔽掉，通过一个静态方法来统一实现：
+
+</description>
+      <pubDate>Wed, 29 Jul 2020 04:54:12 +0800</pubDate>
+      <dc:date>2020-07-29T04:54:12+08:00</dc:date>
+    </item>
     <item>
       <title>为什么学习设计模式</title>
       <link>http://longlinht.github.io//why-learn-design-pattern</link>
@@ -608,6 +618,6 @@ update UI when we finish something in separated thread. This is a basic problem,
       <pubDate>Wed, 03 Nov 2010 02:30:12 +0800</pubDate>
       <dc:date>2010-11-03T02:30:12+08:00</dc:date>
     </item>
-    <dc:date>2020-05-08T04:54:12+08:00</dc:date>
+    <dc:date>2020-07-29T04:54:12+08:00</dc:date>
   </channel>
 </rss>

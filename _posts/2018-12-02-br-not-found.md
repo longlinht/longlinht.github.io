@@ -1,7 +1,7 @@
 ---
 layout: post
 cover: false
-title: 解决闹人的can not found symbol BR问题
+title: 解决恼人的can not found symbol BR问题
 date:   2018-12-02 20:20:12
 tags: machine
 subclass: 'post tag-machine'

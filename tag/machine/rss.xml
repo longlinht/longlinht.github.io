@@ -18,7 +18,8 @@
 	  <pubDate>2020-09-03T04:54:12+08:00</pubDate>
 	  <guid>//static-method-in-kotlin</guid>
 	  <description><![CDATA[
-	     <p>先来看静态方法， 很遗憾，Kotlin中没有<code>static</code>关键字，需要将静态方法放在<code>companion object</code>中的代码块中，因此：</p>
+	     <p>最近开始尝试在现有的工程中使用Kotlin，刚开始使用时感觉语法简洁，代码量也少了很多，语法层面的防空，可以直接访问布局控件这些特性，都让人耳目一新，但是当我要定义静态方法和静态类时，不爽的体验一下子就上来了，所以通过此文来一探Kotlin&quot;静态&quot; 的究竟。
+  先来看静态方法， 很遗憾，Kotlin中没有<code>static</code>关键字，需要将静态方法放在<code>companion object</code>中的代码块中，因此：</p>
 <div class="highlight"><pre><code class="language-text" data-lang="text">class Foo {
   public static int a() { return 1; }
 }

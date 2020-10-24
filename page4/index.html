@@ -122,6 +122,32 @@
     
     <article class="post">
         <header class="post-header">
+            <h2 class="post-title"><a href="http://longlinht.github.io//connectivity-in-android">优化App网络连通性问题</a></h2>
+        </header>
+        <section class="post-excerpt">
+            
+                <p><p>最近遇到一个棘手的问题，我们开发的一款App在中东那边出现大量的<code>UnknownHostException</code>, 导致App在中东那边体验很糟，很快这个问题就被抛给了我们技术优化组，我和另外一名同事就开始定位问题的原因并且试图提出一个可行的解决方案。一般理解，出现<code>UnkownHostException</code>就是DNS失败了，在我们开始解决这个问题的时候，App的网络库已逐渐开始使用OkHttp，我们想到自定义DNS过程，在系统DNS失败的情况下再尝试其他DNS方式，降低<code>UnknownHostException</code>出现的频率，优化App网络连通性。 为了实现我们的技术方案，我们针对OkHttp的DNS做了如下几件事:</p> <ul> <li>创建OkHttpClient时自定义DNS</li> </ul> <div class="highlight"><pre><code class="language-text" data-lang="text">OkHttpClient.Builder builder = new OkHttpClient.Builder() // 实现OKHttp DNS接口, 改变默认的DNS行为 .dns(OkHttpDns.getInstance()) </code></pre></div> <p>上面的OkHttpDns须实现Dns接口</p> <ul> <li>实现自定义DNS</li> </ul> <p>目前我们的设计是使用责任链模式实现四层DNS的lookup: </p>... <a class="read-more" href="http://longlinht.github.io//connectivity-in-android">&raquo;</a></p>
+            
+        </section>
+        <footer class="post-meta">
+            <img class="author-thumb" src="/assets/images/casper.png" alt="Author image" nopin="nopin" />
+            <!-- author -->
+            <a href='/author/hetao'>Tao He</a>
+            <!-- [[tags prefix=" on "]] -->
+             
+                on 
+                
+                    
+                       <a href='/tag/machine'>Machine</a>
+                       
+                
+            
+            <time class="post-date" datetime="2019-05-29">29 May 2019</time>
+        </footer>
+    </article>
+    
+    <article class="post">
+        <header class="post-header">
             <h2 class="post-title"><a href="http://longlinht.github.io//sumsung-foldable-adapt">三星折叠屏适配小计</a></h2>
         </header>
         <section class="post-excerpt">
@@ -224,32 +250,6 @@
                 
             
             <time class="post-date" datetime="2018-12-05">05 Dec 2018</time>
-        </footer>
-    </article>
-    
-    <article class="post">
-        <header class="post-header">
-            <h2 class="post-title"><a href="http://longlinht.github.io//br-not-found">解决恼人的can not found symbol BR问题</a></h2>
-        </header>
-        <section class="post-excerpt">
-            
-                <p><p>最近公司研发的这个App是我从零到一搭建的，在框架搭建时分别使用了Databinding和Room，今天在做新需求时需要向Room中的实体类新添加一个字段，在写完了所有相关的逻辑后，build工程，所有自动生成的Databinding类都报错，build log中并没... <a class="read-more" href="http://longlinht.github.io//br-not-found">&raquo;</a></p>
-            
-        </section>
-        <footer class="post-meta">
-            <img class="author-thumb" src="/assets/images/casper.png" alt="Author image" nopin="nopin" />
-            <!-- author -->
-            <a href='/author/hetao'>Tao He</a>
-            <!-- [[tags prefix=" on "]] -->
-             
-                on 
-                
-                    
-                       <a href='/tag/machine'>Machine</a>
-                       
-                
-            
-            <time class="post-date" datetime="2018-12-03">03 Dec 2018</time>
         </footer>
     </article>
     

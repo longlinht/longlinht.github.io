@@ -8,7 +8,17 @@
     <title>与机器，人，神共舞</title>
     <link>http://longlinht.github.io/</link>
     <description>编程，读书，思考，旅行，与机器对话，与人交谈，对神发问，探索，体验人生美丽的风景</description>
-    <pubDate>Thu, 03 Sep 2020 04:54:12 +0800</pubDate>
+    <pubDate>Sun, 25 Oct 2020 04:54:12 +0800</pubDate>
+    <item>
+      <title>读《未来简史》</title>
+      <link>http://longlinht.github.io//read-homo-deus</link>
+      <description>读《未来简史》一直都在我的读书计划中，最近终于可以安排上了，本来的计划是先把《人类简史》的英文版先读一遍，再接着读三部曲中的第二部，这样可以像看电影似的接上，因为赫拉利的书观点性很强，《人类简史》的中文版我已经读过一遍，所以不太想再把那些观点再嚼一遍，于是直接在Kindle上开始看《未来简史》，通勤中，飞机上，睡觉前，半个月时间，不知不觉看完了。如同《人类简史》一样，是一本让人手不释卷的好书。看完后，总有一种不吐不快的感觉，因此有了此文。
+英文版的封面与中文版不同，醒目的红色大字&quot;Homo Deus&quot;是主标题，而中文版的主标题却是英文版的副标题&quot;A Brief History of Tomorrow&quot;,正好主副标题颠倒，对&quot;Homo Deus&quot;的翻译是&quot;从智人到智神&quot;, 看完全书，感觉还是翻译为&quot;从智人到智神&quot;更为贴切，&quot;未来简史&quot;感觉是病句，当然认为前者更贴切的原因不仅仅是咬文嚼字，而是这个标题才是整本书的主旨——未来会有一个新的脱胎于智人的种族（Homo Deus）诞生，或取代智人的地位，或导致智人灭绝。Homo Deus延续了《人来简史》的风格，或者说延续了赫拉利的写史风格, 宏大的叙事，精炼的语句，几乎是我读过的所有历史类，社会类书籍里面独有的一种，开篇就有惊人之语，至少在我读过的书里面没有遇到类似的论调:
+
+</description>
+      <pubDate>Sun, 25 Oct 2020 04:54:12 +0800</pubDate>
+      <dc:date>2020-10-25T04:54:12+08:00</dc:date>
+    </item>
     <item>
       <title>Kotlin中的&quot;静态&quot; 方法和域</title>
       <link>http://longlinht.github.io//static-method-in-kotlin</link>
@@ -628,6 +638,6 @@ update UI when we finish something in separated thread. This is a basic problem,
       <pubDate>Wed, 03 Nov 2010 02:30:12 +0800</pubDate>
       <dc:date>2010-11-03T02:30:12+08:00</dc:date>
     </item>
-    <dc:date>2020-09-03T04:54:12+08:00</dc:date>
+    <dc:date>2020-10-25T04:54:12+08:00</dc:date>
   </channel>
 </rss>

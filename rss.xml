@@ -8,7 +8,16 @@
     <title>与机器，人，神共舞</title>
     <link>http://longlinht.github.io/</link>
     <description>编程，读书，思考，旅行，与机器对话，与人交谈，对神发问，探索，体验人生美丽的风景</description>
-    <pubDate>Wed, 29 Jul 2020 04:54:12 +0800</pubDate>
+    <pubDate>Thu, 03 Sep 2020 04:54:12 +0800</pubDate>
+    <item>
+      <title>Kotlin中的&quot;静态&quot; 方法和域</title>
+      <link>http://longlinht.github.io//static-method-in-kotlin</link>
+      <description>  先来看静态方法， 很遗憾，Kotlin中没有`static`关键字，需要将静态方法放在`companion object`中的代码块中，因此：
+
+</description>
+      <pubDate>Thu, 03 Sep 2020 04:54:12 +0800</pubDate>
+      <dc:date>2020-09-03T04:54:12+08:00</dc:date>
+    </item>
     <item>
       <title>基于DrawerLayout实现直播抽屉</title>
       <link>http://longlinht.github.io//implement-live-drawer</link>
@@ -618,6 +627,6 @@ update UI when we finish something in separated thread. This is a basic problem,
       <pubDate>Wed, 03 Nov 2010 02:30:12 +0800</pubDate>
       <dc:date>2010-11-03T02:30:12+08:00</dc:date>
     </item>
-    <dc:date>2020-07-29T04:54:12+08:00</dc:date>
+    <dc:date>2020-09-03T04:54:12+08:00</dc:date>
   </channel>
 </rss>

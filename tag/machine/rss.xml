@@ -12,6 +12,71 @@
    <atom:link href="rss" rel="self" type="application/rss+xml" />
    
 	<item>
+	  <title>Kotlin中的"静态" 方法和域</title>
+	  <link>//static-method-in-kotlin</link>
+	  <author>Tao He</author>
+	  <pubDate>2020-09-03T04:54:12+08:00</pubDate>
+	  <guid>//static-method-in-kotlin</guid>
+	  <description><![CDATA[
+	     <p>先来看静态方法， 很遗憾，Kotlin中没有<code>static</code>关键字，需要将静态方法放在<code>companion object</code>中的代码块中，因此：</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">class Foo {
+  public static int a() { return 1; }
+}
+</code></pre></div>
+<p>就变成了这样:</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">class Foo {
+  companion object {
+     fun a() : Int = 1
+  }
+}
+</code></pre></div>
+<p>可以在Kotlin代码中这样使用该类:</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">Foo.a();
+</code></pre></div>
+<p>在Java代码中:</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">Foo.Companion.a();
+</code></pre></div>
+<p>如果你不喜欢使用<code>Companion</code>, 你可以对该静态方法添加<code>@JvmStatic</code>注解:</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">class Foo {
+  companion object {
+    @JvmStatic
+    fun a() : Int = 1;
+  }
+}
+</code></pre></div>
+<p>也可以命名你的<code>companion</code>类:</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">class Foo {
+  companion object Blah {
+    fun a() : Int = 1;
+  }
+}
+</code></pre></div>
+<p>然后可以这样调用:</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">Foo.Blah.a() 
+</code></pre></div>
+<p>然后来看静态域， 比起静态方法，静态域的情况有所不同，虽然也可以这样定义:</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">class Foo {
+  companion object {
+    val MY_CONSTANT = &quot;MY_CONSTANT&quot;
+  }
+}
+</code></pre></div>
+<p>但是会自动为<code>MY_CONSTANT</code>生成getter和setter方法，相当于实例域访问，开销会比静态方法大，不推荐此种定义方法。可以这样定义:</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">object Foo {
+    const val MY_CONSTANT = &quot;MY_CONSTANT&quot;
+}
+</code></pre></div>
+<p>上面定义的object Foo可以全局访问:</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">Foo.MY_CONSTANT
+</code></pre></div>
+<p>而companion object中定义的<code>const var MY_CONSTANT</code>是不可以全局访问的。 当然了，静态域为了避免访问时的Companion，也可以在定义时添加<code>@StaticField</code>.</p>
+
+<p>到此Kotlin中<code>静态</code>相关的部分基本已经覆盖到了，个人觉得这个companion object不是什么好的设计，远没有Java的static关键字来的简洁和表达力。</p>
+
+	  ]]></description>
+	</item>
+
+	<item>
 	  <title>基于DrawerLayout实现直播抽屉</title>
 	  <link>//implement-live-drawer</link>
 	  <author>Tao He</author>
@@ -909,75 +974,6 @@ apply from: &#39;../../check.gradle&#39;
 
 <p>用了这么多工具，又是插件，又是检查器，又是注解，说以前道一万，这些都是辅助措施，要真正减少空指针，降低崩溃率，还是要通过编写高质量的代码来实现，上面提到的那个代码片段，实在不能容忍，肯定要喷，必须要改，共勉！</p>
 
-	  ]]></description>
-	</item>
-
-	<item>
-	  <title>在WebView中支持视频全屏</title>
-	  <link>//h5-video-fullscreen-in-webview</link>
-	  <author>Tao He</author>
-	  <pubDate>2019-07-11T04:20:12+08:00</pubDate>
-	  <guid>//h5-video-fullscreen-in-webview</guid>
-	  <description><![CDATA[
-	     <p>最近感觉和WebView杠上了，刚解决完在WebView中使用Android相机拍照和录像的问题，又遇到在WebView中视频无法全屏，和之前相机拍照和视频的问题一样，iOS和其他浏览器都没有问题，独WebView出错。通过网上查阅一些资料，最终顺利解决，虽不是什么难搞的东西，但是真要弄起来，也需要一些心力，所以通过此篇记录下整个过程。</p>
-
-<p>解决整个问题其实很程式化，先按部就班保证视频能够正常播放:</p>
-
-<ol>
-<li>在AndroidManifest.xml中声明hardwareAccelerate属性</li>
-</ol>
-<div class="highlight"><pre><code class="language-text" data-lang="text"> &lt;application android:hardwareAccelerated =&quot;true&quot;&gt;
-</code></pre></div>
-<ol>
-<li>在Activity中声明</li>
-</ol>
-<div class="highlight"><pre><code class="language-text" data-lang="text">&lt;activity android:hardwareAccelerated=&quot;true&quot; &gt;
-</code></pre></div>
-<ol>
-<li>在代码中设置</li>
-</ol>
-<div class="highlight"><pre><code class="language-text" data-lang="text">getWindow.setFlags(WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED,
-WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED);
-</code></pre></div>
-<p>然后来实现全屏, 而能够全屏的关键在于重写WebChromeClient的onShowCustomView()和onHideCustomView()方法, 在Activity中实现自定义的WebChromeClient，在onShowCustomView中横屏，隐藏WebView,并将得到的View添加到FrameLayout中显示。在onHideCustomView中隐藏View，显示WebView，并竖屏.</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">private View mCustomView;
-private WebChromeClient.CustomViewCallback mCustomViewCallback;
-
-@Override
-public void onShowCustomView(View view, WebChromeClient.CustomViewCallback callback) {
-    if (mCustomView != null) {
-        callback.onCustomViewHidden();
-        return;
-    }
-    mCustomView = view;
-    webViewContainer.addView(mCustomView);
-    mCustomViewCallback = callback;
-    mWebView.setVisibility(View.GONE);
-    mTitle.setVisibility(View.GONE);
-    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-}
-
-@Override
-public void onHideCustomView() {
-    mWebView.setVisibility(View.VISIBLE);
-    mTitle.setVisibility(View.VISIBLE);
-    if (mCustomView == null) {
-        return;
-    }
-    mCustomView.setVisibility(View.GONE);
-    webViewContainer.removeView(mCustomView);
-    mCustomViewCallback.onCustomViewHidden();
-    mCustomView = null;
-    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-}
-</code></pre></div>
-<p>代码中mCustomView和 mCustomViewCallback 需要保存下来，WebView的父容器在实现中也很重要。</p>
-
-<p>需要注意的问题</p>
-
-<p>如果H5工程师在html中使用了iframe, 那需要H5工程师配合在其中中加入一些属性才能对视频进行操作，</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">allowfullscreen=&quot;true&quot; webkitallowfullscreen=&quot;true&quot; mozallowfullscreen=&quot;true&quot;
-</code></pre></div>
 	  ]]></description>
 	</item>
 

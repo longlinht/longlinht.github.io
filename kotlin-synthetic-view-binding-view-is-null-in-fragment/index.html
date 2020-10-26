@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 
     <!-- [[! Page Meta ]] -->
-    <title>Kotlin中的"静态" 方法和域</title>
+    <title>Kotlin synthetic binding view is null in Fragment</title>
     <meta name="description" content="与机器，人，神共舞 - 编程，读书，思考，旅行，与机器对话，与人交谈，对神发问，探索，体验人生美丽的风景" />
 
     <meta name="HandheldFriendly" content="True" />
@@ -96,10 +96,10 @@
     <article class="post tag-machine">
 
         <header class="post-header">
-            <h1 class="post-title">Kotlin中的"静态" 方法和域</h1>
+            <h1 class="post-title">Kotlin synthetic binding view is null in Fragment</h1>
             <section class="post-meta">
             <!-- <a href='/'>Tao He</a> -->
-            <time class="post-date" datetime="2020-09-03">03 Sep 2020</time>
+            <time class="post-date" datetime="2020-09-09">09 Sep 2020</time>
                 <!-- [[tags prefix=" on "]] -->
                  
                 on 
@@ -114,61 +114,17 @@
 
         <section class="post-content">
             
-            <p>最近开始尝试在现有的工程中使用Kotlin，刚开始使用时感觉语法简洁，代码量也少了很多，语法层面的防空，可以直接访问布局控件这些特性，都让人耳目一新，但是当我要定义静态方法和静态类时，不爽的体验一下子就上来了，所以通过此文来一探Kotlin&quot;静态&quot; 的究竟。
-  先来看静态方法， 很遗憾，Kotlin中没有<code>static</code>关键字，需要将静态方法放在<code>companion object</code>中的代码块中，因此：</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">class Foo {
-  public static int a() { return 1; }
-}
-</code></pre></div>
-<p>就变成了这样:</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">class Foo {
-  companion object {
-     fun a() : Int = 1
-  }
-}
-</code></pre></div>
-<p>可以在Kotlin代码中这样使用该类:</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">Foo.a();
-</code></pre></div>
-<p>在Java代码中:</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">Foo.Companion.a();
-</code></pre></div>
-<p>如果你不喜欢使用<code>Companion</code>, 你可以对该静态方法添加<code>@JvmStatic</code>注解:</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">class Foo {
-  companion object {
-    @JvmStatic
-    fun a() : Int = 1;
-  }
-}
-</code></pre></div>
-<p>也可以命名你的<code>companion</code>类:</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">class Foo {
-  companion object Blah {
-    fun a() : Int = 1;
-  }
-}
-</code></pre></div>
-<p>然后可以这样调用:</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">Foo.Blah.a() 
-</code></pre></div>
-<p>然后来看静态域， 比起静态方法，静态域的情况有所不同，虽然也可以这样定义:</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">class Foo {
-  companion object {
-    val MY_CONSTANT = &quot;MY_CONSTANT&quot;
-  }
-}
-</code></pre></div>
-<p>但是会自动为<code>MY_CONSTANT</code>生成getter和setter方法，相当于实例域访问，开销会比静态方法大，不推荐此种定义方法。可以这样定义:</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">object Foo {
-    const val MY_CONSTANT = &quot;MY_CONSTANT&quot;
-}
-</code></pre></div>
-<p>上面定义的object Foo可以全局访问:</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">Foo.MY_CONSTANT
-</code></pre></div>
-<p>而companion object中定义的<code>const var MY_CONSTANT</code>是不可以全局访问的。 当然了，静态域为了避免访问时的Companion，也可以在定义时添加<code>@StaticField</code>.</p>
+            <p>Kotlin provide a handy and concise way to access views in xml layout from code, it works well, but When I create a subclass of <code>DialogFragment</code>, in its method <code>onCreateView</code>, I access synthetic binding view, it seems all is fine, but when run these code, app crash. In logcat, I got this <code>NullPointerException</code>:</p>
 
-<p>到此Kotlin中<code>静态</code>相关的部分基本已经覆盖到了，个人觉得这个companion object不是什么好的设计，远没有Java的static关键字来的简洁和表达力。</p>
+<blockquote>
+<p>Caused by: java.lang.NullPointerException: Attempt to invoke virtual method &#39;android.view.View android.view.View.findViewById(int)&#39; on a null object reference</p>
+</blockquote>
+
+<p>I&#39;m sure synthetic statement is imported and view id is right, it confused me a bit. So I Google Kotlin synthetic binding view related web pages, finally I found a solution:</p>
+
+<p>Just move accessing syntheic binding view statement from <code>onCreateView</code> to <code>onViewCreated</code>.</p>
+
+<p>The problem is that I am accessing it too soon, When I delay the chance to access view, all works well. Magic! But it’s nothing magical, if you decompile the bytecode (By going toTools -&gt; Kotlin -&gt; Show Kotlin Bytecode and then selecting Decompile in the pane) and take a look at the generated java class, you’ll see that all it does is call findViewById() for us. Although this is a simple problem, but it is useful to record it.</p>
 
 
         </section>
@@ -200,15 +156,15 @@
 
             <section class="share">
                 <h4>Share this post</h4>
-                <a class="icon-twitter" href="http://twitter.com/share?text=Kotlin中的"静态" 方法和域&amp;url=http://longlinht.github.io//static-method-in-kotlin"
+                <a class="icon-twitter" href="http://twitter.com/share?text=Kotlin synthetic binding view is null in Fragment&amp;url=http://longlinht.github.io//kotlin-synthetic-view-binding-view-is-null-in-fragment"
                     onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
                     <span class="hidden">Twitter</span>
                 </a>
-                <a class="icon-facebook" href="https://www.facebook.com/sharer/sharer.php?u=http://longlinht.github.io//static-method-in-kotlin"
+                <a class="icon-facebook" href="https://www.facebook.com/sharer/sharer.php?u=http://longlinht.github.io//kotlin-synthetic-view-binding-view-is-null-in-fragment"
                     onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
                     <span class="hidden">Facebook</span>
                 </a>
-                <a class="icon-google-plus" href="https://plus.google.com/share?url=http://longlinht.github.io//static-method-in-kotlin"
+                <a class="icon-google-plus" href="https://plus.google.com/share?url=http://longlinht.github.io//kotlin-synthetic-view-binding-view-is-null-in-fragment"
                    onclick="window.open(this.href, 'google-plus-share', 'width=490,height=530');return false;">
                     <span class="hidden">Google+</span>
                 </a>
@@ -251,18 +207,18 @@
 
     <!-- [[! next_post ]] -->
     
-        <a class="read-next-story no-cover" href="http://longlinht.github.io//kotlin-synthetic-view-binding-view-is-null-in-fragment">
+        <a class="read-next-story no-cover" href="http://longlinht.github.io//read-homo-deus">
             <section class="post">
-                <h2>Kotlin synthetic binding view is null in Fragment</h2>
+                <h2>读《未来简史》</h2>
             </section>
         </a>
     
     <!-- [[! /next_post ]] -->
     <!-- [[! prev_post ]] -->
     
-        <a class="read-next-story prev no-cover" href="http://longlinht.github.io//implement-live-drawer">
+        <a class="read-next-story prev no-cover" href="http://longlinht.github.io//static-method-in-kotlin">
             <section class="post">
-                <h2>基于DrawerLayout实现直播抽屉</h2>
+                <h2>Kotlin中的"静态" 方法和域</h2>
             </section>
         </a>
     

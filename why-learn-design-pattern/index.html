@@ -212,7 +212,6 @@
         <a class="read-next-story no-cover" href="http://longlinht.github.io//implement-live-drawer">
             <section class="post">
                 <h2>基于DrawerLayout实现直播抽屉</h2>
-                <p>直播间里右侧的滑出抽屉现在几乎成了主流直播的标配，无论是映客还是Bigo，都很早就上线了抽屉。我所在的这个产品最近也要上同样的功能，因此需要简单实现一个。 要实现一个简单的侧滑抽屉，最先想到的就是直接使用`DrawerLayout`，但是无法满足产品的一个手势要求: 在屏幕任何位置都可以调出和收起抽屉。`DrawerLayout` 的默认行为是只能从屏幕边缘调出。因此需要改变DrawerLayout的默认行为，使期能够从屏幕任何位置调出，这就需要通过反射修改drawerlayout的edgesize属性，因为drawerlayout还可以通过长按调出，我们的产品需求并不需要这个行为，因此也需要屏蔽掉，通过一个静态方法来统一实现： ``` public static void setDrawerLeftEdgeSize(DrawerLayout drawerLayout, float percent) { if (drawerLayout...</p>
             </section>
         </a>
     
@@ -222,7 +221,6 @@
         <a class="read-next-story prev no-cover" href="http://longlinht.github.io//fix-textview-emoji-problem">
             <section class="post">
                 <h2>解决TextView中emoji被截断的问题</h2>
-                <p><p>理论上TextView中包含emoji显示是没有问题的，问题出在如果TextView限制了宽度，且末尾包含了emoji字符，但是又不够显示，则会出现乱码的情况，原因是单个emoji由两个字符组成，TextView在截断字符时按单个字符截断，所以就有emoji的两个字符被截断后显示的情况，TexView自然无法正常显示。网上有很多解决办法，思路都是通过改变TextView的行为来规避这个问题，但都不理想，在一些特殊情况下仍然有问题。后来我改变了思路，不对TextView做任何更改，而是通过保证emoji本身不被截断来解决问题。</p> <p>考虑这样一个场景，直播间顶部主播区域的主播昵称，肯定是有字数限制的，如果昵称中包含emoji，如何保证emoji不被截断，并且不丧失在昵称过长后需要...的功能?</p> <p>代码如下:</p> <div class="highlight"><pre><code class="language-text" data-lang="text">private void setAnchorName(String nick) { if (TextUtils.isEmpty(nick)) { labelUserName.setText(&quot;&quot;);...</p>
             </section>
         </a>
     

@@ -336,7 +336,6 @@ Glide.with(this)
         <a class="read-next-story no-cover" href="http://longlinht.github.io//most-simple-leakcanary-principle">
             <section class="post">
                 <h2>最简LeakCanary原理解析</h2>
-                <p>LeakCanary现在几乎成了Android开发过程中的一个标配，使用起来非常简单，能够帮助开发者发现和规避大部分的内存泄露问题。虽然大部分的开发者都或多或少，或深或浅的接触过LeakCanary，说起来是比较熟悉的一个第三方框架了，但是谈到LeakCanary的原理可能就会陌生很多。虽然网上也有非常多的讲解LeakCanary的文章，但是很多博文要么陷入无止境的代码细节中，要么就泛泛而谈，都不能很清楚的将LeakCanary的原理讲清楚。这篇文章尽力规避前两种文章的问题，用最小的篇幅把LeakCanary的原理讲清楚。 #### LeakCanary到底是怎么工作的? LeakCanary能够准确，及时地检测到内存泄露，有以下几个关键点 * 检测保留的实例 LeakCanary能够工作的基石是一个叫做ObjectWatcher的库，它hook了Android中Activity和Fragment的生命周期，能够自动检测到Activity和Fragment的销毁和将要被GC，这些被检测到的Activity和Fragment的实例被传给了`ObjectWatcher`，`ObjectWatcher`以WeakReference持有他们。如果这些WeakReference在5秒后或者一次GC周期以后还没有被清理，那么LeakCanary认为这些实例被保留了，没有被回收，泄露发生了。检测没有被回收的实例是LeakCanary能够工作起来的基石，也是后续处理的基础，这一点非常重要。 * Dump 堆 这一步需要对检测到的泄露进行处理，当然也不是检测到一个实例就会触发dump，而是有一个阈值，当达到一定数量实例的泄露后就会触发LeakCanary将Java堆内存dump到`.hprof`文件中去，当然了，这个文件存储在Android文件系统中。这个触发dump的阈值是如何确定的呢？如果App还可见，那这个阈值默认是5，如果App不可见，阈值默认是1。 * 分析Java 堆 LeakCanary使用`Shark`来分析`.hprof`文件，找出阻止实例被回收的引用链:leak...</p>
             </section>
         </a>
     
@@ -346,7 +345,6 @@ Glide.with(this)
         <a class="read-next-story prev no-cover" href="http://longlinht.github.io//fix-video-view-leak">
             <section class="post">
                 <h2>修复VideoView引起的内存泄露小计</h2>
-                <p><p>最近写了非常简单的新手引导视频页面，逻辑很简单，就是新手用户在第一次使用App时可以点击引导视频入口，然后进入一个视频播放页面，为了快速实现功能，就直接使用了VideoView，从需求开发到交付也都没什么问题，需求上线后我打开LeakCanary，想观察下最近有没有新增的内存泄露，竟然发现这个视频页面竟然泄露了。排查了一圈也没有发现有什么会阻止Activity销毁。但是LeakCanary打出了引用链，发现和VideoView有关，通过Google发现，竟然是VideoView自身的bug！这种情况也不是第一次遇见，那也得解决啊，所以开始想办法。</p> <p>首先显明确是谁导致了Activity的销毁，通过查看VideoView的源码，发现罪魁祸首是AudioManager，它可能会长期持有Context(即泄露的Activity)。很明显是因为生命周期不一致导致的泄露，因此最先想到的就是在创建VideoView时不要传Activity的Context，传给它ApplicationContext。当然了，在布局中创建的VideoView传入的就是Activity的Context，所以需要用代码动态创建:</p> <div class="highlight"><pre><code class="language-text" data-lang="text">mVideoView = new VideoView(getApplicationContext()); RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams( RelativeLayout.LayoutParams.MATCH_PARENT,...</p>
             </section>
         </a>
     

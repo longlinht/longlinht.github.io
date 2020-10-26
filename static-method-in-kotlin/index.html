@@ -254,7 +254,6 @@
         <a class="read-next-story no-cover" href="http://longlinht.github.io//read-homo-deus">
             <section class="post">
                 <h2>读《未来简史》</h2>
-                <p>读《未来简史》一直都在我的读书计划中，最近终于可以安排上了，本来的计划是先把《人类简史》的英文版先读一遍，再接着读三部曲中的第二部，这样可以像看电影似的接上，因为赫拉利的书观点性很强，《人类简史》的中文版我已经读过一遍，所以不太想再把那些观点再嚼一遍，于是直接在Kindle上开始看《未来简史》，通勤中，飞机上，睡觉前，半个月时间，不知不觉看完了。如同《人类简史》一样，是一本让人手不释卷的好书。看完后，总有一种不吐不快的感觉，因此有了此文。 英文版的封面与中文版不同，醒目的红色大字"Homo Deus"是主标题，而中文版的主标题却是英文版的副标题"A Brief History of Tomorrow",正好主副标题颠倒，对"Homo Deus"的翻译是"从智人到智神", 看完全书，感觉还是翻译为"从智人到智神"更为贴切，"未来简史"感觉是病句，当然认为前者更贴切的原因不仅仅是咬文嚼字，而是这个标题才是整本书的主旨——未来会有一个新的脱胎于智人的种族（Homo Deus）诞生，或取代智人的地位，或导致智人灭绝。Homo Deus延续了《人来简史》的风格，或者说延续了赫拉利的写史风格, 宏大的叙事，精炼的语句，几乎是我读过的所有历史类，社会类书籍里面独有的一种，开篇就有惊人之语，至少在我读过的书里面没有遇到类似的论调: >For thousands of...</p>
             </section>
         </a>
     
@@ -264,7 +263,6 @@
         <a class="read-next-story prev no-cover" href="http://longlinht.github.io//implement-live-drawer">
             <section class="post">
                 <h2>基于DrawerLayout实现直播抽屉</h2>
-                <p><p>直播间里右侧的滑出抽屉现在几乎成了主流直播的标配，无论是映客还是Bigo，都很早就上线了抽屉。我所在的这个产品最近也要上同样的功能，因此需要简单实现一个。 要实现一个简单的侧滑抽屉，最先想到的就是直接使用<code>DrawerLayout</code>，但是无法满足产品的一个手势要求: 在屏幕任何位置都可以调出和收起抽屉。<code>DrawerLayout</code> 的默认行为是只能从屏幕边缘调出。因此需要改变DrawerLayout的默认行为，使期能够从屏幕任何位置调出，这就需要通过反射修改drawerlayout的edgesize属性，因为drawerlayout还可以通过长按调出，我们的产品需求并不需要这个行为，因此也需要屏蔽掉，通过一个静态方法来统一实现：</p> <div class="highlight"><pre><code class="language-text" data-lang="text">public static void setDrawerLeftEdgeSize(DrawerLayout drawerLayout, float percent) {...</p>
             </section>
         </a>
     

@@ -253,7 +253,6 @@ at dalvik.system.NativeStart.main(Native Method)
         <a class="read-next-story no-cover" href="http://longlinht.github.io//play-video-in-raw-folder">
             <section class="post">
                 <h2>使用VideoView实现视频开屏页</h2>
-                <p>今天PM提了一个视频开屏页的需求，需要在用户第一次使用时播放一个开屏视频，乍一看，挺简单一需求，但是也或多或少碰到了一些坑，也发现了Android资源编译的一个问题，本着研发之事无小事的原则，还是要记录下踩坑经验和发现的问题。整个实现过程一共两三个小时，逐步解决了以下问题: #### 视频全屏 看到这个问题的第一反应就是把`VideoView` 的宽高设置为`match_parent`, 并且保证父容器也是`match_parent` 根布局, 但是事实没那么简单，视频播放后并没有完全全屏，在我的开发机上视频底部有一条细细的白边，很明显视频没有完全全屏。后来又想到设置`MediaPlayer`的视频缩放模式: ``` mPlayer.setVideoScalingMode(MediaPlayer.VIDEO_SCALING_MODE_SCALE_TO_FIT_WITH_CROPPING); ``` 设置了两种模式以后都没有效果，这说明`VideoView`本身没有全屏，没有铺满整个屏幕，所以需要根据屏幕大小动态设置`VideoView`的尺寸，所以用自定义View实现。 自定义一个继承自`VideoView`的类来满足要求，具体实现如下: ``` public...</p>
             </section>
         </a>
     
@@ -263,7 +262,6 @@ at dalvik.system.NativeStart.main(Native Method)
         <a class="read-next-story prev no-cover" href="http://longlinht.github.io//replace-enums-with-enumerated-annotations">
             <section class="post">
                 <h2>用枚举注解替代枚举</h2>
-                <p><p>在日常的Java开发中使用enum是很稀松平常的事，但是在Android应用的开发中使用enum时事情就没那么简单了。以下是Google官方给出的建议:</p> <blockquote> <p>&quot;Enums often require more than twice as much memory as static constants. You...</p>
             </section>
         </a>
     

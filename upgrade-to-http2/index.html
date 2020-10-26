@@ -314,7 +314,6 @@ UDP）之间增加了二进制分帧层</p></li>
         <a class="read-next-story no-cover" href="http://longlinht.github.io//operate-camera-in-webview">
             <section class="post">
                 <h2>在WebView中调用Android相机拍照录像</h2>
-                <p>最近公司App需要以H5的方式接入七鱼客服，根据他们的开发文档接入起来还是很容易，成本很低。理论上如果以native的方式接入的话，用户体验会更好，但是接入后增加的包体积是无法接受的，遂改用H5的方式，整个接入过程还算顺利，有相对详尽的接入文档和demo，只是在最后接入完成后，因为沟通不畅，忽略了客服聊天界面在Android上无法发图片和发视频的问题。同一份html，iOS就是正常的，Android上就死活没反应。后来才恍然大悟，WebView是不支持JS去直接操作Android相机的，必须通过回调到native，由native完成照片的选择，拍摄和录像后将数据返回给JS才能完成一次照片和视频的发送。清楚了问题所在，就需要实现WebView的标准接口来实现这个回调到native的功能，在代码实现前，需要先厘清一些WebView的基本概念和原理。 像发送图片和视频这样的操作，涉及到了定制WebView的一些默认行为，理论上如果要做定制，就需要了解WebSettings、JavaScriptInterface、WebViewClient以及WebChromeClient，一般而言，通过配置WebSettings，使用JavasScriptInterface，重写WebViewClient和WebChromeClient对象的相关方法，就可以实现一些我们想要的行为。发图片和发视频就是通过重写WebChromeClient对象的几个方法来实现的。 ``` // 重写WebChromeClient的特定方法来实现图片和视频的发送 mWebView.setWebChromeClient(new WebChromeClient() { // For Android >=3.0 public void openFileChooser(ValueCallback<Uri>...</p>
             </section>
         </a>
     
@@ -324,7 +323,6 @@ UDP）之间增加了二进制分帧层</p></li>
         <a class="read-next-story prev no-cover" href="http://longlinht.github.io//connectivity-in-android">
             <section class="post">
                 <h2>优化App网络连通性问题</h2>
-                <p><p>最近遇到一个棘手的问题，我们开发的一款App在中东那边出现大量的<code>UnknownHostException</code>, 导致App在中东那边体验很糟，很快这个问题就被抛给了我们技术优化组，我和另外一名同事就开始定位问题的原因并且试图提出一个可行的解决方案。一般理解，出现<code>UnkownHostException</code>就是DNS失败了，在我们开始解决这个问题的时候，App的网络库已逐渐开始使用OkHttp，我们想到自定义DNS过程，在系统DNS失败的情况下再尝试其他DNS方式，降低<code>UnknownHostException</code>出现的频率，优化App网络连通性。 为了实现我们的技术方案，我们针对OkHttp的DNS做了如下几件事:</p> <ul> <li>创建OkHttpClient时自定义DNS</li> </ul> <div class="highlight"><pre><code class="language-text" data-lang="text">OkHttpClient.Builder builder = new OkHttpClient.Builder() //...</p>
             </section>
         </a>
     

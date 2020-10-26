@@ -257,7 +257,6 @@ public void onHideCustomView() {
         <a class="read-next-story no-cover" href="http://longlinht.github.io//guide-to-prevent-null-in-android-project">
             <section class="post">
                 <h2>Android防空指南</h2>
-                <p>最近集中进行了一段时间降低公司App崩溃率的工作，现在App的崩溃率控制在了万一与万三之间，整体来说还比较顺利，有必要将其中的方法和经验做一个沉淀。由于空指针异常导致的崩溃对App整体的崩溃率贡献巨大，日常的崩溃修复总是少不了几个空指针异常，虽然明显的空指针异常修复很容易，但是发出去的版本会持续崩溃，影响留存和体验，因此在积极修复空指针崩溃的同时也需要未雨绸缪，在开发阶段就把空指针拒之门外，对于事前防空的讨论非常多，也有大量的文章总结和分析这件事情，此文可能会提及这些讨论，但是主要还是总结我实践过的一些防空措施： ### 编写不空的代码 这个是基础，也是第一道防线，如果这一步没有做好，后面的一些措施可能负担更重。编写不空的代码其实就是要求我们在编写具体的方法和接口时尽量保证不返回null值，以及一些编程语言特性来避免空指针，也就是从根源上杜绝client代码不经意间去dereference一个空对象，具体的办法，或者说一些规约如下： * 对于数组，比如Point，返回空对象，return new Point[0]; * 对于容器，比如ArraryList,返回空对象。如果需要泛型支持，retrun Collections.emptyList(); 如果不需要泛型支持，则 return Collections.EMPTY_LIST; *...</p>
             </section>
         </a>
     
@@ -267,7 +266,6 @@ public void onHideCustomView() {
         <a class="read-next-story prev no-cover" href="http://longlinht.github.io//fix-anr-related-sharedpreferences">
             <section class="post">
                 <h2>解决SharedPreferences导致的ANR</h2>
-                <p><p>这几天在Google Play的ANR实时报告中看到很多貌似与SharedPreferences相关的ANR，看了历史版本后发现，这个已经是一个老问题了，在历次版班的ANR中居高不下。今天实在忍不了，决定对这个问题一探究竟。</p> <div class="highlight"><pre><code class="language-text" data-lang="text"> at java.lang.Object.wait! (Native method) - waiting on &lt;0x0a351954&gt; (a...</p>
             </section>
         </a>
     

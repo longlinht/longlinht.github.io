@@ -264,7 +264,6 @@ public class ChatMessageEntity {
         <a class="read-next-story no-cover" href="http://longlinht.github.io//scrollview-can-not-display-whole-content">
             <section class="post">
                 <h2>解决ScrollView内容显示不全</h2>
-                <p>这个问题其实只要使用过`ScrollView`，可能都有机会遇到，问题的表现就是`ScrollView`包裹内容的高度超过`ScrollView`可视高度的话，被包裹的内容就会显示不全，最底部的内容永远也看不到了，这种情况肯定是无法接受的， 解决这个问题比较简单，其实就是简单的一句设置语句: ``` android:fillViewport="true" ``` 虽然这样可以解决问题，但是还是心中还有疑惑，我放在`ScrollView`中的`LinearLayout`是的高度是设置了`mactch_parent` 属性的，现在看来并没有生效，我猜测可能是`ScrollView`重写了测量方法导致的，于是去看`ScrollView`的`onMeasure` 方法: ``` @Override protected void onMeasure(int widthMeasureSpec, int...</p>
             </section>
         </a>
     
@@ -274,10 +273,6 @@ public class ChatMessageEntity {
         <a class="read-next-story prev no-cover" href="http://longlinht.github.io//record-a-debug-process">
             <section class="post">
                 <h2>记一次看似困难的Debug</h2>
-                <p><p>今年把自己的手机换成了Android，拿到新机后就想找到一款手写笔记的App，因为在iOS用过一款体验很好，还用那个写了一篇游记，在试用了十几款此类的Andorid App后最终找到了一款名为INKredible的手写笔记App，刚开始用的时候很不顺手，都想卸载了，但是经过一番摸索后找到了技巧，再去试用后有一种惊艳的感觉，今天在地铁通勤的时候竟然用它谢了一篇技术博文，并已图片的形式到了出来，全文如下:(字迹潦草，读者莫怪，其实如果以正楷的形式书写, 效率较差，体验会大打折扣).</p>
-
-<p><img src="https://wx3.sinaimg.cn/mw690/7033bf1dly1g0aqh53p3dj20m80zkdlh.jpg" alt=""></p>
-</p>
             </section>
         </a>
     

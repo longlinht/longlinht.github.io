@@ -21,7 +21,7 @@
         </header>
         <section class="post-excerpt">
             {% if post.chinese %}
-                <p>{{ post.content | truncate: 140 }} <a class="read-more" href="{{ site.url }}{{ post.url }}">&raquo;</a></p>
+                <p>{{ post.content | truncate: 100 }} <a class="read-more" href="{{ site.url }}{{ post.url }}">&raquo;</a></p>
             {% else %}
                 <p>{{ post.content | truncatewords: 26 }} <a class="read-more" href="{{ site.url }}{{ post.url }}">&raquo;</a></p>
             {% endif %}

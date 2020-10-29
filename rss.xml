@@ -20,6 +20,15 @@
       <dc:date>2020-10-25T04:54:12+08:00</dc:date>
     </item>
     <item>
+      <title>在Flutter中实现一个类似Android中的BottomSheetDialog</title>
+      <link>http://longlinht.github.io//bottom-sheet-dialog-in-flutter</link>
+      <description>从屏幕底部滑出的这种弹窗实在是太普遍的需求了，所以Flutter不可能不提供，一查文档，果然有一个API直接就可以调出Dialog: showModalBottomSheet, 这个API有很多入参，但是如果不需要对Dialog的外观和行为有特殊的定制需求的话，值传递前两个参数就可以了。 API看起来非常简单，但是我看到网上有些blog文章对这个API的使用是错误的，所以我贴出我实现了上方圆角dialog的代码:
+
+</description>
+      <pubDate>Mon, 12 Oct 2020 02:20:12 +0800</pubDate>
+      <dc:date>2020-10-12T02:20:12+08:00</dc:date>
+    </item>
+    <item>
       <title>Kotlin synthetic binding view is null in Fragment</title>
       <link>http://longlinht.github.io//kotlin-synthetic-view-binding-view-is-null-in-fragment</link>
       <description>Kotlin provide a handy and concise way to access views in xml layout from code, it works well, but When I create a subclass of `DialogFragment`, in its method `onCreateView`, I access synthetic binding view, it seems all is fine, but when run these code, app crash. In logcat, I got this `NullPointerException`:

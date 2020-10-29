@@ -47,6 +47,43 @@
       </item>
     
       <item>
+        <title>在Flutter中实现一个类似Android中的BottomSheetDialog</title>
+        <description>&lt;p&gt;从屏幕底部滑出的这种弹窗实在是太普遍的需求了，所以Flutter不可能不提供，一查文档，果然有一个API直接就可以调出Dialog: showModalBottomSheet, 这个API有很多入参，但是如果不需要对Dialog的外观和行为有特殊的定制需求的话，值传递前两个参数就可以了。 API看起来非常简单，但是我看到网上有些blog文章对这个API的使用是错误的，所以我贴出我实现了上方圆角dialog的代码:&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;void openBottomSheet(context) {
+  showModalBottomSheet(
+    backgroundColor: Colors.white,
+    context: context,
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.only(topLeft: Radius.circular(18), topRight: Radius.circular(18))
+  ),
+
+  builder: (builder) {
+      return new Container(
+        child: Wrap(
+          children: &amp;lt;Widget&amp;gt;[
+            getListTile(Icons.more, Colors.black45, &amp;quot;More&amp;quot;, context),
+            getListTile(Icons.favorite, Colors.pink, &amp;quot;Favourites&amp;quot;, context),
+            getListTile(Icons.account_box, Colors.blue, &amp;quot;Profile&amp;quot;, context),
+            new Divider(
+              thickness: 2.0,
+              height: 10.0,
+            ),
+            getListTile(Icons.exit_to_app, null, &amp;quot;Logout&amp;quot;, context),
+          ],
+        ),
+      );
+    },
+  );
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;这个圆角的实现，其实可以直接传入&lt;code&gt;backgroundColorback&lt;/code&gt;和&lt;code&gt;shape&lt;/code&gt;参数，不用额外去添加一层i&lt;code&gt;Container&lt;/code&gt;，如果想实现圆角背景，通过&lt;code&gt;Container&lt;/code&gt;也可以实现，就是把&lt;code&gt;backgroundColor&lt;/code&gt;设置成透明，多了一道工序，没必要。背景阴影的效果通过&lt;code&gt;barrierColor&lt;/code&gt;来设置。很简单的一api，如果错误使用，不但不能优雅的实现功能，反而额外做了很多工作，却不能实现预期。看到的几个demo都没有正确使用这个API，所以特意为这个问题做此小记。&lt;/p&gt;
+</description>
+        <pubDate>Mon, 12 Oct 2020 02:20:12 +0800</pubDate>
+        <link>http://longlinht.github.io//bottom-sheet-dialog-in-flutter</link>
+        <guid isPermaLink="true">http://longlinht.github.io//bottom-sheet-dialog-in-flutter</guid>
+      </item>
+    
+      <item>
         <title>Kotlin synthetic binding view is null in Fragment</title>
         <description>&lt;p&gt;Kotlin provide a handy and concise way to access views in xml layout from code, it works well, but When I create a subclass of &lt;code&gt;DialogFragment&lt;/code&gt;, in its method &lt;code&gt;onCreateView&lt;/code&gt;, I access synthetic binding view, it seems all is fine, but when run these code, app crash. In logcat, I got this &lt;code&gt;NullPointerException&lt;/code&gt;:&lt;/p&gt;
 
@@ -639,40 +676,6 @@ protected void attachBaseContext(Context newBase) {
         <pubDate>Sat, 21 Sep 2019 02:30:12 +0800</pubDate>
         <link>http://longlinht.github.io//fix-video-view-leak</link>
         <guid isPermaLink="true">http://longlinht.github.io//fix-video-view-leak</guid>
-      </item>
-    
-      <item>
-        <title>Parcelable vs Serializable</title>
-        <description>&lt;p&gt;在实际的Android开发中Serializable和Parcelable我们都会用到，只是需要区分使用场景。刚开始遇到这两个接口的时候比较疑惑，貌似都是用来做序列化的，虽然能分得清什么时候用哪个，但是对这两个接口并没有清晰的认识，要是冷不丁的问我这俩有什么区别，可能还无法清晰的界定和阐述。因此有必要用一篇文章来彻底捋清这些东西。&lt;/p&gt;
-
-&lt;h3&gt;相同点&lt;/h3&gt;
-
-&lt;p&gt;相同点其实很明显，主要有如下两点:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;p&gt;都可以序列化反序列化&lt;/p&gt;&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;都可以通过Intent传递&lt;/p&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h3&gt;区别&lt;/h3&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;p&gt;Serializable是Java API，Parcelable是Android SDK API，设计目的不同。Serializable是一个通用的序列化机制，通过将文件保存到本地文件、网络流等实现便数据的传递，这种数据传递不仅可以在单个程序中进行，也可以在两个不同的程序中进行；Parcelable是Android SDK API,为了在同个程序的不同组件之间和不同程序（AIDL）之间高效的传输数据，是通过IBinder通信的消息的载体。从设计目的上可以看出Parcelable就是为了Android高效传输数据而生的。&lt;/p&gt;&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;Serializable序列化过程使用反射机制，速度慢，且产生很多临时对象，容易触发GC；Parcelable是直接在内存中读写的，自已实现封送和解封（marshalled &amp;amp;unmarshalled）操作，将一个完整的对象分解成Intent所支持的数据类型，不需要使用反射，所以Parcelable具有效率高，内存开销小的优点。&lt;/p&gt;&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;Serializable是通用的序列化机制，将数据存储在磁盘，可以做到有限持久化保存，文件的生命周期不受程序影响，Parcelable的序列化操作完全由底层实现，不同版本的Android是实现方式可能不相同，所以不能进行持久化存储。&lt;/p&gt;&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;使用场景不同。Parcelable 是 Android 中的序列化方式，因此更适合于 Android 平台上，它的缺点是使用起来稍微麻烦点，但它的效率很高，这是 Android 推荐的序列化方式，因此我们要首选 Parcelable。但 Serializable 也不是在 Android 上无用武之地，下面两种情况就发日常适合 Serializable：&lt;/p&gt;
-
-&lt;ol&gt;
-&lt;li&gt;需要将对象序列化到设备；&lt;/li&gt;
-&lt;li&gt;对象序列化后需要网络传输。&lt;/li&gt;
-&lt;/ol&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;这样一一列举了两者的相同点和区别，对两者的认识清晰了很多！积跬步，共勉！&lt;/p&gt;
-</description>
-        <pubDate>Thu, 19 Sep 2019 02:30:12 +0800</pubDate>
-        <link>http://longlinht.github.io//serializable-vs-parcelable</link>
-        <guid isPermaLink="true">http://longlinht.github.io//serializable-vs-parcelable</guid>
       </item>
     
   </channel>

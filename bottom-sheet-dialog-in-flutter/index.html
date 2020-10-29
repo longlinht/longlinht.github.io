@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 
     <!-- [[! Page Meta ]] -->
-    <title>Kotlin synthetic binding view is null in Fragment</title>
+    <title>在Flutter中实现一个类似Android中的BottomSheetDialog</title>
     <meta name="description" content="与机器，人，神共舞 - 编程，读书，思考，旅行，与机器对话，与人交谈，对神发问，探索，体验人生美丽的风景" />
 
     <meta name="HandheldFriendly" content="True" />
@@ -96,10 +96,10 @@
     <article class="post tag-machine">
 
         <header class="post-header">
-            <h1 class="post-title">Kotlin synthetic binding view is null in Fragment</h1>
+            <h1 class="post-title">在Flutter中实现一个类似Android中的BottomSheetDialog</h1>
             <section class="post-meta">
             <!-- <a href='/'>Tao He</a> -->
-            <time class="post-date" datetime="2020-09-09">09 Sep 2020</time>
+            <time class="post-date" datetime="2020-10-12">12 Oct 2020</time>
                 <!-- [[tags prefix=" on "]] -->
                  
                 on 
@@ -114,17 +114,35 @@
 
         <section class="post-content">
             
-            <p>Kotlin provide a handy and concise way to access views in xml layout from code, it works well, but When I create a subclass of <code>DialogFragment</code>, in its method <code>onCreateView</code>, I access synthetic binding view, it seems all is fine, but when run these code, app crash. In logcat, I got this <code>NullPointerException</code>:</p>
+            <p>从屏幕底部滑出的这种弹窗实在是太普遍的需求了，所以Flutter不可能不提供，一查文档，果然有一个API直接就可以调出Dialog: showModalBottomSheet, 这个API有很多入参，但是如果不需要对Dialog的外观和行为有特殊的定制需求的话，值传递前两个参数就可以了。 API看起来非常简单，但是我看到网上有些blog文章对这个API的使用是错误的，所以我贴出我实现了上方圆角dialog的代码:</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">void openBottomSheet(context) {
+  showModalBottomSheet(
+    backgroundColor: Colors.white,
+    context: context,
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.only(topLeft: Radius.circular(18), topRight: Radius.circular(18))
+  ),
 
-<blockquote>
-<p>Caused by: java.lang.NullPointerException: Attempt to invoke virtual method &#39;android.view.View android.view.View.findViewById(int)&#39; on a null object reference</p>
-</blockquote>
-
-<p>I&#39;m sure synthetic statement is imported and view id is right, it confused me a bit. So I Google Kotlin synthetic binding view related web pages, finally I found a solution:</p>
-
-<p>Just move accessing syntheic binding view statement from <code>onCreateView</code> to <code>onViewCreated</code>.</p>
-
-<p>The problem is that I am accessing it too soon, When I delay the chance to access view, all works well. Magic! But it’s nothing magical, if you decompile the bytecode (By going toTools -&gt; Kotlin -&gt; Show Kotlin Bytecode and then selecting Decompile in the pane) and take a look at the generated java class, you’ll see that all it does is call findViewById() for us. Although this is a simple problem, but it is useful to record it.</p>
+  builder: (builder) {
+      return new Container(
+        child: Wrap(
+          children: &lt;Widget&gt;[
+            getListTile(Icons.more, Colors.black45, &quot;More&quot;, context),
+            getListTile(Icons.favorite, Colors.pink, &quot;Favourites&quot;, context),
+            getListTile(Icons.account_box, Colors.blue, &quot;Profile&quot;, context),
+            new Divider(
+              thickness: 2.0,
+              height: 10.0,
+            ),
+            getListTile(Icons.exit_to_app, null, &quot;Logout&quot;, context),
+          ],
+        ),
+      );
+    },
+  );
+}
+</code></pre></div>
+<p>这个圆角的实现，其实可以直接传入<code>backgroundColorback</code>和<code>shape</code>参数，不用额外去添加一层i<code>Container</code>，如果想实现圆角背景，通过<code>Container</code>也可以实现，就是把<code>backgroundColor</code>设置成透明，多了一道工序，没必要。背景阴影的效果通过<code>barrierColor</code>来设置。很简单的一api，如果错误使用，不但不能优雅的实现功能，反而额外做了很多工作，却不能实现预期。看到的几个demo都没有正确使用这个API，所以特意为这个问题做此小记。</p>
 
 
         </section>
@@ -156,15 +174,15 @@
 
             <section class="share">
                 <h4>Share this post</h4>
-                <a class="icon-twitter" href="http://twitter.com/share?text=Kotlin synthetic binding view is null in Fragment&amp;url=http://longlinht.github.io//kotlin-synthetic-view-binding-view-is-null-in-fragment"
+                <a class="icon-twitter" href="http://twitter.com/share?text=在Flutter中实现一个类似Android中的BottomSheetDialog&amp;url=http://longlinht.github.io//bottom-sheet-dialog-in-flutter"
                     onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
                     <span class="hidden">Twitter</span>
                 </a>
-                <a class="icon-facebook" href="https://www.facebook.com/sharer/sharer.php?u=http://longlinht.github.io//kotlin-synthetic-view-binding-view-is-null-in-fragment"
+                <a class="icon-facebook" href="https://www.facebook.com/sharer/sharer.php?u=http://longlinht.github.io//bottom-sheet-dialog-in-flutter"
                     onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
                     <span class="hidden">Facebook</span>
                 </a>
-                <a class="icon-google-plus" href="https://plus.google.com/share?url=http://longlinht.github.io//kotlin-synthetic-view-binding-view-is-null-in-fragment"
+                <a class="icon-google-plus" href="https://plus.google.com/share?url=http://longlinht.github.io//bottom-sheet-dialog-in-flutter"
                    onclick="window.open(this.href, 'google-plus-share', 'width=490,height=530');return false;">
                     <span class="hidden">Google+</span>
                 </a>
@@ -207,18 +225,18 @@
 
     <!-- [[! next_post ]] -->
     
-        <a class="read-next-story no-cover" href="http://longlinht.github.io//bottom-sheet-dialog-in-flutter">
+        <a class="read-next-story no-cover" href="http://longlinht.github.io//read-homo-deus">
             <section class="post">
-                <h2>在Flutter中实现一个类似Android中的BottomSheetDialog</h2>
+                <h2>读《未来简史》</h2>
             </section>
         </a>
     
     <!-- [[! /next_post ]] -->
     <!-- [[! prev_post ]] -->
     
-        <a class="read-next-story prev no-cover" href="http://longlinht.github.io//static-method-in-kotlin">
+        <a class="read-next-story prev no-cover" href="http://longlinht.github.io//kotlin-synthetic-view-binding-view-is-null-in-fragment">
             <section class="post">
-                <h2>Kotlin中的"静态" 方法和域</h2>
+                <h2>Kotlin synthetic binding view is null in Fragment</h2>
             </section>
         </a>
     

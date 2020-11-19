@@ -8,7 +8,16 @@
     <title>与机器，人，神共舞</title>
     <link>http://longlinht.github.io/</link>
     <description>编程，读书，思考，旅行，与机器对话，与人交谈，对神发问，探索，体验人生美丽的风景</description>
-    <pubDate>Sun, 25 Oct 2020 04:54:12 +0800</pubDate>
+    <pubDate>Thu, 12 Nov 2020 04:54:12 +0800</pubDate>
+    <item>
+      <title>用python脚本优雅的整理Kindle的标注和笔记</title>
+      <link>http://longlinht.github.io//using-python-parse-kindle-notes</link>
+      <description>我是重度Kindle使用者，Kindle里面存满了各类书籍，经常会同时读两三本书，时间一长，多本书的标注和笔记都交叉记录在My Clippings.txt文本文件里，现在这个文件已经有几万行，每次手动去整理特定的一本书的标注和笔记时都极为头疼，还容易错漏，终于有一天实在忍不了了，就去网上找有没有整理kindle标注和笔记的服务，还真让我给找到了，clipping.io，在线服务，马上使用，上传My Clippings.txt文件，一切顺利，文件上传后开始分析整理文本，看到几本书的标注已经出来了，等全部整理结束后发现少了好几本书的，再次重新上传文件重试整理，问题依旧，空欢喜一场，依旧不能解决我的痛点，最近在读的两本书的标注和笔记恰好没有被整理出来，一怒之下，决定自己用python脚本来写一个这样的整理工具，还以为得花费一两天的时间，一不小心，两个小时不到的功夫写完了，调试了一番，完全满足我的需求，现在只需一条命令，传入书名就可以整理出指定的一本书的所有标注和笔记，脚本如下：
+
+</description>
+      <pubDate>Thu, 12 Nov 2020 04:54:12 +0800</pubDate>
+      <dc:date>2020-11-12T04:54:12+08:00</dc:date>
+    </item>
     <item>
       <title>读《未来简史》</title>
       <link>http://longlinht.github.io//read-homo-deus</link>
@@ -656,6 +665,6 @@ update UI when we finish something in separated thread. This is a basic problem,
       <pubDate>Wed, 03 Nov 2010 02:30:12 +0800</pubDate>
       <dc:date>2010-11-03T02:30:12+08:00</dc:date>
     </item>
-    <dc:date>2020-10-25T04:54:12+08:00</dc:date>
+    <dc:date>2020-11-12T04:54:12+08:00</dc:date>
   </channel>
 </rss>

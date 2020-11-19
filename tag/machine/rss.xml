@@ -12,6 +12,82 @@
    <atom:link href="rss" rel="self" type="application/rss+xml" />
    
 	<item>
+	  <title>用python脚本优雅的整理Kindle的标注和笔记</title>
+	  <link>//using-python-parse-kindle-notes</link>
+	  <author>Tao He</author>
+	  <pubDate>2020-11-12T04:54:12+08:00</pubDate>
+	  <guid>//using-python-parse-kindle-notes</guid>
+	  <description><![CDATA[
+	     <p>我是重度Kindle使用者，Kindle里面存满了各类书籍，经常会同时读两三本书，时间一长，多本书的标注和笔记都交叉记录在My Clippings.txt文本文件里，现在这个文件已经有几万行，每次手动去整理特定的一本书的标注和笔记时都极为头疼，还容易错漏，终于有一天实在忍不了了，就去网上找有没有整理kindle标注和笔记的服务，还真让我给找到了，clipping.io，在线服务，马上使用，上传My Clippings.txt文件，一切顺利，文件上传后开始分析整理文本，看到几本书的标注已经出来了，等全部整理结束后发现少了好几本书的，再次重新上传文件重试整理，问题依旧，空欢喜一场，依旧不能解决我的痛点，最近在读的两本书的标注和笔记恰好没有被整理出来，一怒之下，决定自己用python脚本来写一个这样的整理工具，还以为得花费一两天的时间，一不小心，两个小时不到的功夫写完了，调试了一番，完全满足我的需求，现在只需一条命令，传入书名就可以整理出指定的一本书的所有标注和笔记，脚本如下：</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text"># coding=utf-8
+
+import os
+import sys
+
+def main():
+   filepath = sys.argv[1]
+   bookName = sys.argv[2]
+
+   if not os.path.isfile(filepath):
+       print(&quot;File path {} does not exist. Exiting...&quot;.format(filepath))
+       sys.exit()
+
+   DELIMITER = &quot;==========&quot;
+   TIME_MAKR = &quot;- 您在第&quot;
+   lineNum = 0
+   books = {}
+
+   bag_of_words = {}
+   with open(filepath) as fp:
+       encounter = False
+       delimiterCount = 0
+       curBookName = &quot;&quot;
+       for line in fp:
+           if lineNum == 0:
+               books[line] = []
+               curBookName = line
+               delimiterCount += 1
+           else:
+               if line.startswith(DELIMITER):
+                   delimiterCount += 1
+                   encounter = True
+               else:
+                   if encounter == True:
+                       if line in books:
+                           curBookName = line
+                       else:
+                           books[line] = []
+                       encounter = False
+                       curBookName = line
+                   else:
+                       books[curBookName].append(line)
+           lineNum += 1
+           #print(line)
+
+       fp.close()            
+
+   outFile = open(&quot;MyClippingOutput.txt&quot;, &quot;w&quot;)
+   for k in books:
+       if k.startswith(bookName) :
+           outFile.writelines(k)
+           lines = books[k]
+           for l in lines:
+               if l.startswith(TIME_MAKR):
+                   continue
+               if l.startswith(bookName):
+                   continue
+               outFile.writelines(l)
+   outFile.close()
+
+if __name__ == &#39;__main__&#39;:
+    main()
+</code></pre></div>
+<p>目前这个脚本我只是自用，满足我个人的需求，我想肯定也有很多kindle的重度使用者有类似的需求，后续我准备把这个工具也做成在在线服务，使用方式类似clipping.io，做到比clipping.io的可定制型更强，能够适应更多的异常情况，因为我发现clipping.io对一些不规范的书名的容错性很差。期待这个服务上线！</p>
+
+	  ]]></description>
+	</item>
+
+	<item>
 	  <title>在Flutter中实现一个类似Android中的BottomSheetDialog</title>
 	  <link>//bottom-sheet-dialog-in-flutter</link>
 	  <author>Tao He</author>
@@ -666,43 +742,6 @@ protected void attachBaseContext(Context newBase) {
 }
 </code></pre></div>
 <p>去规避系统API的bug真是很烦人的一件事，既不优雅，也不安全！</p>
-
-	  ]]></description>
-	</item>
-
-	<item>
-	  <title>Parcelable vs Serializable</title>
-	  <link>//serializable-vs-parcelable</link>
-	  <author>Tao He</author>
-	  <pubDate>2019-09-19T02:30:12+08:00</pubDate>
-	  <guid>//serializable-vs-parcelable</guid>
-	  <description><![CDATA[
-	     <p>在实际的Android开发中Serializable和Parcelable我们都会用到，只是需要区分使用场景。刚开始遇到这两个接口的时候比较疑惑，貌似都是用来做序列化的，虽然能分得清什么时候用哪个，但是对这两个接口并没有清晰的认识，要是冷不丁的问我这俩有什么区别，可能还无法清晰的界定和阐述。因此有必要用一篇文章来彻底捋清这些东西。</p>
-
-<h3>相同点</h3>
-
-<p>相同点其实很明显，主要有如下两点:</p>
-
-<ul>
-<li><p>都可以序列化反序列化</p></li>
-<li><p>都可以通过Intent传递</p></li>
-</ul>
-
-<h3>区别</h3>
-
-<ul>
-<li><p>Serializable是Java API，Parcelable是Android SDK API，设计目的不同。Serializable是一个通用的序列化机制，通过将文件保存到本地文件、网络流等实现便数据的传递，这种数据传递不仅可以在单个程序中进行，也可以在两个不同的程序中进行；Parcelable是Android SDK API,为了在同个程序的不同组件之间和不同程序（AIDL）之间高效的传输数据，是通过IBinder通信的消息的载体。从设计目的上可以看出Parcelable就是为了Android高效传输数据而生的。</p></li>
-<li><p>Serializable序列化过程使用反射机制，速度慢，且产生很多临时对象，容易触发GC；Parcelable是直接在内存中读写的，自已实现封送和解封（marshalled &amp;unmarshalled）操作，将一个完整的对象分解成Intent所支持的数据类型，不需要使用反射，所以Parcelable具有效率高，内存开销小的优点。</p></li>
-<li><p>Serializable是通用的序列化机制，将数据存储在磁盘，可以做到有限持久化保存，文件的生命周期不受程序影响，Parcelable的序列化操作完全由底层实现，不同版本的Android是实现方式可能不相同，所以不能进行持久化存储。</p></li>
-<li><p>使用场景不同。Parcelable 是 Android 中的序列化方式，因此更适合于 Android 平台上，它的缺点是使用起来稍微麻烦点，但它的效率很高，这是 Android 推荐的序列化方式，因此我们要首选 Parcelable。但 Serializable 也不是在 Android 上无用武之地，下面两种情况就发日常适合 Serializable：</p>
-
-<ol>
-<li>需要将对象序列化到设备；</li>
-<li>对象序列化后需要网络传输。</li>
-</ol></li>
-</ul>
-
-<p>这样一一列举了两者的相同点和区别，对两者的认识清晰了很多！积跬步，共勉！</p>
 
 	  ]]></description>
 	</item>

@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 
     <!-- [[! Page Meta ]] -->
-    <title>用python脚本优雅的整理Kindle的标注和笔记</title>
+    <title>Android module SDK化的实践</title>
     <meta name="description" content="与机器，人，神共舞 - 编程，读书，思考，旅行，与机器对话，与人交谈，对神发问，探索，体验人生美丽的风景" />
 
     <meta name="HandheldFriendly" content="True" />
@@ -96,10 +96,10 @@
     <article class="post tag-machine">
 
         <header class="post-header">
-            <h1 class="post-title">用python脚本优雅的整理Kindle的标注和笔记</h1>
+            <h1 class="post-title">Android module SDK化的实践</h1>
             <section class="post-meta">
             <!-- <a href='/'>Tao He</a> -->
-            <time class="post-date" datetime="2020-11-12">12 Nov 2020</time>
+            <time class="post-date" datetime="2020-11-21">21 Nov 2020</time>
                 <!-- [[tags prefix=" on "]] -->
                  
                 on 
@@ -114,71 +114,107 @@
 
         <section class="post-content">
             
-            <p>我是重度Kindle使用者，Kindle里面存满了各类书籍，经常会同时读两三本书，时间一长，多本书的标注和笔记都交叉记录在My Clippings.txt文本文件里，现在这个文件已经有几万行，每次手动去整理特定的一本书的标注和笔记时都极为头疼，还容易错漏，终于有一天实在忍不了了，就去网上找有没有整理kindle标注和笔记的服务，还真让我给找到了，clipping.io，在线服务，马上使用，上传My Clippings.txt文件，一切顺利，文件上传后开始分析整理文本，看到几本书的标注已经出来了，等全部整理结束后发现少了好几本书的，再次重新上传文件重试整理，问题依旧，空欢喜一场，依旧不能解决我的痛点，最近在读的两本书的标注和笔记恰好没有被整理出来，一怒之下，决定自己用python脚本来写一个这样的整理工具，还以为得花费一两天的时间，一不小心，两个小时不到的功夫写完了，调试了一番，完全满足我的需求，现在只需一条命令，传入书名就可以整理出指定的一本书的所有标注和笔记，脚本如下：</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text"># coding=utf-8
+            <p>文章标题指的SDK化指的是将一个有多个module的Android工程中的特定module以aar的形式输出后被app模块依赖使用。那么如何在基本不改动代码的情况下实现这个要求，完成app模块对特定module的依赖呢?</p>
 
-import os
-import sys
+<p>最直接的想法就是把要SDK化的module输出为aar文件，然后在app模块添加对此aar文件的依赖。在解决完所有的编译错误以后，运行app后发生了crash，查看输出，是因为输出为aar的这个模块所依赖的一个类在运行时找不到，事实上就是这个远端依赖没有被打进apk包。很明显，直接输出aar然后依赖是不可行的。</p>
 
-def main():
-   filepath = sys.argv[1]
-   bookName = sys.argv[2]
+<p>远端依赖的类找不到，因为此module在输出为aar的时候并未将他的依赖打入aar包，那有没有办法将此module的所有依赖都打进aar包呢? 在线上搜索了一番后，还真找到了这样的一个gradle插件<a href="https://github.com/kezong/fat-aar-android">fat-aar-android</a>来做这件事，接入到工程中很简单:</p>
 
-   if not os.path.isfile(filepath):
-       print(&quot;File path {} does not exist. Exiting...&quot;.format(filepath))
-       sys.exit()
+<ol>
+<li>应用插件</li>
+</ol>
 
-   DELIMITER = &quot;==========&quot;
-   TIME_MAKR = &quot;- 您在第&quot;
-   lineNum = 0
-   books = {}
-
-   bag_of_words = {}
-   with open(filepath) as fp:
-       encounter = False
-       delimiterCount = 0
-       curBookName = &quot;&quot;
-       for line in fp:
-           if lineNum == 0:
-               books[line] = []
-               curBookName = line
-               delimiterCount += 1
-           else:
-               if line.startswith(DELIMITER):
-                   delimiterCount += 1
-                   encounter = True
-               else:
-                   if encounter == True:
-                       if line in books:
-                           curBookName = line
-                       else:
-                           books[line] = []
-                       encounter = False
-                       curBookName = line
-                   else:
-                       books[curBookName].append(line)
-           lineNum += 1
-           #print(line)
-
-       fp.close()            
-
-   outFile = open(&quot;MyClippingOutput.txt&quot;, &quot;w&quot;)
-   for k in books:
-       if k.startswith(bookName) :
-           outFile.writelines(k)
-           lines = books[k]
-           for l in lines:
-               if l.startswith(TIME_MAKR):
-                   continue
-               if l.startswith(bookName):
-                   continue
-               outFile.writelines(l)
-   outFile.close()
-
-if __name__ == &#39;__main__&#39;:
-    main()
+<p>在project build gradle文件中加入如下代码:</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath &#39;com.android.tools.build:gradle:xxx&#39;
+        classpath &#39;com.kezong:fat-aar:1.2.20&#39;
+    }
+}
 </code></pre></div>
-<p>目前这个脚本我只是自用，满足我个人的需求，我想肯定也有很多kindle的重度使用者有类似的需求，后续我准备把这个工具也做成在在线服务，使用方式类似clipping.io，做到比clipping.io的可定制型更强，能够适应更多的异常情况，因为我发现clipping.io对一些不规范的书名的容错性很差。期待这个服务上线！</p>
+<ol>
+<li>使用插件关键字来嵌入依赖</li>
+</ol>
+
+<p>将需要嵌入的依赖，修改implementation或api为embed</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">dependencies {
+    implementation fileTree(dir: &#39;libs&#39;, include: &#39;*.jar&#39;)
+    // java dependency
+    embed project(path: &#39;:lib-java&#39;, configuration:&#39;default&#39;)
+    // aar dependency
+    embed project(path: &#39;:lib-aar&#39;, configuration:&#39;default&#39;)
+    // aar dependency
+    embed project(path: &#39;:lib-aar2&#39;, configuration:&#39;default&#39;)
+    // local full aar dependency, just build in flavor1
+    flavor1Embed project(path: &#39;:lib-aar-local&#39;, configuration:&#39;default&#39;)
+    // local full aar dependency, just build in debug
+    debugEmbed (name:&#39;lib-aar-local2&#39;,ext:&#39;aar&#39;)
+    // remote jar dependency
+    embed &#39;com.google.guava:guava:20.0&#39;
+    // remote aar dependency
+    embed &#39;com.facebook.fresco:fresco:1.11.0&#39;
+    // don&#39;t want to embed in
+    // implementation is not recommended because the dependency may be different with the version in application, resulting in the R class not found.
+    compileOnly &#39;com.android.support:appcompat-v7:27.1.1&#39;
+}
+</code></pre></div>
+<p>使用此插件除了会遇到资源冲突外，目前没有发现其他问题。但这个插件在github上的issue有点多，心里有点没底，所以还需要想其他的办法。</p>
+
+<p>这两个方法被排除后，就想到用maven来管理依赖，更灵活，是更一般的做法。 将此module输出后上传到maven服务器，在app上添加对此module的远程依赖后，发现无法编译，找不到此module依赖中的类，这是因为没有在pom中添加依赖。将aar发布到maven和添加依赖配置的代码如下:</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">afterEvaluate {
+    publishing {
+        publications {
+            release(MavenPublication) {
+                artifact(&quot;$buildDir/outputs/aar/live-debug.aar&quot;) {
+                    builtBy tasks.getByName(&quot;assembleDebug&quot;)
+                }
+
+                groupId = &quot;com.overseas.android.live&quot;
+                artifactId = &#39;live&#39;
+                version = &#39;1.0.8&#39;
+
+                pom.withXml {
+                    def dependenciesNode = asNode().appendNode(&quot;dependencies&quot;)
+                    configurations.compile.dependencies.forEach { dep -&gt; addDependency(dependenciesNode, dep, &quot;compile&quot;) }
+                    configurations.api.dependencies.forEach { dep -&gt; addDependency(dependenciesNode, dep, &quot;compile&quot;) }
+                    configurations.implementation.dependencies.forEach { dep -&gt; addDependency(dependenciesNode, dep, &quot;runtime&quot;) }
+                }
+            }
+        }
+
+        repositories {
+            maven {
+                url = uri(&quot;https://xxx/repository/android-release/&quot;)
+
+                credentials {
+                    username = &quot;hetao&quot;
+                    password = &quot;hetao&quot;
+                }
+            }
+        }
+    }
+}
+</code></pre></div>
+<p>在用maven管理依赖时需要注意一下几点:</p>
+
+<ul>
+<li><p>需要关注发布的module是不是有远程依赖，有的话需要添加依赖配置</p></li>
+<li><p>需要发布的module输出为debug版本，统一由app模块去做混淆</p></li>
+<li><p>需要发布的module的混淆规则不能被遗漏，需要添加此配置:</p></li>
+</ul>
+<div class="highlight"><pre><code class="language-text" data-lang="text">defaultConfig {
+    ...
+
+    consumerProguardFiles &#39;proguard-rules.pro&#39;
+
+    ...
+
+}
+</code></pre></div>
+<p>不然会有因为混淆而找不到类的问题。</p>
 
 
         </section>
@@ -210,15 +246,15 @@ if __name__ == &#39;__main__&#39;:
 
             <section class="share">
                 <h4>Share this post</h4>
-                <a class="icon-twitter" href="http://twitter.com/share?text=用python脚本优雅的整理Kindle的标注和笔记&amp;url=http://longlinht.github.io//using-python-parse-kindle-notes"
+                <a class="icon-twitter" href="http://twitter.com/share?text=Android module SDK化的实践&amp;url=http://longlinht.github.io//using-maven-to-mananger-library"
                     onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
                     <span class="hidden">Twitter</span>
                 </a>
-                <a class="icon-facebook" href="https://www.facebook.com/sharer/sharer.php?u=http://longlinht.github.io//using-python-parse-kindle-notes"
+                <a class="icon-facebook" href="https://www.facebook.com/sharer/sharer.php?u=http://longlinht.github.io//using-maven-to-mananger-library"
                     onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
                     <span class="hidden">Facebook</span>
                 </a>
-                <a class="icon-google-plus" href="https://plus.google.com/share?url=http://longlinht.github.io//using-python-parse-kindle-notes"
+                <a class="icon-google-plus" href="https://plus.google.com/share?url=http://longlinht.github.io//using-maven-to-mananger-library"
                    onclick="window.open(this.href, 'google-plus-share', 'width=490,height=530');return false;">
                     <span class="hidden">Google+</span>
                 </a>
@@ -261,18 +297,12 @@ if __name__ == &#39;__main__&#39;:
 
     <!-- [[! next_post ]] -->
     
-        <a class="read-next-story no-cover" href="http://longlinht.github.io//using-maven-to-mananger-library">
-            <section class="post">
-                <h2>Android module SDK化的实践</h2>
-            </section>
-        </a>
-    
     <!-- [[! /next_post ]] -->
     <!-- [[! prev_post ]] -->
     
-        <a class="read-next-story prev no-cover" href="http://longlinht.github.io//read-homo-deus">
+        <a class="read-next-story prev no-cover" href="http://longlinht.github.io//using-python-parse-kindle-notes">
             <section class="post">
-                <h2>读《未来简史》</h2>
+                <h2>用python脚本优雅的整理Kindle的标注和笔记</h2>
             </section>
         </a>
     

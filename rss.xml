@@ -8,7 +8,16 @@
     <title>与机器，人，神共舞</title>
     <link>http://longlinht.github.io/</link>
     <description>编程，读书，思考，旅行，与机器对话，与人交谈，对神发问，探索，体验人生美丽的风景</description>
-    <pubDate>Thu, 12 Nov 2020 04:54:12 +0800</pubDate>
+    <pubDate>Sat, 21 Nov 2020 04:54:12 +0800</pubDate>
+    <item>
+      <title>Android module SDK化的实践</title>
+      <link>http://longlinht.github.io//using-maven-to-mananger-library</link>
+      <description>文章标题指的SDK化指的是将一个有多个module的Android工程中的特定module以aar的形式输出后被app模块依赖使用。那么如何在基本不改动代码的情况下实现这个要求，完成app模块对特定module的依赖呢?
+
+</description>
+      <pubDate>Sat, 21 Nov 2020 04:54:12 +0800</pubDate>
+      <dc:date>2020-11-21T04:54:12+08:00</dc:date>
+    </item>
     <item>
       <title>用python脚本优雅的整理Kindle的标注和笔记</title>
       <link>http://longlinht.github.io//using-python-parse-kindle-notes</link>
@@ -665,6 +674,6 @@ update UI when we finish something in separated thread. This is a basic problem,
       <pubDate>Wed, 03 Nov 2010 02:30:12 +0800</pubDate>
       <dc:date>2010-11-03T02:30:12+08:00</dc:date>
     </item>
-    <dc:date>2020-11-12T04:54:12+08:00</dc:date>
+    <dc:date>2020-11-21T04:54:12+08:00</dc:date>
   </channel>
 </rss>

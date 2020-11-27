@@ -12,6 +12,118 @@
    <atom:link href="rss" rel="self" type="application/rss+xml" />
    
 	<item>
+	  <title>Android module SDK化的实践</title>
+	  <link>//using-maven-to-mananger-library</link>
+	  <author>Tao He</author>
+	  <pubDate>2020-11-21T04:54:12+08:00</pubDate>
+	  <guid>//using-maven-to-mananger-library</guid>
+	  <description><![CDATA[
+	     <p>文章标题指的SDK化指的是将一个有多个module的Android工程中的特定module以aar的形式输出后被app模块依赖使用。那么如何在基本不改动代码的情况下实现这个要求，完成app模块对特定module的依赖呢?</p>
+
+<p>最直接的想法就是把要SDK化的module输出为aar文件，然后在app模块添加对此aar文件的依赖。在解决完所有的编译错误以后，运行app后发生了crash，查看输出，是因为输出为aar的这个模块所依赖的一个类在运行时找不到，事实上就是这个远端依赖没有被打进apk包。很明显，直接输出aar然后依赖是不可行的。</p>
+
+<p>远端依赖的类找不到，因为此module在输出为aar的时候并未将他的依赖打入aar包，那有没有办法将此module的所有依赖都打进aar包呢? 在线上搜索了一番后，还真找到了这样的一个gradle插件<a href="https://github.com/kezong/fat-aar-android">fat-aar-android</a>来做这件事，接入到工程中很简单:</p>
+
+<ol>
+<li>应用插件</li>
+</ol>
+
+<p>在project build gradle文件中加入如下代码:</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath &#39;com.android.tools.build:gradle:xxx&#39;
+        classpath &#39;com.kezong:fat-aar:1.2.20&#39;
+    }
+}
+</code></pre></div>
+<ol>
+<li>使用插件关键字来嵌入依赖</li>
+</ol>
+
+<p>将需要嵌入的依赖，修改implementation或api为embed</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">dependencies {
+    implementation fileTree(dir: &#39;libs&#39;, include: &#39;*.jar&#39;)
+    // java dependency
+    embed project(path: &#39;:lib-java&#39;, configuration:&#39;default&#39;)
+    // aar dependency
+    embed project(path: &#39;:lib-aar&#39;, configuration:&#39;default&#39;)
+    // aar dependency
+    embed project(path: &#39;:lib-aar2&#39;, configuration:&#39;default&#39;)
+    // local full aar dependency, just build in flavor1
+    flavor1Embed project(path: &#39;:lib-aar-local&#39;, configuration:&#39;default&#39;)
+    // local full aar dependency, just build in debug
+    debugEmbed (name:&#39;lib-aar-local2&#39;,ext:&#39;aar&#39;)
+    // remote jar dependency
+    embed &#39;com.google.guava:guava:20.0&#39;
+    // remote aar dependency
+    embed &#39;com.facebook.fresco:fresco:1.11.0&#39;
+    // don&#39;t want to embed in
+    // implementation is not recommended because the dependency may be different with the version in application, resulting in the R class not found.
+    compileOnly &#39;com.android.support:appcompat-v7:27.1.1&#39;
+}
+</code></pre></div>
+<p>使用此插件除了会遇到资源冲突外，目前没有发现其他问题。但这个插件在github上的issue有点多，心里有点没底，所以还需要想其他的办法。</p>
+
+<p>这两个方法被排除后，就想到用maven来管理依赖，更灵活，是更一般的做法。 将此module输出后上传到maven服务器，在app上添加对此module的远程依赖后，发现无法编译，找不到此module依赖中的类，这是因为没有在pom中添加依赖。将aar发布到maven和添加依赖配置的代码如下:</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">afterEvaluate {
+    publishing {
+        publications {
+            release(MavenPublication) {
+                artifact(&quot;$buildDir/outputs/aar/live-debug.aar&quot;) {
+                    builtBy tasks.getByName(&quot;assembleDebug&quot;)
+                }
+
+                groupId = &quot;com.overseas.android.live&quot;
+                artifactId = &#39;live&#39;
+                version = &#39;1.0.8&#39;
+
+                pom.withXml {
+                    def dependenciesNode = asNode().appendNode(&quot;dependencies&quot;)
+                    configurations.compile.dependencies.forEach { dep -&gt; addDependency(dependenciesNode, dep, &quot;compile&quot;) }
+                    configurations.api.dependencies.forEach { dep -&gt; addDependency(dependenciesNode, dep, &quot;compile&quot;) }
+                    configurations.implementation.dependencies.forEach { dep -&gt; addDependency(dependenciesNode, dep, &quot;runtime&quot;) }
+                }
+            }
+        }
+
+        repositories {
+            maven {
+                url = uri(&quot;https://xxx/repository/android-release/&quot;)
+
+                credentials {
+                    username = &quot;hetao&quot;
+                    password = &quot;hetao&quot;
+                }
+            }
+        }
+    }
+}
+</code></pre></div>
+<p>在用maven管理依赖时需要注意一下几点:</p>
+
+<ul>
+<li><p>需要关注发布的module是不是有远程依赖，有的话需要添加依赖配置</p></li>
+<li><p>需要发布的module输出为debug版本，统一由app模块去做混淆</p></li>
+<li><p>需要发布的module的混淆规则不能被遗漏，需要添加此配置:</p></li>
+</ul>
+<div class="highlight"><pre><code class="language-text" data-lang="text">defaultConfig {
+    ...
+
+    consumerProguardFiles &#39;proguard-rules.pro&#39;
+
+    ...
+
+}
+</code></pre></div>
+<p>不然会有因为混淆而找不到类的问题。</p>
+
+	  ]]></description>
+	</item>
+
+	<item>
 	  <title>用python脚本优雅的整理Kindle的标注和笔记</title>
 	  <link>//using-python-parse-kindle-notes</link>
 	  <author>Tao He</author>
@@ -680,68 +792,6 @@ Glide.with(this)
 <p>使用起来需要注意的问题和上面的BgImageSpan相同，也是先要设置Drawable的Bounds。</p>
 
 <p>虽然这两个实现看起来也没有什么难度，但是还是需要把这种解决过的，不那么常规的方法记录下来，以后遇到同样的问题可节省很多调研和调试的事件。</p>
-
-	  ]]></description>
-	</item>
-
-	<item>
-	  <title>修复VideoView引起的内存泄露小计</title>
-	  <link>//fix-video-view-leak</link>
-	  <author>Tao He</author>
-	  <pubDate>2019-09-21T02:30:12+08:00</pubDate>
-	  <guid>//fix-video-view-leak</guid>
-	  <description><![CDATA[
-	     <p>最近写了非常简单的新手引导视频页面，逻辑很简单，就是新手用户在第一次使用App时可以点击引导视频入口，然后进入一个视频播放页面，为了快速实现功能，就直接使用了VideoView，从需求开发到交付也都没什么问题，需求上线后我打开LeakCanary，想观察下最近有没有新增的内存泄露，竟然发现这个视频页面竟然泄露了。排查了一圈也没有发现有什么会阻止Activity销毁。但是LeakCanary打出了引用链，发现和VideoView有关，通过Google发现，竟然是VideoView自身的bug！这种情况也不是第一次遇见，那也得解决啊，所以开始想办法。</p>
-
-<p>首先显明确是谁导致了Activity的销毁，通过查看VideoView的源码，发现罪魁祸首是AudioManager，它可能会长期持有Context(即泄露的Activity)。很明显是因为生命周期不一致导致的泄露，因此最先想到的就是在创建VideoView时不要传Activity的Context，传给它ApplicationContext。当然了，在布局中创建的VideoView传入的就是Activity的Context，所以需要用代码动态创建:</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">mVideoView = new VideoView(getApplicationContext());
-RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(
-        RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-
-layoutParams.addRule(RelativeLayout.CENTER_IN_PARENT);
-mContainer.addView(mVideoView, layoutParams);
-</code></pre></div>
-<p>这样修改后还是会有内存泄露，只是引用链变了，需要在Activity的onDestroy回调中做一些处理</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">@Override
-protected void onDestroy() {
-  super.onDestroy();
-
-  if (mVideoView != null) {
-      mVideoView.stopPlayback();
-      mVideoView.setOnCompletionListener(null);
-      mVideoView.setOnPreparedListener(null);
-      mVideoView.setOnErrorListener(null);
-      mVideoView = null;
-  }
-
-  if (mContainer != null) {
-      mContainer.removeAllViews();
-  }
-</code></pre></div>
-<p>以上解决办法需要注意三点：</p>
-
-<ul>
-<li>给VideoView设置的Listener都要分别置空，否则仍然会泄露</li>
-<li>VideoView的父容器要删掉VideoView，光置空VideoView不够</li>
-<li>需设置VideoView的OnErrorListener且返回true，防止弹出弹窗使用ApplicationContext导致崩溃 </li>
-</ul>
-
-<p>传递ApplicationContext还有人提出另一种方法，但是我test发现没有效果，这种方法我也贴出来:</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">// Override Activity的attachBaseContext的行为
-@Override
-protected void attachBaseContext(Context newBase) {
-    super.attachBaseContext(new ContextWrapper(newBase){
-        @Override
-        public Object getSystemService(String name) {
-            if(Context.AUDIO_SERVICE.equals(name)){
-                return getApplicationContext().getSystemService(name);
-            }
-            return super.getSystemService(name);
-        }
-    });
-}
-</code></pre></div>
-<p>去规避系统API的bug真是很烦人的一件事，既不优雅，也不安全！</p>
 
 	  ]]></description>
 	</item>

@@ -12,6 +12,118 @@
    <atom:link href="rss" rel="self" type="application/rss+xml" />
    
 	<item>
+	  <title>Android module SDK化的实践</title>
+	  <link>//using-maven-to-mananger-library</link>
+	  <author>Tao He</author>
+	  <pubDate>2020-11-21T04:54:12+08:00</pubDate>
+	  <guid>//using-maven-to-mananger-library</guid>
+	  <description><![CDATA[
+	     <p>文章标题指的SDK化指的是将一个有多个module的Android工程中的特定module以aar的形式输出后被app模块依赖使用。那么如何在基本不改动代码的情况下实现这个要求，完成app模块对特定module的依赖呢?</p>
+
+<p>最直接的想法就是把要SDK化的module输出为aar文件，然后在app模块添加对此aar文件的依赖。在解决完所有的编译错误以后，运行app后发生了crash，查看输出，是因为输出为aar的这个模块所依赖的一个类在运行时找不到，事实上就是这个远端依赖没有被打进apk包。很明显，直接输出aar然后依赖是不可行的。</p>
+
+<p>远端依赖的类找不到，因为此module在输出为aar的时候并未将他的依赖打入aar包，那有没有办法将此module的所有依赖都打进aar包呢? 在线上搜索了一番后，还真找到了这样的一个gradle插件<a href="https://github.com/kezong/fat-aar-android">fat-aar-android</a>来做这件事，接入到工程中很简单:</p>
+
+<ol>
+<li>应用插件</li>
+</ol>
+
+<p>在project build gradle文件中加入如下代码:</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath &#39;com.android.tools.build:gradle:xxx&#39;
+        classpath &#39;com.kezong:fat-aar:1.2.20&#39;
+    }
+}
+</code></pre></div>
+<ol>
+<li>使用插件关键字来嵌入依赖</li>
+</ol>
+
+<p>将需要嵌入的依赖，修改implementation或api为embed</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">dependencies {
+    implementation fileTree(dir: &#39;libs&#39;, include: &#39;*.jar&#39;)
+    // java dependency
+    embed project(path: &#39;:lib-java&#39;, configuration:&#39;default&#39;)
+    // aar dependency
+    embed project(path: &#39;:lib-aar&#39;, configuration:&#39;default&#39;)
+    // aar dependency
+    embed project(path: &#39;:lib-aar2&#39;, configuration:&#39;default&#39;)
+    // local full aar dependency, just build in flavor1
+    flavor1Embed project(path: &#39;:lib-aar-local&#39;, configuration:&#39;default&#39;)
+    // local full aar dependency, just build in debug
+    debugEmbed (name:&#39;lib-aar-local2&#39;,ext:&#39;aar&#39;)
+    // remote jar dependency
+    embed &#39;com.google.guava:guava:20.0&#39;
+    // remote aar dependency
+    embed &#39;com.facebook.fresco:fresco:1.11.0&#39;
+    // don&#39;t want to embed in
+    // implementation is not recommended because the dependency may be different with the version in application, resulting in the R class not found.
+    compileOnly &#39;com.android.support:appcompat-v7:27.1.1&#39;
+}
+</code></pre></div>
+<p>使用此插件除了会遇到资源冲突外，目前没有发现其他问题。但这个插件在github上的issue有点多，心里有点没底，所以还需要想其他的办法。</p>
+
+<p>这两个方法被排除后，就想到用maven来管理依赖，更灵活，是更一般的做法。 将此module输出后上传到maven服务器，在app上添加对此module的远程依赖后，发现无法编译，找不到此module依赖中的类，这是因为没有在pom中添加依赖。将aar发布到maven和添加依赖配置的代码如下:</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">afterEvaluate {
+    publishing {
+        publications {
+            release(MavenPublication) {
+                artifact(&quot;$buildDir/outputs/aar/live-debug.aar&quot;) {
+                    builtBy tasks.getByName(&quot;assembleDebug&quot;)
+                }
+
+                groupId = &quot;com.overseas.android.live&quot;
+                artifactId = &#39;live&#39;
+                version = &#39;1.0.8&#39;
+
+                pom.withXml {
+                    def dependenciesNode = asNode().appendNode(&quot;dependencies&quot;)
+                    configurations.compile.dependencies.forEach { dep -&gt; addDependency(dependenciesNode, dep, &quot;compile&quot;) }
+                    configurations.api.dependencies.forEach { dep -&gt; addDependency(dependenciesNode, dep, &quot;compile&quot;) }
+                    configurations.implementation.dependencies.forEach { dep -&gt; addDependency(dependenciesNode, dep, &quot;runtime&quot;) }
+                }
+            }
+        }
+
+        repositories {
+            maven {
+                url = uri(&quot;https://xxx/repository/android-release/&quot;)
+
+                credentials {
+                    username = &quot;hetao&quot;
+                    password = &quot;hetao&quot;
+                }
+            }
+        }
+    }
+}
+</code></pre></div>
+<p>在用maven管理依赖时需要注意一下几点:</p>
+
+<ul>
+<li><p>需要关注发布的module是不是有远程依赖，有的话需要添加依赖配置</p></li>
+<li><p>需要发布的module输出为debug版本，统一由app模块去做混淆</p></li>
+<li><p>需要发布的module的混淆规则不能被遗漏，需要添加此配置:</p></li>
+</ul>
+<div class="highlight"><pre><code class="language-text" data-lang="text">defaultConfig {
+    ...
+
+    consumerProguardFiles &#39;proguard-rules.pro&#39;
+
+    ...
+
+}
+</code></pre></div>
+<p>不然会有因为混淆而找不到类的问题。</p>
+
+	  ]]></description>
+	</item>
+
+	<item>
 	  <title>用python脚本优雅的整理Kindle的标注和笔记</title>
 	  <link>//using-python-parse-kindle-notes</link>
 	  <author>Tao He</author>
@@ -575,154 +687,6 @@ public boolean onInterceptTouchEvent(MotionEvent ev){
 <p>LeakCanary使用泄露的状态信息，将引用链缩小为可能引起泄露的子引用链，并且在界面上显示出来，也就是我们在LeakCanary界面上看到的信息。有的泄露可能不相关，但是引用链相同，也会被认为是同一个引用链，所以泄露会根据相同的子引用链分组。</p>
 
 <p>以上就是LeakCanary基本原理的关键点，相信也是最简单的对LeakCanary原理的描述了吧!</p>
-
-	  ]]></description>
-	</item>
-
-	<item>
-	  <title>ImageSpan的定制使用</title>
-	  <link>//custom-image-span</link>
-	  <author>Tao He</author>
-	  <pubDate>2019-10-19T04:54:12+08:00</pubDate>
-	  <guid>//custom-image-span</guid>
-	  <description><![CDATA[
-	     <p>最近在做一个具体业务需求时，为了实现UI设计的要求，需要实现在同一段文字中，有一段文字是需要有形状的背景色，有一段文字中还有网络图片的插入，如果要达到这两个要求，简单的使用SpannableStringBuilder肯定是达不到要求的，虽然SpannableStringBuilder可以设置背景色，但是并不能绘制形状，说白了就是只能设置颜色，不能设置文字的背景图片。想要在文字中插入图片，可以直接使用ImageSpan，但是ImageSpan并不能加载网络图片。因此这种简单的使用方式都是行不通的，需要考虑去定制ImageSpan实现我们特殊的要求。</p>
-
-<ul>
-<li>实现给同一段文字的一部分文字区域设置背景图片</li>
-</ul>
-
-<p>这个功能的实现还是要继承ImageSpan，将我们的背景图片传进去，并且override ImageSpan的draw方法，根据对文字区域的测量，分别绘制出背景和文字。实现代码如下:</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">// BgImageSpan
-
-public class BgImageSpan extends ImageSpan {
-
-    private int textSize = 20;
-    private int color = Color.GRAY;
-    private TextView mTextView;
-    static float textboundhight;
-    static float textY;
-    String mText;
-
-    public BgImageSpan(Drawable d, TextView tv, String text) {
-        super(d);
-        mTextView = tv;
-        mText = text;
-        textSize = (int) mTextView.getTextSize();
-    }
-
-
-    @Override
-    public void draw(Canvas canvas, CharSequence text, int start, int end, float x, int top, int y,
-                     int bottom, Paint paint) {
-
-        String str = mText;
-        Rect bounds = new Rect();
-        paint.setTextSize(textSize);
-        paint.getTextBounds(str, 0, str.length(), bounds);
-        int textHeight = bounds.height();
-        int textWidth = bounds.width();
-
-        getDrawable().setBounds(0, top, (int)(bounds.width() * 1.3) , bottom);
-        super.draw(canvas, str, start, end, x, top, y, bottom, paint);
-        paint.setColor(mTextView.getTextColors().getDefaultColor());
-        paint.setTypeface(Typeface.create(&quot;normal&quot;, Typeface.NORMAL));
-
-        Rect bounds1 = getDrawable().getBounds();
-
-        float textX = x + bounds1.width() / 2 - bounds.width() / 2;
-        if (textboundhight == 0) {
-            textboundhight = bounds.height();
-            textY = (bounds1.height()) / 2 + textboundhight / 2;
-        }
-        canvas.drawText(str, textX, textY, paint);
-    }
-}
-</code></pre></div>
-<p>使用方法和ImageSpan并没有什么区别:</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">String username = &quot;用户名：&quot;;
-String message = &quot;哈哈，我是一个天才&quot;;
-
-SpannableStringBuilder ssb = new SpannableStringBuilder(username);
-ssb.append(message);
-
-Rect bounds = new Rect();
-Paint paint = mContent.getPaint();
-paint.getTextBounds(username, 0, username.length(), bounds);
-
-Drawable bgDrawable = getDrawable(R.drawable.round_rect);
-bgDrawable.setBounds(0, 0, (int)(bounds.width() * 1.3), bounds.height());
-
-ImageSpan nameBgSpan = new BgImageSpan(bgDrawable, mContent, username);
-ssb.setSpan(nameBgSpan, 0, username.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-
-ForegroundColorSpan contentColorSpan = new ForegroundColorSpan(Color.parseColor(&quot;#ffc800&quot;));
-ssb.setSpan(contentColorSpan, username.length(), username.length() + message.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-
-mContent.setText(ssb);
-mContent.postInvalidate();
-</code></pre></div>
-<p>使用代码需要注意一下几点:</p>
-
-<ol>
-<li>传给BgImageSpan的Drawable需要设置Bounds，然后再传进去，否则可能会出现字符重叠的问题。</li>
-<li>如果设置了Bounds还有字符重叠错乱的问题，可以调用TextView的postInvalidate重绘。</li>
-</ol>
-
-<ul>
-<li>第二种实现同一段文字的一部分文字区域设置背景图片</li>
-</ul>
-
-<p>这种实现的思路很简单，就是通过inflate一个单独的布局，然后用这个inflate好的view生成图片，然后传给一个ImageSpan，即可完成，代码如下:</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">View view = LayoutInflater.from(this).inflate(R.layout.container, null);
-TextView textView = view.findViewById(R.id.tv_value);
-textView.setText(username);
-
-view.measure(View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED),
-        View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
-view.layout(0, 0, view.getMeasuredWidth(), view.getMeasuredHeight());
-view.buildDrawingCache();
-Bitmap bitmap = view.getDrawingCache();
-
-ImageSpan nameBgSpan = new ImageSpan(this, bitmap);
-ssb.setSpan(nameBgSpan, 0, username.length(), Spanned.SPAN_EXCLUSIVE_INCLUSIVE);
-</code></pre></div>
-<ul>
-<li>实现一段文字中插入网络图片</li>
-</ul>
-
-<p>插入网络图片和插入本地图片其实没有本质区别，要插入网络图片，就得先获取到网络图片后再设置到ImageSpan中去。代码如下：</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">String url = &quot;http://img2.imgtn.bdimg.com/it/u=1467875646,1039972052&amp;fm=26&amp;gp=0.jpg&quot;;
-RequestOptions options = new RequestOptions()
-        .dontAnimate()
-        .diskCacheStrategy(DiskCacheStrategy.NONE);
-
-Glide.with(this)
-        .load(url)
-        .apply(options)
-        .into(new CustomTarget&lt;Drawable&gt;() {
-            @Override
-            public void onResourceReady(@NonNull Drawable resource, @Nullable Transition&lt;? super Drawable&gt; transition) {
-                if (resource instanceof BitmapDrawable) {
-                    resource.setBounds(0, 0, 50, 50);
-
-                    ImageSpan iconSpan = new ImageSpan(resource);
-                    ssb.setSpan(iconSpan, username.length(), username.length() + 2, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-
-                    mContent.setText(ssb);
-                    mContent.postInvalidate();
-                }
-            }
-
-            @Override
-            public void onLoadCleared(@Nullable Drawable placeholder) {
-
-            }
-        });
-</code></pre></div>
-<p>使用起来需要注意的问题和上面的BgImageSpan相同，也是先要设置Drawable的Bounds。</p>
-
-<p>虽然这两个实现看起来也没有什么难度，但是还是需要把这种解决过的，不那么常规的方法记录下来，以后遇到同样的问题可节省很多调研和调试的事件。</p>
 
 	  ]]></description>
 	</item>

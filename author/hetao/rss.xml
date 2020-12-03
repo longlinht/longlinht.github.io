@@ -12,6 +12,61 @@
    <atom:link href="rss" rel="self" type="application/rss+xml" />
    
 	<item>
+	  <title>Review Matrix</title>
+	  <link>//review-matrix</link>
+	  <author>Tao He</author>
+	  <pubDate>2020-11-23T04:54:12+08:00</pubDate>
+	  <guid>//review-matrix</guid>
+	  <description><![CDATA[
+	     <p>Linear Algebra is prerequisite for Machine Learning while Matrix is the one of most important stuff in Linear Algebra. It is difficult to learn ML well in case of not 
+familiar with Matrix. So it is time to review a few aspects of Matrix. Because of complexity of mathematical formula input, I will skip some details in main text, but attach them in three images(output from my Inkredible notes).</p>
+
+<p><strong>Image 1</strong> (Learning notes output by Inkredible)</p>
+
+<p><img src="/assets/images/IMG_20201203_201913.png" /></p>
+
+<p>Image 1 involves:</p>
+
+<ul>
+<li><p>Matrix Definition</p></li>
+<li><p>Matrix Addition and Multiplication</p></li>
+</ul>
+
+<p><strong>Image 2</strong> (Learning notes output by Inkredible)</p>
+
+<p><img src="/assets/images/IMG_20201203_201928.png" /></p>
+
+<p>Image 2 involves:</p>
+
+<ul>
+<li><p>Identity Matrix </p></li>
+<li><p>Properties of Matrix:</p>
+
+<ul>
+<li>Not Commutative</li>
+<li>Associativity</li>
+<li>Distributivity</li>
+</ul></li>
+<li><p>Multiplication with the Identity Matrix</p></li>
+<li><p>Inverse and Transpose</p></li>
+</ul>
+
+<p><strong>Image 3</strong> (Learning notes output by Inkredible)</p>
+
+<p><img src="/assets/images/IMG_20201203_201950.png" /></p>
+
+<p>Image 3 involves:</p>
+
+<ul>
+<li><p>Symetric Matrix</p></li>
+<li><p>Multiplication by a Scalar</p></li>
+<li><p>Compat Representation of System Linear Equation</p></li>
+</ul>
+
+	  ]]></description>
+	</item>
+
+	<item>
 	  <title>Android module SDK化的实践</title>
 	  <link>//using-maven-to-mananger-library</link>
 	  <author>Tao He</author>
@@ -646,48 +701,6 @@ public boolean onInterceptTouchEvent(MotionEvent ev){
     }
 }
 </code></pre></div>
-	  ]]></description>
-	</item>
-
-	<item>
-	  <title>最简LeakCanary原理解析</title>
-	  <link>//most-simple-leakcanary-principle</link>
-	  <author>Tao He</author>
-	  <pubDate>2019-11-11T04:54:12+08:00</pubDate>
-	  <guid>//most-simple-leakcanary-principle</guid>
-	  <description><![CDATA[
-	     <p>LeakCanary现在几乎成了Android开发过程中的一个标配，使用起来非常简单，能够帮助开发者发现和规避大部分的内存泄露问题。虽然大部分的开发者都或多或少，或深或浅的接触过LeakCanary，说起来是比较熟悉的一个第三方框架了，但是谈到LeakCanary的原理可能就会陌生很多。虽然网上也有非常多的讲解LeakCanary的文章，但是很多博文要么陷入无止境的代码细节中，要么就泛泛而谈，都不能很清楚的将LeakCanary的原理讲清楚。这篇文章尽力规避前两种文章的问题，用最小的篇幅把LeakCanary的原理讲清楚。</p>
-
-<h4>LeakCanary到底是怎么工作的?</h4>
-
-<p>LeakCanary能够准确，及时地检测到内存泄露，有以下几个关键点</p>
-
-<ul>
-<li>检测保留的实例</li>
-</ul>
-
-<p>LeakCanary能够工作的基石是一个叫做ObjectWatcher的库，它hook了Android中Activity和Fragment的生命周期，能够自动检测到Activity和Fragment的销毁和将要被GC，这些被检测到的Activity和Fragment的实例被传给了<code>ObjectWatcher</code>，<code>ObjectWatcher</code>以WeakReference持有他们。如果这些WeakReference在5秒后或者一次GC周期以后还没有被清理，那么LeakCanary认为这些实例被保留了，没有被回收，泄露发生了。检测没有被回收的实例是LeakCanary能够工作起来的基石，也是后续处理的基础，这一点非常重要。</p>
-
-<ul>
-<li>Dump 堆</li>
-</ul>
-
-<p>这一步需要对检测到的泄露进行处理，当然也不是检测到一个实例就会触发dump，而是有一个阈值，当达到一定数量实例的泄露后就会触发LeakCanary将Java堆内存dump到<code>.hprof</code>文件中去，当然了，这个文件存储在Android文件系统中。这个触发dump的阈值是如何确定的呢？如果App还可见，那这个阈值默认是5，如果App不可见，阈值默认是1。</p>
-
-<ul>
-<li>分析Java 堆</li>
-</ul>
-
-<p>LeakCanary使用<code>Shark</code>来分析<code>.hprof</code>文件，找出阻止实例被回收的引用链:leak trace.其实leak trace的另一个名字是GC Root到被引用实例的最短强引用路径。一旦leak trace确定了，LeakCanary会根据内置的对Android的知识库来推断出leak trace上哪个实例泄露了。</p>
-
-<ul>
-<li>Leak分组</li>
-</ul>
-
-<p>LeakCanary使用泄露的状态信息，将引用链缩小为可能引起泄露的子引用链，并且在界面上显示出来，也就是我们在LeakCanary界面上看到的信息。有的泄露可能不相关，但是引用链相同，也会被认为是同一个引用链，所以泄露会根据相同的子引用链分组。</p>
-
-<p>以上就是LeakCanary基本原理的关键点，相信也是最简单的对LeakCanary原理的描述了吧!</p>
-
 	  ]]></description>
 	</item>
 

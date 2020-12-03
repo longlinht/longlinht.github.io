@@ -8,7 +8,17 @@
     <title>与机器，人，神共舞</title>
     <link>http://longlinht.github.io/</link>
     <description>编程，读书，思考，旅行，与机器对话，与人交谈，对神发问，探索，体验人生美丽的风景</description>
-    <pubDate>Sat, 21 Nov 2020 04:54:12 +0800</pubDate>
+    <pubDate>Mon, 23 Nov 2020 04:54:12 +0800</pubDate>
+    <item>
+      <title>Review Matrix</title>
+      <link>http://longlinht.github.io//review-matrix</link>
+      <description>Linear Algebra is prerequisite for Machine Learning while Matrix is the one of most important stuff in Linear Algebra. It is difficult to learn ML well in case of not 
+familiar with Matrix. So it is time to review a few aspects of Matrix. Because of complexity of mathematical formula input, I will skip some details in main text, but attach them in three images(output from my Inkredible notes).
+
+</description>
+      <pubDate>Mon, 23 Nov 2020 04:54:12 +0800</pubDate>
+      <dc:date>2020-11-23T04:54:12+08:00</dc:date>
+    </item>
     <item>
       <title>Android module SDK化的实践</title>
       <link>http://longlinht.github.io//using-maven-to-mananger-library</link>
@@ -674,6 +684,6 @@ update UI when we finish something in separated thread. This is a basic problem,
       <pubDate>Wed, 03 Nov 2010 02:30:12 +0800</pubDate>
       <dc:date>2010-11-03T02:30:12+08:00</dc:date>
     </item>
-    <dc:date>2020-11-21T04:54:12+08:00</dc:date>
+    <dc:date>2020-11-23T04:54:12+08:00</dc:date>
   </channel>
 </rss>

@@ -8,7 +8,16 @@
     <title>与机器，人，神共舞</title>
     <link>http://longlinht.github.io/</link>
     <description>编程，读书，思考，旅行，与机器对话，与人交谈，对神发问，探索，体验人生美丽的风景</description>
-    <pubDate>Mon, 23 Nov 2020 04:54:12 +0800</pubDate>
+    <pubDate>Tue, 01 Dec 2020 04:54:12 +0800</pubDate>
+    <item>
+      <title>First Lesson of Machine Learning</title>
+      <link>http://longlinht.github.io//first-lesson-of-machine-learning</link>
+      <description>Two months ago, I made a decision for my career: learning machine learning from scratch. Machine learning involves many stuff of math while math is difficult. But I didnot give up in half way this time. Books, Youtube lectures, blogs, I collect learning materials as much as I can and do my best to learning it. 60 days passed, I have had a clarity understanding about some important concepts of Machine learing. In this article, I will figure out these concepts and their relations through 2 figures.
+
+</description>
+      <pubDate>Tue, 01 Dec 2020 04:54:12 +0800</pubDate>
+      <dc:date>2020-12-01T04:54:12+08:00</dc:date>
+    </item>
     <item>
       <title>Review Matrix</title>
       <link>http://longlinht.github.io//review-matrix</link>
@@ -684,6 +693,6 @@ update UI when we finish something in separated thread. This is a basic problem,
       <pubDate>Wed, 03 Nov 2010 02:30:12 +0800</pubDate>
       <dc:date>2010-11-03T02:30:12+08:00</dc:date>
     </item>
-    <dc:date>2020-11-23T04:54:12+08:00</dc:date>
+    <dc:date>2020-12-01T04:54:12+08:00</dc:date>
   </channel>
 </rss>

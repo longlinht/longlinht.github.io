@@ -114,7 +114,7 @@
 
         <section class="post-content">
             
-            <p>这个问题其实只要使用过<code>ScrollView</code>，可能都有机会遇到，问题的表现就是<code>ScrollView</code>包裹内容的高度超过<code>ScrollView</code>可视高度的话，被包裹的内容就会显示不全，最底部的内容永远也看不到了，这种情况肯定是无法接受的， 解决这个问题比较简单，其实就是简单的一句设置语句:</p>
+            <p>这个问题其实只要使用过ScrollView，可能都有机会遇到，问题的表现就是ScrollView包裹内容的高度超过ScrollView可视高度的话，被包裹的内容就会显示不全，最底部的内容永远也看不到了，这种情况肯定是无法接受的， 解决这个问题比较简单，其实就是简单的一句设置语句:</p>
 <div class="highlight"><pre><code class="language-text" data-lang="text">android:fillViewport=&quot;true&quot;
 </code></pre></div>
 <p>虽然这样可以解决问题，但是还是心中还有疑惑，我放在<code>ScrollView</code>中的<code>LinearLayout</code>是的高度是设置了<code>mactch_parent</code> 属性的，现在看来并没有生效，我猜测可能是<code>ScrollView</code>重写了测量方法导致的，于是去看<code>ScrollView</code>的<code>onMeasure</code> 方法:</p>
@@ -283,7 +283,7 @@ protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
 
 
         <footer class="site-footer clearfix">
-          <section class="copyright"><a href="/">与机器，人，神共舞</a> &copy; 2020</section>
+          <section class="copyright"><a href="/">与机器，人，神共舞</a> &copy; 2021</section>
         </footer>
     </div>
     <!-- [[! Ghost outputs important scripts and data with this tag ]] -->

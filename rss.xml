@@ -244,7 +244,7 @@ familiar with Matrix. So it is time to review a few aspects of Matrix. Because o
     <item>
       <title>解决ScrollView内容显示不全</title>
       <link>http://longlinht.github.io//scrollview-can-not-display-whole-content</link>
-      <description>这个问题其实只要使用过`ScrollView`，可能都有机会遇到，问题的表现就是`ScrollView`包裹内容的高度超过`ScrollView`可视高度的话，被包裹的内容就会显示不全，最底部的内容永远也看不到了，这种情况肯定是无法接受的， 解决这个问题比较简单，其实就是简单的一句设置语句:
+      <description>这个问题其实只要使用过ScrollView，可能都有机会遇到，问题的表现就是ScrollView包裹内容的高度超过ScrollView可视高度的话，被包裹的内容就会显示不全，最底部的内容永远也看不到了，这种情况肯定是无法接受的， 解决这个问题比较简单，其实就是简单的一句设置语句:
 
 </description>
       <pubDate>Wed, 05 Dec 2018 04:20:12 +0800</pubDate>

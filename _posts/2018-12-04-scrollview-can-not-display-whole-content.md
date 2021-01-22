@@ -9,7 +9,7 @@ categories: 'hetao'
 chinese: true
 ---
 
-这个问题其实只要使用过`ScrollView`，可能都有机会遇到，问题的表现就是`ScrollView`包裹内容的高度超过`ScrollView`可视高度的话，被包裹的内容就会显示不全，最底部的内容永远也看不到了，这种情况肯定是无法接受的， 解决这个问题比较简单，其实就是简单的一句设置语句:
+这个问题其实只要使用过ScrollView，可能都有机会遇到，问题的表现就是ScrollView包裹内容的高度超过ScrollView可视高度的话，被包裹的内容就会显示不全，最底部的内容永远也看不到了，这种情况肯定是无法接受的， 解决这个问题比较简单，其实就是简单的一句设置语句:
 
 ```
 android:fillViewport="true"

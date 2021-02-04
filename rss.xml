@@ -8,7 +8,16 @@
     <title>与机器，人，神共舞</title>
     <link>http://longlinht.github.io/</link>
     <description>编程，读书，思考，旅行，与机器对话，与人交谈，对神发问，探索，体验人生美丽的风景</description>
-    <pubDate>Tue, 01 Dec 2020 04:54:12 +0800</pubDate>
+    <pubDate>Fri, 15 Jan 2021 22:00:00 +0800</pubDate>
+    <item>
+      <title>在Android中定制Emoji的实现</title>
+      <link>http://longlinht.github.io//custom-emoji-in-android</link>
+      <description>最近公司产品在评论输入中要加入定制emoji面板，因此趟了emoji这个浑水，现以此文记录期间踩过的坑和一些心得。要实现一个相对比较完善的emoji输入和显示的功能，需要解决两个主要的问题: 键盘和emoji表情的平滑切换和emoji的正确显示。前者其实和emoji本身不相关，因此放在后面讨论。先来探究定制emoji的实现方案。 
+
+</description>
+      <pubDate>Fri, 15 Jan 2021 22:00:00 +0800</pubDate>
+      <dc:date>2021-01-15T22:00:00+08:00</dc:date>
+    </item>
     <item>
       <title>First Lesson of Machine Learning</title>
       <link>http://longlinht.github.io//first-lesson-of-machine-learning</link>
@@ -693,6 +702,6 @@ update UI when we finish something in separated thread. This is a basic problem,
       <pubDate>Wed, 03 Nov 2010 02:30:12 +0800</pubDate>
       <dc:date>2010-11-03T02:30:12+08:00</dc:date>
     </item>
-    <dc:date>2020-12-01T04:54:12+08:00</dc:date>
+    <dc:date>2021-01-15T22:00:00+08:00</dc:date>
   </channel>
 </rss>

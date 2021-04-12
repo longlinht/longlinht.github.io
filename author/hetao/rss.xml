@@ -12,6 +12,93 @@
    <atom:link href="rss" rel="self" type="application/rss+xml" />
    
 	<item>
+	  <title>使用Booster解决ANR的实践</title>
+	  <link>//using-booster-fix-anr</link>
+	  <author>Tao He</author>
+	  <pubDate>2021-01-24T22:00:00+08:00</pubDate>
+	  <guid>//using-booster-fix-anr</guid>
+	  <description><![CDATA[
+	     <p>SharedPreferences一直备受诟病，不论是因为开发者的不当使用还是其自身的问题，SharedPreferences都给开发者造成了不少困扰, 尤以ANR最甚。面对由SharedPreferences引起的ANR，我们通常的做法是引入MMKV来替代SP，规避SP本身的缺陷。但是MMKV虽然可以解决App自身由于使用SP导致的ANR，但是无法解决App中第三方库使用SP导致的ANR，因此，虽然MMKV性能优秀，可做数据迁移，久经验证，依然不能彻底解决SP的问题。因此需要考虑其他解决方案，后来找到了滴滴开源的Booster项目，算是找到一个相对彻底的解决方案。</p>
+
+<p>Booster是什么? 请注意，和著名的C++库Boost没半毛钱关系，且看官方介绍:</p>
+
+<blockquote>
+<p>Booster 通过 Gradle Plugin 的形式为 Android 工程质量把控提供了一套完整的框架，无论是代码、资源、动态库、依赖关系、包体积、性能等监控，都可以通过 Booster 来完成</p>
+</blockquote>
+
+<p>简单理解，Booster就是一个Gradle插件，但它不是一个简单的plugin，而是一个框架，提供了诸多不同功能的模块，可按需在项目构建的时候注入不同的功能模块。下面就以使用Booster SharedPreferences功能模块解决SP相关ANR为例来介绍Booster的基本用法:</p>
+
+<ol>
+<li>添加依赖，apply插件:</li>
+</ol>
+<div class="highlight"><pre><code class="language-text" data-lang="text">allprojects { project -&gt;
+    buildscript {
+        ext.booster_version = &#39;3.1.0&#39;
+        repositories {
+            mavenLocal()
+            google()
+            mavenCentral()
+            jcenter()
+            maven { url &#39;https://oss.sonatype.org/content/repositories/public&#39; }
+        }
+        dependencies {
+            classpath &quot;com.didiglobal.booster:booster-gradle-plugin:$booster_version&quot;
+            // 使用SharedPreferences功能模块
+            classpath &quot;com.didiglobal.booster:booster-transform-shared-preferences:$booster_version&quot;
+        }
+    }
+    repositories {
+        mavenLocal()
+        google()
+        mavenCentral()
+        jcenter()
+        maven { url &#39;https://oss.sonatype.org/content/repositories/public&#39; }
+    }
+    project.afterEvaluate {
+        if (project.extensions.findByName(&#39;android&#39;) != null) {
+            project.apply plugin: &#39;com.didiglobal.booster&#39;
+        }
+    }
+}
+</code></pre></div>
+<ol>
+<li>添加到项目的构建流程中去</li>
+</ol>
+
+<p>可以使用-I输入到构建流程中，也可将上述gradle脚本直接集成进project gradle文件，皆可达到目的。</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">// init.gradle即为上面的这段gradle脚本
+./gradlew -I init.gradle :app:assembleDebug
+</code></pre></div>
+<p>在项目构建的过程中输入这段脚本，输出的apk就已使用Booster的SP模块来解决ANR了。使用起来是不是感觉非常简洁，接入很优雅，因为想使用Booster任何一个功能模块，只要简单的添加一句依赖即可，如SP:</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">// 使用SharedPreferences功能模块
+classpath &quot;com.didiglobal.booster:booster-transform-shared-preferences:$booster_version&quot;
+</code></pre></div>
+<p>如此优雅的框架，是什么原理呢? 还以SP为例来简单聊聊:</p>
+
+<p>根本的原理就是Booster通过 SharedPreferencesTransformer 将所有调用 Context.getSharedPreferences(String, int) 的指令替换成 ShadowSharedPreferences.getSharedPreferences(Context, String, int)，代码如下：</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">public class ShadowSharedPreferences {
+
+    public static SharedPreferences getSharedPreferences(final Context context, String name, final int mode) {
+        if (TextUtils.isEmpty(name)) {
+            name = &quot;null&quot;;
+        }
+        return BoosterSharedPreferences.getSharedPreferences(name);
+    }
+
+    public static SharedPreferences getPreferences(final Activity activity, final int mode) {
+        return getSharedPreferences(activity.getApplicationContext(), activity.getLocalClassName(), mode);
+    }
+
+}
+</code></pre></div>
+<p>通过自定义 SharedPreferences 避开 QueuedWork 在 onPause(), onDestroy() 等生命周期回调时在主线程中的同步操作。如果对Booster有基本了解，对Booster这种指令替换的操作应该不陌生。如Booster在解决系统Bug的办法也是通过自定义类来替换有问题的系统类。如果我们使用Android Studio Profiler来查看我们App的内存情况，就可以搜到ShadowSharedPreferences类，此类就是系统SharedPreferences的替换类。</p>
+
+<p>Booster还有其他强大的功能模块有待探索和使用，后续用到后再来聊！</p>
+
+	  ]]></description>
+	</item>
+
+	<item>
 	  <title>在Android中定制Emoji的实现</title>
 	  <link>//custom-emoji-in-android</link>
 	  <author>Tao He</author>
@@ -897,107 +984,6 @@ if __name__ == &#39;__main__&#39;:
 <p>而companion object中定义的<code>const var MY_CONSTANT</code>是不可以全局访问的。 当然了，静态域为了避免访问时的Companion，也可以在定义时添加<code>@StaticField</code>.</p>
 
 <p>到此Kotlin中<code>静态</code>相关的部分基本已经覆盖到了，个人觉得这个companion object不是什么好的设计，远没有Java的static关键字来的简洁和表达力。</p>
-
-	  ]]></description>
-	</item>
-
-	<item>
-	  <title>基于DrawerLayout实现直播抽屉</title>
-	  <link>//implement-live-drawer</link>
-	  <author>Tao He</author>
-	  <pubDate>2020-07-29T04:54:12+08:00</pubDate>
-	  <guid>//implement-live-drawer</guid>
-	  <description><![CDATA[
-	     <p>直播间里右侧的滑出抽屉现在几乎成了主流直播的标配，无论是映客还是Bigo，都很早就上线了抽屉。我所在的这个产品最近也要上同样的功能，因此需要简单实现一个。
-  要实现一个简单的侧滑抽屉，最先想到的就是直接使用<code>DrawerLayout</code>，但是无法满足产品的一个手势要求: 在屏幕任何位置都可以调出和收起抽屉。<code>DrawerLayout</code> 的默认行为是只能从屏幕边缘调出。因此需要改变DrawerLayout的默认行为，使期能够从屏幕任何位置调出，这就需要通过反射修改drawerlayout的edgesize属性，因为drawerlayout还可以通过长按调出，我们的产品需求并不需要这个行为，因此也需要屏蔽掉，通过一个静态方法来统一实现：</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">public static void setDrawerLeftEdgeSize(DrawerLayout drawerLayout,
-                                             float percent) {
-    if (drawerLayout == null)
-        return;
-    try {
-        //获取 ViewDragHelper，更改其 edgeSizeField 为 displayWidthPercentage*屏幕大小
-        Field rightDraggerField = drawerLayout.getClass().getSuperclass().getDeclaredField(&quot;mRightDragger&quot;);
-        rightDraggerField.setAccessible(true);
-        ViewDragHelper rightDragger = (ViewDragHelper) rightDraggerField.get(drawerLayout);
-
-        Field edgeSizeField = rightDragger.getClass().getDeclaredField(&quot;mEdgeSize&quot;);
-        edgeSizeField.setAccessible(true);
-        int edgeSize = edgeSizeField.getInt(rightDragger);
-
-        edgeSizeField.setInt(rightDragger, Math.max(edgeSize, (int)(UIUtils.getScreenWidth() * percent)));
-
-        //获取 Layout 的 ViewDragCallBack 实例“mLeftCallback”
-        //更改其属性 mPeekRunnable
-        Field rightCallbackField = drawerLayout.getClass().getSuperclass().getDeclaredField(&quot;mRightCallback&quot;);
-        rightCallbackField.setAccessible(true);
-
-        //因为无法直接访问私有内部类，所以该私有内部类实现的接口非常重要，通过多态的方式获取实例
-        ViewDragHelper.Callback leftCallback = (ViewDragHelper.Callback) rightCallbackField.get(drawerLayout);
-
-        Field peekRunnableField = leftCallback.getClass().getDeclaredField(&quot;mPeekRunnable&quot;);
-        peekRunnableField.setAccessible(true);
-        Runnable nullRunnable = new Runnable() {
-            @Override
-            public void run() {
-
-            }
-        };
-        peekRunnableField.set(leftCallback, nullRunnable);
-    } catch (Exception e) {
-        e.printStackTrace();
-    }
-}
-</code></pre></div>
-<p>解决了edgsize和长按的问题后，马上又面临一个净屏页和抽屉的手势滑动冲突问题，并且还要注意两个UI元素的层级，基本的解决思路是根据滑动的方向和净屏页的状态在<code>DrawerLayout</code>子类的onInterceptTouchEvent里来处理事件拦截，改变<code>DrawerLayout</code>的默认行为，净屏页的逻辑不变，只向<code>DrawerLayout</code>提供状态的get方法，具体实现如下：</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">@Override
-public boolean onInterceptTouchEvent(MotionEvent ev){
-    Log.d(&quot;drawerLayout&quot;, &quot;onInterceptTouchEvent, action: &quot;
-            + ev.getAction() + &quot; x= &quot; + ev.getX() + &quot; y=&quot; + ev.getY());
-
-    boolean drawerOpen = this.isDrawerOpen(Gravity.RIGHT);
-    boolean pureMode = contentView.isPureMode();
-
-    switch(ev.getAction()) {
-        case MotionEvent.ACTION_DOWN:
-            mLastX = ev.getX();
-            mLastY = ev.getY();
-
-            /*
-            final View touchedView = findTopChildUnder((int) mLastX, (int) mLastY);
-            boolean isContent = isContentView(touchedView);
-
-
-            if (!drawerOpen &amp;&amp; isContent) {
-                return false;
-            }
-              */
-
-            break;
-        case MotionEvent.ACTION_MOVE:
-            float dx = ev.getX() - mLastX;
-            float dy = ev.getY() - mLastY;
-
-            boolean horizontal = Math.abs(dx) &gt; Math.abs(dy);
-
-            if (!pureMode &amp;&amp; dx &lt; 0 &amp;&amp; horizontal) {
-
-            } else if(!pureMode &amp;&amp; dx &gt; 0 &amp;&amp; drawerOpen &amp;&amp; horizontal){
-
-            } else {
-                return false;
-            }
-
-            break;
-        default:
-            break;
-    }
-    return super.onInterceptTouchEvent(ev);
-}
-</code></pre></div>
-<p>这样用最小的开发成本完成了产品的需求，实现了主流直播产品的抽屉功能。唯一的小瑕疵是直播间上下滑动时不能自动收起抽屉，这个因为并不是产品很在意的点，再加上产品需求紧急，就没有深究。当然了，这个抽屉功能其实可以抽取出来做成一个通用的抽屉，提供不同的接口来满足定制要求。</p>
-
-<p>tips：<code>DrawerLayout</code>显示区域穿透的问题可以这样解决：
-将显示区域的clickable属性设置为true。</p>
 
 	  ]]></description>
 	</item>

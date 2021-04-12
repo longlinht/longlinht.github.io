@@ -12,6 +12,93 @@
    <atom:link href="rss" rel="self" type="application/rss+xml" />
    
 	<item>
+	  <title>使用Booster解决ANR的实践</title>
+	  <link>//using-booster-fix-anr</link>
+	  <author>Tao He</author>
+	  <pubDate>2021-01-24T22:00:00+08:00</pubDate>
+	  <guid>//using-booster-fix-anr</guid>
+	  <description><![CDATA[
+	     <p>SharedPreferences一直备受诟病，不论是因为开发者的不当使用还是其自身的问题，SharedPreferences都给开发者造成了不少困扰, 尤以ANR最甚。面对由SharedPreferences引起的ANR，我们通常的做法是引入MMKV来替代SP，规避SP本身的缺陷。但是MMKV虽然可以解决App自身由于使用SP导致的ANR，但是无法解决App中第三方库使用SP导致的ANR，因此，虽然MMKV性能优秀，可做数据迁移，久经验证，依然不能彻底解决SP的问题。因此需要考虑其他解决方案，后来找到了滴滴开源的Booster项目，算是找到一个相对彻底的解决方案。</p>
+
+<p>Booster是什么? 请注意，和著名的C++库Boost没半毛钱关系，且看官方介绍:</p>
+
+<blockquote>
+<p>Booster 通过 Gradle Plugin 的形式为 Android 工程质量把控提供了一套完整的框架，无论是代码、资源、动态库、依赖关系、包体积、性能等监控，都可以通过 Booster 来完成</p>
+</blockquote>
+
+<p>简单理解，Booster就是一个Gradle插件，但它不是一个简单的plugin，而是一个框架，提供了诸多不同功能的模块，可按需在项目构建的时候注入不同的功能模块。下面就以使用Booster SharedPreferences功能模块解决SP相关ANR为例来介绍Booster的基本用法:</p>
+
+<ol>
+<li>添加依赖，apply插件:</li>
+</ol>
+<div class="highlight"><pre><code class="language-text" data-lang="text">allprojects { project -&gt;
+    buildscript {
+        ext.booster_version = &#39;3.1.0&#39;
+        repositories {
+            mavenLocal()
+            google()
+            mavenCentral()
+            jcenter()
+            maven { url &#39;https://oss.sonatype.org/content/repositories/public&#39; }
+        }
+        dependencies {
+            classpath &quot;com.didiglobal.booster:booster-gradle-plugin:$booster_version&quot;
+            // 使用SharedPreferences功能模块
+            classpath &quot;com.didiglobal.booster:booster-transform-shared-preferences:$booster_version&quot;
+        }
+    }
+    repositories {
+        mavenLocal()
+        google()
+        mavenCentral()
+        jcenter()
+        maven { url &#39;https://oss.sonatype.org/content/repositories/public&#39; }
+    }
+    project.afterEvaluate {
+        if (project.extensions.findByName(&#39;android&#39;) != null) {
+            project.apply plugin: &#39;com.didiglobal.booster&#39;
+        }
+    }
+}
+</code></pre></div>
+<ol>
+<li>添加到项目的构建流程中去</li>
+</ol>
+
+<p>可以使用-I输入到构建流程中，也可将上述gradle脚本直接集成进project gradle文件，皆可达到目的。</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">// init.gradle即为上面的这段gradle脚本
+./gradlew -I init.gradle :app:assembleDebug
+</code></pre></div>
+<p>在项目构建的过程中输入这段脚本，输出的apk就已使用Booster的SP模块来解决ANR了。使用起来是不是感觉非常简洁，接入很优雅，因为想使用Booster任何一个功能模块，只要简单的添加一句依赖即可，如SP:</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">// 使用SharedPreferences功能模块
+classpath &quot;com.didiglobal.booster:booster-transform-shared-preferences:$booster_version&quot;
+</code></pre></div>
+<p>如此优雅的框架，是什么原理呢? 还以SP为例来简单聊聊:</p>
+
+<p>根本的原理就是Booster通过 SharedPreferencesTransformer 将所有调用 Context.getSharedPreferences(String, int) 的指令替换成 ShadowSharedPreferences.getSharedPreferences(Context, String, int)，代码如下：</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">public class ShadowSharedPreferences {
+
+    public static SharedPreferences getSharedPreferences(final Context context, String name, final int mode) {
+        if (TextUtils.isEmpty(name)) {
+            name = &quot;null&quot;;
+        }
+        return BoosterSharedPreferences.getSharedPreferences(name);
+    }
+
+    public static SharedPreferences getPreferences(final Activity activity, final int mode) {
+        return getSharedPreferences(activity.getApplicationContext(), activity.getLocalClassName(), mode);
+    }
+
+}
+</code></pre></div>
+<p>通过自定义 SharedPreferences 避开 QueuedWork 在 onPause(), onDestroy() 等生命周期回调时在主线程中的同步操作。如果对Booster有基本了解，对Booster这种指令替换的操作应该不陌生。如Booster在解决系统Bug的办法也是通过自定义类来替换有问题的系统类。如果我们使用Android Studio Profiler来查看我们App的内存情况，就可以搜到ShadowSharedPreferences类，此类就是系统SharedPreferences的替换类。</p>
+
+<p>Booster还有其他强大的功能模块有待探索和使用，后续用到后再来聊！</p>
+
+	  ]]></description>
+	</item>
+
+	<item>
 	  <title>在Android中定制Emoji的实现</title>
 	  <link>//custom-emoji-in-android</link>
 	  <author>Tao He</author>
@@ -955,30 +1042,6 @@ public boolean onInterceptTouchEvent(MotionEvent ev){
 
 <p>tips：<code>DrawerLayout</code>显示区域穿透的问题可以这样解决：
 将显示区域的clickable属性设置为true。</p>
-
-	  ]]></description>
-	</item>
-
-	<item>
-	  <title>为什么学习设计模式</title>
-	  <link>//why-learn-design-pattern</link>
-	  <author>Tao He</author>
-	  <pubDate>2020-05-08T04:54:12+08:00</pubDate>
-	  <guid>//why-learn-design-pattern</guid>
-	  <description><![CDATA[
-	     <p>设计模式，可能是每一个程序员都绕不过去的话题，有人认为特别重要，有人对其嗤之以鼻，也有人并不是很确定它的重要性。为什么要学习设计模式，这么多年以来其实我也没有看到一个很好的回答，前一阵在Youtube看到一个讲Android系统开发的youtuber的主页，发现他的一篇很短的文章探讨了这个问题，看完后感觉醍醐灌顶，因此有冲动翻译并记录下其主要的观点。</p>
-
-<p>编程如下棋，一个新手刚开始接触时，首先要了解能够正常下棋的要素，如棋子，棋盘，要熟悉棋子移动，吃子，将军的规则，等这些都了解了以后，就可以正常下棋了，虽然可能下的不好，但是渐渐的，开始领会一些这个游戏的基本规律，如何占取优势，如何使用策略，通过一次次的棋局，逐步的识别出一些可能是很愚蠢的错误，并在以后的棋局中尽量避免，一个新手也可能下棋下的越来越好。</p>
-
-<p>但是一个人如果想成为下棋的大师，却需要学习大师们所下过的棋局。隐藏在这些棋局中的模式必须通过理解，记忆，反复应用，最后成为一个人的本能。这些模式可能是成千上万的，开放模式更是繁多，以至于有很多关于其变化的书籍。 游戏中模式和结束模式也很普遍，作为大师们必须熟悉它们。</p>
-
-<p>编程也一样，首先学习规则，学习算法，数据结构，熟悉了这些后就可以编程了，尽管所写的代码会比较蹩脚。之后，开始学习软件设计的原则，如结构化编程，模块化编程，面向对象编程，如高内聚低耦合的重要性，如信息隐藏和依赖管理。等这些都学习了以后，一个人要想成为真正的编程大师，还是需要学习大师们的设计，并深入这些设计，举一反三，这些模式必须被理解，记忆，反复应用，最后成为一个人的本能。</p>
-
-<p>这篇文章本来就很短，但是我依旧要提炼出本文要划重点的句子:</p>
-
-<blockquote>
-<p>一个人要想成为真正的编程大师，还是需要学习大师们的设计，并深入这些设计，举一反三，这些模式必须被理解，记忆，反复应用，最后成为一个人的本能。</p>
-</blockquote>
 
 	  ]]></description>
 	</item>

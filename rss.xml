@@ -8,7 +8,16 @@
     <title>与机器，人，神共舞</title>
     <link>http://longlinht.github.io/</link>
     <description>编程，读书，思考，旅行，与机器对话，与人交谈，对神发问，探索，体验人生美丽的风景</description>
-    <pubDate>Sun, 24 Jan 2021 22:00:00 +0800</pubDate>
+    <pubDate>Sun, 18 Apr 2021 04:54:12 +0800</pubDate>
+    <item>
+      <title>重读Sapiens</title>
+      <link>http://longlinht.github.io//read-sapiens</link>
+      <description>两年前读过《人类简史》的中译本，去年年终和今年年初一口气读完了《未来简史》和《今日简史》的英文版，就一直惦记着干脆把《人类简史》的英文版再读一遍，今年过年时本来想一鼓作气读完，但是中间又读了《The Black Swan》，就一直没顾上，最近坐地铁通勤，断断续续终于又读了一遍，不得不说，再读英文版，依旧有新的收获。不管从写史的风格，思路，框架，格局，还是文笔，都是一等一的杰作。
+
+</description>
+      <pubDate>Sun, 18 Apr 2021 04:54:12 +0800</pubDate>
+      <dc:date>2021-04-18T04:54:12+08:00</dc:date>
+    </item>
     <item>
       <title>使用Booster解决ANR的实践</title>
       <link>http://longlinht.github.io//using-booster-fix-anr</link>
@@ -711,6 +720,6 @@ update UI when we finish something in separated thread. This is a basic problem,
       <pubDate>Wed, 03 Nov 2010 02:30:12 +0800</pubDate>
       <dc:date>2010-11-03T02:30:12+08:00</dc:date>
     </item>
-    <dc:date>2021-01-24T22:00:00+08:00</dc:date>
+    <dc:date>2021-04-18T04:54:12+08:00</dc:date>
   </channel>
 </rss>

@@ -12,6 +12,88 @@
    <atom:link href="rss" rel="self" type="application/rss+xml" />
    
 	<item>
+	  <title>重读Sapiens</title>
+	  <link>//read-sapiens</link>
+	  <author>Tao He</author>
+	  <pubDate>2021-04-18T04:54:12+08:00</pubDate>
+	  <guid>//read-sapiens</guid>
+	  <description><![CDATA[
+	     <p>两年前读过《人类简史》的中译本，去年年终和今年年初一口气读完了《未来简史》和《今日简史》的英文版，就一直惦记着干脆把《人类简史》的英文版再读一遍，今年过年时本来想一鼓作气读完，但是中间又读了《The Black Swan》，就一直没顾上，最近坐地铁通勤，断断续续终于又读了一遍，不得不说，再读英文版，依旧有新的收获。不管从写史的风格，思路，框架，格局，还是文笔，都是一等一的杰作。</p>
+
+<p>且看开篇这个段落：</p>
+
+<p>Years Before the Present </p>
+
+<p>13.5 billion Matter and energy appear. Beginning of physics. Atoms and molecules appear. Beginning of chemistry. </p>
+
+<p>4.5 billion Formation of planet Earth. </p>
+
+<p>3.8 billion Emergence of organisms. Beginning of biology. </p>
+
+<p>6 million Last common grandmother of humans and chimpanzees. </p>
+
+<p>2.5 million Evolution of the genus Homo in Africa. First stone tools. </p>
+
+<p>2 million Humans spread from Africa to Eurasia. Evolution of different human species. </p>
+
+<p>500,000 Neanderthals evolve in Europe and the Middle East. </p>
+
+<p>300,000 Daily usage of fire. </p>
+
+<p>200,000 Homo sapiens evolves in East Africa. </p>
+
+<p>70,000 The Cognitive Revolution. Emergence of fictive language. Beginning of history. Sapiens spread out of Africa.</p>
+
+<p>45,000 Sapiens settle Australia. Extinction of Australian megafauna. </p>
+
+<p>30,000 Extinction of Neanderthals. </p>
+
+<p>16,000 Sapiens settle America. Extinction of American megafauna. </p>
+
+<p>13,000 Extinction of Homo floresiensis. Homo sapiens the only surviving human species. </p>
+
+<p>12,000 The Agricultural Revolution. Domestication of plants and animals. Permanent settlements. </p>
+
+<p>5,000 First kingdoms, script and money. Polytheistic religions. </p>
+
+<p>4,250 First empire– the Akkadian Empire of Sargon. </p>
+
+<p>2,500 Invention of coinage– a universal money. The Persian Empire– a universal political order ‘for the benefit of all humans’. Buddhism in India– a universal truth ‘to liberate all beings from suffering’. </p>
+
+<p>2,000 Han Empire in China. Roman Empire in the Mediterranean. Christianity.</p>
+
+<p>1,400 Islam. </p>
+
+<p>500 The Scientific Revolution. Humankind admits its ignorance and begins to acquire unprecedented power. Europeans begin to conquer America and the oceans. The entire planet becomes a single historical arena. The rise of capitalism. </p>
+
+<p>200 The Industrial Revolution. Family and community are replaced by state and market. Massive extinction of plants and animals. The Present Humans transcend the boundaries of planet Earth. Nuclear weapons threaten the survival of humankind. Organisms are increasingly shaped by intelligent design rather than natural selection. The Future Intelligent design becomes the basic principle of life? Homo sapiens is replaced by superhumans? </p>
+
+<p>我也看过不少历史类的书籍，没有一个作者像赫拉利这样，寥寥数言，已经清晰的勾勒出人类历史的基本脉络，并且文字有趣，简洁。坦白讲，自柏杨先生《中国人史纲》的开篇后，好多年没再看到这么好的历史类段落了。</p>
+
+<p>书中所论述的一些观点之新颖，视角之新奇，思想之深刻，足可让赫拉利本人创立一个学派，而这些观点和视角完全值得细数一番：</p>
+
+<p>人类相较于其他哺乳动物都是早产儿。</p>
+
+<p>在地球上曾经存在过很多个人种，现在只剩下智人一支，而其他人种的消亡智人有脱不了的干系，就如一些巨形陆生动物的消亡也与智人的出现脱不了干系一样。</p>
+
+<p>使用火，吃上熟食，依旧是人类节省消化能量，促进大脑进化的关键。</p>
+
+<p>人类的崛起，或者说是成为这个世界的主宰的关键，不是会使用工具，而是智人虚构出了一些不存在的东西，如神鬼，宗教，国家，法律，公司等，这是消亡的其他人种和其它动物所没有的。</p>
+
+<p>人类在农业革命之前可能活的是最轻松和健康的，从那之后人类就进入了无尽的辛劳和焦虑，直到今日这种状况也并没有改善，只是换了一种表现形式。</p>
+
+<p>人类的秩序是想象出来的，包括钱，因为人相信这些是真实存在的。</p>
+
+<p>汉谟拉比法典和人权宣言都不能细细推敲，严格说来都是胡说八道。</p>
+
+<p>书中如上述的一些观点和论述都有更多的细节，可参阅原文，几乎每一条都新是新思路，新视角，使人总有拍案叫绝的冲动。文字也是好文字，使我一个可通读英文书籍没几年的人也感觉没有刻板，不觉晦涩。</p>
+
+<p>好书就该为其写一篇读后感，虽是最俗套的做法，但还是写下了自己的一些感受和领悟。今后回看也好有个参照。</p>
+
+	  ]]></description>
+	</item>
+
+	<item>
 	  <title>使用Booster解决ANR的实践</title>
 	  <link>//using-booster-fix-anr</link>
 	  <author>Tao He</author>
@@ -918,72 +1000,6 @@ if __name__ == &#39;__main__&#39;:
 <p>Just move accessing syntheic binding view statement from <code>onCreateView</code> to <code>onViewCreated</code>.</p>
 
 <p>The problem is that I am accessing it too soon, When I delay the chance to access view, all works well. Magic! But it’s nothing magical, if you decompile the bytecode (By going toTools -&gt; Kotlin -&gt; Show Kotlin Bytecode and then selecting Decompile in the pane) and take a look at the generated java class, you’ll see that all it does is call findViewById() for us. Although this is a simple problem, but it is useful to record it.</p>
-
-	  ]]></description>
-	</item>
-
-	<item>
-	  <title>Kotlin中的"静态" 方法和域</title>
-	  <link>//static-method-in-kotlin</link>
-	  <author>Tao He</author>
-	  <pubDate>2020-09-03T04:54:12+08:00</pubDate>
-	  <guid>//static-method-in-kotlin</guid>
-	  <description><![CDATA[
-	     <p>最近开始尝试在现有的工程中使用Kotlin，刚开始使用时感觉语法简洁，代码量也少了很多，语法层面的防空，可以直接访问布局控件这些特性，都让人耳目一新，但是当我要定义静态方法和静态类时，不爽的体验一下子就上来了，所以通过此文来一探Kotlin&quot;静态&quot; 的究竟。
-  先来看静态方法， 很遗憾，Kotlin中没有<code>static</code>关键字，需要将静态方法放在<code>companion object</code>中的代码块中，因此：</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">class Foo {
-  public static int a() { return 1; }
-}
-</code></pre></div>
-<p>就变成了这样:</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">class Foo {
-  companion object {
-     fun a() : Int = 1
-  }
-}
-</code></pre></div>
-<p>可以在Kotlin代码中这样使用该类:</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">Foo.a();
-</code></pre></div>
-<p>在Java代码中:</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">Foo.Companion.a();
-</code></pre></div>
-<p>如果你不喜欢使用<code>Companion</code>, 你可以对该静态方法添加<code>@JvmStatic</code>注解:</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">class Foo {
-  companion object {
-    @JvmStatic
-    fun a() : Int = 1;
-  }
-}
-</code></pre></div>
-<p>也可以命名你的<code>companion</code>类:</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">class Foo {
-  companion object Blah {
-    fun a() : Int = 1;
-  }
-}
-</code></pre></div>
-<p>然后可以这样调用:</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">Foo.Blah.a() 
-</code></pre></div>
-<p>然后来看静态域， 比起静态方法，静态域的情况有所不同，虽然也可以这样定义:</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">class Foo {
-  companion object {
-    val MY_CONSTANT = &quot;MY_CONSTANT&quot;
-  }
-}
-</code></pre></div>
-<p>但是会自动为<code>MY_CONSTANT</code>生成getter和setter方法，相当于实例域访问，开销会比静态方法大，不推荐此种定义方法。可以这样定义:</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">object Foo {
-    const val MY_CONSTANT = &quot;MY_CONSTANT&quot;
-}
-</code></pre></div>
-<p>上面定义的object Foo可以全局访问:</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">Foo.MY_CONSTANT
-</code></pre></div>
-<p>而companion object中定义的<code>const var MY_CONSTANT</code>是不可以全局访问的。 当然了，静态域为了避免访问时的Companion，也可以在定义时添加<code>@StaticField</code>.</p>
-
-<p>到此Kotlin中<code>静态</code>相关的部分基本已经覆盖到了，个人觉得这个companion object不是什么好的设计，远没有Java的static关键字来的简洁和表达力。</p>
 
 	  ]]></description>
 	</item>

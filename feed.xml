@@ -7,6 +7,56 @@
     <atom:link href="http://longlinht.github.io//feed.xml" rel="self" type="application/rss+xml" />
     
       <item>
+        <title>13个问题测试你对这个世界的无知有多严重</title>
+        <description>&lt;p&gt;在Factfulness这本书中作者一开头就抛出13个对事实认知的问题，以此测试读者对这个世界的认知，因为我已经读完了这本书，我觉得这些问题值得将其单列出来，有兴趣的可以做做这些测试题，文末附有答案，相信我你的成绩不一定好过大猩猩，问题列表如下:&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;1. In all low-income countries across the world today, how many girls finish primary school? 
+   A: 20 percent    B: 40 percent    C: 60 percent 
+
+2. Where does the majority of the world population live? 
+   A: Low-income countries    B: Middle-income countries    C: High-income countries 
+
+3. In the last 20 years, the proportion of the world population living in extreme poverty has … 
+   A: almost doubled    B: remained more or less the same    C: almost halved 
+
+4. What is the life expectancy of the world today?
+    A: 50 years    B: 60 years    C: 70 years 
+
+5. There are 2 billion children in the world today, aged 0 to 15 years old. How many children will there be in the year 2100, according to the United Nations? 
+   A: 4 billion    B: 3 billion    C: 2 billion
+
+6. The UN predicts that by 2100 the world population will have increased by another 4 billion people. What is the main reason? 
+   A: There will be more children (age below 15)    B: There will be more adults (age 15 to 74)    C: There will be more very old people (age 75 and older) 
+
+7. How did the number of deaths per year from natural disasters change over the last hundred years? 
+   A: More than doubled    B: Remained about the same    C: Decreased to less than half 
+
+8. There are roughly 7 billion people in the world today. Which map shows best where they live? (Each figure represents 1 billion people.) 
+
+9. How many of the world’s 1-year-old children today have been vaccinated against some disease?
+   A: 20 percent    B: 50 percent    C: 80 percent 
+
+10. Worldwide, 30-year-old men have spent 10 years in school, on average. How many years have women of the same age spent in school? 
+   A: 9 years    B: 6 years    C: 3 years 
+
+11. In 1996, tigers, giant pandas, and black rhinos were all listed as endangered. How many of these three species are more critically endangered today? 
+   A: Two of them    B: One of them    C: None of them 
+
+12. How many people in the world have some access to electricity? 
+   A: 20 percent    B: 50 percent    C: 80 percent 
+
+13. Global climate experts believe that, over the next 100 years, the average temperature will … 
+   A: get warmer    B: remain the same    C: get colder
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Here are the correct answers:&lt;/p&gt;
+
+&lt;p&gt;1: C, 2: B, 3: C, 4: C, 5: C, 6: B, 7: C, 8: A, 9: C, 10: A, 11: C, 12: C, 13: A&lt;/p&gt;
+</description>
+        <pubDate>Thu, 22 Apr 2021 04:54:12 +0800</pubDate>
+        <link>http://longlinht.github.io//13-questions-test-your-ignorance</link>
+        <guid isPermaLink="true">http://longlinht.github.io//13-questions-test-your-ignorance</guid>
+      </item>
+    
+      <item>
         <title>重读Sapiens</title>
         <description>&lt;p&gt;两年前读过《人类简史》的中译本，去年年终和今年年初一口气读完了《未来简史》和《今日简史》的英文版，就一直惦记着干脆把《人类简史》的英文版再读一遍，今年过年时本来想一鼓作气读完，但是中间又读了《The Black Swan》，就一直没顾上，最近坐地铁通勤，断断续续终于又读了一遍，不得不说，再读英文版，依旧有新的收获。不管从写史的风格，思路，框架，格局，还是文笔，都是一等一的杰作。&lt;/p&gt;
 
@@ -74,7 +124,7 @@
 
 &lt;p&gt;人类的秩序是想象出来的，包括钱，因为人相信这些是真实存在的。&lt;/p&gt;
 
-&lt;p&gt;汉谟拉比法典和人权宣言都不能细细推敲，严格说来都是胡说八道。&lt;/p&gt;
+&lt;p&gt;汉谟拉比法典和人权宣言都不能细细推敲，如严格说来都是胡说八道。&lt;/p&gt;
 
 &lt;p&gt;书中如上述的一些观点和论述都有更多的细节，可参阅原文，几乎每一条都新是新思路，新视角，使人总有拍案叫绝的冲动。文字也是好文字，使我一个可通读英文书籍没几年的人也感觉没有刻板，不觉晦涩。&lt;/p&gt;
 
@@ -948,25 +998,6 @@ if __name__ == &amp;#39;__main__&amp;#39;:
         <pubDate>Mon, 12 Oct 2020 02:20:12 +0800</pubDate>
         <link>http://longlinht.github.io//bottom-sheet-dialog-in-flutter</link>
         <guid isPermaLink="true">http://longlinht.github.io//bottom-sheet-dialog-in-flutter</guid>
-      </item>
-    
-      <item>
-        <title>Kotlin synthetic binding view is null in Fragment</title>
-        <description>&lt;p&gt;Kotlin provide a handy and concise way to access views in xml layout from code, it works well, but When I create a subclass of &lt;code&gt;DialogFragment&lt;/code&gt;, in its method &lt;code&gt;onCreateView&lt;/code&gt;, I access synthetic binding view, it seems all is fine, but when run these code, app crash. In logcat, I got this &lt;code&gt;NullPointerException&lt;/code&gt;:&lt;/p&gt;
-
-&lt;blockquote&gt;
-&lt;p&gt;Caused by: java.lang.NullPointerException: Attempt to invoke virtual method &amp;#39;android.view.View android.view.View.findViewById(int)&amp;#39; on a null object reference&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;I&amp;#39;m sure synthetic statement is imported and view id is right, it confused me a bit. So I Google Kotlin synthetic binding view related web pages, finally I found a solution:&lt;/p&gt;
-
-&lt;p&gt;Just move accessing syntheic binding view statement from &lt;code&gt;onCreateView&lt;/code&gt; to &lt;code&gt;onViewCreated&lt;/code&gt;.&lt;/p&gt;
-
-&lt;p&gt;The problem is that I am accessing it too soon, When I delay the chance to access view, all works well. Magic! But it’s nothing magical, if you decompile the bytecode (By going toTools -&amp;gt; Kotlin -&amp;gt; Show Kotlin Bytecode and then selecting Decompile in the pane) and take a look at the generated java class, you’ll see that all it does is call findViewById() for us. Although this is a simple problem, but it is useful to record it.&lt;/p&gt;
-</description>
-        <pubDate>Wed, 09 Sep 2020 02:20:12 +0800</pubDate>
-        <link>http://longlinht.github.io//kotlin-synthetic-view-binding-view-is-null-in-fragment</link>
-        <guid isPermaLink="true">http://longlinht.github.io//kotlin-synthetic-view-binding-view-is-null-in-fragment</guid>
       </item>
     
   </channel>

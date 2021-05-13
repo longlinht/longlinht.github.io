@@ -8,7 +8,16 @@
     <title>与机器，人，神共舞</title>
     <link>http://longlinht.github.io/</link>
     <description>编程，读书，思考，旅行，与机器对话，与人交谈，对神发问，探索，体验人生美丽的风景</description>
-    <pubDate>Sun, 18 Apr 2021 04:54:12 +0800</pubDate>
+    <pubDate>Thu, 22 Apr 2021 04:54:12 +0800</pubDate>
+    <item>
+      <title>13个问题测试你对这个世界的无知有多严重</title>
+      <link>http://longlinht.github.io//13-questions-test-your-ignorance</link>
+      <description>在Factfulness这本书中作者一开头就抛出13个对事实认知的问题，以此测试读者对这个世界的认知，因为我已经读完了这本书，我觉得这些问题值得将其单列出来，有兴趣的可以做做这些测试题，文末附有答案，相信我你的成绩不一定好过大猩猩，问题列表如下:
+
+</description>
+      <pubDate>Thu, 22 Apr 2021 04:54:12 +0800</pubDate>
+      <dc:date>2021-04-22T04:54:12+08:00</dc:date>
+    </item>
     <item>
       <title>重读Sapiens</title>
       <link>http://longlinht.github.io//read-sapiens</link>
@@ -720,6 +729,6 @@ update UI when we finish something in separated thread. This is a basic problem,
       <pubDate>Wed, 03 Nov 2010 02:30:12 +0800</pubDate>
       <dc:date>2010-11-03T02:30:12+08:00</dc:date>
     </item>
-    <dc:date>2021-04-18T04:54:12+08:00</dc:date>
+    <dc:date>2021-04-22T04:54:12+08:00</dc:date>
   </channel>
 </rss>

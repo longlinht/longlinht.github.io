@@ -7,6 +7,120 @@
     <atom:link href="http://longlinht.github.io//feed.xml" rel="self" type="application/rss+xml" />
     
       <item>
+        <title>xCrash运用小结</title>
+        <description>&lt;p&gt;公司在做海外产品，由于免费版firebase对native崩溃的捕获上报能力有限(无堆栈，无具体上下文信息)，因此对我们定位和降低native极为不利，当native崩溃总量进入top行列的时候，就不能对其视而不见了，因此我开始调研解决方案，最后决定接入爱奇艺推出的xCrash来捕获native崩溃，当然了，xCrash本身是不具备上报功能的，它只是将崩溃信息写入tombstone文件。因此需要在其基础之上添加上报功能。&lt;/p&gt;
+
+&lt;p&gt;要实现上报功能，就需要选择一个上报时机，在崩溃发生时或App再次启动时，我选择了在崩溃发生时即时上传tombstone文件，并与服务端约定上报协议，最终实现可在firebase后台通过设备ID来查看上传到服务器的tombstone文件。&lt;/p&gt;
+
+&lt;p&gt;具体实现如下：&lt;/p&gt;
+
+&lt;p&gt;在崩溃发生的回调中找到最新的tombstone文件，打包上传至服务器&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;public void init(Context context) {
+    XCrash.init(context, new XCrash.InitParameters()
+            .setAppVersion(BuildConfig.VERSION_NAME)
+            .setLogDir(getCrashDir().getAbsolutePath())
+            .setJavaRethrow(true)
+            .setJavaLogCountMax(3)
+            .setJavaDumpAllThreadsWhiteList(new String[]{&amp;quot;^main$&amp;quot;, &amp;quot;^Binder:.*&amp;quot;, &amp;quot;.*Finalizer.*&amp;quot;})
+            .setJavaDumpAllThreadsCountMax(0)
+            .setNativeRethrow(true)
+            .setNativeLogCountMax(3)
+            .setNativeDumpAllThreadsWhiteList(new String[]{&amp;quot;^Signal Catcher$&amp;quot;, &amp;quot;^Jit thread pool$&amp;quot;, &amp;quot;.*(R|r)ender.*&amp;quot;, &amp;quot;.*Chrome.*&amp;quot;})
+            .setNativeDumpAllThreadsCountMax(0)
+            .setAnrRethrow(true)
+            .setAnrLogCountMax(3)
+            .setPlaceholderCountMax(0)
+            .setLogFileMaintainDelayMs(1000)
+            .setLogger(mLogger)
+            .setLibLoader(new ILibLoader() {
+                @Override public void loadLibrary(String libName) {
+                    try {
+                        ReLinker.loadLibrary(context, libName);
+                    } catch (Exception e) {
+                        printLog(e + &amp;quot; | &amp;quot; + libName);
+                        System.loadLibrary(libName);
+                    }
+                }
+            }).setAnrCallback(new ICrashCallback() {
+                // ANR发生时的回调
+                @Override public void onCrash(String logPath, String emergency) throws Exception {
+                    catchANRLogDelay();
+                }
+            }).setJavaCallback(new ICrashCallback() {
+
+                // Java崩溃发生时的回调
+                @Override public void onCrash(String logPath, String emergency) throws Exception {
+                    catchCrashLog();
+                }
+            }).setNativeCallback(new ICrashCallback() {
+               //Native崩溃发生时的回调
+                @Override public void onCrash(String logPath, String emergency) throws Exception {
+                    catchCrashLog();
+                }
+            })
+    );
+}
+
+
+// 打包上传tombstone文件
+private void catchCrashLog() {
+    crashZipId = generateCrashId();
+    final File out = new File(AppInstances.getPathManager().getTmpFilePath() + crashZipId + &amp;quot;.gzip&amp;quot;);
+
+    try {
+        List&amp;lt;File&amp;gt; files = Arrays.asList(getCrashDir().listFiles());
+        if (ListUtils.isEmpty(files)) {
+            return;
+        }
+
+        File crashFile = null;
+        long lastModified = 0;
+        for (File f : files) {
+            if (f.lastModified() &amp;gt; lastModified) {
+                lastModified = f.lastModified();
+                crashFile = f;
+            }
+        }
+
+        if (crashFile != null) {
+            GZIPUtils.gzipFile(crashFile.getAbsolutePath(), out.getAbsolutePath());
+        }
+
+    } catch (Throwable e) {
+        e.printStackTrace();
+    }
+
+    upload();
+    try {
+        Thread.sleep(5000);
+    } catch (InterruptedException e) {
+        e.printStackTrace();
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;上面的代码有一点需要注意: 为了尽可能将崩溃日志成功上传至服务器，主线程sleep五秒，对于anr的情况则是在非UI线程中上传日志。&lt;/p&gt;
+
+&lt;p&gt;日志上传成功后，就可以在firebase的崩溃列表中查看某一个崩溃，在数据一栏找到设备ID来查询。因为我们有运营后台可以将设备ID和用户ID关联，因此就可以轻松查到每个用户的崩溃日志。&lt;/p&gt;
+
+&lt;p&gt;此即时上报的方案上线后虽然助力定位到了一些问题，但也有如下缺陷和问题&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;引入了新的问题，如OOM，ANR等问题。&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;由于上报依赖于全局的OkHttp Client，因此如果App在没有初始化OkHttp Client的情况下崩溃，则不会上报，就属漏报了。&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;崩溃和anr不能即时聚合到一处供查看&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;ANR目前不能查询，但是已尝试使用firebase Event上报，但是貌似免费版无法查看Event的字段，上报的意义不大，后期考虑向服务端上报。&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;问题2和3其实可以很容易改善，但是问题1还有待进一步观察，同期因为我们代码的原因引入了一个严重的OOM问题，所以不太确定是不是xCrash受到了影响和牵连。这个OOM问题修复后准备再打开xCrash进一步验证。&lt;/p&gt;
+
+&lt;p&gt;目前观察到一个现象，Android 7以下的机器基本都没有成功上报，比较奇怪，但是本地测试Android 4的机器是可以上报的，此问题后续有待验证。&lt;/p&gt;
+</description>
+        <pubDate>Thu, 29 Apr 2021 22:00:00 +0800</pubDate>
+        <link>http://longlinht.github.io//summary-of-using-xcrash</link>
+        <guid isPermaLink="true">http://longlinht.github.io//summary-of-using-xcrash</guid>
+      </item>
+    
+      <item>
         <title>13个问题测试你对这个世界的无知有多严重</title>
         <description>&lt;p&gt;在Factfulness这本书中作者一开头就抛出13个对事实认知的问题，以此测试读者对这个世界的认知，因为我已经读完了这本书，我觉得这些问题值得将其单列出来，有兴趣的可以做做这些测试题，文末附有答案，相信我你的成绩不一定好过大猩猩，问题列表如下:&lt;/p&gt;
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;1. In all low-income countries across the world today, how many girls finish primary school? 
@@ -961,43 +1075,6 @@ if __name__ == &amp;#39;__main__&amp;#39;:
         <pubDate>Sun, 25 Oct 2020 04:54:12 +0800</pubDate>
         <link>http://longlinht.github.io//read-homo-deus</link>
         <guid isPermaLink="true">http://longlinht.github.io//read-homo-deus</guid>
-      </item>
-    
-      <item>
-        <title>在Flutter中实现一个类似Android中的BottomSheetDialog</title>
-        <description>&lt;p&gt;从屏幕底部滑出的这种弹窗实在是太普遍的需求了，所以Flutter不可能不提供，一查文档，果然有一个API直接就可以调出Dialog: showModalBottomSheet, 这个API有很多入参，但是如果不需要对Dialog的外观和行为有特殊的定制需求的话，值传递前两个参数就可以了。 API看起来非常简单，但是我看到网上有些blog文章对这个API的使用是错误的，所以我贴出我实现了上方圆角dialog的代码:&lt;/p&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;void openBottomSheet(context) {
-  showModalBottomSheet(
-    backgroundColor: Colors.white,
-    context: context,
-    shape: RoundedRectangleBorder(
-      borderRadius: BorderRadius.only(topLeft: Radius.circular(18), topRight: Radius.circular(18))
-  ),
-
-  builder: (builder) {
-      return new Container(
-        child: Wrap(
-          children: &amp;lt;Widget&amp;gt;[
-            getListTile(Icons.more, Colors.black45, &amp;quot;More&amp;quot;, context),
-            getListTile(Icons.favorite, Colors.pink, &amp;quot;Favourites&amp;quot;, context),
-            getListTile(Icons.account_box, Colors.blue, &amp;quot;Profile&amp;quot;, context),
-            new Divider(
-              thickness: 2.0,
-              height: 10.0,
-            ),
-            getListTile(Icons.exit_to_app, null, &amp;quot;Logout&amp;quot;, context),
-          ],
-        ),
-      );
-    },
-  );
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;p&gt;这个圆角的实现，其实可以直接传入&lt;code&gt;backgroundColorback&lt;/code&gt;和&lt;code&gt;shape&lt;/code&gt;参数，不用额外去添加一层i&lt;code&gt;Container&lt;/code&gt;，如果想实现圆角背景，通过&lt;code&gt;Container&lt;/code&gt;也可以实现，就是把&lt;code&gt;backgroundColor&lt;/code&gt;设置成透明，多了一道工序，没必要。背景阴影的效果通过&lt;code&gt;barrierColor&lt;/code&gt;来设置。很简单的一api，如果错误使用，不但不能优雅的实现功能，反而额外做了很多工作，却不能实现预期。看到的几个demo都没有正确使用这个API，所以特意为这个问题做此小记。&lt;/p&gt;
-</description>
-        <pubDate>Mon, 12 Oct 2020 02:20:12 +0800</pubDate>
-        <link>http://longlinht.github.io//bottom-sheet-dialog-in-flutter</link>
-        <guid isPermaLink="true">http://longlinht.github.io//bottom-sheet-dialog-in-flutter</guid>
       </item>
     
   </channel>

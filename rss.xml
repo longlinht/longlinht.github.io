@@ -8,7 +8,16 @@
     <title>与机器，人，神共舞</title>
     <link>http://longlinht.github.io/</link>
     <description>编程，读书，思考，旅行，与机器对话，与人交谈，对神发问，探索，体验人生美丽的风景</description>
-    <pubDate>Thu, 22 Apr 2021 04:54:12 +0800</pubDate>
+    <pubDate>Thu, 29 Apr 2021 22:00:00 +0800</pubDate>
+    <item>
+      <title>xCrash运用小结</title>
+      <link>http://longlinht.github.io//summary-of-using-xcrash</link>
+      <description>公司在做海外产品，由于免费版firebase对native崩溃的捕获上报能力有限(无堆栈，无具体上下文信息)，因此对我们定位和降低native极为不利，当native崩溃总量进入top行列的时候，就不能对其视而不见了，因此我开始调研解决方案，最后决定接入爱奇艺推出的xCrash来捕获native崩溃，当然了，xCrash本身是不具备上报功能的，它只是将崩溃信息写入tombstone文件。因此需要在其基础之上添加上报功能。
+
+</description>
+      <pubDate>Thu, 29 Apr 2021 22:00:00 +0800</pubDate>
+      <dc:date>2021-04-29T22:00:00+08:00</dc:date>
+    </item>
     <item>
       <title>13个问题测试你对这个世界的无知有多严重</title>
       <link>http://longlinht.github.io//13-questions-test-your-ignorance</link>
@@ -729,6 +738,6 @@ update UI when we finish something in separated thread. This is a basic problem,
       <pubDate>Wed, 03 Nov 2010 02:30:12 +0800</pubDate>
       <dc:date>2010-11-03T02:30:12+08:00</dc:date>
     </item>
-    <dc:date>2021-04-22T04:54:12+08:00</dc:date>
+    <dc:date>2021-04-29T22:00:00+08:00</dc:date>
   </channel>
 </rss>

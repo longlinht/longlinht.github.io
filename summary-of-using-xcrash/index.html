@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 
     <!-- [[! Page Meta ]] -->
-    <title>13个问题测试你对这个世界的无知有多严重</title>
+    <title>xCrash运用小结</title>
     <meta name="description" content="与机器，人，神共舞 - 编程，读书，思考，旅行，与机器对话，与人交谈，对神发问，探索，体验人生美丽的风景" />
 
     <meta name="HandheldFriendly" content="True" />
@@ -93,19 +93,19 @@
 
 <main class="content" role="main">
 
-    <article class="post tag-god">
+    <article class="post tag-machine">
 
         <header class="post-header">
-            <h1 class="post-title">13个问题测试你对这个世界的无知有多严重</h1>
+            <h1 class="post-title">xCrash运用小结</h1>
             <section class="post-meta">
             <!-- <a href='/'>Tao He</a> -->
-            <time class="post-date" datetime="2021-04-22">22 Apr 2021</time>
+            <time class="post-date" datetime="2021-04-29">29 Apr 2021</time>
                 <!-- [[tags prefix=" on "]] -->
                  
                 on 
                 
                     
-                       <a href='/tag/god'>God</a>
+                       <a href='/tag/machine'>Machine</a>
                        
                 
                 
@@ -114,48 +114,112 @@
 
         <section class="post-content">
             
-            <p>在Factfulness这本书中作者一开头就抛出13个对事实认知的问题，以此测试读者对这个世界的认知，因为我已经读完了这本书，我觉得这些问题值得将其单列出来，有兴趣的可以做做这些测试题，文末附有答案，相信我你的成绩不一定好过大猩猩，问题列表如下:</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">1. In all low-income countries across the world today, how many girls finish primary school? 
-   A: 20 percent    B: 40 percent    C: 60 percent 
+            <p>公司在做海外产品，由于免费版firebase对native崩溃的捕获上报能力有限(无堆栈，无具体上下文信息)，因此对我们定位和降低native极为不利，当native崩溃总量进入top行列的时候，就不能对其视而不见了，因此我开始调研解决方案，最后决定接入爱奇艺推出的xCrash来捕获native崩溃，当然了，xCrash本身是不具备上报功能的，它只是将崩溃信息写入tombstone文件。因此需要在其基础之上添加上报功能。</p>
 
-2. Where does the majority of the world population live? 
-   A: Low-income countries    B: Middle-income countries    C: High-income countries 
+<p>要实现上报功能，就需要选择一个上报时机，在崩溃发生时或App再次启动时，我选择了在崩溃发生时即时上传tombstone文件，并与服务端约定上报协议，最终实现可在firebase后台通过设备ID来查看上传到服务器的tombstone文件。</p>
 
-3. In the last 20 years, the proportion of the world population living in extreme poverty has … 
-   A: almost doubled    B: remained more or less the same    C: almost halved 
+<p>具体实现如下：</p>
 
-4. What is the life expectancy of the world today?
-    A: 50 years    B: 60 years    C: 70 years 
+<p>在崩溃发生的回调中找到最新的tombstone文件，打包上传至服务器</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">public void init(Context context) {
+    XCrash.init(context, new XCrash.InitParameters()
+            .setAppVersion(BuildConfig.VERSION_NAME)
+            .setLogDir(getCrashDir().getAbsolutePath())
+            .setJavaRethrow(true)
+            .setJavaLogCountMax(3)
+            .setJavaDumpAllThreadsWhiteList(new String[]{&quot;^main$&quot;, &quot;^Binder:.*&quot;, &quot;.*Finalizer.*&quot;})
+            .setJavaDumpAllThreadsCountMax(0)
+            .setNativeRethrow(true)
+            .setNativeLogCountMax(3)
+            .setNativeDumpAllThreadsWhiteList(new String[]{&quot;^Signal Catcher$&quot;, &quot;^Jit thread pool$&quot;, &quot;.*(R|r)ender.*&quot;, &quot;.*Chrome.*&quot;})
+            .setNativeDumpAllThreadsCountMax(0)
+            .setAnrRethrow(true)
+            .setAnrLogCountMax(3)
+            .setPlaceholderCountMax(0)
+            .setLogFileMaintainDelayMs(1000)
+            .setLogger(mLogger)
+            .setLibLoader(new ILibLoader() {
+                @Override public void loadLibrary(String libName) {
+                    try {
+                        ReLinker.loadLibrary(context, libName);
+                    } catch (Exception e) {
+                        printLog(e + &quot; | &quot; + libName);
+                        System.loadLibrary(libName);
+                    }
+                }
+            }).setAnrCallback(new ICrashCallback() {
+                // ANR发生时的回调
+                @Override public void onCrash(String logPath, String emergency) throws Exception {
+                    catchANRLogDelay();
+                }
+            }).setJavaCallback(new ICrashCallback() {
 
-5. There are 2 billion children in the world today, aged 0 to 15 years old. How many children will there be in the year 2100, according to the United Nations? 
-   A: 4 billion    B: 3 billion    C: 2 billion
+                // Java崩溃发生时的回调
+                @Override public void onCrash(String logPath, String emergency) throws Exception {
+                    catchCrashLog();
+                }
+            }).setNativeCallback(new ICrashCallback() {
+               //Native崩溃发生时的回调
+                @Override public void onCrash(String logPath, String emergency) throws Exception {
+                    catchCrashLog();
+                }
+            })
+    );
+}
 
-6. The UN predicts that by 2100 the world population will have increased by another 4 billion people. What is the main reason? 
-   A: There will be more children (age below 15)    B: There will be more adults (age 15 to 74)    C: There will be more very old people (age 75 and older) 
 
-7. How did the number of deaths per year from natural disasters change over the last hundred years? 
-   A: More than doubled    B: Remained about the same    C: Decreased to less than half 
+// 打包上传tombstone文件
+private void catchCrashLog() {
+    crashZipId = generateCrashId();
+    final File out = new File(AppInstances.getPathManager().getTmpFilePath() + crashZipId + &quot;.gzip&quot;);
 
-8. There are roughly 7 billion people in the world today. Which map shows best where they live? (Each figure represents 1 billion people.) 
+    try {
+        List&lt;File&gt; files = Arrays.asList(getCrashDir().listFiles());
+        if (ListUtils.isEmpty(files)) {
+            return;
+        }
 
-9. How many of the world’s 1-year-old children today have been vaccinated against some disease?
-   A: 20 percent    B: 50 percent    C: 80 percent 
+        File crashFile = null;
+        long lastModified = 0;
+        for (File f : files) {
+            if (f.lastModified() &gt; lastModified) {
+                lastModified = f.lastModified();
+                crashFile = f;
+            }
+        }
 
-10. Worldwide, 30-year-old men have spent 10 years in school, on average. How many years have women of the same age spent in school? 
-   A: 9 years    B: 6 years    C: 3 years 
+        if (crashFile != null) {
+            GZIPUtils.gzipFile(crashFile.getAbsolutePath(), out.getAbsolutePath());
+        }
 
-11. In 1996, tigers, giant pandas, and black rhinos were all listed as endangered. How many of these three species are more critically endangered today? 
-   A: Two of them    B: One of them    C: None of them 
+    } catch (Throwable e) {
+        e.printStackTrace();
+    }
 
-12. How many people in the world have some access to electricity? 
-   A: 20 percent    B: 50 percent    C: 80 percent 
-
-13. Global climate experts believe that, over the next 100 years, the average temperature will … 
-   A: get warmer    B: remain the same    C: get colder
+    upload();
+    try {
+        Thread.sleep(5000);
+    } catch (InterruptedException e) {
+        e.printStackTrace();
+    }
+}
 </code></pre></div>
-<p>Here are the correct answers:</p>
+<p>上面的代码有一点需要注意: 为了尽可能将崩溃日志成功上传至服务器，主线程sleep五秒，对于anr的情况则是在非UI线程中上传日志。</p>
 
-<p>1: C, 2: B, 3: C, 4: C, 5: C, 6: B, 7: C, 8: A, 9: C, 10: A, 11: C, 12: C, 13: A</p>
+<p>日志上传成功后，就可以在firebase的崩溃列表中查看某一个崩溃，在数据一栏找到设备ID来查询。因为我们有运营后台可以将设备ID和用户ID关联，因此就可以轻松查到每个用户的崩溃日志。</p>
+
+<p>此即时上报的方案上线后虽然助力定位到了一些问题，但也有如下缺陷和问题</p>
+
+<ul>
+<li><p>引入了新的问题，如OOM，ANR等问题。</p></li>
+<li><p>由于上报依赖于全局的OkHttp Client，因此如果App在没有初始化OkHttp Client的情况下崩溃，则不会上报，就属漏报了。</p></li>
+<li><p>崩溃和anr不能即时聚合到一处供查看</p></li>
+<li><p>ANR目前不能查询，但是已尝试使用firebase Event上报，但是貌似免费版无法查看Event的字段，上报的意义不大，后期考虑向服务端上报。</p></li>
+</ul>
+
+<p>问题2和3其实可以很容易改善，但是问题1还有待进一步观察，同期因为我们代码的原因引入了一个严重的OOM问题，所以不太确定是不是xCrash受到了影响和牵连。这个OOM问题修复后准备再打开xCrash进一步验证。</p>
+
+<p>目前观察到一个现象，Android 7以下的机器基本都没有成功上报，比较奇怪，但是本地测试Android 4的机器是可以上报的，此问题后续有待验证。</p>
 
 
         </section>
@@ -187,15 +251,15 @@
 
             <section class="share">
                 <h4>Share this post</h4>
-                <a class="icon-twitter" href="http://twitter.com/share?text=13个问题测试你对这个世界的无知有多严重&amp;url=http://longlinht.github.io//13-questions-test-your-ignorance"
+                <a class="icon-twitter" href="http://twitter.com/share?text=xCrash运用小结&amp;url=http://longlinht.github.io//summary-of-using-xcrash"
                     onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
                     <span class="hidden">Twitter</span>
                 </a>
-                <a class="icon-facebook" href="https://www.facebook.com/sharer/sharer.php?u=http://longlinht.github.io//13-questions-test-your-ignorance"
+                <a class="icon-facebook" href="https://www.facebook.com/sharer/sharer.php?u=http://longlinht.github.io//summary-of-using-xcrash"
                     onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
                     <span class="hidden">Facebook</span>
                 </a>
-                <a class="icon-google-plus" href="https://plus.google.com/share?url=http://longlinht.github.io//13-questions-test-your-ignorance"
+                <a class="icon-google-plus" href="https://plus.google.com/share?url=http://longlinht.github.io//summary-of-using-xcrash"
                    onclick="window.open(this.href, 'google-plus-share', 'width=490,height=530');return false;">
                     <span class="hidden">Google+</span>
                 </a>
@@ -238,18 +302,12 @@
 
     <!-- [[! next_post ]] -->
     
-        <a class="read-next-story no-cover" href="http://longlinht.github.io//summary-of-using-xcrash">
-            <section class="post">
-                <h2>xCrash运用小结</h2>
-            </section>
-        </a>
-    
     <!-- [[! /next_post ]] -->
     <!-- [[! prev_post ]] -->
     
-        <a class="read-next-story prev no-cover" href="http://longlinht.github.io//read-sapiens">
+        <a class="read-next-story prev no-cover" href="http://longlinht.github.io//13-questions-test-your-ignorance">
             <section class="post">
-                <h2>重读Sapiens</h2>
+                <h2>13个问题测试你对这个世界的无知有多严重</h2>
             </section>
         </a>
     

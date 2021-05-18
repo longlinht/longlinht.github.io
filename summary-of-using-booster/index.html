@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 
     <!-- [[! Page Meta ]] -->
-    <title>使用Booster解决ANR的实践</title>
+    <title>Booster使用小结</title>
     <meta name="description" content="与机器，人，神共舞 - 编程，读书，思考，旅行，与机器对话，与人交谈，对神发问，探索，体验人生美丽的风景" />
 
     <meta name="HandheldFriendly" content="True" />
@@ -96,10 +96,10 @@
     <article class="post tag-machine">
 
         <header class="post-header">
-            <h1 class="post-title">使用Booster解决ANR的实践</h1>
+            <h1 class="post-title">Booster使用小结</h1>
             <section class="post-meta">
             <!-- <a href='/'>Tao He</a> -->
-            <time class="post-date" datetime="2021-01-24">24 Jan 2021</time>
+            <time class="post-date" datetime="2021-02-20">20 Feb 2021</time>
                 <!-- [[tags prefix=" on "]] -->
                  
                 on 
@@ -114,82 +114,71 @@
 
         <section class="post-content">
             
-            <p>SharedPreferences一直备受诟病，不论是因为开发者的不当使用还是其自身的问题，SharedPreferences都给开发者造成了不少困扰, 尤以ANR最甚。面对由SharedPreferences引起的ANR，我们通常的做法是引入MMKV来替代SP，规避SP本身的缺陷。但是MMKV虽然可以解决App自身由于使用SP导致的ANR，但是无法解决App中第三方库使用SP导致的ANR，因此，虽然MMKV性能优秀，可做数据迁移，久经验证，依然不能彻底解决SP的问题。因此需要考虑其他解决方案，后来找到了滴滴开源的Booster项目，算是找到一个相对彻底的解决方案。</p>
+            <p>使用Booster去修复SharedPreferences导致的ANR的版本已全量上架Google Play，SP导致的ANR几乎绝迹，但是随之全量版本的逐步铺开，firebase崩溃后台却出现了Booster所导致的两个比较多的崩溃:</p>
 
-<p>Booster是什么? 请注意，和著名的C++库Boost没半毛钱关系，且看官方介绍:</p>
+<p>一个是NPE，触发的基本环境如下:</p>
 
-<blockquote>
-<p>Booster 通过 Gradle Plugin 的形式为 Android 工程质量把控提供了一套完整的框架，无论是代码、资源、动态库、依赖关系、包体积、性能等监控，都可以通过 Booster 来完成</p>
-</blockquote>
+<p>System version 6.0.1</p>
 
-<p>简单理解，Booster就是一个Gradle插件，但它不是一个简单的plugin，而是一个框架，提供了诸多不同功能的模块，可按需在项目构建的时候注入不同的功能模块。下面就以使用Booster SharedPreferences功能模块解决SP相关ANR为例来介绍Booster的基本用法:</p>
+<p>Java version 8</p>
 
-<ol>
-<li>添加依赖，apply插件:</li>
-</ol>
-<div class="highlight"><pre><code class="language-text" data-lang="text">allprojects { project -&gt;
-    buildscript {
-        ext.booster_version = &#39;3.1.0&#39;
-        repositories {
-            mavenLocal()
-            google()
-            mavenCentral()
-            jcenter()
-            maven { url &#39;https://oss.sonatype.org/content/repositories/public&#39; }
-        }
-        dependencies {
-            classpath &quot;com.didiglobal.booster:booster-gradle-plugin:$booster_version&quot;
-            // 使用SharedPreferences功能模块
-            classpath &quot;com.didiglobal.booster:booster-transform-shared-preferences:$booster_version&quot;
-        }
-    }
-    repositories {
-        mavenLocal()
-        google()
-        mavenCentral()
-        jcenter()
-        maven { url &#39;https://oss.sonatype.org/content/repositories/public&#39; }
-    }
-    project.afterEvaluate {
-        if (project.extensions.findByName(&#39;android&#39;) != null) {
-            project.apply plugin: &#39;com.didiglobal.booster&#39;
-        }
-    }
-}
+<p>Gradle version 6.6.1</p>
+
+<p>Android Gradle plugin version 4.0.0</p>
+
+<p>Booster version 3.1.0</p>
+
+<p>主要的崩溃机型:Galaxy J2 Prime(76%), Galaxy Grand Neo, Galaxy J3(2016), MAXTRON U22</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">Fatal Exception: java.lang.NullPointerException
+Attempt to invoke virtual method &#39;java.lang.String java.io.File.getParent()&#39; on a null object reference
+com.didiglobal.booster.instrument.sharedpreferences.SharedPreferencesManager.&lt;init&gt; (SharedPreferencesManager.java:36)
+com.didiglobal.booster.instrument.sharedpreferences.BoosterSharedPreferences.&lt;init&gt; (BoosterSharedPreferences.java:42)
+com.didiglobal.booster.instrument.sharedpreferences.BoosterSharedPreferences.getSharedPreferences (BoosterSharedPreferences.java:58)
+com.didiglobal.booster.instrument.ShadowSharedPreferences.getSharedPreferences (ShadowSharedPreferences.java:15)
+com.google.android.gms.internal.ads.zzabb.initialize (zzabb.java:33)
+com.google.android.gms.internal.ads.zzabf.zzi (zzabf.java:15)
+com.google.android.gms.internal.ads.zzabe.get (zzabe.java)
+com.google.android.gms.ads.internal.util.zzbu.zza (zzbu.java:13)
+com.google.android.gms.internal.ads.zzabf.initialize (zzabf.java:1)
+com.google.android.gms.internal.ads.zzanc.run (zzanc.java:2)
+java.lang.Thread.run (Thread.java:818)
 </code></pre></div>
-<ol>
-<li>添加到项目的构建流程中去</li>
-</ol>
+<p>此问题已经在github上提issue给开源团队，经过几次沟通，确定是Booster的bug，开源团队响应极快，在3.3.1版本已修复此问题。</p>
 
-<p>可以使用-I输入到构建流程中，也可将上述gradle脚本直接集成进project gradle文件，皆可达到目的。</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">// init.gradle即为上面的这段gradle脚本
-./gradlew -I init.gradle :app:assembleDebug
+<p>另一个问题Class Cast Exception，基本环境与上面相同，主要发生在 Samsung Android 4, 4.2.2 </p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">Caused by java.lang.ClassCastException
+java.lang.Integer cannot be cast to java.lang.Boolean
+
+com.didiglobal.booster.instrument.sharedpreferences.BoosterSharedPreferences.getBoolean (BoosterSharedPreferences.java:120)
+cn.xiaochuankeji.zuiyouLite.common.instance.SelectGenderDlgManager.&lt;init&gt; (SelectGenderDlgManager.java:95)
+cn.xiaochuankeji.zuiyouLite.common.instance.SelectGenderDlgManager.getInstance (SelectGenderDlgManager.java:71)
+cn.xiaochuankeji.zuiyouLite.ui.main.MainActivity.onCreate (MainActivity.java:236)
+android.app.Activity.performCreate (Activity.java:5112)
+android.app.Instrumentation.callActivityOnCreate (Instrumentation.java:1080)
+android.app.ActivityThread.performLaunchActivity (ActivityThread.java:2214)
+android.app.ActivityThread.handleLaunchActivity (ActivityThread.java:2300)
+android.app.ActivityThread.access$700 (ActivityThread.java:156)
+android.app.ActivityThread$H.handleMessage (ActivityThread.java:1298)
+android.os.Handler.dispatchMessage (Handler.java:99)
+android.os.Looper.loop (Looper.java:137)
+android.app.ActivityThread.main (ActivityThread.java:5211)
+java.lang.reflect.Method.invokeNative (Method.java)
+java.lang.reflect.Method.invoke (Method.java:511)
+com.android.internal.os.ZygoteInit$MethodAndArgsCaller.run (ZygoteInit.java:815)
+com.android.internal.os.ZygoteInit.main (ZygoteInit.java:582)
+dalvik.system.NativeStart.main (NativeStart.java)
 </code></pre></div>
-<p>在项目构建的过程中输入这段脚本，输出的apk就已使用Booster的SP模块来解决ANR了。使用起来是不是感觉非常简洁，接入很优雅，因为想使用Booster任何一个功能模块，只要简单的添加一句依赖即可，如SP:</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">// 使用SharedPreferences功能模块
-classpath &quot;com.didiglobal.booster:booster-transform-shared-preferences:$booster_version&quot;
-</code></pre></div>
-<p>如此优雅的框架，是什么原理呢? 还以SP为例来简单聊聊:</p>
+<p>此问题目前还未被修复。除了这两个比较崩溃，目前Booster未引入新的问题，并且实实在在的解决了SP的ANR问题，使用线程池优化模块的版本也已上线，目前未发现问题，后续会统计对减少创建线程导致的OOM的贡献。引入Booster也是担着一定的风险，对于一个百万级日活的App，如果出现一个因为第三方工具导致的问题，很有可能导致线上事故，因此在引入前一定要对其做足了调研和评估。</p>
 
-<p>根本的原理就是Booster通过 SharedPreferencesTransformer 将所有调用 Context.getSharedPreferences(String, int) 的指令替换成 ShadowSharedPreferences.getSharedPreferences(Context, String, int)，代码如下：</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">public class ShadowSharedPreferences {
+<p>Booster的这种解决问题的方式真的是可谓优雅，不需你更改一行代码，在你使用它提供的gradle插件构建你的工程后，它已默默的为你修复了诸多问题，并且可以根据你的实际情况选择使用不同的功能模块。使用booster以来真的给我很多启发:</p>
 
-    public static SharedPreferences getSharedPreferences(final Context context, String name, final int mode) {
-        if (TextUtils.isEmpty(name)) {
-            name = &quot;null&quot;;
-        }
-        return BoosterSharedPreferences.getSharedPreferences(name);
-    }
-
-    public static SharedPreferences getPreferences(final Activity activity, final int mode) {
-        return getSharedPreferences(activity.getApplicationContext(), activity.getLocalClassName(), mode);
-    }
-
-}
-</code></pre></div>
-<p>通过自定义 SharedPreferences 避开 QueuedWork 在 onPause(), onDestroy() 等生命周期回调时在主线程中的同步操作。如果对Booster有基本了解，对Booster这种指令替换的操作应该不陌生。如Booster在解决系统Bug的办法也是通过自定义类来替换有问题的系统类。如果我们使用Android Studio Profiler来查看我们App的内存情况，就可以搜到ShadowSharedPreferences类，此类就是系统SharedPreferences的替换类。</p>
-
-<p>Booster还有其他强大的功能模块有待探索和使用，后续用到后再来聊！</p>
+<ul>
+<li>系统问题也不是不可解决，也许换个思路，就有了办法</li>
+<li>开发工具，一定要让它易用，直观，易于理解</li>
+<li>开发的功能一定要相对独立，模块化</li>
+<li>引入第三方工具钱，一定要做足调研和评估</li>
+<li>使用了以后也要做好权衡，如它带来的利是否远大于弊</li>
+</ul>
 
 
         </section>
@@ -221,15 +210,15 @@ classpath &quot;com.didiglobal.booster:booster-transform-shared-preferences:$boo
 
             <section class="share">
                 <h4>Share this post</h4>
-                <a class="icon-twitter" href="http://twitter.com/share?text=使用Booster解决ANR的实践&amp;url=http://longlinht.github.io//using-booster-fix-anr"
+                <a class="icon-twitter" href="http://twitter.com/share?text=Booster使用小结&amp;url=http://longlinht.github.io//summary-of-using-booster"
                     onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
                     <span class="hidden">Twitter</span>
                 </a>
-                <a class="icon-facebook" href="https://www.facebook.com/sharer/sharer.php?u=http://longlinht.github.io//using-booster-fix-anr"
+                <a class="icon-facebook" href="https://www.facebook.com/sharer/sharer.php?u=http://longlinht.github.io//summary-of-using-booster"
                     onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
                     <span class="hidden">Facebook</span>
                 </a>
-                <a class="icon-google-plus" href="https://plus.google.com/share?url=http://longlinht.github.io//using-booster-fix-anr"
+                <a class="icon-google-plus" href="https://plus.google.com/share?url=http://longlinht.github.io//summary-of-using-booster"
                    onclick="window.open(this.href, 'google-plus-share', 'width=490,height=530');return false;">
                     <span class="hidden">Google+</span>
                 </a>
@@ -272,18 +261,18 @@ classpath &quot;com.didiglobal.booster:booster-transform-shared-preferences:$boo
 
     <!-- [[! next_post ]] -->
     
-        <a class="read-next-story no-cover" href="http://longlinht.github.io//summary-of-using-booster">
+        <a class="read-next-story no-cover" href="http://longlinht.github.io//read-sapiens">
             <section class="post">
-                <h2>Booster使用小结</h2>
+                <h2>重读Sapiens</h2>
             </section>
         </a>
     
     <!-- [[! /next_post ]] -->
     <!-- [[! prev_post ]] -->
     
-        <a class="read-next-story prev no-cover" href="http://longlinht.github.io//custom-emoji-in-android">
+        <a class="read-next-story prev no-cover" href="http://longlinht.github.io//using-booster-fix-anr">
             <section class="post">
-                <h2>在Android中定制Emoji的实现</h2>
+                <h2>使用Booster解决ANR的实践</h2>
             </section>
         </a>
     

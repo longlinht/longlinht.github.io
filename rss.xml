@@ -37,6 +37,15 @@
       <dc:date>2021-04-18T04:54:12+08:00</dc:date>
     </item>
     <item>
+      <title>Booster使用小结</title>
+      <link>http://longlinht.github.io//summary-of-using-booster</link>
+      <description>使用Booster去修复SharedPreferences导致的ANR的版本已全量上架Google Play，SP导致的ANR几乎绝迹，但是随之全量版本的逐步铺开，firebase崩溃后台却出现了Booster所导致的两个比较多的崩溃:
+
+</description>
+      <pubDate>Sat, 20 Feb 2021 22:00:00 +0800</pubDate>
+      <dc:date>2021-02-20T22:00:00+08:00</dc:date>
+    </item>
+    <item>
       <title>使用Booster解决ANR的实践</title>
       <link>http://longlinht.github.io//using-booster-fix-anr</link>
       <description>SharedPreferences一直备受诟病，不论是因为开发者的不当使用还是其自身的问题，SharedPreferences都给开发者造成了不少困扰, 尤以ANR最甚。面对由SharedPreferences引起的ANR，我们通常的做法是引入MMKV来替代SP，规避SP本身的缺陷。但是MMKV虽然可以解决App自身由于使用SP导致的ANR，但是无法解决App中第三方库使用SP导致的ANR，因此，虽然MMKV性能优秀，可做数据迁移，久经验证，依然不能彻底解决SP的问题。因此需要考虑其他解决方案，后来找到了滴滴开源的Booster项目，算是找到一个相对彻底的解决方案。

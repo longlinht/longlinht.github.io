@@ -129,6 +129,82 @@ private void catchCrashLog() {
 	</item>
 
 	<item>
+	  <title>Booster使用小结</title>
+	  <link>//summary-of-using-booster</link>
+	  <author>Tao He</author>
+	  <pubDate>2021-02-20T22:00:00+08:00</pubDate>
+	  <guid>//summary-of-using-booster</guid>
+	  <description><![CDATA[
+	     <p>使用Booster去修复SharedPreferences导致的ANR的版本已全量上架Google Play，SP导致的ANR几乎绝迹，但是随之全量版本的逐步铺开，firebase崩溃后台却出现了Booster所导致的两个比较多的崩溃:</p>
+
+<p>一个是NPE，触发的基本环境如下:</p>
+
+<p>System version 6.0.1</p>
+
+<p>Java version 8</p>
+
+<p>Gradle version 6.6.1</p>
+
+<p>Android Gradle plugin version 4.0.0</p>
+
+<p>Booster version 3.1.0</p>
+
+<p>主要的崩溃机型:Galaxy J2 Prime(76%), Galaxy Grand Neo, Galaxy J3(2016), MAXTRON U22</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">Fatal Exception: java.lang.NullPointerException
+Attempt to invoke virtual method &#39;java.lang.String java.io.File.getParent()&#39; on a null object reference
+com.didiglobal.booster.instrument.sharedpreferences.SharedPreferencesManager.&lt;init&gt; (SharedPreferencesManager.java:36)
+com.didiglobal.booster.instrument.sharedpreferences.BoosterSharedPreferences.&lt;init&gt; (BoosterSharedPreferences.java:42)
+com.didiglobal.booster.instrument.sharedpreferences.BoosterSharedPreferences.getSharedPreferences (BoosterSharedPreferences.java:58)
+com.didiglobal.booster.instrument.ShadowSharedPreferences.getSharedPreferences (ShadowSharedPreferences.java:15)
+com.google.android.gms.internal.ads.zzabb.initialize (zzabb.java:33)
+com.google.android.gms.internal.ads.zzabf.zzi (zzabf.java:15)
+com.google.android.gms.internal.ads.zzabe.get (zzabe.java)
+com.google.android.gms.ads.internal.util.zzbu.zza (zzbu.java:13)
+com.google.android.gms.internal.ads.zzabf.initialize (zzabf.java:1)
+com.google.android.gms.internal.ads.zzanc.run (zzanc.java:2)
+java.lang.Thread.run (Thread.java:818)
+</code></pre></div>
+<p>此问题已经在github上提issue给开源团队，经过几次沟通，确定是Booster的bug，开源团队响应极快，在3.3.1版本已修复此问题。</p>
+
+<p>另一个问题Class Cast Exception，基本环境与上面相同，主要发生在 Samsung Android 4, 4.2.2 </p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">Caused by java.lang.ClassCastException
+java.lang.Integer cannot be cast to java.lang.Boolean
+
+com.didiglobal.booster.instrument.sharedpreferences.BoosterSharedPreferences.getBoolean (BoosterSharedPreferences.java:120)
+cn.xiaochuankeji.zuiyouLite.common.instance.SelectGenderDlgManager.&lt;init&gt; (SelectGenderDlgManager.java:95)
+cn.xiaochuankeji.zuiyouLite.common.instance.SelectGenderDlgManager.getInstance (SelectGenderDlgManager.java:71)
+cn.xiaochuankeji.zuiyouLite.ui.main.MainActivity.onCreate (MainActivity.java:236)
+android.app.Activity.performCreate (Activity.java:5112)
+android.app.Instrumentation.callActivityOnCreate (Instrumentation.java:1080)
+android.app.ActivityThread.performLaunchActivity (ActivityThread.java:2214)
+android.app.ActivityThread.handleLaunchActivity (ActivityThread.java:2300)
+android.app.ActivityThread.access$700 (ActivityThread.java:156)
+android.app.ActivityThread$H.handleMessage (ActivityThread.java:1298)
+android.os.Handler.dispatchMessage (Handler.java:99)
+android.os.Looper.loop (Looper.java:137)
+android.app.ActivityThread.main (ActivityThread.java:5211)
+java.lang.reflect.Method.invokeNative (Method.java)
+java.lang.reflect.Method.invoke (Method.java:511)
+com.android.internal.os.ZygoteInit$MethodAndArgsCaller.run (ZygoteInit.java:815)
+com.android.internal.os.ZygoteInit.main (ZygoteInit.java:582)
+dalvik.system.NativeStart.main (NativeStart.java)
+</code></pre></div>
+<p>此问题目前还未被修复。除了这两个比较崩溃，目前Booster未引入新的问题，并且实实在在的解决了SP的ANR问题，使用线程池优化模块的版本也已上线，目前未发现问题，后续会统计对减少创建线程导致的OOM的贡献。引入Booster也是担着一定的风险，对于一个百万级日活的App，如果出现一个因为第三方工具导致的问题，很有可能导致线上事故，因此在引入前一定要对其做足了调研和评估。</p>
+
+<p>Booster的这种解决问题的方式真的是可谓优雅，不需你更改一行代码，在你使用它提供的gradle插件构建你的工程后，它已默默的为你修复了诸多问题，并且可以根据你的实际情况选择使用不同的功能模块。使用booster以来真的给我很多启发:</p>
+
+<ul>
+<li>系统问题也不是不可解决，也许换个思路，就有了办法</li>
+<li>开发工具，一定要让它易用，直观，易于理解</li>
+<li>开发的功能一定要相对独立，模块化</li>
+<li>引入第三方工具钱，一定要做足调研和评估</li>
+<li>使用了以后也要做好权衡，如它带来的利是否远大于弊</li>
+</ul>
+
+	  ]]></description>
+	</item>
+
+	<item>
 	  <title>使用Booster解决ANR的实践</title>
 	  <link>//using-booster-fix-anr</link>
 	  <author>Tao He</author>
@@ -992,72 +1068,6 @@ if __name__ == &#39;__main__&#39;:
 <p>Just move accessing syntheic binding view statement from <code>onCreateView</code> to <code>onViewCreated</code>.</p>
 
 <p>The problem is that I am accessing it too soon, When I delay the chance to access view, all works well. Magic! But it’s nothing magical, if you decompile the bytecode (By going toTools -&gt; Kotlin -&gt; Show Kotlin Bytecode and then selecting Decompile in the pane) and take a look at the generated java class, you’ll see that all it does is call findViewById() for us. Although this is a simple problem, but it is useful to record it.</p>
-
-	  ]]></description>
-	</item>
-
-	<item>
-	  <title>Kotlin中的"静态" 方法和域</title>
-	  <link>//static-method-in-kotlin</link>
-	  <author>Tao He</author>
-	  <pubDate>2020-09-03T04:54:12+08:00</pubDate>
-	  <guid>//static-method-in-kotlin</guid>
-	  <description><![CDATA[
-	     <p>最近开始尝试在现有的工程中使用Kotlin，刚开始使用时感觉语法简洁，代码量也少了很多，语法层面的防空，可以直接访问布局控件这些特性，都让人耳目一新，但是当我要定义静态方法和静态类时，不爽的体验一下子就上来了，所以通过此文来一探Kotlin&quot;静态&quot; 的究竟。
-  先来看静态方法， 很遗憾，Kotlin中没有<code>static</code>关键字，需要将静态方法放在<code>companion object</code>中的代码块中，因此：</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">class Foo {
-  public static int a() { return 1; }
-}
-</code></pre></div>
-<p>就变成了这样:</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">class Foo {
-  companion object {
-     fun a() : Int = 1
-  }
-}
-</code></pre></div>
-<p>可以在Kotlin代码中这样使用该类:</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">Foo.a();
-</code></pre></div>
-<p>在Java代码中:</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">Foo.Companion.a();
-</code></pre></div>
-<p>如果你不喜欢使用<code>Companion</code>, 你可以对该静态方法添加<code>@JvmStatic</code>注解:</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">class Foo {
-  companion object {
-    @JvmStatic
-    fun a() : Int = 1;
-  }
-}
-</code></pre></div>
-<p>也可以命名你的<code>companion</code>类:</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">class Foo {
-  companion object Blah {
-    fun a() : Int = 1;
-  }
-}
-</code></pre></div>
-<p>然后可以这样调用:</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">Foo.Blah.a() 
-</code></pre></div>
-<p>然后来看静态域， 比起静态方法，静态域的情况有所不同，虽然也可以这样定义:</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">class Foo {
-  companion object {
-    val MY_CONSTANT = &quot;MY_CONSTANT&quot;
-  }
-}
-</code></pre></div>
-<p>但是会自动为<code>MY_CONSTANT</code>生成getter和setter方法，相当于实例域访问，开销会比静态方法大，不推荐此种定义方法。可以这样定义:</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">object Foo {
-    const val MY_CONSTANT = &quot;MY_CONSTANT&quot;
-}
-</code></pre></div>
-<p>上面定义的object Foo可以全局访问:</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">Foo.MY_CONSTANT
-</code></pre></div>
-<p>而companion object中定义的<code>const var MY_CONSTANT</code>是不可以全局访问的。 当然了，静态域为了避免访问时的Companion，也可以在定义时添加<code>@StaticField</code>.</p>
-
-<p>到此Kotlin中<code>静态</code>相关的部分基本已经覆盖到了，个人觉得这个companion object不是什么好的设计，远没有Java的static关键字来的简洁和表达力。</p>
 
 	  ]]></description>
 	</item>

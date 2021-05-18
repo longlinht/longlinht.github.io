@@ -129,6 +129,39 @@ private void catchCrashLog() {
 	</item>
 
 	<item>
+	  <title>客户端线上问题应对小记</title>
+	  <link>//resolve-online-problem</link>
+	  <author>Tao He</author>
+	  <pubDate>2021-04-26T22:00:00+08:00</pubDate>
+	  <guid>//resolve-online-problem</guid>
+	  <description><![CDATA[
+	     <p>今年三四月份我所在的App项目经历了不少我之前很少遇到的情况，回看这些无论是突发状况，还是隐匿得让人无法发觉的细节导致的问题，都非常有借鉴意义，也是很大的教训，难能可贵的经验，有必要用一小文记录下。</p>
+
+<p>两个月的时间，经历了一次线上crash激增，一次新发版本用户无法播放视频的集中反馈，和一次OOM和ANR持续上涨。下面分别复盘这三次惊魂时刻。</p>
+
+<p>先来说说线上crash突然激增，那天上午的时候突然native崩溃曲线陡升，而我们App最近的一个版本已经全量好多天了，native崩溃一直都是一个相对稳定的曲线，这使我们一头雾水，因为firebase对native崩溃的捕获很不好，更加导致我们焦急万分，我负责App的整体质量，当时更是如热锅上的蚂蚁。着急归着急，也不能乱了阵脚，先开始排除活动或广告下发的影响，于是赶紧联系了市场的同学，让他们确定最近是否有活动或广告投放，询问后发现并没有，但是得知最近的确有买量的操作，并且DAU有上涨的趋势，于是怀疑是不是因为买量导致native崩溃激增，但是后来查看firebase后台，native崩溃大多发生在低端机器上，这就说不过去了，难道买到的量都是低端机器?于是很快推翻了这个怀疑。开始分版本分析，很快发现，近几个版本的native崩溃上涨曲线基本都能吻合，说明这是一个外部环境变化导致的崩溃，而不是某一个版本引入的新崩溃，在firebase有限的native崩溃信息中，还是发现了
+libmonochrome.so这个信息，当看到这个so的时候，直觉告诉我是广告导致的没跑了，但是问题来了，最近并没有增加广告的投放，广告又如何使native崩溃激增呢？直到我们搜到这条新闻:<a href="https://www.cnbeta.com/articles/tech/1105323.htm">谷歌正在修复Android系统WebView组件引发的应用崩溃问题</a>一切才豁然开朗，是因为Google推送的webview组件更新有bug，导致了大面积的崩溃，于是我们果断的关闭了广告的投放，到晚上八点的时候，native崩溃曲线终于回归了正常。</p>
+
+<p>再来说说集中反馈，事情是这样的，我们新发布了一个版本，在放量不到20%时，一天内集中收到好几个用户反馈视频不能播放，从用户提供的截图可以看出视频进度条还在动，但是并未渲染出视频，这个问题与之前我们已知的黑屏问题不同，显然是一个新问题。在没有任何头绪的情况下，就只能通过对比此版本与上个版本的diff来寻找蛛丝马迹，看完所有的diff后还是很让人疑惑，因为真的没有修改任何与播放器相关的代码，就连可能影响播放器的代码也没有，那这个版本到底有什么不同呢？在第二次对比diff的时候，广告sdk的升级改动引起了我的注意，我大胆猜想，难不成是这导致的，如果非要找个嫌疑人的话，只能是它了，于是赌上客户端组的声誉，告知市场广告sdk有问题，新版本去除更新重新发版，放量后再未出现此问题反馈，也是神奇，猜测广告sdk使用了opengl，可能影响到了播放器的视频渲染。</p>
+
+<p>最后说下OOM和ANR持续上涨得情况，这可以说是一次线上事故，是因为使用第三方库不当和第三方工具本身的问题合力导致的，这次问题是在版本全量后几天后才逐步暴露出来的，坏就坏在这个问题是逐步积累，然后雪球越滚越大最后导致了严重的问题。因为firebase不能统计到有些OOM的崩溃，期初的几天我们还奇怪为什么在没有新增崩溃的情况下，崩溃率竟然一直在涨，于是尽快分析firebase的数据，但仍旧没有什么有用的线索，因为我们一直习惯于在firebase后台看崩溃，在Google Play Console看ANR，因此一直以来的习惯是没有人去GPC去看崩溃，直到在一次看ANR的时候不经意间看到了一个之前未发现的崩溃，显示为OOM问题，至此，问题浮出水面，是全量的这个版本在使用第三方库的时候，未注意到第三方库有一个每次操作如果是在主线程调用的话都新建线程的逻辑，导致了严重的OOM，再加上同一版本也接入了xCrash和BoostMultiDex，因此到底是谁导致了OOM和ANR，已然纠缠不清，版本已发出xCrash和BoostMultiDex已无法绕过，但是导致OOM的这个rtt上报却有开关，可以动态关闭，于是在关闭几天后，崩溃率逐步恢复正常，ANR也恢复正常，因此可以断定rtt上报应该是罪魁祸首。这是一个失误导致的大问题，教训深刻，既暴露了我们工程对线程的管理不善，也暴露出firebase可能漏报了很多我们不知道的OOM崩溃，也就说实际的OOM可能比我们现在看到的还要严重。</p>
+
+<p>这三次线上问题，都已经过去了，App的崩溃率和ANR也恢复正常，但是教训却很深刻，经过几天的认真复盘和思考，总结出如下经验和教训:</p>
+
+<ul>
+<li>一个问题激增时不一定是App本身的代码导致的，但也需要及时诊断和定位，不能倾向于从用户设备和DAU变化找问题</li>
+<li>诊断问题要聚焦，不要受一些外部因素干扰</li>
+<li>当问题发生时，倾向于App本身有问题，而不是找外部原因，不要被误导诊断方向</li>
+<li>当反馈集中发生时，肯定是有问题，而不用怀疑是反馈变集中了，事出反常必有妖</li>
+<li>接入第三方库和工具时要慎之又慎，多测试，多验证，多怀疑，做好兜底，做好出了问题的应对之策</li>
+<li>影响较大的功能和模块不宜同时出现在一个版本里，出现问题后纠缠不清，无法定位</li>
+<li>一个问题持续出现后，必须引起重视，在上报数据不完整，无上下文的情况下也要通过其他途径去诊断和定位，切不可倾向于没有问题。</li>
+</ul>
+
+	  ]]></description>
+	</item>
+
+	<item>
 	  <title>13个问题测试你对这个世界的无知有多严重</title>
 	  <link>//13-questions-test-your-ignorance</link>
 	  <author>Tao He</author>
@@ -1065,82 +1098,6 @@ familiar with Matrix. So it is time to review a few aspects of Matrix. Because o
 }
 </code></pre></div>
 <p>不然会有因为混淆而找不到类的问题。</p>
-
-	  ]]></description>
-	</item>
-
-	<item>
-	  <title>用python脚本优雅的整理Kindle的标注和笔记</title>
-	  <link>//using-python-parse-kindle-notes</link>
-	  <author>Tao He</author>
-	  <pubDate>2020-11-12T04:54:12+08:00</pubDate>
-	  <guid>//using-python-parse-kindle-notes</guid>
-	  <description><![CDATA[
-	     <p>我是重度Kindle使用者，Kindle里面存满了各类书籍，经常会同时读两三本书，时间一长，多本书的标注和笔记都交叉记录在My Clippings.txt文本文件里，现在这个文件已经有几万行，每次手动去整理特定的一本书的标注和笔记时都极为头疼，还容易错漏，终于有一天实在忍不了了，就去网上找有没有整理kindle标注和笔记的服务，还真让我给找到了，clipping.io，在线服务，马上使用，上传My Clippings.txt文件，一切顺利，文件上传后开始分析整理文本，看到几本书的标注已经出来了，等全部整理结束后发现少了好几本书的，再次重新上传文件重试整理，问题依旧，空欢喜一场，依旧不能解决我的痛点，最近在读的两本书的标注和笔记恰好没有被整理出来，一怒之下，决定自己用python脚本来写一个这样的整理工具，还以为得花费一两天的时间，一不小心，两个小时不到的功夫写完了，调试了一番，完全满足我的需求，现在只需一条命令，传入书名就可以整理出指定的一本书的所有标注和笔记，脚本如下：</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text"># coding=utf-8
-
-import os
-import sys
-
-def main():
-   filepath = sys.argv[1]
-   bookName = sys.argv[2]
-
-   if not os.path.isfile(filepath):
-       print(&quot;File path {} does not exist. Exiting...&quot;.format(filepath))
-       sys.exit()
-
-   DELIMITER = &quot;==========&quot;
-   TIME_MAKR = &quot;- 您在第&quot;
-   lineNum = 0
-   books = {}
-
-   bag_of_words = {}
-   with open(filepath) as fp:
-       encounter = False
-       delimiterCount = 0
-       curBookName = &quot;&quot;
-       for line in fp:
-           if lineNum == 0:
-               books[line] = []
-               curBookName = line
-               delimiterCount += 1
-           else:
-               if line.startswith(DELIMITER):
-                   delimiterCount += 1
-                   encounter = True
-               else:
-                   if encounter == True:
-                       if line in books:
-                           curBookName = line
-                       else:
-                           books[line] = []
-                       encounter = False
-                       curBookName = line
-                   else:
-                       books[curBookName].append(line)
-           lineNum += 1
-           #print(line)
-
-       fp.close()            
-
-   outFile = open(&quot;MyClippingOutput.txt&quot;, &quot;w&quot;)
-   for k in books:
-       if k.startswith(bookName) :
-           outFile.writelines(k)
-           lines = books[k]
-           for l in lines:
-               if l.startswith(TIME_MAKR):
-                   continue
-               if l.startswith(bookName):
-                   continue
-               outFile.writelines(l)
-   outFile.close()
-
-if __name__ == &#39;__main__&#39;:
-    main()
-</code></pre></div>
-<p>目前这个脚本我只是自用，满足我个人的需求，我想肯定也有很多kindle的重度使用者有类似的需求，后续我准备把这个工具也做成在在线服务，使用方式类似clipping.io，做到比clipping.io的可定制型更强，能够适应更多的异常情况，因为我发现clipping.io对一些不规范的书名的容错性很差。期待这个服务上线！</p>
 
 	  ]]></description>
 	</item>

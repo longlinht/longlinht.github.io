@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 
     <!-- [[! Page Meta ]] -->
-    <title>xCrash运用小结</title>
+    <title>升级Kotlin版本导致的coroutine崩溃ANR小记</title>
     <meta name="description" content="与机器，人，神共舞 - 编程，读书，思考，旅行，与机器对话，与人交谈，对神发问，探索，体验人生美丽的风景" />
 
     <meta name="HandheldFriendly" content="True" />
@@ -96,10 +96,10 @@
     <article class="post tag-machine">
 
         <header class="post-header">
-            <h1 class="post-title">xCrash运用小结</h1>
+            <h1 class="post-title">升级Kotlin版本导致的coroutine崩溃ANR小记</h1>
             <section class="post-meta">
             <!-- <a href='/'>Tao He</a> -->
-            <time class="post-date" datetime="2021-04-29">29 Apr 2021</time>
+            <time class="post-date" datetime="2021-06-04">04 Jun 2021</time>
                 <!-- [[tags prefix=" on "]] -->
                  
                 on 
@@ -114,112 +114,33 @@
 
         <section class="post-content">
             
-            <p>公司在做海外产品，由于免费版firebase对native崩溃的捕获上报能力有限(无堆栈，无具体上下文信息)，因此对我们定位和降低native极为不利，当native崩溃总量进入top行列的时候，就不能对其视而不见了，因此我开始调研解决方案，最后决定接入爱奇艺推出的xCrash来捕获native崩溃，当然了，xCrash本身是不具备上报功能的，它只是将崩溃信息写入tombstone文件。因此需要在其基础之上添加上报功能。</p>
-
-<p>要实现上报功能，就需要选择一个上报时机，在崩溃发生时或App再次启动时，我选择了在崩溃发生时即时上传tombstone文件，并与服务端约定上报协议，最终实现可在firebase后台通过设备ID来查看上传到服务器的tombstone文件。</p>
-
-<p>具体实现如下：</p>
-
-<p>在崩溃发生的回调中找到最新的tombstone文件，打包上传至服务器</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">public void init(Context context) {
-    XCrash.init(context, new XCrash.InitParameters()
-            .setAppVersion(BuildConfig.VERSION_NAME)
-            .setLogDir(getCrashDir().getAbsolutePath())
-            .setJavaRethrow(true)
-            .setJavaLogCountMax(3)
-            .setJavaDumpAllThreadsWhiteList(new String[]{&quot;^main$&quot;, &quot;^Binder:.*&quot;, &quot;.*Finalizer.*&quot;})
-            .setJavaDumpAllThreadsCountMax(0)
-            .setNativeRethrow(true)
-            .setNativeLogCountMax(3)
-            .setNativeDumpAllThreadsWhiteList(new String[]{&quot;^Signal Catcher$&quot;, &quot;^Jit thread pool$&quot;, &quot;.*(R|r)ender.*&quot;, &quot;.*Chrome.*&quot;})
-            .setNativeDumpAllThreadsCountMax(0)
-            .setAnrRethrow(true)
-            .setAnrLogCountMax(3)
-            .setPlaceholderCountMax(0)
-            .setLogFileMaintainDelayMs(1000)
-            .setLogger(mLogger)
-            .setLibLoader(new ILibLoader() {
-                @Override public void loadLibrary(String libName) {
-                    try {
-                        ReLinker.loadLibrary(context, libName);
-                    } catch (Exception e) {
-                        printLog(e + &quot; | &quot; + libName);
-                        System.loadLibrary(libName);
-                    }
-                }
-            }).setAnrCallback(new ICrashCallback() {
-                // ANR发生时的回调
-                @Override public void onCrash(String logPath, String emergency) throws Exception {
-                    catchANRLogDelay();
-                }
-            }).setJavaCallback(new ICrashCallback() {
-
-                // Java崩溃发生时的回调
-                @Override public void onCrash(String logPath, String emergency) throws Exception {
-                    catchCrashLog();
-                }
-            }).setNativeCallback(new ICrashCallback() {
-               //Native崩溃发生时的回调
-                @Override public void onCrash(String logPath, String emergency) throws Exception {
-                    catchCrashLog();
-                }
-            })
-    );
+            <p>最近公司的项目在最新的版本中升级了kotlin版本，使用CI打包后的版本启动都或闪退，或ANR，看崩溃日志和ANR日志，矛头都指向了coroutine，并且Release版本崩溃而Debug版本没有问题，初步断定就是混淆的问题了。因此搜索相关Proguard rules，在Kotlin官方Github中找到coroutines.pro文件:</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text"># Allow R8 to optimize away the FastServiceLoader.
+# Together with ServiceLoader optimization in R8
+# this results in direct instantiation when loading Dispatchers.Main
+-assumenosideeffects class kotlinx.coroutines.internal.MainDispatcherLoader {
+    boolean FAST_SERVICE_LOADER_ENABLED return false;
 }
 
+-assumenosideeffects class kotlinx.coroutines.internal.FastServiceLoaderKt {
+    boolean ANDROID_DETECTED return true;
+}
 
-// 打包上传tombstone文件
-private void catchCrashLog() {
-    crashZipId = generateCrashId();
-    final File out = new File(AppInstances.getPathManager().getTmpFilePath() + crashZipId + &quot;.gzip&quot;);
+-keep class kotlinx.coroutines.android.AndroidDispatcherFactory {*;}
 
-    try {
-        List&lt;File&gt; files = Arrays.asList(getCrashDir().listFiles());
-        if (ListUtils.isEmpty(files)) {
-            return;
-        }
+# Disable support for &quot;Missing Main Dispatcher&quot;, since we always have Android main dispatcher
+-assumenosideeffects class kotlinx.coroutines.internal.MainDispatchersKt {
+    boolean SUPPORT_MISSING return false;
+}
 
-        File crashFile = null;
-        long lastModified = 0;
-        for (File f : files) {
-            if (f.lastModified() &gt; lastModified) {
-                lastModified = f.lastModified();
-                crashFile = f;
-            }
-        }
-
-        if (crashFile != null) {
-            GZIPUtils.gzipFile(crashFile.getAbsolutePath(), out.getAbsolutePath());
-        }
-
-    } catch (Throwable e) {
-        e.printStackTrace();
-    }
-
-    upload();
-    try {
-        Thread.sleep(5000);
-    } catch (InterruptedException e) {
-        e.printStackTrace();
-    }
+# Statically turn off all debugging facilities and assertions
+-assumenosideeffects class kotlinx.coroutines.DebugKt {
+    boolean getASSERTIONS_ENABLED() return false;
+    boolean getDEBUG() return false;
+    boolean getRECOVER_STACK_TRACES() return false;
 }
 </code></pre></div>
-<p>上面的代码有一点需要注意: 为了尽可能将崩溃日志成功上传至服务器，主线程sleep五秒，对于anr的情况则是在非UI线程中上传日志。</p>
-
-<p>日志上传成功后，就可以在firebase的崩溃列表中查看某一个崩溃，在数据一栏找到设备ID来查询。因为我们有运营后台可以将设备ID和用户ID关联，因此就可以轻松查到每个用户的崩溃日志。</p>
-
-<p>此即时上报的方案上线后虽然助力定位到了一些问题，但也有如下缺陷和问题</p>
-
-<ul>
-<li><p>引入了新的问题，如OOM，ANR等问题。</p></li>
-<li><p>由于上报依赖于全局的OkHttp Client，因此如果App在没有初始化OkHttp Client的情况下崩溃，则不会上报，就属漏报了。</p></li>
-<li><p>崩溃和anr不能即时聚合到一处供查看</p></li>
-<li><p>ANR目前不能查询，但是已尝试使用firebase Event上报，但是貌似免费版无法查看Event的字段，上报的意义不大，后期考虑向服务端上报。</p></li>
-</ul>
-
-<p>问题2和3其实可以很容易改善，但是问题1还有待进一步观察，同期因为我们代码的原因引入了一个严重的OOM问题，所以不太确定是不是xCrash受到了影响和牵连。这个OOM问题修复后准备再打开xCrash进一步验证。</p>
-
-<p>目前观察到一个现象，Android 7以下的机器基本都没有成功上报，比较奇怪，但是本地测试Android 4的机器是可以上报的，此问题后续有待验证。</p>
+<p>添加此混淆规则后重新打包，崩溃和ANR成功修复。</p>
 
 
         </section>
@@ -251,15 +172,15 @@ private void catchCrashLog() {
 
             <section class="share">
                 <h4>Share this post</h4>
-                <a class="icon-twitter" href="http://twitter.com/share?text=xCrash运用小结&amp;url=http://longlinht.github.io//summary-of-using-xcrash"
+                <a class="icon-twitter" href="http://twitter.com/share?text=升级Kotlin版本导致的coroutine崩溃ANR小记&amp;url=http://longlinht.github.io//kotli-coroutine-proguard-crash"
                     onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
                     <span class="hidden">Twitter</span>
                 </a>
-                <a class="icon-facebook" href="https://www.facebook.com/sharer/sharer.php?u=http://longlinht.github.io//summary-of-using-xcrash"
+                <a class="icon-facebook" href="https://www.facebook.com/sharer/sharer.php?u=http://longlinht.github.io//kotli-coroutine-proguard-crash"
                     onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
                     <span class="hidden">Facebook</span>
                 </a>
-                <a class="icon-google-plus" href="https://plus.google.com/share?url=http://longlinht.github.io//summary-of-using-xcrash"
+                <a class="icon-google-plus" href="https://plus.google.com/share?url=http://longlinht.github.io//kotli-coroutine-proguard-crash"
                    onclick="window.open(this.href, 'google-plus-share', 'width=490,height=530');return false;">
                     <span class="hidden">Google+</span>
                 </a>
@@ -302,18 +223,12 @@ private void catchCrashLog() {
 
     <!-- [[! next_post ]] -->
     
-        <a class="read-next-story no-cover" href="http://longlinht.github.io//kotli-coroutine-proguard-crash">
-            <section class="post">
-                <h2>升级Kotlin版本导致的coroutine崩溃ANR小记</h2>
-            </section>
-        </a>
-    
     <!-- [[! /next_post ]] -->
     <!-- [[! prev_post ]] -->
     
-        <a class="read-next-story prev no-cover" href="http://longlinht.github.io//resolve-online-problem">
+        <a class="read-next-story prev no-cover" href="http://longlinht.github.io//summary-of-using-xcrash">
             <section class="post">
-                <h2>客户端线上问题应对小记</h2>
+                <h2>xCrash运用小结</h2>
             </section>
         </a>
     

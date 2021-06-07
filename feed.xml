@@ -7,6 +7,41 @@
     <atom:link href="http://longlinht.github.io//feed.xml" rel="self" type="application/rss+xml" />
     
       <item>
+        <title>升级Kotlin版本导致的coroutine崩溃ANR小记</title>
+        <description>&lt;p&gt;最近公司的项目在最新的版本中升级了kotlin版本，使用CI打包后的版本启动都或闪退，或ANR，看崩溃日志和ANR日志，矛头都指向了coroutine，并且Release版本崩溃而Debug版本没有问题，初步断定就是混淆的问题了。因此搜索相关Proguard rules，在Kotlin官方Github中找到coroutines.pro文件:&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;# Allow R8 to optimize away the FastServiceLoader.
+# Together with ServiceLoader optimization in R8
+# this results in direct instantiation when loading Dispatchers.Main
+-assumenosideeffects class kotlinx.coroutines.internal.MainDispatcherLoader {
+    boolean FAST_SERVICE_LOADER_ENABLED return false;
+}
+
+-assumenosideeffects class kotlinx.coroutines.internal.FastServiceLoaderKt {
+    boolean ANDROID_DETECTED return true;
+}
+
+-keep class kotlinx.coroutines.android.AndroidDispatcherFactory {*;}
+
+# Disable support for &amp;quot;Missing Main Dispatcher&amp;quot;, since we always have Android main dispatcher
+-assumenosideeffects class kotlinx.coroutines.internal.MainDispatchersKt {
+    boolean SUPPORT_MISSING return false;
+}
+
+# Statically turn off all debugging facilities and assertions
+-assumenosideeffects class kotlinx.coroutines.DebugKt {
+    boolean getASSERTIONS_ENABLED() return false;
+    boolean getDEBUG() return false;
+    boolean getRECOVER_STACK_TRACES() return false;
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;添加此混淆规则后重新打包，崩溃和ANR成功修复。&lt;/p&gt;
+</description>
+        <pubDate>Fri, 04 Jun 2021 22:00:00 +0800</pubDate>
+        <link>http://longlinht.github.io//kotli-coroutine-proguard-crash</link>
+        <guid isPermaLink="true">http://longlinht.github.io//kotli-coroutine-proguard-crash</guid>
+      </item>
+    
+      <item>
         <title>xCrash运用小结</title>
         <description>&lt;p&gt;公司在做海外产品，由于免费版firebase对native崩溃的捕获上报能力有限(无堆栈，无具体上下文信息)，因此对我们定位和降低native极为不利，当native崩溃总量进入top行列的时候，就不能对其视而不见了，因此我开始调研解决方案，最后决定接入爱奇艺推出的xCrash来捕获native崩溃，当然了，xCrash本身是不具备上报功能的，它只是将崩溃信息写入tombstone文件。因此需要在其基础之上添加上报功能。&lt;/p&gt;
 
@@ -956,115 +991,6 @@ familiar with Matrix. So it is time to review a few aspects of Matrix. Because o
         <pubDate>Mon, 23 Nov 2020 04:54:12 +0800</pubDate>
         <link>http://longlinht.github.io//review-matrix</link>
         <guid isPermaLink="true">http://longlinht.github.io//review-matrix</guid>
-      </item>
-    
-      <item>
-        <title>Android module SDK化的实践</title>
-        <description>&lt;p&gt;文章标题指的SDK化指的是将一个有多个module的Android工程中的特定module以aar的形式输出后被app模块依赖使用。那么如何在基本不改动代码的情况下实现这个要求，完成app模块对特定module的依赖呢?&lt;/p&gt;
-
-&lt;p&gt;最直接的想法就是把要SDK化的module输出为aar文件，然后在app模块添加对此aar文件的依赖。在解决完所有的编译错误以后，运行app后发生了crash，查看输出，是因为输出为aar的这个模块所依赖的一个类在运行时找不到，事实上就是这个远端依赖没有被打进apk包。很明显，直接输出aar然后依赖是不可行的。&lt;/p&gt;
-
-&lt;p&gt;远端依赖的类找不到，因为此module在输出为aar的时候并未将他的依赖打入aar包，那有没有办法将此module的所有依赖都打进aar包呢? 在线上搜索了一番后，还真找到了这样的一个gradle插件&lt;a href=&quot;https://github.com/kezong/fat-aar-android&quot;&gt;fat-aar-android&lt;/a&gt;来做这件事，接入到工程中很简单:&lt;/p&gt;
-
-&lt;ol&gt;
-&lt;li&gt;应用插件&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;在project build gradle文件中加入如下代码:&lt;/p&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;buildscript {
-    repositories {
-        jcenter()
-    }
-    dependencies {
-        classpath &amp;#39;com.android.tools.build:gradle:xxx&amp;#39;
-        classpath &amp;#39;com.kezong:fat-aar:1.2.20&amp;#39;
-    }
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;ol&gt;
-&lt;li&gt;使用插件关键字来嵌入依赖&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;将需要嵌入的依赖，修改implementation或api为embed&lt;/p&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;dependencies {
-    implementation fileTree(dir: &amp;#39;libs&amp;#39;, include: &amp;#39;*.jar&amp;#39;)
-    // java dependency
-    embed project(path: &amp;#39;:lib-java&amp;#39;, configuration:&amp;#39;default&amp;#39;)
-    // aar dependency
-    embed project(path: &amp;#39;:lib-aar&amp;#39;, configuration:&amp;#39;default&amp;#39;)
-    // aar dependency
-    embed project(path: &amp;#39;:lib-aar2&amp;#39;, configuration:&amp;#39;default&amp;#39;)
-    // local full aar dependency, just build in flavor1
-    flavor1Embed project(path: &amp;#39;:lib-aar-local&amp;#39;, configuration:&amp;#39;default&amp;#39;)
-    // local full aar dependency, just build in debug
-    debugEmbed (name:&amp;#39;lib-aar-local2&amp;#39;,ext:&amp;#39;aar&amp;#39;)
-    // remote jar dependency
-    embed &amp;#39;com.google.guava:guava:20.0&amp;#39;
-    // remote aar dependency
-    embed &amp;#39;com.facebook.fresco:fresco:1.11.0&amp;#39;
-    // don&amp;#39;t want to embed in
-    // implementation is not recommended because the dependency may be different with the version in application, resulting in the R class not found.
-    compileOnly &amp;#39;com.android.support:appcompat-v7:27.1.1&amp;#39;
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;p&gt;使用此插件除了会遇到资源冲突外，目前没有发现其他问题。但这个插件在github上的issue有点多，心里有点没底，所以还需要想其他的办法。&lt;/p&gt;
-
-&lt;p&gt;这两个方法被排除后，就想到用maven来管理依赖，更灵活，是更一般的做法。 将此module输出后上传到maven服务器，在app上添加对此module的远程依赖后，发现无法编译，找不到此module依赖中的类，这是因为没有在pom中添加依赖。将aar发布到maven和添加依赖配置的代码如下:&lt;/p&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;afterEvaluate {
-    publishing {
-        publications {
-            release(MavenPublication) {
-                artifact(&amp;quot;$buildDir/outputs/aar/live-debug.aar&amp;quot;) {
-                    builtBy tasks.getByName(&amp;quot;assembleDebug&amp;quot;)
-                }
-
-                groupId = &amp;quot;com.overseas.android.live&amp;quot;
-                artifactId = &amp;#39;live&amp;#39;
-                version = &amp;#39;1.0.8&amp;#39;
-
-                pom.withXml {
-                    def dependenciesNode = asNode().appendNode(&amp;quot;dependencies&amp;quot;)
-                    configurations.compile.dependencies.forEach { dep -&amp;gt; addDependency(dependenciesNode, dep, &amp;quot;compile&amp;quot;) }
-                    configurations.api.dependencies.forEach { dep -&amp;gt; addDependency(dependenciesNode, dep, &amp;quot;compile&amp;quot;) }
-                    configurations.implementation.dependencies.forEach { dep -&amp;gt; addDependency(dependenciesNode, dep, &amp;quot;runtime&amp;quot;) }
-                }
-            }
-        }
-
-        repositories {
-            maven {
-                url = uri(&amp;quot;https://xxx/repository/android-release/&amp;quot;)
-
-                credentials {
-                    username = &amp;quot;hetao&amp;quot;
-                    password = &amp;quot;hetao&amp;quot;
-                }
-            }
-        }
-    }
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;p&gt;在用maven管理依赖时需要注意一下几点:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;p&gt;需要关注发布的module是不是有远程依赖，有的话需要添加依赖配置&lt;/p&gt;&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;需要发布的module输出为debug版本，统一由app模块去做混淆&lt;/p&gt;&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;需要发布的module的混淆规则不能被遗漏，需要添加此配置:&lt;/p&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;defaultConfig {
-    ...
-
-    consumerProguardFiles &amp;#39;proguard-rules.pro&amp;#39;
-
-    ...
-
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;p&gt;不然会有因为混淆而找不到类的问题。&lt;/p&gt;
-</description>
-        <pubDate>Sat, 21 Nov 2020 04:54:12 +0800</pubDate>
-        <link>http://longlinht.github.io//using-maven-to-mananger-library</link>
-        <guid isPermaLink="true">http://longlinht.github.io//using-maven-to-mananger-library</guid>
       </item>
     
   </channel>

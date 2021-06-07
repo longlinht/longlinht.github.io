@@ -8,7 +8,16 @@
     <title>与机器，人，神共舞</title>
     <link>http://longlinht.github.io/</link>
     <description>编程，读书，思考，旅行，与机器对话，与人交谈，对神发问，探索，体验人生美丽的风景</description>
-    <pubDate>Thu, 29 Apr 2021 22:00:00 +0800</pubDate>
+    <pubDate>Fri, 04 Jun 2021 22:00:00 +0800</pubDate>
+    <item>
+      <title>升级Kotlin版本导致的coroutine崩溃ANR小记</title>
+      <link>http://longlinht.github.io//kotli-coroutine-proguard-crash</link>
+      <description>最近公司的项目在最新的版本中升级了kotlin版本，使用CI打包后的版本启动都或闪退，或ANR，看崩溃日志和ANR日志，矛头都指向了coroutine，并且Release版本崩溃而Debug版本没有问题，初步断定就是混淆的问题了。因此搜索相关Proguard rules，在Kotlin官方Github中找到coroutines.pro文件:
+
+</description>
+      <pubDate>Fri, 04 Jun 2021 22:00:00 +0800</pubDate>
+      <dc:date>2021-06-04T22:00:00+08:00</dc:date>
+    </item>
     <item>
       <title>xCrash运用小结</title>
       <link>http://longlinht.github.io//summary-of-using-xcrash</link>
@@ -756,6 +765,6 @@ update UI when we finish something in separated thread. This is a basic problem,
       <pubDate>Wed, 03 Nov 2010 02:30:12 +0800</pubDate>
       <dc:date>2010-11-03T02:30:12+08:00</dc:date>
     </item>
-    <dc:date>2021-04-29T22:00:00+08:00</dc:date>
+    <dc:date>2021-06-04T22:00:00+08:00</dc:date>
   </channel>
 </rss>

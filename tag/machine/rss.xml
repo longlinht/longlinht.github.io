@@ -12,6 +12,44 @@
    <atom:link href="rss" rel="self" type="application/rss+xml" />
    
 	<item>
+	  <title>升级Kotlin版本导致的coroutine崩溃ANR小记</title>
+	  <link>//kotli-coroutine-proguard-crash</link>
+	  <author>Tao He</author>
+	  <pubDate>2021-06-04T22:00:00+08:00</pubDate>
+	  <guid>//kotli-coroutine-proguard-crash</guid>
+	  <description><![CDATA[
+	     <p>最近公司的项目在最新的版本中升级了kotlin版本，使用CI打包后的版本启动都或闪退，或ANR，看崩溃日志和ANR日志，矛头都指向了coroutine，并且Release版本崩溃而Debug版本没有问题，初步断定就是混淆的问题了。因此搜索相关Proguard rules，在Kotlin官方Github中找到coroutines.pro文件:</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text"># Allow R8 to optimize away the FastServiceLoader.
+# Together with ServiceLoader optimization in R8
+# this results in direct instantiation when loading Dispatchers.Main
+-assumenosideeffects class kotlinx.coroutines.internal.MainDispatcherLoader {
+    boolean FAST_SERVICE_LOADER_ENABLED return false;
+}
+
+-assumenosideeffects class kotlinx.coroutines.internal.FastServiceLoaderKt {
+    boolean ANDROID_DETECTED return true;
+}
+
+-keep class kotlinx.coroutines.android.AndroidDispatcherFactory {*;}
+
+# Disable support for &quot;Missing Main Dispatcher&quot;, since we always have Android main dispatcher
+-assumenosideeffects class kotlinx.coroutines.internal.MainDispatchersKt {
+    boolean SUPPORT_MISSING return false;
+}
+
+# Statically turn off all debugging facilities and assertions
+-assumenosideeffects class kotlinx.coroutines.DebugKt {
+    boolean getASSERTIONS_ENABLED() return false;
+    boolean getDEBUG() return false;
+    boolean getRECOVER_STACK_TRACES() return false;
+}
+</code></pre></div>
+<p>添加此混淆规则后重新打包，崩溃和ANR成功修复。</p>
+
+	  ]]></description>
+	</item>
+
+	<item>
 	  <title>xCrash运用小结</title>
 	  <link>//summary-of-using-xcrash</link>
 	  <author>Tao He</author>
@@ -1039,46 +1077,6 @@ if __name__ == &#39;__main__&#39;:
     main()
 </code></pre></div>
 <p>目前这个脚本我只是自用，满足我个人的需求，我想肯定也有很多kindle的重度使用者有类似的需求，后续我准备把这个工具也做成在在线服务，使用方式类似clipping.io，做到比clipping.io的可定制型更强，能够适应更多的异常情况，因为我发现clipping.io对一些不规范的书名的容错性很差。期待这个服务上线！</p>
-
-	  ]]></description>
-	</item>
-
-	<item>
-	  <title>在Flutter中实现一个类似Android中的BottomSheetDialog</title>
-	  <link>//bottom-sheet-dialog-in-flutter</link>
-	  <author>Tao He</author>
-	  <pubDate>2020-10-12T02:20:12+08:00</pubDate>
-	  <guid>//bottom-sheet-dialog-in-flutter</guid>
-	  <description><![CDATA[
-	     <p>从屏幕底部滑出的这种弹窗实在是太普遍的需求了，所以Flutter不可能不提供，一查文档，果然有一个API直接就可以调出Dialog: showModalBottomSheet, 这个API有很多入参，但是如果不需要对Dialog的外观和行为有特殊的定制需求的话，值传递前两个参数就可以了。 API看起来非常简单，但是我看到网上有些blog文章对这个API的使用是错误的，所以我贴出我实现了上方圆角dialog的代码:</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">void openBottomSheet(context) {
-  showModalBottomSheet(
-    backgroundColor: Colors.white,
-    context: context,
-    shape: RoundedRectangleBorder(
-      borderRadius: BorderRadius.only(topLeft: Radius.circular(18), topRight: Radius.circular(18))
-  ),
-
-  builder: (builder) {
-      return new Container(
-        child: Wrap(
-          children: &lt;Widget&gt;[
-            getListTile(Icons.more, Colors.black45, &quot;More&quot;, context),
-            getListTile(Icons.favorite, Colors.pink, &quot;Favourites&quot;, context),
-            getListTile(Icons.account_box, Colors.blue, &quot;Profile&quot;, context),
-            new Divider(
-              thickness: 2.0,
-              height: 10.0,
-            ),
-            getListTile(Icons.exit_to_app, null, &quot;Logout&quot;, context),
-          ],
-        ),
-      );
-    },
-  );
-}
-</code></pre></div>
-<p>这个圆角的实现，其实可以直接传入<code>backgroundColorback</code>和<code>shape</code>参数，不用额外去添加一层i<code>Container</code>，如果想实现圆角背景，通过<code>Container</code>也可以实现，就是把<code>backgroundColor</code>设置成透明，多了一道工序，没必要。背景阴影的效果通过<code>barrierColor</code>来设置。很简单的一api，如果错误使用，不但不能优雅的实现功能，反而额外做了很多工作，却不能实现预期。看到的几个demo都没有正确使用这个API，所以特意为这个问题做此小记。</p>
 
 	  ]]></description>
 	</item>

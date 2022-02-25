@@ -14,12 +14,6 @@ bundle install
 
 ```
 
+3. issues
 
-
-
-
-
-
-
-
-
+https://jekyllrb.com/docs/installation/macos/

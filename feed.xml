@@ -36,7 +36,7 @@
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;p&gt;添加此混淆规则后重新打包，崩溃和ANR成功修复。&lt;/p&gt;
 </description>
-        <pubDate>Fri, 04 Jun 2021 22:00:00 +0800</pubDate>
+        <pubDate>Fri, 04 Jun 2021 14:00:00 +0000</pubDate>
         <link>http://longlinht.github.io//kotli-coroutine-proguard-crash</link>
         <guid isPermaLink="true">http://longlinht.github.io//kotli-coroutine-proguard-crash</guid>
       </item>
@@ -150,7 +150,7 @@ private void catchCrashLog() {
 
 &lt;p&gt;目前观察到一个现象，Android 7以下的机器基本都没有成功上报，比较奇怪，但是本地测试Android 4的机器是可以上报的，此问题后续有待验证。&lt;/p&gt;
 </description>
-        <pubDate>Thu, 29 Apr 2021 22:00:00 +0800</pubDate>
+        <pubDate>Thu, 29 Apr 2021 14:00:00 +0000</pubDate>
         <link>http://longlinht.github.io//summary-of-using-xcrash</link>
         <guid isPermaLink="true">http://longlinht.github.io//summary-of-using-xcrash</guid>
       </item>
@@ -180,7 +180,7 @@ libmonochrome.so这个信息，当看到这个so的时候，直觉告诉我是�
 &lt;li&gt;一个问题持续出现后，必须引起重视，在上报数据不完整，无上下文的情况下也要通过其他途径去诊断和定位，切不可倾向于没有问题。&lt;/li&gt;
 &lt;/ul&gt;
 </description>
-        <pubDate>Mon, 26 Apr 2021 22:00:00 +0800</pubDate>
+        <pubDate>Mon, 26 Apr 2021 14:00:00 +0000</pubDate>
         <link>http://longlinht.github.io//resolve-online-problem</link>
         <guid isPermaLink="true">http://longlinht.github.io//resolve-online-problem</guid>
       </item>
@@ -230,7 +230,7 @@ libmonochrome.so这个信息，当看到这个so的时候，直觉告诉我是�
 
 &lt;p&gt;1: C, 2: B, 3: C, 4: C, 5: C, 6: B, 7: C, 8: A, 9: C, 10: A, 11: C, 12: C, 13: A&lt;/p&gt;
 </description>
-        <pubDate>Thu, 22 Apr 2021 04:54:12 +0800</pubDate>
+        <pubDate>Wed, 21 Apr 2021 20:54:12 +0000</pubDate>
         <link>http://longlinht.github.io//13-questions-test-your-ignorance</link>
         <guid isPermaLink="true">http://longlinht.github.io//13-questions-test-your-ignorance</guid>
       </item>
@@ -309,7 +309,7 @@ libmonochrome.so这个信息，当看到这个so的时候，直觉告诉我是�
 
 &lt;p&gt;好书就该为其写一篇读后感，虽是最俗套的做法，但还是写下了自己的一些感受和领悟。今后回看也好有个参照。&lt;/p&gt;
 </description>
-        <pubDate>Sun, 18 Apr 2021 04:54:12 +0800</pubDate>
+        <pubDate>Sat, 17 Apr 2021 20:54:12 +0000</pubDate>
         <link>http://longlinht.github.io//read-sapiens</link>
         <guid isPermaLink="true">http://longlinht.github.io//read-sapiens</guid>
       </item>
@@ -382,7 +382,7 @@ dalvik.system.NativeStart.main (NativeStart.java)
 &lt;li&gt;使用了以后也要做好权衡，如它带来的利是否远大于弊&lt;/li&gt;
 &lt;/ul&gt;
 </description>
-        <pubDate>Sat, 20 Feb 2021 22:00:00 +0800</pubDate>
+        <pubDate>Sat, 20 Feb 2021 14:00:00 +0000</pubDate>
         <link>http://longlinht.github.io//summary-of-using-booster</link>
         <guid isPermaLink="true">http://longlinht.github.io//summary-of-using-booster</guid>
       </item>
@@ -466,7 +466,7 @@ classpath &amp;quot;com.didiglobal.booster:booster-transform-shared-preferences:
 
 &lt;p&gt;Booster还有其他强大的功能模块有待探索和使用，后续用到后再来聊！&lt;/p&gt;
 </description>
-        <pubDate>Sun, 24 Jan 2021 22:00:00 +0800</pubDate>
+        <pubDate>Sun, 24 Jan 2021 14:00:00 +0000</pubDate>
         <link>http://longlinht.github.io//using-booster-fix-anr</link>
         <guid isPermaLink="true">http://longlinht.github.io//using-booster-fix-anr</guid>
       </item>
@@ -915,7 +915,7 @@ public void showEmoji(boolean animate) {
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;p&gt;其实实现这个方案后，我也有点惊讶，KPSwitch那么复杂的逻辑，竟然可以简单的以这种方式实现。说明做一切事情都不可拘泥于过去成功的方案，应该大胆尝试新的方法，说不定就能收获到惊喜呢！&lt;/p&gt;
 </description>
-        <pubDate>Fri, 15 Jan 2021 22:00:00 +0800</pubDate>
+        <pubDate>Fri, 15 Jan 2021 14:00:00 +0000</pubDate>
         <link>http://longlinht.github.io//custom-emoji-in-android</link>
         <guid isPermaLink="true">http://longlinht.github.io//custom-emoji-in-android</guid>
       </item>
@@ -936,7 +936,7 @@ public void showEmoji(boolean animate) {
 
 &lt;p&gt;&lt;img src=&quot;/assets/images/machine_learning.png&quot; /&gt;&lt;/p&gt;
 </description>
-        <pubDate>Tue, 01 Dec 2020 04:54:12 +0800</pubDate>
+        <pubDate>Mon, 30 Nov 2020 20:54:12 +0000</pubDate>
         <link>http://longlinht.github.io//first-lesson-of-machine-learning</link>
         <guid isPermaLink="true">http://longlinht.github.io//first-lesson-of-machine-learning</guid>
       </item>
@@ -988,7 +988,7 @@ familiar with Matrix. So it is time to review a few aspects of Matrix. Because o
 &lt;li&gt;&lt;p&gt;Compat Representation of System Linear Equation&lt;/p&gt;&lt;/li&gt;
 &lt;/ul&gt;
 </description>
-        <pubDate>Mon, 23 Nov 2020 04:54:12 +0800</pubDate>
+        <pubDate>Sun, 22 Nov 2020 20:54:12 +0000</pubDate>
         <link>http://longlinht.github.io//review-matrix</link>
         <guid isPermaLink="true">http://longlinht.github.io//review-matrix</guid>
       </item>

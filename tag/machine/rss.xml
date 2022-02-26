@@ -15,7 +15,7 @@
 	  <title>升级Kotlin版本导致的coroutine崩溃ANR小记</title>
 	  <link>//kotli-coroutine-proguard-crash</link>
 	  <author>Tao He</author>
-	  <pubDate>2021-06-04T22:00:00+08:00</pubDate>
+	  <pubDate>2021-06-04T14:00:00+00:00</pubDate>
 	  <guid>//kotli-coroutine-proguard-crash</guid>
 	  <description><![CDATA[
 	     <p>最近公司的项目在最新的版本中升级了kotlin版本，使用CI打包后的版本启动都或闪退，或ANR，看崩溃日志和ANR日志，矛头都指向了coroutine，并且Release版本崩溃而Debug版本没有问题，初步断定就是混淆的问题了。因此搜索相关Proguard rules，在Kotlin官方Github中找到coroutines.pro文件:</p>
@@ -53,7 +53,7 @@
 	  <title>xCrash运用小结</title>
 	  <link>//summary-of-using-xcrash</link>
 	  <author>Tao He</author>
-	  <pubDate>2021-04-29T22:00:00+08:00</pubDate>
+	  <pubDate>2021-04-29T14:00:00+00:00</pubDate>
 	  <guid>//summary-of-using-xcrash</guid>
 	  <description><![CDATA[
 	     <p>公司在做海外产品，由于免费版firebase对native崩溃的捕获上报能力有限(无堆栈，无具体上下文信息)，因此对我们定位和降低native极为不利，当native崩溃总量进入top行列的时候，就不能对其视而不见了，因此我开始调研解决方案，最后决定接入爱奇艺推出的xCrash来捕获native崩溃，当然了，xCrash本身是不具备上报功能的，它只是将崩溃信息写入tombstone文件。因此需要在其基础之上添加上报功能。</p>
@@ -170,7 +170,7 @@ private void catchCrashLog() {
 	  <title>客户端线上问题应对小记</title>
 	  <link>//resolve-online-problem</link>
 	  <author>Tao He</author>
-	  <pubDate>2021-04-26T22:00:00+08:00</pubDate>
+	  <pubDate>2021-04-26T14:00:00+00:00</pubDate>
 	  <guid>//resolve-online-problem</guid>
 	  <description><![CDATA[
 	     <p>今年三四月份我所在的App项目经历了不少我之前很少遇到的情况，回看这些无论是突发状况，还是隐匿得让人无法发觉的细节导致的问题，都非常有借鉴意义，也是很大的教训，难能可贵的经验，有必要用一小文记录下。</p>
@@ -203,7 +203,7 @@ libmonochrome.so这个信息，当看到这个so的时候，直觉告诉我是�
 	  <title>Booster使用小结</title>
 	  <link>//summary-of-using-booster</link>
 	  <author>Tao He</author>
-	  <pubDate>2021-02-20T22:00:00+08:00</pubDate>
+	  <pubDate>2021-02-20T14:00:00+00:00</pubDate>
 	  <guid>//summary-of-using-booster</guid>
 	  <description><![CDATA[
 	     <p>使用Booster去修复SharedPreferences导致的ANR的版本已全量上架Google Play，SP导致的ANR几乎绝迹，但是随之全量版本的逐步铺开，firebase崩溃后台却出现了Booster所导致的两个比较多的崩溃:</p>
@@ -279,7 +279,7 @@ dalvik.system.NativeStart.main (NativeStart.java)
 	  <title>使用Booster解决ANR的实践</title>
 	  <link>//using-booster-fix-anr</link>
 	  <author>Tao He</author>
-	  <pubDate>2021-01-24T22:00:00+08:00</pubDate>
+	  <pubDate>2021-01-24T14:00:00+00:00</pubDate>
 	  <guid>//using-booster-fix-anr</guid>
 	  <description><![CDATA[
 	     <p>SharedPreferences一直备受诟病，不论是因为开发者的不当使用还是其自身的问题，SharedPreferences都给开发者造成了不少困扰, 尤以ANR最甚。面对由SharedPreferences引起的ANR，我们通常的做法是引入MMKV来替代SP，规避SP本身的缺陷。但是MMKV虽然可以解决App自身由于使用SP导致的ANR，但是无法解决App中第三方库使用SP导致的ANR，因此，虽然MMKV性能优秀，可做数据迁移，久经验证，依然不能彻底解决SP的问题。因此需要考虑其他解决方案，后来找到了滴滴开源的Booster项目，算是找到一个相对彻底的解决方案。</p>
@@ -366,7 +366,7 @@ classpath &quot;com.didiglobal.booster:booster-transform-shared-preferences:$boo
 	  <title>在Android中定制Emoji的实现</title>
 	  <link>//custom-emoji-in-android</link>
 	  <author>Tao He</author>
-	  <pubDate>2021-01-15T22:00:00+08:00</pubDate>
+	  <pubDate>2021-01-15T14:00:00+00:00</pubDate>
 	  <guid>//custom-emoji-in-android</guid>
 	  <description><![CDATA[
 	     <p>最近公司产品在评论输入中要加入定制emoji面板，因此趟了emoji这个浑水，现以此文记录期间踩过的坑和一些心得。要实现一个相对比较完善的emoji输入和显示的功能，需要解决两个主要的问题: 键盘和emoji表情的平滑切换和emoji的正确显示。前者其实和emoji本身不相关，因此放在后面讨论。先来探究定制emoji的实现方案。 </p>
@@ -818,7 +818,7 @@ public void showEmoji(boolean animate) {
 	  <title>First Lesson of Machine Learning</title>
 	  <link>//first-lesson-of-machine-learning</link>
 	  <author>Tao He</author>
-	  <pubDate>2020-12-01T04:54:12+08:00</pubDate>
+	  <pubDate>2020-11-30T20:54:12+00:00</pubDate>
 	  <guid>//first-lesson-of-machine-learning</guid>
 	  <description><![CDATA[
 	     <p>Two months ago, I made a decision for my career: learning machine learning from scratch. Machine learning involves many stuff of math while math is difficult. But I didnot give up in half way this time. Books, Youtube lectures, blogs, I collect learning materials as much as I can and do my best to learning it. 60 days passed, I have had a clarity understanding about some important concepts of Machine learing. In this article, I will figure out these concepts and their relations through 2 figures.</p>
@@ -842,7 +842,7 @@ public void showEmoji(boolean animate) {
 	  <title>Review Matrix</title>
 	  <link>//review-matrix</link>
 	  <author>Tao He</author>
-	  <pubDate>2020-11-23T04:54:12+08:00</pubDate>
+	  <pubDate>2020-11-22T20:54:12+00:00</pubDate>
 	  <guid>//review-matrix</guid>
 	  <description><![CDATA[
 	     <p>Linear Algebra is prerequisite for Machine Learning while Matrix is the one of most important stuff in Linear Algebra. It is difficult to learn ML well in case of not 
@@ -897,7 +897,7 @@ familiar with Matrix. So it is time to review a few aspects of Matrix. Because o
 	  <title>Android module SDK化的实践</title>
 	  <link>//using-maven-to-mananger-library</link>
 	  <author>Tao He</author>
-	  <pubDate>2020-11-21T04:54:12+08:00</pubDate>
+	  <pubDate>2020-11-20T20:54:12+00:00</pubDate>
 	  <guid>//using-maven-to-mananger-library</guid>
 	  <description><![CDATA[
 	     <p>文章标题指的SDK化指的是将一个有多个module的Android工程中的特定module以aar的形式输出后被app模块依赖使用。那么如何在基本不改动代码的情况下实现这个要求，完成app模块对特定module的依赖呢?</p>
@@ -1009,7 +1009,7 @@ familiar with Matrix. So it is time to review a few aspects of Matrix. Because o
 	  <title>用python脚本优雅的整理Kindle的标注和笔记</title>
 	  <link>//using-python-parse-kindle-notes</link>
 	  <author>Tao He</author>
-	  <pubDate>2020-11-12T04:54:12+08:00</pubDate>
+	  <pubDate>2020-11-11T20:54:12+00:00</pubDate>
 	  <guid>//using-python-parse-kindle-notes</guid>
 	  <description><![CDATA[
 	     <p>我是重度Kindle使用者，Kindle里面存满了各类书籍，经常会同时读两三本书，时间一长，多本书的标注和笔记都交叉记录在My Clippings.txt文本文件里，现在这个文件已经有几万行，每次手动去整理特定的一本书的标注和笔记时都极为头疼，还容易错漏，终于有一天实在忍不了了，就去网上找有没有整理kindle标注和笔记的服务，还真让我给找到了，clipping.io，在线服务，马上使用，上传My Clippings.txt文件，一切顺利，文件上传后开始分析整理文本，看到几本书的标注已经出来了，等全部整理结束后发现少了好几本书的，再次重新上传文件重试整理，问题依旧，空欢喜一场，依旧不能解决我的痛点，最近在读的两本书的标注和笔记恰好没有被整理出来，一怒之下，决定自己用python脚本来写一个这样的整理工具，还以为得花费一两天的时间，一不小心，两个小时不到的功夫写完了，调试了一番，完全满足我的需求，现在只需一条命令，传入书名就可以整理出指定的一本书的所有标注和笔记，脚本如下：</p>

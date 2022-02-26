@@ -15,7 +15,7 @@
 	  <title>升级Kotlin版本导致的coroutine崩溃ANR小记</title>
 	  <link>//kotli-coroutine-proguard-crash</link>
 	  <author>Tao He</author>
-	  <pubDate>2021-06-04T22:00:00+08:00</pubDate>
+	  <pubDate>2021-06-04T14:00:00+00:00</pubDate>
 	  <guid>//kotli-coroutine-proguard-crash</guid>
 	  <description><![CDATA[
 	     <p>最近公司的项目在最新的版本中升级了kotlin版本，使用CI打包后的版本启动都或闪退，或ANR，看崩溃日志和ANR日志，矛头都指向了coroutine，并且Release版本崩溃而Debug版本没有问题，初步断定就是混淆的问题了。因此搜索相关Proguard rules，在Kotlin官方Github中找到coroutines.pro文件:</p>
@@ -53,7 +53,7 @@
 	  <title>xCrash运用小结</title>
 	  <link>//summary-of-using-xcrash</link>
 	  <author>Tao He</author>
-	  <pubDate>2021-04-29T22:00:00+08:00</pubDate>
+	  <pubDate>2021-04-29T14:00:00+00:00</pubDate>
 	  <guid>//summary-of-using-xcrash</guid>
 	  <description><![CDATA[
 	     <p>公司在做海外产品，由于免费版firebase对native崩溃的捕获上报能力有限(无堆栈，无具体上下文信息)，因此对我们定位和降低native极为不利，当native崩溃总量进入top行列的时候，就不能对其视而不见了，因此我开始调研解决方案，最后决定接入爱奇艺推出的xCrash来捕获native崩溃，当然了，xCrash本身是不具备上报功能的，它只是将崩溃信息写入tombstone文件。因此需要在其基础之上添加上报功能。</p>
@@ -170,7 +170,7 @@ private void catchCrashLog() {
 	  <title>客户端线上问题应对小记</title>
 	  <link>//resolve-online-problem</link>
 	  <author>Tao He</author>
-	  <pubDate>2021-04-26T22:00:00+08:00</pubDate>
+	  <pubDate>2021-04-26T14:00:00+00:00</pubDate>
 	  <guid>//resolve-online-problem</guid>
 	  <description><![CDATA[
 	     <p>今年三四月份我所在的App项目经历了不少我之前很少遇到的情况，回看这些无论是突发状况，还是隐匿得让人无法发觉的细节导致的问题，都非常有借鉴意义，也是很大的教训，难能可贵的经验，有必要用一小文记录下。</p>
@@ -203,7 +203,7 @@ libmonochrome.so这个信息，当看到这个so的时候，直觉告诉我是�
 	  <title>13个问题测试你对这个世界的无知有多严重</title>
 	  <link>//13-questions-test-your-ignorance</link>
 	  <author>Tao He</author>
-	  <pubDate>2021-04-22T04:54:12+08:00</pubDate>
+	  <pubDate>2021-04-21T20:54:12+00:00</pubDate>
 	  <guid>//13-questions-test-your-ignorance</guid>
 	  <description><![CDATA[
 	     <p>在Factfulness这本书中作者一开头就抛出13个对事实认知的问题，以此测试读者对这个世界的认知，因为我已经读完了这本书，我觉得这些问题值得将其单列出来，有兴趣的可以做做这些测试题，文末附有答案，相信我你的成绩不一定好过大猩猩，问题列表如下:</p>
@@ -256,7 +256,7 @@ libmonochrome.so这个信息，当看到这个so的时候，直觉告诉我是�
 	  <title>重读Sapiens</title>
 	  <link>//read-sapiens</link>
 	  <author>Tao He</author>
-	  <pubDate>2021-04-18T04:54:12+08:00</pubDate>
+	  <pubDate>2021-04-17T20:54:12+00:00</pubDate>
 	  <guid>//read-sapiens</guid>
 	  <description><![CDATA[
 	     <p>两年前读过《人类简史》的中译本，去年年终和今年年初一口气读完了《未来简史》和《今日简史》的英文版，就一直惦记着干脆把《人类简史》的英文版再读一遍，今年过年时本来想一鼓作气读完，但是中间又读了《The Black Swan》，就一直没顾上，最近坐地铁通勤，断断续续终于又读了一遍，不得不说，再读英文版，依旧有新的收获。不管从写史的风格，思路，框架，格局，还是文笔，都是一等一的杰作。</p>
@@ -338,7 +338,7 @@ libmonochrome.so这个信息，当看到这个so的时候，直觉告诉我是�
 	  <title>Booster使用小结</title>
 	  <link>//summary-of-using-booster</link>
 	  <author>Tao He</author>
-	  <pubDate>2021-02-20T22:00:00+08:00</pubDate>
+	  <pubDate>2021-02-20T14:00:00+00:00</pubDate>
 	  <guid>//summary-of-using-booster</guid>
 	  <description><![CDATA[
 	     <p>使用Booster去修复SharedPreferences导致的ANR的版本已全量上架Google Play，SP导致的ANR几乎绝迹，但是随之全量版本的逐步铺开，firebase崩溃后台却出现了Booster所导致的两个比较多的崩溃:</p>
@@ -414,7 +414,7 @@ dalvik.system.NativeStart.main (NativeStart.java)
 	  <title>使用Booster解决ANR的实践</title>
 	  <link>//using-booster-fix-anr</link>
 	  <author>Tao He</author>
-	  <pubDate>2021-01-24T22:00:00+08:00</pubDate>
+	  <pubDate>2021-01-24T14:00:00+00:00</pubDate>
 	  <guid>//using-booster-fix-anr</guid>
 	  <description><![CDATA[
 	     <p>SharedPreferences一直备受诟病，不论是因为开发者的不当使用还是其自身的问题，SharedPreferences都给开发者造成了不少困扰, 尤以ANR最甚。面对由SharedPreferences引起的ANR，我们通常的做法是引入MMKV来替代SP，规避SP本身的缺陷。但是MMKV虽然可以解决App自身由于使用SP导致的ANR，但是无法解决App中第三方库使用SP导致的ANR，因此，虽然MMKV性能优秀，可做数据迁移，久经验证，依然不能彻底解决SP的问题。因此需要考虑其他解决方案，后来找到了滴滴开源的Booster项目，算是找到一个相对彻底的解决方案。</p>
@@ -501,7 +501,7 @@ classpath &quot;com.didiglobal.booster:booster-transform-shared-preferences:$boo
 	  <title>在Android中定制Emoji的实现</title>
 	  <link>//custom-emoji-in-android</link>
 	  <author>Tao He</author>
-	  <pubDate>2021-01-15T22:00:00+08:00</pubDate>
+	  <pubDate>2021-01-15T14:00:00+00:00</pubDate>
 	  <guid>//custom-emoji-in-android</guid>
 	  <description><![CDATA[
 	     <p>最近公司产品在评论输入中要加入定制emoji面板，因此趟了emoji这个浑水，现以此文记录期间踩过的坑和一些心得。要实现一个相对比较完善的emoji输入和显示的功能，需要解决两个主要的问题: 键盘和emoji表情的平滑切换和emoji的正确显示。前者其实和emoji本身不相关，因此放在后面讨论。先来探究定制emoji的实现方案。 </p>
@@ -953,7 +953,7 @@ public void showEmoji(boolean animate) {
 	  <title>First Lesson of Machine Learning</title>
 	  <link>//first-lesson-of-machine-learning</link>
 	  <author>Tao He</author>
-	  <pubDate>2020-12-01T04:54:12+08:00</pubDate>
+	  <pubDate>2020-11-30T20:54:12+00:00</pubDate>
 	  <guid>//first-lesson-of-machine-learning</guid>
 	  <description><![CDATA[
 	     <p>Two months ago, I made a decision for my career: learning machine learning from scratch. Machine learning involves many stuff of math while math is difficult. But I didnot give up in half way this time. Books, Youtube lectures, blogs, I collect learning materials as much as I can and do my best to learning it. 60 days passed, I have had a clarity understanding about some important concepts of Machine learing. In this article, I will figure out these concepts and their relations through 2 figures.</p>
@@ -977,7 +977,7 @@ public void showEmoji(boolean animate) {
 	  <title>Review Matrix</title>
 	  <link>//review-matrix</link>
 	  <author>Tao He</author>
-	  <pubDate>2020-11-23T04:54:12+08:00</pubDate>
+	  <pubDate>2020-11-22T20:54:12+00:00</pubDate>
 	  <guid>//review-matrix</guid>
 	  <description><![CDATA[
 	     <p>Linear Algebra is prerequisite for Machine Learning while Matrix is the one of most important stuff in Linear Algebra. It is difficult to learn ML well in case of not 

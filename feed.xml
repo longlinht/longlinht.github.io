@@ -7,7 +7,7 @@
     <atom:link href="http://longlinht.github.io//feed.xml" rel="self" type="application/rss+xml" />
     
       <item>
-        <title>升级Kotlin版本导致的coroutine崩溃ANR小记</title>
+        <title>Kotlin使用小计</title>
         <description>&lt;p&gt;此文记录一次对Kotlin的技术分享，显然无法对Kotlin的方方面面都涉及到，只将一些在实际工作中频繁涉及到的要点做一个梳理，以期对Kotlin这们JVM语言有一个整体的认识。&lt;/p&gt;
 
 &lt;h4&gt;为什么使用Kotlin&lt;/h4&gt;
@@ -250,7 +250,7 @@ assertFalse(list.all { it % 2 == 0 })
 
 &lt;p&gt;&lt;img src=&quot;/assets/images/java-vs-kotlin.png&quot; /&gt;&lt;/p&gt;
 </description>
-        <pubDate>Fri, 04 Jun 2021 14:00:00 +0000</pubDate>
+        <pubDate>Sat, 06 Nov 2021 14:00:00 +0000</pubDate>
         <link>http://longlinht.github.io//kotlin-overview</link>
         <guid isPermaLink="true">http://longlinht.github.io//kotlin-overview</guid>
       </item>

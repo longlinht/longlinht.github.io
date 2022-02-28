@@ -8,15 +8,15 @@
     <title>与机器，人，神共舞</title>
     <link>http://longlinht.github.io/</link>
     <description>编程，读书，思考，旅行，与机器对话，与人交谈，对神发问，探索，体验人生美丽的风景</description>
-    <pubDate>Fri, 04 Jun 2021 14:00:00 +0000</pubDate>
+    <pubDate>Sat, 06 Nov 2021 14:00:00 +0000</pubDate>
     <item>
-      <title>升级Kotlin版本导致的coroutine崩溃ANR小记</title>
+      <title>Kotlin使用小计</title>
       <link>http://longlinht.github.io//kotlin-overview</link>
       <description>此文记录一次对Kotlin的技术分享，显然无法对Kotlin的方方面面都涉及到，只将一些在实际工作中频繁涉及到的要点做一个梳理，以期对Kotlin这们JVM语言有一个整体的认识。
 
 </description>
-      <pubDate>Fri, 04 Jun 2021 14:00:00 +0000</pubDate>
-      <dc:date>2021-06-04T14:00:00+00:00</dc:date>
+      <pubDate>Sat, 06 Nov 2021 14:00:00 +0000</pubDate>
+      <dc:date>2021-11-06T14:00:00+00:00</dc:date>
     </item>
     <item>
       <title>升级Kotlin版本导致的coroutine崩溃ANR小记</title>
@@ -774,6 +774,6 @@ update UI when we finish something in separated thread. This is a basic problem,
       <pubDate>Tue, 02 Nov 2010 18:30:12 +0000</pubDate>
       <dc:date>2010-11-02T18:30:12+00:00</dc:date>
     </item>
-    <dc:date>2021-06-04T14:00:00+00:00</dc:date>
+    <dc:date>2021-11-06T14:00:00+00:00</dc:date>
   </channel>
 </rss>

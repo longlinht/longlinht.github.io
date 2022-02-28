@@ -8,6 +8,255 @@
     
       <item>
         <title>升级Kotlin版本导致的coroutine崩溃ANR小记</title>
+        <description>&lt;p&gt;此文记录一次对Kotlin的技术分享，显然无法对Kotlin的方方面面都涉及到，只将一些在实际工作中频繁涉及到的要点做一个梳理，以期对Kotlin这们JVM语言有一个整体的认识。&lt;/p&gt;
+
+&lt;h4&gt;为什么使用Kotlin&lt;/h4&gt;
+
+&lt;ul&gt;
+&lt;li&gt;静态类型语言&lt;/li&gt;
+&lt;li&gt;同时支持面向对象和函数式编程范式&lt;/li&gt;
+&lt;li&gt;更强大语言表达能力&lt;/li&gt;
+&lt;li&gt;解决Java NPE问题，更安全&lt;/li&gt;
+&lt;li&gt;支持扩展函数&lt;/li&gt;
+&lt;li&gt;与Java的高互操作性&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3&gt;类和函数&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;我们只能继承声明为open 或 obstract的类&lt;/li&gt;
+&lt;li&gt;Unit 类似Java中的void&lt;/li&gt;
+&lt;li&gt;每一个函数都返回一个值&lt;/li&gt;
+&lt;li&gt;函数参数支持默认值，类似C++&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3&gt;变量和属性&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;一切都是对象，包括基础类型，比Java更加彻底&lt;/li&gt;
+&lt;li&gt;对于var和val的使用，最佳实践是: 尽可能多的使用val&lt;/li&gt;
+&lt;li&gt;Property类似java中的field，但更强大:&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;In Java:&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;public class Person {
+   private String name;
+
+   public String getName() {
+     return name;
+   }
+
+  public void setName(String name) {
+     this.name = name;
+   }
+
+}
+
+Person person = new Person();
+person.setName(&amp;quot;name&amp;quot;);
+String name = person.getName();
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;In Kotlin:&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;class Person {
+  var name: String = &amp;quot;&amp;quot;
+}
+
+val person = Person()
+person.name = &amp;quot;name&amp;quot;
+val name = person.name
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;定制getter，setter行为:&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;class Person {
+  var name: String = &amp;quot;&amp;quot;
+     get() = field.toUpperCase()
+     set(value) {
+       field = &amp;quot;Name: $value&amp;quot;
+     }
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h4&gt;Data Classes&lt;/h4&gt;
+
+&lt;p&gt;强大的一种类，可以帮助我们避免一些模板代码和避免出错&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;data class Movie(var name: String, var studio: String, var rating: Float)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;等价于Java Pojo:&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;public class Movie {
+
+    private String name;
+    private String studio;
+    private float rating;
+
+    public Movie(String name, String studio, float rating) {
+        this.name = name;
+        this.studio = studio;
+        this.rating = rating;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getStudio() {
+        return studio;
+    }
+
+    public void setStudio(String studio) {
+        this.studio = studio;
+    }
+
+    public float getRating() {
+        return rating;
+    }
+
+    public void setRating(float rating) {
+        this.rating = rating;
+    }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+
+        result = prime * result + ((name == null) ? 0 : name.hashCode());
+        result = prime * result + Float.floatToIntBits(rating);
+        result = prime * result + ((studio == null) ? 0 : studio.hashCode());
+
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+
+        if (obj == null)
+            return false;
+
+        if (getClass() != obj.getClass())
+            return false;
+
+        Movie other = (Movie) obj;
+
+        if (name == null) {
+            if (other.name != null)
+                return false;
+
+        } else if (!name.equals(other.name))
+            return false;
+
+        if (Float.floatToIntBits(rating) != Float.floatToIntBits(other.rating))
+            return false;
+
+        if (studio == null) {
+            if (other.studio != null)
+                return false;
+
+        } else if (!studio.equals(other.studio))
+            return false;
+
+        return true;
+    }
+
+    @Override
+    public String toString() {
+        return &amp;quot;Movie [name=&amp;quot; + name + &amp;quot;, studio=&amp;quot; + studio + &amp;quot;, rating=&amp;quot; + rating + &amp;quot;]&amp;quot;;
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Copy数据类对象:&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;val f1 = Forecast(Date(), 27.5f, &amp;quot;Shiny day&amp;quot;)
+val f2 = f1.copy(temperature = 30f)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;把一个对象的多个字段映射到多个变量中&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;val f1 = Forecast(Date(), 27.5f, &amp;quot;Shiny day&amp;quot;)
+val (date, temperature, details) = f1
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h4&gt;操作符重载&lt;/h4&gt;
+
+&lt;ul&gt;
+&lt;li&gt;类似C++&lt;/li&gt;
+&lt;li&gt;===和!==不能被重载&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h4&gt;Lambdas&lt;/h4&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Java也支持，但是Kotlin中lambdas表达式可以变得非常简单，语法糖，便利的同时也要特别小心&lt;/li&gt;
+&lt;li&gt;在Kotlin中，函数可以作为一个类型&lt;/li&gt;
+&lt;li&gt;类似C++中的函数指针&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h4&gt;Visibility Modifiers&lt;/h4&gt;
+
+&lt;ul&gt;
+&lt;li&gt;默认的可见性是public&lt;/li&gt;
+&lt;li&gt;private, protected, internal可见官方文档定义&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h4&gt;集合和函数操作&lt;/h4&gt;
+
+&lt;p&gt;大概有如下几类操作,具体见官方文档&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Aggregate operations:&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;//any
+val list = listOf(1, 2, 3, 4, 5, 6)
+assertTrue(list.any { it % 2 == 0 })
+assertFalse(list.any { it &amp;gt; 10 })
+
+//all
+assertTrue(list.all { it &amp;lt; 10 })
+assertFalse(list.all { it % 2 == 0 })
+
+...
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;Filtering operations&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Mapping operations&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Elements operations&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Generation operations&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Ordering operations&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h4&gt;Null safety in Kotlin&lt;/h4&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;对臭名昭著的Java NPE有了解决方案&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;代码中如果大量充斥!!操作符将是一个很不好的信号&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;如果显示声明为非空变量后再赋值空对象，会导致运行时crash，需特别注意&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Kotlin和Java代码共存，并且互操作时要特别注意空指针问题&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Java可通过Nullable和NonNull注解来显式明晰变量的取值&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h4&gt;Coroutine&lt;/h4&gt;
+
+&lt;p&gt;可参见已有的一次技术分享: https://wiki.inn.bitcall.xyz/pages/viewpage.action?pageId=2232386&lt;/p&gt;
+
+&lt;h4&gt;Anko&lt;/h4&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;Github: https://github.com/Kotlin/anko&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;JetBrains开发的一个强大的类库&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;主要目的是使用代码来代替XML来生成UI布局&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;我们的项目在后期性能优化时可考虑引入使用&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h4&gt;Kotlin vs. Java&lt;/h4&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/images/java-vs-kotlin.png&quot; /&gt;&lt;/p&gt;
+</description>
+        <pubDate>Fri, 04 Jun 2021 14:00:00 +0000</pubDate>
+        <link>http://longlinht.github.io//kotlin-overview</link>
+        <guid isPermaLink="true">http://longlinht.github.io//kotlin-overview</guid>
+      </item>
+    
+      <item>
+        <title>升级Kotlin版本导致的coroutine崩溃ANR小记</title>
         <description>&lt;p&gt;最近公司的项目在最新的版本中升级了kotlin版本，使用CI打包后的版本启动都或闪退，或ANR，看崩溃日志和ANR日志，矛头都指向了coroutine，并且Release版本崩溃而Debug版本没有问题，初步断定就是混淆的问题了。因此搜索相关Proguard rules，在Kotlin官方Github中找到coroutines.pro文件:&lt;/p&gt;
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;# Allow R8 to optimize away the FastServiceLoader.
 # Together with ServiceLoader optimization in R8
@@ -939,58 +1188,6 @@ public void showEmoji(boolean animate) {
         <pubDate>Mon, 30 Nov 2020 20:54:12 +0000</pubDate>
         <link>http://longlinht.github.io//first-lesson-of-machine-learning</link>
         <guid isPermaLink="true">http://longlinht.github.io//first-lesson-of-machine-learning</guid>
-      </item>
-    
-      <item>
-        <title>Review Matrix</title>
-        <description>&lt;p&gt;Linear Algebra is prerequisite for Machine Learning while Matrix is the one of most important stuff in Linear Algebra. It is difficult to learn ML well in case of not 
-familiar with Matrix. So it is time to review a few aspects of Matrix. Because of complexity of mathematical formula input, I will skip some details in main text, but attach them in three images(output from my Inkredible notes).&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;Image 1&lt;/strong&gt; (Learning notes output by Inkredible)&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/images/IMG_20201203_201913.png&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Image 1 involves:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;p&gt;Matrix Definition&lt;/p&gt;&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;Matrix Addition and Multiplication&lt;/p&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;strong&gt;Image 2&lt;/strong&gt; (Learning notes output by Inkredible)&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/images/IMG_20201203_201928.png&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Image 2 involves:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;p&gt;Identity Matrix &lt;/p&gt;&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;Properties of Matrix:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;Not Commutative&lt;/li&gt;
-&lt;li&gt;Associativity&lt;/li&gt;
-&lt;li&gt;Distributivity&lt;/li&gt;
-&lt;/ul&gt;&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;Multiplication with the Identity Matrix&lt;/p&gt;&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;Inverse and Transpose&lt;/p&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;strong&gt;Image 3&lt;/strong&gt; (Learning notes output by Inkredible)&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/images/IMG_20201203_201950.png&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Image 3 involves:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;p&gt;Symetric Matrix&lt;/p&gt;&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;Multiplication by a Scalar&lt;/p&gt;&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;Compat Representation of System Linear Equation&lt;/p&gt;&lt;/li&gt;
-&lt;/ul&gt;
-</description>
-        <pubDate>Sun, 22 Nov 2020 20:54:12 +0000</pubDate>
-        <link>http://longlinht.github.io//review-matrix</link>
-        <guid isPermaLink="true">http://longlinht.github.io//review-matrix</guid>
       </item>
     
   </channel>

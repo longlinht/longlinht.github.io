@@ -114,33 +114,247 @@
 
         <section class="post-content">
             
-            <p>最近公司的项目在最新的版本中升级了kotlin版本，使用CI打包后的版本启动都或闪退，或ANR，看崩溃日志和ANR日志，矛头都指向了coroutine，并且Release版本崩溃而Debug版本没有问题，初步断定就是混淆的问题了。因此搜索相关Proguard rules，在Kotlin官方Github中找到coroutines.pro文件:</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text"># Allow R8 to optimize away the FastServiceLoader.
-# Together with ServiceLoader optimization in R8
-# this results in direct instantiation when loading Dispatchers.Main
--assumenosideeffects class kotlinx.coroutines.internal.MainDispatcherLoader {
-    boolean FAST_SERVICE_LOADER_ENABLED return false;
+            <p>此文记录一次对Kotlin的技术分享，显然无法对Kotlin的方方面面都涉及到，只将一些在实际工作中频繁涉及到的要点做一个梳理，以期对Kotlin这们JVM语言有一个整体的认识。</p>
+
+<h4>为什么使用Kotlin</h4>
+
+<ul>
+<li>静态类型语言</li>
+<li>同时支持面向对象和函数式编程范式</li>
+<li>更强大语言表达能力</li>
+<li>解决Java NPE问题，更安全</li>
+<li>支持扩展函数</li>
+<li>与Java的高互操作性</li>
+</ul>
+
+<h3>类和函数</h3>
+
+<ul>
+<li>我们只能继承声明为open 或 obstract的类</li>
+<li>Unit 类似Java中的void</li>
+<li>每一个函数都返回一个值</li>
+<li>函数参数支持默认值，类似C++</li>
+</ul>
+
+<h3>变量和属性</h3>
+
+<ul>
+<li>一切都是对象，包括基础类型，比Java更加彻底</li>
+<li>对于var和val的使用，最佳实践是: 尽可能多的使用val</li>
+<li>Property类似java中的field，但更强大:</li>
+</ul>
+
+<p>In Java:</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">public class Person {
+   private String name;
+
+   public String getName() {
+     return name;
+   }
+
+  public void setName(String name) {
+     this.name = name;
+   }
+
 }
 
--assumenosideeffects class kotlinx.coroutines.internal.FastServiceLoaderKt {
-    boolean ANDROID_DETECTED return true;
+Person person = new Person();
+person.setName(&quot;name&quot;);
+String name = person.getName();
+</code></pre></div>
+<p>In Kotlin:</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">class Person {
+  var name: String = &quot;&quot;
 }
 
--keep class kotlinx.coroutines.android.AndroidDispatcherFactory {*;}
-
-# Disable support for &quot;Missing Main Dispatcher&quot;, since we always have Android main dispatcher
--assumenosideeffects class kotlinx.coroutines.internal.MainDispatchersKt {
-    boolean SUPPORT_MISSING return false;
-}
-
-# Statically turn off all debugging facilities and assertions
--assumenosideeffects class kotlinx.coroutines.DebugKt {
-    boolean getASSERTIONS_ENABLED() return false;
-    boolean getDEBUG() return false;
-    boolean getRECOVER_STACK_TRACES() return false;
+val person = Person()
+person.name = &quot;name&quot;
+val name = person.name
+</code></pre></div>
+<p>定制getter，setter行为:</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">class Person {
+  var name: String = &quot;&quot;
+     get() = field.toUpperCase()
+     set(value) {
+       field = &quot;Name: $value&quot;
+     }
 }
 </code></pre></div>
-<p>添加此混淆规则后重新打包，崩溃和ANR成功修复。</p>
+<h4>Data Classes</h4>
+
+<p>强大的一种类，可以帮助我们避免一些模板代码和避免出错</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">data class Movie(var name: String, var studio: String, var rating: Float)
+</code></pre></div>
+<p>等价于Java Pojo:</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">public class Movie {
+
+    private String name;
+    private String studio;
+    private float rating;
+
+    public Movie(String name, String studio, float rating) {
+        this.name = name;
+        this.studio = studio;
+        this.rating = rating;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getStudio() {
+        return studio;
+    }
+
+    public void setStudio(String studio) {
+        this.studio = studio;
+    }
+
+    public float getRating() {
+        return rating;
+    }
+
+    public void setRating(float rating) {
+        this.rating = rating;
+    }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+
+        result = prime * result + ((name == null) ? 0 : name.hashCode());
+        result = prime * result + Float.floatToIntBits(rating);
+        result = prime * result + ((studio == null) ? 0 : studio.hashCode());
+
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+
+        if (obj == null)
+            return false;
+
+        if (getClass() != obj.getClass())
+            return false;
+
+        Movie other = (Movie) obj;
+
+        if (name == null) {
+            if (other.name != null)
+                return false;
+
+        } else if (!name.equals(other.name))
+            return false;
+
+        if (Float.floatToIntBits(rating) != Float.floatToIntBits(other.rating))
+            return false;
+
+        if (studio == null) {
+            if (other.studio != null)
+                return false;
+
+        } else if (!studio.equals(other.studio))
+            return false;
+
+        return true;
+    }
+
+    @Override
+    public String toString() {
+        return &quot;Movie [name=&quot; + name + &quot;, studio=&quot; + studio + &quot;, rating=&quot; + rating + &quot;]&quot;;
+    }
+}
+</code></pre></div>
+<p>Copy数据类对象:</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">val f1 = Forecast(Date(), 27.5f, &quot;Shiny day&quot;)
+val f2 = f1.copy(temperature = 30f)
+</code></pre></div>
+<p>把一个对象的多个字段映射到多个变量中</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">val f1 = Forecast(Date(), 27.5f, &quot;Shiny day&quot;)
+val (date, temperature, details) = f1
+</code></pre></div>
+<h4>操作符重载</h4>
+
+<ul>
+<li>类似C++</li>
+<li>===和!==不能被重载</li>
+</ul>
+
+<h4>Lambdas</h4>
+
+<ul>
+<li>Java也支持，但是Kotlin中lambdas表达式可以变得非常简单，语法糖，便利的同时也要特别小心</li>
+<li>在Kotlin中，函数可以作为一个类型</li>
+<li>类似C++中的函数指针</li>
+</ul>
+
+<h4>Visibility Modifiers</h4>
+
+<ul>
+<li>默认的可见性是public</li>
+<li>private, protected, internal可见官方文档定义</li>
+</ul>
+
+<h4>集合和函数操作</h4>
+
+<p>大概有如下几类操作,具体见官方文档</p>
+
+<ul>
+<li>Aggregate operations:</li>
+</ul>
+<div class="highlight"><pre><code class="language-text" data-lang="text">//any
+val list = listOf(1, 2, 3, 4, 5, 6)
+assertTrue(list.any { it % 2 == 0 })
+assertFalse(list.any { it &gt; 10 })
+
+//all
+assertTrue(list.all { it &lt; 10 })
+assertFalse(list.all { it % 2 == 0 })
+
+...
+</code></pre></div>
+<ul>
+<li><p>Filtering operations</p></li>
+<li><p>Mapping operations</p></li>
+<li><p>Elements operations</p></li>
+<li><p>Generation operations</p></li>
+<li><p>Ordering operations</p></li>
+</ul>
+
+<h4>Null safety in Kotlin</h4>
+
+<ul>
+<li><p>对臭名昭著的Java NPE有了解决方案</p></li>
+<li><p>代码中如果大量充斥!!操作符将是一个很不好的信号</p></li>
+<li><p>如果显示声明为非空变量后再赋值空对象，会导致运行时crash，需特别注意</p></li>
+<li><p>Kotlin和Java代码共存，并且互操作时要特别注意空指针问题</p></li>
+<li><p>Java可通过Nullable和NonNull注解来显式明晰变量的取值</p></li>
+</ul>
+
+<h4>Coroutine</h4>
+
+<p>可参见已有的一次技术分享: https://wiki.inn.bitcall.xyz/pages/viewpage.action?pageId=2232386</p>
+
+<h4>Anko</h4>
+
+<ul>
+<li><p>Github: https://github.com/Kotlin/anko</p></li>
+<li><p>JetBrains开发的一个强大的类库</p></li>
+<li><p>主要目的是使用代码来代替XML来生成UI布局</p></li>
+<li><p>我们的项目在后期性能优化时可考虑引入使用</p></li>
+</ul>
+
+<h4>Kotlin vs. Java</h4>
+
+<p><img src="/assets/images/java-vs-kotlin.png" /></p>
 
 
         </section>
@@ -172,15 +386,15 @@
 
             <section class="share">
                 <h4>Share this post</h4>
-                <a class="icon-twitter" href="http://twitter.com/share?text=升级Kotlin版本导致的coroutine崩溃ANR小记&amp;url=http://longlinht.github.io//kotli-coroutine-proguard-crash"
+                <a class="icon-twitter" href="http://twitter.com/share?text=升级Kotlin版本导致的coroutine崩溃ANR小记&amp;url=http://longlinht.github.io//kotlin-overview"
                     onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
                     <span class="hidden">Twitter</span>
                 </a>
-                <a class="icon-facebook" href="https://www.facebook.com/sharer/sharer.php?u=http://longlinht.github.io//kotli-coroutine-proguard-crash"
+                <a class="icon-facebook" href="https://www.facebook.com/sharer/sharer.php?u=http://longlinht.github.io//kotlin-overview"
                     onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
                     <span class="hidden">Facebook</span>
                 </a>
-                <a class="icon-google-plus" href="https://plus.google.com/share?url=http://longlinht.github.io//kotli-coroutine-proguard-crash"
+                <a class="icon-google-plus" href="https://plus.google.com/share?url=http://longlinht.github.io//kotlin-overview"
                    onclick="window.open(this.href, 'google-plus-share', 'width=490,height=530');return false;">
                     <span class="hidden">Google+</span>
                 </a>
@@ -223,18 +437,12 @@
 
     <!-- [[! next_post ]] -->
     
-        <a class="read-next-story no-cover" href="http://longlinht.github.io//kotlin-overview">
-            <section class="post">
-                <h2>升级Kotlin版本导致的coroutine崩溃ANR小记</h2>
-            </section>
-        </a>
-    
     <!-- [[! /next_post ]] -->
     <!-- [[! prev_post ]] -->
     
-        <a class="read-next-story prev no-cover" href="http://longlinht.github.io//summary-of-using-xcrash">
+        <a class="read-next-story prev no-cover" href="http://longlinht.github.io//kotli-coroutine-proguard-crash">
             <section class="post">
-                <h2>xCrash运用小结</h2>
+                <h2>升级Kotlin版本导致的coroutine崩溃ANR小记</h2>
             </section>
         </a>
     

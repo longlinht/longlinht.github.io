@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 
     <!-- [[! Page Meta ]] -->
-    <title>Kotlin使用小计</title>
+    <title>BaseQuickAdapter使用tips</title>
     <meta name="description" content="与机器，人，神共舞 - 编程，读书，思考，旅行，与机器对话，与人交谈，对神发问，探索，体验人生美丽的风景" />
 
     <meta name="HandheldFriendly" content="True" />
@@ -96,10 +96,10 @@
     <article class="post tag-machine">
 
         <header class="post-header">
-            <h1 class="post-title">Kotlin使用小计</h1>
+            <h1 class="post-title">BaseQuickAdapter使用tips</h1>
             <section class="post-meta">
             <!-- <a href='/'>Tao He</a> -->
-            <time class="post-date" datetime="2021-11-06">06 Nov 2021</time>
+            <time class="post-date" datetime="2021-11-10">10 Nov 2021</time>
                 <!-- [[tags prefix=" on "]] -->
                  
                 on 
@@ -114,247 +114,107 @@
 
         <section class="post-content">
             
-            <p>此文记录一次对Kotlin的技术分享，显然无法对Kotlin的方方面面都涉及到，只将一些在实际工作中频繁涉及到的要点做一个梳理，以期对Kotlin这们JVM语言有一个整体的认识。</p>
+            <p>此文记录在实际工作中使用BaseQuickAdapter的一些经验和心得，以期新同学在第一次使用时免去踩坑的风险。</p>
 
-<h4>为什么使用Kotlin</h4>
-
-<ul>
-<li>静态类型语言</li>
-<li>同时支持面向对象和函数式编程范式</li>
-<li>更强大语言表达能力</li>
-<li>解决Java NPE问题，更安全</li>
-<li>支持扩展函数</li>
-<li>与Java的高互操作性</li>
-</ul>
-
-<h3>类和函数</h3>
+<p>Tips:</p>
 
 <ul>
-<li>我们只能继承声明为open 或 obstract的类</li>
-<li>Unit 类似Java中的void</li>
-<li>每一个函数都返回一个值</li>
-<li>函数参数支持默认值，类似C++</li>
+<li>如果adapter只有一种类型的item，则直接继承自BaseQuickAdapter，提供布局文件即可，例如:</li>
 </ul>
-
-<h3>变量和属性</h3>
-
+<div class="highlight"><pre><code class="language-text" data-lang="text">class SelectedContactAdapter : BaseQuickAdapter&lt;ContactUIItemData, BaseViewHolder&gt;(layoutResId = R.layout.s_item_select_user_normal){
+    override fun convert(holder: BaseViewHolder, item: ContactUIItemData) {
+        holder.getView&lt;UserFaceView&gt;(R.id.ufv_avatar).bindUid(item.bean.account)
+        addChildClickViewIds(R.id.ll_item)
+    }
+}
+</code></pre></div>
 <ul>
-<li>一切都是对象，包括基础类型，比Java更加彻底</li>
-<li>对于var和val的使用，最佳实践是: 尽可能多的使用val</li>
-<li>Property类似java中的field，但更强大:</li>
+<li>如果adapter需要多种类型的item，则需要继承自BaseMultiItemQuickAdapter，例如:</li>
 </ul>
+<div class="highlight"><pre><code class="language-text" data-lang="text">class ContactAdapter : BaseMultiItemQuickAdapter&lt;ContactUIItemData, BaseViewHolder&gt;() {
 
-<p>In Java:</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">public class Person {
-   private String name;
+    var actionType = AppConstants.User.TYPE_CONTACT_NEW_MESSAGE
 
-   public String getName() {
-     return name;
-   }
+    init {
+        addItemType(ITEM_TYPE_HEAD, R.layout.s_item_contact_head)
+        addItemType(ITEM_TYPE_TITLE, R.layout.s_item_contact_title)
+        addItemType(ITEM_TYPE_CONTACT, R.layout.s_item_single_contact)
 
-  public void setName(String name) {
-     this.name = name;
-   }
+        setDiffCallback(object : DiffUtil.ItemCallback&lt;ContactUIItemData&gt;() {
+            override fun areItemsTheSame(
+                oldItem: ContactUIItemData,
+                newItem: ContactUIItemData
+            ): Boolean {
+                return oldItem.viewType == newItem.viewType
+            }
 
-}
+            override fun areContentsTheSame(
+                oldItem: ContactUIItemData,
+                newItem: ContactUIItemData
+            ): Boolean {
+                if (newItem.viewType == ITEM_TYPE_CONTACT) {
+                    return TextUtils.equals(newItem.bean.account, oldItem.bean.account) &amp;&amp; TextUtils.equals(newItem.bean.name, oldItem.bean.name)
+                    &amp;&amp; TextUtils.equals(newItem.searchText, oldItem.searchText)
+                }
+                return true;
+            }
+        })
+    }
 
-Person person = new Person();
-person.setName(&quot;name&quot;);
-String name = person.getName();
-</code></pre></div>
-<p>In Kotlin:</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">class Person {
-  var name: String = &quot;&quot;
-}
-
-val person = Person()
-person.name = &quot;name&quot;
-val name = person.name
-</code></pre></div>
-<p>定制getter，setter行为:</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">class Person {
-  var name: String = &quot;&quot;
-     get() = field.toUpperCase()
-     set(value) {
-       field = &quot;Name: $value&quot;
-     }
+    ....
 }
 </code></pre></div>
-<h4>Data Classes</h4>
+<p>这里需要注意的是数据item必须实现MultiItemEntity接口:</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">public class ContactUIItemData implements MultiItemEntity {
 
-<p>强大的一种类，可以帮助我们避免一些模板代码和避免出错</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">data class Movie(var name: String, var studio: String, var rating: Float)
-</code></pre></div>
-<p>等价于Java Pojo:</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">public class Movie {
-
-    private String name;
-    private String studio;
-    private float rating;
-
-    public Movie(String name, String studio, float rating) {
-        this.name = name;
-        this.studio = studio;
-        this.rating = rating;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getStudio() {
-        return studio;
-    }
-
-    public void setStudio(String studio) {
-        this.studio = studio;
-    }
-
-    public float getRating() {
-        return rating;
-    }
-
-    public void setRating(float rating) {
-        this.rating = rating;
-    }
+    ...
 
     @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-
-        result = prime * result + ((name == null) ? 0 : name.hashCode());
-        result = prime * result + Float.floatToIntBits(rating);
-        result = prime * result + ((studio == null) ? 0 : studio.hashCode());
-
-        return result;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-
-        if (obj == null)
-            return false;
-
-        if (getClass() != obj.getClass())
-            return false;
-
-        Movie other = (Movie) obj;
-
-        if (name == null) {
-            if (other.name != null)
-                return false;
-
-        } else if (!name.equals(other.name))
-            return false;
-
-        if (Float.floatToIntBits(rating) != Float.floatToIntBits(other.rating))
-            return false;
-
-        if (studio == null) {
-            if (other.studio != null)
-                return false;
-
-        } else if (!studio.equals(other.studio))
-            return false;
-
-        return true;
-    }
-
-    @Override
-    public String toString() {
-        return &quot;Movie [name=&quot; + name + &quot;, studio=&quot; + studio + &quot;, rating=&quot; + rating + &quot;]&quot;;
+    public int getItemType() {
+        return viewType;
     }
 }
 </code></pre></div>
-<p>Copy数据类对象:</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">val f1 = Forecast(Date(), 27.5f, &quot;Shiny day&quot;)
-val f2 = f1.copy(temperature = 30f)
+<p>并且需要实现DiffCallback，DiffCallback有两个方法需要实现，第一个用来判断两个item是否同一类型，如果判断是，则调用第二个方法判断两个item内容是否相等，这两个方法需要根据实际业务场景谨慎实现。</p>
+
+<ul>
+<li><p>刷新数据统一调用setDiffNewData，无论是第一次加载数据还是后续数据变更刷新，这里要注意的是，刷新时调用setDiffNewData需要传入新的数据列表才能实现刷新。</p></li>
+<li><p>如只需刷新某个item，则可以通过notifyItemChanged来实现，当然添加和删除数据都有对应的方法，但是添加和删除还是统一走setDiffNewData比较好。</p></li>
+<li><p>如只需刷新某个item中的某个元素，而不是刷新整个item，则可以通过payload的方式来实现局部刷新，例如:</p></li>
+</ul>
+<div class="highlight"><pre><code class="language-text" data-lang="text">override fun convert(holder: BaseViewHolder, item: GroupUIItemData, payloads: List&lt;Any&gt;) {
+    super.convert(holder, item, payloads)
+    when(holder.itemViewType) {
+        GroupContactItemConstants.ITEM_TYPE_CONTACT -&gt; {
+            if (payloads.isEmpty()) {
+                return
+            }
+
+            val payload = payloads[0];
+            if (payload == EDIT_MODE_PAYLOAD) {
+
+                val cbSelect = holder.getView&lt;CheckBox&gt;(R.id.cb_select)
+                cbSelect.isChecked = item.checked
+                cbSelect.isEnabled = item.enabled
+
+                if (item.canSelect) {
+                    cbSelect.visibility = View.VISIBLE
+                } else {
+                    cbSelect.visibility = View.GONE
+                }
+            }
+        }
+    }
+}
 </code></pre></div>
-<p>把一个对象的多个字段映射到多个变量中</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">val f1 = Forecast(Date(), 27.5f, &quot;Shiny day&quot;)
-val (date, temperature, details) = f1
-</code></pre></div>
-<h4>操作符重载</h4>
+<p>对需要局部刷新的item调用contactsAdapter.notifyItemChanged(position, GroupContactAdapter.EDIT<em>MODE</em>PAYLOAD).</p>
 
 <ul>
-<li>类似C++</li>
-<li>===和!==不能被重载</li>
+<li><p>如遇到列表不刷新的问题，则需要检查调用setDiffNewData时传入的是否时新的列表，数据源对象是不是新对象，从多个方面来排查，理论上更新列表就统一使用这个方法，避免调用notifyDataSetChanged.</p></li>
+<li><p>要注意DiffCallback的实现，如果遇到问题，可调试此接口两个方法实现的返回值。</p></li>
+<li><p>Item的点击事件响应都是通过setOnItemClickListener和setOnItemChildClickListener分别实现，前者是注册整个item，后者是注册item上的子view，子view的响应需要调用addChildClickViewIds来分别注册。</p></li>
+<li><p>Item的长按与点击相同，分别对应setOnItemLongClickListener和setOnItemChildLongClickListener两个方法。</p></li>
 </ul>
-
-<h4>Lambdas</h4>
-
-<ul>
-<li>Java也支持，但是Kotlin中lambdas表达式可以变得非常简单，语法糖，便利的同时也要特别小心</li>
-<li>在Kotlin中，函数可以作为一个类型</li>
-<li>类似C++中的函数指针</li>
-</ul>
-
-<h4>Visibility Modifiers</h4>
-
-<ul>
-<li>默认的可见性是public</li>
-<li>private, protected, internal可见官方文档定义</li>
-</ul>
-
-<h4>集合和函数操作</h4>
-
-<p>大概有如下几类操作,具体见官方文档</p>
-
-<ul>
-<li>Aggregate operations:</li>
-</ul>
-<div class="highlight"><pre><code class="language-text" data-lang="text">//any
-val list = listOf(1, 2, 3, 4, 5, 6)
-assertTrue(list.any { it % 2 == 0 })
-assertFalse(list.any { it &gt; 10 })
-
-//all
-assertTrue(list.all { it &lt; 10 })
-assertFalse(list.all { it % 2 == 0 })
-
-...
-</code></pre></div>
-<ul>
-<li><p>Filtering operations</p></li>
-<li><p>Mapping operations</p></li>
-<li><p>Elements operations</p></li>
-<li><p>Generation operations</p></li>
-<li><p>Ordering operations</p></li>
-</ul>
-
-<h4>Null safety in Kotlin</h4>
-
-<ul>
-<li><p>对臭名昭著的Java NPE有了解决方案</p></li>
-<li><p>代码中如果大量充斥!!操作符将是一个很不好的信号</p></li>
-<li><p>如果显示声明为非空变量后再赋值空对象，会导致运行时crash，需特别注意</p></li>
-<li><p>Kotlin和Java代码共存，并且互操作时要特别注意空指针问题</p></li>
-<li><p>Java可通过Nullable和NonNull注解来显式明晰变量的取值</p></li>
-</ul>
-
-<h4>Coroutine</h4>
-
-<p>可参见已有的一次技术分享: https://wiki.inn.bitcall.xyz/pages/viewpage.action?pageId=2232386</p>
-
-<h4>Anko</h4>
-
-<ul>
-<li><p>Github: https://github.com/Kotlin/anko</p></li>
-<li><p>JetBrains开发的一个强大的类库</p></li>
-<li><p>主要目的是使用代码来代替XML来生成UI布局</p></li>
-<li><p>我们的项目在后期性能优化时可考虑引入使用</p></li>
-</ul>
-
-<h4>Kotlin vs. Java</h4>
-
-<p><img src="/assets/images/java-vs-kotlin.png" /></p>
 
 
         </section>
@@ -386,15 +246,15 @@ assertFalse(list.all { it % 2 == 0 })
 
             <section class="share">
                 <h4>Share this post</h4>
-                <a class="icon-twitter" href="http://twitter.com/share?text=Kotlin使用小计&amp;url=http://longlinht.github.io//kotlin-overview"
+                <a class="icon-twitter" href="http://twitter.com/share?text=BaseQuickAdapter使用tips&amp;url=http://longlinht.github.io//base-quick-adapter-tips"
                     onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
                     <span class="hidden">Twitter</span>
                 </a>
-                <a class="icon-facebook" href="https://www.facebook.com/sharer/sharer.php?u=http://longlinht.github.io//kotlin-overview"
+                <a class="icon-facebook" href="https://www.facebook.com/sharer/sharer.php?u=http://longlinht.github.io//base-quick-adapter-tips"
                     onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
                     <span class="hidden">Facebook</span>
                 </a>
-                <a class="icon-google-plus" href="https://plus.google.com/share?url=http://longlinht.github.io//kotlin-overview"
+                <a class="icon-google-plus" href="https://plus.google.com/share?url=http://longlinht.github.io//base-quick-adapter-tips"
                    onclick="window.open(this.href, 'google-plus-share', 'width=490,height=530');return false;">
                     <span class="hidden">Google+</span>
                 </a>
@@ -437,18 +297,12 @@ assertFalse(list.all { it % 2 == 0 })
 
     <!-- [[! next_post ]] -->
     
-        <a class="read-next-story no-cover" href="http://longlinht.github.io//base-quick-adapter-tips">
-            <section class="post">
-                <h2>BaseQuickAdapter使用tips</h2>
-            </section>
-        </a>
-    
     <!-- [[! /next_post ]] -->
     <!-- [[! prev_post ]] -->
     
-        <a class="read-next-story prev no-cover" href="http://longlinht.github.io//kotli-coroutine-proguard-crash">
+        <a class="read-next-story prev no-cover" href="http://longlinht.github.io//kotlin-overview">
             <section class="post">
-                <h2>升级Kotlin版本导致的coroutine崩溃ANR小记</h2>
+                <h2>Kotlin使用小计</h2>
             </section>
         </a>
     

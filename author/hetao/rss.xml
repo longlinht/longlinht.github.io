@@ -12,6 +12,118 @@
    <atom:link href="rss" rel="self" type="application/rss+xml" />
    
 	<item>
+	  <title>BaseQuickAdapter使用tips</title>
+	  <link>//base-quick-adapter-tips</link>
+	  <author>Tao He</author>
+	  <pubDate>2021-11-10T14:00:00+00:00</pubDate>
+	  <guid>//base-quick-adapter-tips</guid>
+	  <description><![CDATA[
+	     <p>此文记录在实际工作中使用BaseQuickAdapter的一些经验和心得，以期新同学在第一次使用时免去踩坑的风险。</p>
+
+<p>Tips:</p>
+
+<ul>
+<li>如果adapter只有一种类型的item，则直接继承自BaseQuickAdapter，提供布局文件即可，例如:</li>
+</ul>
+<div class="highlight"><pre><code class="language-text" data-lang="text">class SelectedContactAdapter : BaseQuickAdapter&lt;ContactUIItemData, BaseViewHolder&gt;(layoutResId = R.layout.s_item_select_user_normal){
+    override fun convert(holder: BaseViewHolder, item: ContactUIItemData) {
+        holder.getView&lt;UserFaceView&gt;(R.id.ufv_avatar).bindUid(item.bean.account)
+        addChildClickViewIds(R.id.ll_item)
+    }
+}
+</code></pre></div>
+<ul>
+<li>如果adapter需要多种类型的item，则需要继承自BaseMultiItemQuickAdapter，例如:</li>
+</ul>
+<div class="highlight"><pre><code class="language-text" data-lang="text">class ContactAdapter : BaseMultiItemQuickAdapter&lt;ContactUIItemData, BaseViewHolder&gt;() {
+
+    var actionType = AppConstants.User.TYPE_CONTACT_NEW_MESSAGE
+
+    init {
+        addItemType(ITEM_TYPE_HEAD, R.layout.s_item_contact_head)
+        addItemType(ITEM_TYPE_TITLE, R.layout.s_item_contact_title)
+        addItemType(ITEM_TYPE_CONTACT, R.layout.s_item_single_contact)
+
+        setDiffCallback(object : DiffUtil.ItemCallback&lt;ContactUIItemData&gt;() {
+            override fun areItemsTheSame(
+                oldItem: ContactUIItemData,
+                newItem: ContactUIItemData
+            ): Boolean {
+                return oldItem.viewType == newItem.viewType
+            }
+
+            override fun areContentsTheSame(
+                oldItem: ContactUIItemData,
+                newItem: ContactUIItemData
+            ): Boolean {
+                if (newItem.viewType == ITEM_TYPE_CONTACT) {
+                    return TextUtils.equals(newItem.bean.account, oldItem.bean.account) &amp;&amp; TextUtils.equals(newItem.bean.name, oldItem.bean.name)
+                    &amp;&amp; TextUtils.equals(newItem.searchText, oldItem.searchText)
+                }
+                return true;
+            }
+        })
+    }
+
+    ....
+}
+</code></pre></div>
+<p>这里需要注意的是数据item必须实现MultiItemEntity接口:</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">public class ContactUIItemData implements MultiItemEntity {
+
+    ...
+
+    @Override
+    public int getItemType() {
+        return viewType;
+    }
+}
+</code></pre></div>
+<p>并且需要实现DiffCallback，DiffCallback有两个方法需要实现，第一个用来判断两个item是否同一类型，如果判断是，则调用第二个方法判断两个item内容是否相等，这两个方法需要根据实际业务场景谨慎实现。</p>
+
+<ul>
+<li><p>刷新数据统一调用setDiffNewData，无论是第一次加载数据还是后续数据变更刷新，这里要注意的是，刷新时调用setDiffNewData需要传入新的数据列表才能实现刷新。</p></li>
+<li><p>如只需刷新某个item，则可以通过notifyItemChanged来实现，当然添加和删除数据都有对应的方法，但是添加和删除还是统一走setDiffNewData比较好。</p></li>
+<li><p>如只需刷新某个item中的某个元素，而不是刷新整个item，则可以通过payload的方式来实现局部刷新，例如:</p></li>
+</ul>
+<div class="highlight"><pre><code class="language-text" data-lang="text">override fun convert(holder: BaseViewHolder, item: GroupUIItemData, payloads: List&lt;Any&gt;) {
+    super.convert(holder, item, payloads)
+    when(holder.itemViewType) {
+        GroupContactItemConstants.ITEM_TYPE_CONTACT -&gt; {
+            if (payloads.isEmpty()) {
+                return
+            }
+
+            val payload = payloads[0];
+            if (payload == EDIT_MODE_PAYLOAD) {
+
+                val cbSelect = holder.getView&lt;CheckBox&gt;(R.id.cb_select)
+                cbSelect.isChecked = item.checked
+                cbSelect.isEnabled = item.enabled
+
+                if (item.canSelect) {
+                    cbSelect.visibility = View.VISIBLE
+                } else {
+                    cbSelect.visibility = View.GONE
+                }
+            }
+        }
+    }
+}
+</code></pre></div>
+<p>对需要局部刷新的item调用contactsAdapter.notifyItemChanged(position, GroupContactAdapter.EDIT<em>MODE</em>PAYLOAD).</p>
+
+<ul>
+<li><p>如遇到列表不刷新的问题，则需要检查调用setDiffNewData时传入的是否时新的列表，数据源对象是不是新对象，从多个方面来排查，理论上更新列表就统一使用这个方法，避免调用notifyDataSetChanged.</p></li>
+<li><p>要注意DiffCallback的实现，如果遇到问题，可调试此接口两个方法实现的返回值。</p></li>
+<li><p>Item的点击事件响应都是通过setOnItemClickListener和setOnItemChildClickListener分别实现，前者是注册整个item，后者是注册item上的子view，子view的响应需要调用addChildClickViewIds来分别注册。</p></li>
+<li><p>Item的长按与点击相同，分别对应setOnItemLongClickListener和setOnItemChildLongClickListener两个方法。</p></li>
+</ul>
+
+	  ]]></description>
+	</item>
+
+	<item>
 	  <title>Kotlin使用小计</title>
 	  <link>//kotlin-overview</link>
 	  <author>Tao He</author>
@@ -1197,30 +1309,6 @@ public void showEmoji(boolean animate) {
 }
 </code></pre></div>
 <p>其实实现这个方案后，我也有点惊讶，KPSwitch那么复杂的逻辑，竟然可以简单的以这种方式实现。说明做一切事情都不可拘泥于过去成功的方案，应该大胆尝试新的方法，说不定就能收获到惊喜呢！</p>
-
-	  ]]></description>
-	</item>
-
-	<item>
-	  <title>First Lesson of Machine Learning</title>
-	  <link>//first-lesson-of-machine-learning</link>
-	  <author>Tao He</author>
-	  <pubDate>2020-11-30T20:54:12+00:00</pubDate>
-	  <guid>//first-lesson-of-machine-learning</guid>
-	  <description><![CDATA[
-	     <p>Two months ago, I made a decision for my career: learning machine learning from scratch. Machine learning involves many stuff of math while math is difficult. But I didnot give up in half way this time. Books, Youtube lectures, blogs, I collect learning materials as much as I can and do my best to learning it. 60 days passed, I have had a clarity understanding about some important concepts of Machine learing. In this article, I will figure out these concepts and their relations through 2 figures.</p>
-
-<p><strong>Figure 1</strong> </p>
-
-<p>This figure seems simple, but it reveals the relations of some important concepts.</p>
-
-<p><img src="/assets/images/scratch_ml.jpg" /></p>
-
-<p><strong>Figure 2</strong> </p>
-
-<p>This figure describes more detail.</p>
-
-<p><img src="/assets/images/machine_learning.png" /></p>
 
 	  ]]></description>
 	</item>

@@ -8,7 +8,16 @@
     <title>与机器，人，神共舞</title>
     <link>http://longlinht.github.io/</link>
     <description>编程，读书，思考，旅行，与机器对话，与人交谈，对神发问，探索，体验人生美丽的风景</description>
-    <pubDate>Sat, 06 Nov 2021 14:00:00 +0000</pubDate>
+    <pubDate>Wed, 10 Nov 2021 14:00:00 +0000</pubDate>
+    <item>
+      <title>BaseQuickAdapter使用tips</title>
+      <link>http://longlinht.github.io//base-quick-adapter-tips</link>
+      <description>此文记录在实际工作中使用BaseQuickAdapter的一些经验和心得，以期新同学在第一次使用时免去踩坑的风险。
+
+</description>
+      <pubDate>Wed, 10 Nov 2021 14:00:00 +0000</pubDate>
+      <dc:date>2021-11-10T14:00:00+00:00</dc:date>
+    </item>
     <item>
       <title>Kotlin使用小计</title>
       <link>http://longlinht.github.io//kotlin-overview</link>
@@ -774,6 +783,6 @@ update UI when we finish something in separated thread. This is a basic problem,
       <pubDate>Tue, 02 Nov 2010 18:30:12 +0000</pubDate>
       <dc:date>2010-11-02T18:30:12+00:00</dc:date>
     </item>
-    <dc:date>2021-11-06T14:00:00+00:00</dc:date>
+    <dc:date>2021-11-10T14:00:00+00:00</dc:date>
   </channel>
 </rss>

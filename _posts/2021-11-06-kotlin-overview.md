@@ -1,8 +1,8 @@
 ---
 layout: post
 cover: false
-title: 升级Kotlin版本导致的coroutine崩溃ANR小记
-date:   2021-06-04 14:00:00
+title: Kotlin使用小计
+date:   2021-11-06 14:00:00
 tags: machine
 subclass: 'post tag-machine'
 categories: 'hetao'

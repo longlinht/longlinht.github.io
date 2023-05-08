@@ -1,9 +1,7 @@
 source "https://rubygems.org"
 
-gem "jekyll", "~> 2.4.0"
-gem "rdiscount", "~> 2.1.7"
-gem "pygments.rb", "~> 0.6.3"
-gem "github-pages", "~> 39"
-gem "rake", "~> 10.1.1"
-gem 'execjs'
-gem 'therubyracer', :platforms => :ruby
+gem "jekyll", "~> 3.9.0"
+gem "github-pages", "~> 214"
+gem "rake", "~> 13.0.3"
+gem "nokogiri", ">= 1.12.5"
+gem "addressable", ">= 2.8.0"

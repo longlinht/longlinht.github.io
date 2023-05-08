@@ -1,26 +1,31 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <!-- [[! Document Settings ]] -->
+    <!-- Document Settings -->
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 
-    <!-- [[! Page Meta ]] -->
+    <!-- Page Meta -->
     <title>与机器，人，神共舞</title>
-    <meta name="description" content="与机器，人，神共舞 - 编程，读书，思考，旅行，与机器对话，与人交谈，对神发问，探索，体验人生美丽的风景" />
+    <meta name="description" content="编程，读书，思考，旅行，与机器对话，与人交谈，对神发问，探索，体验人生美丽的风景" />
 
+    <!-- Mobile Meta -->
     <meta name="HandheldFriendly" content="True" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
+    <!-- Brand icon -->
     <link rel="shortcut icon" href="/assets/images/favicon.ico" >
 
-    <!-- [[! Styles'n'Scripts ]] -->
+    <!-- Styles'n'Scripts -->
     <link rel="stylesheet" type="text/css" href="/assets/css/screen.css" />
-    <link rel="stylesheet" type="text/css"
-          href="//fonts.googleapis.com/css?family=Merriweather:300,700,700italic,300italic|Open+Sans:700,400" />
+    <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Merriweather:300,700,700italic,300italic|Open+Sans:700,400" />
     <link rel="stylesheet" type="text/css" href="/assets/css/syntax.css" />
-    
-    <!-- [[! Ghost outputs important style and meta data with this tag ]] -->
+
+    <!-- highlight.js -->
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.3.0/styles/default.min.css">
+    <style>.hljs { background: none; }</style>
+
+    <!-- Ghost outputs important style and meta data with this tag -->
         <link rel="canonical" href="/" />
     <meta name="referrer" content="origin" />
     <link rel="next" href="/page2/" />
@@ -53,8 +58,9 @@
     <link rel="alternate" type="application/rss+xml" title="与机器，人，神共舞" href="/rss.xml" />
 
 </head>
-<body class="tag-template nav-closed">
+<body class="paged archive-template nav-closed">
 
+    <!-- The blog navigation links -->
     <div class="nav">
     <h3 class="nav-title">Menu</h3>
     <a href="#" class="nav-close">
@@ -75,16 +81,14 @@
 
     <div class="site-wrapper">
 
-        <!-- [[! Everything else gets inserted here ]] -->
-        <!-- < dynamically overriding backgrounds for tags as well as descriptions -->
-
-   
+        <!-- All the main content gets inserted here, index.hbs, post.hbs, etc -->
+        <!-- dynamically overriding backgrounds for tags as well as descriptions -->
 
 
-<!-- < default}} -->
+<!-- default -->
 <!-- The tag above means - insert everything in this file into the [body] of the default.hbs template -->
 
- <!--If we have a tag cover, display that - else blog cover - else nothing -->
+<!-- If we have a tag cover, display that - else blog cover - else nothing -->
 <header class="main-header tag-head " style="background-image: url(/assets/images/cover2.jpg) ">
     <nav class="main-nav overlay clearfix">
         <a class="blog-logo" href="/"><img src="/assets/images/ghost.png" alt="Blog Logo" /></a>
@@ -97,12 +101,12 @@
             <h1 class="page-title">Machine</h1>
             <h2 class="page-description">
             
-                A series of articles about IT.
+			    A 74-post collection
             
             </h2>
         </div>
     </div>
-</header> 
+</header>
 
 <!-- The main content area on the homepage -->
 <main id="content" class="content" role="main">
@@ -149,7 +153,7 @@
                        
                 
             
-            <time class="post-date" datetime="2019-07-09">09 Jul 2019</time>
+            <time class="post-date" datetime="2019-07-10">10 Jul 2019</time>
         </footer>
     </article>
     
@@ -175,7 +179,7 @@
                        
                 
             
-            <time class="post-date" datetime="2019-06-28">28 Jun 2019</time>
+            <time class="post-date" datetime="2019-06-29">29 Jun 2019</time>
         </footer>
     </article>
     
@@ -201,7 +205,7 @@
                        
                 
             
-            <time class="post-date" datetime="2019-06-04">04 Jun 2019</time>
+            <time class="post-date" datetime="2019-06-05">05 Jun 2019</time>
         </footer>
     </article>
     
@@ -211,7 +215,7 @@
         </header>
         <section class="post-excerpt">
             
-                <p><p>最近遇到一个棘手的问题，我们开发的一款App在中东那边出现大量的<code>UnknownHostException</code>, 导致App在中东那边体验很糟，很快这个问题就被抛给了我们技术优化组，我和另外一名同事就开始定位问题的原因并且试图提出一个可行的解决方案。一般理解，出现<code>UnkownHostException</code>就是DNS失败了，在我们开始解决这个问题的时候，App的网络库已逐渐开始使用OkHttp，我们想到自定义DNS过程，在系统DNS失败的情况下再尝试其他DNS方式，降低<code>UnknownHostException</code>出现的频率，优化App网络连通性。 为了实现我们的技术方案，我们针对OkHttp的DNS做了如下几件事:</p> <ul> <li>创建OkHttpClient时自定义DNS</li> </ul> <div class="highlight"><pre><code class="language-text" data-lang="text">OkHttpClient.Builder builder = new OkHttpClient.Builder() // 实现OKHttp DNS接口, 改变默认的DNS行为 .dns(OkHttpDns.getInstance()) </code></pre></div> <p>上面的OkHttpDns须实现Dns接口</p> <ul> <li>实现自定义DNS</li> </ul> <p>目前我们的设计是使用责任链模式实现四层DNS的lookup: </p>... <a class="read-more" href="https://longlinht.github.io//connectivity-in-android">&raquo;</a></p>
+                <p><p>最近遇到一个棘手的问题，我们开发的一款App在中东那边出现大量的<code class="language-plaintext highlighter-rouge">UnknownHostException</code>, 导致App在中东那边体验很糟，很快这个问题就被抛给了我们技术优化组，我和另外一名同事就开始定位问题的原因并且试图提出一个可行的解决方案。一般理解，出现<code class="language-plaintext highlighter-rouge">UnkownHostException</code>就是DNS失败了，在我们开始解决这个问题的时候，App的网络库已逐渐开始使用OkHttp，我们想到自定义DNS过程，在系统DNS失败的情况下再尝试其他DNS方式，降低<code class="language-plaintext highlighter-rouge">UnknownHostException</code>出现的频率，优化App网络连通性。 为了实现我们的技术方案，我们针对OkHttp的DNS做了如下几件事:</p> <ul> <li>创建OkHttpClient时自定义DNS</li> </ul> <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>OkHttpClient.Builder builder = new OkHttpClient.Builder() // 实现OKHttp DNS接口, 改变默认的DNS行为 .dns(OkHttpDns.getInstance())... <a class="read-more" href="https://longlinht.github.io//connectivity-in-android">&raquo;</a></p>
             
         </section>
         <footer class="post-meta">
@@ -227,7 +231,7 @@
                        
                 
             
-            <time class="post-date" datetime="2019-05-28">28 May 2019</time>
+            <time class="post-date" datetime="2019-05-29">29 May 2019</time>
         </footer>
     </article>
     
@@ -253,7 +257,7 @@
                        
                 
             
-            <time class="post-date" datetime="2019-04-09">09 Apr 2019</time>
+            <time class="post-date" datetime="2019-04-10">10 Apr 2019</time>
         </footer>
     </article>
     
@@ -277,16 +281,20 @@
 </main>
 
 
+        <!-- The tiny footer at the very bottom -->
         <footer class="site-footer clearfix">
-          <section class="copyright"><a href="/">与机器，人，神共舞</a> &copy; 2022</section>
+          <section class="copyright"><a href="/">与机器，人，神共舞</a> &copy; 2023</section>
+          <section class="poweredby">Proudly published with <a href="https://jekyllrb.com/">Jekyll</a> using <a href="https://github.com/jekyllt/jasper">Jasper</a></section>
         </footer>
     </div>
-    <!-- [[! Ghost outputs important scripts and data with this tag ]] -->
-    <script type="text/javascript" src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
-    <!-- [[! The main JavaScript file for Casper ]] -->
-    <script type="text/javascript" src="/assets/js/jquery.fitvids.js"></script>
-    <script type="text/javascript" src="/assets/js/index.js"></script>
+    <!-- highlight.js -->
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.3.0/highlight.min.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
 
+    <!-- jQuery needs to come before `` so that jQuery can be used in code injection -->
+    <script type="text/javascript" src="//code.jquery.com/jquery-1.12.0.min.js"></script>
+    <!-- Ghost outputs important scripts and data with this tag -->
+    <!--  -->
     <!-- Add Google Analytics  -->
         <!-- Google Analytics Tracking code -->
      <script>
@@ -299,6 +307,11 @@
 	    ga('send', 'pageview');
 
      </script>
-   
+
+    <!-- Fitvids makes video embeds responsive and awesome -->
+    <script type="text/javascript" src="/assets/js/jquery.fitvids.js"></script>
+    <!-- The main JavaScript file for Casper -->
+    <script type="text/javascript" src="/assets/js/index.js"></script>
+
 </body>
 </html>

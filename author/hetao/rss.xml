@@ -15,7 +15,7 @@
 	  <title>BaseQuickAdapter使用tips</title>
 	  <link>//base-quick-adapter-tips</link>
 	  <author>Tao He</author>
-	  <pubDate>2021-11-10T14:00:00+00:00</pubDate>
+	  <pubDate>2021-11-10T18:00:00+04:00</pubDate>
 	  <guid>//base-quick-adapter-tips</guid>
 	  <description><![CDATA[
 	     <p>此文记录在实际工作中使用BaseQuickAdapter的一些经验和心得，以期新同学在第一次使用时免去踩坑的风险。</p>
@@ -23,19 +23,25 @@
 <p>Tips:</p>
 
 <ul>
-<li>如果adapter只有一种类型的item，则直接继承自BaseQuickAdapter，提供布局文件即可，例如:</li>
+  <li>如果adapter只有一种类型的item，则直接继承自BaseQuickAdapter，提供布局文件即可，例如:</li>
 </ul>
-<div class="highlight"><pre><code class="language-text" data-lang="text">class SelectedContactAdapter : BaseQuickAdapter&lt;ContactUIItemData, BaseViewHolder&gt;(layoutResId = R.layout.s_item_select_user_normal){
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+class SelectedContactAdapter : BaseQuickAdapter&lt;ContactUIItemData, BaseViewHolder&gt;(layoutResId = R.layout.s_item_select_user_normal){
     override fun convert(holder: BaseViewHolder, item: ContactUIItemData) {
         holder.getView&lt;UserFaceView&gt;(R.id.ufv_avatar).bindUid(item.bean.account)
         addChildClickViewIds(R.id.ll_item)
     }
 }
-</code></pre></div>
+
+</code></pre></div></div>
+
 <ul>
-<li>如果adapter需要多种类型的item，则需要继承自BaseMultiItemQuickAdapter，例如:</li>
+  <li>如果adapter需要多种类型的item，则需要继承自BaseMultiItemQuickAdapter，例如:</li>
 </ul>
-<div class="highlight"><pre><code class="language-text" data-lang="text">class ContactAdapter : BaseMultiItemQuickAdapter&lt;ContactUIItemData, BaseViewHolder&gt;() {
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+class ContactAdapter : BaseMultiItemQuickAdapter&lt;ContactUIItemData, BaseViewHolder&gt;() {
 
     var actionType = AppConstants.User.TYPE_CONTACT_NEW_MESSAGE
 
@@ -64,12 +70,16 @@
             }
         })
     }
-
+    
     ....
 }
-</code></pre></div>
+
+</code></pre></div></div>
+
 <p>这里需要注意的是数据item必须实现MultiItemEntity接口:</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">public class ContactUIItemData implements MultiItemEntity {
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+public class ContactUIItemData implements MultiItemEntity {
 
     ...
 
@@ -78,15 +88,25 @@
         return viewType;
     }
 }
-</code></pre></div>
+
+</code></pre></div></div>
+
 <p>并且需要实现DiffCallback，DiffCallback有两个方法需要实现，第一个用来判断两个item是否同一类型，如果判断是，则调用第二个方法判断两个item内容是否相等，这两个方法需要根据实际业务场景谨慎实现。</p>
 
 <ul>
-<li><p>刷新数据统一调用setDiffNewData，无论是第一次加载数据还是后续数据变更刷新，这里要注意的是，刷新时调用setDiffNewData需要传入新的数据列表才能实现刷新。</p></li>
-<li><p>如只需刷新某个item，则可以通过notifyItemChanged来实现，当然添加和删除数据都有对应的方法，但是添加和删除还是统一走setDiffNewData比较好。</p></li>
-<li><p>如只需刷新某个item中的某个元素，而不是刷新整个item，则可以通过payload的方式来实现局部刷新，例如:</p></li>
+  <li>
+    <p>刷新数据统一调用setDiffNewData，无论是第一次加载数据还是后续数据变更刷新，这里要注意的是，刷新时调用setDiffNewData需要传入新的数据列表才能实现刷新。</p>
+  </li>
+  <li>
+    <p>如只需刷新某个item，则可以通过notifyItemChanged来实现，当然添加和删除数据都有对应的方法，但是添加和删除还是统一走setDiffNewData比较好。</p>
+  </li>
+  <li>
+    <p>如只需刷新某个item中的某个元素，而不是刷新整个item，则可以通过payload的方式来实现局部刷新，例如:</p>
+  </li>
 </ul>
-<div class="highlight"><pre><code class="language-text" data-lang="text">override fun convert(holder: BaseViewHolder, item: GroupUIItemData, payloads: List&lt;Any&gt;) {
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+override fun convert(holder: BaseViewHolder, item: GroupUIItemData, payloads: List&lt;Any&gt;) {
     super.convert(holder, item, payloads)
     when(holder.itemViewType) {
         GroupContactItemConstants.ITEM_TYPE_CONTACT -&gt; {
@@ -110,14 +130,24 @@
         }
     }
 }
-</code></pre></div>
-<p>对需要局部刷新的item调用contactsAdapter.notifyItemChanged(position, GroupContactAdapter.EDIT<em>MODE</em>PAYLOAD).</p>
+
+</code></pre></div></div>
+
+<p>对需要局部刷新的item调用contactsAdapter.notifyItemChanged(position, GroupContactAdapter.EDIT_MODE_PAYLOAD).</p>
 
 <ul>
-<li><p>如遇到列表不刷新的问题，则需要检查调用setDiffNewData时传入的是否时新的列表，数据源对象是不是新对象，从多个方面来排查，理论上更新列表就统一使用这个方法，避免调用notifyDataSetChanged.</p></li>
-<li><p>要注意DiffCallback的实现，如果遇到问题，可调试此接口两个方法实现的返回值。</p></li>
-<li><p>Item的点击事件响应都是通过setOnItemClickListener和setOnItemChildClickListener分别实现，前者是注册整个item，后者是注册item上的子view，子view的响应需要调用addChildClickViewIds来分别注册。</p></li>
-<li><p>Item的长按与点击相同，分别对应setOnItemLongClickListener和setOnItemChildLongClickListener两个方法。</p></li>
+  <li>
+    <p>如遇到列表不刷新的问题，则需要检查调用setDiffNewData时传入的是否时新的列表，数据源对象是不是新对象，从多个方面来排查，理论上更新列表就统一使用这个方法，避免调用notifyDataSetChanged.</p>
+  </li>
+  <li>
+    <p>要注意DiffCallback的实现，如果遇到问题，可调试此接口两个方法实现的返回值。</p>
+  </li>
+  <li>
+    <p>Item的点击事件响应都是通过setOnItemClickListener和setOnItemChildClickListener分别实现，前者是注册整个item，后者是注册item上的子view，子view的响应需要调用addChildClickViewIds来分别注册。</p>
+  </li>
+  <li>
+    <p>Item的长按与点击相同，分别对应setOnItemLongClickListener和setOnItemChildLongClickListener两个方法。</p>
+  </li>
 </ul>
 
 	  ]]></description>
@@ -127,41 +157,39 @@
 	  <title>Kotlin使用小计</title>
 	  <link>//kotlin-overview</link>
 	  <author>Tao He</author>
-	  <pubDate>2021-11-06T14:00:00+00:00</pubDate>
+	  <pubDate>2021-11-06T18:00:00+04:00</pubDate>
 	  <guid>//kotlin-overview</guid>
 	  <description><![CDATA[
 	     <p>此文记录一次对Kotlin的技术分享，显然无法对Kotlin的方方面面都涉及到，只将一些在实际工作中频繁涉及到的要点做一个梳理，以期对Kotlin这们JVM语言有一个整体的认识。</p>
 
-<h4>为什么使用Kotlin</h4>
-
+<h4 id="为什么使用kotlin">为什么使用Kotlin</h4>
 <ul>
-<li>静态类型语言</li>
-<li>同时支持面向对象和函数式编程范式</li>
-<li>更强大语言表达能力</li>
-<li>解决Java NPE问题，更安全</li>
-<li>支持扩展函数</li>
-<li>与Java的高互操作性</li>
+  <li>静态类型语言</li>
+  <li>同时支持面向对象和函数式编程范式</li>
+  <li>更强大语言表达能力</li>
+  <li>解决Java NPE问题，更安全</li>
+  <li>支持扩展函数</li>
+  <li>与Java的高互操作性</li>
 </ul>
 
-<h3>类和函数</h3>
-
+<h3 id="类和函数">类和函数</h3>
 <ul>
-<li>我们只能继承声明为open 或 obstract的类</li>
-<li>Unit 类似Java中的void</li>
-<li>每一个函数都返回一个值</li>
-<li>函数参数支持默认值，类似C++</li>
+  <li>我们只能继承声明为open 或 obstract的类</li>
+  <li>Unit 类似Java中的void</li>
+  <li>每一个函数都返回一个值</li>
+  <li>函数参数支持默认值，类似C++</li>
 </ul>
 
-<h3>变量和属性</h3>
-
+<h3 id="变量和属性">变量和属性</h3>
 <ul>
-<li>一切都是对象，包括基础类型，比Java更加彻底</li>
-<li>对于var和val的使用，最佳实践是: 尽可能多的使用val</li>
-<li>Property类似java中的field，但更强大:</li>
+  <li>一切都是对象，包括基础类型，比Java更加彻底</li>
+  <li>对于var和val的使用，最佳实践是: 尽可能多的使用val</li>
+  <li>Property类似java中的field，但更强大:</li>
 </ul>
 
 <p>In Java:</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">public class Person {
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>public class Person {
    private String name;
 
    public String getName() {
@@ -175,39 +203,52 @@
 }
 
 Person person = new Person();
-person.setName(&quot;name&quot;);
+person.setName("name");
 String name = person.getName();
-</code></pre></div>
+
+</code></pre></div></div>
+
 <p>In Kotlin:</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">class Person {
-  var name: String = &quot;&quot;
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>class Person {
+  var name: String = ""
 }
 
 val person = Person()
-person.name = &quot;name&quot;
+person.name = "name"
 val name = person.name
-</code></pre></div>
+
+</code></pre></div></div>
+
 <p>定制getter，setter行为:</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">class Person {
-  var name: String = &quot;&quot;
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>class Person {
+  var name: String = ""
      get() = field.toUpperCase()
      set(value) {
-       field = &quot;Name: $value&quot;
+       field = "Name: $value"
      }
 }
-</code></pre></div>
-<h4>Data Classes</h4>
+
+</code></pre></div></div>
+
+<h4 id="data-classes">Data Classes</h4>
 
 <p>强大的一种类，可以帮助我们避免一些模板代码和避免出错</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">data class Movie(var name: String, var studio: String, var rating: Float)
-</code></pre></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>data class Movie(var name: String, var studio: String, var rating: Float)
+
+</code></pre></div></div>
+
 <p>等价于Java Pojo:</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">public class Movie {
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+public class Movie {
 
     private String name;
     private String studio;
     private float rating;
-
+    
     public Movie(String name, String studio, float rating) {
         this.name = name;
         this.studio = studio;
@@ -242,11 +283,11 @@ val name = person.name
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-
+        
         result = prime * result + ((name == null) ? 0 : name.hashCode());
         result = prime * result + Float.floatToIntBits(rating);
         result = prime * result + ((studio == null) ? 0 : studio.hashCode());
-
+        
         return result;
     }
 
@@ -254,79 +295,89 @@ val name = person.name
     public boolean equals(Object obj) {
         if (this == obj)
             return true;
-
+        
         if (obj == null)
             return false;
-
+        
         if (getClass() != obj.getClass())
             return false;
-
+        
         Movie other = (Movie) obj;
-
+        
         if (name == null) {
             if (other.name != null)
                 return false;
-
+            
         } else if (!name.equals(other.name))
             return false;
-
+        
         if (Float.floatToIntBits(rating) != Float.floatToIntBits(other.rating))
             return false;
-
+        
         if (studio == null) {
             if (other.studio != null)
                 return false;
-
+            
         } else if (!studio.equals(other.studio))
             return false;
-
+        
         return true;
     }
 
     @Override
     public String toString() {
-        return &quot;Movie [name=&quot; + name + &quot;, studio=&quot; + studio + &quot;, rating=&quot; + rating + &quot;]&quot;;
+        return "Movie [name=" + name + ", studio=" + studio + ", rating=" + rating + "]";
     }
 }
-</code></pre></div>
+
+</code></pre></div></div>
+
 <p>Copy数据类对象:</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">val f1 = Forecast(Date(), 27.5f, &quot;Shiny day&quot;)
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>val f1 = Forecast(Date(), 27.5f, "Shiny day")
 val f2 = f1.copy(temperature = 30f)
-</code></pre></div>
+
+</code></pre></div></div>
+
 <p>把一个对象的多个字段映射到多个变量中</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">val f1 = Forecast(Date(), 27.5f, &quot;Shiny day&quot;)
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>val f1 = Forecast(Date(), 27.5f, "Shiny day")
 val (date, temperature, details) = f1
-</code></pre></div>
-<h4>操作符重载</h4>
+
+</code></pre></div></div>
+
+<h4 id="操作符重载">操作符重载</h4>
 
 <ul>
-<li>类似C++</li>
-<li>===和!==不能被重载</li>
+  <li>类似C++</li>
+  <li>===和!==不能被重载</li>
 </ul>
 
-<h4>Lambdas</h4>
+<h4 id="lambdas">Lambdas</h4>
 
 <ul>
-<li>Java也支持，但是Kotlin中lambdas表达式可以变得非常简单，语法糖，便利的同时也要特别小心</li>
-<li>在Kotlin中，函数可以作为一个类型</li>
-<li>类似C++中的函数指针</li>
+  <li>Java也支持，但是Kotlin中lambdas表达式可以变得非常简单，语法糖，便利的同时也要特别小心</li>
+  <li>在Kotlin中，函数可以作为一个类型</li>
+  <li>类似C++中的函数指针</li>
 </ul>
 
-<h4>Visibility Modifiers</h4>
+<h4 id="visibility-modifiers">Visibility Modifiers</h4>
 
 <ul>
-<li>默认的可见性是public</li>
-<li>private, protected, internal可见官方文档定义</li>
+  <li>默认的可见性是public</li>
+  <li>private, protected, internal可见官方文档定义</li>
 </ul>
 
-<h4>集合和函数操作</h4>
+<h4 id="集合和函数操作">集合和函数操作</h4>
 
 <p>大概有如下几类操作,具体见官方文档</p>
 
 <ul>
-<li>Aggregate operations:</li>
+  <li>Aggregate operations:</li>
 </ul>
-<div class="highlight"><pre><code class="language-text" data-lang="text">//any
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+//any
 val list = listOf(1, 2, 3, 4, 5, 6)
 assertTrue(list.any { it % 2 == 0 })
 assertFalse(list.any { it &gt; 10 })
@@ -336,41 +387,71 @@ assertTrue(list.all { it &lt; 10 })
 assertFalse(list.all { it % 2 == 0 })
 
 ...
-</code></pre></div>
-<ul>
-<li><p>Filtering operations</p></li>
-<li><p>Mapping operations</p></li>
-<li><p>Elements operations</p></li>
-<li><p>Generation operations</p></li>
-<li><p>Ordering operations</p></li>
-</ul>
 
-<h4>Null safety in Kotlin</h4>
+</code></pre></div></div>
 
 <ul>
-<li><p>对臭名昭著的Java NPE有了解决方案</p></li>
-<li><p>代码中如果大量充斥!!操作符将是一个很不好的信号</p></li>
-<li><p>如果显示声明为非空变量后再赋值空对象，会导致运行时crash，需特别注意</p></li>
-<li><p>Kotlin和Java代码共存，并且互操作时要特别注意空指针问题</p></li>
-<li><p>Java可通过Nullable和NonNull注解来显式明晰变量的取值</p></li>
+  <li>
+    <p>Filtering operations</p>
+  </li>
+  <li>
+    <p>Mapping operations</p>
+  </li>
+  <li>
+    <p>Elements operations</p>
+  </li>
+  <li>
+    <p>Generation operations</p>
+  </li>
+  <li>
+    <p>Ordering operations</p>
+  </li>
 </ul>
 
-<h4>Coroutine</h4>
+<h4 id="null-safety-in-kotlin">Null safety in Kotlin</h4>
 
+<ul>
+  <li>
+    <p>对臭名昭著的Java NPE有了解决方案</p>
+  </li>
+  <li>
+    <p>代码中如果大量充斥!!操作符将是一个很不好的信号</p>
+  </li>
+  <li>
+    <p>如果显示声明为非空变量后再赋值空对象，会导致运行时crash，需特别注意</p>
+  </li>
+  <li>
+    <p>Kotlin和Java代码共存，并且互操作时要特别注意空指针问题</p>
+  </li>
+  <li>
+    <p>Java可通过Nullable和NonNull注解来显式明晰变量的取值</p>
+  </li>
+</ul>
+
+<h4 id="coroutine">Coroutine</h4>
 <p>可参见已有的一次技术分享: https://wiki.inn.bitcall.xyz/pages/viewpage.action?pageId=2232386</p>
 
-<h4>Anko</h4>
+<h4 id="anko">Anko</h4>
 
 <ul>
-<li><p>Github: https://github.com/Kotlin/anko</p></li>
-<li><p>JetBrains开发的一个强大的类库</p></li>
-<li><p>主要目的是使用代码来代替XML来生成UI布局</p></li>
-<li><p>我们的项目在后期性能优化时可考虑引入使用</p></li>
+  <li>
+    <p>Github: https://github.com/Kotlin/anko</p>
+  </li>
+  <li>
+    <p>JetBrains开发的一个强大的类库</p>
+  </li>
+  <li>
+    <p>主要目的是使用代码来代替XML来生成UI布局</p>
+  </li>
+  <li>
+    <p>我们的项目在后期性能优化时可考虑引入使用</p>
+  </li>
 </ul>
 
-<h4>Kotlin vs. Java</h4>
+<h4 id="kotlin-vs-java">Kotlin vs. Java</h4>
 
 <p><img src="/assets/images/java-vs-kotlin.png" /></p>
+
 
 	  ]]></description>
 	</item>
@@ -379,11 +460,13 @@ assertFalse(list.all { it % 2 == 0 })
 	  <title>升级Kotlin版本导致的coroutine崩溃ANR小记</title>
 	  <link>//kotli-coroutine-proguard-crash</link>
 	  <author>Tao He</author>
-	  <pubDate>2021-06-04T14:00:00+00:00</pubDate>
+	  <pubDate>2021-06-04T18:00:00+04:00</pubDate>
 	  <guid>//kotli-coroutine-proguard-crash</guid>
 	  <description><![CDATA[
 	     <p>最近公司的项目在最新的版本中升级了kotlin版本，使用CI打包后的版本启动都或闪退，或ANR，看崩溃日志和ANR日志，矛头都指向了coroutine，并且Release版本崩溃而Debug版本没有问题，初步断定就是混淆的问题了。因此搜索相关Proguard rules，在Kotlin官方Github中找到coroutines.pro文件:</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text"># Allow R8 to optimize away the FastServiceLoader.
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+# Allow R8 to optimize away the FastServiceLoader.
 # Together with ServiceLoader optimization in R8
 # this results in direct instantiation when loading Dispatchers.Main
 -assumenosideeffects class kotlinx.coroutines.internal.MainDispatcherLoader {
@@ -396,7 +479,7 @@ assertFalse(list.all { it % 2 == 0 })
 
 -keep class kotlinx.coroutines.android.AndroidDispatcherFactory {*;}
 
-# Disable support for &quot;Missing Main Dispatcher&quot;, since we always have Android main dispatcher
+# Disable support for "Missing Main Dispatcher", since we always have Android main dispatcher
 -assumenosideeffects class kotlinx.coroutines.internal.MainDispatchersKt {
     boolean SUPPORT_MISSING return false;
 }
@@ -407,8 +490,10 @@ assertFalse(list.all { it % 2 == 0 })
     boolean getDEBUG() return false;
     boolean getRECOVER_STACK_TRACES() return false;
 }
-</code></pre></div>
+
+</code></pre></div></div>
 <p>添加此混淆规则后重新打包，崩溃和ANR成功修复。</p>
+
 
 	  ]]></description>
 	</item>
@@ -417,7 +502,7 @@ assertFalse(list.all { it % 2 == 0 })
 	  <title>xCrash运用小结</title>
 	  <link>//summary-of-using-xcrash</link>
 	  <author>Tao He</author>
-	  <pubDate>2021-04-29T14:00:00+00:00</pubDate>
+	  <pubDate>2021-04-29T18:00:00+04:00</pubDate>
 	  <guid>//summary-of-using-xcrash</guid>
 	  <description><![CDATA[
 	     <p>公司在做海外产品，由于免费版firebase对native崩溃的捕获上报能力有限(无堆栈，无具体上下文信息)，因此对我们定位和降低native极为不利，当native崩溃总量进入top行列的时候，就不能对其视而不见了，因此我开始调研解决方案，最后决定接入爱奇艺推出的xCrash来捕获native崩溃，当然了，xCrash本身是不具备上报功能的，它只是将崩溃信息写入tombstone文件。因此需要在其基础之上添加上报功能。</p>
@@ -427,17 +512,19 @@ assertFalse(list.all { it % 2 == 0 })
 <p>具体实现如下：</p>
 
 <p>在崩溃发生的回调中找到最新的tombstone文件，打包上传至服务器</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">public void init(Context context) {
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+public void init(Context context) {
     XCrash.init(context, new XCrash.InitParameters()
             .setAppVersion(BuildConfig.VERSION_NAME)
             .setLogDir(getCrashDir().getAbsolutePath())
             .setJavaRethrow(true)
             .setJavaLogCountMax(3)
-            .setJavaDumpAllThreadsWhiteList(new String[]{&quot;^main$&quot;, &quot;^Binder:.*&quot;, &quot;.*Finalizer.*&quot;})
+            .setJavaDumpAllThreadsWhiteList(new String[]{"^main$", "^Binder:.*", ".*Finalizer.*"})
             .setJavaDumpAllThreadsCountMax(0)
             .setNativeRethrow(true)
             .setNativeLogCountMax(3)
-            .setNativeDumpAllThreadsWhiteList(new String[]{&quot;^Signal Catcher$&quot;, &quot;^Jit thread pool$&quot;, &quot;.*(R|r)ender.*&quot;, &quot;.*Chrome.*&quot;})
+            .setNativeDumpAllThreadsWhiteList(new String[]{"^Signal Catcher$", "^Jit thread pool$", ".*(R|r)ender.*", ".*Chrome.*"})
             .setNativeDumpAllThreadsCountMax(0)
             .setAnrRethrow(true)
             .setAnrLogCountMax(3)
@@ -449,7 +536,7 @@ assertFalse(list.all { it % 2 == 0 })
                     try {
                         ReLinker.loadLibrary(context, libName);
                     } catch (Exception e) {
-                        printLog(e + &quot; | &quot; + libName);
+                        printLog(e + " | " + libName);
                         System.loadLibrary(libName);
                     }
                 }
@@ -477,7 +564,7 @@ assertFalse(list.all { it % 2 == 0 })
 // 打包上传tombstone文件
 private void catchCrashLog() {
     crashZipId = generateCrashId();
-    final File out = new File(AppInstances.getPathManager().getTmpFilePath() + crashZipId + &quot;.gzip&quot;);
+    final File out = new File(AppInstances.getPathManager().getTmpFilePath() + crashZipId + ".gzip");
 
     try {
         List&lt;File&gt; files = Arrays.asList(getCrashDir().listFiles());
@@ -509,7 +596,8 @@ private void catchCrashLog() {
         e.printStackTrace();
     }
 }
-</code></pre></div>
+
+</code></pre></div></div>
 <p>上面的代码有一点需要注意: 为了尽可能将崩溃日志成功上传至服务器，主线程sleep五秒，对于anr的情况则是在非UI线程中上传日志。</p>
 
 <p>日志上传成功后，就可以在firebase的崩溃列表中查看某一个崩溃，在数据一栏找到设备ID来查询。因为我们有运营后台可以将设备ID和用户ID关联，因此就可以轻松查到每个用户的崩溃日志。</p>
@@ -517,10 +605,18 @@ private void catchCrashLog() {
 <p>此即时上报的方案上线后虽然助力定位到了一些问题，但也有如下缺陷和问题</p>
 
 <ul>
-<li><p>引入了新的问题，如OOM，ANR等问题。</p></li>
-<li><p>由于上报依赖于全局的OkHttp Client，因此如果App在没有初始化OkHttp Client的情况下崩溃，则不会上报，就属漏报了。</p></li>
-<li><p>崩溃和anr不能即时聚合到一处供查看</p></li>
-<li><p>ANR目前不能查询，但是已尝试使用firebase Event上报，但是貌似免费版无法查看Event的字段，上报的意义不大，后期考虑向服务端上报。</p></li>
+  <li>
+    <p>引入了新的问题，如OOM，ANR等问题。</p>
+  </li>
+  <li>
+    <p>由于上报依赖于全局的OkHttp Client，因此如果App在没有初始化OkHttp Client的情况下崩溃，则不会上报，就属漏报了。</p>
+  </li>
+  <li>
+    <p>崩溃和anr不能即时聚合到一处供查看</p>
+  </li>
+  <li>
+    <p>ANR目前不能查询，但是已尝试使用firebase Event上报，但是貌似免费版无法查看Event的字段，上报的意义不大，后期考虑向服务端上报。</p>
+  </li>
 </ul>
 
 <p>问题2和3其实可以很容易改善，但是问题1还有待进一步观察，同期因为我们代码的原因引入了一个严重的OOM问题，所以不太确定是不是xCrash受到了影响和牵连。这个OOM问题修复后准备再打开xCrash进一步验证。</p>
@@ -534,7 +630,7 @@ private void catchCrashLog() {
 	  <title>客户端线上问题应对小记</title>
 	  <link>//resolve-online-problem</link>
 	  <author>Tao He</author>
-	  <pubDate>2021-04-26T14:00:00+00:00</pubDate>
+	  <pubDate>2021-04-26T18:00:00+04:00</pubDate>
 	  <guid>//resolve-online-problem</guid>
 	  <description><![CDATA[
 	     <p>今年三四月份我所在的App项目经历了不少我之前很少遇到的情况，回看这些无论是突发状况，还是隐匿得让人无法发觉的细节导致的问题，都非常有借鉴意义，也是很大的教训，难能可贵的经验，有必要用一小文记录下。</p>
@@ -551,14 +647,15 @@ libmonochrome.so这个信息，当看到这个so的时候，直觉告诉我是�
 <p>这三次线上问题，都已经过去了，App的崩溃率和ANR也恢复正常，但是教训却很深刻，经过几天的认真复盘和思考，总结出如下经验和教训:</p>
 
 <ul>
-<li>一个问题激增时不一定是App本身的代码导致的，但也需要及时诊断和定位，不能倾向于从用户设备和DAU变化找问题</li>
-<li>诊断问题要聚焦，不要受一些外部因素干扰</li>
-<li>当问题发生时，倾向于App本身有问题，而不是找外部原因，不要被误导诊断方向</li>
-<li>当反馈集中发生时，肯定是有问题，而不用怀疑是反馈变集中了，事出反常必有妖</li>
-<li>接入第三方库和工具时要慎之又慎，多测试，多验证，多怀疑，做好兜底，做好出了问题的应对之策</li>
-<li>影响较大的功能和模块不宜同时出现在一个版本里，出现问题后纠缠不清，无法定位</li>
-<li>一个问题持续出现后，必须引起重视，在上报数据不完整，无上下文的情况下也要通过其他途径去诊断和定位，切不可倾向于没有问题。</li>
+  <li>一个问题激增时不一定是App本身的代码导致的，但也需要及时诊断和定位，不能倾向于从用户设备和DAU变化找问题</li>
+  <li>诊断问题要聚焦，不要受一些外部因素干扰</li>
+  <li>当问题发生时，倾向于App本身有问题，而不是找外部原因，不要被误导诊断方向</li>
+  <li>当反馈集中发生时，肯定是有问题，而不用怀疑是反馈变集中了，事出反常必有妖</li>
+  <li>接入第三方库和工具时要慎之又慎，多测试，多验证，多怀疑，做好兜底，做好出了问题的应对之策</li>
+  <li>影响较大的功能和模块不宜同时出现在一个版本里，出现问题后纠缠不清，无法定位</li>
+  <li>一个问题持续出现后，必须引起重视，在上报数据不完整，无上下文的情况下也要通过其他途径去诊断和定位，切不可倾向于没有问题。</li>
 </ul>
+
 
 	  ]]></description>
 	</item>
@@ -567,11 +664,13 @@ libmonochrome.so这个信息，当看到这个so的时候，直觉告诉我是�
 	  <title>13个问题测试你对这个世界的无知有多严重</title>
 	  <link>//13-questions-test-your-ignorance</link>
 	  <author>Tao He</author>
-	  <pubDate>2021-04-21T20:54:12+00:00</pubDate>
+	  <pubDate>2021-04-22T00:54:12+04:00</pubDate>
 	  <guid>//13-questions-test-your-ignorance</guid>
 	  <description><![CDATA[
 	     <p>在Factfulness这本书中作者一开头就抛出13个对事实认知的问题，以此测试读者对这个世界的认知，因为我已经读完了这本书，我觉得这些问题值得将其单列出来，有兴趣的可以做做这些测试题，文末附有答案，相信我你的成绩不一定好过大猩猩，问题列表如下:</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">1. In all low-income countries across the world today, how many girls finish primary school? 
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+1. In all low-income countries across the world today, how many girls finish primary school? 
    A: 20 percent    B: 40 percent    C: 60 percent 
 
 2. Where does the majority of the world population live? 
@@ -608,10 +707,13 @@ libmonochrome.so这个信息，当看到这个so的时候，直觉告诉我是�
 
 13. Global climate experts believe that, over the next 100 years, the average temperature will … 
    A: get warmer    B: remain the same    C: get colder
-</code></pre></div>
+
+</code></pre></div></div>
+
 <p>Here are the correct answers:</p>
 
 <p>1: C, 2: B, 3: C, 4: C, 5: C, 6: B, 7: C, 8: A, 9: C, 10: A, 11: C, 12: C, 13: A</p>
+
 
 	  ]]></description>
 	</item>
@@ -620,58 +722,58 @@ libmonochrome.so这个信息，当看到这个so的时候，直觉告诉我是�
 	  <title>重读Sapiens</title>
 	  <link>//read-sapiens</link>
 	  <author>Tao He</author>
-	  <pubDate>2021-04-17T20:54:12+00:00</pubDate>
+	  <pubDate>2021-04-18T00:54:12+04:00</pubDate>
 	  <guid>//read-sapiens</guid>
 	  <description><![CDATA[
 	     <p>两年前读过《人类简史》的中译本，去年年终和今年年初一口气读完了《未来简史》和《今日简史》的英文版，就一直惦记着干脆把《人类简史》的英文版再读一遍，今年过年时本来想一鼓作气读完，但是中间又读了《The Black Swan》，就一直没顾上，最近坐地铁通勤，断断续续终于又读了一遍，不得不说，再读英文版，依旧有新的收获。不管从写史的风格，思路，框架，格局，还是文笔，都是一等一的杰作。</p>
 
 <p>且看开篇这个段落：</p>
 
-<p>Years Before the Present </p>
+<p>Years Before the Present</p>
 
-<p>13.5 billion Matter and energy appear. Beginning of physics. Atoms and molecules appear. Beginning of chemistry. </p>
+<p>13.5 billion Matter and energy appear. Beginning of physics. Atoms and molecules appear. Beginning of chemistry.</p>
 
-<p>4.5 billion Formation of planet Earth. </p>
+<p>4.5 billion Formation of planet Earth.</p>
 
-<p>3.8 billion Emergence of organisms. Beginning of biology. </p>
+<p>3.8 billion Emergence of organisms. Beginning of biology.</p>
 
-<p>6 million Last common grandmother of humans and chimpanzees. </p>
+<p>6 million Last common grandmother of humans and chimpanzees.</p>
 
-<p>2.5 million Evolution of the genus Homo in Africa. First stone tools. </p>
+<p>2.5 million Evolution of the genus Homo in Africa. First stone tools.</p>
 
-<p>2 million Humans spread from Africa to Eurasia. Evolution of different human species. </p>
+<p>2 million Humans spread from Africa to Eurasia. Evolution of different human species.</p>
 
-<p>500,000 Neanderthals evolve in Europe and the Middle East. </p>
+<p>500,000 Neanderthals evolve in Europe and the Middle East.</p>
 
-<p>300,000 Daily usage of fire. </p>
+<p>300,000 Daily usage of fire.</p>
 
-<p>200,000 Homo sapiens evolves in East Africa. </p>
+<p>200,000 Homo sapiens evolves in East Africa.</p>
 
 <p>70,000 The Cognitive Revolution. Emergence of fictive language. Beginning of history. Sapiens spread out of Africa.</p>
 
-<p>45,000 Sapiens settle Australia. Extinction of Australian megafauna. </p>
+<p>45,000 Sapiens settle Australia. Extinction of Australian megafauna.</p>
 
-<p>30,000 Extinction of Neanderthals. </p>
+<p>30,000 Extinction of Neanderthals.</p>
 
-<p>16,000 Sapiens settle America. Extinction of American megafauna. </p>
+<p>16,000 Sapiens settle America. Extinction of American megafauna.</p>
 
-<p>13,000 Extinction of Homo floresiensis. Homo sapiens the only surviving human species. </p>
+<p>13,000 Extinction of Homo floresiensis. Homo sapiens the only surviving human species.</p>
 
-<p>12,000 The Agricultural Revolution. Domestication of plants and animals. Permanent settlements. </p>
+<p>12,000 The Agricultural Revolution. Domestication of plants and animals. Permanent settlements.</p>
 
-<p>5,000 First kingdoms, script and money. Polytheistic religions. </p>
+<p>5,000 First kingdoms, script and money. Polytheistic religions.</p>
 
-<p>4,250 First empire– the Akkadian Empire of Sargon. </p>
+<p>4,250 First empire– the Akkadian Empire of Sargon.</p>
 
-<p>2,500 Invention of coinage– a universal money. The Persian Empire– a universal political order ‘for the benefit of all humans’. Buddhism in India– a universal truth ‘to liberate all beings from suffering’. </p>
+<p>2,500 Invention of coinage– a universal money. The Persian Empire– a universal political order ‘for the benefit of all humans’. Buddhism in India– a universal truth ‘to liberate all beings from suffering’.</p>
 
 <p>2,000 Han Empire in China. Roman Empire in the Mediterranean. Christianity.</p>
 
-<p>1,400 Islam. </p>
+<p>1,400 Islam.</p>
 
-<p>500 The Scientific Revolution. Humankind admits its ignorance and begins to acquire unprecedented power. Europeans begin to conquer America and the oceans. The entire planet becomes a single historical arena. The rise of capitalism. </p>
+<p>500 The Scientific Revolution. Humankind admits its ignorance and begins to acquire unprecedented power. Europeans begin to conquer America and the oceans. The entire planet becomes a single historical arena. The rise of capitalism.</p>
 
-<p>200 The Industrial Revolution. Family and community are replaced by state and market. Massive extinction of plants and animals. The Present Humans transcend the boundaries of planet Earth. Nuclear weapons threaten the survival of humankind. Organisms are increasingly shaped by intelligent design rather than natural selection. The Future Intelligent design becomes the basic principle of life? Homo sapiens is replaced by superhumans? </p>
+<p>200 The Industrial Revolution. Family and community are replaced by state and market. Massive extinction of plants and animals. The Present Humans transcend the boundaries of planet Earth. Nuclear weapons threaten the survival of humankind. Organisms are increasingly shaped by intelligent design rather than natural selection. The Future Intelligent design becomes the basic principle of life? Homo sapiens is replaced by superhumans?</p>
 
 <p>我也看过不少历史类的书籍，没有一个作者像赫拉利这样，寥寥数言，已经清晰的勾勒出人类历史的基本脉络，并且文字有趣，简洁。坦白讲，自柏杨先生《中国人史纲》的开篇后，好多年没再看到这么好的历史类段落了。</p>
 
@@ -702,7 +804,7 @@ libmonochrome.so这个信息，当看到这个so的时候，直觉告诉我是�
 	  <title>Booster使用小结</title>
 	  <link>//summary-of-using-booster</link>
 	  <author>Tao He</author>
-	  <pubDate>2021-02-20T14:00:00+00:00</pubDate>
+	  <pubDate>2021-02-20T18:00:00+04:00</pubDate>
 	  <guid>//summary-of-using-booster</guid>
 	  <description><![CDATA[
 	     <p>使用Booster去修复SharedPreferences导致的ANR的版本已全量上架Google Play，SP导致的ANR几乎绝迹，但是随之全量版本的逐步铺开，firebase崩溃后台却出现了Booster所导致的两个比较多的崩溃:</p>
@@ -720,8 +822,9 @@ libmonochrome.so这个信息，当看到这个so的时候，直觉告诉我是�
 <p>Booster version 3.1.0</p>
 
 <p>主要的崩溃机型:Galaxy J2 Prime(76%), Galaxy Grand Neo, Galaxy J3(2016), MAXTRON U22</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">Fatal Exception: java.lang.NullPointerException
-Attempt to invoke virtual method &#39;java.lang.String java.io.File.getParent()&#39; on a null object reference
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Fatal Exception: java.lang.NullPointerException
+Attempt to invoke virtual method 'java.lang.String java.io.File.getParent()' on a null object reference
 com.didiglobal.booster.instrument.sharedpreferences.SharedPreferencesManager.&lt;init&gt; (SharedPreferencesManager.java:36)
 com.didiglobal.booster.instrument.sharedpreferences.BoosterSharedPreferences.&lt;init&gt; (BoosterSharedPreferences.java:42)
 com.didiglobal.booster.instrument.sharedpreferences.BoosterSharedPreferences.getSharedPreferences (BoosterSharedPreferences.java:58)
@@ -733,11 +836,14 @@ com.google.android.gms.ads.internal.util.zzbu.zza (zzbu.java:13)
 com.google.android.gms.internal.ads.zzabf.initialize (zzabf.java:1)
 com.google.android.gms.internal.ads.zzanc.run (zzanc.java:2)
 java.lang.Thread.run (Thread.java:818)
-</code></pre></div>
+
+</code></pre></div></div>
+
 <p>此问题已经在github上提issue给开源团队，经过几次沟通，确定是Booster的bug，开源团队响应极快，在3.3.1版本已修复此问题。</p>
 
-<p>另一个问题Class Cast Exception，基本环境与上面相同，主要发生在 Samsung Android 4, 4.2.2 </p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">Caused by java.lang.ClassCastException
+<p>另一个问题Class Cast Exception，基本环境与上面相同，主要发生在 Samsung Android 4, 4.2.2</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Caused by java.lang.ClassCastException
 java.lang.Integer cannot be cast to java.lang.Boolean
 
 com.didiglobal.booster.instrument.sharedpreferences.BoosterSharedPreferences.getBoolean (BoosterSharedPreferences.java:120)
@@ -758,18 +864,21 @@ java.lang.reflect.Method.invoke (Method.java:511)
 com.android.internal.os.ZygoteInit$MethodAndArgsCaller.run (ZygoteInit.java:815)
 com.android.internal.os.ZygoteInit.main (ZygoteInit.java:582)
 dalvik.system.NativeStart.main (NativeStart.java)
-</code></pre></div>
+
+</code></pre></div></div>
+
 <p>此问题目前还未被修复。除了这两个比较崩溃，目前Booster未引入新的问题，并且实实在在的解决了SP的ANR问题，使用线程池优化模块的版本也已上线，目前未发现问题，后续会统计对减少创建线程导致的OOM的贡献。引入Booster也是担着一定的风险，对于一个百万级日活的App，如果出现一个因为第三方工具导致的问题，很有可能导致线上事故，因此在引入前一定要对其做足了调研和评估。</p>
 
 <p>Booster的这种解决问题的方式真的是可谓优雅，不需你更改一行代码，在你使用它提供的gradle插件构建你的工程后，它已默默的为你修复了诸多问题，并且可以根据你的实际情况选择使用不同的功能模块。使用booster以来真的给我很多启发:</p>
 
 <ul>
-<li>系统问题也不是不可解决，也许换个思路，就有了办法</li>
-<li>开发工具，一定要让它易用，直观，易于理解</li>
-<li>开发的功能一定要相对独立，模块化</li>
-<li>引入第三方工具钱，一定要做足调研和评估</li>
-<li>使用了以后也要做好权衡，如它带来的利是否远大于弊</li>
+  <li>系统问题也不是不可解决，也许换个思路，就有了办法</li>
+  <li>开发工具，一定要让它易用，直观，易于理解</li>
+  <li>开发的功能一定要相对独立，模块化</li>
+  <li>引入第三方工具钱，一定要做足调研和评估</li>
+  <li>使用了以后也要做好权衡，如它带来的利是否远大于弊</li>
 </ul>
+
 
 	  ]]></description>
 	</item>
@@ -778,7 +887,7 @@ dalvik.system.NativeStart.main (NativeStart.java)
 	  <title>使用Booster解决ANR的实践</title>
 	  <link>//using-booster-fix-anr</link>
 	  <author>Tao He</author>
-	  <pubDate>2021-01-24T14:00:00+00:00</pubDate>
+	  <pubDate>2021-01-24T18:00:00+04:00</pubDate>
 	  <guid>//using-booster-fix-anr</guid>
 	  <description><![CDATA[
 	     <p>SharedPreferences一直备受诟病，不论是因为开发者的不当使用还是其自身的问题，SharedPreferences都给开发者造成了不少困扰, 尤以ANR最甚。面对由SharedPreferences引起的ANR，我们通常的做法是引入MMKV来替代SP，规避SP本身的缺陷。但是MMKV虽然可以解决App自身由于使用SP导致的ANR，但是无法解决App中第三方库使用SP导致的ANR，因此，虽然MMKV性能优秀，可做数据迁移，久经验证，依然不能彻底解决SP的问题。因此需要考虑其他解决方案，后来找到了滴滴开源的Booster项目，算是找到一个相对彻底的解决方案。</p>
@@ -786,28 +895,30 @@ dalvik.system.NativeStart.main (NativeStart.java)
 <p>Booster是什么? 请注意，和著名的C++库Boost没半毛钱关系，且看官方介绍:</p>
 
 <blockquote>
-<p>Booster 通过 Gradle Plugin 的形式为 Android 工程质量把控提供了一套完整的框架，无论是代码、资源、动态库、依赖关系、包体积、性能等监控，都可以通过 Booster 来完成</p>
+  <p>Booster 通过 Gradle Plugin 的形式为 Android 工程质量把控提供了一套完整的框架，无论是代码、资源、动态库、依赖关系、包体积、性能等监控，都可以通过 Booster 来完成</p>
 </blockquote>
 
 <p>简单理解，Booster就是一个Gradle插件，但它不是一个简单的plugin，而是一个框架，提供了诸多不同功能的模块，可按需在项目构建的时候注入不同的功能模块。下面就以使用Booster SharedPreferences功能模块解决SP相关ANR为例来介绍Booster的基本用法:</p>
 
 <ol>
-<li>添加依赖，apply插件:</li>
+  <li>添加依赖，apply插件:</li>
 </ol>
-<div class="highlight"><pre><code class="language-text" data-lang="text">allprojects { project -&gt;
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+allprojects { project -&gt;
     buildscript {
-        ext.booster_version = &#39;3.1.0&#39;
+        ext.booster_version = '3.1.0'
         repositories {
             mavenLocal()
             google()
             mavenCentral()
             jcenter()
-            maven { url &#39;https://oss.sonatype.org/content/repositories/public&#39; }
+            maven { url 'https://oss.sonatype.org/content/repositories/public' }
         }
         dependencies {
-            classpath &quot;com.didiglobal.booster:booster-gradle-plugin:$booster_version&quot;
+            classpath "com.didiglobal.booster:booster-gradle-plugin:$booster_version"
             // 使用SharedPreferences功能模块
-            classpath &quot;com.didiglobal.booster:booster-transform-shared-preferences:$booster_version&quot;
+            classpath "com.didiglobal.booster:booster-transform-shared-preferences:$booster_version"
         }
     }
     repositories {
@@ -815,35 +926,46 @@ dalvik.system.NativeStart.main (NativeStart.java)
         google()
         mavenCentral()
         jcenter()
-        maven { url &#39;https://oss.sonatype.org/content/repositories/public&#39; }
+        maven { url 'https://oss.sonatype.org/content/repositories/public' }
     }
     project.afterEvaluate {
-        if (project.extensions.findByName(&#39;android&#39;) != null) {
-            project.apply plugin: &#39;com.didiglobal.booster&#39;
+        if (project.extensions.findByName('android') != null) {
+            project.apply plugin: 'com.didiglobal.booster'
         }
     }
 }
-</code></pre></div>
+
+</code></pre></div></div>
+
 <ol>
-<li>添加到项目的构建流程中去</li>
+  <li>添加到项目的构建流程中去</li>
 </ol>
 
 <p>可以使用-I输入到构建流程中，也可将上述gradle脚本直接集成进project gradle文件，皆可达到目的。</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">// init.gradle即为上面的这段gradle脚本
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+// init.gradle即为上面的这段gradle脚本
 ./gradlew -I init.gradle :app:assembleDebug
-</code></pre></div>
+
+
+</code></pre></div></div>
+
 <p>在项目构建的过程中输入这段脚本，输出的apk就已使用Booster的SP模块来解决ANR了。使用起来是不是感觉非常简洁，接入很优雅，因为想使用Booster任何一个功能模块，只要简单的添加一句依赖即可，如SP:</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">// 使用SharedPreferences功能模块
-classpath &quot;com.didiglobal.booster:booster-transform-shared-preferences:$booster_version&quot;
-</code></pre></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>// 使用SharedPreferences功能模块
+classpath "com.didiglobal.booster:booster-transform-shared-preferences:$booster_version"
+
+</code></pre></div></div>
+
 <p>如此优雅的框架，是什么原理呢? 还以SP为例来简单聊聊:</p>
 
 <p>根本的原理就是Booster通过 SharedPreferencesTransformer 将所有调用 Context.getSharedPreferences(String, int) 的指令替换成 ShadowSharedPreferences.getSharedPreferences(Context, String, int)，代码如下：</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">public class ShadowSharedPreferences {
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>public class ShadowSharedPreferences {
 
     public static SharedPreferences getSharedPreferences(final Context context, String name, final int mode) {
         if (TextUtils.isEmpty(name)) {
-            name = &quot;null&quot;;
+            name = "null";
         }
         return BoosterSharedPreferences.getSharedPreferences(name);
     }
@@ -853,10 +975,12 @@ classpath &quot;com.didiglobal.booster:booster-transform-shared-preferences:$boo
     }
 
 }
-</code></pre></div>
+</code></pre></div></div>
+
 <p>通过自定义 SharedPreferences 避开 QueuedWork 在 onPause(), onDestroy() 等生命周期回调时在主线程中的同步操作。如果对Booster有基本了解，对Booster这种指令替换的操作应该不陌生。如Booster在解决系统Bug的办法也是通过自定义类来替换有问题的系统类。如果我们使用Android Studio Profiler来查看我们App的内存情况，就可以搜到ShadowSharedPreferences类，此类就是系统SharedPreferences的替换类。</p>
 
 <p>Booster还有其他强大的功能模块有待探索和使用，后续用到后再来聊！</p>
+
 
 	  ]]></description>
 	</item>
@@ -865,15 +989,17 @@ classpath &quot;com.didiglobal.booster:booster-transform-shared-preferences:$boo
 	  <title>在Android中定制Emoji的实现</title>
 	  <link>//custom-emoji-in-android</link>
 	  <author>Tao He</author>
-	  <pubDate>2021-01-15T14:00:00+00:00</pubDate>
+	  <pubDate>2021-01-15T18:00:00+04:00</pubDate>
 	  <guid>//custom-emoji-in-android</guid>
 	  <description><![CDATA[
-	     <p>最近公司产品在评论输入中要加入定制emoji面板，因此趟了emoji这个浑水，现以此文记录期间踩过的坑和一些心得。要实现一个相对比较完善的emoji输入和显示的功能，需要解决两个主要的问题: 键盘和emoji表情的平滑切换和emoji的正确显示。前者其实和emoji本身不相关，因此放在后面讨论。先来探究定制emoji的实现方案。 </p>
+	     <p>最近公司产品在评论输入中要加入定制emoji面板，因此趟了emoji这个浑水，现以此文记录期间踩过的坑和一些心得。要实现一个相对比较完善的emoji输入和显示的功能，需要解决两个主要的问题: 键盘和emoji表情的平滑切换和emoji的正确显示。前者其实和emoji本身不相关，因此放在后面讨论。先来探究定制emoji的实现方案。</p>
 
 <p>我们团队内部想到的最快的实现方案是定制googlefonts的NotoColorEmojiCompat.ttf, 使用EmojiCompact加载定制的ttf文件来显示我们定制的emoji。Google官方提供的NotoColorEmojiCompat的使用方法只有两种，一种方式是将NotoColorEmojiCompat.ttf文件放在assets目录，打入apk中使用，另一种方式是不打入apk，而是通过动态查询ContentProvider去查询获得，好处是不用将ttf文件打入apk包，坏处是查询到的ttf文件还是未定制的NotoColorEmojiCompat.ttf文件，实现不了定制的目的。我们的目标是在不打入这样一个7M的ttf文件的情况下实现定制目的，因此官方提供的这两种使用方式都不可取。因此就只剩下一条路，那就是app启动时下载我们定制的ttf文件，在EmojiCompat初始化时自己实现ttf的load过程，从而实现动态加载定制的emoji表情。</p>
 
 <p>创建一个EmojiHelpler类来管理EmojiCompat的初始化和定制ttf的加载:</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">public class EmojiHelper {
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+public class EmojiHelper {
 
     private static Context sContext;
     private static boolean sEmojiReady = false;
@@ -889,14 +1015,14 @@ classpath &quot;com.didiglobal.booster:booster-transform-shared-preferences:$boo
             @Override
             public void onInitialized() {
                 super.onInitialized();
-                Log.d(&quot;hetaod&quot;, &quot;onInitialized&quot;);
-                //XLog.d(&quot;onInitialized&quot;);
+                Log.d("hetaod", "onInitialized");
+                //XLog.d("onInitialized");
             }
 
             @Override
             public void onFailed(@Nullable Throwable throwable) {
                 super.onFailed(throwable);
-                Log.d(&quot;hetaod&quot;, &quot;onFailed: &quot; + throwable.getMessage());
+                Log.d("hetaod", "onFailed: " + throwable.getMessage());
                 //XLog.printStackTrace(throwable);
             }
         });
@@ -922,15 +1048,15 @@ classpath &quot;com.didiglobal.booster:booster-transform-shared-preferences:$boo
 
         @Override
         public void load(@NonNull EmojiCompat.MetadataRepoLoaderCallback loaderCallback) {
-            //String filePath = sContext.getCacheDir().getAbsolutePath() + &quot;/NotoColorrEmojiCompat.ttf&quot;;
+            //String filePath = sContext.getCacheDir().getAbsolutePath() + "/NotoColorrEmojiCompat.ttf";
 
-            File file = new File(&quot;/sdcard/NotoColorEmojiCompat.ttf&quot;);
+            File file = new File("/sdcard/NotoColorEmojiCompat.ttf");
             FileInputStream fileInputStream = null;
             try {
                 fileInputStream = new FileInputStream(file);
                 loaderCallback.onLoaded(MetadataRepo.create(Typeface.createFromFile(file.getAbsolutePath()), fileInputStream));
             } catch (IOException e) {
-                Log.d(&quot;hetaod&quot;, e.getMessage());
+                Log.d("hetaod", e.getMessage());
                 //XLog.printStackTrace(e);
             } finally {
                 //Util.safeClose(fileInputStream);
@@ -938,10 +1064,14 @@ classpath &quot;com.didiglobal.booster:booster-transform-shared-preferences:$boo
         }
     }
 }
-</code></pre></div>
+
+</code></pre></div></div>
 <p>加载定制ttf的关键是继承EmojiCompat和实现EmojiCompat.MetadataRepoLoader接口。在实现了初始化和加载定制ttf后，就剩最后一步，制作定制ttf文件，通过一些emoji的工具，可以轻松制作定制的emoji，我们的实现方式是使用未使用的unicode码来定义我们自己的emoji，在定制的ttf文件制作后以后，下载，初始化，加载，加载失败，卡在了加载这一步，我们定制的ttf文件加载失败，一直报如下的错误:</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">Cannot read metadata.
-</code></pre></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Cannot read metadata.
+
+</code></pre></div></div>
+
 <p>我们多次确认制作ttf的方法应该没有问题，但是仍旧加载失败，怀疑是Google做了限制，无法定制这个ttf文件，多次尝试无果后，我们放弃了这个方案。</p>
 
 <p>放弃了上面这个方案后，我们选择了Github上的一个开源实现，简单易用，通过实现一个提供定制表情的provider就可以达到定制的目的。</p>
@@ -951,14 +1081,18 @@ classpath &quot;com.didiglobal.booster:booster-transform-shared-preferences:$boo
 <p>使用方法：</p>
 
 <ol>
-<li>添加依赖：</li>
+  <li>添加依赖：</li>
 </ol>
-<div class="highlight"><pre><code class="language-text" data-lang="text">implementation &#39;com.vanniktech:emoji:0.7.0&#39;
-</code></pre></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>implementation 'com.vanniktech:emoji:0.7.0'
+
+</code></pre></div></div>
+
 <ol>
-<li>实现EmojiProvider接口:</li>
+  <li>实现EmojiProvider接口:</li>
 </ol>
-<div class="highlight"><pre><code class="language-text" data-lang="text">//实现EmojiProvider接口
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>//实现EmojiProvider接口
 public class CocoEmojiProvider implements EmojiProvider {
     @Override @NonNull
     public EmojiCategory[] getCategories() {
@@ -992,20 +1126,20 @@ public class SimpleCategory implements EmojiCategory {
 
 // 定制emoji列表定义
 final class SimpleCategoryChunk0 {
-    @SuppressWarnings(&quot;PMD.ExcessiveMethodLength&quot;) static CocoEmoji[] get() {
+    @SuppressWarnings("PMD.ExcessiveMethodLength") static CocoEmoji[] get() {
         return new CocoEmoji[] {
-                new CocoEmoji(0x1F580, new String[]{&quot;Hehe&quot;}, 0, 0, false),
-                new CocoEmoji(0x1F581, new String[]{&quot;Mesume&quot;}, 0, 1, false),
-                new CocoEmoji(0x1F582, new String[]{&quot;Ngenes&quot;}, 0, 2, false),
-                new CocoEmoji(0x1F583, new String[]{&quot;Apaan sih&quot;}, 0, 3, false),
-                new CocoEmoji(0x1F584, new String[]{&quot;Ngupil&quot;}, 0, 4, false),
-                new CocoEmoji(0x1F585, new String[]{&quot;Bodo&quot;}, 0, 5, false),
-                new CocoEmoji(0x1F586, new String[]{&quot;Berdoa&quot;}, 0, 6, false),
-                new CocoEmoji(0x1F588, new String[]{&quot;Lempar tai&quot;}, 0, 7, false),
-                new CocoEmoji(0x1F589, new String[]{&quot;Bengek&quot;}, 0, 8, false),
-                new CocoEmoji(0x1F58E, new String[]{&quot;Jempol&quot;}, 0, 9, false),
-                new CocoEmoji(0x1F58F, new String[]{&quot;tepuk tangan&quot;}, 0, 10, false),
-                new CocoEmoji(0x1F591, new String[]{&quot;love&quot;}, 0, 11, false),
+                new CocoEmoji(0x1F580, new String[]{"Hehe"}, 0, 0, false),
+                new CocoEmoji(0x1F581, new String[]{"Mesume"}, 0, 1, false),
+                new CocoEmoji(0x1F582, new String[]{"Ngenes"}, 0, 2, false),
+                new CocoEmoji(0x1F583, new String[]{"Apaan sih"}, 0, 3, false),
+                new CocoEmoji(0x1F584, new String[]{"Ngupil"}, 0, 4, false),
+                new CocoEmoji(0x1F585, new String[]{"Bodo"}, 0, 5, false),
+                new CocoEmoji(0x1F586, new String[]{"Berdoa"}, 0, 6, false),
+                new CocoEmoji(0x1F588, new String[]{"Lempar tai"}, 0, 7, false),
+                new CocoEmoji(0x1F589, new String[]{"Bengek"}, 0, 8, false),
+                new CocoEmoji(0x1F58E, new String[]{"Jempol"}, 0, 9, false),
+                new CocoEmoji(0x1F58F, new String[]{"tepuk tangan"}, 0, 10, false),
+                new CocoEmoji(0x1F591, new String[]{"love"}, 0, 11, false),
         };
     }
 
@@ -1013,187 +1147,195 @@ final class SimpleCategoryChunk0 {
         // No instances.
     }
 }
-</code></pre></div>
+
+</code></pre></div></div>
+
 <ol>
-<li>在布局中使用支持emoji的控件:</li>
+  <li>在布局中使用支持emoji的控件:</li>
 </ol>
-<div class="highlight"><pre><code class="language-text" data-lang="text">&lt;RelativeLayout xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;
-    android:layout_width=&quot;wrap_content&quot;
-    android:layout_height=&quot;wrap_content&quot;
-    android:padding=&quot;10dp&quot;
-    android:orientation=&quot;horizontal&quot;&gt;
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+&lt;RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:padding="10dp"
+    android:orientation="horizontal"&gt;
 
     &lt;com.vanniktech.emoji.EmojiTextView
-        android:layout_width=&quot;match_parent&quot;
-        android:layout_height=&quot;30dp&quot;
-        android:id=&quot;@+id/quick_textview&quot;
-        android:textColor=&quot;@color/CO_T1&quot;
-        android:textSize=&quot;25sp&quot;
-        android:gravity=&quot;center_horizontal&quot;
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:id="@+id/quick_textview"
+        android:textColor="@color/CO_T1"
+        android:textSize="25sp"
+        android:gravity="center_horizontal"
         /&gt;
 
 &lt;/RelativeLayout&gt;
-</code></pre></div>
+
+</code></pre></div></div>
+
 <p>在此方案中仍旧是使用未使用的unicode来定义我们定制的emoji，而不是去定一个固定形式的字符串来定义。因此存在兼容老版本的问题，因为我们app的老版本未使用任何定制emoji，这个问题我们目前是简单的通过服务端替换来解决。</p>
 
 <p>解决了emoji的显示问题，就该着手解决emoji面板和键盘平滑切换的问题了。需要键盘和其他面板切换的输入场景下一般的解决方案是使用KPSwitch实现。但是KPSwitch切换界面在嵌入到一个单独的view里面后，切换时有跳闪，体验不是很好，所以这种方案虽然实现起来最快，但是不符合交互要求，所以首先pass，还有一个方案是把emoji面板，键盘都整体做到一个透明的Activity中，和app其他的业务逻辑分离，吊起键盘相当于启动一个透明的activity，和输入相关的功能逻辑都封装到activity中。这种方案虽然隔离性很好，也相对独立，但是需要管理生命周期的问题，对我们现有的输入功能改动较大，所以也pass。排除了两种可行的方案后，要想改动最小，又能实现平滑的体验，就需要做到两点:</p>
 
 <ol>
-<li>这个输入功能还是得实现为一个自定义View，而不是一个Activity，这样对现有代码改动最小，影响最小。</li>
-<li>要在不使用KPSwitch的情况下实现平滑切换。</li>
+  <li>这个输入功能还是得实现为一个自定义View，而不是一个Activity，这样对现有代码改动最小，影响最小。</li>
+  <li>要在不使用KPSwitch的情况下实现平滑切换。</li>
 </ol>
 
 <p>第一个要求好实现，不在赘述。要实现第二个要求也不是那么难，关键点如下:</p>
 
 <ol>
-<li>自定义View的特殊布局</li>
-<li>关键的几个布局控制方法</li>
+  <li>自定义View的特殊布局</li>
+  <li>关键的几个布局控制方法</li>
 </ol>
 
 <p>先来看布局:</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">&lt;LinearLayout
-        android:layout_width=&quot;match_parent&quot;
-        android:layout_height=&quot;wrap_content&quot;
-        android:orientation=&quot;vertical&quot;
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+&lt;LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
         &gt;
 
         &lt;!--键盘弹起后上，屏幕剩余部分--&gt;
         &lt;View
-            android:id=&quot;@+id/layout_input_empty&quot;
-            android:layout_width=&quot;match_parent&quot;
-            android:layout_height=&quot;0dp&quot;
-            android:layout_weight=&quot;1&quot;
+            android:id="@+id/layout_input_empty"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
             /&gt;
 
         &lt;!--键盘及其他交互UI部分--&gt;
         &lt;LinearLayout
-            android:id=&quot;@+id/ll_bottom&quot;
-            android:layout_width=&quot;match_parent&quot;
-            android:layout_height=&quot;wrap_content&quot;
-            android:focusable=&quot;true&quot;
-            android:clickable=&quot;true&quot;
-            android:focusableInTouchMode=&quot;true&quot;
-            android:gravity=&quot;center_vertical&quot;
+            android:id="@+id/ll_bottom"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:focusable="true"
+            android:clickable="true"
+            android:focusableInTouchMode="true"
+            android:gravity="center_vertical"
 
             &gt;
 
             &lt;LinearLayout
-                android:layout_width=&quot;match_parent&quot;
-                android:layout_height=&quot;wrap_content&quot;
-                android:orientation=&quot;vertical&quot;
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
                 &gt;
 
                 &lt;cn.xiaochuankeji.zuiyouLite.widget.listener.FrameListenerLayout
-                    android:id=&quot;@+id/publisher_top_listener&quot;
-                    android:layout_width=&quot;match_parent&quot;
-                    android:layout_height=&quot;wrap_content&quot;
-                    android:layout_gravity=&quot;center_vertical&quot;
-                    android:paddingLeft=&quot;15dp&quot;
-                    android:paddingTop=&quot;5dp&quot;
-                    android:paddingRight=&quot;15dp&quot;
-                    android:background=&quot;@drawable/replay_comment_bg&quot;
+                    android:id="@+id/publisher_top_listener"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:paddingLeft="15dp"
+                    android:paddingTop="5dp"
+                    android:paddingRight="15dp"
+                    android:background="@drawable/replay_comment_bg"
                     &gt;
 
                     &lt;RelativeLayout
-                        android:layout_width=&quot;match_parent&quot;
-                        android:layout_height=&quot;wrap_content&quot;
-                        android:gravity=&quot;center_vertical&quot;&gt;
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"&gt;
 
                         &lt;cn.xiaochuankeji.zuiyouLite.widget.publisher.ReplaySomeoneTipView
-                            android:id=&quot;@+id/replay_someone_tip_view&quot;
-                            android:layout_width=&quot;match_parent&quot;
-                            android:layout_height=&quot;wrap_content&quot;
-                            android:layout_marginTop=&quot;14dp&quot;
-                            android:layout_marginBottom=&quot;3dp&quot;
-                            android:visibility=&quot;gone&quot; /&gt;
+                            android:id="@+id/replay_someone_tip_view"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="14dp"
+                            android:layout_marginBottom="3dp"
+                            android:visibility="gone" /&gt;
 
 
                         &lt;cn.xiaochuankeji.zuiyouLite.widget.publisher.QuickReplayView
-                            android:id=&quot;@+id/quick_replay_view&quot;
-                            android:layout_width=&quot;match_parent&quot;
-                            android:layout_height=&quot;wrap_content&quot;
-                            android:layout_below=&quot;@+id/replay_someone_tip_view&quot;
-                            android:layout_marginTop=&quot;11dp&quot; /&gt;
+                            android:id="@+id/quick_replay_view"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@+id/replay_someone_tip_view"
+                            android:layout_marginTop="11dp" /&gt;
 
                         &lt;LinearLayout
-                            android:id=&quot;@+id/edit_scroll&quot;
-                            android:layout_width=&quot;match_parent&quot;
-                            android:layout_height=&quot;wrap_content&quot;
-                            android:orientation=&quot;vertical&quot;
-                            android:background=&quot;@drawable/comment_edit_bg&quot;
-                            android:padding=&quot;8dp&quot;
-                            android:layout_below=&quot;@+id/quick_replay_view&quot;
-                            android:layout_toLeftOf=&quot;@+id/publisher_send_new&quot;
-                            android:layout_marginBottom=&quot;12dp&quot;
+                            android:id="@+id/edit_scroll"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:background="@drawable/comment_edit_bg"
+                            android:padding="8dp"
+                            android:layout_below="@+id/quick_replay_view"
+                            android:layout_toLeftOf="@+id/publisher_send_new"
+                            android:layout_marginBottom="12dp"
                             &gt;
 
                             &lt;cn.xiaochuankeji.zuiyouLite.widget.publisher.PostCommentEditText
-                                android:id=&quot;@+id/publisher_edit&quot;
-                                android:layout_width=&quot;match_parent&quot;
-                                android:layout_height=&quot;wrap_content&quot;
-                                android:background=&quot;@color/CO_B3&quot;
-                                android:hint=&quot;@string/comment_input_comment&quot;
-                                android:lineSpacingExtra=&quot;2.4dp&quot;
-                                android:maxLength=&quot;2000&quot;
-                                android:maxLines=&quot;3&quot;
-                                android:minLines=&quot;1&quot;
-                                android:textColor=&quot;@color/CO_T1&quot;
-                                android:textColorHint=&quot;@color/CO_T3&quot;
-                                android:textCursorDrawable=&quot;@drawable/cursor_yellow&quot;
-                                android:textSize=&quot;13sp&quot; /&gt;
+                                android:id="@+id/publisher_edit"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:background="@color/CO_B3"
+                                android:hint="@string/comment_input_comment"
+                                android:lineSpacingExtra="2.4dp"
+                                android:maxLength="2000"
+                                android:maxLines="3"
+                                android:minLines="1"
+                                android:textColor="@color/CO_T1"
+                                android:textColorHint="@color/CO_T3"
+                                android:textCursorDrawable="@drawable/cursor_yellow"
+                                android:textSize="13sp" /&gt;
                             &lt;!-- 选中的 视频/图片 文件列表 --&gt;
                             &lt;androidx.recyclerview.widget.RecyclerView
-                                android:id=&quot;@+id/publisher_select_media_list&quot;
-                                android:layout_below=&quot;@+id/publisher_edit&quot;
-                                android:layout_width=&quot;wrap_content&quot;
-                                android:layout_height=&quot;match_parent&quot;
-                                android:layout_alignLeft=&quot;@+id/publisher_edit&quot;
-                                android:layout_alignRight=&quot;@+id/publisher_edit&quot;
-                                android:layout_marginTop=&quot;7dp&quot;
-                                android:visibility=&quot;gone&quot; /&gt;
+                                android:id="@+id/publisher_select_media_list"
+                                android:layout_below="@+id/publisher_edit"
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:layout_alignLeft="@+id/publisher_edit"
+                                android:layout_alignRight="@+id/publisher_edit"
+                                android:layout_marginTop="7dp"
+                                android:visibility="gone" /&gt;
                         &lt;/LinearLayout&gt;
 
 
                         &lt;androidx.appcompat.widget.AppCompatImageView
-                            android:id=&quot;@+id/publisher_send_new&quot;
-                            android:layout_width=&quot;24dp&quot;
-                            android:layout_height=&quot;24dp&quot;
-                            android:layout_marginLeft=&quot;15dp&quot;
-                            android:layout_alignBottom=&quot;@id/edit_scroll&quot;
-                            android:layout_marginBottom=&quot;4dp&quot;
-                            android:layout_alignParentRight=&quot;true&quot;
-                            android:background=&quot;@drawable/selector_chat_send&quot; /&gt;
+                            android:id="@+id/publisher_send_new"
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:layout_marginLeft="15dp"
+                            android:layout_alignBottom="@id/edit_scroll"
+                            android:layout_marginBottom="4dp"
+                            android:layout_alignParentRight="true"
+                            android:background="@drawable/selector_chat_send" /&gt;
 
 
                         &lt;androidx.appcompat.widget.AppCompatImageView
-                            android:id=&quot;@+id/publisher_image_new&quot;
-                            android:layout_width=&quot;36dp&quot;
-                            android:layout_height=&quot;36dp&quot;
-                            android:paddingRight=&quot;12dp&quot;
-                            android:paddingBottom=&quot;12dp&quot;
-                            android:layout_below=&quot;@+id/edit_scroll&quot;
-                            android:src=&quot;@drawable/ic_comment_select_image&quot; /&gt;
+                            android:id="@+id/publisher_image_new"
+                            android:layout_width="36dp"
+                            android:layout_height="36dp"
+                            android:paddingRight="12dp"
+                            android:paddingBottom="12dp"
+                            android:layout_below="@+id/edit_scroll"
+                            android:src="@drawable/ic_comment_select_image" /&gt;
 
                         &lt;androidx.appcompat.widget.AppCompatImageView
-                            android:id=&quot;@+id/publisher_emoji&quot;
-                            android:layout_width=&quot;36dp&quot;
-                            android:layout_height=&quot;36dp&quot;
-                            android:layout_below=&quot;@+id/edit_scroll&quot;
-                            android:layout_toRightOf=&quot;@id/publisher_image_new&quot;
-                            android:paddingLeft=&quot;12dp&quot;
-                            android:paddingBottom=&quot;12dp&quot;
-                            android:src=&quot;@drawable/ic_comment_cocoemoji&quot; /&gt;
+                            android:id="@+id/publisher_emoji"
+                            android:layout_width="36dp"
+                            android:layout_height="36dp"
+                            android:layout_below="@+id/edit_scroll"
+                            android:layout_toRightOf="@id/publisher_image_new"
+                            android:paddingLeft="12dp"
+                            android:paddingBottom="12dp"
+                            android:src="@drawable/ic_comment_cocoemoji" /&gt;
 
                         &lt;androidx.appcompat.widget.AppCompatImageView
-                            android:id=&quot;@+id/publisher_at_new&quot;
-                            android:layout_width=&quot;36dp&quot;
-                            android:layout_height=&quot;36dp&quot;
-                            android:layout_below=&quot;@id/edit_scroll&quot;
-                            android:layout_toRightOf=&quot;@id/publisher_emoji&quot;
-                            android:layout_marginLeft=&quot;12dp&quot;
-                            android:paddingLeft=&quot;12dp&quot;
-                            android:paddingBottom=&quot;12dp&quot;
-                            android:src=&quot;@drawable/ic_comment_at&quot; /&gt;
+                            android:id="@+id/publisher_at_new"
+                            android:layout_width="36dp"
+                            android:layout_height="36dp"
+                            android:layout_below="@id/edit_scroll"
+                            android:layout_toRightOf="@id/publisher_emoji"
+                            android:layout_marginLeft="12dp"
+                            android:paddingLeft="12dp"
+                            android:paddingBottom="12dp"
+                            android:src="@drawable/ic_comment_at" /&gt;
 
                     &lt;/RelativeLayout&gt;
 
@@ -1203,34 +1345,34 @@ final class SimpleCategoryChunk0 {
 
                 &lt;!--emoji面板--&gt;
                 &lt;FrameLayout
-                    android:id=&quot;@+id/fl_bottom&quot;
-                    android:layout_width=&quot;match_parent&quot;
-                    android:layout_height=&quot;300dp&quot;
-                    android:background=&quot;#f5f7fa&quot;
-                    android:visibility=&quot;gone&quot;
+                    android:id="@+id/fl_bottom"
+                    android:layout_width="match_parent"
+                    android:layout_height="300dp"
+                    android:background="#f5f7fa"
+                    android:visibility="gone"
                     &gt;
-
+                    
                     &lt;androidx.recyclerview.widget.RecyclerView
-                        android:id=&quot;@+id/rv_emoji&quot;
-                        android:layout_width=&quot;match_parent&quot;
-                        android:layout_height=&quot;wrap_content&quot;
-                        android:paddingTop=&quot;5dp&quot;
-                        android:paddingLeft=&quot;5dp&quot;
-                        android:paddingRight=&quot;5dp&quot;
+                        android:id="@+id/rv_emoji"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="5dp"
+                        android:paddingLeft="5dp"
+                        android:paddingRight="5dp"
                         /&gt;
-
+                    
                     &lt;androidx.appcompat.widget.AppCompatImageView
-                        android:id=&quot;@+id/iv_emoji_delete&quot;
-                        android:layout_width=&quot;54dp&quot;
-                        android:layout_height=&quot;40dp&quot;
-                        android:src=&quot;@drawable/ic_comment_delete&quot;
-                        android:scaleType=&quot;centerInside&quot;
-                        android:layout_gravity=&quot;bottom|right&quot;
-                        android:layout_marginRight=&quot;15dp&quot;
-                        android:layout_marginBottom=&quot;15dp&quot;
-                        android:shadowColor=&quot;#33000000&quot;
-                        android:shadowDx=&quot;3.0&quot;
-                        android:background=&quot;@drawable/emoji_delete_bg&quot;
+                        android:id="@+id/iv_emoji_delete"
+                        android:layout_width="54dp"
+                        android:layout_height="40dp"
+                        android:src="@drawable/ic_comment_delete"
+                        android:scaleType="centerInside"
+                        android:layout_gravity="bottom|right"
+                        android:layout_marginRight="15dp"
+                        android:layout_marginBottom="15dp"
+                        android:shadowColor="#33000000"
+                        android:shadowDx="3.0"
+                        android:background="@drawable/emoji_delete_bg"
                         /&gt;
 
 
@@ -1239,9 +1381,13 @@ final class SimpleCategoryChunk0 {
             &lt;/LinearLayout&gt;
         &lt;/LinearLayout&gt;
     &lt;/LinearLayout&gt;
-</code></pre></div>
+
+</code></pre></div></div>
+
 <p>动态代码中几个关键的方法:</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">/**
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+/**
   * 锁定内容View以防止跳闪
   */
 public void lockContentViewHeight() {
@@ -1294,9 +1440,13 @@ public void showEmoji(boolean animate) {
     presentStatus = PublisherStatus.EMOJI;
     emojiVisible = true;
 }
-</code></pre></div>
+
+
+</code></pre></div></div>
+
 <p>如何调用：</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">private void onEmojiClick() {
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>private void onEmojiClick() {
     if (rv_emoji.getVisibility() == View.VISIBLE) {
         lockContentViewHeight();
         hideEmoji();
@@ -1307,8 +1457,11 @@ public void showEmoji(boolean animate) {
         showEmoji(false);
     }
 }
-</code></pre></div>
+
+</code></pre></div></div>
+
 <p>其实实现这个方案后，我也有点惊讶，KPSwitch那么复杂的逻辑，竟然可以简单的以这种方式实现。说明做一切事情都不可拘泥于过去成功的方案，应该大胆尝试新的方法，说不定就能收获到惊喜呢！</p>
+
 
 	  ]]></description>
 	</item>

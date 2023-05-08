@@ -1,26 +1,31 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <!-- [[! Document Settings ]] -->
+    <!-- Document Settings -->
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 
-    <!-- [[! Page Meta ]] -->
+    <!-- Page Meta -->
     <title>与机器，人，神共舞</title>
-    <meta name="description" content="与机器，人，神共舞 - 编程，读书，思考，旅行，与机器对话，与人交谈，对神发问，探索，体验人生美丽的风景" />
+    <meta name="description" content="编程，读书，思考，旅行，与机器对话，与人交谈，对神发问，探索，体验人生美丽的风景" />
 
+    <!-- Mobile Meta -->
     <meta name="HandheldFriendly" content="True" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
+    <!-- Brand icon -->
     <link rel="shortcut icon" href="/assets/images/favicon.ico" >
 
-    <!-- [[! Styles'n'Scripts ]] -->
+    <!-- Styles'n'Scripts -->
     <link rel="stylesheet" type="text/css" href="/assets/css/screen.css" />
-    <link rel="stylesheet" type="text/css"
-          href="//fonts.googleapis.com/css?family=Merriweather:300,700,700italic,300italic|Open+Sans:700,400" />
+    <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Merriweather:300,700,700italic,300italic|Open+Sans:700,400" />
     <link rel="stylesheet" type="text/css" href="/assets/css/syntax.css" />
-    
-    <!-- [[! Ghost outputs important style and meta data with this tag ]] -->
+
+    <!-- highlight.js -->
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.3.0/styles/default.min.css">
+    <style>.hljs { background: none; }</style>
+
+    <!-- Ghost outputs important style and meta data with this tag -->
         <link rel="canonical" href="/" />
     <meta name="referrer" content="origin" />
     <link rel="next" href="/page2/" />
@@ -53,8 +58,9 @@
     <link rel="alternate" type="application/rss+xml" title="与机器，人，神共舞" href="/rss.xml" />
 
 </head>
-<body class="tag-template nav-closed">
+<body class="paged archive-template nav-closed">
 
+    <!-- The blog navigation links -->
     <div class="nav">
     <h3 class="nav-title">Menu</h3>
     <a href="#" class="nav-close">
@@ -75,16 +81,14 @@
 
     <div class="site-wrapper">
 
-        <!-- [[! Everything else gets inserted here ]] -->
-        <!-- < dynamically overriding backgrounds for tags as well as descriptions -->
-
-   
+        <!-- All the main content gets inserted here, index.hbs, post.hbs, etc -->
+        <!-- dynamically overriding backgrounds for tags as well as descriptions -->
 
 
-<!-- < default}} -->
+<!-- default -->
 <!-- The tag above means - insert everything in this file into the [body] of the default.hbs template -->
 
- <!--If we have a tag cover, display that - else blog cover - else nothing -->
+<!-- If we have a tag cover, display that - else blog cover - else nothing -->
 <header class="main-header tag-head " style="background-image: url(/assets/images/cover2.jpg) ">
     <nav class="main-nav overlay clearfix">
         <a class="blog-logo" href="/"><img src="/assets/images/ghost.png" alt="Blog Logo" /></a>
@@ -97,12 +101,12 @@
             <h1 class="page-title">Machine</h1>
             <h2 class="page-description">
             
-                A series of articles about IT.
+			    A 74-post collection
             
             </h2>
         </div>
     </div>
-</header> 
+</header>
 
 <!-- The main content area on the homepage -->
 <main id="content" class="content" role="main">
@@ -135,7 +139,7 @@
             
                 <p><p>创建不规则窗体和控件这个过程包含了大量的图形编程工作，不同的计算机因内存和显卡的不同可能会导致最终的效果有所不同 。创建不规则窗体具体步骤：</p>
 
-<h4>先创建一个具有不规则形状的位... <a class="read-more" href="https://longlinht.github.io//c-sharp-create-unregular-window">&raquo;</a></p>
+<h4 id="先创建一个具有不规则... <a class="read-more" href="https://longlinht.github.io//c-sharp-create-unregular-window">&raquo;</a></p>
             
         </section>
         <footer class="post-meta">
@@ -161,7 +165,7 @@
         </header>
         <section class="post-excerpt">
             
-                <p><ul> <li><p>Java does not support typedefs, defines, or a preprocessor. </p></li> <li><p>Java does not support enums but does support named constants through use of the final... <a class="read-more" href="https://longlinht.github.io//similarities-and-differences-between-java-and-cpp">&raquo;</a></p>
+                <p><ul> <li> <p>Java does not support typedefs, defines, or a preprocessor.</p> </li> <li> <p>Java does not support enums but does support named constants through use of... <a class="read-more" href="https://longlinht.github.io//similarities-and-differences-between-java-and-cpp">&raquo;</a></p>
             
         </section>
         <footer class="post-meta">
@@ -187,7 +191,7 @@
         </header>
         <section class="post-excerpt">
             
-                <p><p>In C++, there is a uncommnon conception named smart pointer, it is rarely seen in other programming lauguages. So, what&#39;s it? We could simply define it.... <a class="read-more" href="https://longlinht.github.io//smart-pointer-in-cpp">&raquo;</a></p>
+                <p><p>In C++, there is a uncommnon conception named smart pointer, it is rarely seen in other programming lauguages. So, what’s it? We could simply define it.... <a class="read-more" href="https://longlinht.github.io//smart-pointer-in-cpp">&raquo;</a></p>
             
         </section>
         <footer class="post-meta">
@@ -214,8 +218,11 @@
         <section class="post-excerpt">
             
                 <p><ul>
-<li><p>不提倡使用全局变量，尽量不要在头文件中出现象extern int value 这类声明</p></li>
-<li><p>变量的名字应当使用“名词”或者“形容词＋名词”</... <a class="read-more" href="https://longlinht.github.io//high-quality-cpp">&raquo;</a></p>
+  <li>
+    <p>不提倡使用全局变量，尽量不要在头文件中出现象extern int value 这类声明</p>
+  </li>
+  <li>
+    <p>变量的名字应当使... <a class="read-more" href="https://longlinht.github.io//high-quality-cpp">&raquo;</a></p>
             
         </section>
         <footer class="post-meta">
@@ -241,7 +248,7 @@
         </header>
         <section class="post-excerpt">
             
-                <p><h4>Purpose - assists the assignment operator in achieving two things:</h4> <ul> <li><p>avoiding code duplication </p></li> <li><p>providing a strong exception guarantee.</p></li> </ul> <h4>How - to implement</h4> <p>Let&#39;s... <a class="read-more" href="https://longlinht.github.io//copy-and-swap-idiom-in-cpp">&raquo;</a></p>
+                <p><h4 id="purpose---assists-the-assignment-operator-in-achieving-two-things">Purpose - assists the assignment operator in achieving two things:</h4> <ul> <li> <p>avoiding code duplication</p> </li> <li> <p>providing a strong exception guarantee.</p> </li> </ul> <h4... <a class="read-more" href="https://longlinht.github.io//copy-and-swap-idiom-in-cpp">&raquo;</a></p>
             
         </section>
         <footer class="post-meta">
@@ -281,16 +288,20 @@
 </main>
 
 
+        <!-- The tiny footer at the very bottom -->
         <footer class="site-footer clearfix">
-          <section class="copyright"><a href="/">与机器，人，神共舞</a> &copy; 2022</section>
+          <section class="copyright"><a href="/">与机器，人，神共舞</a> &copy; 2023</section>
+          <section class="poweredby">Proudly published with <a href="https://jekyllrb.com/">Jekyll</a> using <a href="https://github.com/jekyllt/jasper">Jasper</a></section>
         </footer>
     </div>
-    <!-- [[! Ghost outputs important scripts and data with this tag ]] -->
-    <script type="text/javascript" src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
-    <!-- [[! The main JavaScript file for Casper ]] -->
-    <script type="text/javascript" src="/assets/js/jquery.fitvids.js"></script>
-    <script type="text/javascript" src="/assets/js/index.js"></script>
+    <!-- highlight.js -->
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.3.0/highlight.min.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
 
+    <!-- jQuery needs to come before `` so that jQuery can be used in code injection -->
+    <script type="text/javascript" src="//code.jquery.com/jquery-1.12.0.min.js"></script>
+    <!-- Ghost outputs important scripts and data with this tag -->
+    <!--  -->
     <!-- Add Google Analytics  -->
         <!-- Google Analytics Tracking code -->
      <script>
@@ -303,6 +314,11 @@
 	    ga('send', 'pageview');
 
      </script>
-   
+
+    <!-- Fitvids makes video embeds responsive and awesome -->
+    <script type="text/javascript" src="/assets/js/jquery.fitvids.js"></script>
+    <!-- The main JavaScript file for Casper -->
+    <script type="text/javascript" src="/assets/js/index.js"></script>
+
 </body>
 </html>

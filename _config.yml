@@ -1,8 +1,6 @@
-# Jekyll configuration
-#markdown: redcarpet
-#highlighter: pygments
-markdown: kramdown
-highlighter: rouge
+# Jykell configuration
+markdown: redcarpet
+highlighter: pygments
 paginate: 5
 language: 'en-uk'
 
@@ -25,13 +23,18 @@ disqus: taospage
 # edit baseurl to simply '/' if using as your personal page (instead of a project page)
 baseurl: '/'
 
+
+# url: 'http://localhost:4000/'
+
 # Permalinks
 permalink: /:title
 # permalink: /author/:username
 # permalink: /tag/:tag
 
+
 # gems and other configs
-plugins: [jekyll-paginate]
+gems: [jekyll-paginate]
+exclude: [vendor]
 
 # Additional settings available on the front-matter
 # Site logo in the index.html (as in demo.ghost.io)
@@ -50,5 +53,3 @@ exclude:
   - "*.Rmd"
   - vendor
   - .travis.yml
-  - node_modules
-  - .git

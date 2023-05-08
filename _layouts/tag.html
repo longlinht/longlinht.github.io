@@ -7,20 +7,21 @@ logo: 'assets/images/ghost.png'
 current: tag
 ---
 
-<!-- dynamically overriding backgrounds for tags as well as descriptions -->
-{% if page.url contains 'fables' %}
-   {% assign tag_description='A series of short stories that make you think.' %}
-{% elsif page.url contains 'speeches' %}
+<!-- < dynamically overriding backgrounds for tags as well as descriptions -->
+{% if page.url contains 'machine' %}
+   {% assign tag_description='A series of articles about IT.' %}
+{% elsif page.url contains 'human' %}
     {% assign new_cover='assets/images/cover7.jpg' %}
-    {% assign tag_description='Some of the greatest words ever spoken.' %}
-{% elsif page.url contains 'fiction' %}
+    {% assign tag_description='Some think about life and ourselves.' %}
+{% elsif page.url contains 'god' %}
     {% assign new_cover='assets/images/cover1.jpg' %}
+    {% assign tag_description='Some think about that beyond our lives' %}
 {% endif %}
 
-<!-- default -->
+<!-- < default}} -->
 <!-- The tag above means - insert everything in this file into the [body] of the default.hbs template -->
 
-<!-- If we have a tag cover, display that - else blog cover - else nothing -->
+ <!--If we have a tag cover, display that - else blog cover - else nothing -->
 <header class="main-header tag-head {% if page.cover %}" style="background-image: url({{ site.baseurl }}{% if new_cover %}{{ new_cover }}{% else %}{{ page.cover }}{% endif%}) {% else %}no-cover{% endif %}">
     <nav class="main-nav overlay clearfix">
         {% if page.logo %}<a class="blog-logo" href="{{ site.baseurl }}"><img src="{{ site.baseurl }}{{ page.logo }}" alt="Blog Logo" /></a>{% endif %}
@@ -40,7 +41,7 @@ current: tag
             </h2>
         </div>
     </div>
-</header>
+</header> 
 
 <!-- The main content area on the homepage -->
 <main id="content" class="content" role="main">

@@ -21,38 +21,36 @@
     <link rel="stylesheet" type="text/css" href="/assets/css/syntax.css" />
     
     <!-- [[! Ghost outputs important style and meta data with this tag ]] -->
-        <link rel="canonical" href="https://longlinht.github.io///page5/" />
+        <link rel="canonical" href="/" />
     <meta name="referrer" content="origin" />
     <link rel="next" href="/page2/" />
 
     <meta property="og:site_name" content="与机器，人，神共舞" />
     <meta property="og:type" content="website" />
-    <meta property="og:title" content="Tao's Page" />
+    <meta property="og:title" content="与机器，人，神共舞" />
     <meta property="og:description" content="编程，读书，思考，旅行，与机器对话，与人交谈，对神发问，探索，体验人生美丽的风景" />
-    <meta property="og:url" content="https://longlinht.github.io///page5/" />
+    <meta property="og:url" content="/" />
     <meta property="og:image" content="/assets/images/cover1.jpg" />
 
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Tao's Page" />
+    <meta name="twitter:title" content="与机器，人，神共舞" />
     <meta name="twitter:description" content="编程，读书，思考，旅行，与机器对话，与人交谈，对神发问，探索，体验人生美丽的风景" />
-    <meta name="twitter:url" content="https://longlinht.github.io///page5/" />
+    <meta name="twitter:url" content="/" />
     <meta name="twitter:image:src" content="/assets/images/cover1.jpg" />
 
     <script type="application/ld+json">
 {
     "@context": "http://schema.org",
     "@type": "Website",
-    "publisher": "与机器，人，神共舞",
-    "name": "Tao's Page",
-    "url": "https://longlinht.github.io///page5/",
+    "publisher": "Tao's Page",
+    "url": "/",
     "image": "/assets/images/cover1.jpg",
     "description": "编程，读书，思考，旅行，与机器对话，与人交谈，对神发问，探索，体验人生美丽的风景"
 }
     </script>
 
     <meta name="generator" content="Jekyll 3.0.0" />
-    <link rel="alternate" type="application/rss+xml" title="与机器，人，神共舞" href="/feed.xml" />
-
+    <link rel="alternate" type="application/rss+xml" title="与机器，人，神共舞" href="/rss.xml" />
 
 </head>
 <body class="home-template nav-closed">
@@ -64,17 +62,13 @@
     </a>
     <ul>
         <li class="nav-home  nav-current" role="presentation"><a href="/">Home</a></li>
-        <li class="nav-about " role="presentation"><a href="/about">About</a></li>
-        <li class="nav-fables " role="presentation"><a href="/tag/fables">Fables</a></li>
-        <li class="nav-speeches " role="presentation"><a href="/tag/speeches">Speeches</a></li>
-        <li class="nav-fiction " role="presentation"><a href="/tag/fiction">Fiction</a></li>
-        <li class="nav-author " role="presentation"><a href="/author/casper">Casper</a></li>
-        <li class="nav-author " role="presentation"><a href="/author/edgar">Edgar</a></li>
-        <li class="nav-author " role="presentation"><a href="/author/abraham">Abraham</a></li>
-        <li class="nav-author " role="presentation"><a href="/author/martin">Martin</a></li>
-        <li class="nav-author " role="presentation"><a href="/author/lewis">Lewis</a></li>
+        <li class="nav-about " role="presentation"><a href="/about.html">About</a></li>
+        <li class="nav-fables " role="presentation"><a href="/tag/machine/">Machine</a></li>
+        <li class="nav-speeches " role="presentation"><a href="/tag/human/">Human</a></li>
+        <li class="nav-fiction " role="presentation"><a href="/tag/god/">God</a></li>
+        <li class="nav-author " role="presentation"><a href="/author/hetao/">Author</a></li>
     </ul>
-    <a class="subscribe-button icon-feed" href="/feed.xml">Subscribe</a>
+    <a class="subscribe-button icon-feed" href="/rss.xml">Subscribe</a>
 </div>
 <span class="nav-cover"></span>
 
@@ -128,21 +122,24 @@
     
     <article class="post">
         <header class="post-header">
-            <h2 class="post-title"><a href="/fix-textview-emoji-problem">解决TextView中emoji被截断的问题</a></h2>
+            <h2 class="post-title"><a href="https://longlinht.github.io//fix-textview-emoji-problem">解决TextView中emoji被截断的问题</a></h2>
         </header>
         <section class="post-excerpt">
-            <p>理论上TextView中包含emoji显示是没有问题的，问题出在如果TextView限制了宽度，且末尾包含了emoji字符，但是又不够显示，则会出现乱码的情况，原因是单个emoji由两个字符组成，TextView在截断字符时按单个字符截断，所以就有emoji的两个字符被截断后显示的情况，TexView自然无法正常显示。网上有很多解决办法，思路都是通过改变TextView的行为来规避这个问题，但都不理想，在一些特殊情况下仍然有问题。后来我改变了思路，不对TextView做任何更改，而是通过保证emoji本身不被截断来解决问题。 考虑这样一个场景，直播间顶部主播区域的主播昵称，肯定是有字数限制的，如果昵称中包含emoji，如何保证emoji不被截断，并且不丧失在昵称过长后需要…的功能? 代码如下: private void setAnchorName(String nick) { if (TextUtils.isEmpty(nick)) { labelUserName.setText(""); return; } int len = TextCharUtils.getCurLength(nick); if (len &lt;= 8) { labelUserName.setText(nick); return; }... <a class="read-more" href="/fix-textview-emoji-problem">&raquo;</a></p>
+            
+                <p><p>理论上TextView中包含emoji显示是没有问题的，问题出在如果TextView限制了宽度，且末尾包含了emoji字符，但是又不够显示，则会出现乱码的情况，原因是单个emoji由两个字... <a class="read-more" href="https://longlinht.github.io//fix-textview-emoji-problem">&raquo;</a></p>
+            
         </section>
         <footer class="post-meta">
-            
-
+            <img class="author-thumb" src="/assets/images/casper.png" alt="Author image" nopin="nopin" />
+            <!-- author -->
+            <a href='/author/hetao'>Tao He</a>
             <!-- [[tags prefix=" on "]] -->
-            
-                on
+             
+                on 
                 
                     
                        <a href='/tag/machine'>Machine</a>
-                    
+                       
                 
             
             <time class="post-date" datetime="2020-04-22">22 Apr 2020</time>
@@ -151,52 +148,24 @@
     
     <article class="post">
         <header class="post-header">
-            <h2 class="post-title"><a href="/most-simple-leakcanary-principle">最简LeakCanary原理解析</a></h2>
+            <h2 class="post-title"><a href="https://longlinht.github.io//most-simple-leakcanary-principle">最简LeakCanary原理解析</a></h2>
         </header>
         <section class="post-excerpt">
-            <p>LeakCanary现在几乎成了Android开发过程中的一个标配，使用起来非常简单，能够帮助开发者发现和规避大部分的内存泄露问题。虽然大部分的开发者都或多或少，或深或浅的接触过LeakCanary，说起来是比较熟悉的一个第三方框架了，但是谈到LeakCanary的原理可能就会陌生很多。虽然网上也有非常多的讲解LeakCanary的文章，但是很多博文要么陷入无止境的代码细节中，要么就泛泛而谈，都不能很清楚的将LeakCanary的原理讲清楚。这篇文章尽力规避前两种文章的问题，用最小的篇幅把LeakCanary的原理讲清楚。
-
-LeakCanary到底是怎么工作的?
-
-LeakCanary能够准确，及时地检测到内存泄露，有以下几个关键点
-
-
-  检测保留的实例
-
-
-LeakCanary能够工作的基石是一个叫做ObjectWatcher的库，它hook了Android中Activity和Fragment的生命周期，能够自动检测到Activity和Fragment的销毁和将要被GC，这些被检测到的Activity和Fragment的实例被传给了ObjectWatcher，ObjectWatcher以WeakReference持有他们。如果这些WeakReference在5秒后或者一次GC周期以后还没有被清理，那么LeakCanary认为这些实例被保留了，没有被回收，泄露发生了。检测没有被回收的实例是LeakCanary能够工作起来的基石，也是后续处理的基础，这一点非常重要。
-
-
-  Dump 堆
-
-
-这一步需要对检测到的泄露进行处理，当然也不是检测到一个实例就会触发dump，而是有一个阈值，当达到一定数量实例的泄露后就会触发LeakCanary将Java堆内存dump到.hprof文件中去，当然了，这个文件存储在Android文件系统中。这个触发dump的阈值是如何确定的呢？如果App还可见，那这个阈值默认是5，如果App不可见，阈值默认是1。
-
-
-  分析Java 堆
-
-
-LeakCanary使用Shark来分析.hprof文件，找出阻止实例被回收的引用链:leak trace.其实leak trace的另一个名字是GC Root到被引用实例的最短强引用路径。一旦leak trace确定了，LeakCanary会根据内置的对Android的知识库来推断出leak trace上哪个实例泄露了。
-
-
-  Leak分组
-
-
-LeakCanary使用泄露的状态信息，将引用链缩小为可能引起泄露的子引用链，并且在界面上显示出来，也就是我们在LeakCanary界面上看到的信息。有的泄露可能不相关，但是引用链相同，也会被认为是同一个引用链，所以泄露会根据相同的子引用链分组。
-
-以上就是LeakCanary基本原理的关键点，相信也是最简单的对LeakCanary原理的描述了吧!
- <a class="read-more" href="/most-simple-leakcanary-principle">&raquo;</a></p>
+            
+                <p><p>LeakCanary现在几乎成了Android开发过程中的一个标配，使用起来非常简单，能够帮助开发者发现和规避大部分的内存泄露问题。虽然大部分的开发者都或多或少，或深或浅的接触过LeakC... <a class="read-more" href="https://longlinht.github.io//most-simple-leakcanary-principle">&raquo;</a></p>
+            
         </section>
         <footer class="post-meta">
-            
-
+            <img class="author-thumb" src="/assets/images/casper.png" alt="Author image" nopin="nopin" />
+            <!-- author -->
+            <a href='/author/hetao'>Tao He</a>
             <!-- [[tags prefix=" on "]] -->
-            
-                on
+             
+                on 
                 
                     
                        <a href='/tag/machine'>Machine</a>
-                    
+                       
                 
             
             <time class="post-date" datetime="2019-11-11">11 Nov 2019</time>
@@ -205,21 +174,24 @@ LeakCanary使用泄露的状态信息，将引用链缩小为可能引起泄露�
     
     <article class="post">
         <header class="post-header">
-            <h2 class="post-title"><a href="/custom-image-span">ImageSpan的定制使用</a></h2>
+            <h2 class="post-title"><a href="https://longlinht.github.io//custom-image-span">ImageSpan的定制使用</a></h2>
         </header>
         <section class="post-excerpt">
-            <p>最近在做一个具体业务需求时，为了实现UI设计的要求，需要实现在同一段文字中，有一段文字是需要有形状的背景色，有一段文字中还有网络图片的插入，如果要达到这两个要求，简单的使用SpannableStringBuilder肯定是达不到要求的，虽然SpannableStringBuilder可以设置背景色，但是并不能绘制形状，说白了就是只能设置颜色，不能设置文字的背景图片。想要在文字中插入图片，可以直接使用ImageSpan，但是ImageSpan并不能加载网络图片。因此这种简单的使用方式都是行不通的，需要考虑去定制ImageSpan实现我们特殊的要求。 实现给同一段文字的一部分文字区域设置背景图片 这个功能的实现还是要继承ImageSpan，将我们的背景图片传进去，并且override ImageSpan的draw方法，根据对文字区域的测量，分别绘制出背景和文字。实现代码如下: // BgImageSpan public class BgImageSpan extends ImageSpan { private int textSize = 20; private int color = Color.GRAY; private TextView mTextView; static... <a class="read-more" href="/custom-image-span">&raquo;</a></p>
+            
+                <p><p>最近在做一个具体业务需求时，为了实现UI设计的要求，需要实现在同一段文字中，有一段文字是需要有形状的背景色，有一段文字中还有网络图片的插入，如果要达到这两个要求，简单的使用Spannabl... <a class="read-more" href="https://longlinht.github.io//custom-image-span">&raquo;</a></p>
+            
         </section>
         <footer class="post-meta">
-            
-
+            <img class="author-thumb" src="/assets/images/casper.png" alt="Author image" nopin="nopin" />
+            <!-- author -->
+            <a href='/author/hetao'>Tao He</a>
             <!-- [[tags prefix=" on "]] -->
-            
-                on
+             
+                on 
                 
                     
                        <a href='/tag/machine'>Machine</a>
-                    
+                       
                 
             
             <time class="post-date" datetime="2019-10-19">19 Oct 2019</time>
@@ -228,21 +200,24 @@ LeakCanary使用泄露的状态信息，将引用链缩小为可能引起泄露�
     
     <article class="post">
         <header class="post-header">
-            <h2 class="post-title"><a href="/fix-video-view-leak">修复VideoView引起的内存泄露小计</a></h2>
+            <h2 class="post-title"><a href="https://longlinht.github.io//fix-video-view-leak">修复VideoView引起的内存泄露小计</a></h2>
         </header>
         <section class="post-excerpt">
-            <p>最近写了非常简单的新手引导视频页面，逻辑很简单，就是新手用户在第一次使用App时可以点击引导视频入口，然后进入一个视频播放页面，为了快速实现功能，就直接使用了VideoView，从需求开发到交付也都没什么问题，需求上线后我打开LeakCanary，想观察下最近有没有新增的内存泄露，竟然发现这个视频页面竟然泄露了。排查了一圈也没有发现有什么会阻止Activity销毁。但是LeakCanary打出了引用链，发现和VideoView有关，通过Google发现，竟然是VideoView自身的bug！这种情况也不是第一次遇见，那也得解决啊，所以开始想办法。 首先显明确是谁导致了Activity的销毁，通过查看VideoView的源码，发现罪魁祸首是AudioManager，它可能会长期持有Context(即泄露的Activity)。很明显是因为生命周期不一致导致的泄露，因此最先想到的就是在创建VideoView时不要传Activity的Context，传给它ApplicationContext。当然了，在布局中创建的VideoView传入的就是Activity的Context，所以需要用代码动态创建: mVideoView = new VideoView(getApplicationContext()); RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams( RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT); layoutParams.addRule(RelativeLayout.CENTER_IN_PARENT); mContainer.addView(mVideoView, layoutParams); 这样修改后还是会有内存泄露，只是引用链变了，需要在Activity的onDestroy回调中做一些处理 @Override protected void onDestroy() { super.onDestroy(); if (mVideoView !=... <a class="read-more" href="/fix-video-view-leak">&raquo;</a></p>
+            
+                <p><p>最近写了非常简单的新手引导视频页面，逻辑很简单，就是新手用户在第一次使用App时可以点击引导视频入口，然后进入一个视频播放页面，为了快速实现功能，就直接使用了VideoView，从需求开发... <a class="read-more" href="https://longlinht.github.io//fix-video-view-leak">&raquo;</a></p>
+            
         </section>
         <footer class="post-meta">
-            
-
+            <img class="author-thumb" src="/assets/images/casper.png" alt="Author image" nopin="nopin" />
+            <!-- author -->
+            <a href='/author/hetao'>Tao He</a>
             <!-- [[tags prefix=" on "]] -->
-            
-                on
+             
+                on 
                 
                     
                        <a href='/tag/machine'>Machine</a>
-                    
+                       
                 
             
             <time class="post-date" datetime="2019-09-20">20 Sep 2019</time>
@@ -251,21 +226,24 @@ LeakCanary使用泄露的状态信息，将引用链缩小为可能引起泄露�
     
     <article class="post">
         <header class="post-header">
-            <h2 class="post-title"><a href="/serializable-vs-parcelable">Parcelable vs Serializable</a></h2>
+            <h2 class="post-title"><a href="https://longlinht.github.io//serializable-vs-parcelable">Parcelable vs Serializable</a></h2>
         </header>
         <section class="post-excerpt">
-            <p>在实际的Android开发中Serializable和Parcelable我们都会用到，只是需要区分使用场景。刚开始遇到这两个接口的时候比较疑惑，貌似都是用来做序列化的，虽然能分得清什么时候用哪个，但是对这两个接口并没有清晰的认识，要是冷不丁的问我这俩有什么区别，可能还无法清晰的界定和阐述。因此有必要用一篇文章来彻底捋清这些东西。 相同点 相同点其实很明显，主要有如下两点: 都可以序列化反序列化 都可以通过Intent传递 区别 Serializable是Java API，Parcelable是Android SDK API，设计目的不同。Serializable是一个通用的序列化机制，通过将文件保存到本地文件、网络流等实现便数据的传递，这种数据传递不仅可以在单个程序中进行，也可以在两个不同的程序中进行；Parcelable是Android SDK API,为了在同个程序的不同组件之间和不同程序（AIDL）之间高效的传输数据，是通过IBinder通信的消息的载体。从设计目的上可以看出Parcelable就是为了Android高效传输数据而生的。 Serializable序列化过程使用反射机制，速度慢，且产生很多临时对象，容易触发GC；Parcelable是直接在内存中读写的，自已实现封送和解封（marshalled &amp;unmarshalled）操作，将一个完整的对象分解成Intent所支持的数据类型，不需要使用反射，所以Parcelable具有效率高，内存开销小的优点。 Serializable是通用的序列化机制，将数据存储在磁盘，可以做到有限持久化保存，文件的生命周期不受程序影响，Parcelable的序列化操作完全由底层实现，不同版本的Android是实现方式可能不相同，所以不能进行持久化存储。 使用场景不同。Parcelable 是 Android 中的序列化方式，因此更适合于 Android 平台上，它的缺点是使用起来稍微麻烦点，但它的效率很高，这是 Android 推荐的序列化方式，因此我们要首选 Parcelable。但 Serializable 也不是在... <a class="read-more" href="/serializable-vs-parcelable">&raquo;</a></p>
+            
+                <p><p>在实际的Android开发中Serializable和Parcelable我们都会用到，只是需要区分使用场景。刚开始遇到这两个接口的时候比较疑惑，貌似都是用来做序列化的，虽然能分得清什么时... <a class="read-more" href="https://longlinht.github.io//serializable-vs-parcelable">&raquo;</a></p>
+            
         </section>
         <footer class="post-meta">
-            
-
+            <img class="author-thumb" src="/assets/images/casper.png" alt="Author image" nopin="nopin" />
+            <!-- author -->
+            <a href='/author/hetao'>Tao He</a>
             <!-- [[tags prefix=" on "]] -->
-            
-                on
+             
+                on 
                 
                     
                        <a href='/tag/machine'>Machine</a>
-                    
+                       
                 
             
             <time class="post-date" datetime="2019-09-18">18 Sep 2019</time>

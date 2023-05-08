@@ -21,38 +21,36 @@
     <link rel="stylesheet" type="text/css" href="/assets/css/syntax.css" />
     
     <!-- [[! Ghost outputs important style and meta data with this tag ]] -->
-        <link rel="canonical" href="https://longlinht.github.io///page8/" />
+        <link rel="canonical" href="/" />
     <meta name="referrer" content="origin" />
     <link rel="next" href="/page2/" />
 
     <meta property="og:site_name" content="与机器，人，神共舞" />
     <meta property="og:type" content="website" />
-    <meta property="og:title" content="Tao's Page" />
+    <meta property="og:title" content="与机器，人，神共舞" />
     <meta property="og:description" content="编程，读书，思考，旅行，与机器对话，与人交谈，对神发问，探索，体验人生美丽的风景" />
-    <meta property="og:url" content="https://longlinht.github.io///page8/" />
+    <meta property="og:url" content="/" />
     <meta property="og:image" content="/assets/images/cover1.jpg" />
 
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Tao's Page" />
+    <meta name="twitter:title" content="与机器，人，神共舞" />
     <meta name="twitter:description" content="编程，读书，思考，旅行，与机器对话，与人交谈，对神发问，探索，体验人生美丽的风景" />
-    <meta name="twitter:url" content="https://longlinht.github.io///page8/" />
+    <meta name="twitter:url" content="/" />
     <meta name="twitter:image:src" content="/assets/images/cover1.jpg" />
 
     <script type="application/ld+json">
 {
     "@context": "http://schema.org",
     "@type": "Website",
-    "publisher": "与机器，人，神共舞",
-    "name": "Tao's Page",
-    "url": "https://longlinht.github.io///page8/",
+    "publisher": "Tao's Page",
+    "url": "/",
     "image": "/assets/images/cover1.jpg",
     "description": "编程，读书，思考，旅行，与机器对话，与人交谈，对神发问，探索，体验人生美丽的风景"
 }
     </script>
 
     <meta name="generator" content="Jekyll 3.0.0" />
-    <link rel="alternate" type="application/rss+xml" title="与机器，人，神共舞" href="/feed.xml" />
-
+    <link rel="alternate" type="application/rss+xml" title="与机器，人，神共舞" href="/rss.xml" />
 
 </head>
 <body class="home-template nav-closed">
@@ -64,17 +62,13 @@
     </a>
     <ul>
         <li class="nav-home  nav-current" role="presentation"><a href="/">Home</a></li>
-        <li class="nav-about " role="presentation"><a href="/about">About</a></li>
-        <li class="nav-fables " role="presentation"><a href="/tag/fables">Fables</a></li>
-        <li class="nav-speeches " role="presentation"><a href="/tag/speeches">Speeches</a></li>
-        <li class="nav-fiction " role="presentation"><a href="/tag/fiction">Fiction</a></li>
-        <li class="nav-author " role="presentation"><a href="/author/casper">Casper</a></li>
-        <li class="nav-author " role="presentation"><a href="/author/edgar">Edgar</a></li>
-        <li class="nav-author " role="presentation"><a href="/author/abraham">Abraham</a></li>
-        <li class="nav-author " role="presentation"><a href="/author/martin">Martin</a></li>
-        <li class="nav-author " role="presentation"><a href="/author/lewis">Lewis</a></li>
+        <li class="nav-about " role="presentation"><a href="/about.html">About</a></li>
+        <li class="nav-fables " role="presentation"><a href="/tag/machine/">Machine</a></li>
+        <li class="nav-speeches " role="presentation"><a href="/tag/human/">Human</a></li>
+        <li class="nav-fiction " role="presentation"><a href="/tag/god/">God</a></li>
+        <li class="nav-author " role="presentation"><a href="/author/hetao/">Author</a></li>
     </ul>
-    <a class="subscribe-button icon-feed" href="/feed.xml">Subscribe</a>
+    <a class="subscribe-button icon-feed" href="/rss.xml">Subscribe</a>
 </div>
 <span class="nav-cover"></span>
 
@@ -128,21 +122,24 @@
     
     <article class="post">
         <header class="post-header">
-            <h2 class="post-title"><a href="/scrollview-can-not-display-whole-content">解决ScrollView内容显示不全</a></h2>
+            <h2 class="post-title"><a href="https://longlinht.github.io//scrollview-can-not-display-whole-content">解决ScrollView内容显示不全</a></h2>
         </header>
         <section class="post-excerpt">
-            <p>这个问题其实只要使用过ScrollView，可能都有机会遇到，问题的表现就是ScrollView包裹内容的高度超过ScrollView可视高度的话，被包裹的内容就会显示不全，最底部的内容永远也看不到了，这种情况肯定是无法接受的， 解决这个问题比较简单，其实就是简单的一句设置语句: android:fillViewport="true" 虽然这样可以解决问题，但是还是心中还有疑惑，我放在ScrollView中的LinearLayout是的高度是设置了mactch_parent 属性的，现在看来并没有生效，我猜测可能是ScrollView重写了测量方法导致的，于是去看ScrollView的onMeasure 方法: @Override protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) { super.onMeasure(widthMeasureSpec, heightMeasureSpec); if (!mFillViewport) { return; } final int heightMode = MeasureSpec.getMode(heightMeasureSpec);... <a class="read-more" href="/scrollview-can-not-display-whole-content">&raquo;</a></p>
+            
+                <p><p>这个问题其实只要使用过ScrollView，可能都有机会遇到，问题的表现就是ScrollView包裹内容的高度超过ScrollView可视高度的话，被包裹的内容就会显示不全，最底部的内容永... <a class="read-more" href="https://longlinht.github.io//scrollview-can-not-display-whole-content">&raquo;</a></p>
+            
         </section>
         <footer class="post-meta">
-            
-
+            <img class="author-thumb" src="/assets/images/casper.png" alt="Author image" nopin="nopin" />
+            <!-- author -->
+            <a href='/author/hetao'>Tao He</a>
             <!-- [[tags prefix=" on "]] -->
-            
-                on
+             
+                on 
                 
                     
                        <a href='/tag/machine'>Machine</a>
-                    
+                       
                 
             
             <time class="post-date" datetime="2018-12-05">05 Dec 2018</time>
@@ -151,21 +148,24 @@
     
     <article class="post">
         <header class="post-header">
-            <h2 class="post-title"><a href="/br-not-found">解决恼人的can not found symbol BR问题</a></h2>
+            <h2 class="post-title"><a href="https://longlinht.github.io//br-not-found">解决恼人的can not found symbol BR问题</a></h2>
         </header>
         <section class="post-excerpt">
-            <p>最近公司研发的这个App是我从零到一搭建的，在框架搭建时分别使用了Databinding和Room，今天在做新需求时需要向Room中的实体类新添加一个字段，在写完了所有相关的逻辑后，build工程，所有自动生成的Databinding类都报错，build log中并没有指向任何具体报错的Databinding类，这就令人很困惑，因为这个需求的添加并没有改动任何Databinding的类，在不知所以的情况下，那就尝试其他方法解决，之前我在一个技术博客上看到过一个Databinding类的Troubleshooting: Troubleshooting the Issues with Binding Class Make sure you have the proper dataBinding.enabled = true in gradle and trigger “Sync with Gradle” Open the... <a class="read-more" href="/br-not-found">&raquo;</a></p>
+            
+                <p><p>最近公司研发的这个App是我从零到一搭建的，在框架搭建时分别使用了Databinding和Room，今天在做新需求时需要向Room中的实体类新添加一个字段，在写完了所有相关的逻辑后，bui... <a class="read-more" href="https://longlinht.github.io//br-not-found">&raquo;</a></p>
+            
         </section>
         <footer class="post-meta">
-            
-
+            <img class="author-thumb" src="/assets/images/casper.png" alt="Author image" nopin="nopin" />
+            <!-- author -->
+            <a href='/author/hetao'>Tao He</a>
             <!-- [[tags prefix=" on "]] -->
-            
-                on
+             
+                on 
                 
                     
                        <a href='/tag/machine'>Machine</a>
-                    
+                       
                 
             
             <time class="post-date" datetime="2018-12-03">03 Dec 2018</time>
@@ -174,25 +174,24 @@
     
     <article class="post">
         <header class="post-header">
-            <h2 class="post-title"><a href="/record-a-debug-process">记一次看似困难的Debug</a></h2>
+            <h2 class="post-title"><a href="https://longlinht.github.io//record-a-debug-process">记一次看似困难的Debug</a></h2>
         </header>
         <section class="post-excerpt">
-            <p>今年把自己的手机换成了Android，拿到新机后就想找到一款手写笔记的App，因为在iOS用过一款体验很好，还用那个写了一篇游记，在试用了十几款此类的Andorid App后最终找到了一款名为INKredible的手写笔记App，刚开始用的时候很不顺手，都想卸载了，但是经过一番摸索后找到了技巧，再去试用后有一种惊艳的感觉，今天在地铁通勤的时候竟然用它谢了一篇技术博文，并已图片的形式到了出来，全文如下:(字迹潦草，读者莫怪，其实如果以正楷的形式书写, 效率较差，体验会大打折扣).
-
-
-
- <a class="read-more" href="/record-a-debug-process">&raquo;</a></p>
+            
+                <p><p>今年把自己的手机换成了Android，拿到新机后就想找到一款手写笔记的App，因为在iOS用过一款体验很好，还用那个写了一篇游记，在试用了十几款此类的Andorid App后最终找到了一款... <a class="read-more" href="https://longlinht.github.io//record-a-debug-process">&raquo;</a></p>
+            
         </section>
         <footer class="post-meta">
-            
-
+            <img class="author-thumb" src="/assets/images/casper.png" alt="Author image" nopin="nopin" />
+            <!-- author -->
+            <a href='/author/hetao'>Tao He</a>
             <!-- [[tags prefix=" on "]] -->
-            
-                on
+             
+                on 
                 
                     
                        <a href='/tag/machine'>Machine</a>
-                    
+                       
                 
             
             <time class="post-date" datetime="2018-11-30">30 Nov 2018</time>
@@ -201,21 +200,24 @@
     
     <article class="post">
         <header class="post-header">
-            <h2 class="post-title"><a href="/play-video-in-raw-folder">使用VideoView实现视频开屏页</a></h2>
+            <h2 class="post-title"><a href="https://longlinht.github.io//play-video-in-raw-folder">使用VideoView实现视频开屏页</a></h2>
         </header>
         <section class="post-excerpt">
-            <p>今天PM提了一个视频开屏页的需求，需要在用户第一次使用时播放一个开屏视频，乍一看，挺简单一需求，但是也或多或少碰到了一些坑，也发现了Android资源编译的一个问题，本着研发之事无小事的原则，还是要记录下踩坑经验和发现的问题。整个实现过程一共两三个小时，逐步解决了以下问题: 视频全屏 看到这个问题的第一反应就是把VideoView 的宽高设置为match_parent, 并且保证父容器也是match_parent 根布局, 但是事实没那么简单，视频播放后并没有完全全屏，在我的开发机上视频底部有一条细细的白边，很明显视频没有完全全屏。后来又想到设置MediaPlayer的视频缩放模式: mPlayer.setVideoScalingMode(MediaPlayer.VIDEO_SCALING_MODE_SCALE_TO_FIT_WITH_CROPPING); 设置了两种模式以后都没有效果，这说明VideoView本身没有全屏，没有铺满整个屏幕，所以需要根据屏幕大小动态设置VideoView的尺寸，所以用自定义View实现。 自定义一个继承自VideoView的类来满足要求，具体实现如下: public class FullScreenVideoView extends VideoView { public FullScreenVideoView(Context context) { super(context); } public FullScreenVideoView(Context context, AttributeSet... <a class="read-more" href="/play-video-in-raw-folder">&raquo;</a></p>
+            
+                <p><p>今天PM提了一个视频开屏页的需求，需要在用户第一次使用时播放一个开屏视频，乍一看，挺简单一需求，但是也或多或少碰到了一些坑，也发现了Android资源编译的一个问题，本着研发之事无小事的原... <a class="read-more" href="https://longlinht.github.io//play-video-in-raw-folder">&raquo;</a></p>
+            
         </section>
         <footer class="post-meta">
-            
-
+            <img class="author-thumb" src="/assets/images/casper.png" alt="Author image" nopin="nopin" />
+            <!-- author -->
+            <a href='/author/hetao'>Tao He</a>
             <!-- [[tags prefix=" on "]] -->
-            
-                on
+             
+                on 
                 
                     
                        <a href='/tag/machine'>Machine</a>
-                    
+                       
                 
             
             <time class="post-date" datetime="2018-11-27">27 Nov 2018</time>
@@ -224,21 +226,24 @@
     
     <article class="post">
         <header class="post-header">
-            <h2 class="post-title"><a href="/multidex-application-crash">MultidexApplication相关的一个crash</a></h2>
+            <h2 class="post-title"><a href="https://longlinht.github.io//multidex-application-crash">MultidexApplication相关的一个crash</a></h2>
         </header>
         <section class="post-excerpt">
-            <p>最近在内测的一个App在内测开始后有用户反馈启动就crash的问题，后来拿到用户的信息后发现几个crash的机器都是4.4的机器，因为现在真实用户使用4.4系统的用户真的是不多了，就没怎么在意，但是在阿里云移动测试平台进行兼容性测试的时候，这个问题必现，并且都出现在4.4的机器上，查看兼容性测试报告，都是同一个crash，崩溃的堆栈记录了下来: FATAL EXCEPTION: main Process: com.ross.android, PID: 9282 java.lang.RuntimeException: Unable to get provider com.readystatesoftware.chuck.internal.data.ChuckContentProvider: java.lang.ClassNotFoundException: Didn't find class "com.readystatesoftware.chuck.internal.data.ChuckContentProvider" on path: DexPathList[[zip file "/data/app/com.ross.android-1.apk"],nativeLibraryDirectories=[/data/app-lib/com.ross.android-1, /vendor/lib, /system/lib]]... <a class="read-more" href="/multidex-application-crash">&raquo;</a></p>
+            
+                <p><p>最近在内测的一个App在内测开始后有用户反馈启动就crash的问题，后来拿到用户的信息后发现几个crash的机器都是4.4的机器，因为现在真实用户使用4.4系统的用户真的是不多了，就没怎么... <a class="read-more" href="https://longlinht.github.io//multidex-application-crash">&raquo;</a></p>
+            
         </section>
         <footer class="post-meta">
-            
-
+            <img class="author-thumb" src="/assets/images/casper.png" alt="Author image" nopin="nopin" />
+            <!-- author -->
+            <a href='/author/hetao'>Tao He</a>
             <!-- [[tags prefix=" on "]] -->
-            
-                on
+             
+                on 
                 
                     
                        <a href='/tag/machine'>Machine</a>
-                    
+                       
                 
             
             <time class="post-date" datetime="2018-11-26">26 Nov 2018</time>

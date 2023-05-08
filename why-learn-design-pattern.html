@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- Document Settings -->
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+    <!-- Page Meta -->
+    <title>为什么学习设计模式</title>
+    <meta name="description" content="编程，读书，思考，旅行，与机器对话，与人交谈，对神发问，探索，体验人生美丽的风景" />
+
+    <!-- Mobile Meta -->
+    <meta name="HandheldFriendly" content="True" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- Brand icon -->
+    <link rel="shortcut icon" href="/assets/images/favicon.ico" >
+
+    <!-- Styles'n'Scripts -->
+    <link rel="stylesheet" type="text/css" href="/assets/css/screen.css" />
+    <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Merriweather:300,700,700italic,300italic|Open+Sans:700,400" />
+    <link rel="stylesheet" type="text/css" href="/assets/css/syntax.css" />
+
+    <!-- highlight.js -->
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.3.0/styles/default.min.css">
+    <style>.hljs { background: none; }</style>
+
+    <!-- Ghost outputs important style and meta data with this tag -->
+        <link rel="canonical" href="/" />
+    <meta name="referrer" content="origin" />
+    <link rel="next" href="/page2/" />
+
+    <meta property="og:site_name" content="与机器，人，神共舞" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="与机器，人，神共舞" />
+    <meta property="og:description" content="编程，读书，思考，旅行，与机器对话，与人交谈，对神发问，探索，体验人生美丽的风景" />
+    <meta property="og:url" content="/" />
+    <meta property="og:image" content="/assets/images/cover1.jpg" />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="与机器，人，神共舞" />
+    <meta name="twitter:description" content="编程，读书，思考，旅行，与机器对话，与人交谈，对神发问，探索，体验人生美丽的风景" />
+    <meta name="twitter:url" content="/" />
+    <meta name="twitter:image:src" content="/assets/images/cover1.jpg" />
+
+    <script type="application/ld+json">
+{
+    "@context": "http://schema.org",
+    "@type": "Website",
+    "publisher": "Tao's Page",
+    "url": "/",
+    "image": "/assets/images/cover1.jpg",
+    "description": "编程，读书，思考，旅行，与机器对话，与人交谈，对神发问，探索，体验人生美丽的风景"
+}
+    </script>
+
+    <meta name="generator" content="Jekyll 3.0.0" />
+    <link rel="alternate" type="application/rss+xml" title="与机器，人，神共舞" href="/rss.xml" />
+
+</head>
+<body class="home-template nav-closed">
+
+    <!-- The blog navigation links -->
+    <div class="nav">
+    <h3 class="nav-title">Menu</h3>
+    <a href="#" class="nav-close">
+        <span class="hidden">Close</span>
+    </a>
+    <ul>
+        <li class="nav-home " role="presentation"><a href="/">Home</a></li>
+        <li class="nav-about " role="presentation"><a href="/about.html">About</a></li>
+        <li class="nav-fables " role="presentation"><a href="/tag/machine/">Machine</a></li>
+        <li class="nav-speeches " role="presentation"><a href="/tag/human/">Human</a></li>
+        <li class="nav-fiction " role="presentation"><a href="/tag/god/">God</a></li>
+        <li class="nav-author " role="presentation"><a href="/author/hetao/">Author</a></li>
+    </ul>
+    <a class="subscribe-button icon-feed" href="/rss.xml">Subscribe</a>
+</div>
+<span class="nav-cover"></span>
+
+
+    <div class="site-wrapper">
+
+        <!-- All the main content gets inserted here, index.hbs, post.hbs, etc -->
+        <!-- default -->
+
+<!-- The comment above "< default" means - insert everything in this file into -->
+    <!-- the [body] of the default.hbs template, which contains our header/footer. -->
+
+<!-- Everything inside the #post tags pulls data from the post -->
+<!-- #post -->
+
+<header class="main-header post-head no-cover">
+    <nav class="main-nav  clearfix">
+        
+        
+    </nav>
+</header>
+
+<main class="content" role="main">
+
+    <article class="post tag-machine">
+
+        <header class="post-header">
+            <h1 class="post-title">为什么学习设计模式</h1>
+            <section class="post-meta">
+            <!-- <a href='/'>Tao He</a> -->
+
+            
+            <time class="post-date" datetime="2020-05-08">08 May 2020</time>
+                <!-- [[tags prefix=" on "]] -->
+                
+                on
+                
+                    
+                       <a href='/tag/machine'>Machine</a>
+                    
+                
+                
+            </section>
+        </header>
+
+        <section class="post-content">
+
+            <p>设计模式，可能是每一个程序员都绕不过去的话题，有人认为特别重要，有人对其嗤之以鼻，也有人并不是很确定它的重要性。为什么要学习设计模式，这么多年以来其实我也没有看到一个很好的回答，前一阵在Youtube看到一个讲Android系统开发的youtuber的主页，发现他的一篇很短的文章探讨了这个问题，看完后感觉醍醐灌顶，因此有冲动翻译并记录下其主要的观点。</p>
+
+<p>编程如下棋，一个新手刚开始接触时，首先要了解能够正常下棋的要素，如棋子，棋盘，要熟悉棋子移动，吃子，将军的规则，等这些都了解了以后，就可以正常下棋了，虽然可能下的不好，但是渐渐的，开始领会一些这个游戏的基本规律，如何占取优势，如何使用策略，通过一次次的棋局，逐步的识别出一些可能是很愚蠢的错误，并在以后的棋局中尽量避免，一个新手也可能下棋下的越来越好。</p>
+
+<p>但是一个人如果想成为下棋的大师，却需要学习大师们所下过的棋局。隐藏在这些棋局中的模式必须通过理解，记忆，反复应用，最后成为一个人的本能。这些模式可能是成千上万的，开放模式更是繁多，以至于有很多关于其变化的书籍。 游戏中模式和结束模式也很普遍，作为大师们必须熟悉它们。</p>
+
+<p>编程也一样，首先学习规则，学习算法，数据结构，熟悉了这些后就可以编程了，尽管所写的代码会比较蹩脚。之后，开始学习软件设计的原则，如结构化编程，模块化编程，面向对象编程，如高内聚低耦合的重要性，如信息隐藏和依赖管理。等这些都学习了以后，一个人要想成为真正的编程大师，还是需要学习大师们的设计，并深入这些设计，举一反三，这些模式必须被理解，记忆，反复应用，最后成为一个人的本能。</p>
+
+<p>这篇文章本来就很短，但是我依旧要提炼出本文要划重点的句子:</p>
+
+<blockquote>
+  <p>一个人要想成为真正的编程大师，还是需要学习大师们的设计，并深入这些设计，举一反三，这些模式必须被理解，记忆，反复应用，最后成为一个人的本能。</p>
+</blockquote>
+
+
+
+        </section>
+
+        <footer class="post-footer">
+
+            <!-- Everything inside the #author tags pulls data from the author -->
+            <!-- #author-->
+            
+
+            <!-- Add Disqus Comments -->
+            
+
+        </footer>
+
+    </article>
+
+</main>
+
+<aside class="read-next">
+
+    <!-- [[! next_post ]] -->
+    
+        <a class="read-next-story no-cover" href="/implement-live-drawer">
+            <section class="post">
+                <h2>基于DrawerLayout实现直播抽屉</h2>
+                <p>直播间里右侧的滑出抽屉现在几乎成了主流直播的标配，无论是映客还是Bigo，都很早就上线了抽屉。我所在的这个产品最近也要上同样的功能，因此需要简单实现一个。 要实现一个简单的侧滑抽屉，最先想到的就是直接使用`DrawerLayout`，但是无法满足产品的一个手势要求: 在屏幕任何位置都可以调出和收起抽屉。`DrawerLayout` 的默认行为是只能从屏幕边缘调出。因此需要改变DrawerLayout的默认行为，使期能够从屏幕任何位置调出，这就需要通过反射修改drawerlayout的edgesize属性，因为drawerlayout还可以通过长按调出，我们的产品需求并不需要这个行为，因此也需要屏蔽掉，通过一个静态方法来统一实现： ``` public static void setDrawerLeftEdgeSize(DrawerLayout drawerLayout, float percent) { if (drawerLayout...</p>
+            </section>
+        </a>
+    
+    <!-- [[! /next_post ]] -->
+    <!-- [[! prev_post ]] -->
+    
+        <a class="read-next-story prev no-cover" href="/fix-textview-emoji-problem">
+            <section class="post">
+                <h2>解决TextView中emoji被截断的问题</h2>
+                <p>理论上TextView中包含emoji显示是没有问题的，问题出在如果TextView限制了宽度，且末尾包含了emoji字符，但是又不够显示，则会出现乱码的情况，原因是单个emoji由两个字符组成，TextView在截断字符时按单个字符截断，所以就有emoji的两个字符被截断后显示的情况，TexView自然无法正常显示。网上有很多解决办法，思路都是通过改变TextView的行为来规避这个问题，但都不理想，在一些特殊情况下仍然有问题。后来我改变了思路，不对TextView做任何更改，而是通过保证emoji本身不被截断来解决问题。 考虑这样一个场景，直播间顶部主播区域的主播昵称，肯定是有字数限制的，如果昵称中包含emoji，如何保证emoji不被截断，并且不丧失在昵称过长后需要…的功能? 代码如下: private void setAnchorName(String nick) { if (TextUtils.isEmpty(nick)) { labelUserName.setText(""); return; } int...</p>
+            </section>
+        </a>
+    
+    <!-- [[! /prev_post ]] -->
+</aside>
+
+<!-- /post -->
+
+
+        <!-- The tiny footer at the very bottom -->
+        <footer class="site-footer clearfix">
+          <section class="copyright"><a href="/">与机器，人，神共舞</a> &copy; 2023</section>
+          <section class="poweredby">Proudly published with <a href="https://jekyllrb.com/">Jekyll</a> using <a href="https://github.com/jekyllt/jasper">Jasper</a></section>
+        </footer>
+    </div>
+    <!-- highlight.js -->
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.3.0/highlight.min.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+
+    <!-- jQuery needs to come before `` so that jQuery can be used in code injection -->
+    <script type="text/javascript" src="//code.jquery.com/jquery-1.12.0.min.js"></script>
+    <!-- Ghost outputs important scripts and data with this tag -->
+    <!--  -->
+    <!-- Add Google Analytics  -->
+        <!-- Google Analytics Tracking code -->
+     <script>
+	    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+	    ga('create', 'UA-78960009-1', 'auto');
+	    ga('send', 'pageview');
+
+     </script>
+
+    <!-- Fitvids makes video embeds responsive and awesome -->
+    <script type="text/javascript" src="/assets/js/jquery.fitvids.js"></script>
+    <!-- The main JavaScript file for Casper -->
+    <script type="text/javascript" src="/assets/js/index.js"></script>
+
+</body>
+</html>

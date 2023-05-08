@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- Document Settings -->
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+    <!-- Page Meta -->
+    <title>在Android中定制Emoji的实现</title>
+    <meta name="description" content="编程，读书，思考，旅行，与机器对话，与人交谈，对神发问，探索，体验人生美丽的风景" />
+
+    <!-- Mobile Meta -->
+    <meta name="HandheldFriendly" content="True" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- Brand icon -->
+    <link rel="shortcut icon" href="/assets/images/favicon.ico" >
+
+    <!-- Styles'n'Scripts -->
+    <link rel="stylesheet" type="text/css" href="/assets/css/screen.css" />
+    <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Merriweather:300,700,700italic,300italic|Open+Sans:700,400" />
+    <link rel="stylesheet" type="text/css" href="/assets/css/syntax.css" />
+
+    <!-- highlight.js -->
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.3.0/styles/default.min.css">
+    <style>.hljs { background: none; }</style>
+
+    <!-- Ghost outputs important style and meta data with this tag -->
+        <link rel="canonical" href="/" />
+    <meta name="referrer" content="origin" />
+    <link rel="next" href="/page2/" />
+
+    <meta property="og:site_name" content="与机器，人，神共舞" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="与机器，人，神共舞" />
+    <meta property="og:description" content="编程，读书，思考，旅行，与机器对话，与人交谈，对神发问，探索，体验人生美丽的风景" />
+    <meta property="og:url" content="/" />
+    <meta property="og:image" content="/assets/images/cover1.jpg" />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="与机器，人，神共舞" />
+    <meta name="twitter:description" content="编程，读书，思考，旅行，与机器对话，与人交谈，对神发问，探索，体验人生美丽的风景" />
+    <meta name="twitter:url" content="/" />
+    <meta name="twitter:image:src" content="/assets/images/cover1.jpg" />
+
+    <script type="application/ld+json">
+{
+    "@context": "http://schema.org",
+    "@type": "Website",
+    "publisher": "Tao's Page",
+    "url": "/",
+    "image": "/assets/images/cover1.jpg",
+    "description": "编程，读书，思考，旅行，与机器对话，与人交谈，对神发问，探索，体验人生美丽的风景"
+}
+    </script>
+
+    <meta name="generator" content="Jekyll 3.0.0" />
+    <link rel="alternate" type="application/rss+xml" title="与机器，人，神共舞" href="/rss.xml" />
+
+</head>
+<body class="home-template nav-closed">
+
+    <!-- The blog navigation links -->
+    <div class="nav">
+    <h3 class="nav-title">Menu</h3>
+    <a href="#" class="nav-close">
+        <span class="hidden">Close</span>
+    </a>
+    <ul>
+        <li class="nav-home " role="presentation"><a href="/">Home</a></li>
+        <li class="nav-about " role="presentation"><a href="/about.html">About</a></li>
+        <li class="nav-fables " role="presentation"><a href="/tag/machine/">Machine</a></li>
+        <li class="nav-speeches " role="presentation"><a href="/tag/human/">Human</a></li>
+        <li class="nav-fiction " role="presentation"><a href="/tag/god/">God</a></li>
+        <li class="nav-author " role="presentation"><a href="/author/hetao/">Author</a></li>
+    </ul>
+    <a class="subscribe-button icon-feed" href="/rss.xml">Subscribe</a>
+</div>
+<span class="nav-cover"></span>
+
+
+    <div class="site-wrapper">
+
+        <!-- All the main content gets inserted here, index.hbs, post.hbs, etc -->
+        <!-- default -->
+
+<!-- The comment above "< default" means - insert everything in this file into -->
+    <!-- the [body] of the default.hbs template, which contains our header/footer. -->
+
+<!-- Everything inside the #post tags pulls data from the post -->
+<!-- #post -->
+
+<header class="main-header post-head no-cover">
+    <nav class="main-nav  clearfix">
+        
+        
+    </nav>
+</header>
+
+<main class="content" role="main">
+
+    <article class="post tag-machine">
+
+        <header class="post-header">
+            <h1 class="post-title">在Android中定制Emoji的实现</h1>
+            <section class="post-meta">
+            <!-- <a href='/'>Tao He</a> -->
+
+            
+            <time class="post-date" datetime="2021-01-15">15 Jan 2021</time>
+                <!-- [[tags prefix=" on "]] -->
+                
+                on
+                
+                    
+                       <a href='/tag/machine'>Machine</a>
+                    
+                
+                
+            </section>
+        </header>
+
+        <section class="post-content">
+
+            <p>最近公司产品在评论输入中要加入定制emoji面板，因此趟了emoji这个浑水，现以此文记录期间踩过的坑和一些心得。要实现一个相对比较完善的emoji输入和显示的功能，需要解决两个主要的问题: 键盘和emoji表情的平滑切换和emoji的正确显示。前者其实和emoji本身不相关，因此放在后面讨论。先来探究定制emoji的实现方案。</p>
+
+<p>我们团队内部想到的最快的实现方案是定制googlefonts的NotoColorEmojiCompat.ttf, 使用EmojiCompact加载定制的ttf文件来显示我们定制的emoji。Google官方提供的NotoColorEmojiCompat的使用方法只有两种，一种方式是将NotoColorEmojiCompat.ttf文件放在assets目录，打入apk中使用，另一种方式是不打入apk，而是通过动态查询ContentProvider去查询获得，好处是不用将ttf文件打入apk包，坏处是查询到的ttf文件还是未定制的NotoColorEmojiCompat.ttf文件，实现不了定制的目的。我们的目标是在不打入这样一个7M的ttf文件的情况下实现定制目的，因此官方提供的这两种使用方式都不可取。因此就只剩下一条路，那就是app启动时下载我们定制的ttf文件，在EmojiCompat初始化时自己实现ttf的load过程，从而实现动态加载定制的emoji表情。</p>
+
+<p>创建一个EmojiHelpler类来管理EmojiCompat的初始化和定制ttf的加载:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+public class EmojiHelper {
+
+    private static Context sContext;
+    private static boolean sEmojiReady = false;
+
+    public static void initCompat(Context context) {
+
+        sContext = context;
+        //EmojiCompat.Config config = new BundledEmojiCompatConfig(AppContext.get());
+        EmojiCompat.Config config = new XLEmojiCompatConfig();
+
+        config.setReplaceAll(true);
+        config.registerInitCallback(new EmojiCompat.InitCallback() {
+            @Override
+            public void onInitialized() {
+                super.onInitialized();
+                Log.d("hetaod", "onInitialized");
+                //XLog.d("onInitialized");
+            }
+
+            @Override
+            public void onFailed(@Nullable Throwable throwable) {
+                super.onFailed(throwable);
+                Log.d("hetaod", "onFailed: " + throwable.getMessage());
+                //XLog.printStackTrace(throwable);
+            }
+        });
+
+
+        EmojiCompat.init(config);
+    }
+
+    public static CharSequence process(CharSequence text) {
+        if (sEmojiReady) {
+            return EmojiCompat.get().process(text);
+        }
+        return text;
+    }
+
+    private static class XLEmojiCompatConfig extends EmojiCompat.Config {
+        XLEmojiCompatConfig() {
+            super(new XLMetadataRepoLoader());
+        }
+    }
+
+    private static class XLMetadataRepoLoader implements EmojiCompat.MetadataRepoLoader {
+
+        @Override
+        public void load(@NonNull EmojiCompat.MetadataRepoLoaderCallback loaderCallback) {
+            //String filePath = sContext.getCacheDir().getAbsolutePath() + "/NotoColorrEmojiCompat.ttf";
+
+            File file = new File("/sdcard/NotoColorEmojiCompat.ttf");
+            FileInputStream fileInputStream = null;
+            try {
+                fileInputStream = new FileInputStream(file);
+                loaderCallback.onLoaded(MetadataRepo.create(Typeface.createFromFile(file.getAbsolutePath()), fileInputStream));
+            } catch (IOException e) {
+                Log.d("hetaod", e.getMessage());
+                //XLog.printStackTrace(e);
+            } finally {
+                //Util.safeClose(fileInputStream);
+            }
+        }
+    }
+}
+
+</code></pre></div></div>
+<p>加载定制ttf的关键是继承EmojiCompat和实现EmojiCompat.MetadataRepoLoader接口。在实现了初始化和加载定制ttf后，就剩最后一步，制作定制ttf文件，通过一些emoji的工具，可以轻松制作定制的emoji，我们的实现方式是使用未使用的unicode码来定义我们自己的emoji，在定制的ttf文件制作后以后，下载，初始化，加载，加载失败，卡在了加载这一步，我们定制的ttf文件加载失败，一直报如下的错误:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Cannot read metadata.
+
+</code></pre></div></div>
+
+<p>我们多次确认制作ttf的方法应该没有问题，但是仍旧加载失败，怀疑是Google做了限制，无法定制这个ttf文件，多次尝试无果后，我们放弃了这个方案。</p>
+
+<p>放弃了上面这个方案后，我们选择了Github上的一个开源实现，简单易用，通过实现一个提供定制表情的provider就可以达到定制的目的。</p>
+
+<p>Github地址: https://github.com/vanniktech/Emoji</p>
+
+<p>使用方法：</p>
+
+<ol>
+  <li>添加依赖：</li>
+</ol>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>implementation 'com.vanniktech:emoji:0.7.0'
+
+</code></pre></div></div>
+
+<ol>
+  <li>实现EmojiProvider接口:</li>
+</ol>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>//实现EmojiProvider接口
+public class CocoEmojiProvider implements EmojiProvider {
+    @Override @NonNull
+    public EmojiCategory[] getCategories() {
+        return new EmojiCategory[] {
+                new SimpleCategory()
+        };
+    }
+}
+
+
+//emoji分类
+public class SimpleCategory implements EmojiCategory {
+    private static final CocoEmoji[] EMOJIS = CategoryUtils.concatAll(SimpleCategoryChunk0.get());
+
+    @Override @NonNull
+    public CocoEmoji[] getEmojis() {
+        return EMOJIS;
+    }
+
+    @Override @DrawableRes
+    public int getIcon() {
+        return 0;
+    }
+
+    @Override @StringRes
+    public int getCategoryName() {
+        return 0;
+    }
+}
+
+
+// 定制emoji列表定义
+final class SimpleCategoryChunk0 {
+    @SuppressWarnings("PMD.ExcessiveMethodLength") static CocoEmoji[] get() {
+        return new CocoEmoji[] {
+                new CocoEmoji(0x1F580, new String[]{"Hehe"}, 0, 0, false),
+                new CocoEmoji(0x1F581, new String[]{"Mesume"}, 0, 1, false),
+                new CocoEmoji(0x1F582, new String[]{"Ngenes"}, 0, 2, false),
+                new CocoEmoji(0x1F583, new String[]{"Apaan sih"}, 0, 3, false),
+                new CocoEmoji(0x1F584, new String[]{"Ngupil"}, 0, 4, false),
+                new CocoEmoji(0x1F585, new String[]{"Bodo"}, 0, 5, false),
+                new CocoEmoji(0x1F586, new String[]{"Berdoa"}, 0, 6, false),
+                new CocoEmoji(0x1F588, new String[]{"Lempar tai"}, 0, 7, false),
+                new CocoEmoji(0x1F589, new String[]{"Bengek"}, 0, 8, false),
+                new CocoEmoji(0x1F58E, new String[]{"Jempol"}, 0, 9, false),
+                new CocoEmoji(0x1F58F, new String[]{"tepuk tangan"}, 0, 10, false),
+                new CocoEmoji(0x1F591, new String[]{"love"}, 0, 11, false),
+        };
+    }
+
+    private SimpleCategoryChunk0() {
+        // No instances.
+    }
+}
+
+</code></pre></div></div>
+
+<ol>
+  <li>在布局中使用支持emoji的控件:</li>
+</ol>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+&lt;RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:padding="10dp"
+    android:orientation="horizontal"&gt;
+
+    &lt;com.vanniktech.emoji.EmojiTextView
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:id="@+id/quick_textview"
+        android:textColor="@color/CO_T1"
+        android:textSize="25sp"
+        android:gravity="center_horizontal"
+        /&gt;
+
+&lt;/RelativeLayout&gt;
+
+</code></pre></div></div>
+
+<p>在此方案中仍旧是使用未使用的unicode来定义我们定制的emoji，而不是去定一个固定形式的字符串来定义。因此存在兼容老版本的问题，因为我们app的老版本未使用任何定制emoji，这个问题我们目前是简单的通过服务端替换来解决。</p>
+
+<p>解决了emoji的显示问题，就该着手解决emoji面板和键盘平滑切换的问题了。需要键盘和其他面板切换的输入场景下一般的解决方案是使用KPSwitch实现。但是KPSwitch切换界面在嵌入到一个单独的view里面后，切换时有跳闪，体验不是很好，所以这种方案虽然实现起来最快，但是不符合交互要求，所以首先pass，还有一个方案是把emoji面板，键盘都整体做到一个透明的Activity中，和app其他的业务逻辑分离，吊起键盘相当于启动一个透明的activity，和输入相关的功能逻辑都封装到activity中。这种方案虽然隔离性很好，也相对独立，但是需要管理生命周期的问题，对我们现有的输入功能改动较大，所以也pass。排除了两种可行的方案后，要想改动最小，又能实现平滑的体验，就需要做到两点:</p>
+
+<ol>
+  <li>这个输入功能还是得实现为一个自定义View，而不是一个Activity，这样对现有代码改动最小，影响最小。</li>
+  <li>要在不使用KPSwitch的情况下实现平滑切换。</li>
+</ol>
+
+<p>第一个要求好实现，不在赘述。要实现第二个要求也不是那么难，关键点如下:</p>
+
+<ol>
+  <li>自定义View的特殊布局</li>
+  <li>关键的几个布局控制方法</li>
+</ol>
+
+<p>先来看布局:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+&lt;LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        &gt;
+
+        &lt;!--键盘弹起后上，屏幕剩余部分--&gt;
+        &lt;View
+            android:id="@+id/layout_input_empty"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            /&gt;
+
+        &lt;!--键盘及其他交互UI部分--&gt;
+        &lt;LinearLayout
+            android:id="@+id/ll_bottom"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:focusable="true"
+            android:clickable="true"
+            android:focusableInTouchMode="true"
+            android:gravity="center_vertical"
+
+            &gt;
+
+            &lt;LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                &gt;
+
+                &lt;cn.xiaochuankeji.zuiyouLite.widget.listener.FrameListenerLayout
+                    android:id="@+id/publisher_top_listener"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:paddingLeft="15dp"
+                    android:paddingTop="5dp"
+                    android:paddingRight="15dp"
+                    android:background="@drawable/replay_comment_bg"
+                    &gt;
+
+                    &lt;RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"&gt;
+
+                        &lt;cn.xiaochuankeji.zuiyouLite.widget.publisher.ReplaySomeoneTipView
+                            android:id="@+id/replay_someone_tip_view"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="14dp"
+                            android:layout_marginBottom="3dp"
+                            android:visibility="gone" /&gt;
+
+
+                        &lt;cn.xiaochuankeji.zuiyouLite.widget.publisher.QuickReplayView
+                            android:id="@+id/quick_replay_view"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@+id/replay_someone_tip_view"
+                            android:layout_marginTop="11dp" /&gt;
+
+                        &lt;LinearLayout
+                            android:id="@+id/edit_scroll"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:background="@drawable/comment_edit_bg"
+                            android:padding="8dp"
+                            android:layout_below="@+id/quick_replay_view"
+                            android:layout_toLeftOf="@+id/publisher_send_new"
+                            android:layout_marginBottom="12dp"
+                            &gt;
+
+                            &lt;cn.xiaochuankeji.zuiyouLite.widget.publisher.PostCommentEditText
+                                android:id="@+id/publisher_edit"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:background="@color/CO_B3"
+                                android:hint="@string/comment_input_comment"
+                                android:lineSpacingExtra="2.4dp"
+                                android:maxLength="2000"
+                                android:maxLines="3"
+                                android:minLines="1"
+                                android:textColor="@color/CO_T1"
+                                android:textColorHint="@color/CO_T3"
+                                android:textCursorDrawable="@drawable/cursor_yellow"
+                                android:textSize="13sp" /&gt;
+                            &lt;!-- 选中的 视频/图片 文件列表 --&gt;
+                            &lt;androidx.recyclerview.widget.RecyclerView
+                                android:id="@+id/publisher_select_media_list"
+                                android:layout_below="@+id/publisher_edit"
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:layout_alignLeft="@+id/publisher_edit"
+                                android:layout_alignRight="@+id/publisher_edit"
+                                android:layout_marginTop="7dp"
+                                android:visibility="gone" /&gt;
+                        &lt;/LinearLayout&gt;
+
+
+                        &lt;androidx.appcompat.widget.AppCompatImageView
+                            android:id="@+id/publisher_send_new"
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:layout_marginLeft="15dp"
+                            android:layout_alignBottom="@id/edit_scroll"
+                            android:layout_marginBottom="4dp"
+                            android:layout_alignParentRight="true"
+                            android:background="@drawable/selector_chat_send" /&gt;
+
+
+                        &lt;androidx.appcompat.widget.AppCompatImageView
+                            android:id="@+id/publisher_image_new"
+                            android:layout_width="36dp"
+                            android:layout_height="36dp"
+                            android:paddingRight="12dp"
+                            android:paddingBottom="12dp"
+                            android:layout_below="@+id/edit_scroll"
+                            android:src="@drawable/ic_comment_select_image" /&gt;
+
+                        &lt;androidx.appcompat.widget.AppCompatImageView
+                            android:id="@+id/publisher_emoji"
+                            android:layout_width="36dp"
+                            android:layout_height="36dp"
+                            android:layout_below="@+id/edit_scroll"
+                            android:layout_toRightOf="@id/publisher_image_new"
+                            android:paddingLeft="12dp"
+                            android:paddingBottom="12dp"
+                            android:src="@drawable/ic_comment_cocoemoji" /&gt;
+
+                        &lt;androidx.appcompat.widget.AppCompatImageView
+                            android:id="@+id/publisher_at_new"
+                            android:layout_width="36dp"
+                            android:layout_height="36dp"
+                            android:layout_below="@id/edit_scroll"
+                            android:layout_toRightOf="@id/publisher_emoji"
+                            android:layout_marginLeft="12dp"
+                            android:paddingLeft="12dp"
+                            android:paddingBottom="12dp"
+                            android:src="@drawable/ic_comment_at" /&gt;
+
+                    &lt;/RelativeLayout&gt;
+
+
+                &lt;/cn.xiaochuankeji.zuiyouLite.widget.listener.FrameListenerLayout&gt;
+
+
+                &lt;!--emoji面板--&gt;
+                &lt;FrameLayout
+                    android:id="@+id/fl_bottom"
+                    android:layout_width="match_parent"
+                    android:layout_height="300dp"
+                    android:background="#f5f7fa"
+                    android:visibility="gone"
+                    &gt;
+                    
+                    &lt;androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/rv_emoji"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="5dp"
+                        android:paddingLeft="5dp"
+                        android:paddingRight="5dp"
+                        /&gt;
+                    
+                    &lt;androidx.appcompat.widget.AppCompatImageView
+                        android:id="@+id/iv_emoji_delete"
+                        android:layout_width="54dp"
+                        android:layout_height="40dp"
+                        android:src="@drawable/ic_comment_delete"
+                        android:scaleType="centerInside"
+                        android:layout_gravity="bottom|right"
+                        android:layout_marginRight="15dp"
+                        android:layout_marginBottom="15dp"
+                        android:shadowColor="#33000000"
+                        android:shadowDx="3.0"
+                        android:background="@drawable/emoji_delete_bg"
+                        /&gt;
+
+
+                &lt;/FrameLayout&gt;
+
+            &lt;/LinearLayout&gt;
+        &lt;/LinearLayout&gt;
+    &lt;/LinearLayout&gt;
+
+</code></pre></div></div>
+
+<p>动态代码中几个关键的方法:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+/**
+  * 锁定内容View以防止跳闪
+  */
+public void lockContentViewHeight() {
+    LinearLayout.LayoutParams layoutParams =
+            (LinearLayout.LayoutParams) layout_input_empty.getLayoutParams();
+    layoutParams.height = layout_input_empty.getHeight();
+    layoutParams.weight = 0;
+    layout_input_empty.requestLayout();
+}
+
+/**
+  * 释放锁定的内容View
+  */
+public void unlockContentViewHeight() {
+    postDelayed(() -&gt; {
+        LinearLayout.LayoutParams layoutParams =
+                (LinearLayout.LayoutParams) layout_input_empty.getLayoutParams();
+        layoutParams.height = 0;
+        layoutParams.weight = 1;
+        //rc_content.requestLayout();
+        ll_bottom.requestLayout();
+        //requestLayout();
+    }, 200);
+}
+
+
+public void hideEmoji() {
+    iv_emoji.setImageResource(R.drawable.ic_comment_cocoemoji);
+    lockContentViewHeight();
+    rv_emoji.setVisibility(View.GONE);
+    fl_bottom.setVisibility(GONE);
+    unlockContentViewHeight();
+    presentStatus = PublisherStatus.文字编辑;
+    emojiVisible = false;
+}
+
+public void showEmoji(boolean animate) {
+    iv_emoji.setImageResource(R.drawable.ic_comment_keyboard);
+    if (!animate) {
+        lockContentViewHeight();
+        rv_emoji.setVisibility(View.VISIBLE);
+        fl_bottom.setVisibility(VISIBLE);
+        unlockContentViewHeight();
+    } else {
+        rv_emoji.setVisibility(View.VISIBLE);
+        fl_bottom.setVisibility(VISIBLE);
+    }
+    //UIUtils.hideSoftInput((Activity) getContext());
+    AndroidPlatformUtil.hideSoftInput((Activity) getContext());
+    presentStatus = PublisherStatus.EMOJI;
+    emojiVisible = true;
+}
+
+
+</code></pre></div></div>
+
+<p>如何调用：</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>private void onEmojiClick() {
+    if (rv_emoji.getVisibility() == View.VISIBLE) {
+        lockContentViewHeight();
+        hideEmoji();
+        unlockContentViewHeight();
+        //UIUtils.showSoftInput(et_comment, getContext());
+        AndroidPlatformUtil.showSoftInput(et_comment, getContext());
+    } else {
+        showEmoji(false);
+    }
+}
+
+</code></pre></div></div>
+
+<p>其实实现这个方案后，我也有点惊讶，KPSwitch那么复杂的逻辑，竟然可以简单的以这种方式实现。说明做一切事情都不可拘泥于过去成功的方案，应该大胆尝试新的方法，说不定就能收获到惊喜呢！</p>
+
+
+
+        </section>
+
+        <footer class="post-footer">
+
+            <!-- Everything inside the #author tags pulls data from the author -->
+            <!-- #author-->
+            
+
+            <!-- Add Disqus Comments -->
+            
+
+        </footer>
+
+    </article>
+
+</main>
+
+<aside class="read-next">
+
+    <!-- [[! next_post ]] -->
+    
+        <a class="read-next-story no-cover" href="/using-booster-fix-anr">
+            <section class="post">
+                <h2>使用Booster解决ANR的实践</h2>
+                <p>SharedPreferences一直备受诟病，不论是因为开发者的不当使用还是其自身的问题，SharedPreferences都给开发者造成了不少困扰, 尤以ANR最甚。面对由SharedPreferences引起的ANR，我们通常的做法是引入MMKV来替代SP，规避SP本身的缺陷。但是MMKV虽然可以解决App自身由于使用SP导致的ANR，但是无法解决App中第三方库使用SP导致的ANR，因此，虽然MMKV性能优秀，可做数据迁移，久经验证，依然不能彻底解决SP的问题。因此需要考虑其他解决方案，后来找到了滴滴开源的Booster项目，算是找到一个相对彻底的解决方案。 Booster是什么? 请注意，和著名的C++库Boost没半毛钱关系，且看官方介绍: >Booster 通过 Gradle Plugin 的形式为 Android 工程质量把控提供了一套完整的框架，无论是代码、资源、动态库、依赖关系、包体积、性能等监控，都可以通过 Booster 来完成 简单理解，Booster就是一个Gradle插件，但它不是一个简单的plugin，而是一个框架，提供了诸多不同功能的模块，可按需在项目构建的时候注入不同的功能模块。下面就以使用Booster SharedPreferences功能模块解决SP相关ANR为例来介绍Booster的基本用法:...</p>
+            </section>
+        </a>
+    
+    <!-- [[! /next_post ]] -->
+    <!-- [[! prev_post ]] -->
+    
+        <a class="read-next-story prev no-cover" href="/first-lesson-of-machine-learning">
+            <section class="post">
+                <h2>First Lesson of Machine Learning</h2>
+                <p>Two months ago, I made a decision for my career: learning machine learning from scratch....</p>
+            </section>
+        </a>
+    
+    <!-- [[! /prev_post ]] -->
+</aside>
+
+<!-- /post -->
+
+
+        <!-- The tiny footer at the very bottom -->
+        <footer class="site-footer clearfix">
+          <section class="copyright"><a href="/">与机器，人，神共舞</a> &copy; 2023</section>
+          <section class="poweredby">Proudly published with <a href="https://jekyllrb.com/">Jekyll</a> using <a href="https://github.com/jekyllt/jasper">Jasper</a></section>
+        </footer>
+    </div>
+    <!-- highlight.js -->
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.3.0/highlight.min.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+
+    <!-- jQuery needs to come before `` so that jQuery can be used in code injection -->
+    <script type="text/javascript" src="//code.jquery.com/jquery-1.12.0.min.js"></script>
+    <!-- Ghost outputs important scripts and data with this tag -->
+    <!--  -->
+    <!-- Add Google Analytics  -->
+        <!-- Google Analytics Tracking code -->
+     <script>
+	    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+	    ga('create', 'UA-78960009-1', 'auto');
+	    ga('send', 'pageview');
+
+     </script>
+
+    <!-- Fitvids makes video embeds responsive and awesome -->
+    <script type="text/javascript" src="/assets/js/jquery.fitvids.js"></script>
+    <!-- The main JavaScript file for Casper -->
+    <script type="text/javascript" src="/assets/js/index.js"></script>
+
+</body>
+</html>

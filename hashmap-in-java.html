@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- Document Settings -->
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+    <!-- Page Meta -->
+    <title>Java中的HashMap</title>
+    <meta name="description" content="编程，读书，思考，旅行，与机器对话，与人交谈，对神发问，探索，体验人生美丽的风景" />
+
+    <!-- Mobile Meta -->
+    <meta name="HandheldFriendly" content="True" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- Brand icon -->
+    <link rel="shortcut icon" href="/assets/images/favicon.ico" >
+
+    <!-- Styles'n'Scripts -->
+    <link rel="stylesheet" type="text/css" href="/assets/css/screen.css" />
+    <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Merriweather:300,700,700italic,300italic|Open+Sans:700,400" />
+    <link rel="stylesheet" type="text/css" href="/assets/css/syntax.css" />
+
+    <!-- highlight.js -->
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.3.0/styles/default.min.css">
+    <style>.hljs { background: none; }</style>
+
+    <!-- Ghost outputs important style and meta data with this tag -->
+        <link rel="canonical" href="/" />
+    <meta name="referrer" content="origin" />
+    <link rel="next" href="/page2/" />
+
+    <meta property="og:site_name" content="与机器，人，神共舞" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="与机器，人，神共舞" />
+    <meta property="og:description" content="编程，读书，思考，旅行，与机器对话，与人交谈，对神发问，探索，体验人生美丽的风景" />
+    <meta property="og:url" content="/" />
+    <meta property="og:image" content="/assets/images/cover1.jpg" />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="与机器，人，神共舞" />
+    <meta name="twitter:description" content="编程，读书，思考，旅行，与机器对话，与人交谈，对神发问，探索，体验人生美丽的风景" />
+    <meta name="twitter:url" content="/" />
+    <meta name="twitter:image:src" content="/assets/images/cover1.jpg" />
+
+    <script type="application/ld+json">
+{
+    "@context": "http://schema.org",
+    "@type": "Website",
+    "publisher": "Tao's Page",
+    "url": "/",
+    "image": "/assets/images/cover1.jpg",
+    "description": "编程，读书，思考，旅行，与机器对话，与人交谈，对神发问，探索，体验人生美丽的风景"
+}
+    </script>
+
+    <meta name="generator" content="Jekyll 3.0.0" />
+    <link rel="alternate" type="application/rss+xml" title="与机器，人，神共舞" href="/rss.xml" />
+
+</head>
+<body class="home-template nav-closed">
+
+    <!-- The blog navigation links -->
+    <div class="nav">
+    <h3 class="nav-title">Menu</h3>
+    <a href="#" class="nav-close">
+        <span class="hidden">Close</span>
+    </a>
+    <ul>
+        <li class="nav-home " role="presentation"><a href="/">Home</a></li>
+        <li class="nav-about " role="presentation"><a href="/about.html">About</a></li>
+        <li class="nav-fables " role="presentation"><a href="/tag/machine/">Machine</a></li>
+        <li class="nav-speeches " role="presentation"><a href="/tag/human/">Human</a></li>
+        <li class="nav-fiction " role="presentation"><a href="/tag/god/">God</a></li>
+        <li class="nav-author " role="presentation"><a href="/author/hetao/">Author</a></li>
+    </ul>
+    <a class="subscribe-button icon-feed" href="/rss.xml">Subscribe</a>
+</div>
+<span class="nav-cover"></span>
+
+
+    <div class="site-wrapper">
+
+        <!-- All the main content gets inserted here, index.hbs, post.hbs, etc -->
+        <!-- default -->
+
+<!-- The comment above "< default" means - insert everything in this file into -->
+    <!-- the [body] of the default.hbs template, which contains our header/footer. -->
+
+<!-- Everything inside the #post tags pulls data from the post -->
+<!-- #post -->
+
+<header class="main-header post-head no-cover">
+    <nav class="main-nav  clearfix">
+        
+        
+    </nav>
+</header>
+
+<main class="content" role="main">
+
+    <article class="post tag-machine">
+
+        <header class="post-header">
+            <h1 class="post-title">Java中的HashMap</h1>
+            <section class="post-meta">
+            <!-- <a href='/'>Tao He</a> -->
+
+            
+            <time class="post-date" datetime="2017-07-10">10 Jul 2017</time>
+                <!-- [[tags prefix=" on "]] -->
+                
+                on
+                
+                    
+                       <a href='/tag/machine'>Machine</a>
+                    
+                
+                
+            </section>
+        </header>
+
+        <section class="post-content">
+
+            <p>如果你是个Java程序员，那么你不可能对HashMap视而不见，因为你会经常遇到使用它的场景，因此对HashMap的充分了解非常有必要，对我们写出高效可靠的代码很有帮助。</p>
+
+<p>在对HashMap进行深入了解之前，得先清楚HashMap到底是个什么样的存在！</p>
+
+<h4 id="whats-hashmap">What’s HashMap</h4>
+
+<p>让我来罗列一些点逐步勾勒出HashMap的轮廓:</p>
+
+<ul>
+  <li>
+    <p>HashMap就是将key做hash算法，然后将hash所对应的数据映射到内存地址，直接取得key所对应的数据。</p>
+  </li>
+  <li>
+    <p>底层为哈希数组，数组的每个元素都是一个单链表的头结点</p>
+  </li>
+  <li>
+    <p>基于<code class="language-plaintext highlighter-rouge">Map</code>接口实现，提供了map操作的泛型类</p>
+  </li>
+  <li>
+    <p>允许<code class="language-plaintext highlighter-rouge">null</code> values and the <code class="language-plaintext highlighter-rouge">null</code> key</p>
+  </li>
+  <li>
+    <p>实现了Serializable和Cloneable接口，支持序列化，能被克隆</p>
+  </li>
+</ul>
+
+<p>轮廓已出，但是仍旧对HashMap感到陌生,甚至都不清楚与Hashtable的区别，因此与Hashtable做一个简单的对比，来辨识出一些HashMap的重要特性。</p>
+
+<h4 id="hashmap-vs-hashtable">HashMap vs. Hashtable</h4>
+
+<ul>
+  <li>
+    <p>Hashtable是线程安全的，HashMap不是</p>
+  </li>
+  <li>
+    <p>HashMap 允许<code class="language-plaintext highlighter-rouge">null</code> values and the <code class="language-plaintext highlighter-rouge">null</code> key, Hashtable不允许</p>
+  </li>
+  <li>
+    <p>如果想要预测遍历次序，使用HashMap, Hashtable不易实现</p>
+  </li>
+</ul>
+
+<p>通过这些概念和理论的梳理，大概对HashMap有了一定感觉，也肯定能够在正确的场景下使用HashMap，但是要说起对HashMap的很多细节时，光知道这些是不够的，需要刨根问底了。
+要深入了解HashMap，没有比看其原代码更直接的方式了，但是HashMap的源代码是在太长，如果全部贴进来进行分析和解释，实在没有必要，因此只节选部分关键代码来帮助理解
+HashMap的实现和原理。</p>
+
+<h4 id="hashmap的原理与实现">HashMap的原理与实现</h4>
+
+<h5 id="hashmap存储结构">HashMap存储结构</h5>
+
+<p>HashMap的底层存储结构是哈希数组，数组的每个元素都是一个单链表的头节点，链表是用来解决冲突的，如果不同的key映射到了数组的同一位置处，就将其放入单链表中。
+链表中节点的数据结构:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>static class Entry&lt;K,V&gt; implements Map.Entry&lt;K,V&gt; {    
+    final K key;    
+    V value;    
+    // 指向下一个节点    
+    Entry&lt;K,V&gt; next;    
+    final int hash;    
+  
+    // 构造函数。    
+    // 输入参数包括"哈希值(h)", "键(k)", "值(v)", "下一节点(n)"    
+    Entry(int h, K k, V v, Entry&lt;K,V&gt; n) {    
+        value = v;    
+        next = n;    
+        key = k;    
+        hash = h;    
+    }    
+  
+    public final K getKey() {    
+        return key;    
+    }    
+  
+    public final V getValue() {    
+        return value;    
+    }    
+  
+    public final V setValue(V newValue) {    
+        V oldValue = value;    
+        value = newValue;    
+        return oldValue;    
+    }    
+  
+    // 判断两个Entry是否相等    
+    // 若两个Entry的“key”和“value”都相等，则返回true。    
+    // 否则，返回false    
+    public final boolean equals(Object o) {    
+        if (!(o instanceof Map.Entry))    
+            return false;    
+        Map.Entry e = (Map.Entry)o;    
+        Object k1 = getKey();    
+        Object k2 = e.getKey();    
+        if (k1 == k2 || (k1 != null &amp;&amp; k1.equals(k2))) {    
+            Object v1 = getValue();    
+            Object v2 = e.getValue();    
+            if (v1 == v2 || (v1 != null &amp;&amp; v1.equals(v2)))    
+                return true;    
+        }    
+        return false;    
+    }    
+  
+    // 实现hashCode()    
+    public final int hashCode() {    
+        return (key==null   ? 0 : key.hashCode()) ^    
+               (value==null ? 0 : value.hashCode());    
+    }    
+  
+    public final String toString() {    
+        return getKey() + "=" + getValue();    
+    }    
+  
+    // 当向HashMap中添加元素时，绘调用recordAccess()。    
+    // 这里不做任何处理    
+    void recordAccess(HashMap&lt;K,V&gt; m) {    
+    }  
+  
+    // 当从HashMap中删除元素时，绘调用recordRemoval()。    
+    // 这里不做任何处理    
+    void recordRemoval(HashMap&lt;K,V&gt; m) {    
+    }
+} 
+
+</code></pre></div></div>
+
+<ul>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">Entry</code>是单向链表</p>
+  </li>
+  <li>
+    <p>它是 <code class="language-plaintext highlighter-rouge">HashMap</code>链式存储法对应的链表</p>
+  </li>
+</ul>
+
+<h5 id="hashmap几个重要的属性">HashMap几个重要的属性</h5>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>public class HashMap&lt;K,V&gt;    
+    extends AbstractMap&lt;K,V&gt;    
+    implements Map&lt;K,V&gt;, Cloneable, Serializable    
+{    
+   
+    static final int DEFAULT_INITIAL_CAPACITY = 16;    
+   
+    static final int MAXIMUM_CAPACITY = 1 &lt;&lt; 30;    
+   
+    static final float DEFAULT_LOAD_FACTOR = 0.75f;    
+   
+    // 存储数据的Entry数组，长度是2的幂。    
+    // HashMap采用链表法解决冲突，每一个Entry本质上是一个单向链表    
+    transient Entry[] table;    
+   
+    // HashMap的底层数组中已用槽的数量    
+    transient int size;    
+   
+    int threshold;
+   
+    final float loadFactor;    
+   
+    // HashMap被改变的次数    
+    transient volatile int modCount; 
+    
+    ...
+}
+
+</code></pre></div></div>
+
+<ul>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">DEFAULT_INITIAL_CAPACITY</code> - 默认的初始容量（容量为HashMap中槽的数目）是16，且实际容量必须是2的整数次幂</p>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">MAXIMUM_CAPACITY</code> - 最大容量（必须是2的幂且小于2的30次方，传入容量过大将被这个值替换）</p>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">loadFactor</code> - 加载因子, 默认为0.75</p>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">threshold</code> - HashMap的阈值，用于判断是否需要调整HashMap的容量（threshold = 容量*加载因子）</p>
+  </li>
+</ul>
+
+<p>其中初始容量和加载因子是影响HashMap性能的重要参数。如果这两个测试设置得当，则HashMap可以表现出很好的性能。到此，关于HashMap
+的一些关键部分都已和盘托出,更加细节的部分再次就不进一步讨论了。</p>
+
+
+
+        </section>
+
+        <footer class="post-footer">
+
+            <!-- Everything inside the #author tags pulls data from the author -->
+            <!-- #author-->
+            
+
+            <!-- Add Disqus Comments -->
+            
+
+        </footer>
+
+    </article>
+
+</main>
+
+<aside class="read-next">
+
+    <!-- [[! next_post ]] -->
+    
+        <a class="read-next-story no-cover" href="/implement-page-up-down-animation-on-android">
+            <section class="post">
+                <h2>在Android上实现无限翻页轮播动画效果</h2>
+                <p>最近在工作中遇到一个需求，要求在一个Dialog的标题上显示两行字，但是这行字如果同时出现的话会非常难看，设计出了套方案，类似无限翻页轮播这两行字，要有翻书的效果。 刚开始实现的时候，动画的效果也出来了，但是拿去给设计验收的时候设计总感觉怪怪的，始终达不到设计最终想要的结果。后来通过好多次的调试和验证，发现问题出现在两个 View的动画播放时序和旋转轴的问题上，解决了这两个问题后再拿去给设计看的时候，一切都完美了。 现在这个比较好的设计也已上线， 也因为这个调试和验证的过程感觉对 Android动画的一些细节碰触的较多，所以写下此文记录下这个过程。 #### 基本原理 通过`ObjectAnimation`操作`View`的`RotationY`属性，再利用动态改变`PivotY`的值和动画播放时序的不同来模拟出无限翻页轮播的动画效果 #### ObjectAnimation ``` // 上面的View翻下去的动画 private...</p>
+            </section>
+        </a>
+    
+    <!-- [[! /next_post ]] -->
+    <!-- [[! prev_post ]] -->
+    
+        <a class="read-next-story prev no-cover" href="/think-about-AI">
+            <section class="post">
+                <h2>对AI的一些臆想</h2>
+                <p>作为一个码农，长期从事应用研发的工作，于当下热门的人工智能其实一点都没有交集，既不了解机器学习，也没有接触过计算机神经网络，甚至没有使用过Hadoop这种技术，可谓对AI相关的领域所知甚少，但这并不阻碍我对AI产生一些思考和想法，而这些思考和想法的缘起竟然都是这一两年上映的几部AI相关的电影和相关的几本畅销书，其中所涉及的技术和思想也都相对易懂，和机器学习类的书籍形成鲜明对比。
+
+但是通俗易懂并不代表其中的想法和思考无足轻重，相反，我认为如下的一些想法新颖具有启发性：
+
+意识永生，简单的说就是人类的肉体可以死亡，但是把意识转移到了AI中，没有输入人类意识的AI可以通过学习获得人类的智能和意识，输入了人类意识的AI和真正的人类无异，结果就是人类的存在有了另外一种形式，人类的存在摆脱了肉体，智能的载体既可以是碳也可以是硅，这种想法其实很自然，人类要想在宇宙间获得更大的自由和实现更多的可能，肉体凡胎也许始终是一个阻碍和限制，尤其在面对宇宙近于无限的空间和时间时，人类更加渴望脱离这幅躯壳。
+
+当然也有一些电影和书籍对技术的演进速度没有那么乐观，认为意识永生的概念太过理想化，太遥远，而他们所持的态度显得更加保守和务实，认为短期内达到人类智能水平的AI不会出现，AI的智能水平会越来越强，但是还是作为人类社会的一种技术形式存在，对人的能力的极大延伸，既不会超越人类，更不会取代人类。作为对人类的延伸，有可能在未来出现半人半机器的存在。
+
+另一种大胆的想法认为，人类的未来之路就是被AI取代，人类打开了这个潘多拉魔盒，造成了无法逆转的灾难，人类彻底被取代，或被消灭，这种设想和猜测在时下非常流行，甚至有一些AI和计算机方面的专家都发出警告，要人类警惕AI的进一步发展。
+
+以上就是一些我截取的一些有意思的观点和想法，可以看出近几年的一些电影和书籍多半不会深入艰深的技术细节，而多是通过对AI未来的畅想和猜测，以及带入AI这个特殊角色后对人类自身的一种反省和思考，我因受这些想法和思考的影响，也时而会在脑中闪出一下奇怪的想法，我甚至也不明白我为什么会产生这些奇思异想。
+
+我竟想到人类的起源和AI的未来可能有某种相似性，怎么说呢？因为我之前看到过一些文章分析人类可能并不是地球上的土著生物，可能真的是被一种神一样的存在所创造的，无中生有的，而这种神一样的存在现在却只留在了人类的神话中，我突然就想到，这种神一样的存在创造了我们，而后被我们所取代，他们存在过的痕迹也就只留在了我们的神话中，也许我们现在之于AI，就是那个神一样的存在，但我们最终会被AI取代，只留在AI的神话中，就跟没存在过一样……
+
+也许人类的真正归宿还真就是以硅为载体，以此长存于世，胡说八道了这么多，可以止笔了，再有臆想，再来码字
+
+</p>
+            </section>
+        </a>
+    
+    <!-- [[! /prev_post ]] -->
+</aside>
+
+<!-- /post -->
+
+
+        <!-- The tiny footer at the very bottom -->
+        <footer class="site-footer clearfix">
+          <section class="copyright"><a href="/">与机器，人，神共舞</a> &copy; 2023</section>
+          <section class="poweredby">Proudly published with <a href="https://jekyllrb.com/">Jekyll</a> using <a href="https://github.com/jekyllt/jasper">Jasper</a></section>
+        </footer>
+    </div>
+    <!-- highlight.js -->
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.3.0/highlight.min.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+
+    <!-- jQuery needs to come before `` so that jQuery can be used in code injection -->
+    <script type="text/javascript" src="//code.jquery.com/jquery-1.12.0.min.js"></script>
+    <!-- Ghost outputs important scripts and data with this tag -->
+    <!--  -->
+    <!-- Add Google Analytics  -->
+        <!-- Google Analytics Tracking code -->
+     <script>
+	    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+	    ga('create', 'UA-78960009-1', 'auto');
+	    ga('send', 'pageview');
+
+     </script>
+
+    <!-- Fitvids makes video embeds responsive and awesome -->
+    <script type="text/javascript" src="/assets/js/jquery.fitvids.js"></script>
+    <!-- The main JavaScript file for Casper -->
+    <script type="text/javascript" src="/assets/js/index.js"></script>
+
+</body>
+</html>

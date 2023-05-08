@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- Document Settings -->
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+    <!-- Page Meta -->
+    <title>MultidexApplication相关的一个crash</title>
+    <meta name="description" content="编程，读书，思考，旅行，与机器对话，与人交谈，对神发问，探索，体验人生美丽的风景" />
+
+    <!-- Mobile Meta -->
+    <meta name="HandheldFriendly" content="True" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- Brand icon -->
+    <link rel="shortcut icon" href="/assets/images/favicon.ico" >
+
+    <!-- Styles'n'Scripts -->
+    <link rel="stylesheet" type="text/css" href="/assets/css/screen.css" />
+    <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Merriweather:300,700,700italic,300italic|Open+Sans:700,400" />
+    <link rel="stylesheet" type="text/css" href="/assets/css/syntax.css" />
+
+    <!-- highlight.js -->
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.3.0/styles/default.min.css">
+    <style>.hljs { background: none; }</style>
+
+    <!-- Ghost outputs important style and meta data with this tag -->
+        <link rel="canonical" href="/" />
+    <meta name="referrer" content="origin" />
+    <link rel="next" href="/page2/" />
+
+    <meta property="og:site_name" content="与机器，人，神共舞" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="与机器，人，神共舞" />
+    <meta property="og:description" content="编程，读书，思考，旅行，与机器对话，与人交谈，对神发问，探索，体验人生美丽的风景" />
+    <meta property="og:url" content="/" />
+    <meta property="og:image" content="/assets/images/cover1.jpg" />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="与机器，人，神共舞" />
+    <meta name="twitter:description" content="编程，读书，思考，旅行，与机器对话，与人交谈，对神发问，探索，体验人生美丽的风景" />
+    <meta name="twitter:url" content="/" />
+    <meta name="twitter:image:src" content="/assets/images/cover1.jpg" />
+
+    <script type="application/ld+json">
+{
+    "@context": "http://schema.org",
+    "@type": "Website",
+    "publisher": "Tao's Page",
+    "url": "/",
+    "image": "/assets/images/cover1.jpg",
+    "description": "编程，读书，思考，旅行，与机器对话，与人交谈，对神发问，探索，体验人生美丽的风景"
+}
+    </script>
+
+    <meta name="generator" content="Jekyll 3.0.0" />
+    <link rel="alternate" type="application/rss+xml" title="与机器，人，神共舞" href="/rss.xml" />
+
+</head>
+<body class="home-template nav-closed">
+
+    <!-- The blog navigation links -->
+    <div class="nav">
+    <h3 class="nav-title">Menu</h3>
+    <a href="#" class="nav-close">
+        <span class="hidden">Close</span>
+    </a>
+    <ul>
+        <li class="nav-home " role="presentation"><a href="/">Home</a></li>
+        <li class="nav-about " role="presentation"><a href="/about.html">About</a></li>
+        <li class="nav-fables " role="presentation"><a href="/tag/machine/">Machine</a></li>
+        <li class="nav-speeches " role="presentation"><a href="/tag/human/">Human</a></li>
+        <li class="nav-fiction " role="presentation"><a href="/tag/god/">God</a></li>
+        <li class="nav-author " role="presentation"><a href="/author/hetao/">Author</a></li>
+    </ul>
+    <a class="subscribe-button icon-feed" href="/rss.xml">Subscribe</a>
+</div>
+<span class="nav-cover"></span>
+
+
+    <div class="site-wrapper">
+
+        <!-- All the main content gets inserted here, index.hbs, post.hbs, etc -->
+        <!-- default -->
+
+<!-- The comment above "< default" means - insert everything in this file into -->
+    <!-- the [body] of the default.hbs template, which contains our header/footer. -->
+
+<!-- Everything inside the #post tags pulls data from the post -->
+<!-- #post -->
+
+<header class="main-header post-head no-cover">
+    <nav class="main-nav  clearfix">
+        
+        
+    </nav>
+</header>
+
+<main class="content" role="main">
+
+    <article class="post tag-machine">
+
+        <header class="post-header">
+            <h1 class="post-title">MultidexApplication相关的一个crash</h1>
+            <section class="post-meta">
+            <!-- <a href='/'>Tao He</a> -->
+
+            
+            <time class="post-date" datetime="2018-11-26">26 Nov 2018</time>
+                <!-- [[tags prefix=" on "]] -->
+                
+                on
+                
+                    
+                       <a href='/tag/machine'>Machine</a>
+                    
+                
+                
+            </section>
+        </header>
+
+        <section class="post-content">
+
+            <p>最近在内测的一个App在内测开始后有用户反馈启动就crash的问题，后来拿到用户的信息后发现几个crash的机器都是4.4的机器，因为现在真实用户使用4.4系统的用户真的是不多了，就没怎么在意，但是在阿里云移动测试平台进行兼容性测试的时候，这个问题必现，并且都出现在4.4的机器上，查看兼容性测试报告，都是同一个crash，崩溃的堆栈记录了下来:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>FATAL EXCEPTION: main Process: com.ross.android, PID: 9282 java.lang.RuntimeException: Unable to get provider com.readystatesoftware.chuck.internal.data.ChuckContentProvider: 
+java.lang.ClassNotFoundException: Didn't find class "com.readystatesoftware.chuck.internal.data.ChuckContentProvider" on path: DexPathList[[zip file "/data/app/com.ross.android-1.apk"],nativeLibraryDirectories=[/data/app-lib/com.ross.android-1, /vendor/lib, /system/lib]] 
+at android.app.ActivityThread.installProvider(ActivityThread.java:5060) 
+at android.app.ActivityThread.installContentProviders(ActivityThread.java:4631) 
+at android.app.ActivityThread.handleBindApplication(ActivityThread.java:4571) 
+at android.app.ActivityThread.access$1500(ActivityThread.java:155) 
+at android.app.ActivityThread$H.handleMessage(ActivityThread.java:1406) 
+at android.os.Handler.dispatchMessage(Handler.java:110) 
+at android.os.Looper.loop(Looper.java:193)
+at android.app.ActivityThread.main(ActivityThread.java:5341) 
+at java.lang.reflect.Method.invokeNative(Native Method) 
+at java.lang.reflect.Method.invoke(Method.java:515) 
+at com.android.internal.os.ZygoteInit$MethodAndArgsCaller.run(ZygoteInit.java:830) 
+at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:646) 
+at dalvik.system.NativeStart.main(Native Method) Caused by: java.lang.ClassNotFoundException: Didn't find class "com.readystatesoftware.chuck.internal.data.ChuckContentProvider" on path: DexPathList[[zip file "/data/app/com.ross.android-1.apk"],nativeLibraryDirectories=[/data/app-lib/com.ross.android-1, /vendor/lib, /system/lib]] at dalvik.system.BaseDexClassLoader.findClass(BaseDexClassLoader.java:56) 
+at java.lang.ClassLoader.loadClass(ClassLoader.java:497) 
+at java.lang.ClassLoader.loadClass(ClassLoader.java:457)
+at android.app.ActivityThread.installProvider(ActivityThread.java:5045) 
+at android.app.ActivityThread.installContentProviders(ActivityThread.java:4631)
+at android.app.ActivityThread.handleBindApplication(ActivityThread.java:4571) 
+at android.app.ActivityThread.access$1500(ActivityThread.java:155) 
+at android.app.ActivityThread$H.handleMessage(ActivityThread.java:1406) 
+at android.os.Handler.dispatchMessage(Handler.java:110) 
+at android.os.Looper.loop(Looper.java:193) 
+at android.app.ActivityThread.main(ActivityThread.java:5341) 
+at java.lang.reflect.Method.invokeNative(Native Method) at java.lang.reflect.Method.invoke(Method.java:515)
+at com.android.internal.os.ZygoteInit$MethodAndArgsCaller.run(ZygoteInit.java:830) 
+at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:646) 
+at dalvik.system.NativeStart.main(Native Method)
+
+</code></pre></div></div>
+
+<p>看到这个崩溃的记录后，赶紧去查看到了build.gradle中multiDexEnabled选项，果然是true，处于打开状态，然后看了本App的Application竟然并没有继承自<code class="language-plaintext highlighter-rouge">MultiDexApplication</code>，在<code class="language-plaintext highlighter-rouge">Application</code>的onCreate的方法中也没有调用<code class="language-plaintext highlighter-rouge">MultiDex.install(this)</code>, 这也就难怪在4.4中出现这个崩溃了，因为貌似这个崩溃只出现在 api&lt;21 的情况下, 因为我平时的开发机都是8.0的系统，所以这个问题一直没有暴露出来, 直到将这个App安装在用户的机器上，崩溃出现了，这个问题解决起来其实很简单，要么将本App的Application继承自<code class="language-plaintext highlighter-rouge">MultiDexApplication</code>, 要么在Application中的onCreate中调用<code class="language-plaintext highlighter-rouge">MultiDex.install(this)</code>。就是这么简单,那这么简单的一个问题为什么要专写一篇来记录呢？其实也是因为这次这个内测阶段的crash的问题很典型，它就是在开发工程中被忽略，或者现有环境没有覆盖到，导致崩溃出现在了用户的机器上，其实这类问题是可以在发布版本前就能避免的，算是一次很好的教训。 解决方案再明确下:</p>
+
+<ul>
+  <li>方法一</li>
+</ul>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>TestApplcation extends MultiDexApplication {
+
+
+}
+
+
+</code></pre></div></div>
+
+<ul>
+  <li>方法二</li>
+</ul>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>TestApplcation extends Application {
+
+    @Override
+	public void onCreate() {
+		super.onCreate();
+
+        MultiDex.install(this);
+    }
+
+}
+
+</code></pre></div></div>
+
+
+
+        </section>
+
+        <footer class="post-footer">
+
+            <!-- Everything inside the #author tags pulls data from the author -->
+            <!-- #author-->
+            
+
+            <!-- Add Disqus Comments -->
+            
+
+        </footer>
+
+    </article>
+
+</main>
+
+<aside class="read-next">
+
+    <!-- [[! next_post ]] -->
+    
+        <a class="read-next-story no-cover" href="/play-video-in-raw-folder">
+            <section class="post">
+                <h2>使用VideoView实现视频开屏页</h2>
+                <p>今天PM提了一个视频开屏页的需求，需要在用户第一次使用时播放一个开屏视频，乍一看，挺简单一需求，但是也或多或少碰到了一些坑，也发现了Android资源编译的一个问题，本着研发之事无小事的原则，还是要记录下踩坑经验和发现的问题。整个实现过程一共两三个小时，逐步解决了以下问题: #### 视频全屏 看到这个问题的第一反应就是把`VideoView` 的宽高设置为`match_parent`, 并且保证父容器也是`match_parent` 根布局, 但是事实没那么简单，视频播放后并没有完全全屏，在我的开发机上视频底部有一条细细的白边，很明显视频没有完全全屏。后来又想到设置`MediaPlayer`的视频缩放模式: ``` mPlayer.setVideoScalingMode(MediaPlayer.VIDEO_SCALING_MODE_SCALE_TO_FIT_WITH_CROPPING); ``` 设置了两种模式以后都没有效果，这说明`VideoView`本身没有全屏，没有铺满整个屏幕，所以需要根据屏幕大小动态设置`VideoView`的尺寸，所以用自定义View实现。 自定义一个继承自`VideoView`的类来满足要求，具体实现如下: ``` public...</p>
+            </section>
+        </a>
+    
+    <!-- [[! /next_post ]] -->
+    <!-- [[! prev_post ]] -->
+    
+        <a class="read-next-story prev no-cover" href="/replace-enums-with-enumerated-annotations">
+            <section class="post">
+                <h2>用枚举注解替代枚举</h2>
+                <p>在日常的Java开发中使用enum是很稀松平常的事，但是在Android应用的开发中使用enum时事情就没那么简单了。以下是Google官方给出的建议: “Enums often require more than twice as much memory as static constants. You should...</p>
+            </section>
+        </a>
+    
+    <!-- [[! /prev_post ]] -->
+</aside>
+
+<!-- /post -->
+
+
+        <!-- The tiny footer at the very bottom -->
+        <footer class="site-footer clearfix">
+          <section class="copyright"><a href="/">与机器，人，神共舞</a> &copy; 2023</section>
+          <section class="poweredby">Proudly published with <a href="https://jekyllrb.com/">Jekyll</a> using <a href="https://github.com/jekyllt/jasper">Jasper</a></section>
+        </footer>
+    </div>
+    <!-- highlight.js -->
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.3.0/highlight.min.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+
+    <!-- jQuery needs to come before `` so that jQuery can be used in code injection -->
+    <script type="text/javascript" src="//code.jquery.com/jquery-1.12.0.min.js"></script>
+    <!-- Ghost outputs important scripts and data with this tag -->
+    <!--  -->
+    <!-- Add Google Analytics  -->
+        <!-- Google Analytics Tracking code -->
+     <script>
+	    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+	    ga('create', 'UA-78960009-1', 'auto');
+	    ga('send', 'pageview');
+
+     </script>
+
+    <!-- Fitvids makes video embeds responsive and awesome -->
+    <script type="text/javascript" src="/assets/js/jquery.fitvids.js"></script>
+    <!-- The main JavaScript file for Casper -->
+    <script type="text/javascript" src="/assets/js/index.js"></script>
+
+</body>
+</html>

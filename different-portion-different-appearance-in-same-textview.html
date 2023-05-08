@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- Document Settings -->
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+    <!-- Page Meta -->
+    <title>多样式 TextView 小记</title>
+    <meta name="description" content="编程，读书，思考，旅行，与机器对话，与人交谈，对神发问，探索，体验人生美丽的风景" />
+
+    <!-- Mobile Meta -->
+    <meta name="HandheldFriendly" content="True" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- Brand icon -->
+    <link rel="shortcut icon" href="/assets/images/favicon.ico" >
+
+    <!-- Styles'n'Scripts -->
+    <link rel="stylesheet" type="text/css" href="/assets/css/screen.css" />
+    <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Merriweather:300,700,700italic,300italic|Open+Sans:700,400" />
+    <link rel="stylesheet" type="text/css" href="/assets/css/syntax.css" />
+
+    <!-- highlight.js -->
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.3.0/styles/default.min.css">
+    <style>.hljs { background: none; }</style>
+
+    <!-- Ghost outputs important style and meta data with this tag -->
+        <link rel="canonical" href="/" />
+    <meta name="referrer" content="origin" />
+    <link rel="next" href="/page2/" />
+
+    <meta property="og:site_name" content="与机器，人，神共舞" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="与机器，人，神共舞" />
+    <meta property="og:description" content="编程，读书，思考，旅行，与机器对话，与人交谈，对神发问，探索，体验人生美丽的风景" />
+    <meta property="og:url" content="/" />
+    <meta property="og:image" content="/assets/images/cover1.jpg" />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="与机器，人，神共舞" />
+    <meta name="twitter:description" content="编程，读书，思考，旅行，与机器对话，与人交谈，对神发问，探索，体验人生美丽的风景" />
+    <meta name="twitter:url" content="/" />
+    <meta name="twitter:image:src" content="/assets/images/cover1.jpg" />
+
+    <script type="application/ld+json">
+{
+    "@context": "http://schema.org",
+    "@type": "Website",
+    "publisher": "Tao's Page",
+    "url": "/",
+    "image": "/assets/images/cover1.jpg",
+    "description": "编程，读书，思考，旅行，与机器对话，与人交谈，对神发问，探索，体验人生美丽的风景"
+}
+    </script>
+
+    <meta name="generator" content="Jekyll 3.0.0" />
+    <link rel="alternate" type="application/rss+xml" title="与机器，人，神共舞" href="/rss.xml" />
+
+</head>
+<body class="home-template nav-closed">
+
+    <!-- The blog navigation links -->
+    <div class="nav">
+    <h3 class="nav-title">Menu</h3>
+    <a href="#" class="nav-close">
+        <span class="hidden">Close</span>
+    </a>
+    <ul>
+        <li class="nav-home " role="presentation"><a href="/">Home</a></li>
+        <li class="nav-about " role="presentation"><a href="/about.html">About</a></li>
+        <li class="nav-fables " role="presentation"><a href="/tag/machine/">Machine</a></li>
+        <li class="nav-speeches " role="presentation"><a href="/tag/human/">Human</a></li>
+        <li class="nav-fiction " role="presentation"><a href="/tag/god/">God</a></li>
+        <li class="nav-author " role="presentation"><a href="/author/hetao/">Author</a></li>
+    </ul>
+    <a class="subscribe-button icon-feed" href="/rss.xml">Subscribe</a>
+</div>
+<span class="nav-cover"></span>
+
+
+    <div class="site-wrapper">
+
+        <!-- All the main content gets inserted here, index.hbs, post.hbs, etc -->
+        <!-- default -->
+
+<!-- The comment above "< default" means - insert everything in this file into -->
+    <!-- the [body] of the default.hbs template, which contains our header/footer. -->
+
+<!-- Everything inside the #post tags pulls data from the post -->
+<!-- #post -->
+
+<header class="main-header post-head no-cover">
+    <nav class="main-nav  clearfix">
+        
+        
+    </nav>
+</header>
+
+<main class="content" role="main">
+
+    <article class="post tag-machine">
+
+        <header class="post-header">
+            <h1 class="post-title">多样式 TextView 小记</h1>
+            <section class="post-meta">
+            <!-- <a href='/'>Tao He</a> -->
+
+            
+            <time class="post-date" datetime="2018-02-02">02 Feb 2018</time>
+                <!-- [[tags prefix=" on "]] -->
+                
+                on
+                
+                    
+                       <a href='/tag/machine'>Machine</a>
+                    
+                
+                
+            </section>
+        </header>
+
+        <section class="post-content">
+
+            <p>所谓多样式 <code class="language-plaintext highlighter-rouge">TextView</code>, 就是在同一个 <code class="language-plaintext highlighter-rouge">TextView</code>中不同部分的text展示不同的颜色,字体大小,字体,字体Style,这种需求其实在很多App中都存在, 能够直接的给每一部分Text赋予不同的外观, 既可以在布局中少添加几个<code class="language-plaintext highlighter-rouge">TextView</code>, 也可以使以后需求变动后能够灵活的做出改动, 我在实际的开发中也经常碰到这种需求,很多次都是临时Google下, 实现了以后也就作罢了, 等后面又遇到的时候,貌似又记得不太清楚了, 又需要去查, 很没有效率, 所以写下这篇小记.</p>
+
+<p>要想给TextView的不同部分设置不同的属性,通常有两种做法:</p>
+
+<h4 id="使用spannablestring">使用SpannableString</h4>
+
+<p>这种方法需要用到<code class="language-plaintext highlighter-rouge">Spannable</code>借口, 一般做法如下:</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="nc">String</span> <span class="n">text</span> <span class="o">=</span> <span class="s">"Hello World"</span><span class="o">;</span>
+<span class="nc">TextView</span> <span class="n">tvTitle</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">TextView</span><span class="o">(</span><span class="n">context</span><span class="o">);</span>
+
+<span class="nc">Spannable</span> <span class="n">spannable</span> <span class="o">=</span> <span class="nc">SpannableString</span><span class="o">(</span><span class="n">text</span><span class="o">);</span>
+
+<span class="c1">// set different text color</span>
+<span class="n">spannable</span><span class="o">.</span><span class="na">setSpan</span><span class="o">(</span><span class="k">new</span> <span class="nc">ForegroundColorSpan</span><span class="o">(</span><span class="n">context</span><span class="o">.</span><span class="na">getResouces</span><span class="o">().</span><span class="na">getColor</span><span class="o">(</span><span class="n">android</span><span class="o">.</span><span class="na">R</span><span class="o">.</span><span class="na">color</span><span class="o">.</span><span class="na">black</span><span class="o">)),</span> <span class="mi">0</span><span class="o">,</span> <span class="mi">5</span><span class="o">,</span> <span class="nc">Spannable</span><span class="o">.</span><span class="na">SPAN_EXCLUSIVE_EXCLUSIVE</span><span class="o">);</span>
+<span class="n">spannable</span><span class="o">.</span><span class="na">setSpan</span><span class="o">(</span><span class="k">new</span> <span class="nc">ForegroundColorSpan</span><span class="o">(</span><span class="n">context</span><span class="o">.</span><span class="na">getResouces</span><span class="o">().</span><span class="na">getColor</span><span class="o">(</span><span class="n">android</span><span class="o">.</span><span class="na">R</span><span class="o">.</span><span class="na">color</span><span class="o">.</span><span class="na">white</span><span class="o">)),</span> <span class="mi">5</span><span class="o">,</span> <span class="n">text</span><span class="o">.</span><span class="na">length</span><span class="o">(),</span> <span class="nc">Spannable</span><span class="o">.</span><span class="na">SPAN_EXCLUSIVE_EXCLUSIVE</span><span class="o">);</span>
+
+<span class="c1">// set different background color</span>
+<span class="n">spannable</span><span class="o">.</span><span class="na">setSpan</span><span class="o">(</span><span class="k">new</span> <span class="nc">BackgroundColorSpan</span><span class="o">(</span><span class="n">android</span><span class="o">.</span><span class="na">R</span><span class="o">.</span><span class="na">color</span><span class="o">.</span><span class="na">black</span><span class="o">),</span> <span class="mi">0</span><span class="o">,</span> <span class="mi">5</span><span class="o">,</span> <span class="nc">Spannable</span><span class="o">.</span><span class="na">SPAN_EXCLUSIVE_EXCLUSIVE</span><span class="o">);</span>
+
+<span class="c1">// set different text size</span>
+<span class="kt">int</span> <span class="n">largeSize</span> <span class="o">=</span> <span class="n">getResources</span><span class="o">().</span><span class="na">getDimensionPixelSize</span><span class="o">(</span><span class="no">R</span><span class="o">.</span><span class="na">dimen</span><span class="o">.</span><span class="na">larage</span><span class="o">);</span>
+<span class="kt">int</span> <span class="n">smallSize</span> <span class="o">=</span> <span class="n">getResources</span><span class="o">().</span><span class="na">getDimensionPixelSize</span><span class="o">(</span><span class="no">R</span><span class="o">.</span><span class="na">dimen</span><span class="o">.</span><span class="na">small</span><span class="o">);</span>
+<span class="n">spannable</span><span class="o">.</span><span class="na">setSpan</span><span class="o">(</span><span class="k">new</span> <span class="nc">AbsoluteSizeSpan</span><span class="o">(</span><span class="n">largeSize</span><span class="o">),</span> <span class="mi">0</span><span class="o">,</span> <span class="mi">5</span><span class="o">,</span> <span class="nc">Spannable</span><span class="o">.</span><span class="na">SPAN_EXCLUSIVE_EXCLUSIVE</span><span class="o">);</span>
+<span class="n">spannable</span><span class="o">.</span><span class="na">setSpan</span><span class="o">(</span><span class="k">new</span> <span class="nc">AbsoluteSizeSpan</span><span class="o">(</span><span class="n">smallSize</span><span class="o">),</span> <span class="mi">5</span><span class="o">,</span> <span class="n">text</span><span class="o">.</span><span class="na">length</span><span class="o">(),</span> <span class="nc">Spannable</span><span class="o">.</span><span class="na">SPAN_EXCLUSIVE_EXCLUSIVE</span><span class="o">);</span>
+
+<span class="c1">// set relative size </span>
+<span class="n">spannable</span><span class="o">.</span><span class="na">setSpan</span><span class="o">(</span><span class="k">new</span> <span class="nc">RelativeSizeSpan</span><span class="o">(</span><span class="mi">2</span><span class="n">f</span><span class="o">),</span> <span class="mi">0</span><span class="o">,</span> <span class="mi">5</span><span class="o">,</span> <span class="nc">Spannable</span><span class="o">.</span><span class="na">SPAN_EXCLUSIVE_EXCLUSIVE</span><span class="o">);</span>
+
+<span class="c1">// set different font style</span>
+<span class="n">spannable</span><span class="o">.</span><span class="na">setSpan</span><span class="o">(</span><span class="k">new</span> <span class="nc">StyleSpan</span><span class="o">(</span><span class="n">android</span><span class="o">.</span><span class="na">graphics</span><span class="o">.</span><span class="na">Typeface</span><span class="o">.</span><span class="na">ITALIC</span><span class="o">),</span> <span class="mi">0</span><span class="o">,</span> <span class="mi">5</span><span class="o">,</span> <span class="nc">Spannable</span><span class="o">.</span><span class="na">SPAN_EXCLUSIVE_EXCLUSIVE</span><span class="o">);</span>
+<span class="n">spannable</span><span class="o">.</span><span class="na">setSpan</span><span class="o">(</span><span class="k">new</span> <span class="nc">StyleSpan</span><span class="o">(</span><span class="n">android</span><span class="o">.</span><span class="na">graphics</span><span class="o">.</span><span class="na">Typeface</span><span class="o">.</span><span class="na">BOLD</span><span class="o">),</span> <span class="mi">5</span><span class="o">,</span> <span class="n">text</span><span class="o">.</span><span class="na">length</span><span class="o">(),</span> <span class="nc">Spannable</span><span class="o">.</span><span class="na">SPAN_EXCLUSIVE_EXCLUSIVE</span><span class="o">);</span>
+<span class="n">tvTitle</span><span class="o">.</span><span class="na">setText</span><span class="o">(</span><span class="n">spannable</span><span class="o">);</span>
+
+</code></pre></div></div>
+
+<p>使用<code class="language-plaintext highlighter-rouge">Spannable</code>接口还是比较灵活和已于理解的.</p>
+
+<h4 id="使用html-tags">使用Html Tags</h4>
+
+<p><code class="language-plaintext highlighter-rouge">TextView</code>支持常见的Html tags来标记text的外观,一般做法如下：</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+TextView textview = new TextView(context);
+textView.setText(Html.fromHtml("&lt;b&gt;" + title + "&lt;/b&gt;" +  "&lt;br /&gt;" + 
+            "&lt;small&gt;" + description + "&lt;/small&gt;" + "&lt;br /&gt;" + 
+            "&lt;small&gt;" + DateAdded + "&lt;/small&gt;"));
+
+
+</code></pre></div></div>
+
+<p>例如也可以在strings.xml中这样定义:</p>
+
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;string</span> <span class="na">name=</span><span class="s">"my_text"</span><span class="nt">&gt;</span>
+  <span class="cp">&lt;![CDATA[
+    &lt;b&gt;</span>Autor:<span class="nt">&lt;/b&gt;</span> Tao<span class="nt">&lt;br/&gt;</span>
+    <span class="nt">&lt;b&gt;</span>Contact:<span class="nt">&lt;/b&gt;</span> myemail@gmail.com<span class="nt">&lt;br/&gt;</span>
+    <span class="nt">&lt;i&gt;</span>Copyright © 2011-2012 <span class="nt">&lt;/i&gt;</span>
+  ]]&gt;
+<span class="nt">&lt;/string&gt;</span> 
+
+</code></pre></div></div>
+<p>这样定义就比上面那种方式更好一点,可以对string资源统一管理, 当然了Html的这种方式支持很多其他的tag, 同样可以做到Spannable接口可以做到的, 这里就不一一列举了. 不过有一点需要注意, 就是在<code class="language-plaintext highlighter-rouge">setText</code>的时候要调用<code class="language-plaintext highlighter-rouge">Html.fromHtml</code>才生效. 这个主题琐碎,但对于工程师来说什么事不琐碎呢? 注意细节, 提高效率, 每次记录下一些需要反复使用到的技术点, 也是一种修行.</p>
+
+
+        </section>
+
+        <footer class="post-footer">
+
+            <!-- Everything inside the #author tags pulls data from the author -->
+            <!-- #author-->
+            
+
+            <!-- Add Disqus Comments -->
+            
+
+        </footer>
+
+    </article>
+
+</main>
+
+<aside class="read-next">
+
+    <!-- [[! next_post ]] -->
+    
+        <a class="read-next-story no-cover" href="/avoid-default-constructor-in-fragment">
+            <section class="post">
+                <h2>为什么要避免使用Fragment的默认构造函数</h2>
+                <p>今天在项目中需要用到Fragment, 但是在代码写完后碰到了这样一个警告: >Avoid non-default constructors in fragments: use a default constructor plus Fragment#setArguments(Bundle) instead 后来发现是因为自己使用了Fragment的非默认构造函数,...</p>
+            </section>
+        </a>
+    
+    <!-- [[! /next_post ]] -->
+    <!-- [[! prev_post ]] -->
+    
+        <a class="read-next-story prev no-cover" href="/popup-window-is-showing-not-work">
+            <section class="post">
+                <h2>踩坑小计 - PopupWindow 的 isShowing 不工作</h2>
+                <p>PopupWindow在Android中是比较常用的一种控件，一个成熟的商业级app几乎不可能不用到它,最近在做的一个音乐播放列表的弹窗就是用PopupWindow实现的，做起来也没什么困难，就是有一个恼人的问题，不知道算不算SDK的一个bug. 问题描述 创建了一个PopuWindow将其show出来以后，调用其isShowing()方法后一直返回false，代码如下： // show musicPopup = new RoomMusicPopupWindow(this); musicPopup.show(mGameCenter); // want to decide if...</p>
+            </section>
+        </a>
+    
+    <!-- [[! /prev_post ]] -->
+</aside>
+
+<!-- /post -->
+
+
+        <!-- The tiny footer at the very bottom -->
+        <footer class="site-footer clearfix">
+          <section class="copyright"><a href="/">与机器，人，神共舞</a> &copy; 2023</section>
+          <section class="poweredby">Proudly published with <a href="https://jekyllrb.com/">Jekyll</a> using <a href="https://github.com/jekyllt/jasper">Jasper</a></section>
+        </footer>
+    </div>
+    <!-- highlight.js -->
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.3.0/highlight.min.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+
+    <!-- jQuery needs to come before `` so that jQuery can be used in code injection -->
+    <script type="text/javascript" src="//code.jquery.com/jquery-1.12.0.min.js"></script>
+    <!-- Ghost outputs important scripts and data with this tag -->
+    <!--  -->
+    <!-- Add Google Analytics  -->
+        <!-- Google Analytics Tracking code -->
+     <script>
+	    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+	    ga('create', 'UA-78960009-1', 'auto');
+	    ga('send', 'pageview');
+
+     </script>
+
+    <!-- Fitvids makes video embeds responsive and awesome -->
+    <script type="text/javascript" src="/assets/js/jquery.fitvids.js"></script>
+    <!-- The main JavaScript file for Casper -->
+    <script type="text/javascript" src="/assets/js/index.js"></script>
+
+</body>
+</html>

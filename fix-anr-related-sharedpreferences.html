@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- Document Settings -->
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+    <!-- Page Meta -->
+    <title>解决SharedPreferences导致的ANR</title>
+    <meta name="description" content="编程，读书，思考，旅行，与机器对话，与人交谈，对神发问，探索，体验人生美丽的风景" />
+
+    <!-- Mobile Meta -->
+    <meta name="HandheldFriendly" content="True" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- Brand icon -->
+    <link rel="shortcut icon" href="/assets/images/favicon.ico" >
+
+    <!-- Styles'n'Scripts -->
+    <link rel="stylesheet" type="text/css" href="/assets/css/screen.css" />
+    <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Merriweather:300,700,700italic,300italic|Open+Sans:700,400" />
+    <link rel="stylesheet" type="text/css" href="/assets/css/syntax.css" />
+
+    <!-- highlight.js -->
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.3.0/styles/default.min.css">
+    <style>.hljs { background: none; }</style>
+
+    <!-- Ghost outputs important style and meta data with this tag -->
+        <link rel="canonical" href="/" />
+    <meta name="referrer" content="origin" />
+    <link rel="next" href="/page2/" />
+
+    <meta property="og:site_name" content="与机器，人，神共舞" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="与机器，人，神共舞" />
+    <meta property="og:description" content="编程，读书，思考，旅行，与机器对话，与人交谈，对神发问，探索，体验人生美丽的风景" />
+    <meta property="og:url" content="/" />
+    <meta property="og:image" content="/assets/images/cover1.jpg" />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="与机器，人，神共舞" />
+    <meta name="twitter:description" content="编程，读书，思考，旅行，与机器对话，与人交谈，对神发问，探索，体验人生美丽的风景" />
+    <meta name="twitter:url" content="/" />
+    <meta name="twitter:image:src" content="/assets/images/cover1.jpg" />
+
+    <script type="application/ld+json">
+{
+    "@context": "http://schema.org",
+    "@type": "Website",
+    "publisher": "Tao's Page",
+    "url": "/",
+    "image": "/assets/images/cover1.jpg",
+    "description": "编程，读书，思考，旅行，与机器对话，与人交谈，对神发问，探索，体验人生美丽的风景"
+}
+    </script>
+
+    <meta name="generator" content="Jekyll 3.0.0" />
+    <link rel="alternate" type="application/rss+xml" title="与机器，人，神共舞" href="/rss.xml" />
+
+</head>
+<body class="home-template nav-closed">
+
+    <!-- The blog navigation links -->
+    <div class="nav">
+    <h3 class="nav-title">Menu</h3>
+    <a href="#" class="nav-close">
+        <span class="hidden">Close</span>
+    </a>
+    <ul>
+        <li class="nav-home " role="presentation"><a href="/">Home</a></li>
+        <li class="nav-about " role="presentation"><a href="/about.html">About</a></li>
+        <li class="nav-fables " role="presentation"><a href="/tag/machine/">Machine</a></li>
+        <li class="nav-speeches " role="presentation"><a href="/tag/human/">Human</a></li>
+        <li class="nav-fiction " role="presentation"><a href="/tag/god/">God</a></li>
+        <li class="nav-author " role="presentation"><a href="/author/hetao/">Author</a></li>
+    </ul>
+    <a class="subscribe-button icon-feed" href="/rss.xml">Subscribe</a>
+</div>
+<span class="nav-cover"></span>
+
+
+    <div class="site-wrapper">
+
+        <!-- All the main content gets inserted here, index.hbs, post.hbs, etc -->
+        <!-- default -->
+
+<!-- The comment above "< default" means - insert everything in this file into -->
+    <!-- the [body] of the default.hbs template, which contains our header/footer. -->
+
+<!-- Everything inside the #post tags pulls data from the post -->
+<!-- #post -->
+
+<header class="main-header post-head no-cover">
+    <nav class="main-nav  clearfix">
+        
+        
+    </nav>
+</header>
+
+<main class="content" role="main">
+
+    <article class="post tag-machine">
+
+        <header class="post-header">
+            <h1 class="post-title">解决SharedPreferences导致的ANR</h1>
+            <section class="post-meta">
+            <!-- <a href='/'>Tao He</a> -->
+
+            
+            <time class="post-date" datetime="2019-07-10">10 Jul 2019</time>
+                <!-- [[tags prefix=" on "]] -->
+                
+                on
+                
+                    
+                       <a href='/tag/machine'>Machine</a>
+                    
+                
+                
+            </section>
+        </header>
+
+        <section class="post-content">
+
+            <p>这几天在Google Play的ANR实时报告中看到很多貌似与SharedPreferences相关的ANR，看了历史版本后发现，这个已经是一个老问题了，在历次版班的ANR中居高不下。今天实在忍不了，决定对这个问题一探究竟。</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+ at java.lang.Object.wait! (Native method)
+- waiting on &lt;0x0a351954&gt; (a java.lang.Object)
+  at java.lang.Thread.parkFor$ (Thread.java:1220)
+- locked &lt;0x0a351954&gt; (a java.lang.Object)
+  at sun.misc.Unsafe.park (Unsafe.java:299)
+  at java.util.concurrent.locks.LockSupport.park (LockSupport.java:158)
+  at java.util.concurrent.locks.AbstractQueuedSynchronizer.parkAndCheckInterrupt (AbstractQueuedSynchronizer.java:810)
+  at java.util.concurrent.locks.AbstractQueuedSynchronizer.doAcquireSharedInterruptibly (AbstractQueuedSynchronizer.java:970)
+  at java.util.concurrent.locks.AbstractQueuedSynchronizer.acquireSharedInterruptibly (AbstractQueuedSynchronizer.java:1278)
+  at java.util.concurrent.CountDownLatch.await (CountDownLatch.java:203)
+  at android.app.SharedPreferencesImpl$EditorImpl$1.run (SharedPreferencesImpl.java:366)
+  at android.app.QueuedWork.waitToFinish (QueuedWork.java:88)
+  at android.app.ActivityThread.handleServiceArgs (ActivityThread.java:3029)
+  at android.app.ActivityThread.access$2200 (ActivityThread.java:155)
+  at android.app.ActivityThread$H.handleMessage (ActivityThread.java:1450)
+  at android.os.Handler.dispatchMessage (Handler.java:102)
+  at android.os.Looper.loop (Looper.java:175)
+  at android.app.ActivityThread.main (ActivityThread.java:5430)
+  at java.lang.reflect.Method.invoke! (Native method)
+  at com.android.internal.os.ZygoteInit$MethodAndArgsCaller.run (ZygoteInit.java:726)
+  at com.android.internal.os.ZygoteInit.main (ZygoteInit.java:616)
+
+</code></pre></div></div>
+
+<p>这事Google Play提供的堆栈信息，信息非常有限，但是还是能观察到SharedPreferences的身影的，这个 <code class="language-plaintext highlighter-rouge">waitToFinish</code> 非常可疑，追踪到代码:</p>
+
+<pre><code class="language-`">/**
+ * Finishes or waits for async operations to complete.
+ * (e.g. SharedPreferences$Editor#startCommit writes)
+ *
+ * Is called from the Activity base class's onPause(), after
+ * BroadcastReceiver's onReceive, after Service command handling,
+ * etc. (so async work is never lost)
+ */
+public static void waitToFinish() {
+    Runnable toFinish;
+    while ((toFinish = sPendingWorkFinishers.poll()) != null) {
+        toFinish.run();
+    }
+}
+
+</code></pre>
+
+<p>这个方法的注释已经很清楚了，如果我们使用SharedPreference的apply方法, 虽然该方法可以很快返回， 并在其它线程里将键值对写入到文件系统， 但是当Activity, BroadcastReceiver和Service的一些回调方法被调用时，会等待写入到文件系统的任务完成，如果写入比较慢，主线程就会出现ANR问题。</p>
+
+<p>另外，SharedPreference除了提供apply外还提供commit方法，源码如下所示，该方法直接在调用线程中执行，不会转入后台，但如果我们在UI线程commit，且磁盘写入较慢的情况下，ANR依然会发生。行文至此，问题应该描述的比较清楚了，可以理解为SharedPreferences的机制导致系统组件回调过程中的阻塞，触发了ANR。可以将这个问题视为Android一个bug，也可以将问题归咎于为使用SharedPreferences不当(在SharedPreferences里读写数据量太大), 但是问题终究要解决，所以下面提出解决方案，并且记录下解决过程中的实践经验。</p>
+
+<ul>
+  <li>方案一</li>
+</ul>
+
+<p>考虑启动一个线程commit，不使用apply</p>
+
+<ul>
+  <li>方案二</li>
+</ul>
+
+<p>Hook ActivityThread，拿到Handler变量，在调用QueuedWork.waitToFinish()之前，将其中保存的队列清空，防止ANR的发生</p>
+
+<ul>
+  <li>方案三</li>
+</ul>
+
+<p>使用MMKV替代SharedPrferences</p>
+
+<p>最后我们选用了第三种方案，对于我们现有的代码改动量最小。第一种方案可行，但是也有问题，会有线程同步，仍然需要管理其他线程，保证读写的一致性。第二种方案不好验证它的副作用，因此也没有采纳。</p>
+
+<p>选用MMKV后也有一个问题需要解决，那就是数据迁移，因为不可能针对之前所有使用SharedPreferences的地方逐一进行迁移，因此写了一个MMKV的封装类来统一对外提供数据迁移和读写的接口，可以实现对现已代码最小改动的情况下完成替换和迁移。封装类如下:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+
+public class SharedPreferencesStore {
+    public static final String TAG = SharedPreferencesStore.class.getSimpleName();
+
+    private MMKV mMMKV;
+
+    private SharedPreferencesStore(MMKV mmkv) {
+        mMMKV = mmkv;
+    }
+
+    // 初始化，必须在使用前调用
+    public static void initialize(Context context) {
+        String rootDir = MMKV.initialize(context);
+        ApplicationDelegate.log(TAG + " MMKV root directory=" + rootDir);
+    }
+
+    // 获取全局SharedPreferencesStore, 不需要迁移老的SharedPreferences数据的情况下调用
+    public static SharedPreferencesStore getGlobal() {
+        MMKV mmkv = MMKV.defaultMMKV();
+        return new SharedPreferencesStore(mmkv);
+    }
+
+    // 获取全局SharedPreferencesStore, 需要迁移老的SharedPreferences数据的情况下调用
+    public static SharedPreferencesStore getGlobalWithMigration(Context context) {
+        MMKV mmkv = MMKV.defaultMMKV();
+        importFromDefaultSharePreferences(mmkv, context);
+        return new SharedPreferencesStore(mmkv);
+    }
+
+    // 获取特定SharedPreferencesStore, 不需要迁移老的SharedPreferences数据的情况下调用
+    public static SharedPreferencesStore getByName(final String name) {
+        MMKV mmkv = MMKV.mmkvWithID(name);
+        return new SharedPreferencesStore(mmkv);
+    }
+
+    // 获取特定SharedPreferencesStore, 需要迁移老的SharedPreferences数据的情况下调用
+    public static SharedPreferencesStore getByNameWithMigration(Context context, final String name) {
+        MMKV mmkv = MMKV.mmkvWithID(name);
+        importFromSharePreferences(mmkv, context, name);
+        return new SharedPreferencesStore(mmkv);
+    }
+
+    // 需要多进程访问, 不需要迁移老的SharedPreferences数据的情况下调用
+    public static SharedPreferencesStore getMultiProcessByName(final String name) {
+        MMKV mmkv = MMKV.mmkvWithID(name, MMKV.MULTI_PROCESS_MODE);
+        return new SharedPreferencesStore(mmkv);
+    }
+
+    // 需要多进程访问, 需要迁移老的SharedPreferences数据的情况下调用
+    public static SharedPreferencesStore getMultiProcessByNameWithMigration(Context context, final String name) {
+        MMKV mmkv = MMKV.mmkvWithID(name, MMKV.MULTI_PROCESS_MODE);
+        importFromSharePreferencesMultiProcess(mmkv, context, name);
+        return new SharedPreferencesStore(mmkv);
+    }
+
+    public void put(final String key, boolean value) {
+        mMMKV.encode(key, value);
+    }
+
+    public boolean getBoolean(final String key, boolean defValue) {
+        return mMMKV.decodeBool(key, defValue);
+    }
+
+    public void put(final String key, int value) {
+        mMMKV.encode(key, value);
+    }
+
+    public int getInt(final String key, int defValue) {
+        return mMMKV.decodeInt(key, defValue);
+    }
+
+    public void put(final String key, long value) {
+        mMMKV.encode(key, value);
+    }
+
+    public long getLong(final String key, long defValue) {
+        return mMMKV.decodeLong(key, defValue);
+    }
+
+    public void put(final String key, float value) {
+        mMMKV.encode(key, value);
+    }
+
+    public float getFloat(final String key, float defValue) {
+        return mMMKV.decodeFloat(key, defValue);
+    }
+
+    public void put(final String key, double value) {
+        mMMKV.encode(key, value);
+    }
+
+    public double getDouble(final String key, double defValue) {
+        return mMMKV.decodeDouble(key, defValue);
+    }
+
+    public void put(final String key, final String value) {
+        mMMKV.encode(key, value);
+    }
+
+    public String getString(final String key, final String defValue) {
+        return mMMKV.decodeString(key, defValue);
+    }
+
+    public void put(final String key, final byte[] value) {
+        mMMKV.encode(key, value);
+    }
+
+    public byte[] getBytes(final String key) {
+        return mMMKV.decodeBytes(key);
+    }
+
+    public Map&lt;String, ?&gt; getAll() {
+        return mMMKV.getAll();
+    }
+
+    public void remove(final String key) {
+        mMMKV.remove(key);
+    }
+
+    public void removeForKey(final String key) {
+        mMMKV.removeValueForKey(key);
+    }
+
+    public void removeForKeys(final String[] keys) {
+        mMMKV.removeValuesForKeys(keys);
+    }
+
+    public boolean contains(final String key) {
+        return mMMKV.contains(key);
+    }
+
+    public boolean containsKey(final String key) {
+        return mMMKV.containsKey(key);
+    }
+
+    public SharedPreferences.Editor edit() {
+        return mMMKV.edit();
+    }
+
+    public static void importFromSharePreferences(MMKV mmkv, final Context context, final String name) {
+        if (null == context) {
+            return;
+        }
+        SharedPreferences sp = context.getSharedPreferences(name, Context.MODE_PRIVATE);
+        doImport(mmkv, sp, name);
+    }
+
+    public static void importFromSharePreferencesMultiProcess(MMKV mmkv, final Context context, final String name) {
+        if (context == null) {
+            return;
+        }
+        SharedPreferences sp = context.getSharedPreferences(name, Context.MODE_MULTI_PROCESS);
+        doImport(mmkv, sp, name);
+    }
+
+    public static void importFromDefaultSharePreferences(MMKV mmkv, final Context context) {
+        if (context == null) {
+            return;
+        }
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
+        doImport(mmkv, sp, context.getPackageName() + "_preferences");
+    }
+
+    private static void doImport(MMKV mmkv, SharedPreferences sp, final String name) {
+        ApplicationDelegate.log(TAG + " ------" + name + "-----SharedPreferences迁移开始-----------");
+        if (sp.getAll() == null || sp.getAll().size() == 0) {
+            ApplicationDelegate.log(TAG + " " + name + " SharedPreferences 为空，不需要迁移");
+            return;
+        }
+
+        int oldSize = sp.getAll().size();
+        ApplicationDelegate.log(TAG + " old size: " + oldSize);
+
+        Map&lt;String, ?&gt; map = sp.getAll();
+
+        Map&lt;String, String&gt; keyTypes = new HashMap&lt;&gt;();
+
+        ApplicationDelegate.log(TAG + " ---old data: ");
+        for (Map.Entry&lt;String, ?&gt; entry : map.entrySet()) {
+            Object obj = entry.getValue();
+            if (obj instanceof Boolean) {
+                keyTypes.put(entry.getKey(), "Boolean");
+            } else if (obj instanceof Integer) {
+                keyTypes.put(entry.getKey(), "Integer");
+            } else if (obj instanceof Long) {
+                keyTypes.put(entry.getKey(), "Long");
+            } else if (obj instanceof Float) {
+                keyTypes.put(entry.getKey(), "Float");
+            } else if (obj instanceof Double) {
+                keyTypes.put(entry.getKey(), "Double");
+            } else if (obj instanceof String) {
+                keyTypes.put(entry.getKey(), "String");
+            }
+            ApplicationDelegate.log(TAG + " key: " + entry.getKey() + " value: " + entry.getValue());
+        }
+
+
+        int imported = mmkv.importFromSharedPreferences(sp);
+        ApplicationDelegate.log(TAG + " imported size: " + imported);
+
+        if (BuildConfig.DEBUG) {
+            ApplicationDelegate.log(TAG +  " ---imported data: ");
+
+            String[] keys = mmkv.allKeys();
+            for (int i = 0; i &lt; keys.length; i++) {
+
+                String type = keyTypes.get(keys[i]);
+                if (type == null) {
+                    continue;
+                }
+
+                switch (type) {
+                    case "Boolean":
+                        ApplicationDelegate.log(TAG + " key: " + keys[i] + " value: " + mmkv.decodeBool(keys[i]));
+                        break;
+                    case "Integer":
+                        ApplicationDelegate.log(TAG + " key: " + keys[i] + " value: " + mmkv.decodeInt(keys[i]));
+                        break;
+                    case "Long":
+                        ApplicationDelegate.log(TAG + " key: " + keys[i] + " value: " + mmkv.decodeLong(keys[i]));
+                        break;
+                    case "Float":
+                        ApplicationDelegate.log(TAG + " key: " + keys[i] + " value: " + mmkv.decodeFloat(keys[i]));
+                        break;
+                    case "Double":
+                        ApplicationDelegate.log(TAG + " key: " + keys[i] + " value: " + mmkv.decodeDouble(keys[i]));
+                        break;
+                    case "String":
+                        ApplicationDelegate.log(TAG + " key: " + keys[i] + " value: " + mmkv.decodeString(keys[i]));
+                        break;
+                    default:
+                        ApplicationDelegate.log(TAG + " key: " + keys[i] + " value: unknown type");
+                        break;
+                }
+            }
+        }
+
+
+        if (imported &gt; 0 &amp;&amp; oldSize == imported) {
+            sp.edit().clear().apply();
+        }
+
+        if (oldSize != imported) {
+            ApplicationDelegate.log(TAG + " SharedPreferences 迁移失败, name=" + name);
+            ApplicationDelegate.bugTrace(ApplicationDelegate.MAIN_CODE_MMKV_IMPORT_FAIL, 0,
+                    "name=" + name + ", old size=" + oldSize + ", import size=" + imported);
+        }
+        ApplicationDelegate.log(TAG +  " ------" + name + "-----SharedPreferences迁移结束-----------");
+    }
+}
+
+</code></pre></div></div>
+
+<p>这次替换和迁移目前已经上线验证 ，目前只发现在API 19的机器上出现崩溃，报java.lang.UnsatisfiedLinkError，MMKV的官网上有次问题的解答，可以参考解决。</p>
+
+
+
+        </section>
+
+        <footer class="post-footer">
+
+            <!-- Everything inside the #author tags pulls data from the author -->
+            <!-- #author-->
+            
+
+            <!-- Add Disqus Comments -->
+            
+
+        </footer>
+
+    </article>
+
+</main>
+
+<aside class="read-next">
+
+    <!-- [[! next_post ]] -->
+    
+        <a class="read-next-story no-cover" href="/h5-video-fullscreen-in-webview">
+            <section class="post">
+                <h2>在WebView中支持视频全屏</h2>
+                <p>最近感觉和WebView杠上了，刚解决完在WebView中使用Android相机拍照和录像的问题，又遇到在WebView中视频无法全屏，和之前相机拍照和视频的问题一样，iOS和其他浏览器都没有问题，独WebView出错。通过网上查阅一些资料，最终顺利解决，虽不是什么难搞的东西，但是真要弄起来，也需要一些心力，所以通过此篇记录下整个过程。 解决整个问题其实很程式化，先按部就班保证视频能够正常播放: 1. 在AndroidManifest.xml中声明hardwareAccelerate属性 ``` ``` 2. 在Activity中声明 ``` ``` 3. 在代码中设置 ``` getWindow.setFlags(WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED, WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED);...</p>
+            </section>
+        </a>
+    
+    <!-- [[! /next_post ]] -->
+    <!-- [[! prev_post ]] -->
+    
+        <a class="read-next-story prev no-cover" href="/operate-camera-in-webview">
+            <section class="post">
+                <h2>在WebView中调用Android相机拍照录像</h2>
+                <p>最近公司App需要以H5的方式接入七鱼客服，根据他们的开发文档接入起来还是很容易，成本很低。理论上如果以native的方式接入的话，用户体验会更好，但是接入后增加的包体积是无法接受的，遂改用H5的方式，整个接入过程还算顺利，有相对详尽的接入文档和demo，只是在最后接入完成后，因为沟通不畅，忽略了客服聊天界面在Android上无法发图片和发视频的问题。同一份html，iOS就是正常的，Android上就死活没反应。后来才恍然大悟，WebView是不支持JS去直接操作Android相机的，必须通过回调到native，由native完成照片的选择，拍摄和录像后将数据返回给JS才能完成一次照片和视频的发送。清楚了问题所在，就需要实现WebView的标准接口来实现这个回调到native的功能，在代码实现前，需要先厘清一些WebView的基本概念和原理。 像发送图片和视频这样的操作，涉及到了定制WebView的一些默认行为，理论上如果要做定制，就需要了解WebSettings、JavaScriptInterface、WebViewClient以及WebChromeClient，一般而言，通过配置WebSettings，使用JavasScriptInterface，重写WebViewClient和WebChromeClient对象的相关方法，就可以实现一些我们想要的行为。发图片和发视频就是通过重写WebChromeClient对象的几个方法来实现的。 // 重写WebChromeClient的特定方法来实现图片和视频的发送 mWebView.setWebChromeClient(new WebChromeClient() { // For Android &gt;=3.0 public void openFileChooser(ValueCallback&lt;Uri&gt; uploadMsg,...</p>
+            </section>
+        </a>
+    
+    <!-- [[! /prev_post ]] -->
+</aside>
+
+<!-- /post -->
+
+
+        <!-- The tiny footer at the very bottom -->
+        <footer class="site-footer clearfix">
+          <section class="copyright"><a href="/">与机器，人，神共舞</a> &copy; 2023</section>
+          <section class="poweredby">Proudly published with <a href="https://jekyllrb.com/">Jekyll</a> using <a href="https://github.com/jekyllt/jasper">Jasper</a></section>
+        </footer>
+    </div>
+    <!-- highlight.js -->
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.3.0/highlight.min.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+
+    <!-- jQuery needs to come before `` so that jQuery can be used in code injection -->
+    <script type="text/javascript" src="//code.jquery.com/jquery-1.12.0.min.js"></script>
+    <!-- Ghost outputs important scripts and data with this tag -->
+    <!--  -->
+    <!-- Add Google Analytics  -->
+        <!-- Google Analytics Tracking code -->
+     <script>
+	    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+	    ga('create', 'UA-78960009-1', 'auto');
+	    ga('send', 'pageview');
+
+     </script>
+
+    <!-- Fitvids makes video embeds responsive and awesome -->
+    <script type="text/javascript" src="/assets/js/jquery.fitvids.js"></script>
+    <!-- The main JavaScript file for Casper -->
+    <script type="text/javascript" src="/assets/js/index.js"></script>
+
+</body>
+</html>

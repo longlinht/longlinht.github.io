@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- Document Settings -->
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+    <!-- Page Meta -->
+    <title>Define Userful Android Drawables</title>
+    <meta name="description" content="编程，读书，思考，旅行，与机器对话，与人交谈，对神发问，探索，体验人生美丽的风景" />
+
+    <!-- Mobile Meta -->
+    <meta name="HandheldFriendly" content="True" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- Brand icon -->
+    <link rel="shortcut icon" href="/assets/images/favicon.ico" >
+
+    <!-- Styles'n'Scripts -->
+    <link rel="stylesheet" type="text/css" href="/assets/css/screen.css" />
+    <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Merriweather:300,700,700italic,300italic|Open+Sans:700,400" />
+    <link rel="stylesheet" type="text/css" href="/assets/css/syntax.css" />
+
+    <!-- highlight.js -->
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.3.0/styles/default.min.css">
+    <style>.hljs { background: none; }</style>
+
+    <!-- Ghost outputs important style and meta data with this tag -->
+        <link rel="canonical" href="/" />
+    <meta name="referrer" content="origin" />
+    <link rel="next" href="/page2/" />
+
+    <meta property="og:site_name" content="与机器，人，神共舞" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="与机器，人，神共舞" />
+    <meta property="og:description" content="编程，读书，思考，旅行，与机器对话，与人交谈，对神发问，探索，体验人生美丽的风景" />
+    <meta property="og:url" content="/" />
+    <meta property="og:image" content="/assets/images/cover1.jpg" />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="与机器，人，神共舞" />
+    <meta name="twitter:description" content="编程，读书，思考，旅行，与机器对话，与人交谈，对神发问，探索，体验人生美丽的风景" />
+    <meta name="twitter:url" content="/" />
+    <meta name="twitter:image:src" content="/assets/images/cover1.jpg" />
+
+    <script type="application/ld+json">
+{
+    "@context": "http://schema.org",
+    "@type": "Website",
+    "publisher": "Tao's Page",
+    "url": "/",
+    "image": "/assets/images/cover1.jpg",
+    "description": "编程，读书，思考，旅行，与机器对话，与人交谈，对神发问，探索，体验人生美丽的风景"
+}
+    </script>
+
+    <meta name="generator" content="Jekyll 3.0.0" />
+    <link rel="alternate" type="application/rss+xml" title="与机器，人，神共舞" href="/rss.xml" />
+
+</head>
+<body class="home-template nav-closed">
+
+    <!-- The blog navigation links -->
+    <div class="nav">
+    <h3 class="nav-title">Menu</h3>
+    <a href="#" class="nav-close">
+        <span class="hidden">Close</span>
+    </a>
+    <ul>
+        <li class="nav-home " role="presentation"><a href="/">Home</a></li>
+        <li class="nav-about " role="presentation"><a href="/about.html">About</a></li>
+        <li class="nav-fables " role="presentation"><a href="/tag/machine/">Machine</a></li>
+        <li class="nav-speeches " role="presentation"><a href="/tag/human/">Human</a></li>
+        <li class="nav-fiction " role="presentation"><a href="/tag/god/">God</a></li>
+        <li class="nav-author " role="presentation"><a href="/author/hetao/">Author</a></li>
+    </ul>
+    <a class="subscribe-button icon-feed" href="/rss.xml">Subscribe</a>
+</div>
+<span class="nav-cover"></span>
+
+
+    <div class="site-wrapper">
+
+        <!-- All the main content gets inserted here, index.hbs, post.hbs, etc -->
+        <!-- default -->
+
+<!-- The comment above "< default" means - insert everything in this file into -->
+    <!-- the [body] of the default.hbs template, which contains our header/footer. -->
+
+<!-- Everything inside the #post tags pulls data from the post -->
+<!-- #post -->
+
+<header class="main-header post-head no-cover">
+    <nav class="main-nav  clearfix">
+        
+        
+    </nav>
+</header>
+
+<main class="content" role="main">
+
+    <article class="post tag-machine">
+
+        <header class="post-header">
+            <h1 class="post-title">Define Userful Android Drawables</h1>
+            <section class="post-meta">
+            <!-- <a href='/'>Tao He</a> -->
+
+            
+            <time class="post-date" datetime="2016-07-05">05 Jul 2016</time>
+                <!-- [[tags prefix=" on "]] -->
+                
+                on
+                
+                    
+                       <a href='/tag/machine'>Machine</a>
+                    
+                
+                
+            </section>
+        </header>
+
+        <section class="post-content">
+
+            <p>We can define many useful drawables in Android, in this article, I collected some of definations I ever used.</p>
+
+<h4 id="define-a-round-corner-drawable">Define a round corner drawable</h4>
+
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;shape</span> <span class="na">xmlns:android=</span><span class="s">"http://schemas.android.com/apk/res/android"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;solid</span> <span class="na">android:color=</span><span class="s">"#ffffffff"</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;stroke</span> <span class="na">android:width=</span><span class="s">"0dp"</span>
+            <span class="na">android:color=</span><span class="s">"#ffffffff"</span> <span class="nt">/&gt;</span>
+    <span class="nt">&lt;padding</span> <span class="na">android:left=</span><span class="s">"1dp"</span>
+             <span class="na">android:top=</span><span class="s">"1dp"</span>
+             <span class="na">android:right=</span><span class="s">"1dp"</span>
+             <span class="na">android:bottom=</span><span class="s">"1dp"</span> <span class="nt">/&gt;</span>
+    <span class="nt">&lt;corners</span> <span class="na">android:bottomRightRadius=</span><span class="s">"4dp"</span>
+             <span class="na">android:bottomLeftRadius=</span><span class="s">"4dp"</span>
+             <span class="na">android:topLeftRadius=</span><span class="s">"0dp"</span>
+             <span class="na">android:topRightRadius=</span><span class="s">"0dp"</span><span class="nt">/&gt;</span>
+<span class="nt">&lt;/shape&gt;</span>
+</code></pre></div></div>
+
+<h4 id="define-a-circle">Define a circle</h4>
+
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?xml version="1.0" encoding="utf-8"?&gt;</span>
+<span class="nt">&lt;shape</span>
+    <span class="na">xmlns:android=</span><span class="s">"http://schemas.android.com/apk/res/android"</span>
+    <span class="na">android:shape=</span><span class="s">"oval"</span><span class="nt">&gt;</span>
+   <span class="nt">&lt;solid</span>
+       <span class="na">android:color=</span><span class="s">"#66000000"</span><span class="nt">/&gt;</span>
+<span class="nt">&lt;/shape&gt;</span>
+</code></pre></div></div>
+
+<h4 id="define-a-ring">Define a ring</h4>
+
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;shape</span>
+    <span class="na">android:shape=</span><span class="s">"ring"</span>
+    <span class="na">android:thickness=</span><span class="s">"2.5dp"</span>
+    <span class="na">android:useLevel=</span><span class="s">"true"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;solid</span> <span class="na">android:color=</span><span class="s">"#979797"</span><span class="nt">/&gt;</span>
+<span class="nt">&lt;/shape&gt;</span>
+</code></pre></div></div>
+<h4 id="define-a-drawable-with-state">Define a drawable with state</h4>
+
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?xml version="1.0" encoding="utf-8"?&gt;</span>
+<span class="nt">&lt;selector</span> <span class="na">xmlns:android=</span><span class="s">"http://schemas.android.com/apk/res/android"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;item</span> <span class="na">android:drawable=</span><span class="s">"@drawable/qq_login_button_bg_pressed"</span> <span class="na">android:state_pressed=</span><span class="s">"true"</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;item</span> <span class="na">android:drawable=</span><span class="s">"@drawable/qq_login_button_bg_normal"</span><span class="nt">/&gt;</span>
+<span class="nt">&lt;/selector&gt;</span>
+</code></pre></div></div>
+
+<h4 id="define-a-ring-as-progressbar-background">Define a ring as progressbar background</h4>
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?xml version="1.0" encoding="utf-8"?&gt;</span>
+<span class="nt">&lt;layer-list</span> <span class="na">xmlns:android=</span><span class="s">"http://schemas.android.com/apk/res/android"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;item</span> <span class="na">android:id=</span><span class="s">"@android:id/secondaryProgress"</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;shape</span>
+            <span class="na">android:shape=</span><span class="s">"ring"</span>
+            <span class="na">android:thickness=</span><span class="s">"2.5dp"</span>
+            <span class="na">android:useLevel=</span><span class="s">"true"</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;solid</span> <span class="na">android:color=</span><span class="s">"#979797"</span><span class="nt">/&gt;</span>
+        <span class="nt">&lt;/shape&gt;</span>
+    <span class="nt">&lt;/item&gt;</span>
+
+    <span class="nt">&lt;item</span> <span class="na">android:id=</span><span class="s">"@android:id/progress"</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;rotate</span>
+            <span class="na">android:fromDegrees=</span><span class="s">"270"</span>
+            <span class="na">android:pivotX=</span><span class="s">"50%"</span>
+            <span class="na">android:pivotY=</span><span class="s">"50%"</span>
+            <span class="na">android:toDegrees=</span><span class="s">"270"</span><span class="nt">&gt;</span>
+
+            <span class="nt">&lt;shape</span>
+                <span class="na">android:shape=</span><span class="s">"ring"</span>
+                <span class="na">android:thickness=</span><span class="s">"2.5dp"</span>
+                <span class="na">android:useLevel=</span><span class="s">"true"</span><span class="nt">&gt;</span>
+
+                <span class="nt">&lt;rotate</span>
+                    <span class="na">android:fromDegrees=</span><span class="s">"0"</span>
+                    <span class="na">android:pivotX=</span><span class="s">"50%"</span>
+                    <span class="na">android:pivotY=</span><span class="s">"50%"</span>
+                    <span class="na">android:toDegrees=</span><span class="s">"360"</span> <span class="nt">/&gt;</span>
+                <span class="nt">&lt;solid</span> <span class="na">android:color=</span><span class="s">"#ffffffff"</span><span class="nt">/&gt;</span>
+            <span class="nt">&lt;/shape&gt;</span>
+        <span class="nt">&lt;/rotate&gt;</span>
+    <span class="nt">&lt;/item&gt;</span>
+<span class="nt">&lt;/layer-list&gt;</span>
+</code></pre></div></div>
+
+
+        </section>
+
+        <footer class="post-footer">
+
+            <!-- Everything inside the #author tags pulls data from the author -->
+            <!-- #author-->
+            
+
+            <!-- Add Disqus Comments -->
+            
+
+        </footer>
+
+    </article>
+
+</main>
+
+<aside class="read-next">
+
+    <!-- [[! next_post ]] -->
+    
+        <a class="read-next-story no-cover" href="/userful-command-line-in-android-development">
+            <section class="post">
+                <h2>Userful command line in Android development</h2>
+                <p>## Over the years, these are the Android development tools I’ve found most useful. I...</p>
+            </section>
+        </a>
+    
+    <!-- [[! /next_post ]] -->
+    <!-- [[! prev_post ]] -->
+    
+        <a class="read-next-story prev no-cover" href="/I-do-not-know-what-I-may-appear-to-the-world">
+            <section class="post">
+                <h2>I Do Not Know What I May Appear To The World</h2>
+                <p>作为“God”板块的第一篇，引用牛顿爵士的一段话来开启。 I do not know what I may appear to the world, but to myself...</p>
+            </section>
+        </a>
+    
+    <!-- [[! /prev_post ]] -->
+</aside>
+
+<!-- /post -->
+
+
+        <!-- The tiny footer at the very bottom -->
+        <footer class="site-footer clearfix">
+          <section class="copyright"><a href="/">与机器，人，神共舞</a> &copy; 2023</section>
+          <section class="poweredby">Proudly published with <a href="https://jekyllrb.com/">Jekyll</a> using <a href="https://github.com/jekyllt/jasper">Jasper</a></section>
+        </footer>
+    </div>
+    <!-- highlight.js -->
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.3.0/highlight.min.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+
+    <!-- jQuery needs to come before `` so that jQuery can be used in code injection -->
+    <script type="text/javascript" src="//code.jquery.com/jquery-1.12.0.min.js"></script>
+    <!-- Ghost outputs important scripts and data with this tag -->
+    <!--  -->
+    <!-- Add Google Analytics  -->
+        <!-- Google Analytics Tracking code -->
+     <script>
+	    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+	    ga('create', 'UA-78960009-1', 'auto');
+	    ga('send', 'pageview');
+
+     </script>
+
+    <!-- Fitvids makes video embeds responsive and awesome -->
+    <script type="text/javascript" src="/assets/js/jquery.fitvids.js"></script>
+    <!-- The main JavaScript file for Casper -->
+    <script type="text/javascript" src="/assets/js/index.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- Document Settings -->
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+    <!-- Page Meta -->
+    <title>Booster使用小结</title>
+    <meta name="description" content="编程，读书，思考，旅行，与机器对话，与人交谈，对神发问，探索，体验人生美丽的风景" />
+
+    <!-- Mobile Meta -->
+    <meta name="HandheldFriendly" content="True" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- Brand icon -->
+    <link rel="shortcut icon" href="/assets/images/favicon.ico" >
+
+    <!-- Styles'n'Scripts -->
+    <link rel="stylesheet" type="text/css" href="/assets/css/screen.css" />
+    <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Merriweather:300,700,700italic,300italic|Open+Sans:700,400" />
+    <link rel="stylesheet" type="text/css" href="/assets/css/syntax.css" />
+
+    <!-- highlight.js -->
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.3.0/styles/default.min.css">
+    <style>.hljs { background: none; }</style>
+
+    <!-- Ghost outputs important style and meta data with this tag -->
+        <link rel="canonical" href="/" />
+    <meta name="referrer" content="origin" />
+    <link rel="next" href="/page2/" />
+
+    <meta property="og:site_name" content="与机器，人，神共舞" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="与机器，人，神共舞" />
+    <meta property="og:description" content="编程，读书，思考，旅行，与机器对话，与人交谈，对神发问，探索，体验人生美丽的风景" />
+    <meta property="og:url" content="/" />
+    <meta property="og:image" content="/assets/images/cover1.jpg" />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="与机器，人，神共舞" />
+    <meta name="twitter:description" content="编程，读书，思考，旅行，与机器对话，与人交谈，对神发问，探索，体验人生美丽的风景" />
+    <meta name="twitter:url" content="/" />
+    <meta name="twitter:image:src" content="/assets/images/cover1.jpg" />
+
+    <script type="application/ld+json">
+{
+    "@context": "http://schema.org",
+    "@type": "Website",
+    "publisher": "Tao's Page",
+    "url": "/",
+    "image": "/assets/images/cover1.jpg",
+    "description": "编程，读书，思考，旅行，与机器对话，与人交谈，对神发问，探索，体验人生美丽的风景"
+}
+    </script>
+
+    <meta name="generator" content="Jekyll 3.0.0" />
+    <link rel="alternate" type="application/rss+xml" title="与机器，人，神共舞" href="/rss.xml" />
+
+</head>
+<body class="home-template nav-closed">
+
+    <!-- The blog navigation links -->
+    <div class="nav">
+    <h3 class="nav-title">Menu</h3>
+    <a href="#" class="nav-close">
+        <span class="hidden">Close</span>
+    </a>
+    <ul>
+        <li class="nav-home " role="presentation"><a href="/">Home</a></li>
+        <li class="nav-about " role="presentation"><a href="/about.html">About</a></li>
+        <li class="nav-fables " role="presentation"><a href="/tag/machine/">Machine</a></li>
+        <li class="nav-speeches " role="presentation"><a href="/tag/human/">Human</a></li>
+        <li class="nav-fiction " role="presentation"><a href="/tag/god/">God</a></li>
+        <li class="nav-author " role="presentation"><a href="/author/hetao/">Author</a></li>
+    </ul>
+    <a class="subscribe-button icon-feed" href="/rss.xml">Subscribe</a>
+</div>
+<span class="nav-cover"></span>
+
+
+    <div class="site-wrapper">
+
+        <!-- All the main content gets inserted here, index.hbs, post.hbs, etc -->
+        <!-- default -->
+
+<!-- The comment above "< default" means - insert everything in this file into -->
+    <!-- the [body] of the default.hbs template, which contains our header/footer. -->
+
+<!-- Everything inside the #post tags pulls data from the post -->
+<!-- #post -->
+
+<header class="main-header post-head no-cover">
+    <nav class="main-nav  clearfix">
+        
+        
+    </nav>
+</header>
+
+<main class="content" role="main">
+
+    <article class="post tag-machine">
+
+        <header class="post-header">
+            <h1 class="post-title">Booster使用小结</h1>
+            <section class="post-meta">
+            <!-- <a href='/'>Tao He</a> -->
+
+            
+            <time class="post-date" datetime="2021-02-20">20 Feb 2021</time>
+                <!-- [[tags prefix=" on "]] -->
+                
+                on
+                
+                    
+                       <a href='/tag/machine'>Machine</a>
+                    
+                
+                
+            </section>
+        </header>
+
+        <section class="post-content">
+
+            <p>使用Booster去修复SharedPreferences导致的ANR的版本已全量上架Google Play，SP导致的ANR几乎绝迹，但是随之全量版本的逐步铺开，firebase崩溃后台却出现了Booster所导致的两个比较多的崩溃:</p>
+
+<p>一个是NPE，触发的基本环境如下:</p>
+
+<p>System version 6.0.1</p>
+
+<p>Java version 8</p>
+
+<p>Gradle version 6.6.1</p>
+
+<p>Android Gradle plugin version 4.0.0</p>
+
+<p>Booster version 3.1.0</p>
+
+<p>主要的崩溃机型:Galaxy J2 Prime(76%), Galaxy Grand Neo, Galaxy J3(2016), MAXTRON U22</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Fatal Exception: java.lang.NullPointerException
+Attempt to invoke virtual method 'java.lang.String java.io.File.getParent()' on a null object reference
+com.didiglobal.booster.instrument.sharedpreferences.SharedPreferencesManager.&lt;init&gt; (SharedPreferencesManager.java:36)
+com.didiglobal.booster.instrument.sharedpreferences.BoosterSharedPreferences.&lt;init&gt; (BoosterSharedPreferences.java:42)
+com.didiglobal.booster.instrument.sharedpreferences.BoosterSharedPreferences.getSharedPreferences (BoosterSharedPreferences.java:58)
+com.didiglobal.booster.instrument.ShadowSharedPreferences.getSharedPreferences (ShadowSharedPreferences.java:15)
+com.google.android.gms.internal.ads.zzabb.initialize (zzabb.java:33)
+com.google.android.gms.internal.ads.zzabf.zzi (zzabf.java:15)
+com.google.android.gms.internal.ads.zzabe.get (zzabe.java)
+com.google.android.gms.ads.internal.util.zzbu.zza (zzbu.java:13)
+com.google.android.gms.internal.ads.zzabf.initialize (zzabf.java:1)
+com.google.android.gms.internal.ads.zzanc.run (zzanc.java:2)
+java.lang.Thread.run (Thread.java:818)
+
+</code></pre></div></div>
+
+<p>此问题已经在github上提issue给开源团队，经过几次沟通，确定是Booster的bug，开源团队响应极快，在3.3.1版本已修复此问题。</p>
+
+<p>另一个问题Class Cast Exception，基本环境与上面相同，主要发生在 Samsung Android 4, 4.2.2</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Caused by java.lang.ClassCastException
+java.lang.Integer cannot be cast to java.lang.Boolean
+
+com.didiglobal.booster.instrument.sharedpreferences.BoosterSharedPreferences.getBoolean (BoosterSharedPreferences.java:120)
+cn.xiaochuankeji.zuiyouLite.common.instance.SelectGenderDlgManager.&lt;init&gt; (SelectGenderDlgManager.java:95)
+cn.xiaochuankeji.zuiyouLite.common.instance.SelectGenderDlgManager.getInstance (SelectGenderDlgManager.java:71)
+cn.xiaochuankeji.zuiyouLite.ui.main.MainActivity.onCreate (MainActivity.java:236)
+android.app.Activity.performCreate (Activity.java:5112)
+android.app.Instrumentation.callActivityOnCreate (Instrumentation.java:1080)
+android.app.ActivityThread.performLaunchActivity (ActivityThread.java:2214)
+android.app.ActivityThread.handleLaunchActivity (ActivityThread.java:2300)
+android.app.ActivityThread.access$700 (ActivityThread.java:156)
+android.app.ActivityThread$H.handleMessage (ActivityThread.java:1298)
+android.os.Handler.dispatchMessage (Handler.java:99)
+android.os.Looper.loop (Looper.java:137)
+android.app.ActivityThread.main (ActivityThread.java:5211)
+java.lang.reflect.Method.invokeNative (Method.java)
+java.lang.reflect.Method.invoke (Method.java:511)
+com.android.internal.os.ZygoteInit$MethodAndArgsCaller.run (ZygoteInit.java:815)
+com.android.internal.os.ZygoteInit.main (ZygoteInit.java:582)
+dalvik.system.NativeStart.main (NativeStart.java)
+
+</code></pre></div></div>
+
+<p>此问题目前还未被修复。除了这两个比较崩溃，目前Booster未引入新的问题，并且实实在在的解决了SP的ANR问题，使用线程池优化模块的版本也已上线，目前未发现问题，后续会统计对减少创建线程导致的OOM的贡献。引入Booster也是担着一定的风险，对于一个百万级日活的App，如果出现一个因为第三方工具导致的问题，很有可能导致线上事故，因此在引入前一定要对其做足了调研和评估。</p>
+
+<p>Booster的这种解决问题的方式真的是可谓优雅，不需你更改一行代码，在你使用它提供的gradle插件构建你的工程后，它已默默的为你修复了诸多问题，并且可以根据你的实际情况选择使用不同的功能模块。使用booster以来真的给我很多启发:</p>
+
+<ul>
+  <li>系统问题也不是不可解决，也许换个思路，就有了办法</li>
+  <li>开发工具，一定要让它易用，直观，易于理解</li>
+  <li>开发的功能一定要相对独立，模块化</li>
+  <li>引入第三方工具钱，一定要做足调研和评估</li>
+  <li>使用了以后也要做好权衡，如它带来的利是否远大于弊</li>
+</ul>
+
+
+
+        </section>
+
+        <footer class="post-footer">
+
+            <!-- Everything inside the #author tags pulls data from the author -->
+            <!-- #author-->
+            
+
+            <!-- Add Disqus Comments -->
+            
+
+        </footer>
+
+    </article>
+
+</main>
+
+<aside class="read-next">
+
+    <!-- [[! next_post ]] -->
+    
+        <a class="read-next-story no-cover" href="/read-sapiens">
+            <section class="post">
+                <h2>重读Sapiens</h2>
+                <p>两年前读过《人类简史》的中译本，去年年终和今年年初一口气读完了《未来简史》和《今日简史》的英文版，就一直惦记着干脆把《人类简史》的英文版再读一遍，今年过年时本来想一鼓作气读完，但是中间又读了《The Black Swan》，就一直没顾上，最近坐地铁通勤，断断续续终于又读了一遍，不得不说，再读英文版，依旧有新的收获。不管从写史的风格，思路，框架，格局，还是文笔，都是一等一的杰作。 且看开篇这个段落： Years Before the Present 13.5 billion Matter and energy appear. Beginning...</p>
+            </section>
+        </a>
+    
+    <!-- [[! /next_post ]] -->
+    <!-- [[! prev_post ]] -->
+    
+        <a class="read-next-story prev no-cover" href="/using-booster-fix-anr">
+            <section class="post">
+                <h2>使用Booster解决ANR的实践</h2>
+                <p>SharedPreferences一直备受诟病，不论是因为开发者的不当使用还是其自身的问题，SharedPreferences都给开发者造成了不少困扰, 尤以ANR最甚。面对由SharedPreferences引起的ANR，我们通常的做法是引入MMKV来替代SP，规避SP本身的缺陷。但是MMKV虽然可以解决App自身由于使用SP导致的ANR，但是无法解决App中第三方库使用SP导致的ANR，因此，虽然MMKV性能优秀，可做数据迁移，久经验证，依然不能彻底解决SP的问题。因此需要考虑其他解决方案，后来找到了滴滴开源的Booster项目，算是找到一个相对彻底的解决方案。 Booster是什么? 请注意，和著名的C++库Boost没半毛钱关系，且看官方介绍: Booster 通过 Gradle Plugin 的形式为 Android 工程质量把控提供了一套完整的框架，无论是代码、资源、动态库、依赖关系、包体积、性能等监控，都可以通过 Booster 来完成 简单理解，Booster就是一个Gradle插件，但它不是一个简单的plugin，而是一个框架，提供了诸多不同功能的模块，可按需在项目构建的时候注入不同的功能模块。下面就以使用Booster SharedPreferences功能模块解决SP相关ANR为例来介绍Booster的基本用法:...</p>
+            </section>
+        </a>
+    
+    <!-- [[! /prev_post ]] -->
+</aside>
+
+<!-- /post -->
+
+
+        <!-- The tiny footer at the very bottom -->
+        <footer class="site-footer clearfix">
+          <section class="copyright"><a href="/">与机器，人，神共舞</a> &copy; 2023</section>
+          <section class="poweredby">Proudly published with <a href="https://jekyllrb.com/">Jekyll</a> using <a href="https://github.com/jekyllt/jasper">Jasper</a></section>
+        </footer>
+    </div>
+    <!-- highlight.js -->
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.3.0/highlight.min.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+
+    <!-- jQuery needs to come before `` so that jQuery can be used in code injection -->
+    <script type="text/javascript" src="//code.jquery.com/jquery-1.12.0.min.js"></script>
+    <!-- Ghost outputs important scripts and data with this tag -->
+    <!--  -->
+    <!-- Add Google Analytics  -->
+        <!-- Google Analytics Tracking code -->
+     <script>
+	    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+	    ga('create', 'UA-78960009-1', 'auto');
+	    ga('send', 'pageview');
+
+     </script>
+
+    <!-- Fitvids makes video embeds responsive and awesome -->
+    <script type="text/javascript" src="/assets/js/jquery.fitvids.js"></script>
+    <!-- The main JavaScript file for Casper -->
+    <script type="text/javascript" src="/assets/js/index.js"></script>
+
+</body>
+</html>

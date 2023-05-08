@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- Document Settings -->
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+    <!-- Page Meta -->
+    <title>基于DrawerLayout实现直播抽屉</title>
+    <meta name="description" content="编程，读书，思考，旅行，与机器对话，与人交谈，对神发问，探索，体验人生美丽的风景" />
+
+    <!-- Mobile Meta -->
+    <meta name="HandheldFriendly" content="True" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- Brand icon -->
+    <link rel="shortcut icon" href="/assets/images/favicon.ico" >
+
+    <!-- Styles'n'Scripts -->
+    <link rel="stylesheet" type="text/css" href="/assets/css/screen.css" />
+    <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Merriweather:300,700,700italic,300italic|Open+Sans:700,400" />
+    <link rel="stylesheet" type="text/css" href="/assets/css/syntax.css" />
+
+    <!-- highlight.js -->
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.3.0/styles/default.min.css">
+    <style>.hljs { background: none; }</style>
+
+    <!-- Ghost outputs important style and meta data with this tag -->
+        <link rel="canonical" href="/" />
+    <meta name="referrer" content="origin" />
+    <link rel="next" href="/page2/" />
+
+    <meta property="og:site_name" content="与机器，人，神共舞" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="与机器，人，神共舞" />
+    <meta property="og:description" content="编程，读书，思考，旅行，与机器对话，与人交谈，对神发问，探索，体验人生美丽的风景" />
+    <meta property="og:url" content="/" />
+    <meta property="og:image" content="/assets/images/cover1.jpg" />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="与机器，人，神共舞" />
+    <meta name="twitter:description" content="编程，读书，思考，旅行，与机器对话，与人交谈，对神发问，探索，体验人生美丽的风景" />
+    <meta name="twitter:url" content="/" />
+    <meta name="twitter:image:src" content="/assets/images/cover1.jpg" />
+
+    <script type="application/ld+json">
+{
+    "@context": "http://schema.org",
+    "@type": "Website",
+    "publisher": "Tao's Page",
+    "url": "/",
+    "image": "/assets/images/cover1.jpg",
+    "description": "编程，读书，思考，旅行，与机器对话，与人交谈，对神发问，探索，体验人生美丽的风景"
+}
+    </script>
+
+    <meta name="generator" content="Jekyll 3.0.0" />
+    <link rel="alternate" type="application/rss+xml" title="与机器，人，神共舞" href="/rss.xml" />
+
+</head>
+<body class="home-template nav-closed">
+
+    <!-- The blog navigation links -->
+    <div class="nav">
+    <h3 class="nav-title">Menu</h3>
+    <a href="#" class="nav-close">
+        <span class="hidden">Close</span>
+    </a>
+    <ul>
+        <li class="nav-home " role="presentation"><a href="/">Home</a></li>
+        <li class="nav-about " role="presentation"><a href="/about.html">About</a></li>
+        <li class="nav-fables " role="presentation"><a href="/tag/machine/">Machine</a></li>
+        <li class="nav-speeches " role="presentation"><a href="/tag/human/">Human</a></li>
+        <li class="nav-fiction " role="presentation"><a href="/tag/god/">God</a></li>
+        <li class="nav-author " role="presentation"><a href="/author/hetao/">Author</a></li>
+    </ul>
+    <a class="subscribe-button icon-feed" href="/rss.xml">Subscribe</a>
+</div>
+<span class="nav-cover"></span>
+
+
+    <div class="site-wrapper">
+
+        <!-- All the main content gets inserted here, index.hbs, post.hbs, etc -->
+        <!-- default -->
+
+<!-- The comment above "< default" means - insert everything in this file into -->
+    <!-- the [body] of the default.hbs template, which contains our header/footer. -->
+
+<!-- Everything inside the #post tags pulls data from the post -->
+<!-- #post -->
+
+<header class="main-header post-head no-cover">
+    <nav class="main-nav  clearfix">
+        
+        
+    </nav>
+</header>
+
+<main class="content" role="main">
+
+    <article class="post tag-machine">
+
+        <header class="post-header">
+            <h1 class="post-title">基于DrawerLayout实现直播抽屉</h1>
+            <section class="post-meta">
+            <!-- <a href='/'>Tao He</a> -->
+
+            
+            <time class="post-date" datetime="2020-07-29">29 Jul 2020</time>
+                <!-- [[tags prefix=" on "]] -->
+                
+                on
+                
+                    
+                       <a href='/tag/machine'>Machine</a>
+                    
+                
+                
+            </section>
+        </header>
+
+        <section class="post-content">
+
+            <p>直播间里右侧的滑出抽屉现在几乎成了主流直播的标配，无论是映客还是Bigo，都很早就上线了抽屉。我所在的这个产品最近也要上同样的功能，因此需要简单实现一个。
+  要实现一个简单的侧滑抽屉，最先想到的就是直接使用<code class="language-plaintext highlighter-rouge">DrawerLayout</code>，但是无法满足产品的一个手势要求: 在屏幕任何位置都可以调出和收起抽屉。<code class="language-plaintext highlighter-rouge">DrawerLayout</code> 的默认行为是只能从屏幕边缘调出。因此需要改变DrawerLayout的默认行为，使期能够从屏幕任何位置调出，这就需要通过反射修改drawerlayout的edgesize属性，因为drawerlayout还可以通过长按调出，我们的产品需求并不需要这个行为，因此也需要屏蔽掉，通过一个静态方法来统一实现：</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>public static void setDrawerLeftEdgeSize(DrawerLayout drawerLayout,
+                                             float percent) {
+    if (drawerLayout == null)
+        return;
+    try {
+        //获取 ViewDragHelper，更改其 edgeSizeField 为 displayWidthPercentage*屏幕大小
+        Field rightDraggerField = drawerLayout.getClass().getSuperclass().getDeclaredField("mRightDragger");
+        rightDraggerField.setAccessible(true);
+        ViewDragHelper rightDragger = (ViewDragHelper) rightDraggerField.get(drawerLayout);
+
+        Field edgeSizeField = rightDragger.getClass().getDeclaredField("mEdgeSize");
+        edgeSizeField.setAccessible(true);
+        int edgeSize = edgeSizeField.getInt(rightDragger);
+
+        edgeSizeField.setInt(rightDragger, Math.max(edgeSize, (int)(UIUtils.getScreenWidth() * percent)));
+
+        //获取 Layout 的 ViewDragCallBack 实例“mLeftCallback”
+        //更改其属性 mPeekRunnable
+        Field rightCallbackField = drawerLayout.getClass().getSuperclass().getDeclaredField("mRightCallback");
+        rightCallbackField.setAccessible(true);
+
+        //因为无法直接访问私有内部类，所以该私有内部类实现的接口非常重要，通过多态的方式获取实例
+        ViewDragHelper.Callback leftCallback = (ViewDragHelper.Callback) rightCallbackField.get(drawerLayout);
+
+        Field peekRunnableField = leftCallback.getClass().getDeclaredField("mPeekRunnable");
+        peekRunnableField.setAccessible(true);
+        Runnable nullRunnable = new Runnable() {
+            @Override
+            public void run() {
+
+            }
+        };
+        peekRunnableField.set(leftCallback, nullRunnable);
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+}
+
+</code></pre></div></div>
+
+<p>解决了edgsize和长按的问题后，马上又面临一个净屏页和抽屉的手势滑动冲突问题，并且还要注意两个UI元素的层级，基本的解决思路是根据滑动的方向和净屏页的状态在<code class="language-plaintext highlighter-rouge">DrawerLayout</code>子类的onInterceptTouchEvent里来处理事件拦截，改变<code class="language-plaintext highlighter-rouge">DrawerLayout</code>的默认行为，净屏页的逻辑不变，只向<code class="language-plaintext highlighter-rouge">DrawerLayout</code>提供状态的get方法，具体实现如下：</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+@Override
+public boolean onInterceptTouchEvent(MotionEvent ev){
+    Log.d("drawerLayout", "onInterceptTouchEvent, action: "
+            + ev.getAction() + " x= " + ev.getX() + " y=" + ev.getY());
+
+    boolean drawerOpen = this.isDrawerOpen(Gravity.RIGHT);
+    boolean pureMode = contentView.isPureMode();
+
+    switch(ev.getAction()) {
+        case MotionEvent.ACTION_DOWN:
+            mLastX = ev.getX();
+            mLastY = ev.getY();
+
+            /*
+            final View touchedView = findTopChildUnder((int) mLastX, (int) mLastY);
+            boolean isContent = isContentView(touchedView);
+
+
+            if (!drawerOpen &amp;&amp; isContent) {
+                return false;
+            }
+              */
+
+            break;
+        case MotionEvent.ACTION_MOVE:
+            float dx = ev.getX() - mLastX;
+            float dy = ev.getY() - mLastY;
+
+            boolean horizontal = Math.abs(dx) &gt; Math.abs(dy);
+
+            if (!pureMode &amp;&amp; dx &lt; 0 &amp;&amp; horizontal) {
+
+            } else if(!pureMode &amp;&amp; dx &gt; 0 &amp;&amp; drawerOpen &amp;&amp; horizontal){
+
+            } else {
+                return false;
+            }
+
+            break;
+        default:
+            break;
+    }
+    return super.onInterceptTouchEvent(ev);
+}
+
+
+</code></pre></div></div>
+
+<p>这样用最小的开发成本完成了产品的需求，实现了主流直播产品的抽屉功能。唯一的小瑕疵是直播间上下滑动时不能自动收起抽屉，这个因为并不是产品很在意的点，再加上产品需求紧急，就没有深究。当然了，这个抽屉功能其实可以抽取出来做成一个通用的抽屉，提供不同的接口来满足定制要求。</p>
+
+<p>tips：<code class="language-plaintext highlighter-rouge">DrawerLayout</code>显示区域穿透的问题可以这样解决：
+将显示区域的clickable属性设置为true。</p>
+
+
+        </section>
+
+        <footer class="post-footer">
+
+            <!-- Everything inside the #author tags pulls data from the author -->
+            <!-- #author-->
+            
+
+            <!-- Add Disqus Comments -->
+            
+
+        </footer>
+
+    </article>
+
+</main>
+
+<aside class="read-next">
+
+    <!-- [[! next_post ]] -->
+    
+        <a class="read-next-story no-cover" href="/static-method-in-kotlin">
+            <section class="post">
+                <h2>Kotlin中的"静态" 方法和域</h2>
+                <p>最近开始尝试在现有的工程中使用Kotlin，刚开始使用时感觉语法简洁，代码量也少了很多，语法层面的防空，可以直接访问布局控件这些特性，都让人耳目一新，但是当我要定义静态方法和静态类时，不爽的体验一下子就上来了，所以通过此文来一探Kotlin"静态" 的究竟。 先来看静态方法， 很遗憾，Kotlin中没有`static`关键字，需要将静态方法放在`companion object`中的代码块中，因此： ``` class Foo { public static int a() { return...</p>
+            </section>
+        </a>
+    
+    <!-- [[! /next_post ]] -->
+    <!-- [[! prev_post ]] -->
+    
+        <a class="read-next-story prev no-cover" href="/why-learn-design-pattern">
+            <section class="post">
+                <h2>为什么学习设计模式</h2>
+                <p>设计模式，可能是每一个程序员都绕不过去的话题，有人认为特别重要，有人对其嗤之以鼻，也有人并不是很确定它的重要性。为什么要学习设计模式，这么多年以来其实我也没有看到一个很好的回答，前一阵在Youtube看到一个讲Android系统开发的youtuber的主页，发现他的一篇很短的文章探讨了这个问题，看完后感觉醍醐灌顶，因此有冲动翻译并记录下其主要的观点。
+
+编程如下棋，一个新手刚开始接触时，首先要了解能够正常下棋的要素，如棋子，棋盘，要熟悉棋子移动，吃子，将军的规则，等这些都了解了以后，就可以正常下棋了，虽然可能下的不好，但是渐渐的，开始领会一些这个游戏的基本规律，如何占取优势，如何使用策略，通过一次次的棋局，逐步的识别出一些可能是很愚蠢的错误，并在以后的棋局中尽量避免，一个新手也可能下棋下的越来越好。
+
+但是一个人如果想成为下棋的大师，却需要学习大师们所下过的棋局。隐藏在这些棋局中的模式必须通过理解，记忆，反复应用，最后成为一个人的本能。这些模式可能是成千上万的，开放模式更是繁多，以至于有很多关于其变化的书籍。 游戏中模式和结束模式也很普遍，作为大师们必须熟悉它们。
+
+编程也一样，首先学习规则，学习算法，数据结构，熟悉了这些后就可以编程了，尽管所写的代码会比较蹩脚。之后，开始学习软件设计的原则，如结构化编程，模块化编程，面向对象编程，如高内聚低耦合的重要性，如信息隐藏和依赖管理。等这些都学习了以后，一个人要想成为真正的编程大师，还是需要学习大师们的设计，并深入这些设计，举一反三，这些模式必须被理解，记忆，反复应用，最后成为一个人的本能。
+
+这篇文章本来就很短，但是我依旧要提炼出本文要划重点的句子:
+
+
+  一个人要想成为真正的编程大师，还是需要学习大师们的设计，并深入这些设计，举一反三，这些模式必须被理解，记忆，反复应用，最后成为一个人的本能。
+
+
+</p>
+            </section>
+        </a>
+    
+    <!-- [[! /prev_post ]] -->
+</aside>
+
+<!-- /post -->
+
+
+        <!-- The tiny footer at the very bottom -->
+        <footer class="site-footer clearfix">
+          <section class="copyright"><a href="/">与机器，人，神共舞</a> &copy; 2023</section>
+          <section class="poweredby">Proudly published with <a href="https://jekyllrb.com/">Jekyll</a> using <a href="https://github.com/jekyllt/jasper">Jasper</a></section>
+        </footer>
+    </div>
+    <!-- highlight.js -->
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.3.0/highlight.min.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+
+    <!-- jQuery needs to come before `` so that jQuery can be used in code injection -->
+    <script type="text/javascript" src="//code.jquery.com/jquery-1.12.0.min.js"></script>
+    <!-- Ghost outputs important scripts and data with this tag -->
+    <!--  -->
+    <!-- Add Google Analytics  -->
+        <!-- Google Analytics Tracking code -->
+     <script>
+	    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+	    ga('create', 'UA-78960009-1', 'auto');
+	    ga('send', 'pageview');
+
+     </script>
+
+    <!-- Fitvids makes video embeds responsive and awesome -->
+    <script type="text/javascript" src="/assets/js/jquery.fitvids.js"></script>
+    <!-- The main JavaScript file for Casper -->
+    <script type="text/javascript" src="/assets/js/index.js"></script>
+
+</body>
+</html>

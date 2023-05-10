@@ -2,7 +2,7 @@
 layout: post
 cover: false
 title:  生活在Vim中
-date:   2023-05-10 18:30:12
+date:   2021-12-10 18:30:12
 tags: machine
 subclass: 'post tag-machine'
 categories: 'hetao'

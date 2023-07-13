@@ -193,9 +193,7 @@ http://localhost/user/users
 
 <p>For example, if we want to introduce Simple for cache, we will follow these 3 steps:</p>
 
-<ol>
-  <li>Import</li>
-</ol>
+<p>1.Import</p>
 
 <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
 &lt;dependency&gt;
@@ -204,9 +202,7 @@ http://localhost/user/users
 &lt;/dependency&gt;
 
 </code></pre></div></div>
-<ol>
-  <li>Turn on</li>
-</ol>
+<p>2.Turn on</p>
 
 <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
 @SpringBootApplication
@@ -218,9 +214,7 @@ public class TacoCloudApplication implements WebMvcConfigurer {
 }
 
 </code></pre></div></div>
-<ol>
-  <li>Using</li>
-</ol>
+<p>3.Using</p>
 
 <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>@Cachable(value="cacheSpace",key="#id")
 public User getById(Integer id) {

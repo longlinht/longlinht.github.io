@@ -87,7 +87,7 @@ Spring Boot has been evolving quickly since it appeared. Until now, it has been 
 For example, if we want to introduce Simple for cache, we will follow these 3 steps:
 
 
-1. Import
+1.Import
 
 ```
 
@@ -97,7 +97,7 @@ For example, if we want to introduce Simple for cache, we will follow these 3 st
 </dependency>
 
 ```
-2. Turn on
+2.Turn on
 
 ```
 
@@ -110,7 +110,7 @@ public class TacoCloudApplication implements WebMvcConfigurer {
 }
 
 ```
-3. Using
+3.Using
 
 ```
 @Cachable(value="cacheSpace",key="#id")

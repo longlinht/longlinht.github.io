@@ -2,7 +2,7 @@
 layout: post
 cover: false
 title: A quick tour of Spring Boot
-date:   2023-07-13 18:20:12
+date:   2023-07-12 18:20:12
 tags: machine
 subclass: 'post tag-machine'
 categories: 'hetao'

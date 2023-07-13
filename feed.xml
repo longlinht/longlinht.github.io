@@ -7,6 +7,129 @@
     <atom:link href="https://longlinht.github.io//feed.xml" rel="self" type="application/rss+xml" />
     
       <item>
+        <title>A quick tour of Spring Boot</title>
+        <description>&lt;p&gt;As for my new job requirement, I started to learn Java backend programming. During the past two weeks, I have read one book and watched a series of tutorial videos on Spring Boot. So I am going to summarize what I have learned and write down my thoughts.&lt;/p&gt;
+
+&lt;p&gt;I have to admit that I had never heard of Spring Boot before I started learning it. After I effortlessly started up a simple project and ran it successfully following the steps the book describes, I have to say it is pretty easy to create and run an application. It just takes one or two minutes to start a runnable program without any extra effort. It just works.&lt;/p&gt;
+
+&lt;p&gt;So the first question is what such a powerful Spring Boot is. Actually, it is not a mysterious thing. You can treat it as an enhanced Spring, which simplifies the complicated configurations and makes dependency management unprecedentedly easy. Let us compare the differences between Spring and Spring Boot in configurations to experience the attractions of Spring Boot for developers.&lt;/p&gt;
+
+&lt;p&gt;for Spring applications:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;We have to manually add dependency in pom.xml&lt;/li&gt;
+  &lt;li&gt;We have to manually program the Web3.0 configuration class.&lt;/li&gt;
+  &lt;li&gt;We have to manually write the Spring/Spring MVC configuration class.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;while for Spring Boot applications:&lt;/p&gt;
+
+&lt;p&gt;We only need to check a dependency to add it or manually add it, not manually write a configuration class anymore. Writing business controllers and designing data models become the only things we need to do. It significantly speeds up the process of development. No configurations, no worry about dependencies, especially dependency versions—it sounds amazing. We cannot stop asking, How did Spring Boot make it? The answer is that these configurations and dependencies are embedded into Spring Boot. The starter is the key point. Spring Boot has embedded most dependencies we need and organized every dependency with the most matched versions. For example, if we need Spring Web, we just add lines like below:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;
+&amp;lt;dependencies&amp;gt;
+
+...
+
+        &amp;lt;dependency&amp;gt;
+            &amp;lt;groupId&amp;gt;org.springframework.boot&amp;lt;/groupId&amp;gt;
+            &amp;lt;artifactId&amp;gt;spring-boot-starter-web&amp;lt;/artifactId&amp;gt;
+        &amp;lt;/dependency&amp;gt;
+...
+
+&amp;lt;dependencies&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;You may have noticed that the dependency didn’t specify the version and that the name of artifactId contains &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;starter&lt;/code&gt;. The version is not necessary any more; Spring Boot helps us figure out all embedded dependencies with the proper version based on the Spring Boot version. This saves us much time and effort in finding the matched versions of dependencies. As an Android developer, I have to say that Android developers also need a framework like this, which can do the most dirty work for us.&lt;/p&gt;
+
+&lt;p&gt;Spring Boot also helps us avoid writing boilerplate code like the Spring MVC configuration class. I think it makes the most use of the annotation and the reflection of Java to implement. It is not uncommon to find that almost all production-grade frameworks written in Java use these Java features to fulfill complicated tasks.&lt;/p&gt;
+
+&lt;p&gt;Another obvious difference between Spring and Spring Boot in the work flow is that Spring Boot has embedded a Tomcat, so I do not need to configure one manually any more. When you are in the process of development, you even forget its existence. You just run and wait for the result.&lt;/p&gt;
+
+&lt;p&gt;Although Spring Boot has helped us get rid of annoying XML configurations, it still has configurations. Several styles of configuration files are supported. But the style of yaml is preferred.&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;spring:
+  thymeleaf:
+    cache: false
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;Yaml differs from traditional property files, which consist of key=value lines. The reason for choosing yaml instead of property files is that property files cannot represent structured configuration well.&lt;/p&gt;
+
+&lt;p&gt;Before going to the most exciting part of Spring Boot, let us go on a whirlwind REST tour.
+If we would like to locate a resource through a URI (path) and do different operations on it, we usually define different paths to complete different tasks.&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;http://localhost/user/saveUser
+http://localhost/user/delete?id=1
+http://localhost/user/updateUser
+http://localhost/user/getById?id=1
+http://localhost/user/getAll
+
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;While adopting REST style, we can do this more elegantly:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;http://localhost/user/users
+http://localhost/user/users/1
+http://localhost/user/users
+http://localhost/user/users/1
+http://localhost/user/users
+
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;On first sight, it is hard to tell the difference among these paths. In fact, Spring Boot has provided us with several annotations to specify every action each path stands for. The first path with the GET action will make a request for all users, while the third path with the POST action will save a user. Concise and elegant, right? Next, we will step into the key part of Spring Boot that can show its power.&lt;/p&gt;
+
+&lt;p&gt;Spring Boot has been evolving quickly since it appeared. Until now, it has been seamlessly integrated with most mainstream third-party technologies like JUnit(for testing), MyBatis(for persistence), Druid(for data source), Simple(for cache). Actually, it supports most of them directly. Introducing them to your project becomes quick and effortless. I have tried to integrate several of them into my trivial project and found a general routine to complete the integration task. When you want to introduce a technology (library) for a specific purpose to your project, generally speaking, you should do these three steps:&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;Import the starter of this library.&lt;/li&gt;
+  &lt;li&gt;Turn on this library, which means letting Spring Boot know you want to use this library or technology.&lt;/li&gt;
+  &lt;li&gt;Using it in your business code.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;For example, if we want to introduce Simple for cache, we will follow these 3 steps:&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;Import&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;
+&amp;lt;dependency&amp;gt;
+    &amp;lt;groupId&amp;gt;org.springframework.boot&amp;lt;/groupId&amp;gt;
+    &amp;lt;artifactId&amp;gt;spring-boot-starter-cache&amp;lt;/artifactId&amp;gt;
+&amp;lt;/dependency&amp;gt;
+
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;ol&gt;
+  &lt;li&gt;Turn on&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;
+@SpringBootApplication
+@EnableCaching
+public class TacoCloudApplication implements WebMvcConfigurer {
+    public static void main(String[] args) {
+        SpringApplication.run(TacoCloudApplication.class, args);
+    }
+}
+
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;ol&gt;
+  &lt;li&gt;Using&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;@Cachable(value=&quot;cacheSpace&quot;,key=&quot;#id&quot;)
+public User getById(Integer id) {
+  return userDao.selectById(id);
+}
+
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;After these 3 steps, we can already use all the cache capabilities that Simple has provided for us. Other 3rd-party libraries are directly supported by Spring Boot nearly all can be introduced like above. The quick tour of Spring Boot has to end now. This article is just a summary and whirlwind tour; next I will dive deep into a specific technology often used in Spring Boot.&lt;/p&gt;
+
+</description>
+        <pubDate>Wed, 12 Jul 2023 22:20:12 +0400</pubDate>
+        <link>https://longlinht.github.io//a-quick-tour-of-spring-boot</link>
+        <guid isPermaLink="true">https://longlinht.github.io//a-quick-tour-of-spring-boot</guid>
+      </item>
+    
+      <item>
         <title>生活在Vim中</title>
         <description>&lt;p&gt;从第一天接触Vim编辑器到现在已经过去10年了，从最开始的不知所措到现在的运用自如，Vim已经融入到了我工作生活的很多场景, 它对于我已经不仅仅是一个高效强大的编辑器，更是变成了一种做事的方式和编辑，操作的哲学。关于这种哲学我最喜欢一个类比: 使用Vim的过程就像是一个画家画画的过程，当一个画家需要挥毫泼墨时，他就进入了insert模式，可以对画布进行任意的修改，当一个画家需要思考和审视时，他需要防止笔误和操作失当，这个时候他就需要进入normal模式，这个时候不能修改画布，只能在画布上移动，无论是移动你的手指和思绪，这个时候都不能对画布进行修改。这种特有的多模式也许是Vim和Emacs与其他大部分编辑器最显著的不同。&lt;/p&gt;
 
@@ -834,7 +957,7 @@ libmonochrome.so这个信息，当看到这个so的时候，直觉告诉我是�
 &lt;p&gt;主要的崩溃机型:Galaxy J2 Prime(76%), Galaxy Grand Neo, Galaxy J3(2016), MAXTRON U22&lt;/p&gt;
 
 &lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Fatal Exception: java.lang.NullPointerException
-Attempt to invoke virtual method &apos;java.lang.String java.io.File.getParent()&apos; on a null object reference
+Attempt to invoke virtual method 'java.lang.String java.io.File.getParent()' on a null object reference
 com.didiglobal.booster.instrument.sharedpreferences.SharedPreferencesManager.&amp;lt;init&amp;gt; (SharedPreferencesManager.java:36)
 com.didiglobal.booster.instrument.sharedpreferences.BoosterSharedPreferences.&amp;lt;init&amp;gt; (BoosterSharedPreferences.java:42)
 com.didiglobal.booster.instrument.sharedpreferences.BoosterSharedPreferences.getSharedPreferences (BoosterSharedPreferences.java:58)
@@ -893,105 +1016,6 @@ dalvik.system.NativeStart.main (NativeStart.java)
         <pubDate>Sat, 20 Feb 2021 18:00:00 +0400</pubDate>
         <link>https://longlinht.github.io//summary-of-using-booster</link>
         <guid isPermaLink="true">https://longlinht.github.io//summary-of-using-booster</guid>
-      </item>
-    
-      <item>
-        <title>使用Booster解决ANR的实践</title>
-        <description>&lt;p&gt;SharedPreferences一直备受诟病，不论是因为开发者的不当使用还是其自身的问题，SharedPreferences都给开发者造成了不少困扰, 尤以ANR最甚。面对由SharedPreferences引起的ANR，我们通常的做法是引入MMKV来替代SP，规避SP本身的缺陷。但是MMKV虽然可以解决App自身由于使用SP导致的ANR，但是无法解决App中第三方库使用SP导致的ANR，因此，虽然MMKV性能优秀，可做数据迁移，久经验证，依然不能彻底解决SP的问题。因此需要考虑其他解决方案，后来找到了滴滴开源的Booster项目，算是找到一个相对彻底的解决方案。&lt;/p&gt;
-
-&lt;p&gt;Booster是什么? 请注意，和著名的C++库Boost没半毛钱关系，且看官方介绍:&lt;/p&gt;
-
-&lt;blockquote&gt;
-  &lt;p&gt;Booster 通过 Gradle Plugin 的形式为 Android 工程质量把控提供了一套完整的框架，无论是代码、资源、动态库、依赖关系、包体积、性能等监控，都可以通过 Booster 来完成&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;简单理解，Booster就是一个Gradle插件，但它不是一个简单的plugin，而是一个框架，提供了诸多不同功能的模块，可按需在项目构建的时候注入不同的功能模块。下面就以使用Booster SharedPreferences功能模块解决SP相关ANR为例来介绍Booster的基本用法:&lt;/p&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;添加依赖，apply插件:&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;
-allprojects { project -&amp;gt;
-    buildscript {
-        ext.booster_version = &apos;3.1.0&apos;
-        repositories {
-            mavenLocal()
-            google()
-            mavenCentral()
-            jcenter()
-            maven { url &apos;https://oss.sonatype.org/content/repositories/public&apos; }
-        }
-        dependencies {
-            classpath &quot;com.didiglobal.booster:booster-gradle-plugin:$booster_version&quot;
-            // 使用SharedPreferences功能模块
-            classpath &quot;com.didiglobal.booster:booster-transform-shared-preferences:$booster_version&quot;
-        }
-    }
-    repositories {
-        mavenLocal()
-        google()
-        mavenCentral()
-        jcenter()
-        maven { url &apos;https://oss.sonatype.org/content/repositories/public&apos; }
-    }
-    project.afterEvaluate {
-        if (project.extensions.findByName(&apos;android&apos;) != null) {
-            project.apply plugin: &apos;com.didiglobal.booster&apos;
-        }
-    }
-}
-
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;添加到项目的构建流程中去&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;可以使用-I输入到构建流程中，也可将上述gradle脚本直接集成进project gradle文件，皆可达到目的。&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;
-// init.gradle即为上面的这段gradle脚本
-./gradlew -I init.gradle :app:assembleDebug
-
-
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;在项目构建的过程中输入这段脚本，输出的apk就已使用Booster的SP模块来解决ANR了。使用起来是不是感觉非常简洁，接入很优雅，因为想使用Booster任何一个功能模块，只要简单的添加一句依赖即可，如SP:&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;// 使用SharedPreferences功能模块
-classpath &quot;com.didiglobal.booster:booster-transform-shared-preferences:$booster_version&quot;
-
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;如此优雅的框架，是什么原理呢? 还以SP为例来简单聊聊:&lt;/p&gt;
-
-&lt;p&gt;根本的原理就是Booster通过 SharedPreferencesTransformer 将所有调用 Context.getSharedPreferences(String, int) 的指令替换成 ShadowSharedPreferences.getSharedPreferences(Context, String, int)，代码如下：&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;public class ShadowSharedPreferences {
-
-    public static SharedPreferences getSharedPreferences(final Context context, String name, final int mode) {
-        if (TextUtils.isEmpty(name)) {
-            name = &quot;null&quot;;
-        }
-        return BoosterSharedPreferences.getSharedPreferences(name);
-    }
-
-    public static SharedPreferences getPreferences(final Activity activity, final int mode) {
-        return getSharedPreferences(activity.getApplicationContext(), activity.getLocalClassName(), mode);
-    }
-
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;通过自定义 SharedPreferences 避开 QueuedWork 在 onPause(), onDestroy() 等生命周期回调时在主线程中的同步操作。如果对Booster有基本了解，对Booster这种指令替换的操作应该不陌生。如Booster在解决系统Bug的办法也是通过自定义类来替换有问题的系统类。如果我们使用Android Studio Profiler来查看我们App的内存情况，就可以搜到ShadowSharedPreferences类，此类就是系统SharedPreferences的替换类。&lt;/p&gt;
-
-&lt;p&gt;Booster还有其他强大的功能模块有待探索和使用，后续用到后再来聊！&lt;/p&gt;
-
-</description>
-        <pubDate>Sun, 24 Jan 2021 18:00:00 +0400</pubDate>
-        <link>https://longlinht.github.io//using-booster-fix-anr</link>
-        <guid isPermaLink="true">https://longlinht.github.io//using-booster-fix-anr</guid>
       </item>
     
   </channel>

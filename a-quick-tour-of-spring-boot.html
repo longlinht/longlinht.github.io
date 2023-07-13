@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- [[! Document Settings ]] -->
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+    <!-- [[! Page Meta ]] -->
+    <title>A quick tour of Spring Boot</title>
+    <meta name="description" content="与机器，人，神共舞 - 编程，读书，思考，旅行，与机器对话，与人交谈，对神发问，探索，体验人生美丽的风景" />
+
+    <meta name="HandheldFriendly" content="True" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link rel="shortcut icon" href="/assets/images/favicon.ico" >
+
+    <!-- [[! Styles'n'Scripts ]] -->
+    <link rel="stylesheet" type="text/css" href="/assets/css/screen.css" />
+    <link rel="stylesheet" type="text/css"
+          href="//fonts.googleapis.com/css?family=Merriweather:300,700,700italic,300italic|Open+Sans:700,400" />
+    <link rel="stylesheet" type="text/css" href="/assets/css/syntax.css" />
+    
+    <!-- [[! Ghost outputs important style and meta data with this tag ]] -->
+        <link rel="canonical" href="/" />
+    <meta name="referrer" content="origin" />
+    <link rel="next" href="/page2/" />
+
+    <meta property="og:site_name" content="与机器，人，神共舞" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="与机器，人，神共舞" />
+    <meta property="og:description" content="编程，读书，思考，旅行，与机器对话，与人交谈，对神发问，探索，体验人生美丽的风景" />
+    <meta property="og:url" content="/" />
+    <meta property="og:image" content="/assets/images/cover1.jpg" />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="与机器，人，神共舞" />
+    <meta name="twitter:description" content="编程，读书，思考，旅行，与机器对话，与人交谈，对神发问，探索，体验人生美丽的风景" />
+    <meta name="twitter:url" content="/" />
+    <meta name="twitter:image:src" content="/assets/images/cover1.jpg" />
+
+    <script type="application/ld+json">
+{
+    "@context": "http://schema.org",
+    "@type": "Website",
+    "publisher": "Tao's Page",
+    "url": "/",
+    "image": "/assets/images/cover1.jpg",
+    "description": "编程，读书，思考，旅行，与机器对话，与人交谈，对神发问，探索，体验人生美丽的风景"
+}
+    </script>
+
+    <meta name="generator" content="Jekyll 3.0.0" />
+    <link rel="alternate" type="application/rss+xml" title="与机器，人，神共舞" href="/rss.xml" />
+
+</head>
+<body class="home-template nav-closed">
+
+    <div class="nav">
+    <h3 class="nav-title">Menu</h3>
+    <a href="#" class="nav-close">
+        <span class="hidden">Close</span>
+    </a>
+    <ul>
+        <li class="nav-home " role="presentation"><a href="/">Home</a></li>
+        <li class="nav-about " role="presentation"><a href="/about.html">About</a></li>
+        <li class="nav-fables " role="presentation"><a href="/tag/machine/">Machine</a></li>
+        <li class="nav-speeches " role="presentation"><a href="/tag/human/">Human</a></li>
+        <li class="nav-fiction " role="presentation"><a href="/tag/god/">God</a></li>
+        <li class="nav-author " role="presentation"><a href="/author/hetao/">Author</a></li>
+    </ul>
+    <a class="subscribe-button icon-feed" href="/rss.xml">Subscribe</a>
+</div>
+<span class="nav-cover"></span>
+
+
+    <div class="site-wrapper">
+
+        <!-- [[! Everything else gets inserted here ]] -->
+        <!-- default -->
+
+<!-- The comment above "< default" means - insert everything in this file into -->
+    <!-- the [body] of the default.hbs template, which contains our header/footer. -->
+
+<!-- Everything inside the #post tags pulls data from the post -->
+<!-- #post -->
+
+<header class="main-header post-head no-cover">
+    <nav class="main-nav  clearfix">
+        
+        
+    </nav>
+</header>
+
+<main class="content" role="main">
+
+    <article class="post tag-machine">
+
+        <header class="post-header">
+            <h1 class="post-title">A quick tour of Spring Boot</h1>
+            <section class="post-meta">
+            <!-- <a href='/'>Tao He</a> -->
+
+            
+            <time class="post-date" datetime="2023-07-12">12 Jul 2023</time>
+                <!-- [[tags prefix=" on "]] -->
+                
+                on
+                
+                    
+                       <a href='/tag/machine'>Machine</a>
+                    
+                
+                
+            </section>
+        </header>
+
+        <section class="post-content">
+
+            <p>As for my new job requirement, I started to learn Java backend programming. During the past two weeks, I have read one book and watched a series of tutorial videos on Spring Boot. So I am going to summarize what I have learned and write down my thoughts.</p>
+
+<p>I have to admit that I had never heard of Spring Boot before I started learning it. After I effortlessly started up a simple project and ran it successfully following the steps the book describes, I have to say it is pretty easy to create and run an application. It just takes one or two minutes to start a runnable program without any extra effort. It just works.</p>
+
+<p>So the first question is what such a powerful Spring Boot is. Actually, it is not a mysterious thing. You can treat it as an enhanced Spring, which simplifies the complicated configurations and makes dependency management unprecedentedly easy. Let us compare the differences between Spring and Spring Boot in configurations to experience the attractions of Spring Boot for developers.</p>
+
+<p>for Spring applications:</p>
+
+<ul>
+  <li>We have to manually add dependency in pom.xml</li>
+  <li>We have to manually program the Web3.0 configuration class.</li>
+  <li>We have to manually write the Spring/Spring MVC configuration class.</li>
+</ul>
+
+<p>while for Spring Boot applications:</p>
+
+<p>We only need to check a dependency to add it or manually add it, not manually write a configuration class anymore. Writing business controllers and designing data models become the only things we need to do. It significantly speeds up the process of development. No configurations, no worry about dependencies, especially dependency versions—it sounds amazing. We cannot stop asking, How did Spring Boot make it? The answer is that these configurations and dependencies are embedded into Spring Boot. The starter is the key point. Spring Boot has embedded most dependencies we need and organized every dependency with the most matched versions. For example, if we need Spring Web, we just add lines like below:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+&lt;dependencies&gt;
+
+...
+
+        &lt;dependency&gt;
+            &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+            &lt;artifactId&gt;spring-boot-starter-web&lt;/artifactId&gt;
+        &lt;/dependency&gt;
+...
+
+&lt;dependencies&gt;
+</code></pre></div></div>
+
+<p>You may have noticed that the dependency didn’t specify the version and that the name of artifactId contains <code class="language-plaintext highlighter-rouge">starter</code>. The version is not necessary any more; Spring Boot helps us figure out all embedded dependencies with the proper version based on the Spring Boot version. This saves us much time and effort in finding the matched versions of dependencies. As an Android developer, I have to say that Android developers also need a framework like this, which can do the most dirty work for us.</p>
+
+<p>Spring Boot also helps us avoid writing boilerplate code like the Spring MVC configuration class. I think it makes the most use of the annotation and the reflection of Java to implement. It is not uncommon to find that almost all production-grade frameworks written in Java use these Java features to fulfill complicated tasks.</p>
+
+<p>Another obvious difference between Spring and Spring Boot in the work flow is that Spring Boot has embedded a Tomcat, so I do not need to configure one manually any more. When you are in the process of development, you even forget its existence. You just run and wait for the result.</p>
+
+<p>Although Spring Boot has helped us get rid of annoying XML configurations, it still has configurations. Several styles of configuration files are supported. But the style of yaml is preferred.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>spring:
+  thymeleaf:
+    cache: false
+</code></pre></div></div>
+<p>Yaml differs from traditional property files, which consist of key=value lines. The reason for choosing yaml instead of property files is that property files cannot represent structured configuration well.</p>
+
+<p>Before going to the most exciting part of Spring Boot, let us go on a whirlwind REST tour.
+If we would like to locate a resource through a URI (path) and do different operations on it, we usually define different paths to complete different tasks.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>http://localhost/user/saveUser
+http://localhost/user/delete?id=1
+http://localhost/user/updateUser
+http://localhost/user/getById?id=1
+http://localhost/user/getAll
+
+</code></pre></div></div>
+<p>While adopting REST style, we can do this more elegantly:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>http://localhost/user/users
+http://localhost/user/users/1
+http://localhost/user/users
+http://localhost/user/users/1
+http://localhost/user/users
+
+</code></pre></div></div>
+<p>On first sight, it is hard to tell the difference among these paths. In fact, Spring Boot has provided us with several annotations to specify every action each path stands for. The first path with the GET action will make a request for all users, while the third path with the POST action will save a user. Concise and elegant, right? Next, we will step into the key part of Spring Boot that can show its power.</p>
+
+<p>Spring Boot has been evolving quickly since it appeared. Until now, it has been seamlessly integrated with most mainstream third-party technologies like JUnit(for testing), MyBatis(for persistence), Druid(for data source), Simple(for cache). Actually, it supports most of them directly. Introducing them to your project becomes quick and effortless. I have tried to integrate several of them into my trivial project and found a general routine to complete the integration task. When you want to introduce a technology (library) for a specific purpose to your project, generally speaking, you should do these three steps:</p>
+
+<ol>
+  <li>Import the starter of this library.</li>
+  <li>Turn on this library, which means letting Spring Boot know you want to use this library or technology.</li>
+  <li>Using it in your business code.</li>
+</ol>
+
+<p>For example, if we want to introduce Simple for cache, we will follow these 3 steps:</p>
+
+<ol>
+  <li>Import</li>
+</ol>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+&lt;dependency&gt;
+    &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+    &lt;artifactId&gt;spring-boot-starter-cache&lt;/artifactId&gt;
+&lt;/dependency&gt;
+
+</code></pre></div></div>
+<ol>
+  <li>Turn on</li>
+</ol>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+@SpringBootApplication
+@EnableCaching
+public class TacoCloudApplication implements WebMvcConfigurer {
+    public static void main(String[] args) {
+        SpringApplication.run(TacoCloudApplication.class, args);
+    }
+}
+
+</code></pre></div></div>
+<ol>
+  <li>Using</li>
+</ol>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>@Cachable(value="cacheSpace",key="#id")
+public User getById(Integer id) {
+  return userDao.selectById(id);
+}
+
+</code></pre></div></div>
+
+<p>After these 3 steps, we can already use all the cache capabilities that Simple has provided for us. Other 3rd-party libraries are directly supported by Spring Boot nearly all can be introduced like above. The quick tour of Spring Boot has to end now. This article is just a summary and whirlwind tour; next I will dive deep into a specific technology often used in Spring Boot.</p>
+
+
+
+        </section>
+
+        <footer class="post-footer">
+
+            <!-- Everything inside the #author tags pulls data from the author -->
+            <!-- #author-->
+            
+
+            <!-- Add Disqus Comments -->
+            
+
+        </footer>
+
+    </article>
+
+</main>
+
+<aside class="read-next">
+
+    <!-- [[! next_post ]] -->
+    
+    <!-- [[! /next_post ]] -->
+    <!-- [[! prev_post ]] -->
+    
+        <a class="read-next-story prev no-cover" href="/live-in-the-vim">
+            <section class="post">
+                <h2>生活在Vim中</h2>
+                <p>从第一天接触Vim编辑器到现在已经过去10年了，从最开始的不知所措到现在的运用自如，Vim已经融入到了我工作生活的很多场景, 它对于我已经不仅仅是一个高效强大的编辑器，更是变成了一种做事的方式和编辑，操作的哲学。关于这种哲学我最喜欢一个类比: 使用Vim的过程就像是一个画家画画的过程，当一个画家需要挥毫泼墨时，他就进入了insert模式，可以对画布进行任意的修改，当一个画家需要思考和审视时，他需要防止笔误和操作失当，这个时候他就需要进入normal模式，这个时候不能修改画布，只能在画布上移动，无论是移动你的手指和思绪，这个时候都不能对画布进行修改。这种特有的多模式也许是Vim和Emacs与其他大部分编辑器最显著的不同。 当你初窥Vim的与众不同后，如果你还不熟悉它的使用，你可能会不知所措，甚至无法编辑，无法退出，你和它会僵死在那里。你遇到的这种困境也正是Vim特有的操作方式引起的。这篇文章不打算如流水账般罗列Vim的诸多命令，我只挑选几种在日常代码编辑中最常用的命令来呈现Vim的神奇与强大。Vim之强大主要体现在无论是移动查询还是修改替换都能将一个动作做到非常小的粒度和精确控制，并且可以以极少的击键次数优雅地实现你精细的操作。我来举一个最常见的例子: int i = 3 * (4 + 2); 如上，假如我们想将括号中的内容改掉，一般的编辑器的做法都是移动到数字4，然后完全选中括号中的内容后修改。但是如果使用Vim，动作将会非常简单和快捷，只需移动到左括号后键入ci(即可，然后就可以直接进入insert模式修改了。敏感的读者可能已经感知到Vim的这条命令其实就是change in ()，有非常强的自然语言命令的感觉。...</p>
+            </section>
+        </a>
+    
+    <!-- [[! /prev_post ]] -->
+</aside>
+
+<!-- /post -->
+
+
+        <footer class="site-footer clearfix">
+          <section class="copyright"><a href="/">与机器，人，神共舞</a> &copy; 2023</section>
+        </footer>
+    </div>
+    <!-- [[! Ghost outputs important scripts and data with this tag ]] -->
+    <script type="text/javascript" src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+    <!-- [[! The main JavaScript file for Casper ]] -->
+    <script type="text/javascript" src="/assets/js/jquery.fitvids.js"></script>
+    <script type="text/javascript" src="/assets/js/index.js"></script>
+
+    <!-- Add Google Analytics  -->
+        <!-- Google Analytics Tracking code -->
+     <script>
+	    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+	    ga('create', 'UA-78960009-1', 'auto');
+	    ga('send', 'pageview');
+
+     </script>
+   
+</body>
+</html>

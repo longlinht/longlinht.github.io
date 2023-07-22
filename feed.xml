@@ -7,6 +7,119 @@
     <atom:link href="https://longlinht.github.io//feed.xml" rel="self" type="application/rss+xml" />
     
       <item>
+        <title>A practical way to make sure the correctness of your algorithm</title>
+        <description>&lt;p&gt;As programmers, it really frustrates us when we cannot 100 percent make sure the functions or algorithms we have written can produce the results we expected. Although we have passed many test cases, we are still not confident enough to say these functions can work and output correct values in all cases. It is impossible for us to have a test case system like Leecode wherever and whenever. It is not realistic. So we need to figure out a way to test our algorithm ourselves. Fortunately, there is indeed one.&lt;/p&gt;
+
+&lt;p&gt;As a fact, this method is based on comparing an existing solution to verify a new one. It sounds simple, right? What are we waiting for? Let us implement it step by step.&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Identify a function or algorithm you would like to test. For this example, it is a selection sort function we wrote.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;public static void selectionSort(int[] arr) {
+		if (arr == null || arr.length &amp;lt; 2) {
+			return;
+		}
+		for (int i = 0; i &amp;lt; arr.length - 1; i++) {
+			int minIndex = i;
+			for (int j = i + 1; j &amp;lt; arr.length; j++) { 
+				minIndex = arr[j] &amp;lt; arr[minIndex] ? j : minIndex;
+			}
+			swap(arr, i, minIndex);
+		}
+	}
+
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;In order to compare, we need to implement a simple function, which also can sort the array using an existed and verified solutiion. In this case we using a Java API.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;public static void comparator(int[] arr) {
+    Arrays.sort(arr);
+}
+
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Implement a random sample generator.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;public static int[] generateRandomArray(int maxSize, int maxValue) {
+    int[] arr = new int[(int) (Math.random() * maxSize) + 1];
+    arr[0] = (int) (Math.random() * maxValue) - (int) (Math.random() * maxValue);
+    for (int i = 1; i &amp;lt; arr.length; i++) {
+        do {
+            arr[i] = (int) (Math.random() * maxValue) - (int) (Math.random() * maxValue);
+        } while (arr[i] == arr[i - 1]);
+    }
+    return arr;
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Write a function to compare output.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;public static boolean isEqual(int[] arr1, int[] arr2) {
+    if ((arr1 == null &amp;amp;&amp;amp; arr2 != null) || (arr1 != null &amp;amp;&amp;amp; arr2 == null)) {
+        return false;
+    }
+    if (arr1 == null &amp;amp;&amp;amp; arr2 == null) {
+        return true;
+    }
+    if (arr1.length != arr2.length) {
+        return false;
+    }
+    for (int i = 0; i &amp;lt; arr1.length; i++) {
+        if (arr1[i] != arr2[i]) {
+            return false;
+        }
+    }
+    return true;
+}
+
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Using various size of sample to test the function we wrote and compare to the existed solution.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;public static void main(String[] args) {
+    int testTime = 500000;
+    int maxSize = 100;
+    int maxValue = 100;
+    boolean succeed = true;
+    for (int i = 0; i &amp;lt; testTime; i++) {
+        int[] arr1 = generateRandomArray(maxSize, maxValue);
+        int[] arr2 = copyArray(arr1);
+        selectionSort(arr1);
+        comparator(arr2);
+        if (!isEqual(arr1, arr2)) {
+            succeed = false;
+            printArray(arr1);
+            printArray(arr2);
+            break;
+        }
+    }
+    System.out.println(succeed ? &quot;Nice!&quot; : &quot;Fucking fucked!&quot;);
+
+    int[] arr = generateRandomArray(maxSize, maxValue);
+    printArray(arr);
+    selectionSort(arr);
+    printArray(arr);
+}
+
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;We can randomly set the test time and sample size to do loads of tests to make sure the function works and outputs correctly. If it can produce expected results after millions of tests. We can be sure of the correctness of this function. But if there is one time they are not equal, in other words, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;selectionSort&lt;/code&gt; produces outputs that are not equal, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;comparator&lt;/code&gt;. We have to say the new solution cannot be accepted; we should debug and test more to find the problem. As long as we use this sharp comparator more and more, we will have more confidence to write down more reliable algorithms.&lt;/p&gt;
+</description>
+        <pubDate>Thu, 20 Jul 2023 22:20:12 +0400</pubDate>
+        <link>https://longlinht.github.io//a-practical-way-for-algorithm-correctness</link>
+        <guid isPermaLink="true">https://longlinht.github.io//a-practical-way-for-algorithm-correctness</guid>
+      </item>
+    
+      <item>
         <title>A quick tour of Spring Boot</title>
         <description>&lt;p&gt;As an Android developer currently, I have always dreamed of becoming a full-stack developer, so I started to learn Java backend programming. During the past two weeks, I have read one book and watched a series of tutorial videos on Spring Boot. So I am going to summarize what I have learned and write down my thoughts.&lt;/p&gt;
 
@@ -930,86 +1043,6 @@ libmonochrome.so这个信息，当看到这个so的时候，直觉告诉我是�
         <pubDate>Sun, 18 Apr 2021 00:54:12 +0400</pubDate>
         <link>https://longlinht.github.io//read-sapiens</link>
         <guid isPermaLink="true">https://longlinht.github.io//read-sapiens</guid>
-      </item>
-    
-      <item>
-        <title>Booster使用小结</title>
-        <description>&lt;p&gt;使用Booster去修复SharedPreferences导致的ANR的版本已全量上架Google Play，SP导致的ANR几乎绝迹，但是随之全量版本的逐步铺开，firebase崩溃后台却出现了Booster所导致的两个比较多的崩溃:&lt;/p&gt;
-
-&lt;p&gt;一个是NPE，触发的基本环境如下:&lt;/p&gt;
-
-&lt;p&gt;System version 6.0.1&lt;/p&gt;
-
-&lt;p&gt;Java version 8&lt;/p&gt;
-
-&lt;p&gt;Gradle version 6.6.1&lt;/p&gt;
-
-&lt;p&gt;Android Gradle plugin version 4.0.0&lt;/p&gt;
-
-&lt;p&gt;Booster version 3.1.0&lt;/p&gt;
-
-&lt;p&gt;主要的崩溃机型:Galaxy J2 Prime(76%), Galaxy Grand Neo, Galaxy J3(2016), MAXTRON U22&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Fatal Exception: java.lang.NullPointerException
-Attempt to invoke virtual method 'java.lang.String java.io.File.getParent()' on a null object reference
-com.didiglobal.booster.instrument.sharedpreferences.SharedPreferencesManager.&amp;lt;init&amp;gt; (SharedPreferencesManager.java:36)
-com.didiglobal.booster.instrument.sharedpreferences.BoosterSharedPreferences.&amp;lt;init&amp;gt; (BoosterSharedPreferences.java:42)
-com.didiglobal.booster.instrument.sharedpreferences.BoosterSharedPreferences.getSharedPreferences (BoosterSharedPreferences.java:58)
-com.didiglobal.booster.instrument.ShadowSharedPreferences.getSharedPreferences (ShadowSharedPreferences.java:15)
-com.google.android.gms.internal.ads.zzabb.initialize (zzabb.java:33)
-com.google.android.gms.internal.ads.zzabf.zzi (zzabf.java:15)
-com.google.android.gms.internal.ads.zzabe.get (zzabe.java)
-com.google.android.gms.ads.internal.util.zzbu.zza (zzbu.java:13)
-com.google.android.gms.internal.ads.zzabf.initialize (zzabf.java:1)
-com.google.android.gms.internal.ads.zzanc.run (zzanc.java:2)
-java.lang.Thread.run (Thread.java:818)
-
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;此问题已经在github上提issue给开源团队，经过几次沟通，确定是Booster的bug，开源团队响应极快，在3.3.1版本已修复此问题。&lt;/p&gt;
-
-&lt;p&gt;另一个问题Class Cast Exception，基本环境与上面相同，主要发生在 Samsung Android 4, 4.2.2&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Caused by java.lang.ClassCastException
-java.lang.Integer cannot be cast to java.lang.Boolean
-
-com.didiglobal.booster.instrument.sharedpreferences.BoosterSharedPreferences.getBoolean (BoosterSharedPreferences.java:120)
-cn.xiaochuankeji.zuiyouLite.common.instance.SelectGenderDlgManager.&amp;lt;init&amp;gt; (SelectGenderDlgManager.java:95)
-cn.xiaochuankeji.zuiyouLite.common.instance.SelectGenderDlgManager.getInstance (SelectGenderDlgManager.java:71)
-cn.xiaochuankeji.zuiyouLite.ui.main.MainActivity.onCreate (MainActivity.java:236)
-android.app.Activity.performCreate (Activity.java:5112)
-android.app.Instrumentation.callActivityOnCreate (Instrumentation.java:1080)
-android.app.ActivityThread.performLaunchActivity (ActivityThread.java:2214)
-android.app.ActivityThread.handleLaunchActivity (ActivityThread.java:2300)
-android.app.ActivityThread.access$700 (ActivityThread.java:156)
-android.app.ActivityThread$H.handleMessage (ActivityThread.java:1298)
-android.os.Handler.dispatchMessage (Handler.java:99)
-android.os.Looper.loop (Looper.java:137)
-android.app.ActivityThread.main (ActivityThread.java:5211)
-java.lang.reflect.Method.invokeNative (Method.java)
-java.lang.reflect.Method.invoke (Method.java:511)
-com.android.internal.os.ZygoteInit$MethodAndArgsCaller.run (ZygoteInit.java:815)
-com.android.internal.os.ZygoteInit.main (ZygoteInit.java:582)
-dalvik.system.NativeStart.main (NativeStart.java)
-
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;此问题目前还未被修复。除了这两个比较崩溃，目前Booster未引入新的问题，并且实实在在的解决了SP的ANR问题，使用线程池优化模块的版本也已上线，目前未发现问题，后续会统计对减少创建线程导致的OOM的贡献。引入Booster也是担着一定的风险，对于一个百万级日活的App，如果出现一个因为第三方工具导致的问题，很有可能导致线上事故，因此在引入前一定要对其做足了调研和评估。&lt;/p&gt;
-
-&lt;p&gt;Booster的这种解决问题的方式真的是可谓优雅，不需你更改一行代码，在你使用它提供的gradle插件构建你的工程后，它已默默的为你修复了诸多问题，并且可以根据你的实际情况选择使用不同的功能模块。使用booster以来真的给我很多启发:&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;系统问题也不是不可解决，也许换个思路，就有了办法&lt;/li&gt;
-  &lt;li&gt;开发工具，一定要让它易用，直观，易于理解&lt;/li&gt;
-  &lt;li&gt;开发的功能一定要相对独立，模块化&lt;/li&gt;
-  &lt;li&gt;引入第三方工具钱，一定要做足调研和评估&lt;/li&gt;
-  &lt;li&gt;使用了以后也要做好权衡，如它带来的利是否远大于弊&lt;/li&gt;
-&lt;/ul&gt;
-
-</description>
-        <pubDate>Sat, 20 Feb 2021 18:00:00 +0400</pubDate>
-        <link>https://longlinht.github.io//summary-of-using-booster</link>
-        <guid isPermaLink="true">https://longlinht.github.io//summary-of-using-booster</guid>
       </item>
     
   </channel>

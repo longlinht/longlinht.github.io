@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 
     <!-- [[! Page Meta ]] -->
-    <title>A practical way to make sure the correctness of your algorithm</title>
+    <title>Userful EOR operations in algorithm design</title>
     <meta name="description" content="与机器，人，神共舞 - 编程，读书，思考，旅行，与机器对话，与人交谈，对神发问，探索，体验人生美丽的风景" />
 
     <meta name="HandheldFriendly" content="True" />
@@ -96,12 +96,12 @@
     <article class="post tag-machine">
 
         <header class="post-header">
-            <h1 class="post-title">A practical way to make sure the correctness of your algorithm</h1>
+            <h1 class="post-title">Userful EOR operations in algorithm design</h1>
             <section class="post-meta">
             <!-- <a href='/'>Tao He</a> -->
 
             
-            <time class="post-date" datetime="2023-07-20">20 Jul 2023</time>
+            <time class="post-date" datetime="2023-07-22">22 Jul 2023</time>
                 <!-- [[tags prefix=" on "]] -->
                 
                 on
@@ -116,111 +116,68 @@
 
         <section class="post-content">
 
-            <p>As programmers, it really frustrates us when we cannot 100 percent make sure the functions or algorithms we have written can produce the results we expected. Although we have passed many test cases, we are still not confident enough to say these functions can work and output correct values in all cases. It is impossible for us to have a test case system like Leecode wherever and whenever. It is not realistic. So we need to figure out a way to test our algorithm ourselves. Fortunately, there is indeed one.</p>
+            <p>The EOR is a short form of Exclusive OR, which is a logic operator and satisfies the commutative law and the associative law. It means:</p>
 
-<p>As a fact, this method is based on comparing an existing solution to verify a new one. It sounds simple, right? What are we waiting for? Let us implement it step by step.</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>0 ^ N == N
+N ^ N == 0
 
-<ul>
-  <li>Identify a function or algorithm you would like to test. For this example, it is a selection sort function we wrote.</li>
-</ul>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>public static void selectionSort(int[] arr) {
-		if (arr == null || arr.length &lt; 2) {
-			return;
-		}
-		for (int i = 0; i &lt; arr.length - 1; i++) {
-			int minIndex = i;
-			for (int j = i + 1; j &lt; arr.length; j++) { 
-				minIndex = arr[j] &lt; arr[minIndex] ? j : minIndex;
-			}
-			swap(arr, i, minIndex);
-		}
-	}
+A ^ B == B ^ A
+A ^ B ^ C == A ^ (B ^ C)
 
 </code></pre></div></div>
 
-<ul>
-  <li>In order to compare, we need to implement a simple function, which also can sort the array using an existed and verified solutiion. In this case we using a Java API.</li>
-</ul>
+<p>With these properties, EOR can be useful to efficiently solve some questions. Let us start with a simple one:</p>
 
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>public static void comparator(int[] arr) {
-    Arrays.sort(arr);
+<blockquote>
+  <p>Given an integer array with only one integer appearing odd times and others appearing even times, print the odd-times one.</p>
+</blockquote>
+
+<p>At first glance, you could have several solutions to this question. But trust me, you might not have an elegant solution like the one below:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>public static void printOddTimesNumber1(int[] array) {
+    int eor = 0;
+    for(int i=0; i &lt; array.length; i++) {
+        eor ^= array[i];
+    }
+    System.out.println(eor);
 }
 
 </code></pre></div></div>
 
-<ul>
-  <li>Implement a random sample generator.</li>
-</ul>
+<p>With just few lines of code, it’s done. It utilizes the basic properties of EOR pretty well. EOR operation on even-time numbers always 0 while only one odd-times number <code class="language-plaintext highlighter-rouge">^</code> 0 always itself.</p>
 
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>public static int[] generateRandomArray(int maxSize, int maxValue) {
-    int[] arr = new int[(int) (Math.random() * maxSize) + 1];
-    arr[0] = (int) (Math.random() * maxValue) - (int) (Math.random() * maxValue);
-    for (int i = 1; i &lt; arr.length; i++) {
-        do {
-            arr[i] = (int) (Math.random() * maxValue) - (int) (Math.random() * maxValue);
-        } while (arr[i] == arr[i - 1]);
-    }
-    return arr;
-}
-</code></pre></div></div>
+<p>One more difficult question:</p>
 
-<ul>
-  <li>Write a function to compare output.</li>
-</ul>
+<blockquote>
+  <p>Given an integer array with only two integers appearing odd times and others appearing event times, print the two odd-time numbers.</p>
+</blockquote>
 
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>public static boolean isEqual(int[] arr1, int[] arr2) {
-    if ((arr1 == null &amp;&amp; arr2 != null) || (arr1 != null &amp;&amp; arr2 == null)) {
-        return false;
+<p>We give the solution directly and explain the code later.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>public static void printOddTimesNumber2(int[] array) {
+    int eor = 0;
+    for(int i=0; i &lt; array.length; i++) {
+        eor ^= array[i];
     }
-    if (arr1 == null &amp;&amp; arr2 == null) {
-        return true;
-    }
-    if (arr1.length != arr2.length) {
-        return false;
-    }
-    for (int i = 0; i &lt; arr1.length; i++) {
-        if (arr1[i] != arr2[i]) {
-            return false;
+    
+    int rightOne = eor &amp; (~eor + 1);
+    onlyOne = 0;
+    for(int i=0; i &lt; array.length; i++) {
+        if(array[i] &amp; rightOne != 0) {
+            onlyOne ^= array[i];
         }
     }
-    return true;
+    
+    int zeroOne = eor ^ onlyOne;
+    System.out.println(onlyOne, eor ^ onlyOne);
 }
 
 </code></pre></div></div>
 
-<ul>
-  <li>Using various size of sample to test the function we wrote and compare to the existed solution.</li>
-</ul>
+<p>The code seems complex, especially this segment <code class="language-plaintext highlighter-rouge">eor &amp; (~eor + 1)</code>. The expression gets an integer whose only bit is the same as the most right 1 bit of eor and the rest is 0.</p>
 
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>public static void main(String[] args) {
-    int testTime = 500000;
-    int maxSize = 100;
-    int maxValue = 100;
-    boolean succeed = true;
-    for (int i = 0; i &lt; testTime; i++) {
-        int[] arr1 = generateRandomArray(maxSize, maxValue);
-        int[] arr2 = copyArray(arr1);
-        selectionSort(arr1);
-        comparator(arr2);
-        if (!isEqual(arr1, arr2)) {
-            succeed = false;
-            printArray(arr1);
-            printArray(arr2);
-            break;
-        }
-    }
-    System.out.println(succeed ? "Nice!" : "Fucking fucked!");
+<p>Assume that these two numbers are A and B. The first part of the code was figured out: eor = A ^ B. We know A != B. So there must be a bit of A and B that is different. If the bit of A is 1 and the bit of B is 0, We need to figure out this bit. Then the complex expression above helped. Having the <code class="language-plaintext highlighter-rouge">rightOne</code>, we can iterate the array to find which number’s this bit is 1. After iteration, we get it as <code class="language-plaintext highlighter-rouge">onlyOne</code> which is A. Finally, we also get the <code class="language-plaintext highlighter-rouge">zeroOne</code> which is B.</p>
 
-    int[] arr = generateRandomArray(maxSize, maxValue);
-    printArray(arr);
-    selectionSort(arr);
-    printArray(arr);
-}
-
-</code></pre></div></div>
-
-<p>We can randomly set the test time and sample size to do loads of tests to make sure the function works and outputs correctly. If it can produce expected results after millions of tests. We can be sure of the correctness of this function. But if there is one time they are not equal, in other words, <code class="language-plaintext highlighter-rouge">selectionSort</code> produces outputs that are not equal, <code class="language-plaintext highlighter-rouge">comparator</code>. We have to say the new solution cannot be accepted; we should debug and test more to find the problem. As long as we use this sharp comparator more and more, we will have more confidence to write down more reliable algorithms.</p>
 
 
         </section>
@@ -244,20 +201,13 @@
 
     <!-- [[! next_post ]] -->
     
-        <a class="read-next-story no-cover" href="/useful-eor-operation">
-            <section class="post">
-                <h2>Userful EOR operations in algorithm design</h2>
-                <p>The EOR is a short form of Exclusive OR, which is a logic operator and...</p>
-            </section>
-        </a>
-    
     <!-- [[! /next_post ]] -->
     <!-- [[! prev_post ]] -->
     
-        <a class="read-next-story prev no-cover" href="/a-quick-tour-of-spring-boot">
+        <a class="read-next-story prev no-cover" href="/a-practical-way-for-algorithm-correctness">
             <section class="post">
-                <h2>A quick tour of Spring Boot</h2>
-                <p>As an Android developer currently, I have always dreamed of becoming a full-stack developer, so...</p>
+                <h2>A practical way to make sure the correctness of your algorithm</h2>
+                <p>As programmers, it really frustrates us when we cannot 100 percent make sure the functions...</p>
             </section>
         </a>
     

@@ -116,7 +116,7 @@
 
         <section class="post-content">
 
-            <p>最近遇到一个棘手的问题，我们开发的一款App在中东那边出现大量的<code class="language-plaintext highlighter-rouge">UnknownHostException</code>, 导致App在中东那边体验很糟，很快这个问题就被抛给了我们技术优化组，我和另外一名同事就开始定位问题的原因并且试图提出一个可行的解决方案。一般理解，出现<code class="language-plaintext highlighter-rouge">UnkownHostException</code>就是DNS失败了，在我们开始解决这个问题的时候，App的网络库已逐渐开始使用OkHttp，我们想到自定义DNS过程，在系统DNS失败的情况下再尝试其他DNS方式，降低<code class="language-plaintext highlighter-rouge">UnknownHostException</code>出现的频率，优化App网络连通性。
+            <p>最近遇到一个棘手的问题，我们开发的一款App在中东那边出现大量的UnknownHostException, 导致App在中东那边体验很糟，很快这个问题就被抛给了我们技术优化组，我和另外一名同事就开始定位问题的原因并且试图提出一个可行的解决方案。一般理解，出现UnkownHostException就是DNS失败了，在我们开始解决这个问题的时候，App的网络库已逐渐开始使用OkHttp，我们想到自定义DNS过程，在系统DNS失败的情况下再尝试其他DNS方式，降低UnknownHostException出现的频率，优化App网络连通性。
 为了实现我们的技术方案，我们针对OkHttp的DNS做了如下几件事:</p>
 
 <ul>
@@ -244,7 +244,7 @@ public List&lt;InetAddress&gt; lookup(String hostname) throws UnknownHostExcepti
 
 
         <footer class="site-footer clearfix">
-          <section class="copyright"><a href="/">与机器，人，神共舞</a> &copy; 2023</section>
+          <section class="copyright"><a href="/">与机器，人，神共舞</a> &copy; 2024</section>
         </footer>
     </div>
     <!-- [[! Ghost outputs important scripts and data with this tag ]] -->

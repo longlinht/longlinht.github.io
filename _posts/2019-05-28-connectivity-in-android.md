@@ -8,7 +8,7 @@ subclass: 'post tag-machine'
 categories: 'hetao'
 ---
 
-最近遇到一个棘手的问题，我们开发的一款App在中东那边出现大量的`UnknownHostException`, 导致App在中东那边体验很糟，很快这个问题就被抛给了我们技术优化组，我和另外一名同事就开始定位问题的原因并且试图提出一个可行的解决方案。一般理解，出现`UnkownHostException`就是DNS失败了，在我们开始解决这个问题的时候，App的网络库已逐渐开始使用OkHttp，我们想到自定义DNS过程，在系统DNS失败的情况下再尝试其他DNS方式，降低`UnknownHostException`出现的频率，优化App网络连通性。
+最近遇到一个棘手的问题，我们开发的一款App在中东那边出现大量的UnknownHostException, 导致App在中东那边体验很糟，很快这个问题就被抛给了我们技术优化组，我和另外一名同事就开始定位问题的原因并且试图提出一个可行的解决方案。一般理解，出现UnkownHostException就是DNS失败了，在我们开始解决这个问题的时候，App的网络库已逐渐开始使用OkHttp，我们想到自定义DNS过程，在系统DNS失败的情况下再尝试其他DNS方式，降低UnknownHostException出现的频率，优化App网络连通性。
 为了实现我们的技术方案，我们针对OkHttp的DNS做了如下几件事:
 
 * 创建OkHttpClient时自定义DNS

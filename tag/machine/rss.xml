@@ -12,303 +12,6 @@
    <atom:link href="rss" rel="self" type="application/rss+xml" />
    
 	<item>
-	  <title>The greatest philosophiers from Socrates to Peter Singer</title>
-	  <link>//the-40-greatest-philosophiers</link>
-	  <author>Tao He</author>
-	  <pubDate>2023-07-23T22:20:12+04:00</pubDate>
-	  <guid>//the-40-greatest-philosophiers</guid>
-	  <description><![CDATA[
-	     <p>I felt overwhelmed reading books about philosophy history every time until I read A Little History of Philosophy, written by Nigel Warburton. Its conciseness and to-the-pointness deeply attracted me, and I finished it fast. Although it only has 40 chapters, it is still not easy to remember and understand all philosophiers’ideas, works, and experiences. So I decided to make a list. Every item on the list includes the philosopher’s name, birth and death years, and his or her most famous idea.</p>
-
-<ul>
-  <li>
-    <p>Socrates</p>
-
-    <ul>
-      <li>470–399 BC</li>
-      <li>I know that I know nothing</li>
-      <li>The unexamined life is not worth living”</li>
-      <li>Gadfly</li>
-    </ul>
-  </li>
-  <li>Plato
-    <ul>
-      <li>428/427 or 424/423 BC</li>
-      <li>In The Republic,Philosophers would be at the top and would get a special education; Beneath them would be soldiers who were trained to defend the country, and beneath them would be the workers.</li>
-    </ul>
-  </li>
-  <li>Aristotle
-    <ul>
-      <li>384–322 BC</li>
-      <li>Eudaemonia isn’t about fleeting moments of bliss or how you feel.</li>
-    </ul>
-  </li>
-  <li>Pyrrho
-    <ul>
-      <li>365–360 BC</li>
-      <li>We know nothing</li>
-    </ul>
-  </li>
-  <li>Epicurus
-    <ul>
-      <li>341–270 BC</li>
-      <li>The fear of death was a waste of time and based on bad logic.</li>
-    </ul>
-  </li>
-  <li>Cicero
-    <ul>
-      <li>106-43 BC</li>
-      <li>Learning Not to Care</li>
-    </ul>
-  </li>
-  <li>Augustine
-    <ul>
-      <li>354-430 AD</li>
-      <li>God has given us free will.</li>
-    </ul>
-  </li>
-  <li>Boethius
-    <ul>
-      <li>480–524 AD</li>
-      <li>He should not forget that God judges human beings on how they behave, the choices they make, even though he knows in advance what they will do.</li>
-    </ul>
-  </li>
-  <li>Aquinas
-    <ul>
-      <li>1225-1274</li>
-      <li>This first cause, he declared, must have been God. God is the uncaused cause of everything that is.</li>
-    </ul>
-  </li>
-  <li>Machiavelli
-    <ul>
-      <li>1469-1527</li>
-      <li>Machiavelli stresses that it’s better as a leader to be feared than to be loved.If you can achieve what you are aiming for by showing kindness, keeping your promises, and being loved, then you should do this (or at least appear to do it). But if you can’t, then you need to combine these human qualities with animal ones.</li>
-    </ul>
-  </li>
-  <li>Thomas Hobbes
-    <ul>
-      <li>1588-1679</li>
-      <li>Life outside society would be ‘solitary, poor, nasty, brutish, and short’.</li>
-    </ul>
-  </li>
-  <li>René Descartes
-    <ul>
-      <li>1596-1650</li>
-      <li>I think, therefore I am</li>
-    </ul>
-  </li>
-  <li>Blaise Pascal
-    <ul>
-      <li>1623-1662</li>
-      <li>Place Your Bets</li>
-    </ul>
-  </li>
-  <li>Baruch Spinoza
-    <ul>
-      <li>1632-1677</li>
-      <li>God is nature and nature is God</li>
-    </ul>
-  </li>
-  <li>John Locke
-    <ul>
-      <li>1632-1704</li>
-      <li>Whenever laws end, tyranny begins.</li>
-    </ul>
-  </li>
-  <li>George Berkeley
-    <ul>
-      <li>1685-1753</li>
-      <li>Truth is the cry of all, but the game of few.</li>
-    </ul>
-  </li>
-  <li>Voltaire
-    <ul>
-      <li>1694–1778</li>
-      <li>I hate what you say, but will defend to the death your right to say it</li>
-    </ul>
-  </li>
-  <li>
-    <p>Leibniz</p>
-
-    <ul>
-      <li>1646–1716</li>
-      <li>The present is big with the future.</li>
-    </ul>
-  </li>
-  <li>
-    <p>David Hume</p>
-
-    <ul>
-      <li>1711–76</li>
-      <li>Reason is, and ought only to be the slave of the passions.</li>
-    </ul>
-  </li>
-  <li>
-    <p>Jacques Rousseau</p>
-
-    <ul>
-      <li>1712-1778</li>
-      <li>Man was born free, and everywhere he is in chains</li>
-    </ul>
-  </li>
-  <li>
-    <p>Immanuel Kant</p>
-
-    <ul>
-      <li>1724-1804</li>
-      <li>Always recognize that human individuals are ends, and do not use them as mere means to your end.</li>
-    </ul>
-  </li>
-  <li>
-    <p>Jeremy Bentham</p>
-
-    <ul>
-      <li>1748-1832</li>
-      <li>It is the greatest good to the greatest number of people which is the measure of right and wrong.</li>
-    </ul>
-  </li>
-  <li>
-    <p>Hegel</p>
-
-    <ul>
-      <li>1770-1831</li>
-      <li>The owl of Minerva spreads its wings only with the falling of the dusk.</li>
-    </ul>
-  </li>
-  <li>
-    <p>Schopenhauer</p>
-
-    <ul>
-      <li>1788-1860</li>
-      <li>Reality has two aspects. It exists both as Will and as Representation.</li>
-    </ul>
-  </li>
-  <li>
-    <p>Charles Darwin</p>
-
-    <ul>
-      <li>1809-1882</li>
-      <li>It is not the strongest of the species that survives, nor the most intelligent that survives. It is the one that is the most adaptable to change.</li>
-    </ul>
-  </li>
-  <li>
-    <p>Søren Kierkegaard</p>
-
-    <ul>
-      <li>1813-1855</li>
-      <li>Life can only be understood backward, but it must be lived forward.</li>
-    </ul>
-  </li>
-  <li>
-    <p>Karl Marx</p>
-
-    <ul>
-      <li>1818-1883</li>
-      <li>Workers of the world, unite! You have nothing to lose but your chains.</li>
-    </ul>
-  </li>
-  <li>
-    <p>William James</p>
-
-    <ul>
-      <li>1842-1910</li>
-      <li>The deepest principle in human nature is the craving to be appreciated.</li>
-    </ul>
-  </li>
-  <li>
-    <p>Nietzsche</p>
-
-    <ul>
-      <li>1844-1900</li>
-      <li>God is dead, and we have killed him.</li>
-    </ul>
-  </li>
-  <li>
-    <p>Sigmund Freud</p>
-
-    <ul>
-      <li>1856-1939</li>
-      <li>The interpretation of dreams is the royal road to a knowledge of the unconscious activities of the mind.</li>
-    </ul>
-  </li>
-  <li>
-    <p>Bertrand Russell</p>
-
-    <ul>
-      <li>1872-1970</li>
-      <li>The whole problem with the world is that fools and fanatics are always so certain of themselves, and wiser people so full of doubts.</li>
-    </ul>
-  </li>
-  <li>
-    <p>Alfred Jules Ayer</p>
-
-    <ul>
-      <li>1910-1989</li>
-      <li>The principle of verification is a criterion of meaningfulness. We say that a sentence is factually significant to any given person, if, and only if, he knows how to verify the proposition which it purports to express.</li>
-    </ul>
-  </li>
-  <li>
-    <p>Jean-Paul Sartre</p>
-
-    <ul>
-      <li>1905-1980</li>
-      <li>Existence precedes essence.</li>
-    </ul>
-  </li>
-  <li>
-    <p>Wittgenstein</p>
-
-    <ul>
-      <li>1889-1951</li>
-      <li>The limits of my language mean the limits of my world.”</li>
-    </ul>
-  </li>
-  <li>
-    <p>Hannah Arendt</p>
-
-    <ul>
-      <li>1906-1975</li>
-      <li>The sad truth is that most evil is done by people who never make up their minds to be good or evil.</li>
-    </ul>
-  </li>
-  <li>
-    <p>Philippa Foot</p>
-
-    <ul>
-      <li>1920-2010</li>
-      <li>The duty of not being unjust can override the duty of truth-telling.</li>
-    </ul>
-  </li>
-  <li>
-    <p>John Rawls</p>
-
-    <ul>
-      <li>1921-2002</li>
-      <li>The most reasonable principles of justice are those everyone would accept and agree to from a fair position.</li>
-    </ul>
-  </li>
-  <li>
-    <p>Alan Turing</p>
-
-    <ul>
-      <li>1912-1954</li>
-      <li>A machine can be called intelligent when it can deceive a human into believing that it is human.</li>
-    </ul>
-  </li>
-  <li>
-    <p>Peter Singer</p>
-
-    <ul>
-      <li>1946</li>
-      <li>To protest about bullfighting in Spain, the eating of dogs in South Korea, or the slaughter of baby seals in Canada, while continuing to eat eggs from hens who have spent their lives crammed into cages, or veal from calves who have been deprived of their mothers, their proper diet, and the freedom to lie down with their legs extended, is like denouncing apartheid in South Africa while asking your neighbors not to sell their houses to blacks.</li>
-    </ul>
-  </li>
-</ul>
-
-	  ]]></description>
-	</item>
-
-	<item>
 	  <title>Userful EOR operations in algorithm design</title>
 	  <link>//useful-eor-operation</link>
 	  <author>Tao He</author>
@@ -1304,6 +1007,89 @@ libmonochrome.so这个信息，当看到这个so的时候，直觉告诉我是�
   <li>接入第三方库和工具时要慎之又慎，多测试，多验证，多怀疑，做好兜底，做好出了问题的应对之策</li>
   <li>影响较大的功能和模块不宜同时出现在一个版本里，出现问题后纠缠不清，无法定位</li>
   <li>一个问题持续出现后，必须引起重视，在上报数据不完整，无上下文的情况下也要通过其他途径去诊断和定位，切不可倾向于没有问题。</li>
+</ul>
+
+
+	  ]]></description>
+	</item>
+
+	<item>
+	  <title>Booster使用小结</title>
+	  <link>//summary-of-using-booster</link>
+	  <author>Tao He</author>
+	  <pubDate>2021-02-20T18:00:00+04:00</pubDate>
+	  <guid>//summary-of-using-booster</guid>
+	  <description><![CDATA[
+	     <p>使用Booster去修复SharedPreferences导致的ANR的版本已全量上架Google Play，SP导致的ANR几乎绝迹，但是随之全量版本的逐步铺开，firebase崩溃后台却出现了Booster所导致的两个比较多的崩溃:</p>
+
+<p>一个是NPE，触发的基本环境如下:</p>
+
+<p>System version 6.0.1</p>
+
+<p>Java version 8</p>
+
+<p>Gradle version 6.6.1</p>
+
+<p>Android Gradle plugin version 4.0.0</p>
+
+<p>Booster version 3.1.0</p>
+
+<p>主要的崩溃机型:Galaxy J2 Prime(76%), Galaxy Grand Neo, Galaxy J3(2016), MAXTRON U22</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Fatal Exception: java.lang.NullPointerException
+Attempt to invoke virtual method 'java.lang.String java.io.File.getParent()' on a null object reference
+com.didiglobal.booster.instrument.sharedpreferences.SharedPreferencesManager.&lt;init&gt; (SharedPreferencesManager.java:36)
+com.didiglobal.booster.instrument.sharedpreferences.BoosterSharedPreferences.&lt;init&gt; (BoosterSharedPreferences.java:42)
+com.didiglobal.booster.instrument.sharedpreferences.BoosterSharedPreferences.getSharedPreferences (BoosterSharedPreferences.java:58)
+com.didiglobal.booster.instrument.ShadowSharedPreferences.getSharedPreferences (ShadowSharedPreferences.java:15)
+com.google.android.gms.internal.ads.zzabb.initialize (zzabb.java:33)
+com.google.android.gms.internal.ads.zzabf.zzi (zzabf.java:15)
+com.google.android.gms.internal.ads.zzabe.get (zzabe.java)
+com.google.android.gms.ads.internal.util.zzbu.zza (zzbu.java:13)
+com.google.android.gms.internal.ads.zzabf.initialize (zzabf.java:1)
+com.google.android.gms.internal.ads.zzanc.run (zzanc.java:2)
+java.lang.Thread.run (Thread.java:818)
+
+</code></pre></div></div>
+
+<p>此问题已经在github上提issue给开源团队，经过几次沟通，确定是Booster的bug，开源团队响应极快，在3.3.1版本已修复此问题。</p>
+
+<p>另一个问题Class Cast Exception，基本环境与上面相同，主要发生在 Samsung Android 4, 4.2.2</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Caused by java.lang.ClassCastException
+java.lang.Integer cannot be cast to java.lang.Boolean
+
+com.didiglobal.booster.instrument.sharedpreferences.BoosterSharedPreferences.getBoolean (BoosterSharedPreferences.java:120)
+cn.xiaochuankeji.zuiyouLite.common.instance.SelectGenderDlgManager.&lt;init&gt; (SelectGenderDlgManager.java:95)
+cn.xiaochuankeji.zuiyouLite.common.instance.SelectGenderDlgManager.getInstance (SelectGenderDlgManager.java:71)
+cn.xiaochuankeji.zuiyouLite.ui.main.MainActivity.onCreate (MainActivity.java:236)
+android.app.Activity.performCreate (Activity.java:5112)
+android.app.Instrumentation.callActivityOnCreate (Instrumentation.java:1080)
+android.app.ActivityThread.performLaunchActivity (ActivityThread.java:2214)
+android.app.ActivityThread.handleLaunchActivity (ActivityThread.java:2300)
+android.app.ActivityThread.access$700 (ActivityThread.java:156)
+android.app.ActivityThread$H.handleMessage (ActivityThread.java:1298)
+android.os.Handler.dispatchMessage (Handler.java:99)
+android.os.Looper.loop (Looper.java:137)
+android.app.ActivityThread.main (ActivityThread.java:5211)
+java.lang.reflect.Method.invokeNative (Method.java)
+java.lang.reflect.Method.invoke (Method.java:511)
+com.android.internal.os.ZygoteInit$MethodAndArgsCaller.run (ZygoteInit.java:815)
+com.android.internal.os.ZygoteInit.main (ZygoteInit.java:582)
+dalvik.system.NativeStart.main (NativeStart.java)
+
+</code></pre></div></div>
+
+<p>此问题目前还未被修复。除了这两个比较崩溃，目前Booster未引入新的问题，并且实实在在的解决了SP的ANR问题，使用线程池优化模块的版本也已上线，目前未发现问题，后续会统计对减少创建线程导致的OOM的贡献。引入Booster也是担着一定的风险，对于一个百万级日活的App，如果出现一个因为第三方工具导致的问题，很有可能导致线上事故，因此在引入前一定要对其做足了调研和评估。</p>
+
+<p>Booster的这种解决问题的方式真的是可谓优雅，不需你更改一行代码，在你使用它提供的gradle插件构建你的工程后，它已默默的为你修复了诸多问题，并且可以根据你的实际情况选择使用不同的功能模块。使用booster以来真的给我很多启发:</p>
+
+<ul>
+  <li>系统问题也不是不可解决，也许换个思路，就有了办法</li>
+  <li>开发工具，一定要让它易用，直观，易于理解</li>
+  <li>开发的功能一定要相对独立，模块化</li>
+  <li>引入第三方工具钱，一定要做足调研和评估</li>
+  <li>使用了以后也要做好权衡，如它带来的利是否远大于弊</li>
 </ul>
 
 

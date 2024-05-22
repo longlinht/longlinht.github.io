@@ -1,0 +1,4 @@
+/build
+/.idea/
+/Gemfile.lock
+/.sass-cache

@@ -3,8 +3,8 @@ layout: post
 cover: false
 title: The greatest philosophiers from Socrates to Peter Singer
 date:   2023-07-23 18:20:12
-tags: machine
-subclass: 'post tag-machine'
+tags: god
+subclass: 'post tag-god'
 categories: 'hetao'
 chinese: false
 ---

@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 
     <!-- [[! Page Meta ]] -->
-    <title>Split a String in C++</title>
+    <title>Why can templates only be implemented in the header file</title>
     <meta name="description" content="与机器，人，神共舞 - 编程，读书，思考，旅行，与机器对话，与人交谈，对神发问，探索，体验人生美丽的风景" />
 
     <meta name="HandheldFriendly" content="True" />
@@ -96,12 +96,12 @@
     <article class="post tag-machine">
 
         <header class="post-header">
-            <h1 class="post-title">Split a String in C++</h1>
+            <h1 class="post-title">Why can templates only be implemented in the header file</h1>
             <section class="post-meta">
             <!-- <a href='/'>Tao He</a> -->
 
             
-            <time class="post-date" datetime="2010-12-28">28 Dec 2010</time>
+            <time class="post-date" datetime="2010-12-15">15 Dec 2010</time>
                 <!-- [[tags prefix=" on "]] -->
                 
                 on
@@ -116,53 +116,54 @@
 
         <section class="post-content">
 
-            <p>There are many ways to split a string in C++, but what’s the most elegant way to split a string in C++? May be we can find it step by step. The most simple and direct way is use <code class="language-plaintext highlighter-rouge">istringstream</code> to split.</p>
+            <p>The primary reason C++ templates are implemented in header files is due to the way templates are instantiated by the compiler. Here’s a detailed explanation:</p>
 
-<p>If the delimiter is whitespace, we could simply code like thie and print substrings:</p>
+<ol>
+  <li>
+    <p><strong>Template Instantiation</strong>:
+Templates in C++ are not actual classes or functions but blueprints for creating them. When a template is used with a specific type (e.g., <code class="language-plaintext highlighter-rouge">MyTemplate&lt;int&gt;</code>), the compiler generates a concrete instance of the template for that type. This process is called instantiation.</p>
+  </li>
+  <li>
+    <p><strong>Visibility</strong>:
+For the compiler to instantiate a template, it needs to see the complete definition of the template. This includes both the declaration and the implementation. If the implementation were in a separate .cpp file, the compiler wouldn’t have access to it when it tries to instantiate the template in different translation units.</p>
+  </li>
+  <li>
+    <p><strong>One Definition Rule (ODR)</strong>:
+Including template definitions in header files ensures that the template implementation is available wherever the header is included. This prevents multiple definition errors and ensures that each translation unit can instantiate the template independently.</p>
+  </li>
+  <li>
+    <p><strong>Linking Issues</strong>:
+If templates were implemented in .cpp files, linking issues could arise. Since each instantiation must be unique across the entire program, managing instantiations across different .cpp files would be cumbersome and error-prone. The linker would struggle to resolve which instantiation to use, leading to potential duplicate symbols or unresolved references.</p>
+  </li>
+  <li>
+    <p><strong>Workarounds</strong>:
+There are workarounds to keep template definitions out of headers, but they involve explicit instantiation. In this approach, specific instances of the template are instantiated in a .cpp file. For example:</p>
 
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>std::string s("Split a string in C++");
-std::istringstream iss(s);
+    <div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// MyTemplate.h</span>
+<span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="nc">T</span><span class="p">&gt;</span>
+<span class="k">class</span> <span class="nc">MyTemplate</span> <span class="p">{</span>
+<span class="nl">public:</span>
+    <span class="kt">void</span> <span class="n">doSomething</span><span class="p">();</span>
+<span class="p">};</span>
 
-do 
-{
-    std::string sub;
-    iss &gt;&gt; sub;
-    if(!sub.empty())
-        std::cout &lt;&lt; "Substring: " &lt;&lt; sub &lt;&lt; std::endl;
-} while (iss);
-</code></pre></div></div>
-<p>While when the delimiter is not whitespace, we need think about other way to resolve this problem. If you ever have used vector container in C++ STL, you can combine it figure out more general solution. We could create a function like this:</p>
+<span class="c1">// MyTemplate.cpp</span>
+<span class="cp">#include "MyTemplate.h"
+</span><span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="nc">T</span><span class="p">&gt;</span>
+<span class="kt">void</span> <span class="n">MyTemplate</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;::</span><span class="n">doSomething</span><span class="p">()</span> <span class="p">{</span>
+    <span class="c1">// Implementation</span>
+<span class="p">}</span>
 
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>typedef std::vector&lt;std::string&gt; StringVector;
+<span class="c1">// Explicit instantiation</span>
+<span class="k">template</span> <span class="k">class</span> <span class="nc">MyTemplate</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">&gt;;</span>
+</code></pre></div>    </div>
 
-StringVector&amp; splitString(const std::string &amp;s, char delim, StringVector &amp;elems)
-{
-    std::stringstream ss(s);
-    std::string item;
-    while (std::getline(ss, item, delim))
-    {
-        elems.push_back(item);
-    }
-    return elems;
-}
-</code></pre></div></div>
-<p>May be above solution is more elegent then first one, but it still use <code class="language-plaintext highlighter-rouge">stringstream</code>, while structure and some string class’s method, the STL’s power is not incarnated. The later solution will embody the elegence and power of STL’s design.</p>
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>string sentence = "Split a string in C++";
-istringstream iss(sentence);
-copy(istream_iterator&lt;string&gt;(iss),
-     istream_iterator&lt;string&gt;(),
-     ostream_iterator&lt;string&gt;(cout, "\n"));
-</code></pre></div></div>
-<p>Instead of copying the extracted tokens to an output stream, one could insert them into a container, using the same generic copy algorithm.</p>
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>vector&lt;string&gt; tokens;
-copy(istream_iterator&lt;string&gt;(iss),
-     istream_iterator&lt;string&gt;(),
-     back_inserter(tokens));
-</code></pre></div></div>
-<p>So simple code, it seems elegent, but its delimiter must be whitespace, it’s not a general solution.</p>
+    <p>This method works but requires anticipating all the types that will be used with the template, which can be limiting and impractical for generic libraries.</p>
+  </li>
+</ol>
 
-<p>Conclusion: There is not a standard solution in C++, neither in STL, so usual and common operation on string, why C++ not provide a method in string class.</p>
+<h3 id="conclusion">Conclusion</h3>
 
+<p>The necessity of implementing templates in header files in C++ stems from the need for the compiler to have full visibility of the template definitions at the point of instantiation. While alternative approaches exist, they are generally more complex and less flexible than simply including template implementations in headers. This design choice helps ensure that template-based code is both efficient and straightforward to compile and link.</p>
 
 
         </section>
@@ -186,20 +187,20 @@ copy(istream_iterator&lt;string&gt;(iss),
 
     <!-- [[! next_post ]] -->
     
-        <a class="read-next-story no-cover" href="/pointers-vs-references-in-cpp">
+        <a class="read-next-story no-cover" href="/split-string-in-cpp">
             <section class="post">
-                <h2>References vs. Pointers in C++</h2>
-                <p>In C++, references provide many of the same capabilities as pointers. In real development, we...</p>
+                <h2>Split a String in C++</h2>
+                <p>There are many ways to split a string in C++, but what's the most elegant...</p>
             </section>
         </a>
     
     <!-- [[! /next_post ]] -->
     <!-- [[! prev_post ]] -->
     
-        <a class="read-next-story prev no-cover" href="/template-only-be-implemented-in-header-file">
+        <a class="read-next-story prev no-cover" href="/the-rule-of-three">
             <section class="post">
-                <h2>Why can templates only be implemented in the header file</h2>
-                <p>The primary reason C++ templates are implemented in header files is due to the way...</p>
+                <h2>The Rule of Three</h2>
+                <p>The Stack Overflow question “What is the Rule of Three?” addresses a fundamental concept in...</p>
             </section>
         </a>
     

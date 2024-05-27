@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 
     <!-- [[! Page Meta ]] -->
-    <title>Split a String in C++</title>
+    <title>The Rule of Three</title>
     <meta name="description" content="与机器，人，神共舞 - 编程，读书，思考，旅行，与机器对话，与人交谈，对神发问，探索，体验人生美丽的风景" />
 
     <meta name="HandheldFriendly" content="True" />
@@ -96,12 +96,12 @@
     <article class="post tag-machine">
 
         <header class="post-header">
-            <h1 class="post-title">Split a String in C++</h1>
+            <h1 class="post-title">The Rule of Three</h1>
             <section class="post-meta">
             <!-- <a href='/'>Tao He</a> -->
 
             
-            <time class="post-date" datetime="2010-12-28">28 Dec 2010</time>
+            <time class="post-date" datetime="2010-12-10">10 Dec 2010</time>
                 <!-- [[tags prefix=" on "]] -->
                 
                 on
@@ -116,53 +116,47 @@
 
         <section class="post-content">
 
-            <p>There are many ways to split a string in C++, but what’s the most elegant way to split a string in C++? May be we can find it step by step. The most simple and direct way is use <code class="language-plaintext highlighter-rouge">istringstream</code> to split.</p>
+            <p>The Stack Overflow question “What is the Rule of Three?” addresses a fundamental concept in C++ programming related to resource management and object copying. The Rule of Three states that if a class requires a user-defined destructor, copy constructor, or copy assignment operator, it likely needs all three. This principle ensures proper handling of resources, especially dynamic memory, to avoid issues such as memory leaks, double deletions, and dangling pointers.</p>
 
-<p>If the delimiter is whitespace, we could simply code like thie and print substrings:</p>
+<h3 id="why-the-rule-of-three-is-important">Why the Rule of Three is Important</h3>
 
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>std::string s("Split a string in C++");
-std::istringstream iss(s);
+<p>When a class manages resources such as dynamic memory, the compiler-generated versions of these functions typically perform shallow copies, which copy the memory addresses rather than the actual data. This can lead to multiple objects pointing to the same memory location, causing problems like double deletion when destructors are called on these objects.</p>
 
-do 
-{
-    std::string sub;
-    iss &gt;&gt; sub;
-    if(!sub.empty())
-        std::cout &lt;&lt; "Substring: " &lt;&lt; sub &lt;&lt; std::endl;
-} while (iss);
+<h3 id="example">Example</h3>
+
+<p>Consider the following class that allocates dynamic memory:</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">MyClass</span> <span class="p">{</span>
+<span class="nl">public:</span>
+    <span class="n">MyClass</span><span class="p">(</span><span class="kt">int</span> <span class="n">size</span><span class="p">)</span> <span class="o">:</span> <span class="n">_size</span><span class="p">(</span><span class="n">size</span><span class="p">),</span> <span class="n">_data</span><span class="p">(</span><span class="k">new</span> <span class="kt">int</span><span class="p">[</span><span class="n">size</span><span class="p">])</span> <span class="p">{}</span>
+
+    <span class="o">~</span><span class="n">MyClass</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">delete</span><span class="p">[]</span> <span class="n">_data</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="n">MyClass</span><span class="p">(</span><span class="k">const</span> <span class="n">MyClass</span><span class="o">&amp;</span> <span class="n">other</span><span class="p">)</span> <span class="o">:</span> <span class="n">_size</span><span class="p">(</span><span class="n">other</span><span class="p">.</span><span class="n">_size</span><span class="p">),</span> <span class="n">_data</span><span class="p">(</span><span class="k">new</span> <span class="kt">int</span><span class="p">[</span><span class="n">other</span><span class="p">.</span><span class="n">_size</span><span class="p">])</span> <span class="p">{</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">copy</span><span class="p">(</span><span class="n">other</span><span class="p">.</span><span class="n">_data</span><span class="p">,</span> <span class="n">other</span><span class="p">.</span><span class="n">_data</span> <span class="o">+</span> <span class="n">other</span><span class="p">.</span><span class="n">_size</span><span class="p">,</span> <span class="n">_data</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="n">MyClass</span><span class="o">&amp;</span> <span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="k">const</span> <span class="n">MyClass</span><span class="o">&amp;</span> <span class="n">other</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="k">this</span> <span class="o">==</span> <span class="o">&amp;</span><span class="n">other</span><span class="p">)</span> <span class="k">return</span> <span class="o">*</span><span class="k">this</span><span class="p">;</span>
+
+        <span class="k">delete</span><span class="p">[]</span> <span class="n">_data</span><span class="p">;</span>
+        <span class="n">_size</span> <span class="o">=</span> <span class="n">other</span><span class="p">.</span><span class="n">_size</span><span class="p">;</span>
+        <span class="n">_data</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="p">[</span><span class="n">_size</span><span class="p">];</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">copy</span><span class="p">(</span><span class="n">other</span><span class="p">.</span><span class="n">_data</span><span class="p">,</span> <span class="n">other</span><span class="p">.</span><span class="n">_data</span> <span class="o">+</span> <span class="n">_size</span><span class="p">,</span> <span class="n">_data</span><span class="p">);</span>
+        <span class="k">return</span> <span class="o">*</span><span class="k">this</span><span class="p">;</span>
+    <span class="p">}</span>
+
+<span class="nl">private:</span>
+    <span class="kt">int</span> <span class="n">_size</span><span class="p">;</span>
+    <span class="kt">int</span><span class="o">*</span> <span class="n">_data</span><span class="p">;</span>
+<span class="p">};</span>
 </code></pre></div></div>
-<p>While when the delimiter is not whitespace, we need think about other way to resolve this problem. If you ever have used vector container in C++ STL, you can combine it figure out more general solution. We could create a function like this:</p>
 
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>typedef std::vector&lt;std::string&gt; StringVector;
+<h3 id="conclusion">Conclusion</h3>
 
-StringVector&amp; splitString(const std::string &amp;s, char delim, StringVector &amp;elems)
-{
-    std::stringstream ss(s);
-    std::string item;
-    while (std::getline(ss, item, delim))
-    {
-        elems.push_back(item);
-    }
-    return elems;
-}
-</code></pre></div></div>
-<p>May be above solution is more elegent then first one, but it still use <code class="language-plaintext highlighter-rouge">stringstream</code>, while structure and some string class’s method, the STL’s power is not incarnated. The later solution will embody the elegence and power of STL’s design.</p>
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>string sentence = "Split a string in C++";
-istringstream iss(sentence);
-copy(istream_iterator&lt;string&gt;(iss),
-     istream_iterator&lt;string&gt;(),
-     ostream_iterator&lt;string&gt;(cout, "\n"));
-</code></pre></div></div>
-<p>Instead of copying the extracted tokens to an output stream, one could insert them into a container, using the same generic copy algorithm.</p>
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>vector&lt;string&gt; tokens;
-copy(istream_iterator&lt;string&gt;(iss),
-     istream_iterator&lt;string&gt;(),
-     back_inserter(tokens));
-</code></pre></div></div>
-<p>So simple code, it seems elegent, but its delimiter must be whitespace, it’s not a general solution.</p>
-
-<p>Conclusion: There is not a standard solution in C++, neither in STL, so usual and common operation on string, why C++ not provide a method in string class.</p>
-
+<p>The Rule of Three ensures that if one of these special member functions is defined to manage resources properly, the other two should be defined as well to maintain consistency and prevent resource management issues. This practice leads to more robust and reliable code.</p>
 
 
         </section>
@@ -186,20 +180,20 @@ copy(istream_iterator&lt;string&gt;(iss),
 
     <!-- [[! next_post ]] -->
     
-        <a class="read-next-story no-cover" href="/pointers-vs-references-in-cpp">
+        <a class="read-next-story no-cover" href="/template-only-be-implemented-in-header-file">
             <section class="post">
-                <h2>References vs. Pointers in C++</h2>
-                <p>In C++, references provide many of the same capabilities as pointers. In real development, we...</p>
+                <h2>Why can templates only be implemented in the header file</h2>
+                <p>The primary reason C++ templates are implemented in header files is due to the way...</p>
             </section>
         </a>
     
     <!-- [[! /next_post ]] -->
     <!-- [[! prev_post ]] -->
     
-        <a class="read-next-story prev no-cover" href="/template-only-be-implemented-in-header-file">
+        <a class="read-next-story prev no-cover" href="/issues-with-using-name-std">
             <section class="post">
-                <h2>Why can templates only be implemented in the header file</h2>
-                <p>The primary reason C++ templates are implemented in header files is due to the way...</p>
+                <h2>What's the problem with "using namespace std;"</h2>
+                <p>In C++, using namespace std can simplify your code by allowing you to omit the...</p>
             </section>
         </a>
     

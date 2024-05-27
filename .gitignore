@@ -3,3 +3,5 @@
 /Gemfile.lock
 /.sass-cache
 /_site/
+/release.sh
+/server.sh

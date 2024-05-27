@@ -7,7 +7,8 @@ logo: 'assets/images/ghost.png'
 current: about
 ---
 
-This is my simple personal blog. Because I'm not good at front end technology, I used the jekyll template of **Jasper**, thanks for his good job.
 
-On this blog, I will write down my thinking about programming and life. If you confused about my category name of posts, just freely treated "Machine" as computer programming or computer technology,treated "Human" as life or thinking about life, treadted "God" as something which beyond our lives.Using such odd category name, just because a sentence which I used to courage myself several years ago.
+This is my personal website. Since I'm not skilled in front-end technology, I used Jasper's Jekyll template. Thanks to him for the excellent work.
+
+On this blog, I'll share my thoughts on programming and life. If you're puzzled by my post categories, simply interpret "Machine" as computer programming or technology, "Human" as life or reflections on life, and "God" as anything beyond our everyday experiences. I chose these unconventional category names because of a phrase that has inspired me for several years.
 

@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 
     <!-- [[! Page Meta ]] -->
-    <title>无题</title>
+    <title>Difference between static and shared libraries</title>
     <meta name="description" content="与机器，人，神共舞 - 编程，读书，思考，旅行，与机器对话，与人交谈，对神发问，探索，体验人生美丽的风景" />
 
     <meta name="HandheldFriendly" content="True" />
@@ -93,21 +93,21 @@
 
 <main class="content" role="main">
 
-    <article class="post tag-human">
+    <article class="post tag-machine">
 
         <header class="post-header">
-            <h1 class="post-title">无题</h1>
+            <h1 class="post-title">Difference between static and shared libraries</h1>
             <section class="post-meta">
             <!-- <a href='/'>Tao He</a> -->
 
             
-            <time class="post-date" datetime="2011-07-24">24 Jul 2011</time>
+            <time class="post-date" datetime="2011-03-16">16 Mar 2011</time>
                 <!-- [[tags prefix=" on "]] -->
                 
                 on
                 
                     
-                       <a href='/tag/human'>Human</a>
+                       <a href='/tag/machine'>Machine</a>
                     
                 
                 
@@ -116,8 +116,33 @@
 
         <section class="post-content">
 
-            <p>不受现实价值体系的摆布，不囿于世俗传统，读自己的书，做自己认为该做的事，走一条不被设计的人生轨迹，守望，感受，捍卫其独有的美，人生若如此，夫复何求？</p>
+            <p>In software development, libraries are essential components that provide reusable code to streamline and enhance programming. These libraries come in two main forms: shared libraries and static libraries. Understanding the differences between them, as well as their respective advantages and disadvantages, is crucial for making informed decisions in software development.</p>
 
+<h4 id="shared-libraries">Shared Libraries</h4>
+
+<p>Shared libraries, represented by .so files on Unix-based systems, .dll files on Windows, and .dylib files on macOS, contain all the necessary code within a single file. Programs that utilize these libraries reference the required code at runtime. This means that only the code actually used by the program is linked dynamically, reducing the overall size of the binaries.</p>
+
+<p>One significant advantage of shared libraries is their ability to minimize code duplication across programs. By referencing a single shared library, multiple programs can stay lightweight. Additionally, shared libraries can be updated independently of the programs that use them. Replacing a shared library with a newer version that offers performance improvements or bug fixes can be done without recompiling the dependent programs. Shared libraries are also instrumental in implementing binary plug-in systems, as they can be loaded into an application at runtime.</p>
+
+<p>However, shared libraries come with some drawbacks. They introduce a small performance overhead due to the runtime linking process, where all symbols in the library must be resolved. Moreover, there is a cost associated with loading the library into memory during program startup.</p>
+
+<h4 id="static-libraries">Static Libraries</h4>
+
+<p>Static libraries, typically in .a files on Unix-based systems and .lib files on Windows, are linked directly into the program at compile time. Unlike shared libraries, static libraries embed copies of the necessary code within the program itself. This approach eliminates the need for external library files at runtime, ensuring that the program is self-contained.</p>
+
+<p>The primary advantage of static libraries is the absence of runtime loading costs. Since the code is already part of the binary, the program can start and execute without any additional linking overhead. This makes static libraries particularly useful in environments where minimizing external dependencies is critical. However, static libraries also have their disadvantages. They increase the overall size of the binary because the library code is duplicated in each program that uses it.</p>
+
+<h4 id="practical-considerations">Practical Considerations</h4>
+
+<p>Choosing between shared and static libraries often depends on the specific requirements and constraints of a project. Shared libraries are preferred when reducing binary size and maintaining ease of updates are priorities. They are also beneficial for implementing plug-in systems due to their runtime loading capabilities.</p>
+
+<p>On the other hand, static libraries are ideal when creating self-contained binaries with no external dependencies. This can be particularly important in situations where meeting specific library versions, such as certain versions of the C++ standard library or Boost C++ library, might be challenging.</p>
+
+<p>In my personal experience, I tend to favor shared libraries for their flexibility and efficiency in managing code updates. However, I opt for static libraries when the goal is to ensure that the binary is independent of external libraries, thus avoiding potential compatibility issues.</p>
+
+<h4 id="conclusion">Conclusion</h4>
+
+<p>Both shared and static libraries have their unique advantages and disadvantages. Shared libraries excel in reducing binary sizes and facilitating updates, while static libraries provide self-contained binaries with no runtime linking costs. The choice between the two depends on the specific needs of the project, including considerations of dependency management, performance, and binary size. Understanding these trade-offs allows developers to make informed decisions to optimize their software’s functionality and maintainability.</p>
 
 
         </section>
@@ -141,20 +166,23 @@
 
     <!-- [[! next_post ]] -->
     
-        <a class="read-next-story no-cover" href="/similarities-and-differences-between-java-and-cpp">
+        <a class="read-next-story no-cover" href="/normal-write-paragraph">
             <section class="post">
-                <h2>Similarities and Differences between Java and C++</h2>
-                <p>* Java does not support typedefs, defines, or a preprocessor. * Java does not support...</p>
+                <h2>无题</h2>
+                <p>不受现实价值体系的摆布，不囿于世俗传统，读自己的书，做自己认为该做的事，走一条不被设计的人生轨迹，守望，感受，捍卫其独有的美，人生若如此，夫复何求？
+
+
+</p>
             </section>
         </a>
     
     <!-- [[! /next_post ]] -->
     <!-- [[! prev_post ]] -->
     
-        <a class="read-next-story prev no-cover" href="/difference-between-static-and-shared-libraries">
+        <a class="read-next-story prev no-cover" href="/segmentation-fault">
             <section class="post">
-                <h2>Difference between static and shared libraries</h2>
-                <p>In software development, libraries are essential components that provide reusable code to streamline and enhance...</p>
+                <h2>Segmentation-fault in C++</h2>
+                <p>A segmentation fault, commonly referred to as a segfault, is a specific error that occurs...</p>
             </section>
         </a>
     

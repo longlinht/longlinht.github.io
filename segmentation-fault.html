@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 
     <!-- [[! Page Meta ]] -->
-    <title>无题</title>
+    <title>Segmentation-fault in C++</title>
     <meta name="description" content="与机器，人，神共舞 - 编程，读书，思考，旅行，与机器对话，与人交谈，对神发问，探索，体验人生美丽的风景" />
 
     <meta name="HandheldFriendly" content="True" />
@@ -93,21 +93,21 @@
 
 <main class="content" role="main">
 
-    <article class="post tag-human">
+    <article class="post tag-machine">
 
         <header class="post-header">
-            <h1 class="post-title">无题</h1>
+            <h1 class="post-title">Segmentation-fault in C++</h1>
             <section class="post-meta">
             <!-- <a href='/'>Tao He</a> -->
 
             
-            <time class="post-date" datetime="2011-07-24">24 Jul 2011</time>
+            <time class="post-date" datetime="2011-03-14">14 Mar 2011</time>
                 <!-- [[tags prefix=" on "]] -->
                 
                 on
                 
                     
-                       <a href='/tag/human'>Human</a>
+                       <a href='/tag/machine'>Machine</a>
                     
                 
                 
@@ -116,8 +116,41 @@
 
         <section class="post-content">
 
-            <p>不受现实价值体系的摆布，不囿于世俗传统，读自己的书，做自己认为该做的事，走一条不被设计的人生轨迹，守望，感受，捍卫其独有的美，人生若如此，夫复何求？</p>
+            <p>A segmentation fault, commonly referred to as a segfault, is a specific error that occurs when a program attempts to access a region of memory that it is not permitted to access. This mechanism acts as a safeguard, preventing memory corruption and the introduction of complex, hard-to-debug memory bugs. Segfaults serve as indicators that there is a problem with memory handling in the code, such as accessing a freed variable or writing to a read-only memory segment. This error is prevalent in languages that allow direct memory management, such as C and C++.</p>
 
+<h4 id="common-causes-of-segmentation-faults">Common Causes of Segmentation Faults</h4>
+
+<ol>
+  <li><strong>Dereferencing Null Pointers</strong>:
+One of the most common causes of segfaults in low-level programming languages is dereferencing a null pointer. For example:
+    <div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span> <span class="o">*</span><span class="n">p</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
+<span class="o">*</span><span class="n">p</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+</code></pre></div>    </div>
+    <p>In this case, the pointer <code class="language-plaintext highlighter-rouge">p</code> is set to NULL and attempting to assign a value to the location it points to results in a segfault.</p>
+  </li>
+  <li><strong>Writing to Read-Only Memory</strong>:
+Segfaults also occur when a program attempts to write to a read-only section of memory. Consider the following example:
+    <div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">char</span> <span class="o">*</span><span class="n">str</span> <span class="o">=</span> <span class="s">"Foo"</span><span class="p">;</span> <span class="c1">// The compiler marks this string as read-only</span>
+<span class="o">*</span><span class="n">str</span> <span class="o">=</span> <span class="sc">'b'</span><span class="p">;</span> <span class="c1">// This write operation is illegal and causes a segfault</span>
+</code></pre></div>    </div>
+    <p>Here, the string “Foo” is stored in a read-only memory segment. Attempting to modify it results in a segmentation fault.</p>
+  </li>
+  <li><strong>Dereferencing Dangling Pointers</strong>:
+A dangling pointer points to a memory location that has already been deallocated or is no longer valid. For example:
+    <div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">char</span> <span class="o">*</span><span class="n">p</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
+<span class="p">{</span>
+    <span class="kt">char</span> <span class="n">c</span><span class="p">;</span>
+    <span class="n">p</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">c</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="c1">// Now p is dangling</span>
+</code></pre></div>    </div>
+    <p>In this snippet, <code class="language-plaintext highlighter-rouge">p</code> points to the local variable <code class="language-plaintext highlighter-rouge">c</code>, which ceases to exist once the block scope ends. Dereferencing <code class="language-plaintext highlighter-rouge">p</code> after this point, such as with <code class="language-plaintext highlighter-rouge">*p = 'A'</code>, would likely result in a segfault since <code class="language-plaintext highlighter-rouge">p</code> points to an invalid memory location.</p>
+  </li>
+</ol>
+
+<h4 id="conclusion">Conclusion</h4>
+
+<p>Segmentation faults are critical errors in low-level programming that signal improper memory access. They occur due to various reasons, including dereferencing null or dangling pointers and writing to read-only memory. Understanding and handling these errors is essential for maintaining robust and bug-free code in languages that allow direct memory manipulation. By carefully managing memory and being aware of common pitfalls, programmers can minimize the occurrence of segmentation faults and improve the stability of their programs.</p>
 
 
         </section>
@@ -141,20 +174,20 @@
 
     <!-- [[! next_post ]] -->
     
-        <a class="read-next-story no-cover" href="/similarities-and-differences-between-java-and-cpp">
+        <a class="read-next-story no-cover" href="/difference-between-static-and-shared-libraries">
             <section class="post">
-                <h2>Similarities and Differences between Java and C++</h2>
-                <p>* Java does not support typedefs, defines, or a preprocessor. * Java does not support...</p>
+                <h2>Difference between static and shared libraries</h2>
+                <p>In software development, libraries are essential components that provide reusable code to streamline and enhance...</p>
             </section>
         </a>
     
     <!-- [[! /next_post ]] -->
     <!-- [[! prev_post ]] -->
     
-        <a class="read-next-story prev no-cover" href="/difference-between-static-and-shared-libraries">
+        <a class="read-next-story prev no-cover" href="/cache-friendly-code">
             <section class="post">
-                <h2>Difference between static and shared libraries</h2>
-                <p>In software development, libraries are essential components that provide reusable code to streamline and enhance...</p>
+                <h2>What is cache-friendly code</h2>
+                <p>In modern computer systems, the memory hierarchy plays a crucial role in balancing performance and...</p>
             </section>
         </a>
     

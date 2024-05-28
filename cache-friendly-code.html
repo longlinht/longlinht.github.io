@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 
     <!-- [[! Page Meta ]] -->
-    <title>无题</title>
+    <title>What is cache-friendly code</title>
     <meta name="description" content="与机器，人，神共舞 - 编程，读书，思考，旅行，与机器对话，与人交谈，对神发问，探索，体验人生美丽的风景" />
 
     <meta name="HandheldFriendly" content="True" />
@@ -93,21 +93,21 @@
 
 <main class="content" role="main">
 
-    <article class="post tag-human">
+    <article class="post tag-machine">
 
         <header class="post-header">
-            <h1 class="post-title">无题</h1>
+            <h1 class="post-title">What is cache-friendly code</h1>
             <section class="post-meta">
             <!-- <a href='/'>Tao He</a> -->
 
             
-            <time class="post-date" datetime="2011-07-24">24 Jul 2011</time>
+            <time class="post-date" datetime="2011-03-12">12 Mar 2011</time>
                 <!-- [[tags prefix=" on "]] -->
                 
                 on
                 
                     
-                       <a href='/tag/human'>Human</a>
+                       <a href='/tag/machine'>Machine</a>
                     
                 
                 
@@ -116,8 +116,60 @@
 
         <section class="post-content">
 
-            <p>不受现实价值体系的摆布，不囿于世俗传统，读自己的书，做自己认为该做的事，走一条不被设计的人生轨迹，守望，感受，捍卫其独有的美，人生若如此，夫复何求？</p>
+            <p>In modern computer systems, the memory hierarchy plays a crucial role in balancing performance and cost. At the top of this hierarchy are the registers, which are extremely fast but very limited in number due to their high cost. On the other end, we have DRAM, which is inexpensive but significantly slower, taking hundreds of clock cycles to access data. To bridge this gap between fast and costly registers and slow but cheap DRAM, intermediate cache memories—namely L1, L2, and L3 caches—are used. These caches progressively decrease in speed and cost, allowing frequently accessed data to be retrieved quickly, while less frequently accessed data is stored in slower, cheaper memory.</p>
 
+<p>Caching works on the principle that most executing code frequently accesses a small set of variables, while a much larger set of variables is accessed infrequently. If the processor cannot find the needed data in the L1 cache, it checks the L2 cache, then the L3 cache, and finally the main memory. Each cache miss, where data is not found in the cache and must be retrieved from a lower level, incurs a significant time penalty.</p>
+
+<p>This hierarchical approach is analogous to the relationship between system memory and hard disk storage: system memory is faster but more expensive, while hard disk storage is slower but much cheaper. Effective caching is essential to mitigate latency, as increasing bandwidth alone cannot solve the latency problem.</p>
+
+<p>Data retrieval always follows the memory hierarchy, moving from the fastest, smallest memory to the slowest, largest memory. The performance of a system heavily depends on the cache hit rate, which refers to the frequency with which data requests are successfully served from the cache. High cache hit rates are crucial because cache misses result in slower data retrieval from RAM or, worse, the hard disk, significantly impacting performance.</p>
+
+<p>In contemporary computer architectures, the main performance bottleneck is accessing memory outside the CPU die, such as RAM. This issue has become more pronounced over time, as increases in processor frequency no longer translate to significant performance gains due to memory access limitations. Consequently, modern CPU designs focus heavily on optimizing caches, prefetching data, pipeline efficiency, and concurrency. Notably, up to 85% of a CPU’s die area is devoted to caches, and up to 99% for data storage and movement.</p>
+
+<h4 id="key-concepts-for-cache-friendly-code">Key Concepts for Cache-Friendly Code</h4>
+
+<ol>
+  <li><strong>Principle of Locality</strong>:
+    <ul>
+      <li><strong>Temporal Locality</strong>: Frequently accessed data is likely to be accessed again soon.</li>
+      <li><strong>Spatial Locality</strong>: Data located near recently accessed data is also likely to be accessed soon.</li>
+    </ul>
+  </li>
+  <li><strong>Cache Lines</strong>:
+    <ul>
+      <li>Understanding cache lines is critical, as data is fetched in blocks, making contiguous memory access more efficient.</li>
+    </ul>
+  </li>
+  <li><strong>Choosing Appropriate Containers</strong>:
+    <ul>
+      <li>For instance, in C++, <code class="language-plaintext highlighter-rouge">std::vector</code> stores elements contiguously, enhancing cache efficiency, whereas <code class="language-plaintext highlighter-rouge">std::list</code> does not, leading to poorer cache performance.</li>
+    </ul>
+  </li>
+  <li><strong>Data Structure and Algorithm Design</strong>:
+    <ul>
+      <li>Techniques like cache blocking and exploiting data structure order (e.g., row-major vs. column-major ordering) are essential to optimize cache usage.</li>
+    </ul>
+  </li>
+  <li><strong>Avoid Unpredictable Branches</strong>:
+    <ul>
+      <li>These complicate prefetching and lead to more cache misses.</li>
+    </ul>
+  </li>
+  <li><strong>Minimize Use of Virtual Functions</strong>:
+    <ul>
+      <li>Virtual function calls can cause cache misses, although frequent calls might mitigate this issue.</li>
+    </ul>
+  </li>
+  <li><strong>Prevent False Sharing</strong>:
+    <ul>
+      <li>This occurs when multiple processors write to different variables in the same cache line, causing excessive cache coherence traffic.</li>
+    </ul>
+  </li>
+</ol>
+
+<h3 id="conclusion">Conclusion</h3>
+
+<p>Efficient caching is fundamental to the performance of modern computer systems. By leveraging principles of locality, choosing appropriate data structures, and optimizing algorithms, programmers can significantly enhance their code’s efficiency. Understanding and addressing common caching issues, such as false sharing and unpredictable branches, further helps in achieving optimal performance.</p>
 
 
         </section>
@@ -141,20 +193,20 @@
 
     <!-- [[! next_post ]] -->
     
-        <a class="read-next-story no-cover" href="/similarities-and-differences-between-java-and-cpp">
+        <a class="read-next-story no-cover" href="/segmentation-fault">
             <section class="post">
-                <h2>Similarities and Differences between Java and C++</h2>
-                <p>* Java does not support typedefs, defines, or a preprocessor. * Java does not support...</p>
+                <h2>Segmentation-fault in C++</h2>
+                <p>A segmentation fault, commonly referred to as a segfault, is a specific error that occurs...</p>
             </section>
         </a>
     
     <!-- [[! /next_post ]] -->
     <!-- [[! prev_post ]] -->
     
-        <a class="read-next-story prev no-cover" href="/difference-between-static-and-shared-libraries">
+        <a class="read-next-story prev no-cover" href="/singleton-in-cpp">
             <section class="post">
-                <h2>Difference between static and shared libraries</h2>
-                <p>In software development, libraries are essential components that provide reusable code to streamline and enhance...</p>
+                <h2>Singleton Design Pattern in C++</h2>
+                <p>The Singleton design pattern ensures a class has only one instance and provides a global...</p>
             </section>
         </a>
     

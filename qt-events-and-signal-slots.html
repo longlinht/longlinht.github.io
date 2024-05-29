@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- [[! Document Settings ]] -->
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+    <!-- [[! Page Meta ]] -->
+    <title>Qt events and signal/slots</title>
+    <meta name="description" content="与机器，人，神共舞 - 编程，读书，思考，旅行，与机器对话，与人交谈，对神发问，探索，体验人生美丽的风景" />
+
+    <meta name="HandheldFriendly" content="True" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link rel="shortcut icon" href="/assets/images/favicon.ico" >
+
+    <!-- [[! Styles'n'Scripts ]] -->
+    <link rel="stylesheet" type="text/css" href="/assets/css/screen.css" />
+    <link rel="stylesheet" type="text/css"
+          href="//fonts.googleapis.com/css?family=Merriweather:300,700,700italic,300italic|Open+Sans:700,400" />
+    <link rel="stylesheet" type="text/css" href="/assets/css/syntax.css" />
+    
+    <!-- [[! Ghost outputs important style and meta data with this tag ]] -->
+        <link rel="canonical" href="/" />
+    <meta name="referrer" content="origin" />
+    <link rel="next" href="/page2/" />
+
+    <meta property="og:site_name" content="与机器，人，神共舞" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="与机器，人，神共舞" />
+    <meta property="og:description" content="编程，读书，思考，旅行，与机器对话，与人交谈，对神发问，探索，体验人生美丽的风景" />
+    <meta property="og:url" content="/" />
+    <meta property="og:image" content="/assets/images/cover1.jpg" />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="与机器，人，神共舞" />
+    <meta name="twitter:description" content="编程，读书，思考，旅行，与机器对话，与人交谈，对神发问，探索，体验人生美丽的风景" />
+    <meta name="twitter:url" content="/" />
+    <meta name="twitter:image:src" content="/assets/images/cover1.jpg" />
+
+    <script type="application/ld+json">
+{
+    "@context": "http://schema.org",
+    "@type": "Website",
+    "publisher": "Tao's Page",
+    "url": "/",
+    "image": "/assets/images/cover1.jpg",
+    "description": "编程，读书，思考，旅行，与机器对话，与人交谈，对神发问，探索，体验人生美丽的风景"
+}
+    </script>
+
+    <meta name="generator" content="Jekyll 3.0.0" />
+    <link rel="alternate" type="application/rss+xml" title="与机器，人，神共舞" href="/rss.xml" />
+
+</head>
+<body class="home-template nav-closed">
+
+    <div class="nav">
+    <h3 class="nav-title">Menu</h3>
+    <a href="#" class="nav-close">
+        <span class="hidden">Close</span>
+    </a>
+    <ul>
+        <li class="nav-home " role="presentation"><a href="/">Home</a></li>
+        <li class="nav-about " role="presentation"><a href="/about.html">About</a></li>
+        <li class="nav-fables " role="presentation"><a href="/tag/machine/">Machine</a></li>
+        <li class="nav-speeches " role="presentation"><a href="/tag/human/">Human</a></li>
+        <li class="nav-fiction " role="presentation"><a href="/tag/god/">God</a></li>
+        <li class="nav-author " role="presentation"><a href="/author/hetao/">Author</a></li>
+    </ul>
+    <a class="subscribe-button icon-feed" href="/vocab.html">Apps</a>
+</div>
+<span class="nav-cover"></span>
+
+
+    <div class="site-wrapper">
+
+        <!-- [[! Everything else gets inserted here ]] -->
+        <!-- default -->
+
+<!-- The comment above "< default" means - insert everything in this file into -->
+    <!-- the [body] of the default.hbs template, which contains our header/footer. -->
+
+<!-- Everything inside the #post tags pulls data from the post -->
+<!-- #post -->
+
+<header class="main-header post-head no-cover">
+    <nav class="main-nav  clearfix">
+        
+        
+    </nav>
+</header>
+
+<main class="content" role="main">
+
+    <article class="post tag-machine">
+
+        <header class="post-header">
+            <h1 class="post-title">Qt events and signal/slots</h1>
+            <section class="post-meta">
+            <!-- <a href='/'>Tao He</a> -->
+
+            
+            <time class="post-date" datetime="2011-04-04">04 Apr 2011</time>
+                <!-- [[tags prefix=" on "]] -->
+                
+                on
+                
+                    
+                       <a href='/tag/machine'>Machine</a>
+                    
+                
+                
+            </section>
+        </header>
+
+        <section class="post-content">
+
+            <p>In the realm of Qt, signals and events serve as fundamental mechanisms for communication and interaction within applications. Both adhere to the Observer pattern but are tailored to different use cases due to their unique strengths and weaknesses. Understanding their distinct roles and applications is crucial for effective Qt programming.</p>
+
+<h4 id="defining-qt-events-and-signals">Defining Qt Events and Signals</h4>
+
+<p>In Qt, an event is a virtual function in a Qt class that developers are expected to reimplement in their subclasses to handle specific occurrences. This approach aligns with the Template Method pattern. For example, handling a key press in a custom widget involves reimplementing the <code class="language-plaintext highlighter-rouge">keyPressEvent</code> method in a subclass. This method allows developers to define how their widget should respond to key presses, adding specific behaviors while preserving the basic functionality provided by the base class.</p>
+
+<p>Signals, on the other hand, are used to notify other parts of the application that something has occurred. They are typically connected to slots, which are functions designed to handle these notifications. Signals are emitted when a particular event occurs, allowing multiple slots to be connected and respond accordingly.</p>
+
+<h4 id="handling-events-vs-responding-to-signals">Handling Events vs. Responding to Signals</h4>
+
+<p>The primary distinction between events and signals lies in their intent and use cases:</p>
+
+<ul>
+  <li>
+    <p><strong>Handling Events</strong>: When an event is handled, the responsibility is on the developer to define a response that extends the widget’s functionality. For instance, a custom button widget that changes its number when the “up” or “down” keys are pressed can be created by subclassing <code class="language-plaintext highlighter-rouge">QPushButton</code> and reimplementing the <code class="language-plaintext highlighter-rouge">keyPressEvent</code> method. This encapsulates the new behavior within the subclass, making it a reusable component.</p>
+  </li>
+  <li>
+    <p><strong>Responding to Signals</strong>: Signals are used to notify other parts of the application about an event. This approach is less about altering the behavior of the emitting object and more about informing interested parties that something has happened. For example, a <code class="language-plaintext highlighter-rouge">QPushButton</code> emits a <code class="language-plaintext highlighter-rouge">clicked()</code> signal when it is pressed. Connecting this signal to a slot allows external functions to respond to the click without modifying the button’s inherent behavior.</p>
+  </li>
+</ul>
+
+<h4 id="advantages-of-events-and-signals">Advantages of Events and Signals</h4>
+
+<p><strong>Events</strong>:</p>
+<ol>
+  <li><strong>Encapsulation and Modularity</strong>: Reimplementing events in subclasses encapsulates new behaviors within the widget, making it modular and reusable.</li>
+  <li><strong>Chain of Responsibility</strong>: The ability to call the base class implementation within an overridden event method allows for the Chain of Responsibility pattern, where special cases are handled while deferring default behavior to the base class.</li>
+  <li><strong>Design Intent</strong>: Events convey the intent that they are building blocks of functionality rather than user-facing notifications.</li>
+</ol>
+
+<p><strong>Signals</strong>:</p>
+<ol>
+  <li><strong>Ease of Use</strong>: Connecting to signals externally avoids the need for numerous subclasses, simplifying the code and making it more maintainable.</li>
+  <li><strong>Flexibility</strong>: Signals can have multiple slots connected to them and can be emitted in various situations, providing flexibility in how the application responds to events.</li>
+  <li><strong>Separation of Concerns</strong>: Signals support the separation of concerns by allowing different parts of the application to respond to events without tightly coupling the response logic to the emitting object.</li>
+</ol>
+
+<h4 id="practical-application-examples">Practical Application Examples</h4>
+
+<p>Consider a custom <code class="language-plaintext highlighter-rouge">NumericButton</code> that increments or decrements its number based on key presses. This involves subclassing <code class="language-plaintext highlighter-rouge">QPushButton</code> and handling the <code class="language-plaintext highlighter-rouge">keyPressEvent</code> to add the new behavior. The encapsulated implementation ensures the widget is reusable and maintains its basic button functionality.</p>
+
+<p>In contrast, simply connecting a <code class="language-plaintext highlighter-rouge">QPushButton</code>’s <code class="language-plaintext highlighter-rouge">clicked()</code> signal to a slot that displays a message box is straightforward and avoids the complexity of subclassing for each unique click response. This approach is ideal for scenarios where the response to an event is specific to the current application context and does not necessitate creating a reusable component.</p>
+
+<h3 id="conclusion">Conclusion</h3>
+
+<p>Signals and events in Qt, while both implementations of the Observer pattern, serve distinct purposes. Events are ideal for encapsulating behavior within reusable components, while signals offer a flexible and straightforward way to notify different parts of an application about occurrences. Understanding when to use each mechanism allows developers to write clean, efficient, and maintainable Qt applications, leveraging the full potential of this robust framework.</p>
+
+
+        </section>
+
+        <footer class="post-footer">
+
+            <!-- Everything inside the #author tags pulls data from the author -->
+            <!-- #author-->
+            
+
+            <!-- Add Disqus Comments -->
+            
+
+        </footer>
+
+    </article>
+
+</main>
+
+<aside class="read-next">
+
+    <!-- [[! next_post ]] -->
+    
+        <a class="read-next-story no-cover" href="/memory-management-in-qt">
+            <section class="post">
+                <h2>Memory management in Qt</h2>
+                <p>In Qt, the management of object hierarchies and memory is streamlined through the use of...</p>
+            </section>
+        </a>
+    
+    <!-- [[! /next_post ]] -->
+    <!-- [[! prev_post ]] -->
+    
+        <a class="read-next-story prev no-cover" href="/stl-or-qt-containers">
+            <section class="post">
+                <h2>STL or Qt containers</h2>
+                <p>Choosing the right data structures and adhering to consistent coding conventions are crucial decisions in...</p>
+            </section>
+        </a>
+    
+    <!-- [[! /prev_post ]] -->
+</aside>
+
+<!-- /post -->
+
+
+        <footer class="site-footer clearfix">
+          <section class="copyright"><a href="/">与机器，人，神共舞</a> &copy; 2024</section>
+        </footer>
+    </div>
+    <!-- [[! Ghost outputs important scripts and data with this tag ]] -->
+    <script type="text/javascript" src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+    <!-- [[! The main JavaScript file for Casper ]] -->
+    <script type="text/javascript" src="/assets/js/jquery.fitvids.js"></script>
+    <script type="text/javascript" src="/assets/js/index.js"></script>
+
+    <!-- Add Google Analytics  -->
+        <!-- Google Analytics Tracking code -->
+     <script>
+	    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+	    ga('create', 'UA-78960009-1', 'auto');
+	    ga('send', 'pageview');
+
+     </script>
+   
+</body>
+</html>

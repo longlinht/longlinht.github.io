@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 
     <!-- [[! Page Meta ]] -->
-    <title>STL or Qt containers</title>
+    <title>Memory management in Qt</title>
     <meta name="description" content="与机器，人，神共舞 - 编程，读书，思考，旅行，与机器对话，与人交谈，对神发问，探索，体验人生美丽的风景" />
 
     <meta name="HandheldFriendly" content="True" />
@@ -96,12 +96,12 @@
     <article class="post tag-machine">
 
         <header class="post-header">
-            <h1 class="post-title">STL or Qt containers</h1>
+            <h1 class="post-title">Memory management in Qt</h1>
             <section class="post-meta">
             <!-- <a href='/'>Tao He</a> -->
 
             
-            <time class="post-date" datetime="2011-04-02">02 Apr 2011</time>
+            <time class="post-date" datetime="2011-04-06">06 Apr 2011</time>
                 <!-- [[tags prefix=" on "]] -->
                 
                 on
@@ -116,33 +116,46 @@
 
         <section class="post-content">
 
-            <p>Choosing the right data structures and adhering to consistent coding conventions are crucial decisions in software development. When working within a specific framework or ecosystem, such as Qt, these choices often come with additional considerations beyond just technical merits. The debate between using Standard Template Library (STL) containers versus Qt containers provides a prime example of this decision-making process, illustrating how practicality and philosophical perspectives intertwine.</p>
+            <p>In Qt, the management of object hierarchies and memory is streamlined through the use of QObjects. Understanding how to properly set up and utilize these hierarchies is essential for developing robust and maintainable applications. This essay explores the principles and practices of building and managing QObject hierarchies.</p>
 
-<h4 id="the-practical-perspective">The Practical Perspective</h4>
+<h4 id="establishing-parent-child-relationships">Establishing Parent-Child Relationships</h4>
 
-<p>When working within the Qt framework, a pragmatic approach is to use Qt containers instead of STL containers. This choice is not solely about readability and consistency—although those are significant factors—but also about the seamless integration and efficiency within the Qt ecosystem.</p>
+<p>When constructing a QObject hierarchy, the initialization of newly created QObjects with a parent is crucial. This can be achieved by specifying the parent QObject during the creation of child QObjects:</p>
 
-<p>Consider the scenario where your application heavily depends on Qt. If you opt to use STL containers, you introduce the necessity of constantly converting between STL and Qt containers whenever you interact with Qt functions. This conversion process can lead to:</p>
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">QObject</span><span class="o">*</span> <span class="n">parent</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">QObject</span><span class="p">();</span>
+<span class="n">QObject</span><span class="o">*</span> <span class="n">child</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">QObject</span><span class="p">(</span><span class="n">parent</span><span class="p">);</span>
+</code></pre></div></div>
 
+<p>In this setup, deleting the parent object will automatically take care of destroying its child objects. The parent’s destructor issues signals to ensure that the destruction process is safe, even if a child is manually deleted before the parent. This automatic management of object lifetimes simplifies memory management and helps prevent memory leaks.</p>
+
+<h4 id="order-of-deletion">Order of Deletion</h4>
+
+<p>The order in which objects are deleted within a QObject hierarchy is generally flexible. Both of the following sequences are valid:</p>
 <ol>
-  <li><strong>Increased Complexity</strong>: Managing code that frequently converts data between STL and Qt containers adds unnecessary complexity. Each conversion introduces the risk of errors and makes the code harder to maintain.</li>
-  <li><strong>Performance Overheads</strong>: Copying data between different container types can incur performance penalties. This overhead can be especially detrimental in performance-critical applications where efficiency is paramount.</li>
-  <li><strong>Code Readability</strong>: Using a mix of STL and Qt containers can confuse new developers or collaborators who may expect consistency in the codebase. Maintaining readability is essential for long-term project sustainability.</li>
+  <li>Deleting the parent object, which then deletes all child objects.</li>
+  <li>Deleting a child object first, followed by the parent object.</li>
 </ol>
 
-<h4 id="the-philosophical-perspective">The Philosophical Perspective</h4>
+<p>Qt’s object tree documentation provides examples where the order of deletion may matter, but in most cases, the parent-child relationship ensures that objects are properly cleaned up, regardless of the deletion order.</p>
 
-<p>From a philosophical standpoint, adhering to the principle of “When in Rome, do as the Romans do” is often beneficial in software development. This principle advocates for aligning with the conventions and practices of the framework or community you are working within. In the context of Qt development, this means adopting Qt containers and idioms. This alignment provides several advantages:</p>
+<h4 id="non-qobject-class-hierarchies">Non-QObject Class Hierarchies</h4>
 
-<ol>
-  <li><strong>Community Standards</strong>: Following community standards ensures that your code is immediately understandable to other Qt developers. This can facilitate better collaboration, code reviews, and knowledge sharing within the community.</li>
-  <li><strong>Leverage Framework Strengths</strong>: Qt containers are designed to work seamlessly with other Qt components. By using them, you leverage the full strengths of the Qt framework, including its well-documented functionalities, performance optimizations, and integration capabilities.</li>
-  <li><strong>Future-Proofing</strong>: Adhering to the framework’s standards can help future-proof your code. As Qt evolves, its containers and associated functionalities are more likely to receive updates and improvements that benefit your application directly.</li>
-</ol>
+<p>If a class is not derived from QObject, the standard C++ mechanisms for memory management must be employed. This typically involves explicitly managing the creation and destruction of objects using techniques like smart pointers or manual deletion.</p>
+
+<h4 id="independence-from-c-class-hierarchies">Independence from C++ Class Hierarchies</h4>
+
+<p>An important aspect of Qt’s parent-child hierarchy is its independence from the C++ class hierarchy. This means that a child QObject does not need to be a direct subclass of its parent. Any QObject or its subclasses can be assigned as a child to another QObject, providing flexibility in how hierarchies are constructed.</p>
+
+<p>However, certain constraints might be imposed by specific class constructors. For example, the <code class="language-plaintext highlighter-rouge">QWidget</code> constructor:</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">QWidget</span><span class="p">(</span><span class="n">QWidget</span><span class="o">*</span> <span class="n">parent</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>Here, the parent must be another QWidget due to reasons such as visibility flags and layout management. These constraints ensure that the specific functionality and behavior of QWidget are maintained, but they do not affect the general rules of QObject parent-child relationships.</p>
 
 <h4 id="conclusion">Conclusion</h4>
 
-<p>The choice between STL and Qt containers is not merely a technical decision but also a strategic one. While STL containers are standard and widely used, their integration within a Qt-centric application can lead to unnecessary complexity and inefficiency. Embracing Qt containers aligns with the “When in Rome” philosophy, offering practical benefits in terms of readability, performance, and maintainability. Ultimately, adapting to the conventions of the ecosystem you are working in is a prudent approach that enhances the coherence and robustness of your code.</p>
+<p>The QObject parent-child mechanism in Qt offers a powerful and convenient way to manage object hierarchies and memory. By leveraging this system, developers can ensure that objects are properly destroyed when their parent is deleted, thus preventing memory leaks and simplifying resource management. Understanding the independence of QObject hierarchies from the C++ class inheritance tree further enhances the flexibility and modularity of Qt applications. Through careful use of these principles, robust and maintainable Qt applications can be developed with ease.</p>
 
 
         </section>
@@ -166,20 +179,23 @@
 
     <!-- [[! next_post ]] -->
     
-        <a class="read-next-story no-cover" href="/qt-events-and-signal-slots">
+        <a class="read-next-story no-cover" href="/normal-write-paragraph">
             <section class="post">
-                <h2>Qt events and signal/slots</h2>
-                <p>In the realm of Qt, signals and events serve as fundamental mechanisms for communication and...</p>
+                <h2>无题</h2>
+                <p>不受现实价值体系的摆布，不囿于世俗传统，读自己的书，做自己认为该做的事，走一条不被设计的人生轨迹，守望，感受，捍卫其独有的美，人生若如此，夫复何求？
+
+
+</p>
             </section>
         </a>
     
     <!-- [[! /next_post ]] -->
     <!-- [[! prev_post ]] -->
     
-        <a class="read-next-story prev no-cover" href="/difference-between-static-and-shared-libraries">
+        <a class="read-next-story prev no-cover" href="/qt-events-and-signal-slots">
             <section class="post">
-                <h2>Difference between static and shared libraries</h2>
-                <p>In software development, libraries are essential components that provide reusable code to streamline and enhance...</p>
+                <h2>Qt events and signal/slots</h2>
+                <p>In the realm of Qt, signals and events serve as fundamental mechanisms for communication and...</p>
             </section>
         </a>
     

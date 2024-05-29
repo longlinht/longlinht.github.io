@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 
     <!-- [[! Page Meta ]] -->
-    <title>无题</title>
+    <title>STL or Qt containers</title>
     <meta name="description" content="与机器，人，神共舞 - 编程，读书，思考，旅行，与机器对话，与人交谈，对神发问，探索，体验人生美丽的风景" />
 
     <meta name="HandheldFriendly" content="True" />
@@ -93,21 +93,21 @@
 
 <main class="content" role="main">
 
-    <article class="post tag-human">
+    <article class="post tag-machine">
 
         <header class="post-header">
-            <h1 class="post-title">无题</h1>
+            <h1 class="post-title">STL or Qt containers</h1>
             <section class="post-meta">
             <!-- <a href='/'>Tao He</a> -->
 
             
-            <time class="post-date" datetime="2011-07-24">24 Jul 2011</time>
+            <time class="post-date" datetime="2011-04-02">02 Apr 2011</time>
                 <!-- [[tags prefix=" on "]] -->
                 
                 on
                 
                     
-                       <a href='/tag/human'>Human</a>
+                       <a href='/tag/machine'>Machine</a>
                     
                 
                 
@@ -116,8 +116,33 @@
 
         <section class="post-content">
 
-            <p>不受现实价值体系的摆布，不囿于世俗传统，读自己的书，做自己认为该做的事，走一条不被设计的人生轨迹，守望，感受，捍卫其独有的美，人生若如此，夫复何求？</p>
+            <p>Choosing the right data structures and adhering to consistent coding conventions are crucial decisions in software development. When working within a specific framework or ecosystem, such as Qt, these choices often come with additional considerations beyond just technical merits. The debate between using Standard Template Library (STL) containers versus Qt containers provides a prime example of this decision-making process, illustrating how practicality and philosophical perspectives intertwine.</p>
 
+<h4 id="the-practical-perspective">The Practical Perspective</h4>
+
+<p>When working within the Qt framework, a pragmatic approach is to use Qt containers instead of STL containers. This choice is not solely about readability and consistency—although those are significant factors—but also about the seamless integration and efficiency within the Qt ecosystem.</p>
+
+<p>Consider the scenario where your application heavily depends on Qt. If you opt to use STL containers, you introduce the necessity of constantly converting between STL and Qt containers whenever you interact with Qt functions. This conversion process can lead to:</p>
+
+<ol>
+  <li><strong>Increased Complexity</strong>: Managing code that frequently converts data between STL and Qt containers adds unnecessary complexity. Each conversion introduces the risk of errors and makes the code harder to maintain.</li>
+  <li><strong>Performance Overheads</strong>: Copying data between different container types can incur performance penalties. This overhead can be especially detrimental in performance-critical applications where efficiency is paramount.</li>
+  <li><strong>Code Readability</strong>: Using a mix of STL and Qt containers can confuse new developers or collaborators who may expect consistency in the codebase. Maintaining readability is essential for long-term project sustainability.</li>
+</ol>
+
+<h4 id="the-philosophical-perspective">The Philosophical Perspective</h4>
+
+<p>From a philosophical standpoint, adhering to the principle of “When in Rome, do as the Romans do” is often beneficial in software development. This principle advocates for aligning with the conventions and practices of the framework or community you are working within. In the context of Qt development, this means adopting Qt containers and idioms. This alignment provides several advantages:</p>
+
+<ol>
+  <li><strong>Community Standards</strong>: Following community standards ensures that your code is immediately understandable to other Qt developers. This can facilitate better collaboration, code reviews, and knowledge sharing within the community.</li>
+  <li><strong>Leverage Framework Strengths</strong>: Qt containers are designed to work seamlessly with other Qt components. By using them, you leverage the full strengths of the Qt framework, including its well-documented functionalities, performance optimizations, and integration capabilities.</li>
+  <li><strong>Future-Proofing</strong>: Adhering to the framework’s standards can help future-proof your code. As Qt evolves, its containers and associated functionalities are more likely to receive updates and improvements that benefit your application directly.</li>
+</ol>
+
+<h4 id="conclusion">Conclusion</h4>
+
+<p>The choice between STL and Qt containers is not merely a technical decision but also a strategic one. While STL containers are standard and widely used, their integration within a Qt-centric application can lead to unnecessary complexity and inefficiency. Embracing Qt containers aligns with the “When in Rome” philosophy, offering practical benefits in terms of readability, performance, and maintainability. Ultimately, adapting to the conventions of the ecosystem you are working in is a prudent approach that enhances the coherence and robustness of your code.</p>
 
 
         </section>
@@ -141,20 +166,23 @@
 
     <!-- [[! next_post ]] -->
     
-        <a class="read-next-story no-cover" href="/similarities-and-differences-between-java-and-cpp">
+        <a class="read-next-story no-cover" href="/normal-write-paragraph">
             <section class="post">
-                <h2>Similarities and Differences between Java and C++</h2>
-                <p>* Java does not support typedefs, defines, or a preprocessor. * Java does not support...</p>
+                <h2>无题</h2>
+                <p>不受现实价值体系的摆布，不囿于世俗传统，读自己的书，做自己认为该做的事，走一条不被设计的人生轨迹，守望，感受，捍卫其独有的美，人生若如此，夫复何求？
+
+
+</p>
             </section>
         </a>
     
     <!-- [[! /next_post ]] -->
     <!-- [[! prev_post ]] -->
     
-        <a class="read-next-story prev no-cover" href="/stl-or-qt-containers">
+        <a class="read-next-story prev no-cover" href="/difference-between-static-and-shared-libraries">
             <section class="post">
-                <h2>STL or Qt containers</h2>
-                <p>Choosing the right data structures and adhering to consistent coding conventions are crucial decisions in...</p>
+                <h2>Difference between static and shared libraries</h2>
+                <p>In software development, libraries are essential components that provide reusable code to streamline and enhance...</p>
             </section>
         </a>
     

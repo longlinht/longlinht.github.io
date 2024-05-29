@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 
     <!-- [[! Page Meta ]] -->
-    <title>与机器，人，神共舞</title>
+    <title>Author</title>
     <meta name="description" content="与机器，人，神共舞 - 编程，读书，思考，旅行，与机器对话，与人交谈，对神发问，探索，体验人生美丽的风景" />
 
     <meta name="HandheldFriendly" content="True" />
@@ -53,7 +53,7 @@
     <link rel="alternate" type="application/rss+xml" title="与机器，人，神共舞" href="/rss.xml" />
 
 </head>
-<body class="tag-template nav-closed">
+<body class="paged archive-template nav-closed">
 
     <div class="nav">
     <h3 class="nav-title">Menu</h3>
@@ -63,10 +63,10 @@
     <ul>
         <li class="nav-home " role="presentation"><a href="/">Home</a></li>
         <li class="nav-about " role="presentation"><a href="/about.html">About</a></li>
-        <li class="nav-fables  nav-current" role="presentation"><a href="/tag/machine/">Machine</a></li>
+        <li class="nav-fables " role="presentation"><a href="/tag/machine/">Machine</a></li>
         <li class="nav-speeches " role="presentation"><a href="/tag/human/">Human</a></li>
         <li class="nav-fiction " role="presentation"><a href="/tag/god/">God</a></li>
-        <li class="nav-author " role="presentation"><a href="/author/hetao/">Author</a></li>
+        <li class="nav-author  nav-current" role="presentation"><a href="/author/hetao/">Author</a></li>
     </ul>
     <a class="subscribe-button icon-feed" href="/vocab.html">Apps</a>
 </div>
@@ -76,50 +76,58 @@
     <div class="site-wrapper">
 
         <!-- [[! Everything else gets inserted here ]] -->
-        <!-- < dynamically overriding backgrounds for tags as well as descriptions -->
-
-
-<!-- < default}} -->
+        <!-- < default}} -->
 <!-- The tag above means - insert everything in this file into the [body] of the default.hbs template -->
 
- <!--If we have a tag cover, display that - else blog cover - else nothing -->
-<header class="main-header tag-head " style="background-image: url(/assets/images/cover2.jpg) ">
-    <nav class="main-nav overlay clearfix">
-        <a class="blog-logo" href="/"><img src="/assets/images/ghost.png" alt="Blog Logo" /></a>
-        
-            <a class="menu-button icon-menu" href="#"><span class="word">Menu</span></a>
-        
-    </nav>
-    <div class="vertical">
-        <div class="main-header-content inner">
-            <h1 class="page-title">Machine</h1>
-            <h2 class="page-description">
+<!-- The big featured header -->
+
+<!-- Everything inside the #author tags pulls data from the author -->
+<!-- #author  -->
+    <header class="main-header author-head " style="background-image: url(/assets/images/cover4.jpg) ">
+        <nav class="main-nav overlay clearfix">
+            <a class="blog-logo" href="/"><img src="/assets/images/ghost.png" alt="Blog Logo" /></a>
             
-                A series of articles about IT.
+                <a class="menu-button icon-menu" href="#"><span class="word">Menu</span></a>
             
-            </h2>
+        </nav>
+    </header>
+
+    <section class="author-profile inner">
+        
+        <figure class="author-image">
+            <div class="img" style="background-image: url(/assets/images/casper.png)"><span class="hidden">Tao He's Picture</span></div>
+        </figure>
+        
+        <h1 class="author-title">Tao He</h1>
+        
+            <h2 class="author-bio">A programmer, reader and thinker.</h2>
+        
+        <div class="author-meta">
+            <span class="author-location icon-location">Beijing, China</span>
+            <span class="author-link icon-link"><a href="https://longlinht.github.io/">longlinht.github.io/</a></span>
+            <!-- <span class="author-stats"><i class="icon-stats"></i> [[plural ../pagination.total empty='No posts' singular='% post' plural='% posts']]</span> -->
+            <span class="author-stats"><i class="icon-stats"></i>108 posts</span>
         </div>
-    </div>
-</header> 
+    </section>
+<!-- /author -->
 
 <!-- The main content area on the homepage -->
 <main id="content" class="content" role="main">
 
-    <!-- The tag below includes the post loop - partials/loop.hbs -->
+    <!-- The tag below includes the post loop - partials/loop.hbs  -->
         <!-- Previous/next page links - only displayed on page 2+ -->
     <div class="extra-pagination inner">
         
             <nav class="pagination" role="pagination">
     
         
-            <a class="newer-posts" href="/tag/machine/page10/" title="Previous Page">&laquo; Newer Posts</a>
+            <a class="newer-posts" href="https://longlinht.github.io/author/hetao/page21/" title="Previous Page">&laquo; Newer Posts</a>
       
     
-    <span class="page-number"> Page 11 of 20 </span>
-     
-        <a class="older-posts" href="/tag/machine/page12/" title="Next Page">Older Posts &raquo;</a>
+    <span class="page-number"> Page 22 of 22 </span>
      
 </nav>
+
         
     </div>
 
@@ -127,11 +135,11 @@
     
     <article class="post">
         <header class="post-header">
-            <h2 class="post-title"><a href="https://longlinht.github.io//select-qrc-code-library-in-andord">Android开发中二维码库的选用</a></h2>
+            <h2 class="post-title"><a href="https://longlinht.github.io//the-rule-of-three">The Rule of Three</a></h2>
         </header>
         <section class="post-excerpt">
             
-                <p><p>在现今的移动App开发中，二维码的使用场景变得越来越普遍，最近我要开发的一个需求就必须生成二维码，自然就面临二维码库选用的问题，因为大名鼎鼎的ZXing的存在，这也本不是什么特别需要考虑的... <a class="read-more" href="https://longlinht.github.io//select-qrc-code-library-in-andord">&raquo;</a></p>
+                <p><p>The Stack Overflow question “What is the Rule of Three?” addresses a fundamental concept in C++ programming related to resource management and object copying. The Rule... <a class="read-more" href="https://longlinht.github.io//the-rule-of-three">&raquo;</a></p>
             
         </section>
         <footer class="post-meta">
@@ -147,18 +155,17 @@
                        
                 
             
-            <time class="post-date" datetime="2017-08-20">20 Aug 2017</time>
+            <time class="post-date" datetime="2010-12-10">10 Dec 2010</time>
         </footer>
     </article>
     
     <article class="post">
         <header class="post-header">
-            <h2 class="post-title"><a href="https://longlinht.github.io//capture-screenshot-event-on-android">捕获Android截屏事件</a></h2>
+            <h2 class="post-title"><a href="https://longlinht.github.io//issues-with-using-name-std">What's the problem with "using namespace std;"</a></h2>
         </header>
         <section class="post-excerpt">
             
-                <p><p>在Android平台上截屏事件没有对应的一个标准的事件和通知，所以应用App无法通过标准或统一的方式去捕获这个事件来满足自己的要求。
-只能通过间接的方式捕获到这个事件，我因为要做一个微信的... <a class="read-more" href="https://longlinht.github.io//capture-screenshot-event-on-android">&raquo;</a></p>
+                <p><p>In C++, using <code class="language-plaintext highlighter-rouge">namespace std</code> can simplify your code by allowing you to omit the <code class="language-plaintext highlighter-rouge">std::</code> prefix for standard library components. However,... <a class="read-more" href="https://longlinht.github.io//issues-with-using-name-std">&raquo;</a></p>
             
         </section>
         <footer class="post-meta">
@@ -174,17 +181,17 @@
                        
                 
             
-            <time class="post-date" datetime="2017-08-02">02 Aug 2017</time>
+            <time class="post-date" datetime="2010-11-05">05 Nov 2010</time>
         </footer>
     </article>
     
     <article class="post">
         <header class="post-header">
-            <h2 class="post-title"><a href="https://longlinht.github.io//install-emacs-on-ubuntu">Intall Emacs on Ubuntu</a></h2>
+            <h2 class="post-title"><a href="https://longlinht.github.io//forward-declaration-in-cpp">Forward declaration in C++</a></h2>
         </header>
         <section class="post-excerpt">
             
-                <p><p>Install Emacs 25 on Ubuntu from source is very easy, follow these steps below could achieve it.</p> <ul> <li>Open terminal (Ctrl+Alt+T) and run command to install... <a class="read-more" href="https://longlinht.github.io//install-emacs-on-ubuntu">&raquo;</a></p>
+                <p><p>Why need use forward declaration? when we can use it? I will figure out these problem separately.</p> <h4 id="why">Why</h4> <ul> <li> <p>Forward-declarations can significantly reduce build... <a class="read-more" href="https://longlinht.github.io//forward-declaration-in-cpp">&raquo;</a></p>
             
         </section>
         <footer class="post-meta">
@@ -200,62 +207,7 @@
                        
                 
             
-            <time class="post-date" datetime="2017-07-15">15 Jul 2017</time>
-        </footer>
-    </article>
-    
-    <article class="post">
-        <header class="post-header">
-            <h2 class="post-title"><a href="https://longlinht.github.io//implement-page-up-down-animation-on-android">在Android上实现无限翻页轮播动画效果</a></h2>
-        </header>
-        <section class="post-excerpt">
-            
-                <p><p>最近在工作中遇到一个需求，要求在一个Dialog的标题上显示两行字，但是这行字如果同时出现的话会非常难看，设计出了套方案，类似无限翻页轮播这两行字，要有翻书的效果。
-刚开始实现的时候，动画... <a class="read-more" href="https://longlinht.github.io//implement-page-up-down-animation-on-android">&raquo;</a></p>
-            
-        </section>
-        <footer class="post-meta">
-            <img class="author-thumb" src="/assets/images/casper.png" alt="Author image" nopin="nopin" />
-            <!-- author -->
-            <a href='/author/hetao'>Tao He</a>
-            <!-- [[tags prefix=" on "]] -->
-             
-                on 
-                
-                    
-                       <a href='/tag/machine'>Machine</a>
-                       
-                
-            
-            <time class="post-date" datetime="2017-07-12">12 Jul 2017</time>
-        </footer>
-    </article>
-    
-    <article class="post">
-        <header class="post-header">
-            <h2 class="post-title"><a href="https://longlinht.github.io//hashmap-in-java">Java中的HashMap</a></h2>
-        </header>
-        <section class="post-excerpt">
-            
-                <p><p>如果你是个Java程序员，那么你不可能对HashMap视而不见，因为你会经常遇到使用它的场景，因此对HashMap的充分了解非常有必要，对我们写出高效可靠的代码很有帮助。</p>
-
-<p>... <a class="read-more" href="https://longlinht.github.io//hashmap-in-java">&raquo;</a></p>
-            
-        </section>
-        <footer class="post-meta">
-            <img class="author-thumb" src="/assets/images/casper.png" alt="Author image" nopin="nopin" />
-            <!-- author -->
-            <a href='/author/hetao'>Tao He</a>
-            <!-- [[tags prefix=" on "]] -->
-             
-                on 
-                
-                    
-                       <a href='/tag/machine'>Machine</a>
-                       
-                
-            
-            <time class="post-date" datetime="2017-07-10">10 Jul 2017</time>
+            <time class="post-date" datetime="2010-11-02">02 Nov 2010</time>
         </footer>
     </article>
     
@@ -265,14 +217,13 @@
         <nav class="pagination" role="pagination">
     
         
-            <a class="newer-posts" href="/tag/machine/page10/" title="Previous Page">&laquo; Newer Posts</a>
+            <a class="newer-posts" href="https://longlinht.github.io/author/hetao/page21/" title="Previous Page">&laquo; Newer Posts</a>
       
     
-    <span class="page-number"> Page 11 of 20 </span>
-     
-        <a class="older-posts" href="/tag/machine/page12/" title="Next Page">Older Posts &raquo;</a>
+    <span class="page-number"> Page 22 of 22 </span>
      
 </nav>
+
     
 
 

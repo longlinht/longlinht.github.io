@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- [[! Document Settings ]] -->
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+    <!-- [[! Page Meta ]] -->
+    <title>使用BOOST库rapidxml读写XML</title>
+    <meta name="description" content="与机器，人，神共舞 - 编程，读书，思考，旅行，与机器对话，与人交谈，对神发问，探索，体验人生美丽的风景" />
+
+    <meta name="HandheldFriendly" content="True" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link rel="shortcut icon" href="/assets/images/favicon.ico" >
+
+    <!-- [[! Styles'n'Scripts ]] -->
+    <link rel="stylesheet" type="text/css" href="/assets/css/screen.css" />
+    <link rel="stylesheet" type="text/css"
+          href="//fonts.googleapis.com/css?family=Merriweather:300,700,700italic,300italic|Open+Sans:700,400" />
+    <link rel="stylesheet" type="text/css" href="/assets/css/syntax.css" />
+    
+    <!-- [[! Ghost outputs important style and meta data with this tag ]] -->
+        <link rel="canonical" href="/" />
+    <meta name="referrer" content="origin" />
+    <link rel="next" href="/page2/" />
+
+    <meta property="og:site_name" content="与机器，人，神共舞" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="与机器，人，神共舞" />
+    <meta property="og:description" content="编程，读书，思考，旅行，与机器对话，与人交谈，对神发问，探索，体验人生美丽的风景" />
+    <meta property="og:url" content="/" />
+    <meta property="og:image" content="/assets/images/cover1.jpg" />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="与机器，人，神共舞" />
+    <meta name="twitter:description" content="编程，读书，思考，旅行，与机器对话，与人交谈，对神发问，探索，体验人生美丽的风景" />
+    <meta name="twitter:url" content="/" />
+    <meta name="twitter:image:src" content="/assets/images/cover1.jpg" />
+
+    <script type="application/ld+json">
+{
+    "@context": "http://schema.org",
+    "@type": "Website",
+    "publisher": "Tao's Page",
+    "url": "/",
+    "image": "/assets/images/cover1.jpg",
+    "description": "编程，读书，思考，旅行，与机器对话，与人交谈，对神发问，探索，体验人生美丽的风景"
+}
+    </script>
+
+    <meta name="generator" content="Jekyll 3.0.0" />
+    <link rel="alternate" type="application/rss+xml" title="与机器，人，神共舞" href="/rss.xml" />
+
+</head>
+<body class="home-template nav-closed">
+
+    <div class="nav">
+    <h3 class="nav-title">Menu</h3>
+    <a href="#" class="nav-close">
+        <span class="hidden">Close</span>
+    </a>
+    <ul>
+        <li class="nav-home " role="presentation"><a href="/">Home</a></li>
+        <li class="nav-about " role="presentation"><a href="/about.html">About</a></li>
+        <li class="nav-fables " role="presentation"><a href="/tag/machine/">Machine</a></li>
+        <li class="nav-speeches " role="presentation"><a href="/tag/human/">Human</a></li>
+        <li class="nav-fiction " role="presentation"><a href="/tag/god/">God</a></li>
+        <li class="nav-author " role="presentation"><a href="/author/hetao/">Author</a></li>
+    </ul>
+    <a class="subscribe-button icon-feed" href="/vocab.html">Apps</a>
+</div>
+<span class="nav-cover"></span>
+
+
+    <div class="site-wrapper">
+
+        <!-- [[! Everything else gets inserted here ]] -->
+        <!-- default -->
+
+<!-- The comment above "< default" means - insert everything in this file into -->
+    <!-- the [body] of the default.hbs template, which contains our header/footer. -->
+
+<!-- Everything inside the #post tags pulls data from the post -->
+<!-- #post -->
+
+<header class="main-header post-head no-cover">
+    <nav class="main-nav  clearfix">
+        
+        
+    </nav>
+</header>
+
+<main class="content" role="main">
+
+    <article class="post tag-machine">
+
+        <header class="post-header">
+            <h1 class="post-title">使用BOOST库rapidxml读写XML</h1>
+            <section class="post-meta">
+            <!-- <a href='/'>Tao He</a> -->
+
+            
+            <time class="post-date" datetime="2012-09-10">10 Sep 2012</time>
+                <!-- [[tags prefix=" on "]] -->
+                
+                on
+                
+                    
+                       <a href='/tag/machine'>Machine</a>
+                    
+                
+                
+            </section>
+        </header>
+
+        <section class="post-content">
+
+            <p>在现代软件开发中，XML（可扩展标记语言）被广泛用于数据存储和交换。为了高效处理XML数据，开发者通常会选择使用现有的库。BOOST库中的rapidxml是一个高效且易于使用的C++库，专门用于解析和生成XML文档。本文将介绍如何使用rapidxml库进行XML的读写操作。</p>
+
+<h4 id="安装和引入rapidxml">安装和引入rapidxml</h4>
+
+<p>首先，确保你已经安装了BOOST库。BOOST库中包含了许多有用的工具和库，rapidxml便是其中之一。你可以通过以下方式引入rapidxml：</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include &lt;boost/property_tree/detail/rapidxml.hpp&gt;
+#include &lt;boost/property_tree/detail/rapidxml_utils.hpp&gt;
+#include &lt;boost/property_tree/detail/rapidxml_print.hpp&gt;
+#include &lt;boost/property_tree/detail/rapidxml_iterators.hpp&gt;
+</span></code></pre></div></div>
+
+<p>这些头文件分别用于XML的解析、打印和辅助操作。</p>
+
+<h4 id="读取xml文件">读取XML文件</h4>
+
+<p>读取XML文件是处理XML数据的第一步。以下示例代码展示了如何使用rapidxml读取并解析XML文件：</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include &lt;iostream&gt;
+#include &lt;fstream&gt;
+#include &lt;boost/property_tree/detail/rapidxml.hpp&gt;
+#include &lt;boost/property_tree/detail/rapidxml_utils.hpp&gt;
+</span>
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">boost</span><span class="o">::</span><span class="n">rapidxml</span><span class="p">;</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="c1">// 读取XML文件</span>
+    <span class="n">file</span><span class="o">&lt;&gt;</span> <span class="n">xmlFile</span><span class="p">(</span><span class="s">"example.xml"</span><span class="p">);</span>
+    <span class="c1">// 解析XML文件内容</span>
+    <span class="n">xml_document</span><span class="o">&lt;&gt;</span> <span class="n">doc</span><span class="p">;</span>
+    <span class="n">doc</span><span class="p">.</span><span class="n">parse</span><span class="o">&lt;</span><span class="mi">0</span><span class="o">&gt;</span><span class="p">(</span><span class="n">xmlFile</span><span class="p">.</span><span class="n">data</span><span class="p">());</span>
+
+    <span class="c1">// 获取根节点</span>
+    <span class="n">xml_node</span><span class="o">&lt;&gt;</span> <span class="o">*</span><span class="n">root</span> <span class="o">=</span> <span class="n">doc</span><span class="p">.</span><span class="n">first_node</span><span class="p">(</span><span class="s">"root"</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">root</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"Root node name: "</span> <span class="o">&lt;&lt;</span> <span class="n">root</span><span class="o">-&gt;</span><span class="n">name</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+        <span class="c1">// 遍历子节点</span>
+        <span class="k">for</span> <span class="p">(</span><span class="n">xml_node</span><span class="o">&lt;&gt;</span> <span class="o">*</span><span class="n">node</span> <span class="o">=</span> <span class="n">root</span><span class="o">-&gt;</span><span class="n">first_node</span><span class="p">();</span> <span class="n">node</span><span class="p">;</span> <span class="n">node</span> <span class="o">=</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">next_sibling</span><span class="p">())</span> <span class="p">{</span>
+            <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"Node name: "</span> <span class="o">&lt;&lt;</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">name</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="s">", value: "</span> <span class="o">&lt;&lt;</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">value</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>上述代码首先读取了一个名为<code class="language-plaintext highlighter-rouge">example.xml</code>的文件，并将其内容解析为XML文档对象。然后，通过<code class="language-plaintext highlighter-rouge">first_node</code>方法获取根节点，并遍历其子节点，输出节点的名称和值。</p>
+
+<h4 id="写入xml文件">写入XML文件</h4>
+
+<p>除了读取XML，rapidxml同样支持生成和写入XML文件。以下示例展示了如何创建一个简单的XML文档并将其写入文件：</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include &lt;iostream&gt;
+#include &lt;fstream&gt;
+#include &lt;boost/property_tree/detail/rapidxml.hpp&gt;
+#include &lt;boost/property_tree/detail/rapidxml_print.hpp&gt;
+</span>
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">boost</span><span class="o">::</span><span class="n">rapidxml</span><span class="p">;</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="c1">// 创建XML文档</span>
+    <span class="n">xml_document</span><span class="o">&lt;&gt;</span> <span class="n">doc</span><span class="p">;</span>
+
+    <span class="c1">// 添加根节点</span>
+    <span class="n">xml_node</span><span class="o">&lt;&gt;</span> <span class="o">*</span><span class="n">root</span> <span class="o">=</span> <span class="n">doc</span><span class="p">.</span><span class="n">allocate_node</span><span class="p">(</span><span class="n">node_element</span><span class="p">,</span> <span class="s">"root"</span><span class="p">);</span>
+    <span class="n">doc</span><span class="p">.</span><span class="n">append_node</span><span class="p">(</span><span class="n">root</span><span class="p">);</span>
+
+    <span class="c1">// 添加子节点</span>
+    <span class="n">xml_node</span><span class="o">&lt;&gt;</span> <span class="o">*</span><span class="n">child1</span> <span class="o">=</span> <span class="n">doc</span><span class="p">.</span><span class="n">allocate_node</span><span class="p">(</span><span class="n">node_element</span><span class="p">,</span> <span class="s">"child"</span><span class="p">,</span> <span class="s">"value1"</span><span class="p">);</span>
+    <span class="n">root</span><span class="o">-&gt;</span><span class="n">append_node</span><span class="p">(</span><span class="n">child1</span><span class="p">);</span>
+
+    <span class="n">xml_node</span><span class="o">&lt;&gt;</span> <span class="o">*</span><span class="n">child2</span> <span class="o">=</span> <span class="n">doc</span><span class="p">.</span><span class="n">allocate_node</span><span class="p">(</span><span class="n">node_element</span><span class="p">,</span> <span class="s">"child"</span><span class="p">,</span> <span class="s">"value2"</span><span class="p">);</span>
+    <span class="n">root</span><span class="o">-&gt;</span><span class="n">append_node</span><span class="p">(</span><span class="n">child2</span><span class="p">);</span>
+
+    <span class="c1">// 打印XML到标准输出</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">doc</span><span class="p">;</span>
+
+    <span class="c1">// 将XML写入文件</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">ofstream</span> <span class="n">file</span><span class="p">(</span><span class="s">"output.xml"</span><span class="p">);</span>
+    <span class="n">file</span> <span class="o">&lt;&lt;</span> <span class="n">doc</span><span class="p">;</span>
+    <span class="n">file</span><span class="p">.</span><span class="n">close</span><span class="p">();</span>
+
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>在这个例子中，我们首先创建了一个XML文档对象，并添加了根节点及其子节点。使用<code class="language-plaintext highlighter-rouge">allocate_node</code>方法可以创建新节点，并通过<code class="language-plaintext highlighter-rouge">append_node</code>方法将其添加到文档中。最后，我们将生成的XML文档打印到标准输出并写入文件<code class="language-plaintext highlighter-rouge">output.xml</code>。</p>
+
+<h4 id="结论">结论</h4>
+
+<p>通过上述示例，可以看出rapidxml库在处理XML文档时提供了高效且直观的接口。无论是读取还是生成XML文件，rapidxml都能简化操作并提高性能。因此，使用BOOST库中的rapidxml处理XML数据，是C++开发者在项目中值得考虑的一种高效解决方案。</p>
+
+
+        </section>
+
+        <footer class="post-footer">
+
+            <!-- Everything inside the #author tags pulls data from the author -->
+            <!-- #author-->
+            
+
+            <!-- Add Disqus Comments -->
+            
+
+        </footer>
+
+    </article>
+
+</main>
+
+<aside class="read-next">
+
+    <!-- [[! next_post ]] -->
+    
+        <a class="read-next-story no-cover" href="/integrate-cas-with-openldap">
+            <section class="post">
+                <h2>CAS与OpenLDAP整合</h2>
+                <p>CAS（Central Authentication Service）和OpenLDAP是现代企业和机构在用户认证和目录服务中广泛使用的两个重要工具。CAS是一种流行的单点登录（SSO）解决方案，能够简化用户的认证过程，提高安全性和用户体验。OpenLDAP则是一个开放源代码的轻量级目录访问协议（LDAP）服务器，提供了高效的目录服务和用户信息管理。将CAS与OpenLDAP整合在一起，可以实现集中化的用户认证和目录管理，极大地提升系统的安全性和便捷性。 #### 什么是CAS？ CAS是由耶鲁大学开发的开源项目，主要用于Web应用的单点登录。通过CAS，用户只需一次登录，便可访问所有集成了CAS认证的应用系统。这种方式不仅简化了用户的操作流程，还避免了多次输入用户名和密码带来的安全风险。 #### 什么是OpenLDAP？ OpenLDAP是一个实现了LDAP协议的开源目录服务，它被广泛用于用户信息存储、检索和管理。LDAP目录可以包含用户、群组、计算机等信息，支持快速查询和高效管理。由于其灵活性和扩展性，OpenLDAP在企业环境中非常受欢迎。 #### CAS与OpenLDAP整合的必要性 整合CAS与OpenLDAP的主要目的是实现统一的用户认证和目录服务管理。通过将CAS与OpenLDAP结合，企业可以利用OpenLDAP的强大目录服务功能，同时享受CAS提供的单点登录便利。这种整合可以带来以下好处： 1. **统一用户管理**：所有用户信息集中存储在OpenLDAP中，避免了分散管理的复杂性和冗余数据的产生。 2....</p>
+            </section>
+        </a>
+    
+    <!-- [[! /next_post ]] -->
+    <!-- [[! prev_post ]] -->
+    
+        <a class="read-next-story prev no-cover" href="/implement-single-sign-on-using-cas">
+            <section class="post">
+                <h2>CAS实现单点登录</h2>
+                <p>单点登录（Single Sign-On，SSO）是一种身份验证过程，允许用户使用一个帐户登录多个应用程序或系统，而无需为每个应用程序分别登录。中央认证服务（Central Authentication Service，CAS）是一种广泛使用的开源解决方案，用于实现单点登录。 CAS的基本原理 CAS的工作原理基于票证（ticket）机制。其流程如下： 用户访问应用程序：用户尝试访问一个需要认证的应用程序。 重定向到CAS服务器：该应用程序将用户重定向到CAS认证服务器。 用户认证：用户在CAS认证服务器上进行身份验证（如输入用户名和密码）。 生成票证：CAS服务器验证用户身份成功后，生成一个票证，并将用户重定向回最初的应用程序，同时附带票证。 应用程序验证票证：应用程序收到票证后，将其发送到CAS服务器进行验证。 返回用户信息：CAS服务器验证票证有效后，返回用户信息，应用程序根据这些信息创建用户会话。 访问其他应用程序：当用户访问其他需要认证的应用程序时，这些应用程序将重复验证票证的过程，而无需用户再次登录。 CAS的优势 简化用户体验：用户只需登录一次，即可访问多个应用程序，提高了用户体验。...</p>
+            </section>
+        </a>
+    
+    <!-- [[! /prev_post ]] -->
+</aside>
+
+<!-- /post -->
+
+
+        <footer class="site-footer clearfix">
+          <section class="copyright"><a href="/">与机器，人，神共舞</a> &copy; 2024</section>
+        </footer>
+    </div>
+    <!-- [[! Ghost outputs important scripts and data with this tag ]] -->
+    <script type="text/javascript" src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+    <!-- [[! The main JavaScript file for Casper ]] -->
+    <script type="text/javascript" src="/assets/js/jquery.fitvids.js"></script>
+    <script type="text/javascript" src="/assets/js/index.js"></script>
+
+    <!-- Add Google Analytics  -->
+        <!-- Google Analytics Tracking code -->
+     <script>
+	    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+	    ga('create', 'UA-78960009-1', 'auto');
+	    ga('send', 'pageview');
+
+     </script>
+   
+</body>
+</html>

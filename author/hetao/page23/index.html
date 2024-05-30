@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 
     <!-- [[! Page Meta ]] -->
-    <title>与机器，人，神共舞</title>
+    <title>Author</title>
     <meta name="description" content="与机器，人，神共舞 - 编程，读书，思考，旅行，与机器对话，与人交谈，对神发问，探索，体验人生美丽的风景" />
 
     <meta name="HandheldFriendly" content="True" />
@@ -53,7 +53,7 @@
     <link rel="alternate" type="application/rss+xml" title="与机器，人，神共舞" href="/rss.xml" />
 
 </head>
-<body class="tag-template nav-closed">
+<body class="paged archive-template nav-closed">
 
     <div class="nav">
     <h3 class="nav-title">Menu</h3>
@@ -63,10 +63,10 @@
     <ul>
         <li class="nav-home " role="presentation"><a href="/">Home</a></li>
         <li class="nav-about " role="presentation"><a href="/about.html">About</a></li>
-        <li class="nav-fables  nav-current" role="presentation"><a href="/tag/machine/">Machine</a></li>
+        <li class="nav-fables " role="presentation"><a href="/tag/machine/">Machine</a></li>
         <li class="nav-speeches " role="presentation"><a href="/tag/human/">Human</a></li>
         <li class="nav-fiction " role="presentation"><a href="/tag/god/">God</a></li>
-        <li class="nav-author " role="presentation"><a href="/author/hetao/">Author</a></li>
+        <li class="nav-author  nav-current" role="presentation"><a href="/author/hetao/">Author</a></li>
     </ul>
     <a class="subscribe-button icon-feed" href="/vocab.html">Apps</a>
 </div>
@@ -76,50 +76,58 @@
     <div class="site-wrapper">
 
         <!-- [[! Everything else gets inserted here ]] -->
-        <!-- < dynamically overriding backgrounds for tags as well as descriptions -->
-
-
-<!-- < default}} -->
+        <!-- < default}} -->
 <!-- The tag above means - insert everything in this file into the [body] of the default.hbs template -->
 
- <!--If we have a tag cover, display that - else blog cover - else nothing -->
-<header class="main-header tag-head " style="background-image: url(/assets/images/cover2.jpg) ">
-    <nav class="main-nav overlay clearfix">
-        <a class="blog-logo" href="/"><img src="/assets/images/ghost.png" alt="Blog Logo" /></a>
-        
-            <a class="menu-button icon-menu" href="#"><span class="word">Menu</span></a>
-        
-    </nav>
-    <div class="vertical">
-        <div class="main-header-content inner">
-            <h1 class="page-title">Machine</h1>
-            <h2 class="page-description">
+<!-- The big featured header -->
+
+<!-- Everything inside the #author tags pulls data from the author -->
+<!-- #author  -->
+    <header class="main-header author-head " style="background-image: url(/assets/images/cover4.jpg) ">
+        <nav class="main-nav overlay clearfix">
+            <a class="blog-logo" href="/"><img src="/assets/images/ghost.png" alt="Blog Logo" /></a>
             
-                A series of articles about IT.
+                <a class="menu-button icon-menu" href="#"><span class="word">Menu</span></a>
             
-            </h2>
+        </nav>
+    </header>
+
+    <section class="author-profile inner">
+        
+        <figure class="author-image">
+            <div class="img" style="background-image: url(/assets/images/casper.png)"><span class="hidden">Tao He's Picture</span></div>
+        </figure>
+        
+        <h1 class="author-title">Tao He</h1>
+        
+            <h2 class="author-bio">A programmer, reader and thinker.</h2>
+        
+        <div class="author-meta">
+            <span class="author-location icon-location">Beijing, China</span>
+            <span class="author-link icon-link"><a href="https://longlinht.github.io/">longlinht.github.io/</a></span>
+            <!-- <span class="author-stats"><i class="icon-stats"></i> [[plural ../pagination.total empty='No posts' singular='% post' plural='% posts']]</span> -->
+            <span class="author-stats"><i class="icon-stats"></i>114 posts</span>
         </div>
-    </div>
-</header> 
+    </section>
+<!-- /author -->
 
 <!-- The main content area on the homepage -->
 <main id="content" class="content" role="main">
 
-    <!-- The tag below includes the post loop - partials/loop.hbs -->
+    <!-- The tag below includes the post loop - partials/loop.hbs  -->
         <!-- Previous/next page links - only displayed on page 2+ -->
     <div class="extra-pagination inner">
         
             <nav class="pagination" role="pagination">
     
         
-            <a class="newer-posts" href="/tag/machine/page15/" title="Previous Page">&laquo; Newer Posts</a>
+            <a class="newer-posts" href="https://longlinht.github.io/author/hetao/page22/" title="Previous Page">&laquo; Newer Posts</a>
       
     
-    <span class="page-number"> Page 16 of 21 </span>
-     
-        <a class="older-posts" href="/tag/machine/page17/" title="Next Page">Older Posts &raquo;</a>
+    <span class="page-number"> Page 23 of 23 </span>
      
 </nav>
+
         
     </div>
 
@@ -127,11 +135,11 @@
     
     <article class="post">
         <header class="post-header">
-            <h2 class="post-title"><a href="https://longlinht.github.io//integrate-cas-with-openldap">CAS与OpenLDAP整合</a></h2>
+            <h2 class="post-title"><a href="https://longlinht.github.io//template-only-be-implemented-in-header-file">Why can templates only be implemented in the header file</a></h2>
         </header>
         <section class="post-excerpt">
             
-                <p><p>CAS（Central Authentication Service）和OpenLDAP是现代企业和机构在用户认证和目录服务中广泛使用的两个重要工具。CAS是一种流行的单点登录（SSO）解... <a class="read-more" href="https://longlinht.github.io//integrate-cas-with-openldap">&raquo;</a></p>
+                <p><p>The primary reason C++ templates are implemented in header files is due to the way templates are instantiated by the compiler. Here’s a detailed explanation:</p> <ol>... <a class="read-more" href="https://longlinht.github.io//template-only-be-implemented-in-header-file">&raquo;</a></p>
             
         </section>
         <footer class="post-meta">
@@ -147,17 +155,17 @@
                        
                 
             
-            <time class="post-date" datetime="2012-09-20">20 Sep 2012</time>
+            <time class="post-date" datetime="2010-12-15">15 Dec 2010</time>
         </footer>
     </article>
     
     <article class="post">
         <header class="post-header">
-            <h2 class="post-title"><a href="https://longlinht.github.io//using-boost-to-read-write-xml">使用BOOST库rapidxml读写XML</a></h2>
+            <h2 class="post-title"><a href="https://longlinht.github.io//the-rule-of-three">The Rule of Three</a></h2>
         </header>
         <section class="post-excerpt">
             
-                <p><p>在现代软件开发中，XML（可扩展标记语言）被广泛用于数据存储和交换。为了高效处理XML数据，开发者通常会选择使用现有的库。BOOST库中的rapidxml是一个高效且易于使用的C++库，专... <a class="read-more" href="https://longlinht.github.io//using-boost-to-read-write-xml">&raquo;</a></p>
+                <p><p>The Stack Overflow question “What is the Rule of Three?” addresses a fundamental concept in C++ programming related to resource management and object copying. The Rule... <a class="read-more" href="https://longlinht.github.io//the-rule-of-three">&raquo;</a></p>
             
         </section>
         <footer class="post-meta">
@@ -173,17 +181,17 @@
                        
                 
             
-            <time class="post-date" datetime="2012-09-10">10 Sep 2012</time>
+            <time class="post-date" datetime="2010-12-10">10 Dec 2010</time>
         </footer>
     </article>
     
     <article class="post">
         <header class="post-header">
-            <h2 class="post-title"><a href="https://longlinht.github.io//implement-single-sign-on-using-cas">CAS实现单点登录</a></h2>
+            <h2 class="post-title"><a href="https://longlinht.github.io//issues-with-using-name-std">What's the problem with "using namespace std;"</a></h2>
         </header>
         <section class="post-excerpt">
             
-                <p><p>单点登录（Single Sign-On，SSO）是一种身份验证过程，允许用户使用一个帐户登录多个应用程序或系统，而无需为每个应用程序分别登录。中央认证服务（Central Authenti... <a class="read-more" href="https://longlinht.github.io//implement-single-sign-on-using-cas">&raquo;</a></p>
+                <p><p>In C++, using <code class="language-plaintext highlighter-rouge">namespace std</code> can simplify your code by allowing you to omit the <code class="language-plaintext highlighter-rouge">std::</code> prefix for standard library components. However,... <a class="read-more" href="https://longlinht.github.io//issues-with-using-name-std">&raquo;</a></p>
             
         </section>
         <footer class="post-meta">
@@ -199,19 +207,17 @@
                        
                 
             
-            <time class="post-date" datetime="2012-09-06">06 Sep 2012</time>
+            <time class="post-date" datetime="2010-11-05">05 Nov 2010</time>
         </footer>
     </article>
     
     <article class="post">
         <header class="post-header">
-            <h2 class="post-title"><a href="https://longlinht.github.io//c-sharp-create-unregular-window">C#创建不规则窗体(控件)</a></h2>
+            <h2 class="post-title"><a href="https://longlinht.github.io//forward-declaration-in-cpp">Forward declaration in C++</a></h2>
         </header>
         <section class="post-excerpt">
             
-                <p><p>创建不规则窗体和控件这个过程包含了大量的图形编程工作，不同的计算机因内存和显卡的不同可能会导致最终的效果有所不同 。创建不规则窗体具体步骤：</p>
-
-<h4 id="先创建一个具有不规则... <a class="read-more" href="https://longlinht.github.io//c-sharp-create-unregular-window">&raquo;</a></p>
+                <p><p>Why need use forward declaration? when we can use it? I will figure out these problem separately.</p> <h4 id="why">Why</h4> <ul> <li> <p>Forward-declarations can significantly reduce build... <a class="read-more" href="https://longlinht.github.io//forward-declaration-in-cpp">&raquo;</a></p>
             
         </section>
         <footer class="post-meta">
@@ -227,33 +233,7 @@
                        
                 
             
-            <time class="post-date" datetime="2012-09-05">05 Sep 2012</time>
-        </footer>
-    </article>
-    
-    <article class="post">
-        <header class="post-header">
-            <h2 class="post-title"><a href="https://longlinht.github.io//sorted-array-vs-unsorted-array">Why is processing a sorted array faster than processing an unsorted array</a></h2>
-        </header>
-        <section class="post-excerpt">
-            
-                <p><p>As a C++ developer, understanding why processing a sorted array is often faster than an unsorted one involves delving into the intricacies of CPU architecture and... <a class="read-more" href="https://longlinht.github.io//sorted-array-vs-unsorted-array">&raquo;</a></p>
-            
-        </section>
-        <footer class="post-meta">
-            <img class="author-thumb" src="/assets/images/casper.png" alt="Author image" nopin="nopin" />
-            <!-- author -->
-            <a href='/author/hetao'>Tao He</a>
-            <!-- [[tags prefix=" on "]] -->
-             
-                on 
-                
-                    
-                       <a href='/tag/machine'>Machine</a>
-                       
-                
-            
-            <time class="post-date" datetime="2012-08-02">02 Aug 2012</time>
+            <time class="post-date" datetime="2010-11-02">02 Nov 2010</time>
         </footer>
     </article>
     
@@ -263,14 +243,13 @@
         <nav class="pagination" role="pagination">
     
         
-            <a class="newer-posts" href="/tag/machine/page15/" title="Previous Page">&laquo; Newer Posts</a>
+            <a class="newer-posts" href="https://longlinht.github.io/author/hetao/page22/" title="Previous Page">&laquo; Newer Posts</a>
       
     
-    <span class="page-number"> Page 16 of 21 </span>
-     
-        <a class="older-posts" href="/tag/machine/page17/" title="Next Page">Older Posts &raquo;</a>
+    <span class="page-number"> Page 23 of 23 </span>
      
 </nav>
+
     
 
 

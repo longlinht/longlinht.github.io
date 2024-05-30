@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- [[! Document Settings ]] -->
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+    <!-- [[! Page Meta ]] -->
+    <title>Developing Applications with Qt</title>
+    <meta name="description" content="与机器，人，神共舞 - 编程，读书，思考，旅行，与机器对话，与人交谈，对神发问，探索，体验人生美丽的风景" />
+
+    <meta name="HandheldFriendly" content="True" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link rel="shortcut icon" href="/assets/images/favicon.ico" >
+
+    <!-- [[! Styles'n'Scripts ]] -->
+    <link rel="stylesheet" type="text/css" href="/assets/css/screen.css" />
+    <link rel="stylesheet" type="text/css"
+          href="//fonts.googleapis.com/css?family=Merriweather:300,700,700italic,300italic|Open+Sans:700,400" />
+    <link rel="stylesheet" type="text/css" href="/assets/css/syntax.css" />
+    
+    <!-- [[! Ghost outputs important style and meta data with this tag ]] -->
+        <link rel="canonical" href="/" />
+    <meta name="referrer" content="origin" />
+    <link rel="next" href="/page2/" />
+
+    <meta property="og:site_name" content="与机器，人，神共舞" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="与机器，人，神共舞" />
+    <meta property="og:description" content="编程，读书，思考，旅行，与机器对话，与人交谈，对神发问，探索，体验人生美丽的风景" />
+    <meta property="og:url" content="/" />
+    <meta property="og:image" content="/assets/images/cover1.jpg" />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="与机器，人，神共舞" />
+    <meta name="twitter:description" content="编程，读书，思考，旅行，与机器对话，与人交谈，对神发问，探索，体验人生美丽的风景" />
+    <meta name="twitter:url" content="/" />
+    <meta name="twitter:image:src" content="/assets/images/cover1.jpg" />
+
+    <script type="application/ld+json">
+{
+    "@context": "http://schema.org",
+    "@type": "Website",
+    "publisher": "Tao's Page",
+    "url": "/",
+    "image": "/assets/images/cover1.jpg",
+    "description": "编程，读书，思考，旅行，与机器对话，与人交谈，对神发问，探索，体验人生美丽的风景"
+}
+    </script>
+
+    <meta name="generator" content="Jekyll 3.0.0" />
+    <link rel="alternate" type="application/rss+xml" title="与机器，人，神共舞" href="/rss.xml" />
+
+</head>
+<body class="home-template nav-closed">
+
+    <div class="nav">
+    <h3 class="nav-title">Menu</h3>
+    <a href="#" class="nav-close">
+        <span class="hidden">Close</span>
+    </a>
+    <ul>
+        <li class="nav-home " role="presentation"><a href="/">Home</a></li>
+        <li class="nav-about " role="presentation"><a href="/about.html">About</a></li>
+        <li class="nav-fables " role="presentation"><a href="/tag/machine/">Machine</a></li>
+        <li class="nav-speeches " role="presentation"><a href="/tag/human/">Human</a></li>
+        <li class="nav-fiction " role="presentation"><a href="/tag/god/">God</a></li>
+        <li class="nav-author " role="presentation"><a href="/author/hetao/">Author</a></li>
+    </ul>
+    <a class="subscribe-button icon-feed" href="/vocab.html">Apps</a>
+</div>
+<span class="nav-cover"></span>
+
+
+    <div class="site-wrapper">
+
+        <!-- [[! Everything else gets inserted here ]] -->
+        <!-- default -->
+
+<!-- The comment above "< default" means - insert everything in this file into -->
+    <!-- the [body] of the default.hbs template, which contains our header/footer. -->
+
+<!-- Everything inside the #post tags pulls data from the post -->
+<!-- #post -->
+
+<header class="main-header post-head no-cover">
+    <nav class="main-nav  clearfix">
+        
+        
+    </nav>
+</header>
+
+<main class="content" role="main">
+
+    <article class="post tag-machine">
+
+        <header class="post-header">
+            <h1 class="post-title">Developing Applications with Qt</h1>
+            <section class="post-meta">
+            <!-- <a href='/'>Tao He</a> -->
+
+            
+            <time class="post-date" datetime="2013-06-08">08 Jun 2013</time>
+                <!-- [[tags prefix=" on "]] -->
+                
+                on
+                
+                    
+                       <a href='/tag/machine'>Machine</a>
+                    
+                
+                
+            </section>
+        </header>
+
+        <section class="post-content">
+
+            <p>Qt is a powerful framework for developing cross-platform applications, offering extensive libraries and tools to streamline the development process. This essay provides an overview of essential techniques and best practices for working with Qt, including managing dependencies, handling permissions, incorporating icons, managing translations, enforcing single-instance applications, and implementing basic encryption.</p>
+
+<h2 id="including-qt-headers">Including Qt Headers</h2>
+
+<p>When including Qt headers, if you encounter compilation success but linkage failure, it may be necessary to specify the appropriate namespaces in your project file (<code class="language-plaintext highlighter-rouge">.pro</code>). For example:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>QT += core gui
+QT += network
+QT += xml
+QT += webkit
+</code></pre></div></div>
+
+<p>These lines ensure that the necessary Qt modules are linked correctly during the build process.</p>
+
+<h2 id="obtaining-administrator-privileges">Obtaining Administrator Privileges</h2>
+
+<p>To grant your executable administrative privileges on Windows, you can modify the project file (<code class="language-plaintext highlighter-rouge">.pro</code>) as follows:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>QMAKE_LFLAGS += /MANIFESTUAC:\"level='requireAdministrator' uiAccess='false'\"
+</code></pre></div></div>
+
+<p>This line modifies the linker flags to request elevated permissions when the application is run.</p>
+
+<h2 id="adding-application-icons">Adding Application Icons</h2>
+
+<p>To add an icon to your Qt application, include the following lines in your project file:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>RC_FILE = icon.rc
+OTHER_FILES += \icon.rc
+</code></pre></div></div>
+
+<p>This configuration ensures that the specified icon resource is included in the build process and linked with the application.</p>
+
+<h2 id="adding-library-dependencies">Adding Library Dependencies</h2>
+
+<p>Managing dependencies in Qt projects involves specifying include paths and library paths. Update your project file (<code class="language-plaintext highlighter-rouge">.pro</code>) to include necessary libraries as shown:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>INCLUDEPATH += $$PWD/../ext/win/include $$PWD/../../boost_1_40_0/boost/property_tree/detail $$PWD/../lib $$PWD/../../boost_1_40_0 $$PWD/../curl $$PWD/../
+DEPENDPATH += $$PWD/../ext/win/x86 $$PWD/../../boost_1_40_0/libx86/lib
+win32:CONFIG(release, debug|release): {
+LIBS += -L$$PWD/../ext/win/x86/ -L$$PWD/../../boost_1_40_0/libx86/lib -L$$PWD/../curl/lib -L$$PWD/plugins/imageformats -lxmlrpc_Win32_Release -lsqlite3_Win32_Release -lWS2_32 -lIPHlpApi -lMpr -lPowrProf \
+-libboost_filesystem-vc90-mt-1_42 -lAdvapi32 -lKernel32 -lUser32 -lqgif4 -llibcurl -lws2_32 -llibeay32 -lssleay32
+}
+else:win32:CONFIG(debug, debug|release): {
+LIBS += -L$$PWD/../ext/win/x86/ -L$$PWD/../../boost_1_40_0/libx86/lib -L$$PWD/../curl/lib -L$$PWD/plugins/imageformats -lxmlrpc_Win32_Debug -lsqlite3_Win32_Debug -lWS2_32 -lIPHlpApi -lMpr -lPowrProf \
+-libboost_filesystem-vc90-mt-gd-1_42 -lAdvapi32 -lKernel32 -lUser32 -lqgifd4 -llibcurld -lws2_32 -llibeay32 -lssleay32
+}
+</code></pre></div></div>
+
+<p>This configuration helps in resolving dependencies by specifying the paths for include files and libraries.</p>
+
+<h2 id="internationalization">Internationalization</h2>
+
+<p>Internationalizing a Qt application involves preparing the project for translations. First, add the following line to the project file to include the translation file:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>TRANSLATIONS += scc.ts
+</code></pre></div></div>
+
+<p>In the application code, wrap translatable strings with the <code class="language-plaintext highlighter-rouge">tr()</code> function. To generate and compile translation files, use the <code class="language-plaintext highlighter-rouge">lupdate</code> and <code class="language-plaintext highlighter-rouge">lrelease</code> commands. At the program entry point, load the appropriate translation file based on the selected language:</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">QTranslator</span> <span class="n">qtTranslator</span><span class="p">;</span>
+<span class="k">if</span><span class="p">(</span><span class="n">lang</span> <span class="o">==</span> <span class="n">LANG_EN</span><span class="p">){</span>
+<span class="p">}</span> <span class="k">else</span> <span class="nf">if</span><span class="p">(</span><span class="n">lang</span> <span class="o">==</span> <span class="n">LANG_ZH</span><span class="p">){</span>
+    <span class="n">qtTranslator</span><span class="p">.</span><span class="n">load</span><span class="p">(</span><span class="s">"scc.qm"</span><span class="p">);</span>
+    <span class="n">a</span><span class="p">.</span><span class="n">installTranslator</span><span class="p">(</span><span class="o">&amp;</span><span class="n">qtTranslator</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h2 id="enforcing-single-instance-applications">Enforcing Single-Instance Applications</h2>
+
+<p>To ensure that only one instance of an application runs at a time, implement a singleton pattern. Below is a typical implementation:</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#ifndef SINGLEINSTANCE_H
+#define SINGLEINSTANCE_H
+#if WIN32
+#include &lt;windows.h&gt;
+#include &lt;string&gt;
+#include "util.h"
+</span>
+<span class="k">using</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">;</span>
+
+<span class="k">class</span> <span class="nc">CLimitSingleInstance</span> <span class="p">{</span>
+<span class="nl">protected:</span>
+    <span class="n">DWORD</span> <span class="n">m_dwLastError</span><span class="p">;</span>
+    <span class="n">HANDLE</span> <span class="n">m_hMutex</span><span class="p">;</span>
+
+<span class="nl">public:</span>
+    <span class="n">CLimitSingleInstance</span><span class="p">(</span><span class="n">string</span> <span class="n">strMutexName</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">string</span> <span class="n">name</span> <span class="o">=</span> <span class="s">"Global</span><span class="se">\\</span><span class="s">"</span> <span class="o">+</span> <span class="n">strMutexName</span><span class="p">;</span>
+        <span class="n">m_hMutex</span> <span class="o">=</span> <span class="n">CreateMutex</span><span class="p">(</span><span class="nb">NULL</span><span class="p">,</span> <span class="n">TRUE</span><span class="p">,</span> <span class="n">s2ws</span><span class="p">(</span><span class="n">name</span><span class="p">).</span><span class="n">c_str</span><span class="p">());</span>
+        <span class="n">m_dwLastError</span> <span class="o">=</span> <span class="n">GetLastError</span><span class="p">();</span>
+    <span class="p">}</span>
+
+    <span class="o">~</span><span class="n">CLimitSingleInstance</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">m_hMutex</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">CloseHandle</span><span class="p">(</span><span class="n">m_hMutex</span><span class="p">);</span>
+            <span class="n">m_hMutex</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="n">BOOL</span> <span class="n">IsAnotherInstanceRunning</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">ERROR_ALREADY_EXISTS</span> <span class="o">==</span> <span class="n">m_dwLastError</span> <span class="o">||</span> <span class="n">m_hMutex</span> <span class="o">==</span> <span class="mi">0</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+
+<span class="k">static</span> <span class="n">CLimitSingleInstance</span> <span class="nf">g_SingleShineCloudClientInstanceObj</span><span class="p">(</span><span class="s">"{F5A38595-26E4-4999-AB15-395BC6B23402}"</span><span class="p">);</span>
+
+<span class="k">static</span> <span class="kr">inline</span> <span class="kt">bool</span> <span class="nf">isAnotherSCCRunning</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="n">g_SingleShineCloudClientInstanceObj</span><span class="p">.</span><span class="n">IsAnotherInstanceRunning</span><span class="p">();</span>
+<span class="p">}</span>
+
+<span class="cp">#else
+#include &lt;string&gt;
+#include &lt;unistd.h&gt;
+#include &lt;fcntl.h&gt;
+#include &lt;sys/types.h&gt;
+#include &lt;string.h&gt;
+#include "db.h"
+#include &lt;stdlib.h&gt;
+#include "sutil.h"
+#include &lt;errno.h&gt;
+</span>
+<span class="k">using</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">;</span>
+
+<span class="k">struct</span> <span class="nc">flock</span><span class="o">*</span> <span class="nf">file_lock</span><span class="p">(</span><span class="kt">short</span> <span class="n">type</span><span class="p">,</span> <span class="kt">short</span> <span class="n">whence</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">static</span> <span class="k">struct</span> <span class="nc">flock</span> <span class="n">ret</span><span class="p">;</span>
+    <span class="n">ret</span><span class="p">.</span><span class="n">l_type</span> <span class="o">=</span> <span class="n">type</span><span class="p">;</span>
+    <span class="n">ret</span><span class="p">.</span><span class="n">l_start</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="n">ret</span><span class="p">.</span><span class="n">l_whence</span> <span class="o">=</span> <span class="n">whence</span><span class="p">;</span>
+    <span class="n">ret</span><span class="p">.</span><span class="n">l_len</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="n">ret</span><span class="p">.</span><span class="n">l_pid</span> <span class="o">=</span> <span class="n">getpid</span><span class="p">();</span>
+    <span class="k">return</span> <span class="o">&amp;</span><span class="n">ret</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="k">class</span> <span class="nc">CLimitSingleInstance</span> <span class="p">{</span>
+    <span class="n">string</span> <span class="n">filename</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">fp</span><span class="p">;</span>
+    <span class="kt">bool</span> <span class="n">isLock</span><span class="p">;</span>
+
+<span class="nl">public:</span>
+    <span class="n">CLimitSingleInstance</span><span class="p">(</span><span class="n">string</span> <span class="n">file</span><span class="p">)</span> <span class="o">:</span> <span class="n">isLock</span><span class="p">(</span><span class="nb">false</span><span class="p">),</span> <span class="n">filename</span><span class="p">(</span><span class="n">file</span><span class="p">),</span> <span class="n">fp</span><span class="p">(</span><span class="n">open</span><span class="p">(</span><span class="n">file</span><span class="p">.</span><span class="n">c_str</span><span class="p">(),</span> <span class="n">O_CREAT</span> <span class="o">|</span> <span class="n">O_RDWR</span><span class="p">))</span> <span class="p">{</span>
+        <span class="k">if</span><span class="p">(</span><span class="n">fp</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span> <span class="o">&amp;&amp;</span> <span class="n">fcntl</span><span class="p">(</span><span class="n">fp</span><span class="p">,</span> <span class="n">F_SETLK</span><span class="p">,</span> <span class="n">file_lock</span><span class="p">(</span><span class="n">F_WRLCK</span><span class="p">,</span> <span class="n">SEEK_SET</span><span class="p">))</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">isLock</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="n">CLimitSingleInstance</span><span class="p">()</span> <span class="o">:</span> <span class="n">isLock</span><span class="p">(</span><span class="nb">false</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">id</span> <span class="o">=</span> <span class="n">DBGetOptionValue</span><span class="p">(</span><span class="s">"host_cpid"</span><span class="p">);</span>
+        <span class="n">string</span> <span class="n">appPath</span> <span class="o">=</span> <span class="n">suGetApplicationPath</span><span class="p">()</span> <span class="o">+</span> <span class="s">"/locks/"</span><span class="p">;</span>
+        <span class="n">system</span><span class="p">((</span><span class="s">"mkdir -p "</span> <span class="o">+</span> <span class="n">appPath</span><span class="p">).</span><span class="n">c_str</span><span class="p">());</span>
+        <span class="n">appPath</span> <span class="o">+=</span> <span class="n">id</span><span class="p">;</span>
+        <span class="n">filename</span> <span class="o">=</span> <span class="n">appPath</span><span class="p">;</span>
+        <span class="n">fp</span> <span class="o">=</span> <span class="n">open</span><span class="p">(</span><span class="n">filename</span><span class="p">.</span><span class="n">c_str</span><span class="p">(),</span> <span class="n">O_CREAT</span> <span class="o">|</span> <span class="n">O_RDWR</span><span class="p">);</span>
+        <span class="k">if</span><span class="p">(</span><span class="n">fp</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">system</span><span class="p">((</span><span class="s">"chmod u+rw </span><span class="se">\"</span><span class="s">"</span> <span class="o">+</span> <span class="n">filename</span> <span class="o">+</span> <span class="s">"</span><span class="se">\"</span><span class="s">"</span><span class="p">).</span><span class="n">c_str</span><span class="p">());</span>
+            <span class="k">if</span><span class="p">(</span><span class="n">fcntl</span><span class="p">(</span><span class="n">fp</span><span class="p">,</span> <span class="n">F_SETLK</span><span class="p">,</span> <span class="n">file_lock</span><span class="p">(</span><span class="n">F_WRLCK</span><span class="p">,</span> <span class="n">SEEK_SET</span><span class="p">))</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+                <span class="n">isLock</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="n">DBReleaseOptionValue</span><span class="p">(</span><span class="n">id</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="o">~</span><span class="n">CLimitSingleInstance</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">if</span><span class="p">(</span><span class="n">fp</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">fcntl</span><span class="p">(</span><span class="n">fp</span><span class="p">,</span> <span class="n">F_SETLK</span><span class="p">,</span> <span class="n">file_lock</span><span class="p">(</span><span class="n">F_UNLCK</span><span class="p">,</span> <span class="n">SEEK_SET</span><span class="p">));</span>
+            <span class="n">close</span><span class="p">(</span><span class="n">fp</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="kt">bool</span> <span class="n">IsAnotherInstanceRunning</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">fp</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">?</span> <span class="nb">false</span> <span class="o">:</span> <span class="o">!</span><span class="n">isLock</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+
+<span class="k">static</span> <span class="kr">inline</span> <span class="kt">bool</span> <span class="nf">isAnotherSlaveRunning</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">static</span> <span class="n">CLimitSingleInstance</span> <span class="n">g_SingleShineWonderSlaveInstanceObj</span><span class="p">;</span>
+    <span class="k">return</span> <span class="n">g_SingleShineWonderSlaveInstanceObj</span><span class="p">.</span><span class="n">IsAnotherInstanceRunning</span><span class="p">();</span>
+<span class="p">}</span>
+
+<span class="cp">#endif
+#endif // SINGLEINSTANCE_H
+</span></code></pre></div></div>
+
+<h2 id="basic-encryption">Basic Encryption</h2>
+
+<p>For basic encryption, you can use the following simple encryption class:</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#ifndef SIMPLECRYPT_H
+#define SIMPLECRYPT_H
+</span>
+<span class="cp">#include &lt;QString&gt;
+#include &lt;QVector&gt;
+#include &lt;QFlags&gt;
+</span>
+<span class="k">class</span> <span class="nc">SimpleCrypt</span> <span class="p">{</span>
+<span class="nl">public:</span>
+    <span class="k">enum</span> <span class="n">CompressionMode</span> <span class="p">{</span> <span class="n">CompressionAuto</span><span class="p">,</span> <span class="n">CompressionAlways</span><span class="p">,</span> <span class="n">CompressionNever</span> <span class="p">};</span>
+    <span class="k">enum</span> <span class="n">IntegrityProtectionMode</span> <span class="p">{</span> <span class="n">ProtectionNone</span><span class="p">,</span> <span class="n">ProtectionChecksum</span><span class="p">,</span> <span class="n">ProtectionHash</span> <span class="p">};</span>
+    <span class="k">enum</span> <span class="n">Error</span> <span class="p">{</span> <span class="n">ErrorNoError</span><span class="p">,</span> <span class="n">ErrorNoKeySet</span><span class="p">,</span> <span class="n">ErrorUnknownVersion</span><span class="p">,</span> <span class="n">ErrorIntegrityFailed</span> <span class="p">};</span>
+
+    <span class="n">SimpleCrypt</span><span class="p">();</span>
+    <span class="k">explicit</span> <span class="n">SimpleCrypt</span><span class="p">(</span><span class="n">quint64</span> <span class="n">key</span><span class="p">);</span>
+    <span class="kt">void</span> <span class="n">setKey</span><span class="p">(</span><span class="n">quint64</span> <span class="n">key</span><span class="p">);</span>
+    <span class="kt">bool</span> <span class="n">hasKey</span><span class="p">()</span> <span class="k">const</span> <span class="p">{</span> <span class="k">return</span> <span class="o">!</span><span class="n">m_keyParts</span><span class="p">.</span><span class="n">isEmpty</span><span class="p">();</span> <span class="p">}</span>
+    <span class="kt">void</span> <span class="n">setCompressionMode</span><span class="p">(</span><span class="n">CompressionMode</span> <span class="n">mode</span><span class="p">)</span> <span class="p">{</span> <span class="n">m_compressionMode</span> <span class="o">=</span> <span class="n">mode</span><span class="p">;</span> <span class="p">}</span>
+    <span class="n">CompressionMode</span> <span class="n">compressionMode</span><span class="p">()</span> <span class="k">const</span> <span class="p">{</span> <span class="k">return</span> <span class="n">m_compressionMode</span><span class="p">;</span> <span class="p">}</span>
+    <span class="kt">void</span> <span class="n">setIntegrityProtectionMode</span><span class="p">(</span><span class="n">IntegrityProtectionMode</span> <span class="n">mode</span><span class="p">)</span> <span class="p">{</span> <span class="n">m_protectionMode</span> <span class="o">=</span> <span class="n">mode</span><span class="p">;</span> <span class="p">}</span>
+    <span class="n">IntegrityProtectionMode</span> <span class="n">integrityProtectionMode</span><span class="p">()</span> <span class="k">const</span> <span class="p">{</span> <span class="k">return</span> <span class="n">m_protectionMode</span><span class="p">;</span> <span class="p">}</span>
+    <span class="n">Error</span> <span class="n">lastError</span><span class="p">()</span> <span class="k">const</span> <span class="p">{</span> <span class="k">return</span> <span class="n">m_lastError</span><span class="p">;</span> <span class="p">}</span>
+    <span class="n">QString</span> <span class="n">encryptToString</span><span class="p">(</span><span class="k">const</span> <span class="n">QString</span><span class="o">&amp;</span> <span class="n">plaintext</span><span class="p">);</span>
+    <span class="n">QString</span> <span class="n">encryptToString</span><span class="p">(</span><span class="n">QByteArray</span> <span class="n">plaintext</span><span class="p">);</span>
+    <span class="n">QByteArray</span> <span class="n">encryptToByteArray</span><span class="p">(</span><span class="k">const</span> <span class="n">QString</span><span class="o">&amp;</span> <span class="n">plaintext</span><span class="p">);</span>
+    <span class="n">QByteArray</span> <span class="n">encryptToByteArray</span><span class="p">(</span><span class="n">QByteArray</span> <span class="n">plaintext</span><span class="p">);</span>
+    <span class="n">QString</span> <span class="n">decryptToString</span><span class="p">(</span><span class="k">const</span> <span class="n">QString</span><span class="o">&amp;</span> <span class="n">cyphertext</span><span class="p">);</span>
+    <span class="n">QByteArray</span> <span class="n">decryptToByteArray</span><span class="p">(</span><span class="k">const</span> <span class="n">QString</span><span class="o">&amp;</span> <span class="n">cyphertext</span><span class="p">);</span>
+    <span class="n">QString</span> <span class="n">decryptToString</span><span class="p">(</span><span class="n">QByteArray</span> <span class="n">cypher</span><span class="p">);</span>
+    <span class="n">QByteArray</span> <span class="n">decryptToByteArray</span><span class="p">(</span><span class="n">QByteArray</span> <span class="n">cypher</span><span class="p">);</span>
+
+    <span class="k">enum</span> <span class="n">CryptoFlag</span> <span class="p">{</span> <span class="n">CryptoFlagNone</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">CryptoFlagCompression</span> <span class="o">=</span> <span class="mh">0x01</span><span class="p">,</span> <span class="n">CryptoFlagChecksum</span> <span class="o">=</span> <span class="mh">0x02</span><span class="p">,</span> <span class="n">CryptoFlagHash</span> <span class="o">=</span> <span class="mh">0x04</span> <span class="p">};</span>
+    <span class="n">Q_DECLARE_FLAGS</span><span class="p">(</span><span class="n">CryptoFlags</span><span class="p">,</span> <span class="n">CryptoFlag</span><span class="p">)</span>
+
+<span class="nl">private:</span>
+    <span class="kt">void</span> <span class="n">splitKey</span><span class="p">();</span>
+    <span class="n">quint64</span> <span class="n">m_key</span><span class="p">;</span>
+    <span class="n">QVector</span><span class="o">&lt;</span><span class="kt">char</span><span class="o">&gt;</span> <span class="n">m_keyParts</span><span class="p">;</span>
+    <span class="n">CompressionMode</span> <span class="n">m_compressionMode</span><span class="p">;</span>
+    <span class="n">IntegrityProtectionMode</span> <span class="n">m_protectionMode</span><span class="p">;</span>
+    <span class="n">Error</span> <span class="n">m_lastError</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="n">Q_DECLARE_OPERATORS_FOR_FLAGS</span><span class="p">(</span><span class="n">SimpleCrypt</span><span class="o">::</span><span class="n">CryptoFlags</span>
+
+</code></pre></div></div>
+
+
+        </section>
+
+        <footer class="post-footer">
+
+            <!-- Everything inside the #author tags pulls data from the author -->
+            <!-- #author-->
+            
+
+            <!-- Add Disqus Comments -->
+            
+
+        </footer>
+
+    </article>
+
+</main>
+
+<aside class="read-next">
+
+    <!-- [[! next_post ]] -->
+    
+        <a class="read-next-story no-cover" href="/capturing-and-merging-window-screenshots-in-windows">
+            <section class="post">
+                <h2>Capturing and Merging Window Screenshots in Windows</h2>
+                <p>This essay discusses a program written in C++ that captures screenshots of multiple windows and...</p>
+            </section>
+        </a>
+    
+    <!-- [[! /next_post ]] -->
+    <!-- [[! prev_post ]] -->
+    
+        <a class="read-next-story prev no-cover" href="/develop-a-plugin-for-autodesk-maya">
+            <section class="post">
+                <h2>Develop a plugin for Autodesk Maya</h2>
+                <p>Autodesk Maya is a powerful 3D computer graphics software widely used in the film, television,...</p>
+            </section>
+        </a>
+    
+    <!-- [[! /prev_post ]] -->
+</aside>
+
+<!-- /post -->
+
+
+        <footer class="site-footer clearfix">
+          <section class="copyright"><a href="/">与机器，人，神共舞</a> &copy; 2024</section>
+        </footer>
+    </div>
+    <!-- [[! Ghost outputs important scripts and data with this tag ]] -->
+    <script type="text/javascript" src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+    <!-- [[! The main JavaScript file for Casper ]] -->
+    <script type="text/javascript" src="/assets/js/jquery.fitvids.js"></script>
+    <script type="text/javascript" src="/assets/js/index.js"></script>
+
+    <!-- Add Google Analytics  -->
+        <!-- Google Analytics Tracking code -->
+     <script>
+	    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+	    ga('create', 'UA-78960009-1', 'auto');
+	    ga('send', 'pageview');
+
+     </script>
+   
+</body>
+</html>

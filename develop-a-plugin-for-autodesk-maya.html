@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- [[! Document Settings ]] -->
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+    <!-- [[! Page Meta ]] -->
+    <title>Develop a plugin for Autodesk Maya</title>
+    <meta name="description" content="与机器，人，神共舞 - 编程，读书，思考，旅行，与机器对话，与人交谈，对神发问，探索，体验人生美丽的风景" />
+
+    <meta name="HandheldFriendly" content="True" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link rel="shortcut icon" href="/assets/images/favicon.ico" >
+
+    <!-- [[! Styles'n'Scripts ]] -->
+    <link rel="stylesheet" type="text/css" href="/assets/css/screen.css" />
+    <link rel="stylesheet" type="text/css"
+          href="//fonts.googleapis.com/css?family=Merriweather:300,700,700italic,300italic|Open+Sans:700,400" />
+    <link rel="stylesheet" type="text/css" href="/assets/css/syntax.css" />
+    
+    <!-- [[! Ghost outputs important style and meta data with this tag ]] -->
+        <link rel="canonical" href="/" />
+    <meta name="referrer" content="origin" />
+    <link rel="next" href="/page2/" />
+
+    <meta property="og:site_name" content="与机器，人，神共舞" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="与机器，人，神共舞" />
+    <meta property="og:description" content="编程，读书，思考，旅行，与机器对话，与人交谈，对神发问，探索，体验人生美丽的风景" />
+    <meta property="og:url" content="/" />
+    <meta property="og:image" content="/assets/images/cover1.jpg" />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="与机器，人，神共舞" />
+    <meta name="twitter:description" content="编程，读书，思考，旅行，与机器对话，与人交谈，对神发问，探索，体验人生美丽的风景" />
+    <meta name="twitter:url" content="/" />
+    <meta name="twitter:image:src" content="/assets/images/cover1.jpg" />
+
+    <script type="application/ld+json">
+{
+    "@context": "http://schema.org",
+    "@type": "Website",
+    "publisher": "Tao's Page",
+    "url": "/",
+    "image": "/assets/images/cover1.jpg",
+    "description": "编程，读书，思考，旅行，与机器对话，与人交谈，对神发问，探索，体验人生美丽的风景"
+}
+    </script>
+
+    <meta name="generator" content="Jekyll 3.0.0" />
+    <link rel="alternate" type="application/rss+xml" title="与机器，人，神共舞" href="/rss.xml" />
+
+</head>
+<body class="home-template nav-closed">
+
+    <div class="nav">
+    <h3 class="nav-title">Menu</h3>
+    <a href="#" class="nav-close">
+        <span class="hidden">Close</span>
+    </a>
+    <ul>
+        <li class="nav-home " role="presentation"><a href="/">Home</a></li>
+        <li class="nav-about " role="presentation"><a href="/about.html">About</a></li>
+        <li class="nav-fables " role="presentation"><a href="/tag/machine/">Machine</a></li>
+        <li class="nav-speeches " role="presentation"><a href="/tag/human/">Human</a></li>
+        <li class="nav-fiction " role="presentation"><a href="/tag/god/">God</a></li>
+        <li class="nav-author " role="presentation"><a href="/author/hetao/">Author</a></li>
+    </ul>
+    <a class="subscribe-button icon-feed" href="/vocab.html">Apps</a>
+</div>
+<span class="nav-cover"></span>
+
+
+    <div class="site-wrapper">
+
+        <!-- [[! Everything else gets inserted here ]] -->
+        <!-- default -->
+
+<!-- The comment above "< default" means - insert everything in this file into -->
+    <!-- the [body] of the default.hbs template, which contains our header/footer. -->
+
+<!-- Everything inside the #post tags pulls data from the post -->
+<!-- #post -->
+
+<header class="main-header post-head no-cover">
+    <nav class="main-nav  clearfix">
+        
+        
+    </nav>
+</header>
+
+<main class="content" role="main">
+
+    <article class="post tag-machine">
+
+        <header class="post-header">
+            <h1 class="post-title">Develop a plugin for Autodesk Maya</h1>
+            <section class="post-meta">
+            <!-- <a href='/'>Tao He</a> -->
+
+            
+            <time class="post-date" datetime="2013-06-06">06 Jun 2013</time>
+                <!-- [[tags prefix=" on "]] -->
+                
+                on
+                
+                    
+                       <a href='/tag/machine'>Machine</a>
+                    
+                
+                
+            </section>
+        </header>
+
+        <section class="post-content">
+
+            <p>Autodesk Maya is a powerful 3D computer graphics software widely used in the film, television, and gaming industries for creating sophisticated animations, models, and visual effects. One of the reasons for its popularity is its extensibility through plugins. Developing plugins for Maya allows developers to customize the software to better meet their specific needs, automate repetitive tasks, and introduce new features.</p>
+
+<h2 id="getting-started">Getting Started</h2>
+
+<h3 id="understanding-mayas-api">Understanding Maya’s API</h3>
+
+<p>To develop plugins for Maya, you need to understand its API (Application Programming Interface). Maya provides two main APIs for plugin development: the <strong>Maya Python API</strong> and the <strong>Maya C++ API</strong>. The Python API is more accessible for beginners due to its simplicity and the ease of writing and testing code quickly. The C++ API, on the other hand, is more powerful and efficient, suitable for more complex and performance-critical plugins.</p>
+
+<h3 id="setting-up-your-development-environment">Setting Up Your Development Environment</h3>
+
+<ol>
+  <li>
+    <p><strong>Maya Installation</strong>: Ensure you have a valid installation of Autodesk Maya on your machine. Maya offers educational and trial versions if you are getting started.</p>
+  </li>
+  <li>
+    <p><strong>IDE Setup</strong>: Choose an Integrated Development Environment (IDE) that supports Python or C++ development. Popular choices include PyCharm for Python and Visual Studio for C++.</p>
+  </li>
+  <li>
+    <p><strong>Maya Developer Kit</strong>: Download and install the Maya Developer Kit from the Autodesk website. This kit includes sample code, libraries, and documentation essential for plugin development.</p>
+  </li>
+</ol>
+
+<h2 id="writing-your-first-plugin">Writing Your First Plugin</h2>
+
+<h3 id="python-example">Python Example</h3>
+
+<p>Here is a simple example of a Python plugin that creates a new command in Maya:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">maya.OpenMaya</span> <span class="k">as</span> <span class="n">om</span>
+<span class="kn">import</span> <span class="nn">maya.OpenMayaMPx</span> <span class="k">as</span> <span class="n">ompx</span>
+
+<span class="c1"># Command class
+</span><span class="k">class</span> <span class="nc">HelloWorldCmd</span><span class="p">(</span><span class="n">ompx</span><span class="p">.</span><span class="n">MPxCommand</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">ompx</span><span class="p">.</span><span class="n">MPxCommand</span><span class="p">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">doIt</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">args</span><span class="p">):</span>
+        <span class="n">om</span><span class="p">.</span><span class="n">MGlobal</span><span class="p">.</span><span class="n">displayInfo</span><span class="p">(</span><span class="s">"Hello, Maya Plugin!"</span><span class="p">)</span>
+
+<span class="c1"># Creator function
+</span><span class="k">def</span> <span class="nf">cmdCreator</span><span class="p">():</span>
+    <span class="k">return</span> <span class="n">ompx</span><span class="p">.</span><span class="n">asMPxPtr</span><span class="p">(</span><span class="n">HelloWorldCmd</span><span class="p">())</span>
+
+<span class="c1"># Initialize the plugin
+</span><span class="k">def</span> <span class="nf">initializePlugin</span><span class="p">(</span><span class="n">mobject</span><span class="p">):</span>
+    <span class="n">mplugin</span> <span class="o">=</span> <span class="n">ompx</span><span class="p">.</span><span class="n">MFnPlugin</span><span class="p">(</span><span class="n">mobject</span><span class="p">)</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">mplugin</span><span class="p">.</span><span class="n">registerCommand</span><span class="p">(</span><span class="s">"helloWorld"</span><span class="p">,</span> <span class="n">cmdCreator</span><span class="p">)</span>
+    <span class="k">except</span><span class="p">:</span>
+        <span class="n">om</span><span class="p">.</span><span class="n">MGlobal</span><span class="p">.</span><span class="n">displayError</span><span class="p">(</span><span class="s">"Failed to register command: helloWorld"</span><span class="p">)</span>
+
+<span class="c1"># Uninitialize the plugin
+</span><span class="k">def</span> <span class="nf">uninitializePlugin</span><span class="p">(</span><span class="n">mobject</span><span class="p">):</span>
+    <span class="n">mplugin</span> <span class="o">=</span> <span class="n">ompx</span><span class="p">.</span><span class="n">MFnPlugin</span><span class="p">(</span><span class="n">mobject</span><span class="p">)</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">mplugin</span><span class="p">.</span><span class="n">deregisterCommand</span><span class="p">(</span><span class="s">"helloWorld"</span><span class="p">)</span>
+    <span class="k">except</span><span class="p">:</span>
+        <span class="n">om</span><span class="p">.</span><span class="n">MGlobal</span><span class="p">.</span><span class="n">displayError</span><span class="p">(</span><span class="s">"Failed to deregister command: helloWorld"</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>Save this script as <code class="language-plaintext highlighter-rouge">helloWorldCmd.py</code> and load it in Maya using the Script Editor. Once loaded, you can execute the new command by typing <code class="language-plaintext highlighter-rouge">helloWorld</code> in the Maya command line.</p>
+
+<h3 id="c-example">C++ Example</h3>
+
+<p>Here is a simple C++ plugin example:</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include &lt;maya/MFnPlugin.h&gt;
+#include &lt;maya/MGlobal.h&gt;
+#include &lt;maya/MPxCommand.h&gt;
+</span>
+<span class="k">class</span> <span class="nc">HelloWorldCmd</span> <span class="o">:</span> <span class="k">public</span> <span class="n">MPxCommand</span> <span class="p">{</span>
+<span class="nl">public:</span>
+    <span class="n">MStatus</span> <span class="n">doIt</span><span class="p">(</span><span class="k">const</span> <span class="n">MArgList</span><span class="o">&amp;</span><span class="p">)</span> <span class="k">override</span> <span class="p">{</span>
+        <span class="n">MGlobal</span><span class="o">::</span><span class="n">displayInfo</span><span class="p">(</span><span class="s">"Hello, Maya Plugin!"</span><span class="p">);</span>
+        <span class="k">return</span> <span class="n">MS</span><span class="o">::</span><span class="n">kSuccess</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">static</span> <span class="kt">void</span><span class="o">*</span> <span class="n">creator</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="k">new</span> <span class="n">HelloWorldCmd</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+
+<span class="n">MStatus</span> <span class="nf">initializePlugin</span><span class="p">(</span><span class="n">MObject</span> <span class="n">obj</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">MFnPlugin</span> <span class="n">plugin</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="s">"YourName"</span><span class="p">,</span> <span class="s">"1.0"</span><span class="p">,</span> <span class="s">"Any"</span><span class="p">);</span>
+    <span class="k">return</span> <span class="n">plugin</span><span class="p">.</span><span class="n">registerCommand</span><span class="p">(</span><span class="s">"helloWorld"</span><span class="p">,</span> <span class="n">HelloWorldCmd</span><span class="o">::</span><span class="n">creator</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="n">MStatus</span> <span class="nf">uninitializePlugin</span><span class="p">(</span><span class="n">MObject</span> <span class="n">obj</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">MFnPlugin</span> <span class="n">plugin</span><span class="p">(</span><span class="n">obj</span><span class="p">);</span>
+    <span class="k">return</span> <span class="n">plugin</span><span class="p">.</span><span class="n">deregisterCommand</span><span class="p">(</span><span class="s">"helloWorld"</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>Save this as <code class="language-plaintext highlighter-rouge">helloWorldCmd.cpp</code>, compile it using the appropriate build tools, and load the compiled plugin in Maya.</p>
+
+<h2 id="testing-and-debugging">Testing and Debugging</h2>
+
+<p>Testing and debugging are crucial parts of plugin development. Maya provides tools and log files that can help you identify and fix issues. The <code class="language-plaintext highlighter-rouge">MGlobal::displayInfo</code>, <code class="language-plaintext highlighter-rouge">MGlobal::displayWarning</code>, and <code class="language-plaintext highlighter-rouge">MGlobal::displayError</code> functions are useful for outputting messages during plugin execution.</p>
+
+<p>For debugging C++ plugins, you can attach your debugger to the Maya process. This allows you to set breakpoints, inspect variables, and step through your code.</p>
+
+<h2 id="distribution-and-deployment">Distribution and Deployment</h2>
+
+<p>Once your plugin is developed and tested, you can distribute it by providing the compiled binaries (for C++ plugins) or the script files (for Python plugins) along with any necessary documentation. Users can install your plugin by placing the files in Maya’s plugin directory and loading them through the Plugin Manager.</p>
+
+<h2 id="conclusion">Conclusion</h2>
+
+<p>Developing plugins for Maya is a powerful way to extend its functionality and tailor it to specific workflows. Whether you choose to use Python for its ease of use or C++ for its performance, understanding Maya’s API and having a well-configured development environment are key to successful plugin development. With practice and creativity, you can enhance Maya’s capabilities and streamline your 3D graphics projects.</p>
+
+
+        </section>
+
+        <footer class="post-footer">
+
+            <!-- Everything inside the #author tags pulls data from the author -->
+            <!-- #author-->
+            
+
+            <!-- Add Disqus Comments -->
+            
+
+        </footer>
+
+    </article>
+
+</main>
+
+<aside class="read-next">
+
+    <!-- [[! next_post ]] -->
+    
+        <a class="read-next-story no-cover" href="/qt-notes">
+            <section class="post">
+                <h2>Developing Applications with Qt</h2>
+                <p>Qt is a powerful framework for developing cross-platform applications, offering extensive libraries and tools to...</p>
+            </section>
+        </a>
+    
+    <!-- [[! /next_post ]] -->
+    <!-- [[! prev_post ]] -->
+    
+        <a class="read-next-story prev no-cover" href="/thirty-six-chinese-medicine">
+            <section class="post">
+                <h2>珍爱生命，远离马兜铃</h2>
+                <p>马兜铃是一种传统的中药材，广泛用于中医药方中。马兜铃及其相关植物（如广防己、细辛、关木通等）含有马兜铃酸，这是一种有潜在肾毒性和致癌性的化合物。虽然这些中药材在中医中有许多应用，但近年来，由于马兜铃酸的毒性，许多国家和地区对其使用进行了限制。此文列出36种含马兜铃的中草药： 喘息灵胶囊 肺安片 复方蛇胆川贝散 鸡鸣丸 鸡苏丸 京制咳嗽痰喘丸 七十味松石丸 青果止嗽丸 润肺化痰丸(鸡鸣丸) 十三味疏肝胶囊 胃福颗粒 消咳平喘口服液 新碧桃仙片 止嗽化痰胶囊...</p>
+            </section>
+        </a>
+    
+    <!-- [[! /prev_post ]] -->
+</aside>
+
+<!-- /post -->
+
+
+        <footer class="site-footer clearfix">
+          <section class="copyright"><a href="/">与机器，人，神共舞</a> &copy; 2024</section>
+        </footer>
+    </div>
+    <!-- [[! Ghost outputs important scripts and data with this tag ]] -->
+    <script type="text/javascript" src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+    <!-- [[! The main JavaScript file for Casper ]] -->
+    <script type="text/javascript" src="/assets/js/jquery.fitvids.js"></script>
+    <script type="text/javascript" src="/assets/js/index.js"></script>
+
+    <!-- Add Google Analytics  -->
+        <!-- Google Analytics Tracking code -->
+     <script>
+	    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+	    ga('create', 'UA-78960009-1', 'auto');
+	    ga('send', 'pageview');
+
+     </script>
+   
+</body>
+</html>

@@ -17,11 +17,6 @@ chinese: true
 1. **Visual Studio**：一个强大的C++集成开发环境。
 2. **OpenSSL库**：可以从[OpenSSL官网](https://www.openssl.org/)下载并安装适用于Windows的版本。
 
-#### 下载和配置OpenSSL
-
-1. **下载OpenSSL**：从OpenSSL官网或其他可信来源下载适用于Windows的OpenSSL安装包。
-2. **安装OpenSSL**：运行安装包，按照提示完成安装。确保将OpenSSL的bin目录添加到系统的环境变量中，以便可以在命令行中直接使用OpenSSL工具。
-
 #### 编写C++代码
 
 接下来，我们编写C++代码，使用OpenSSL库来连接服务器并获取其证书。以下是一个示例代码，展示了如何使用OpenSSL库自动获取服务器证书。

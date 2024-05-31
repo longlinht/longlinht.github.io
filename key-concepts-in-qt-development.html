@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- [[! Document Settings ]] -->
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+    <!-- [[! Page Meta ]] -->
+    <title>Key concepts in Qt development</title>
+    <meta name="description" content="与机器，人，神共舞 - 编程，读书，思考，旅行，与机器对话，与人交谈，对神发问，探索，体验人生美丽的风景" />
+
+    <meta name="HandheldFriendly" content="True" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link rel="shortcut icon" href="/assets/images/favicon.ico" >
+
+    <!-- [[! Styles'n'Scripts ]] -->
+    <link rel="stylesheet" type="text/css" href="/assets/css/screen.css" />
+    <link rel="stylesheet" type="text/css"
+          href="//fonts.googleapis.com/css?family=Merriweather:300,700,700italic,300italic|Open+Sans:700,400" />
+    <link rel="stylesheet" type="text/css" href="/assets/css/syntax.css" />
+    
+    <!-- [[! Ghost outputs important style and meta data with this tag ]] -->
+        <link rel="canonical" href="/" />
+    <meta name="referrer" content="origin" />
+    <link rel="next" href="/page2/" />
+
+    <meta property="og:site_name" content="与机器，人，神共舞" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="与机器，人，神共舞" />
+    <meta property="og:description" content="编程，读书，思考，旅行，与机器对话，与人交谈，对神发问，探索，体验人生美丽的风景" />
+    <meta property="og:url" content="/" />
+    <meta property="og:image" content="/assets/images/cover1.jpg" />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="与机器，人，神共舞" />
+    <meta name="twitter:description" content="编程，读书，思考，旅行，与机器对话，与人交谈，对神发问，探索，体验人生美丽的风景" />
+    <meta name="twitter:url" content="/" />
+    <meta name="twitter:image:src" content="/assets/images/cover1.jpg" />
+
+    <script type="application/ld+json">
+{
+    "@context": "http://schema.org",
+    "@type": "Website",
+    "publisher": "Tao's Page",
+    "url": "/",
+    "image": "/assets/images/cover1.jpg",
+    "description": "编程，读书，思考，旅行，与机器对话，与人交谈，对神发问，探索，体验人生美丽的风景"
+}
+    </script>
+
+    <meta name="generator" content="Jekyll 3.0.0" />
+    <link rel="alternate" type="application/rss+xml" title="与机器，人，神共舞" href="/rss.xml" />
+
+</head>
+<body class="home-template nav-closed">
+
+    <div class="nav">
+    <h3 class="nav-title">Menu</h3>
+    <a href="#" class="nav-close">
+        <span class="hidden">Close</span>
+    </a>
+    <ul>
+        <li class="nav-home " role="presentation"><a href="/">Home</a></li>
+        <li class="nav-about " role="presentation"><a href="/about.html">About</a></li>
+        <li class="nav-fables " role="presentation"><a href="/tag/machine/">Machine</a></li>
+        <li class="nav-speeches " role="presentation"><a href="/tag/human/">Human</a></li>
+        <li class="nav-fiction " role="presentation"><a href="/tag/god/">God</a></li>
+        <li class="nav-author " role="presentation"><a href="/author/hetao/">Author</a></li>
+    </ul>
+    <a class="subscribe-button icon-feed" href="/vocab.html">Apps</a>
+</div>
+<span class="nav-cover"></span>
+
+
+    <div class="site-wrapper">
+
+        <!-- [[! Everything else gets inserted here ]] -->
+        <!-- default -->
+
+<!-- The comment above "< default" means - insert everything in this file into -->
+    <!-- the [body] of the default.hbs template, which contains our header/footer. -->
+
+<!-- Everything inside the #post tags pulls data from the post -->
+<!-- #post -->
+
+<header class="main-header post-head no-cover">
+    <nav class="main-nav  clearfix">
+        
+        
+    </nav>
+</header>
+
+<main class="content" role="main">
+
+    <article class="post tag-machine">
+
+        <header class="post-header">
+            <h1 class="post-title">Key concepts in Qt development</h1>
+            <section class="post-meta">
+            <!-- <a href='/'>Tao He</a> -->
+
+            
+            <time class="post-date" datetime="2014-09-16">16 Sep 2014</time>
+                <!-- [[tags prefix=" on "]] -->
+                
+                on
+                
+                    
+                       <a href='/tag/machine'>Machine</a>
+                    
+                
+                
+            </section>
+        </header>
+
+        <section class="post-content">
+
+            <p>Qt is a powerful and flexible framework for developing cross-platform applications, especially those with graphical user interfaces (GUIs). Here, we explore some of the fundamental concepts and features that make Qt a popular choice for developers.</p>
+
+<h4 id="qt-inheritance-tree-and-modules">Qt Inheritance Tree and Modules</h4>
+
+<p>Qt’s functionality is organized into various modules. The most important ones include:</p>
+<ul>
+  <li><strong>QtCore</strong>: Provides core non-GUI functionality.</li>
+  <li><strong>QtGui</strong>: Handles GUI elements.</li>
+  <li><strong>QtNetwork</strong>: Facilitates network programming.</li>
+  <li><strong>QtOpenGL</strong>: Integrates OpenGL for 3D graphics.</li>
+  <li><strong>QtSql</strong>: Manages database access.</li>
+  <li><strong>QtSvg</strong>: Supports Scalable Vector Graphics.</li>
+  <li><strong>QtXml</strong>: Handles XML parsing and manipulation.</li>
+</ul>
+
+<p>These modules are the building blocks for creating diverse and robust applications.</p>
+
+<h4 id="widget-size-and-object-management">Widget Size and Object Management</h4>
+
+<p>The <code class="language-plaintext highlighter-rouge">QWidget::sizeHint()</code> function plays a crucial role by returning a widget’s “ideal” size, aiding in layout management. One of Qt’s convenient features is its automatic deletion of child objects when their parent is destroyed, simplifying memory management.</p>
+
+<h4 id="signals-and-slots">Signals and Slots</h4>
+
+<p>A core feature of Qt is its signal and slot mechanism, which allows for communication between objects. Slots in Qt are almost identical to ordinary C++ member functions. They can be virtual, overloaded, public, protected, or private, and can be invoked directly like any other C++ member function. The key difference is that slots can be connected to signals and are automatically called when the signal is emitted.</p>
+
+<ul>
+  <li><strong>Multiple Connections</strong>: One signal can be connected to multiple slots, which are called in an unspecified order when the signal is emitted.</li>
+  <li><strong>Signal-to-Signal Connections</strong>: Signals can be connected to other signals, allowing for a chain of reactions.</li>
+  <li><strong>Connection Removal</strong>: Connections can be removed if they are no longer needed.</li>
+  <li><strong>Parameter Matching</strong>: To successfully connect a signal to a slot, they must have the same parameter types in the same order. If a signal has more parameters than the slot, the additional parameters are ignored.</li>
+</ul>
+
+<p>This mechanism allows for a flexible and decoupled design, where objects can communicate without needing to know about each other’s implementation details.</p>
+
+<h4 id="widget-management-and-events">Widget Management and Events</h4>
+
+<p>In Qt, the only objects that need to be explicitly deleted are those created with <code class="language-plaintext highlighter-rouge">new</code> that have no parent. Qt provides various container widgets, such as:</p>
+<ul>
+  <li><strong>Single-page containers</strong>: <code class="language-plaintext highlighter-rouge">QGroupBox</code>, <code class="language-plaintext highlighter-rouge">QFrame</code></li>
+  <li><strong>Multi-page containers</strong>: <code class="language-plaintext highlighter-rouge">QTabWidget</code>, <code class="language-plaintext highlighter-rouge">QToolBox</code></li>
+</ul>
+
+<p>The <code class="language-plaintext highlighter-rouge">QMainWindow</code> class offers predefined areas for placing widgets, streamlining the creation of main application windows.</p>
+
+<p>Paint events are generated in several situations, such as when a widget is shown for the first time, resized, or revealed after being obscured. These events trigger the <code class="language-plaintext highlighter-rouge">paintEvent()</code> function, which is responsible for rendering the widget.</p>
+
+<h4 id="mouse-cursor-control">Mouse Cursor Control</h4>
+
+<p>Qt provides mechanisms to control the mouse cursor’s shape:</p>
+<ul>
+  <li><strong>QWidget::setCursor()</strong>: Sets the cursor shape for a specific widget.</li>
+  <li><strong>QApplication::setOverrideCursor()</strong>: Sets the cursor shape for the entire application, overriding individual widget settings until <code class="language-plaintext highlighter-rouge">restoreOverrideCursor()</code> is called.</li>
+</ul>
+
+<h4 id="creating-custom-widgets">Creating Custom Widgets</h4>
+
+<p>Custom widgets can be created by subclassing <code class="language-plaintext highlighter-rouge">QWidget</code> and reimplementing event handlers to define custom behavior and appearance. This approach provides complete control over how a widget looks and responds to user interactions.</p>
+
+<h4 id="widget-palette">Widget Palette</h4>
+
+<p>A widget’s palette in Qt consists of three color groups: active, inactive, and disabled. This allows for consistent and dynamic theming across the application.</p>
+
+<h4 id="event-processing-and-filtering">Event Processing and Filtering</h4>
+
+<p>Qt offers multiple levels for event processing and filtering:</p>
+<ol>
+  <li><strong>Reimplement a specific event handler</strong>: Custom handling of specific events.</li>
+  <li><strong>Reimplement <code class="language-plaintext highlighter-rouge">QObject::event()</code></strong>: General event processing.</li>
+  <li><strong>Install an event filter on a single <code class="language-plaintext highlighter-rouge">QObject</code></strong>: Filter events for a specific object.</li>
+  <li><strong>Install an event filter on the <code class="language-plaintext highlighter-rouge">QApplication</code> object</strong>: Global event filtering for the application.</li>
+  <li><strong>Subclass <code class="language-plaintext highlighter-rouge">QApplication</code> and reimplement <code class="language-plaintext highlighter-rouge">notify()</code></strong>: Customize event dispatching at the application level.</li>
+</ol>
+
+<p>These mechanisms provide flexibility in handling events, allowing developers to intercept and process events at various stages.</p>
+
+<h4 id="networking-with-qnetworkaccessmanager">Networking with QNetworkAccessManager</h4>
+
+<p>The <code class="language-plaintext highlighter-rouge">QNetworkAccessManager</code> class handles network operations, such as downloading web content or communicating with external web services. It manages network connections and provides a high-level API for performing network requests, making it easier to integrate internet-based features into applications.</p>
+
+<h3 id="conclusion">Conclusion</h3>
+
+<p>Qt’s rich set of features and intuitive design patterns make it a versatile framework for developing cross-platform applications. Its signal and slot mechanism, comprehensive widget set, and robust event handling capabilities allow developers to create responsive and well-structured applications. Whether building simple GUIs or complex networked applications, Qt provides the tools and flexibility needed to succeed.</p>
+
+
+        </section>
+
+        <footer class="post-footer">
+
+            <!-- Everything inside the #author tags pulls data from the author -->
+            <!-- #author-->
+            
+
+            <!-- Add Disqus Comments -->
+            
+
+        </footer>
+
+    </article>
+
+</main>
+
+<aside class="read-next">
+
+    <!-- [[! next_post ]] -->
+    
+        <a class="read-next-story no-cover" href="/html-layout">
+            <section class="post">
+                <h2>HTMLayout界面技术研究</h2>
+                <p>HTMLayout是一种用于创建和管理用户界面的技术，特别适用于嵌入式系统和轻量级应用程序。它结合了HTML和CSS的优点，使开发者能够设计和实现复杂的用户界面，同时保持代码的简洁和可维护性。本文将探讨HTMLayout的基本原理、主要特点、优势和应用场景。 #### HTMLayout的基本原理 HTMLayout的核心思想是将HTML和CSS用于本地应用程序的用户界面设计。这种方法允许开发者使用Web技术来创建桌面应用程序的界面，而无需依赖于浏览器。HTMLayout引擎解析HTML和CSS，并将其渲染为本地窗口和控件。这种方法不仅简化了界面设计过程，还提高了界面的可定制性和灵活性。 #### HTMLayout的主要特点 1. **轻量级**: HTMLayout引擎相对轻量，不需要像传统浏览器那样消耗大量资源。这使得它非常适合资源有限的嵌入式系统和小型应用程序。 2. **高度可定制**: 开发者可以使用CSS来精确控制界面的外观和行为，类似于Web开发中的做法。这种高可定制性允许开发者创建独特且用户友好的界面。 3. **独立运行**: HTMLayout不依赖于外部浏览器或其他运行时环境。它作为独立的库，可以直接嵌入到应用程序中，提供本地界面渲染功能。...</p>
+            </section>
+        </a>
+    
+    <!-- [[! /next_post ]] -->
+    <!-- [[! prev_post ]] -->
+    
+        <a class="read-next-story prev no-cover" href="/what-happens-when-you-type-in-a-url-in-browser">
+            <section class="post">
+                <h2>What happens when you type in a URL in browser</h2>
+                <p>When you type a URL into your browser’s address bar and press Enter, a series...</p>
+            </section>
+        </a>
+    
+    <!-- [[! /prev_post ]] -->
+</aside>
+
+<!-- /post -->
+
+
+        <footer class="site-footer clearfix">
+          <section class="copyright"><a href="/">与机器，人，神共舞</a> &copy; 2024</section>
+        </footer>
+    </div>
+    <!-- [[! Ghost outputs important scripts and data with this tag ]] -->
+    <script type="text/javascript" src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+    <!-- [[! The main JavaScript file for Casper ]] -->
+    <script type="text/javascript" src="/assets/js/jquery.fitvids.js"></script>
+    <script type="text/javascript" src="/assets/js/index.js"></script>
+
+    <!-- Add Google Analytics  -->
+        <!-- Google Analytics Tracking code -->
+     <script>
+	    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+	    ga('create', 'UA-78960009-1', 'auto');
+	    ga('send', 'pageview');
+
+     </script>
+   
+</body>
+</html>

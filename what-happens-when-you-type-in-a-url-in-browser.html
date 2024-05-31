@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- [[! Document Settings ]] -->
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+    <!-- [[! Page Meta ]] -->
+    <title>What happens when you type in a URL in browser</title>
+    <meta name="description" content="与机器，人，神共舞 - 编程，读书，思考，旅行，与机器对话，与人交谈，对神发问，探索，体验人生美丽的风景" />
+
+    <meta name="HandheldFriendly" content="True" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link rel="shortcut icon" href="/assets/images/favicon.ico" >
+
+    <!-- [[! Styles'n'Scripts ]] -->
+    <link rel="stylesheet" type="text/css" href="/assets/css/screen.css" />
+    <link rel="stylesheet" type="text/css"
+          href="//fonts.googleapis.com/css?family=Merriweather:300,700,700italic,300italic|Open+Sans:700,400" />
+    <link rel="stylesheet" type="text/css" href="/assets/css/syntax.css" />
+    
+    <!-- [[! Ghost outputs important style and meta data with this tag ]] -->
+        <link rel="canonical" href="/" />
+    <meta name="referrer" content="origin" />
+    <link rel="next" href="/page2/" />
+
+    <meta property="og:site_name" content="与机器，人，神共舞" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="与机器，人，神共舞" />
+    <meta property="og:description" content="编程，读书，思考，旅行，与机器对话，与人交谈，对神发问，探索，体验人生美丽的风景" />
+    <meta property="og:url" content="/" />
+    <meta property="og:image" content="/assets/images/cover1.jpg" />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="与机器，人，神共舞" />
+    <meta name="twitter:description" content="编程，读书，思考，旅行，与机器对话，与人交谈，对神发问，探索，体验人生美丽的风景" />
+    <meta name="twitter:url" content="/" />
+    <meta name="twitter:image:src" content="/assets/images/cover1.jpg" />
+
+    <script type="application/ld+json">
+{
+    "@context": "http://schema.org",
+    "@type": "Website",
+    "publisher": "Tao's Page",
+    "url": "/",
+    "image": "/assets/images/cover1.jpg",
+    "description": "编程，读书，思考，旅行，与机器对话，与人交谈，对神发问，探索，体验人生美丽的风景"
+}
+    </script>
+
+    <meta name="generator" content="Jekyll 3.0.0" />
+    <link rel="alternate" type="application/rss+xml" title="与机器，人，神共舞" href="/rss.xml" />
+
+</head>
+<body class="home-template nav-closed">
+
+    <div class="nav">
+    <h3 class="nav-title">Menu</h3>
+    <a href="#" class="nav-close">
+        <span class="hidden">Close</span>
+    </a>
+    <ul>
+        <li class="nav-home " role="presentation"><a href="/">Home</a></li>
+        <li class="nav-about " role="presentation"><a href="/about.html">About</a></li>
+        <li class="nav-fables " role="presentation"><a href="/tag/machine/">Machine</a></li>
+        <li class="nav-speeches " role="presentation"><a href="/tag/human/">Human</a></li>
+        <li class="nav-fiction " role="presentation"><a href="/tag/god/">God</a></li>
+        <li class="nav-author " role="presentation"><a href="/author/hetao/">Author</a></li>
+    </ul>
+    <a class="subscribe-button icon-feed" href="/vocab.html">Apps</a>
+</div>
+<span class="nav-cover"></span>
+
+
+    <div class="site-wrapper">
+
+        <!-- [[! Everything else gets inserted here ]] -->
+        <!-- default -->
+
+<!-- The comment above "< default" means - insert everything in this file into -->
+    <!-- the [body] of the default.hbs template, which contains our header/footer. -->
+
+<!-- Everything inside the #post tags pulls data from the post -->
+<!-- #post -->
+
+<header class="main-header post-head no-cover">
+    <nav class="main-nav  clearfix">
+        
+        
+    </nav>
+</header>
+
+<main class="content" role="main">
+
+    <article class="post tag-machine">
+
+        <header class="post-header">
+            <h1 class="post-title">What happens when you type in a URL in browser</h1>
+            <section class="post-meta">
+            <!-- <a href='/'>Tao He</a> -->
+
+            
+            <time class="post-date" datetime="2014-07-31">31 Jul 2014</time>
+                <!-- [[tags prefix=" on "]] -->
+                
+                on
+                
+                    
+                       <a href='/tag/machine'>Machine</a>
+                    
+                
+                
+            </section>
+        </header>
+
+        <section class="post-content">
+
+            <p>When you type a URL into your browser’s address bar and press Enter, a series of intricate steps are triggered to retrieve and display the desired web page. Here’s an outline of this process, assuming the simplest possible scenario involving an HTTP request, no proxies, and IPv4.</p>
+
+<h4 id="1-cache-check">1. <strong>Cache Check</strong></h4>
+
+<p>First, the browser checks its cache to see if it has a fresh copy of the requested resource. If the resource is found and is still fresh, the browser can skip many subsequent steps and immediately proceed to rendering the page.</p>
+
+<h4 id="2-resolving-the-servers-ip-address">2. <strong>Resolving the Server’s IP Address</strong></h4>
+
+<p>If the resource is not in the cache, the browser needs to determine the IP address of the server hosting the website. It asks the operating system (OS) for this information.</p>
+
+<h4 id="3-dns-lookup">3. <strong>DNS Lookup</strong></h4>
+
+<p>The OS performs a DNS lookup to translate the human-readable domain name (e.g., <code class="language-plaintext highlighter-rouge">www.example.com</code>) into an IP address (e.g., <code class="language-plaintext highlighter-rouge">192.0.2.1</code>). Once the OS obtains the IP address, it returns this information to the browser.</p>
+
+<h4 id="4-establishing-a-tcp-connection">4. <strong>Establishing a TCP Connection</strong></h4>
+
+<p>Armed with the server’s IP address, the browser initiates a TCP (Transmission Control Protocol) connection to the server. This involves a handshake process to ensure a reliable and ordered communication channel. This step is significantly more complex if the connection uses HTTPS, involving additional steps for encryption and security.</p>
+
+<h4 id="5-sending-the-http-request">5. <strong>Sending the HTTP Request</strong></h4>
+
+<p>With the TCP connection established, the browser sends an HTTP request to the server. This request typically includes the method (e.g., GET, POST), the path of the resource, headers, and possibly a body (for POST requests).</p>
+
+<h4 id="6-receiving-the-http-response">6. <strong>Receiving the HTTP Response</strong></h4>
+
+<p>The server processes the HTTP request and sends back a response. The browser receives this response and may close the TCP connection or keep it open for subsequent requests, depending on the connection settings.</p>
+
+<h4 id="7-handling-the-response">7. <strong>Handling the Response</strong></h4>
+
+<p>Upon receiving the response, the browser checks the status code to determine the next steps. For instance, if the response indicates a redirect (status codes 3xx), the browser will follow the new location. If it indicates an authorization request (status code 401), the browser will prompt the user for credentials. Error responses (status codes 4xx and 5xx) are handled differently from successful responses (status codes 2xx).</p>
+
+<h4 id="8-caching-the-response">8. <strong>Caching the Response</strong></h4>
+
+<p>If the response is cacheable, the browser stores it in the cache for future use. This helps in speeding up subsequent requests for the same resource.</p>
+
+<h4 id="9-decoding-the-response">9. <strong>Decoding the Response</strong></h4>
+
+<p>The browser decodes the response if necessary. For example, if the response is compressed (e.g., gzipped), the browser decompresses it to obtain the original content.</p>
+
+<h4 id="10-determining-the-response-type">10. <strong>Determining the Response Type</strong></h4>
+
+<p>Next, the browser determines the type of the response to decide what to do with it. This could be an HTML page, an image, a sound clip, or any other type of resource.</p>
+
+<h4 id="11-rendering-the-page">11. <strong>Rendering the Page</strong></h4>
+
+<p>Finally, the browser renders the response. If the response is an HTML page, it will parse the HTML, apply styles from CSS, and execute JavaScript to construct and display the web page. For other types of resources, such as images or videos, the browser will render them accordingly or offer a download dialog if the type is unrecognized.</p>
+
+<h3 id="additional-processes">Additional Processes</h3>
+
+<p>While the steps above outline the core process, several other activities occur in parallel:</p>
+
+<ul>
+  <li><strong>Processing the Typed-In Address</strong>: As the URL is typed, the browser predicts and autocompletes possible addresses based on history and bookmarks.</li>
+  <li><strong>Adding Page to Browser History</strong>: Once the page loads, the URL is added to the browser’s history for future reference.</li>
+  <li><strong>Displaying Progress</strong>: The browser updates the progress bar or spinner to indicate the loading status.</li>
+  <li><strong>Notifying Plugins and Extensions</strong>: Any active plugins or extensions are notified of the new page load.</li>
+  <li><strong>Rendering While Downloading</strong>: Modern browsers start rendering the page as soon as enough data is received, even before the full page is downloaded.</li>
+  <li><strong>Pipelining and Connection Tracking</strong>: For performance, the browser may send multiple requests in parallel or reuse open connections for multiple resources.</li>
+</ul>
+
+<h3 id="conclusion">Conclusion</h3>
+
+<p>Typing a URL into a browser triggers a sophisticated sequence of actions that involves networking, data processing, and rendering to deliver a seamless browsing experience. Each step, from resolving the server’s IP address to rendering the final page, is optimized for efficiency and speed, ensuring that users can access web resources quickly and reliably. Understanding this process not only highlights the complexity behind a simple action but also emphasizes the technological advancements that make modern web browsing possible.</p>
+
+
+        </section>
+
+        <footer class="post-footer">
+
+            <!-- Everything inside the #author tags pulls data from the author -->
+            <!-- #author-->
+            
+
+            <!-- Add Disqus Comments -->
+            
+
+        </footer>
+
+    </article>
+
+</main>
+
+<aside class="read-next">
+
+    <!-- [[! next_post ]] -->
+    
+        <a class="read-next-story no-cover" href="/key-concepts-in-qt-development">
+            <section class="post">
+                <h2>Key concepts in Qt development</h2>
+                <p>Qt is a powerful and flexible framework for developing cross-platform applications, especially those with graphical...</p>
+            </section>
+        </a>
+    
+    <!-- [[! /next_post ]] -->
+    <!-- [[! prev_post ]] -->
+    
+        <a class="read-next-story prev no-cover" href="/cpp-empty-class-instance-size-not-zero">
+            <section class="post">
+                <h2>C++空类实例大小</h2>
+                <p>在C++中，空类实例的大小不是0，这一点经常让初学者感到困惑。表面上看，一个空类没有任何数据成员，似乎它的实例应该占用0字节的空间。然而，C++标准明确规定，即使是空类，其实例也必须占用非零的内存空间。本文将探讨这一现象背后的原因以及相关的编程实践。 1. 内存对齐和对象识别 首先，C++中的对象实例需要在内存中独立存在，以便在运行时能够被正确识别和操作。即使是空类，其实例也需要一个唯一的地址，这样在需要进行类型识别、指针运算或对象比较时，系统能够准确地识别每个对象。这个地址不能与其他对象重叠，否则会导致内存管理问题和未定义行为。 为了实现这一点，C++编译器通常会为空类分配至少一个字节的内存空间。这样，每个空类实例都有一个唯一的地址，确保了对象在内存中的独立性和可识别性。 2. 遵循标准和一致性 C++标准明确规定，所有对象都必须具有唯一的地址。即使是空类，其实例也不例外。这个要求不仅保证了语言的一致性，还使得编译器实现更为简洁和统一。通过为空类实例分配非零大小的空间，编译器可以避免在处理对象时出现特殊情况，从而简化了编译过程中的对象管理。 3. 基类和派生类的设计考虑 在面向对象编程中，继承是一个重要的概念。即使一个类是空的，它也可能被设计为基类。考虑以下代码： class Empty {}; class...</p>
+            </section>
+        </a>
+    
+    <!-- [[! /prev_post ]] -->
+</aside>
+
+<!-- /post -->
+
+
+        <footer class="site-footer clearfix">
+          <section class="copyright"><a href="/">与机器，人，神共舞</a> &copy; 2024</section>
+        </footer>
+    </div>
+    <!-- [[! Ghost outputs important scripts and data with this tag ]] -->
+    <script type="text/javascript" src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+    <!-- [[! The main JavaScript file for Casper ]] -->
+    <script type="text/javascript" src="/assets/js/jquery.fitvids.js"></script>
+    <script type="text/javascript" src="/assets/js/index.js"></script>
+
+    <!-- Add Google Analytics  -->
+        <!-- Google Analytics Tracking code -->
+     <script>
+	    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+	    ga('create', 'UA-78960009-1', 'auto');
+	    ga('send', 'pageview');
+
+     </script>
+   
+</body>
+</html>

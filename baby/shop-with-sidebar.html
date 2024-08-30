@@ -575,18 +575,36 @@
               { label: "$40- $50", min: 40, max: 50 }
           ];
 
+          async function fetchProducts(page = 1, filters = {}) {
+            const queryParams = new URLSearchParams({
+                page,
+                limit: productsPerPage,
+                ...filters
+            });
+            try {
+                const response = await fetch(`https://babystore.hetaoof.workers.dev/?${queryParams}`);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                const data = await response.json();
+                return data;
+            } catch (error) {
+                console.error("Could not fetch products:", error);
+                return { products: [], totalPages: 0 };
+            }
+          }
+
           let currentPage = 1;
           const productsPerPage = 6;
-          let filteredProducts = [...products];
+          let currentFilters = {};
+          let filteredProducts =  fetchProducts();
 
-          function renderProducts() {
-              const startIndex = (currentPage - 1) * productsPerPage;
-              const endIndex = startIndex + productsPerPage;
+          async function renderProducts() {
+              const { products, totalPages } = await fetchProducts(currentPage, currentFilters);
               const productGrid = document.getElementById('productGrid');
-              console.log("id=" + productGrid);
               productGrid.innerHTML = '';
 
-              filteredProducts.slice(startIndex, endIndex).forEach(product => {
+              products.forEach(product => {
                   const productCard = document.createElement('div');
                   productCard.className = 'col-lg-4 col-md-6 col-sm-6 mb-5';
                   productCard.innerHTML = `

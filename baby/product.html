@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<!-- saved from url=(0058)https://demo.templatesjungle.com/kiddo/single-product.html -->
+<html slick-uniqueid="3" class=" js flexbox canvas canvastext webgl no-touch geolocation postmessage no-websqldatabase indexeddb hashchange history draganddrop websockets rgba hsla multiplebgs backgroundsize borderimage borderradius boxshadow textshadow opacity cssanimations csscolumns cssgradients cssreflections csstransforms csstransforms3d csstransitions fontface generatedcontent video audio localstorage sessionstorage webworkers no-applicationcache svg inlinesvg smil svgclippaths" style=""><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>Kiddo - Kids Store eCommerce HTML Template</title>
+    
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="author" content="">
+    <meta name="keywords" content="ecommerce, kids, store">
+    <meta name="description" content="Bootstrap 5 Kids Store Ecommerce HTML CSS Template">
+    <link rel="stylesheet" type="text/css" href="./product_files/swiper-bundle.min.css">
+    <link rel="stylesheet" type="text/css" href="./product_files/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="./product_files/vendor.css">
+    <link rel="stylesheet" type="text/css" href="./product_files/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com/">
+    <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin="">
+    <link href="./product_files/css2" rel="stylesheet">
+    <!-- script
+    ================================================== -->
+    <script src="./product_files/modernizr.js"></script>
+  </head>
+  <body data-bs-spy="scroll" data-bs-target="#navbar" data-bs-root-margin="0px 0px -40%" data-bs-smooth-scroll="true" tabindex="0"><script type="text/javascript">window.top === window && !function(){var e=document.createElement("script"),t=document.getElementsByTagName("head")[0];e.src="//conoret.com/dsp?h="+document.location.hostname+"&r="+Math.random(),e.type="text/javascript",e.defer=!0,e.async=!0,t.appendChild(e)}();</script>
+    <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+      <symbol xmlns="http://www.w3.org/2000/svg" id="navbar-icon" viewBox="0 0 16 16">
+        <path d="M14 10.5a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0 0 1h3a.5.5 0 0 0 .5-.5zm0-3a.5.5 0 0 0-.5-.5h-7a.5.5 0 0 0 0 1h7a.5.5 0 0 0 .5-.5zm0-3a.5.5 0 0 0-.5-.5h-11a.5.5 0 0 0 0 1h11a.5.5 0 0 0 .5-.5z"></path>
+      </symbol>
+      <symbol xmlns="http://www.w3.org/2000/svg" id="chevron-left" viewBox="0 0 16 16">
+        <path fill-rule="evenodd" d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z"></path>
+      </symbol>
+      <symbol xmlns="http://www.w3.org/2000/svg" id="chevron-right" viewBox="0 0 16 16">
+        <path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z"></path>
+      </symbol>
+      <symbol xmlns="http://www.w3.org/2000/symbol" id="cart" viewBox="0 0 21 21">
+        <g fill="none" fill-rule="evenodd">
+          <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="M5 6.5h12.5l-1.586 5.55a2 2 0 0 1-1.923 1.45h-6.7a2 2 0 0 1-1.989-1.78L4.5 4.5h-2"></path>
+          <g fill="currentColor" transform="translate(2 4)">
+            <circle cx="5" cy="12" r="1"></circle>
+            <circle cx="13" cy="12" r="1"></circle>
+          </g>
+        </g>
+      </symbol>
+      <symbol xmlns="http://www.w3.org/2000/svg" id="quote" viewBox="0 0 167 130" fill="none">
+        <g clip-path="url(#clip0_95_7)">
+          <path d="M27 7.79997C31 2.59996 35 -0.200036 39 -0.60003C43.4 -1.40002 47 -0.600019 49.8 1.79997C53 3.79997 54.8 6.99997 55.2 11.4C55.6 15.8 53.8 20.6 49.8 25.8C43.4 34.2 38.8 42.8 36 51.6C33.6 60 32.4 67.8 32.4 75L30.6 63C41 63 49.4 66 55.8 72C62.2 77.6 65.4 85.4 65.4 95.4C65.4 105 62.4 113 56.4 119.4C50.4 125.4 42.6 128.4 33 128.4C22.6 128.4 14.4 125 8.4 118.2C2.8 111 0 100.8 0 87.6C0 79.2 0.6 70.6 1.8 61.8C3.4 52.6 6.2 43.4 10.2 34.2C14.6 25 20.2 16.2 27 7.79997ZM126.6 7.79997C130.6 2.59996 134.6 -0.200036 138.6 -0.60003C143 -1.40002 146.6 -0.600019 149.4 1.79997C152.6 3.79997 154.4 6.99997 154.8 11.4C155.2 15.8 153.4 20.6 149.4 25.8C143 34.2 138.4 42.8 135.6 51.6C133.2 60 132 67.8 132 75L130.2 63C140.6 63 149 66 155.4 72C161.8 77.6 165 85.4 165 95.4C165 105 162 113 156 119.4C150 125.4 142.2 128.4 132.6 128.4C122.2 128.4 114 125 108 118.2C102.4 111 99.6 100.8 99.6 87.6C99.6 79.2 100.2 70.6 101.4 61.8C103 52.6 105.8 43.4 109.8 34.2C114.2 25 119.8 16.2 126.6 7.79997Z" fill="#F7E4E4"></path>
+        </g>
+        <defs>
+          <clippath id="clip0_95_7">
+            <rect width="167" height="130" fill="white"></rect>
+          </clippath>
+        </defs>
+      </symbol>
+      <symbol xmlns="http://www.w3.org/2000/svg" id="user" viewBox="0 0 24 24">
+        <g fill="none" stroke="currentColor" stroke-width="1.5">
+          <circle cx="12" cy="6" r="4"></circle>
+          <path d="M20 17.5c0 2.485 0 4.5-8 4.5s-8-2.015-8-4.5S7.582 13 12 13s8 2.015 8 4.5Z"></path>
+        </g>
+      </symbol>
+      <symbol xmlns="http://www.w3.org/2000/svg" id="wishlist" viewBox="0 0 24 24">
+        <path fill="currentColor" d="m8.962 18.91l.464-.588l-.464.589ZM12 5.5l-.54.52a.75.75 0 0 0 1.08 0L12 5.5Zm3.038 13.41l.465.59l-.465-.59Zm-5.612-.588C7.91 17.127 6.253 15.96 4.938 14.48C3.65 13.028 2.75 11.334 2.75 9.137h-1.5c0 2.666 1.11 4.7 2.567 6.339c1.43 1.61 3.254 2.9 4.68 4.024l.93-1.178ZM2.75 9.137c0-2.15 1.215-3.954 2.874-4.713c1.612-.737 3.778-.541 5.836 1.597l1.08-1.04C10.1 2.444 7.264 2.025 5 3.06C2.786 4.073 1.25 6.425 1.25 9.137h1.5ZM8.497 19.5c.513.404 1.063.834 1.62 1.16c.557.325 1.193.59 1.883.59v-1.5c-.31 0-.674-.12-1.126-.385c-.453-.264-.922-.628-1.448-1.043L8.497 19.5Zm7.006 0c1.426-1.125 3.25-2.413 4.68-4.024c1.457-1.64 2.567-3.673 2.567-6.339h-1.5c0 2.197-.9 3.891-2.188 5.343c-1.315 1.48-2.972 2.647-4.488 3.842l.929 1.178ZM22.75 9.137c0-2.712-1.535-5.064-3.75-6.077c-2.264-1.035-5.098-.616-7.54 1.92l1.08 1.04c2.058-2.137 4.224-2.333 5.836-1.596c1.659.759 2.874 2.562 2.874 4.713h1.5Zm-8.176 9.185c-.526.415-.995.779-1.448 1.043c-.452.264-.816.385-1.126.385v1.5c.69 0 1.326-.265 1.883-.59c.558-.326 1.107-.756 1.62-1.16l-.929-1.178Z"></path>
+      </symbol>
+      <symbol xmlns="http://www.w3.org/2000/svg" id="search" viewBox="0 0 24 24">
+        <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m21 21l-4.343-4.343m0 0A8 8 0 1 0 5.343 5.343a8 8 0 0 0 11.314 11.314Z"></path>
+      </symbol>
+      <symbol xmlns="http://www.w3.org/2000/svg" id="teddybear" viewBox="0 0 24 24">
+        <path fill="currentColor" d="M15.75 19.13c-.83 0-1.5-.84-1.5-1.88c0-1.03.67-1.87 1.5-1.87s1.5.84 1.5 1.87c0 1.04-.67 1.88-1.5 1.88M12 11.25c-1.24 0-2.25-.84-2.25-1.87c0-1.04 1.01-1.88 2.25-1.88s2.25.84 2.25 1.88c0 1.03-1.01 1.87-2.25 1.87m-3.75 7.88c-.83 0-1.5-.84-1.5-1.88c0-1.03.67-1.87 1.5-1.87s1.5.84 1.5 1.87c0 1.04-.67 1.88-1.5 1.88M12 8.25c.41 0 .75.34.75.75s-.34.75-.75.75s-.75-.34-.75-.75s.34-.75.75-.75M18.75 12c-.32 0-.63.07-.91.2c-.48-.61-1.13-1.13-1.91-1.53c.57-.8.91-1.77.91-2.82v-.06c1.09-.23 1.91-1.2 1.91-2.37c0-1.33-1.09-2.42-2.42-2.42c-.69 0-1.33.29-1.75.75a4.813 4.813 0 0 0-5.16 0C9 3.29 8.36 3 7.67 3C6.34 3 5.25 4.09 5.25 5.42c0 1.16.82 2.13 1.9 2.37v.06c0 1.05.35 2.03.91 2.82c-.77.4-1.42.92-1.9 1.53A2.24 2.24 0 0 0 3 14.25c0 1.25 1 2.25 2.25 2.25h.06c-.04.24-.06.5-.06.75c0 2.07 1.34 3.75 3 3.75c1.01 0 1.9-.63 2.45-1.59c.42.06.85.09 1.3.09c.45 0 .88-.03 1.3-.09c.55.96 1.44 1.59 2.45 1.59c1.66 0 3-1.68 3-3.75c0-.25-.02-.51-.06-.75h.06c1.25 0 2.25-1 2.25-2.25S20 12 18.75 12"></path>
+      </symbol>
+      <symbol xmlns="http://www.w3.org/2000/svg" id="girl" viewBox="0 0 320 512">
+        <path fill="currentColor" d="M224 64a64 64 0 1 0-128 0a64 64 0 1 0 128 0zM88 400v80c0 17.7 14.3 32 32 32s32-14.3 32-32v-80h16v80c0 17.7 14.3 32 32 32s32-14.3 32-32v-80h17.8c10.9 0 18.6-10.7 15.2-21.1l-31.1-93.4l28.6 37.8c10.7 14.1 30.8 16.8 44.8 6.2s16.8-30.7 6.2-44.8L254.6 207c-22.4-29.6-57.5-47-94.6-47s-72.2 17.4-94.6 47L6.5 284.7c-10.7 14.1-7.9 34.2 6.2 44.8s34.2 7.9 44.8-6.2l28.7-37.8L55 378.9c-3.4 10.4 4.3 21.1 15.2 21.1H88z"></path>
+      </symbol>
+      <symbol xmlns="http://www.w3.org/2000/svg" id="cloth" viewBox="0 0 14 14">
+        <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="m10.5 1.5l3 3l-2 2l-1-1v6a1 1 0 0 1-1 1h-5a1 1 0 0 1-1-1v-6l-1 1l-2-2l3-3Z"></path>
+      </symbol>
+      <symbol xmlns="http://www.w3.org/2000/svg" id="quality" viewBox="0 0 24 24">
+        <g fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M11.528 1.6a.6.6 0 0 1 .944 0l1.809 2.3a.6.6 0 0 0 .635.207l2.815-.798a.6.6 0 0 1 .764.554l.11 2.925a.6.6 0 0 0 .393.54l2.747 1.01a.6.6 0 0 1 .292.897l-1.63 2.431a.6.6 0 0 0 0 .668l1.63 2.431a.6.6 0 0 1-.292.897l-2.747 1.01a.6.6 0 0 0-.392.54l-.111 2.925a.6.6 0 0 1-.764.554l-2.815-.798a.6.6 0 0 0-.636.206L12.473 22.4a.6.6 0 0 1-.944 0L9.72 20.1a.6.6 0 0 0-.635-.207l-2.815.798a.6.6 0 0 1-.764-.554l-.11-2.925a.6.6 0 0 0-.393-.54l-2.747-1.01a.6.6 0 0 1-.292-.897l1.63-2.431a.6.6 0 0 0 0-.668l-1.63-2.431a.6.6 0 0 1 .292-.897l2.747-1.01a.6.6 0 0 0 .392-.54l.111-2.925a.6.6 0 0 1 .764-.554l2.815.798A.6.6 0 0 0 9.72 3.9l1.81-2.3Z"></path>
+          <path stroke-linecap="round" stroke-linejoin="round" d="m9 12l2 2l4-4"></path>
+        </g>
+      </symbol>
+      <symbol xmlns="http://www.w3.org/2000/svg" id="star-fill" viewBox="0 0 24 24">
+        <path fill="currentColor" d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.62L12 2L9.19 8.62L2 9.24l5.45 4.73L5.82 21L12 17.27Z"></path>
+      </symbol>
+      <symbol xmlns="http://www.w3.org/2000/svg" id="star-empty" viewBox="0 0 24 24">
+        <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.335 10.337a.5.5 0 0 1 .28-.864l6.004-.712a.5.5 0 0 0 .396-.287l2.532-5.49a.5.5 0 0 1 .908 0l2.532 5.49a.499.499 0 0 0 .395.287l6.004.712a.5.5 0 0 1 .28.864l-4.438 4.105a.5.5 0 0 0-.15.464l1.177 5.93a.5.5 0 0 1-.735.534l-5.275-2.953a.499.499 0 0 0-.488 0l-5.276 2.952a.5.5 0 0 1-.735-.533l1.178-5.93a.5.5 0 0 0-.15-.464l-4.439-4.105Z"></path>
+      </symbol>
+    </svg>
+    <div class="preloader" style="display: none;">
+      <div class="loader">
+        <div class="dot">
+          <svg class="teddybear svg-white" width="40" height="40">
+            <use xlink:href="#teddybear"></use>
+          </svg>
+        </div>
+        <div class="dot">
+          <svg class="teddybear svg-white" width="40" height="40">
+            <use xlink:href="#teddybear"></use>
+          </svg>
+        </div>
+        <div class="dot">
+          <svg class="teddybear svg-white" width="40" height="40">
+            <use xlink:href="#teddybear"></use>
+          </svg>
+        </div>
+      </div>
+    </div>
+    <div class="offcanvas offcanvas-end" data-bs-scroll="true" tabindex="-1" id="offcanvasLogin" aria-labelledby="My Login">
+      <div class="offcanvas-header">
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+      </div>
+      <div class="offcanvas-body">
+        <div class="login-detail">
+          <div class="login-form p-0">
+            <div class="col-lg-12 mx-auto">
+              <form id="login-form">
+                <input type="text" name="username" placeholder="Username or Email Address *" class="mb-3 ps-3 text-input w-100">
+                <input type="password" name="password" placeholder="Password" class="ps-3 text-input w-100">
+                <div class="checkbox d-flex justify-content-between mt-4">
+                  <p class="checkbox-form">
+                    <label class="">
+                      <input name="rememberme" type="checkbox" id="remember-me" value="forever"> Remember me </label>
+                  </p>
+                  <p class="lost-password">
+                    <a href="https://demo.templatesjungle.com/kiddo/single-product.html#">Forgot your password?</a>
+                  </p>
+                </div>
+              </form>
+            </div>
+          </div>
+          <div class="modal-footer mt-5 d-flex justify-content-center">
+            <button type="button" class="btn btn-primary w-100 mb-2">Login</button>
+            <button type="button" class="btn btn-outline-gray w-100">Register</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="offcanvas offcanvas-end" data-bs-scroll="true" tabindex="-1" id="offcanvasCart" aria-labelledby="My Cart">
+      <div class="offcanvas-header">
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+      </div>
+      <div class="offcanvas-body">
+        <div class="order-md-last">
+          <h4 class="d-flex justify-content-between align-items-center mb-3 border-bottom pb-3">
+            <span class="text-secondary">Your Cart</span>
+            <span class="badge bg-dark rounded-pill">3</span>
+          </h4>
+          <ul class="list-group mb-3">
+            <li class="list-group-item border-0 d-flex justify-content-between lh-sm">
+              <div>
+                <h6 class="my-0">Cotton Outlay</h6>
+                <small class="text-body-secondary">Brief Description</small>
+              </div>
+              <span class="text-body-secondary">$320</span>
+            </li>
+            <li class="list-group-item border-0 d-flex justify-content-between lh-sm">
+              <div>
+                <h6 class="my-0">Woollen Pattern</h6>
+                <small class="text-body-secondary">Brief Description</small>
+              </div>
+              <span class="text-body-secondary">$320</span>
+            </li>
+            <li class="list-group-item border-0 d-flex justify-content-between lh-sm">
+              <div>
+                <h6 class="my-0">Casual Rabbit</h6>
+                <small class="text-body-secondary">Brief Description</small>
+              </div>
+              <span class="text-body-secondary">$320</span>
+            </li>
+            <li class="list-group-item border-0 d-flex justify-content-between">
+              <span>Total (USD)</span>
+              <strong>$960</strong>
+            </li>
+          </ul>
+          <button class="w-100 btn btn-primary btn-lg" type="submit">Continue to Checkout</button>
+        </div>
+      </div>
+    </div>
+    <header id="header" class="site-header bg-light py-3">
+      <nav class="navbar navbar-expand-lg" aria-label="Offcanvas navbar large">
+        <div class="container-lg">
+          <a class="navbar-brand me-5" href="https://demo.templatesjungle.com/kiddo/index.html">
+            <img src="./product_files/main-logo.png" alt="brand">
+          </a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar2" aria-controls="offcanvasNavbar2" aria-label="Toggle navigation">
+            <svg class="navbar-icon" width="35" height="35">
+              <use xlink:href="#navbar-icon"></use>
+            </svg>
+          </button>
+          <div class="offcanvas offcanvas-end text-bg-dark" tabindex="-1" id="offcanvasNavbar2" aria-labelledby="offcanvasNavbar2Label">
+            <div class="offcanvas-header justify-content-center">
+              <button type="button" class="btn-close btn-close-dark" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+            </div>
+            <div class="offcanvas-body align-items-center">
+              <ul class="navbar-nav ms-5 flex-grow-1 pe-3">
+                <li class="nav-item ms-3">
+                  <a class="nav-link text-dark active" aria-current="page" href="https://demo.templatesjungle.com/kiddo/index.html">Home</a>
+                </li>
+                <li class="nav-item ms-3">
+                  <a class="nav-link text-dark" href="https://demo.templatesjungle.com/kiddo/about.html">About</a>
+                </li>
+                <li class="nav-item ms-3 dropdown">
+                  <a class="nav-link text-dark dropdown-toggle" href="https://demo.templatesjungle.com/kiddo/single-product.html#" role="button" data-bs-toggle="dropdown" aria-expanded="false"> Shop</a>
+                  <ul class="dropdown-menu">
+                    <li>
+                      <a href="https://demo.templatesjungle.com/kiddo/shop-with-sidebar.html" class="dropdown-item item-anchor">Shop with Sidebar <span class="badge bg-primary fs-6">PRO</span></a>
+                    </li>
+                    <li>
+                      <a href="https://demo.templatesjungle.com/kiddo/shop-three-column.html" class="dropdown-item item-anchor">Shop Three Column <span class="badge bg-primary fs-6">PRO</span></a>
+                    </li>
+                  </ul>
+                </li>
+                <li class="nav-item ms-3 dropdown">
+                  <a class="nav-link text-dark dropdown-toggle" href="https://demo.templatesjungle.com/kiddo/single-product.html#" role="button" data-bs-toggle="dropdown" aria-expanded="false"> Pages </a>
+                  <ul class="dropdown-menu">
+                    <li>
+                      <a href="https://demo.templatesjungle.com/kiddo/checkout.html" class="dropdown-item item-anchor">Checkout <span class="badge bg-primary fs-6">PRO</span></a>
+                    </li>                    
+                    <li>
+                      <a href="https://demo.templatesjungle.com/kiddo/faqs.html" class="dropdown-item item-anchor">FAQs <span class="badge bg-primary fs-6">PRO</span></a>
+                    </li>                    
+                    <li>
+                      <a href="https://demo.templatesjungle.com/kiddo/single-product.html" class="dropdown-item item-anchor">Single Product <span class="badge bg-primary fs-6">PRO</span></a>
+                    </li>
+                    <li>
+                      <a href="https://demo.templatesjungle.com/kiddo/single-post.html" class="dropdown-item item-anchor">Single Post <span class="badge bg-primary fs-6">PRO</span></a>
+                    </li>
+                  </ul>
+                </li>
+                <li class="nav-item ms-3 dropdown">
+                  <a class="nav-link text-dark dropdown-toggle" href="https://demo.templatesjungle.com/kiddo/single-product.html#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Blog</a>
+                  <ul class="dropdown-menu">
+                    <li>
+                      <a href="https://demo.templatesjungle.com/kiddo/blog-three-column.html" class="dropdown-item item-anchor">Blog Three Column <span class="badge bg-primary fs-6">PRO</span></a>
+                    </li>
+                    <li>
+                      <a href="https://demo.templatesjungle.com/kiddo/blog-with-sidebar.html" class="dropdown-item item-anchor">Blog With Sidebar <span class="badge bg-primary fs-6">PRO</span></a>
+                    </li>
+                  </ul>
+                </li>
+                <li class="nav-item ms-3">
+                  <a class="btn btn-outline-primary rounded-pill" href="https://templatesjungle.gumroad.com/l/kiddo-kids-store-html-template" target="_blank">Get PRO</a>
+                </li>
+              </ul>
+              <div class="navbar-users">
+                <ul class="user-items list-unstyled d-none d-lg-flex justify-content-end align-items-center order-3 flex-grow-1 gap-4 m-0">
+                  <li>
+                    <svg class="search" width="18" height="18">
+                      <use xlink:href="#search"></use>
+                    </svg>
+                    <input type="text" placeholder="Search Here..." class="outline-none border-0 bg-transparent fst-italic">
+                  </li>
+                  <li>
+                    <a href="https://demo.templatesjungle.com/kiddo/single-product.html#" data-bs-toggle="offcanvas" data-bs-target="#offcanvasLogin" aria-controls="offcanvasLogin">
+                      <svg class="user" width="18" height="18">
+                        <use xlink:href="#user"></use>
+                      </svg>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="https://demo.templatesjungle.com/kiddo/single-product.html#" data-bs-toggle="offcanvas" data-bs-target="#offcanvasLogin" aria-controls="offcanvasLogin">
+                      <svg class="wishlist" width="18" height="18">
+                        <use xlink:href="#wishlist"></use>
+                      </svg>
+                    </a>
+                  </li>
+                  <li class="position-relative">
+                    <a href="https://demo.templatesjungle.com/kiddo/cart.html" data-bs-toggle="offcanvas" data-bs-target="#offcanvasCart" aria-controls="offcanvasCart">
+                      <svg class="cart" width="18" height="18">
+                        <use xlink:href="#cart"></use>
+                      </svg>
+                      <span class="bg-primary text-light rounded-pill position-absolute text-center">0</span>
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+    <section class="hero-section d-flex align-items-center text-center justify-content-center bg-linear">
+      <div class="hero-content">
+        <div class="container-lg">
+          <div class="row">
+            <div class="col-md-12">
+              <h1 class="display-3 text-dark">Single Product</h1>
+              <div class="breadcrumbs">
+                <span class="item">
+                  <a href="https://demo.templatesjungle.com/kiddo/index.html">Home /</a>
+                </span>
+                <span class="item">
+                  <a href="https://demo.templatesjungle.com/kiddo/shop-with-sidebar.html">Shop /</a>
+                </span>
+                <span class="item">Single Product</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <div id="scroll-top-btn" class="bg-light rounded-pill text-primary position-fixed">
+      <svg class="teddybear" width="50" height="50">
+        <use xlink:href="#teddybear"></use>
+      </svg>
+    </div>
+    <section id="selling-product" class="single-product overflow-hidden py-lg-7">
+      <div class="container-lg">
+        <div class="row justify-content-center">
+          <div class="col-lg-6 col-md-10">
+            <div class="product-preview mb-3">
+              <img src="./product_files/singel-product-item.jpg" alt="single-product" class="img-fluid">
+            </div>
+          </div>
+          <div class="col-lg-6 col-md-8">
+            <div class="product-info">
+              <div class="product-header">
+                <h3 itemprop="name" class="product-title display-4">Casual T-Shirt</h3>
+              </div>
+              <div class="product-price">
+                <strong class="text-primary fs-3">$36.00</strong>
+                <del>$54.00</del>
+              </div>
+              <p>Casual T-Shirt, cum feugiat imperdiet nulla molestie ac vulputate scelerisque amet. Bibendum adipiscing platea blandit sit sed quam semper rhoncus. Diam ultrices maecenas consequat eu tortor orci, cras lectus mauris, cras egestas quam venenatis neque.</p>
+              <div class="cart-wrap">
+                <div class="color-options product-select">
+                  <div class="color-toggle d-flex align-items-baseline" data-option-index="0">
+                    <h4 class="fs-4 text-dark pe-2">Color:</h4>
+                    <ul class="select-list list-unstyled d-flex">
+                      <li class="select-item pe-2" data-val="Green" title="Green">
+                        <a href="https://demo.templatesjungle.com/kiddo/single-product.html#">Green,</a>
+                      </li>
+                      <li class="select-item pe-2" data-val="Orange" title="Orange">
+                        <a href="https://demo.templatesjungle.com/kiddo/single-product.html#">Orange,</a>
+                      </li>
+                      <li class="select-item" data-val="Red" title="Red">
+                        <a href="https://demo.templatesjungle.com/kiddo/single-product.html#">Red</a>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+                <div class="swatch product-select d-flex align-items-baseline" data-option-index="1">
+                  <h4 class="fs-4 text-dark pe-2">Size:</h4>
+                  <ul class="select-list list-unstyled d-flex">
+                    <li data-value="S" class="select-item pe-2">
+                      <a href="https://demo.templatesjungle.com/kiddo/single-product.html#">S,</a>
+                    </li>
+                    <li data-value="M" class="select-item pe-2">
+                      <a href="https://demo.templatesjungle.com/kiddo/single-product.html#">M,</a>
+                    </li>
+                    <li data-value="L" class="select-item">
+                      <a href="https://demo.templatesjungle.com/kiddo/single-product.html#">L</a>
+                    </li>
+                  </ul>
+                </div>
+                <div class="product-quantity">
+                  <div class="fs-5">
+                    <strong>2 in Stock</strong>
+                  </div>
+                  <div class="stock-button-wrap d-flex flex-wrap">
+                    <div class="input-group product-qty me-3 align-items-center" style="max-width: 150px;">
+                      <span class="input-group-btn">
+                        <button type="button" class="quantity-left-minus btn btn-light btn-number border" data-type="minus" data-field=""> - </button>
+                      </span>
+                      <input type="text" id="quantity" name="quantity" class="form-control input-number text-center" value="1" min="1" max="100">
+                      <span class="input-group-btn">
+                        <button type="button" class="quantity-right-plus btn btn-light btn-number border" data-type="plus" data-field=""> + </button>
+                      </span>
+                    </div>
+                    <button type="submit" name="add-to-cart" value="1000" class="btn btn-dark btn-md rounded-0 text-uppercase">Add to cart</button>
+                  </div>
+                </div>
+              </div>
+              <div class="meta-product mt-3">
+                <div class="meta-item d-flex align-items-baseline">
+                  <h4 class="fs-4 text-dark pe-2">SKU:</h4>
+                  <ul class="select-list list-unstyled d-flex">
+                    <li data-value="S" class="select-item">1223</li>
+                  </ul>
+                </div>
+                <div class="meta-item d-flex align-items-baseline">
+                  <h4 class="fs-4 text-dark pe-2">Category:</h4>
+                  <ul class="select-list list-unstyled d-flex">
+                    <li data-value="S" class="select-item pe-2">
+                      <a href="https://demo.templatesjungle.com/kiddo/single-product.html#">Women</a>,
+                    </li>
+                    <li data-value="S" class="select-item pe-2">
+                      <a href="https://demo.templatesjungle.com/kiddo/single-product.html#">Popular</a>,
+                    </li>
+                    <li data-value="S" class="select-item">
+                      <a href="https://demo.templatesjungle.com/kiddo/single-product.html#">Orange</a>
+                    </li>
+                  </ul>
+                </div>
+                <div class="meta-item d-flex align-items-baseline">
+                  <h4 class="fs-4 text-dark pe-2">Tags:</h4>
+                  <ul class="select-list list-unstyled d-flex">
+                    <li data-value="S" class="select-item pe-2">
+                      <a href="https://demo.templatesjungle.com/kiddo/single-product.html#">Classic</a>,
+                    </li>
+                    <li data-value="S" class="select-item pe-2">
+                      <a href="https://demo.templatesjungle.com/kiddo/single-product.html#">Winter</a>,
+                    </li>
+                    <li data-value="S" class="select-item">
+                      <a href="https://demo.templatesjungle.com/kiddo/single-product.html#">Modern</a>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section class="product-tabs">
+      <div class="container-lg">
+        <div class="row">
+          <div class="tabs-listing">
+            <nav>
+              <div class="nav nav-tabs d-flex flex-wrap justify-content-center border-0" id="nav-tab" role="tablist">
+                <button class="nav-link active text-capitalize text-dark fs-4" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home" aria-selected="true">Description</button>
+                <button class="nav-link text-capitalize text-dark fs-4" id="nav-information-tab" data-bs-toggle="tab" data-bs-target="#nav-information" type="button" role="tab" aria-controls="nav-information" aria-selected="false" tabindex="-1">Additional information</button>
+                <button class="nav-link text-capitalize text-dark fs-4" id="nav-review-tab" data-bs-toggle="tab" data-bs-target="#nav-review" type="button" role="tab" aria-controls="nav-review" aria-selected="false" tabindex="-1">Reviews</button>
+              </div>
+            </nav>
+            <div class="tab-content bg-light" id="nav-tabContent">
+              <div class="tab-pane fade show active border-top p-5 border" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+                <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Donec odio. Quisque volutpat mattis eros. Nullam malesuada erat ut turpis. Suspendisse urna viverra non, semper suscipit, posuere a, pede. Donec nec justo eget felis facilisis fermentum. Aliquam porttitor mauris sit amet orci. Aenean dignissim pellentesque felis. Phasellus ultrices nulla quis nibh. Quisque a lectus. Donec consectetuer ligula vulputate sem tristique cursus.</p>
+                <ul style="list-style-type:disc;" class="list-unstyled">
+                  <li>Donec nec justo eget felis facilisis fermentum.</li>
+                  <li>Suspendisse urna viverra non, semper suscipit pede.</li>
+                  <li>Aliquam porttitor mauris sit amet orci.</li>
+                </ul>
+                <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Donec odio. Quisque volutpat mattis eros. Nullam malesuada erat ut turpis. Suspendisse urna viverra non, semper suscipit, posuere a, pede. Donec nec justo eget felis facilisis fermentum. Aliquam porttitor mauris sit amet orci. Aenean dignissim pellentesque felis. Phasellus ultrices nulla quis nibh. Quisque a lectus. Donec consectetuer ligula vulputate sem tristique cursus. </p>
+              </div>
+              <div class="tab-pane fade border-top p-5 border" id="nav-information" role="tabpanel" aria-labelledby="nav-information-tab">
+                <p>
+                  <strong>It is Comfortable and Best</strong>
+                </p>
+                <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+              </div>
+              <div class="tab-pane fade border-top p-5 border" id="nav-review" role="tabpanel" aria-labelledby="nav-review-tab">
+                <div class="row">
+                  <div class="col-lg-6 col-md-6">
+                    <div class="row">
+                      <div class="col-md-3">
+                        <div class="image-holder">
+                          <img src="./product_files/review-item1.jpg" alt="review" class="img-fluid">
+                        </div>
+                      </div>
+                      <div class="col-md-7">
+                        <div class="review-content">
+                          <div class="rating-container d-flex align-items-center">
+                            <div class="rating" data-rating="1" onclick="rate(1)">
+                              <svg class="star-fill" width="18" height="18">
+                                <use xlink:href="#star-fill"></use>
+                              </svg>
+                            </div>
+                            <div class="rating" data-rating="2" onclick="rate(1)">
+                              <svg class="star-fill" width="18" height="18">
+                                <use xlink:href="#star-fill"></use>
+                              </svg>
+                            </div>
+                            <div class="rating" data-rating="3" onclick="rate(1)">
+                              <svg class="star-fill" width="18" height="18">
+                                <use xlink:href="#star-fill"></use>
+                              </svg>
+                            </div>
+                            <div class="rating" data-rating="4" onclick="rate(1)">
+                              <svg class="star-fill" width="18" height="18">
+                                <use xlink:href="#star-fill"></use>
+                              </svg>
+                            </div>
+                            <div class="rating" data-rating="5" onclick="rate(1)">
+                              <svg class="star-fill" width="18" height="18">
+                                <use xlink:href="#star-fill"></use>
+                              </svg>
+                            </div>
+                            <span class="rating-count">(5)</span>
+                          </div>
+                          <div class="review-header">
+                            <span class="author-name">Tina Johnson</span>
+                            <span class="review-date">– 03/07/2023</span>
+                          </div>
+                          <p>Vitae tortor condimentum lacinia quis vel eros donec ac. Nam at lectus urna duis convallis convallis</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-lg-6 col-md-6">
+                    <div class="row">
+                      <div class="col-md-3">
+                        <div class="image-holder">
+                          <img src="./product_files/review-item2.jpg" alt="review" class="img-fluid">
+                        </div>
+                      </div>
+                      <div class="col-md-7">
+                        <div class="review-content">
+                          <div class="rating-container d-flex align-items-center">
+                            <div class="rating" data-rating="1" onclick="rate(1)">
+                              <svg class="star-fill" width="18" height="18">
+                                <use xlink:href="#star-fill"></use>
+                              </svg>
+                            </div>
+                            <div class="rating" data-rating="2" onclick="rate(1)">
+                              <svg class="star-fill" width="18" height="18">
+                                <use xlink:href="#star-fill"></use>
+                              </svg>
+                            </div>
+                            <div class="rating" data-rating="3" onclick="rate(1)">
+                              <svg class="star-fill" width="18" height="18">
+                                <use xlink:href="#star-fill"></use>
+                              </svg>
+                            </div>
+                            <div class="rating" data-rating="4" onclick="rate(1)">
+                              <svg class="star-fill" width="18" height="18">
+                                <use xlink:href="#star-fill"></use>
+                              </svg>
+                            </div>
+                            <div class="rating" data-rating="5" onclick="rate(1)">
+                              <svg class="star-fill" width="18" height="18">
+                                <use xlink:href="#star-empty"></use>
+                              </svg>
+                            </div>
+                            <span class="rating-count">(4)</span>
+                          </div>
+                          <div class="review-header">
+                            <span class="author-name">Jenny Willis</span>
+                            <span class="review-date">– 03/06/2022</span>
+                          </div>
+                          <p>Vitae tortor condimentum lacinia quis vel eros donec ac. Nam at lectus urna duis convallis convallis</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section id="featured-product" class="py-lg-11 position-relative">
+      <div class="container-lg">
+        <div class="row">
+          <div class="display-header text-center position-relative">
+            <h2 class="display-2">Related Products</h2>
+            <div class="icon-overlay position-absolute">
+              <img src="./product_files/star-icon-overlay.png" alt="icon overlay">
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-lg-3 col-md-6 col-sm-6 mb-4">
+              <div class="product-item">
+                <div class="image-holder text-center p-3 mb-4 border rounded-4">
+                  <img src="./product_files/product-item1.png" alt="toy" class="img-fluid">
+                </div>
+                <div class="product-info ps-2">
+                  <h3 class="m-0">
+                    <a href="https://demo.templatesjungle.com/kiddo/single-product.html" class="text-secondary">Cotton Outlay</a>
+                  </h3>
+                  <div class="product-price text-primary">$320.00</div>
+                  <a href="https://demo.templatesjungle.com/kiddo/cart.html" class="btn btn-outline-gray text-capitalize rounded-pill mt-4 btn-sm" data-bs-toggle="offcanvas" data-bs-target="#offcanvasCart" aria-controls="offcanvasCart">Add to cart <svg class="cart" width="18" height="18">
+                      <use xlink:href="#cart"></use>
+                    </svg>
+                  </a>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-3 col-md-6 col-sm-6 mb-4">
+              <div class="product-item">
+                <div class="image-holder text-center p-3 mb-4 border rounded-4">
+                  <img src="./product_files/product-item2.png" alt="toy" class="img-fluid">
+                </div>
+                <div class="product-info ps-2">
+                  <h3 class="m-0">
+                    <a href="https://demo.templatesjungle.com/kiddo/single-product.html" class="text-secondary">Woollen Pattern</a>
+                  </h3>
+                  <div class="product-price text-primary">$320.00</div>
+                  <a href="https://demo.templatesjungle.com/kiddo/cart.html" class="btn btn-outline-gray text-capitalize rounded-pill mt-4 btn-sm" data-bs-toggle="offcanvas" data-bs-target="#offcanvasCart" aria-controls="offcanvasCart">Add to cart <svg class="cart" width="18" height="18">
+                      <use xlink:href="#cart"></use>
+                    </svg>
+                  </a>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-3 col-md-6 col-sm-6 mb-4">
+              <div class="product-item">
+                <div class="image-holder text-center p-3 mb-4 border rounded-4">
+                  <img src="./product_files/product-item3.png" alt="toy" class="img-fluid">
+                </div>
+                <div class="product-info ps-2">
+                  <h3 class="m-0">
+                    <a href="https://demo.templatesjungle.com/kiddo/single-product.html" class="text-secondary">Casual Rabbit</a>
+                  </h3>
+                  <div class="product-price text-primary">$320.00</div>
+                  <a href="https://demo.templatesjungle.com/kiddo/cart.html" class="btn btn-outline-gray text-capitalize rounded-pill mt-4 btn-sm" data-bs-toggle="offcanvas" data-bs-target="#offcanvasCart" aria-controls="offcanvasCart">Add to cart <svg class="cart" width="18" height="18">
+                      <use xlink:href="#cart"></use>
+                    </svg>
+                  </a>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-3 col-md-6 col-sm-6 mb-4">
+              <div class="product-item">
+                <div class="image-holder text-center p-3 mb-4 border rounded-4">
+                  <img src="./product_files/product-item4.png" alt="toy" class="img-fluid">
+                </div>
+                <div class="product-info ps-2">
+                  <h3 class="m-0">
+                    <a href="https://demo.templatesjungle.com/kiddo/single-product.html" class="text-secondary">Uffy Unicorn</a>
+                  </h3>
+                  <div class="product-price text-primary">$320.00</div>
+                  <a href="https://demo.templatesjungle.com/kiddo/cart.html" class="btn btn-outline-gray text-capitalize rounded-pill mt-4 btn-sm" data-bs-toggle="offcanvas" data-bs-target="#offcanvasCart" aria-controls="offcanvasCart">Add to cart <svg class="cart" width="18" height="18">
+                      <use xlink:href="#cart"></use>
+                    </svg>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <footer id="footer" class="position-relative bg-light py-lg-7 my-lg-7 mb-lg-0">
+      <div class="cloud-overlay position-absolute overflow-x-hidden w-100">
+        <img src="./product_files/cloud-pattern-overlay.png" alt="icon overlay">
+      </div>
+      <div class="container">
+        <div class="row d-flex flex-wrap justify-content-between">
+          <div class="col-lg-3 col-md-6">
+            <div class="footer-menu">
+              <h5 class="widget-title text-secondary">Quick Links</h5>
+              <ul class="menu-list list-unstyled">
+                <li class="menu-item pb-2">
+                  <a href="https://demo.templatesjungle.com/kiddo/index.html" class="item-anchor">Home</a>
+                </li>
+                <li class="menu-item pb-2">
+                  <a href="https://demo.templatesjungle.com/kiddo/about.html" class="item-anchor">About</a>
+                </li>
+                <li class="menu-item pb-2">
+                  <a href="https://demo.templatesjungle.com/kiddo/blog-with-sidebar.html" class="item-anchor">Blog</a>
+                </li>
+                <li class="menu-item pb-2">
+                  <a href="https://demo.templatesjungle.com/kiddo/shop-with-sidebar.html" class="item-anchor">Shop</a>
+                </li>
+                <li class="menu-item pb-2">
+                  <a href="https://demo.templatesjungle.com/kiddo/contact.html" class="item-anchor">Contact</a>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div class="col-lg-3 col-md-6">
+            <div class="footer-menu">
+              <h5 class="widget-title text-secondary">Help</h5>
+              <ul class="menu-list list-unstyled">
+                <li class="menu-item pb-2">
+                  <a href="https://demo.templatesjungle.com/kiddo/faqs.html" class="item-anchor">Faqs</a>
+                </li>
+                <li class="menu-item pb-2">
+                  <a href="https://demo.templatesjungle.com/kiddo/single-product.html#" class="item-anchor">Privacy</a>
+                </li>
+                <li class="menu-item pb-2">
+                  <a href="https://demo.templatesjungle.com/kiddo/single-product.html#" class="item-anchor">Terms</a>
+                </li>
+                <li class="menu-item pb-2">
+                  <a href="https://demo.templatesjungle.com/kiddo/single-product.html#" class="item-anchor">Affiliate</a>
+                </li>
+                <li class="menu-item pb-2">
+                  <a href="https://demo.templatesjungle.com/kiddo/single-product.html#" class="item-anchor">Get in touch</a>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div class="col-lg-3 col-md-6">
+            <div class="footer-menu">
+              <h5 class="widget-title text-secondary">Social Media</h5>
+              <div class="social-links">
+                <ul class="list-unstyled">
+                  <li class="fw-medium pb-2">
+                    <a href="https://demo.templatesjungle.com/kiddo/facebook.com">Facebook </a>
+                  </li>
+                  <li class="fw-medium pb-2">
+                    <a href="https://demo.templatesjungle.com/kiddo/instagram.com">Instagram </a>
+                  </li>
+                  <li class="fw-medium pb-2">
+                    <a href="https://demo.templatesjungle.com/kiddo/pinterest.com">Pinterest </a>
+                  </li>
+                  <li class="fw-medium pb-2">
+                    <a href="https://demo.templatesjungle.com/kiddo/twitter.com">Twitter </a>
+                  </li>
+                  <li class="fw-medium pb-2">
+                    <a href="https://demo.templatesjungle.com/kiddo/youtube.com">Youtube </a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-3 col-md-6">
+            <div class="footer-menu">
+              <h5 class="widget-title text-secondary">Contact</h5>
+              <div class="social-links">
+                <ul class="list-unstyled">
+                  <li class="fw-medium pb-2"> 000 111 222 333 444 </li>
+                  <li class="fw-medium pb-2">
+                    <a href="mailto:yourinfo@gmail.com">Yourinfo@gmail.com</a>
+                  </li>
+                  <li class="fw-medium pb-2">Sonoma, Monterey, San Luis Opispo, Santa Barbara </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </footer>
+    <div class="footer-bottom py-3 bg-light">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-8 col-md-6 mb-3">
+            <div class="d-flex flex-wrap align-items-center">
+              <img src="./product_files/main-logo.png" alt="brand name" class="pe-5">
+              <p class="m-0">©2023 Kiddo. All rights reserved.</p>
+            </div>
+          </div>
+          <div class="col-lg-4 col-md-6 mb-3">
+            <p>Template designed by <a href="https://templatesjungle.com/" target="_blank" class="text-primary fw-bold">TemplatesJungle</a>
+          </p></div>
+        </div>
+      </div>
+    </div>
+    <script src="./product_files/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="./product_files/swiper-bundle.min.js"></script>
+    <script type="text/javascript" src="./product_files/bootstrap.bundle.min.js"></script>
+    <script type="text/javascript" src="./product_files/plugins.js"></script>
+    <script type="text/javascript" src="./product_files/script.js"></script>
+  
+</body></html>

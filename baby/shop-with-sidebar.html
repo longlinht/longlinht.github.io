@@ -551,19 +551,6 @@
 
     <script>
           // Sample product data
-          const products = [
-              { id: 1, name: "Uffy Unicorn", price: 320, image: "/api/placeholder/200/200", color: "White", size: "M" },
-              { id: 2, name: "Woolen Outer", price: 320, image: "/api/placeholder/200/200", color: "Pink", size: "L" },
-              { id: 3, name: "Sweatshirt", price: 320, image: "/api/placeholder/200/200", color: "Gray", size: "M" },
-              { id: 4, name: "Sweatshirt", price: 320, image: "/api/placeholder/200/200", color: "Gray", size: "M" },
-              { id: 5, name: "Sweatshirt", price: 320, image: "/api/placeholder/200/200", color: "Gray", size: "M" },
-              { id: 6, name: "Sweatshirt", price: 320, image: "/api/placeholder/200/200", color: "Gray", size: "M" },
-              { id: 7, name: "Sweatshirt", price: 320, image: "/api/placeholder/200/200", color: "Gray", size: "M" },
-              { id: 8, name: "Sweatshirt", price: 320, image: "/api/placeholder/200/200", color: "Gray", size: "M" },
-              { id: 9, name: "Sweatshirt", price: 320, image: "/api/placeholder/200/200", color: "Gray", size: "M" },
-              { id: 10, name: "Sweatshirt", price: 320, image: "/api/placeholder/200/200", color: "Gray", size: "M" },
-              // Add more product data here...
-          ];
 
           const colors = ["Red", "Orange", "Green", "Blue", "White", "Pink", "Gray"];
           const sizes = ["XS", "S", "M", "L", "XL"];
@@ -587,6 +574,7 @@
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
                 const data = await response.json();
+                console.log("----data:", data);
                 return data;
             } catch (error) {
                 console.error("Could not fetch products:", error);
@@ -597,12 +585,13 @@
           let currentPage = 1;
           const productsPerPage = 6;
           let currentFilters = {};
-          let filteredProducts =  fetchProducts();
 
           async function renderProducts() {
-              const { products, totalPages } = await fetchProducts(currentPage, currentFilters);
               const productGrid = document.getElementById('productGrid');
+              products = await fetchProducts(currentPage, currentFilters);
               productGrid.innerHTML = '';
+
+              console.log("----products:", products);
 
               products.forEach(product => {
                   const productCard = document.createElement('div');
@@ -610,13 +599,13 @@
                   productCard.innerHTML = `
                       <div class="product-item">
                       <div class="image-holder text-center p-3 mb-4 border rounded-4">
-                        <img src="./shop-with-sidebar_files/product-item1.png" alt="${product.name} class="img-fluid">
+                        <img src="./shop-with-sidebar_files/product-item1.png" alt="${product.productName} class="img-fluid">
                       </div>
                       <div class="product-info ps-2">
                         <h3 class="m-0">
-                          <a href="https://demo.templatesjungle.com/kiddo/single-product.html" class="text-secondary">${product.name}</a>
+                          <a href="https://demo.templatesjungle.com/kiddo/single-product.html" class="text-secondary">${product.productName}</a>
                         </h3>
-                        <div class="product-price text-primary">$${product.price.toFixed(2)}</div>
+                        <div class="product-price text-primary">$${product.single_price}</div>
                         <a href="https://demo.templatesjungle.com/kiddo/cart.html" class="btn btn-outline-gray text-capitalize rounded-pill mt-4 btn-sm" data-bs-toggle="offcanvas" data-bs-target="#offcanvasCart" aria-controls="offcanvasCart">Add to cart
                           <svg class="cart" width="18" height="18">
                             <use xlink:href="#cart"></use>
@@ -628,7 +617,7 @@
                   productGrid.appendChild(productCard);
               });
 
-              renderPagination();
+              //renderPagination();
           }
 
           function renderPagination() {

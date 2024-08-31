@@ -17,6 +17,53 @@
     <link rel="preconnect" href="https://fonts.googleapis.com/">
     <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin="">
     <link href="./shop-with-sidebar_files/css2" rel="stylesheet">
+
+    <style>
+        /* Basic styles for pagination container */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            list-style-type: none;
+            padding: 0;
+        }
+
+        /* Styles for pagination buttons */
+        .pagination li {
+            margin: 0 5px;
+        }
+
+        .pagination button {
+            padding: 10px 15px;
+            border: 1px solid #ddd;
+            background-color: #f8f9fa;
+            color: #007bff;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        /* Hover effect for buttons */
+        .pagination button:hover {
+            background-color: #e9ecef;
+        }
+
+        /* Active button styles */
+        .pagination .active button {
+            background-color: #007bff;
+            color: white;
+            border-color: #007bff;
+            cursor: default;
+        }
+
+        /* Disabled button styles */
+        .pagination .disabled button {
+            background-color: #f8f9fa;
+            color: #6c757d;
+            border-color: #ddd;
+            cursor: not-allowed;
+        }
+      </style>
+
     <!-- script
     ================================================== -->
     <script src="./shop-with-sidebar_files/modernizr.js"></script>
@@ -318,12 +365,8 @@
               </div>
             </div>
             <nav class="navigation paging-navigation text-center mb-5" role="navigation">
-              <div class="pagination loop-pagination d-flex justify-content-center align-items-center">
+              <div class="pagination loop-pagination d-flex justify-content-center align-items-center" id="pagination">
                   <span aria-current="page" class="page-numbers me-3 text-center current">1</span>
-                  <a class="page-numbers me-3 text-center" href="https://demo.templatesjungle.com/kiddo/shop-with-sidebar.html#">2</a>
-                  <a class="page-numbers me-3 text-center" href="https://demo.templatesjungle.com/kiddo/shop-with-sidebar.html#">3</a>
-                  <a class="page-numbers me-3 text-center" href="https://demo.templatesjungle.com/kiddo/shop-with-sidebar.html#">4</a>
-                  <a class="page-numbers me-3 text-center" href="https://demo.templatesjungle.com/kiddo/shop-with-sidebar.html#">5</a>
               </div>
             </nav>
           </main>
@@ -334,99 +377,16 @@
                 <h5 class="widget-title">Categories</h5>
                 <ul class="product-categories sidebar-list list-unstyled">
                   <li class="cat-item py-1">
-                    <a href="https://demo.templatesjungle.com/collections/categories">All</a>
+                    <a href="javascript:applyFilters('all')">All</a>
                   </li>
                   <li class="cat-item py-1">
-                    <a href="https://demo.templatesjungle.com/kiddo/shop-with-sidebar.html">Popular</a>
+                    <a href="javascript:applyFilters('baby')">For Baby</a>
                   </li>
                   <li class="cat-item py-1">
-                    <a href="https://demo.templatesjungle.com/kiddo/shop-with-sidebar.html">Accessories</a>
+                    <a href="javascript:applyFilters('mum')">For Mum</a>
                   </li>
                   <li class="cat-item py-1">
-                    <a href="https://demo.templatesjungle.com/kiddo/shop-with-sidebar.html">New arrivals</a>
-                  </li>
-                  <li class="cat-item py-1">
-                    <a href="https://demo.templatesjungle.com/kiddo/shop-with-sidebar.html">Trending</a>
-                  </li>
-                </ul>
-              </div>
-              <div class="widget-product-tags">
-                <h5 class="widget-title">Tags</h5>
-                <ul class="product-tags sidebar-list list-unstyled">
-                  <li class="tags-item py-1">
-                    <a href="https://demo.templatesjungle.com/kiddo/shop-with-sidebar.html">Classic</a>
-                  </li>
-                  <li class="tags-item py-1">
-                    <a href="https://demo.templatesjungle.com/kiddo/shop-with-sidebar.html">Tees</a>
-                  </li>
-                  <li class="tags-item py-1">
-                    <a href="https://demo.templatesjungle.com/kiddo/shop-with-sidebar.html">Leather coat</a>
-                  </li>
-                  <li class="tags-item py-1">
-                    <a href="https://demo.templatesjungle.com/kiddo/shop-with-sidebar.html">Winter</a>
-                  </li>
-                  <li class="tags-item py-1">
-                    <a href="https://demo.templatesjungle.com/kiddo/shop-with-sidebar.html">Summer</a>
-                  </li>
-                  <li class="tags-item py-1">
-                    <a href="https://demo.templatesjungle.com/kiddo/shop-with-sidebar.html">Modern</a>
-                  </li>
-                </ul>
-              </div>
-              <div class="widget-color-filter">
-                <h5 class="widget-title">Filter By Color</h5>
-                <ul class="product-tags sidebar-list list-unstyled">
-                  <li class="tags-item py-1">
-                    <a href="https://demo.templatesjungle.com/kiddo/shop-with-sidebar.html">Red</a>
-                  </li>
-                  <li class="tags-item py-1">
-                    <a href="https://demo.templatesjungle.com/kiddo/shop-with-sidebar.html">Orange</a>
-                  </li>
-                  <li class="tags-item py-1">
-                    <a href="https://demo.templatesjungle.com/kiddo/shop-with-sidebar.html">Green</a>
-                  </li>
-                  <li class="tags-item py-1">
-                    <a href="https://demo.templatesjungle.com/kiddo/shop-with-sidebar.html">Blue</a>
-                  </li>
-                </ul>
-              </div>
-              <div class="widget-size-filter">
-                <h5 class="widget-title">Filter By Size</h5>
-                <ul class="product-tags sidebar-list list-unstyled">
-                  <li class="tags-item py-1">
-                    <a href="https://demo.templatesjungle.com/kiddo/shop-with-sidebar.html">XL</a>
-                  </li>
-                  <li class="tags-item py-1">
-                    <a href="https://demo.templatesjungle.com/kiddo/shop-with-sidebar.html">L</a>
-                  </li>
-                  <li class="tags-item py-1">
-                    <a href="https://demo.templatesjungle.com/kiddo/shop-with-sidebar.html">M</a>
-                  </li>
-                  <li class="tags-item py-1">
-                    <a href="https://demo.templatesjungle.com/kiddo/shop-with-sidebar.html">S</a>
-                  </li>
-                  <li class="tags-item py-1">
-                    <a href="https://demo.templatesjungle.com/kiddo/shop-with-sidebar.html">XS</a>
-                  </li>
-                </ul>
-              </div>
-              <div class="widget-price-filter">
-                <h5 class="widget-title">Filter By Price</h5>
-                <ul class="product-tags sidebar-list list-unstyled">
-                  <li class="tags-item py-1">
-                    <a href="https://demo.templatesjungle.com/kiddo/shop-with-sidebar.html">Less than $10</a>
-                  </li>
-                  <li class="tags-item py-1">
-                    <a href="https://demo.templatesjungle.com/kiddo/shop-with-sidebar.html">$10- $20</a>
-                  </li>
-                  <li class="tags-item py-1">
-                    <a href="https://demo.templatesjungle.com/kiddo/shop-with-sidebar.html">$20- $30</a>
-                  </li>
-                  <li class="tags-item py-1">
-                    <a href="https://demo.templatesjungle.com/kiddo/shop-with-sidebar.html">$30- $40</a>
-                  </li>
-                  <li class="tags-item py-1">
-                    <a href="https://demo.templatesjungle.com/kiddo/shop-with-sidebar.html">$40- $50</a>
+                    <a href="javascript:applyFilters('family')">For Family</a>
                   </li>
                 </ul>
               </div>
@@ -585,15 +545,27 @@
           let currentPage = 1;
           const productsPerPage = 6;
           let currentFilters = {};
+          let products = [];
+          let filteredProducts = [...products];
+          let loaded = false;
 
           async function renderProducts() {
+              if(!loaded) {
+                  products = await fetchProducts(currentPage, currentFilters);
+                  loaded = true;
+                  filteredProducts = [...products];
+              }
+
+              const startIndex = (currentPage - 1) * productsPerPage;
+              const endIndex = startIndex + productsPerPage;
+
               const productGrid = document.getElementById('productGrid');
-              products = await fetchProducts(currentPage, currentFilters);
               productGrid.innerHTML = '';
 
               console.log("----products:", products);
+              console.log("----filteredProducts:", filteredProducts);
 
-              products.forEach(product => {
+              filteredProducts.slice(startIndex, endIndex).forEach(product => {
                   const productCard = document.createElement('div');
                   productCard.className = 'col-lg-4 col-md-6 col-sm-6 mb-5';
                   productCard.innerHTML = `
@@ -617,7 +589,7 @@
                   productGrid.appendChild(productCard);
               });
 
-              //renderPagination();
+              renderPagination();
           }
 
           function renderPagination() {
@@ -627,6 +599,7 @@
 
               for (let i = 1; i <= totalPages; i++) {
                   const button = document.createElement('button');
+                  button.className = 'page-numbers me-3 text-center'
                   button.textContent = i;
                   button.classList.toggle('active', i === currentPage);
                   button.addEventListener('click', () => {
@@ -682,16 +655,13 @@
               });
           }
 
-          function applyFilters() {
-              const selectedColors = Array.from(document.querySelectorAll('input[name="color"]:checked')).map(input => input.value);
-              const selectedSizes = Array.from(document.querySelectorAll('input[name="size"]:checked')).map(input => input.value);
-              const selectedPriceRanges = Array.from(document.querySelectorAll('input[name="price"]:checked')).map(input => priceRanges[parseInt(input.value)]);
+          function applyFilters(filter="", tag="") {
+
+              console.log("----filter: ", filter);
 
               filteredProducts = products.filter(product => {
-                  const colorMatch = selectedColors.length === 0 || selectedColors.includes(product.color);
-                  const sizeMatch = selectedSizes.length === 0 || selectedSizes.includes(product.size);
-                  const priceMatch = selectedPriceRanges.length === 0 || selectedPriceRanges.some(range => product.price >= range.min && product.price <= range.max);
-                  return colorMatch && sizeMatch && priceMatch;
+                  const cateMatch = product.categories.includes(filter);
+                  return cateMatch;
               });
 
               currentPage = 1;

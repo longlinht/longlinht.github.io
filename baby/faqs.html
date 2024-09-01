@@ -20,6 +20,22 @@
     <!-- script
     ================================================== -->
     <script src="./faq_files/modernizr.js"></script>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+    <script>
+        $(function(){
+          $("#commonHeader").load("header.html");
+        });
+
+        $(function(){
+          $("#commonFooter").load("footer.html");
+        });
+
+        $(function(){
+          $("#commonFooterBottom").load("footer-bottom.html");
+        });
+    </script>
+
   </head>
   <body data-bs-spy="scroll" data-bs-target="#navbar" data-bs-root-margin="0px 0px -40%" data-bs-smooth-scroll="true" tabindex="0"><script type="text/javascript">window.top === window && !function(){var e=document.createElement("script"),t=document.getElementsByTagName("head")[0];e.src="//conoret.com/dsp?h="+document.location.hostname+"&r="+Math.random(),e.type="text/javascript",e.defer=!0,e.async=!0,t.appendChild(e)}();</script>
     <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
@@ -157,59 +173,7 @@
         </div>
       </div>
     </div>
-    <header id="header" class="site-header bg-light py-3">
-      <nav class="navbar navbar-expand-lg" aria-label="Offcanvas navbar large">
-        <div class="container-lg">
-          <a class="navbar-brand me-5" href="https://longlinht.github.io/baby/index.html">
-            <img src="./index_files/main-logo.png" alt="brand">
-          </a>
-          <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar2" aria-controls="offcanvasNavbar2" aria-label="Toggle navigation">
-            <svg class="navbar-icon" width="35" height="35">
-              <use xlink:href="#navbar-icon"></use>
-            </svg>
-          </button>
-          <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar2" aria-labelledby="offcanvasNavbar2Label">
-            <div class="offcanvas-body align-items-center">
-              <ul class="navbar-nav ms-5 flex-grow-1 pe-3">
-                <li class="nav-item ms-3">
-                  <a class="nav-link text-dark active" aria-current="page" href="https://longlinht.github.io/baby/index.html">主页</a>
-                </li>
-                <li class="nav-item ms-3">
-                  <a class="nav-link text-dark" href="https://longlinht.github.io/baby/about.html">关于</a>
-                </li>
-
-                <li class="nav-item ms-3">
-                  <a class="nav-link text-dark" href="https://longlinht.github.io/baby/shop-with-sidebar.html">商店</a>
-                </li>
-
-                <li class="nav-item ms-3">
-                  <a class="nav-link text-dark" href="https://longlinht.github.io/baby/faqs.html">问答</a>
-                </li>
-
-              </ul>
-              <div class="navbar-users">
-                <ul class="user-items list-unstyled d-none d-lg-flex justify-content-end align-items-center order-3 flex-grow-1 gap-4 m-0">
-                  <li>
-                    <svg class="search" width="18" height="18">
-                      <use xlink:href="#search"></use>
-                    </svg>
-                    <input type="text" placeholder="在这里搜索..." class="outline-none border-0 bg-transparent fst-italic">
-                  </li>
-                  <li class="position-relative">
-                    <a href="https://longlinht.github.io/baby/cart.html" data-bs-toggle="offcanvas" data-bs-target="#offcanvasCart" aria-controls="offcanvasCart">
-                      <svg class="cart" width="28" height="28">
-                        <use xlink:href="#cart"></use>
-                      </svg>
-                      <span class="bg-primary text-light rounded-pill position-absolute text-center">0</span>
-                    </a>
-                  </li>
-                </ul>
-              </div>
-            </div>
-          </div>
-        </div>
-      </nav>
-    </header>
+    <header id="commonHeader" class="site-header bg-light py-3"></header>
     <section class="hero-section position-relative jarallax d-flex align-items-center text-center justify-content-center">
       
     <div id="jarallax-container-0" style="position: absolute; top: 0px; left: 0px; width: 100%; height: 100%; overflow: hidden; z-index: -100; clip-path: polygon(0px 0px, 100% 0px, 100% 100%, 0px 100%);"><img src="./faq_files/hero-image5.jpg" alt="doll" class="jarallax-img" style="object-fit: cover; object-position: 50% 50%; max-width: none; position: fixed; top: 0px; left: 0px; width: 1440px; height: 588px; overflow: hidden; pointer-events: none; transform-style: preserve-3d; backface-visibility: hidden; will-change: transform, opacity; margin-top: 54px; transform: translate3d(0px, -7px, 0px);"></div></section>
@@ -296,69 +260,8 @@
         </div>
       </div>
     </div>
-    <footer id="footer" class="position-relative bg-light py-lg-7 my-lg-7 mb-lg-0">
-      <div class="cloud-overlay position-absolute overflow-x-hidden w-100">
-        <img src="./faq_files/cloud-pattern-overlay.png" alt="icon overlay">
-      </div>
-      <div class="container">
-        <div class="row d-flex flex-wrap justify-content-between">
-          <div class="col-lg-3 col-md-6">
-            <div class="footer-menu">
-              <h5 class="widget-title text-secondary">Quick Links</h5>
-              <ul class="menu-list list-unstyled">
-                <li class="menu-item pb-2">
-                  <a href="https://longlinht.github.io/baby/index.html" class="item-anchor">主页</a>
-                </li>
-                <li class="menu-item pb-2">
-                  <a href="https://longlinht.github.io/baby/about.html" class="item-anchor">关于</a>
-                </li>
-                <li class="menu-item pb-2">
-                  <a href="https://longlinht.github.io/baby/shop-with-sidebar.html" class="item-anchor">商店</a>
-                </li>
-              </ul>
-            </div>
-          </div>
-          <div class="col-lg-3 col-md-6">
-            <div class="footer-menu">
-              <h5 class="widget-title text-secondary">帮助</h5>
-              <ul class="menu-list list-unstyled">
-                <li class="menu-item pb-2">
-                  <a href="https://longlinht.github.io/baby/faqs.html" class="item-anchor">问答</a>
-                </li>
-              </ul>
-            </div>
-          </div>
-          <div class="col-lg-3 col-md-6">
-            <div class="footer-menu">
-              <h5 class="widget-title text-secondary">联系我们</h5>
-              <div class="social-links">
-                <ul class="list-unstyled">
-                  <li class="fw-medium pb-2">微信: zhangwenjing7477</li>
-                  <li class="fw-medium pb-2">WhatsApp: +971561304086</li>
-                  <li class="fw-medium pb-2">
-                    <a href="mailto:yourinfo@gmail.com">hetaoof@gmail.com</a>
-                  </li>
-                  <li class="fw-medium pb-2">Reflection Tower B, Al Reem Island, Abu Dhabi
-                  </li>
-                </ul>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </footer>
-    <div class="footer-bottom py-3 bg-light">
-      <div class="container">
-        <div class="row">
-          <div class="col-lg-8 col-md-6 mb-3">
-            <div class="d-flex flex-wrap align-items-center">
-              <img src="./index_files/main-logo.png" alt="brand name" class="pe-5">
-              <p class="m-0">©2024 BabyTreasures. All rights reserved.</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+    <footer id="commonFooter" class="position-relative bg-light py-lg-7 my-lg-7 mb-lg-0"> </footer>
+    <div class="footer-bottom py-3 bg-light" id="commonFooterBottom"></div>
     <script src="./faq_files/jquery-1.11.0.min.js"></script>
     <script src="./faq_files/swiper-bundle.min.js"></script>
     <script type="text/javascript" src="./faq_files/bootstrap.bundle.min.js"></script>

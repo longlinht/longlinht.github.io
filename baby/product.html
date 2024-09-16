@@ -49,6 +49,17 @@
             right: 0;
             border-radius: 3px 0 0 3px;
         }
+
+        .image-container {
+            width: 232;
+            height: 370;
+            overflow: hidden;
+        }
+        .image-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* You can change this value to 'contain', 'fill', 'none', or 'scale-down' */
+        }
     </style>
 
     <!-- script
@@ -190,40 +201,16 @@
       <div class="offcanvas-header">
         <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
       </div>
+
       <div class="offcanvas-body">
         <div class="order-md-last">
-          <h4 class="d-flex justify-content-between align-items-center mb-3 border-bottom pb-3">
-            <span class="text-secondary">Your Cart</span>
-            <span class="badge bg-dark rounded-pill">3</span>
-          </h4>
-          <ul class="list-group mb-3">
-            <li class="list-group-item border-0 d-flex justify-content-between lh-sm">
-              <div>
-                <h6 class="my-0">Cotton Outlay</h6>
-                <small class="text-body-secondary">Brief Description</small>
-              </div>
-              <span class="text-body-secondary">$320</span>
-            </li>
-            <li class="list-group-item border-0 d-flex justify-content-between lh-sm">
-              <div>
-                <h6 class="my-0">Woollen Pattern</h6>
-                <small class="text-body-secondary">Brief Description</small>
-              </div>
-              <span class="text-body-secondary">$320</span>
-            </li>
-            <li class="list-group-item border-0 d-flex justify-content-between lh-sm">
-              <div>
-                <h6 class="my-0">Casual Rabbit</h6>
-                <small class="text-body-secondary">Brief Description</small>
-              </div>
-              <span class="text-body-secondary">$320</span>
-            </li>
-            <li class="list-group-item border-0 d-flex justify-content-between">
-              <span>Total (USD)</span>
-              <strong>$960</strong>
-            </li>
-          </ul>
-          <button class="w-100 btn btn-primary btn-lg" type="submit">Continue to Checkout</button>
+          <h5 class="d-flex justify-content-between align-items-center mb-3 border-bottom pb-3">
+            <span class="text-secondary" >请添加客服微信购买</span>
+          </h5>
+
+          <div class="image-container">
+            <img src="./shop-with-sidebar_files/single_purchase_entrance.jpeg">
+          </div>
         </div>
       </div>
     </div>
@@ -257,7 +244,11 @@
               <div class="cart-wrap">
                 <div class="product-quantity">
                   <div class="stock-button-wrap d-flex flex-wrap">
-                    <button type="submit" name="add-to-cart" value="1000" class="btn btn-dark btn-md rounded-0 text-uppercase">马上购买</button>
+                    <a href="https://longlinht.github.io/baby/cart.html" class="btn btn-outline-gray text-capitalize rounded-pill mt-4 btn-sm" data-bs-toggle="offcanvas" data-bs-target="#offcanvasCart" aria-controls="offcanvasCart">马上购买
+                      <svg class="cart" width="18" height="18">
+                        <use xlink:href="#cart"></use>
+                      </svg>
+                    </a>
                   </div>
                 </div>
               </div>
@@ -311,13 +302,15 @@
       let currentSlide = 0;
 
       function changeSlide(n) {
+          if(images.length === 1) {
+            return
+          }
           const slides = document.getElementsByClassName('slides');
           slides[currentSlide].style.display = 'none';
           currentSlide = (currentSlide + n + slides.length) % slides.length; // Loop around
           slides[currentSlide].style.display = 'block';
       }
 
-      // Auto slide every 3 seconds
       setInterval(() => {
           changeSlide(1);
       }, 3000);

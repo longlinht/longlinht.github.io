@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <!-- saved from url=(0061)https://longlinht.github.io/baby/shop-with-sidebar.html -->
 <html slick-uniqueid="3" class=" js flexbox canvas canvastext webgl no-touch geolocation postmessage no-websqldatabase indexeddb hashchange history draganddrop websockets rgba hsla multiplebgs backgroundsize borderimage borderradius boxshadow textshadow opacity cssanimations csscolumns cssgradients cssreflections csstransforms csstransforms3d csstransitions fontface generatedcontent video audio localstorage sessionstorage webworkers no-applicationcache svg inlinesvg smil svgclippaths" style=""><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <title>Kiddo - Kids Store eCommerce HTML Template</title>
+    <title>Baby Treasures</title>
     
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -78,8 +78,9 @@
     <!-- script
     ================================================== -->
     <script src="./shop-with-sidebar_files/modernizr.js"></script>
+  <script src="./shop-with-sidebar_files/const.js"></script>
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
     <script>
             $(function(){
               $("#commonHeader").load("header.html");
@@ -317,6 +318,10 @@
                   filteredProducts = [...products];
               }
 
+              if (filteredProducts === undefined || filteredProducts.length == 0) {
+                  filteredProducts = allProducts
+              }
+
               const startIndex = (currentPage - 1) * productsPerPage;
               const endIndex = startIndex + productsPerPage;
 
@@ -331,8 +336,8 @@
                   productCard.className = 'col-lg-4 col-md-6 col-sm-6 mb-5';
                   productCard.innerHTML = `
                       <div class="product-item">
-                      <div class="image-holder text-center p-3 mb-4 border rounded-4">
-                        <img src="./shop-with-sidebar_files/product-item1.png" alt="${product.productName} class="img-fluid">
+                      <div class="image-container text-center p-3 mb-4 border rounded-4">
+                        <img src="./shop-with-sidebar_files/ic_${product.pid}_0.jpg" alt="${product.productName} >
                       </div>
                       <div class="product-info ps-2">
                         <h3 class="m-0">

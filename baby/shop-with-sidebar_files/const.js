@@ -121,9 +121,9 @@ const allProducts = [
       },
       {
         "pid": "00007",
-        "productName": "十月结晶-婴儿吸鼻器",
+        "productName": "十月结晶-婴儿鼻吸器",
         "icon": 1,
-        "desc": "",
+        "desc": "防逆流双阀设置，连续挤压不回流，1cm恰到长处，轻松吸，防误伤，柔软硅胶，手抖碰到也不怕",
         "single_price": 15,
         "inStock": true,
         "categories": [
@@ -161,7 +161,7 @@ const allProducts = [
          "pid": "00009",
          "productName": "十月结晶-小月龄舌苔乳牙清洁刷",
          "icon": 13,
-         "desc": "",
+         "desc": "奶嘴用的材质，入口才安全，SPA级柔软，轻柔拂走污垢，柔软不伤口腔，无惧高温清洗，洁净如初",
          "single_price": 17,
          "inStock": true,
          "categories": [
@@ -199,7 +199,7 @@ const allProducts = [
          "pid": "00011",
          "productName": "十月结晶-漱口水",
          "icon": 6,
-         "desc": "",
+         "desc": "口袋好物，随时清新口气，独立包装，小巧便携，零刺激零酒精，温和不辣口，防龋木糖醇，减少细菌滋生，人气果味，唇齿留香",
          "single_price": 17,
          "inStock": true,
          "categories": [
@@ -353,9 +353,9 @@ const allProducts = [
        },
         {
           "pid": "00019",
-          "productName": "十月结晶-植物驱蚊贴",
+          "productName": "十月结晶植物驱蚊精油贴",
           "icon": 13,
-          "desc": "",
+          "desc": "母婴专护，天然更安心，恒速释缓，持久续航8h，2.2m³防御，立体防护圈，复配植萃，温和不刺激，强韧PU，散发时效UP，玩味童趣，每天不重样，严苛检测，安全触手可及",
           "single_price": 9,
           "inStock": true,
           "categories": [
@@ -393,7 +393,7 @@ const allProducts = [
           "pid": "00021",
           "productName": "十月结晶-纱布围嘴",
           "icon": 18,
-          "desc": "",
+          "desc": "高密棉纱，隔水隔脏实力派。经典水洗工艺，蓬松清爽透气不闷热，快速洗干，不添加荧光增白剂，宝宝爱舔咬更安全！",
           "single_price": 8,
           "inStock": true,
           "categories": [
@@ -412,7 +412,7 @@ const allProducts = [
            "pid": "00022",
            "productName": "Babycare-学习筷",
            "icon": 15,
-           "desc": "",
+           "desc": "三指环定位，零技巧上手就会，选可啃咬的材质，做妈妈的放心筷",
            "single_price": 14,
            "inStock": true,
            "categories": [
@@ -486,9 +486,9 @@ const allProducts = [
          },
          {
            "pid": "00026",
-           "productName": "Babycare-霸王龙水杯",
+           "productName": "Babycare-霸王龙托比吸管学饮杯",
            "icon": 3,
-           "desc": "",
+           "desc": "轻咬喝水，贴合口欲期，全身可拆洗，清洁无死角",
            "single_price": 60,
            "inStock": false,
            "categories": [
@@ -527,7 +527,7 @@ const allProducts = [
            "pid": "00028",
            "productName": "Babycare-霸王龙托比果蔬训练器",
            "icon": 9,
-           "desc": "",
+           "desc": "立式收纳，防尘防污，2mm出汁孔，均匀出汁防呛防噎，高温消毒，耐得住考验，螺旋推进，出汁不浪费，部件可拆，清洗不留死角，奶嘴级硅胶，不伤牙龈",
            "single_price": 29.5,
            "inStock": true,
            "categories": [
@@ -546,7 +546,7 @@ const allProducts = [
            "pid": "00029",
            "productName": "Babycare-多功能吸盘碗套装",
            "icon": 11,
-           "desc": "",
+           "desc": "一套三碗，饭菜，水果，营养搭配，不串味，环保PP材质，每一口都安心，强力吸盘打不翻，碗口63°内收，盛住满满成就感，便捷消毒，清洗无死角",
            "single_price": 46,
            "inStock": true,
            "categories": [

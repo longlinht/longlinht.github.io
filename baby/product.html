@@ -334,14 +334,28 @@
     <script type="text/javascript" src="./product_files/plugins.js"></script>
     <script type="text/javascript" src="./product_files/script.js"></script>
 
+    <script src="./shop-with-sidebar_files/const.js"></script>
+
     <script>
-      // List of image URLs
-      const images = [
-          './product_files/singel-product-item.jpg',
-          './product_files/singel-product-item.jpg',
-          './product_files/singel-product-item.jpg',
-          './product_files/singel-product-item.jpg'
-      ];
+
+      const currentUrl = window.location.href;
+      const url = new URL(currentUrl);
+      const params = new URLSearchParams(url.search);
+      const pid = params.get('pid');
+
+      const product = allProducts.find(function(p) {
+        return p.pid === pid;
+      });
+
+      let images = []
+      const count = product.icon
+
+      console.log("----count:" + count);
+      for(let i=0; i < count; i++) {
+        let imageSrc = "./shop-with-sidebar_files/ic_" + pid + "_" + i + ".png"
+        console.log("----imageSrc:" + imageSrc);
+        images.push(imageSrc)
+      }
 
       // Dynamically load images into the slider
       const sliderContainer = document.getElementById('imageSlider');

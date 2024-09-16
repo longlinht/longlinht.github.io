@@ -315,11 +315,11 @@
               if(!loaded) {
                   products = await fetchProducts(currentPage, currentFilters);
                   loaded = true;
-                  filteredProducts = [...products];
-              }
-
-              if (filteredProducts === undefined || filteredProducts.length == 0) {
-                  filteredProducts = allProducts
+                  if (products === undefined || products.length == 0) {
+                    filteredProducts = allProducts
+                  } else {
+                    filteredProducts = [...products];
+                  }
               }
 
               const startIndex = (currentPage - 1) * productsPerPage;

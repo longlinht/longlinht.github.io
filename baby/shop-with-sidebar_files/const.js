@@ -139,11 +139,30 @@ const allProducts = [
         ]
       },
        {
+         "pid": "00008",
+         "productName": "贝易-花生车",
+         "icon": 1,
+         "desc": "",
+         "single_price": 149,
+         "inStock": true,
+         "categories": [
+           "all",
+           "baby"
+         ],
+         "specifications": {
+           "dimensions": "120cmx150cm",
+           "color":["blue","pink", "yellow"]
+         },
+         "relatedProducts": [
+           "1,2"
+         ]
+       },
+       {
          "pid": "00009",
          "productName": "十月结晶-小月龄舌苔乳牙清洁刷",
          "icon": 13,
          "desc": "",
-         "single_price": 15,
+         "single_price": 17,
          "inStock": true,
          "categories": [
            "all",
@@ -162,11 +181,11 @@ const allProducts = [
          "productName": "十月结晶-冲洗瓶",
          "icon": 6,
          "desc": "",
-         "single_price": 15,
+         "single_price": 19,
          "inStock": true,
          "categories": [
            "all",
-           "baby"
+           "mum"
          ],
          "specifications": {
            "dimensions": "120cmx150cm",
@@ -181,11 +200,11 @@ const allProducts = [
          "productName": "十月结晶-漱口水",
          "icon": 6,
          "desc": "",
-         "single_price": 15,
+         "single_price": 17,
          "inStock": true,
          "categories": [
            "all",
-           "baby"
+           "mum"
          ],
          "specifications": {
            "dimensions": "120cmx150cm",
@@ -200,11 +219,13 @@ const allProducts = [
          "productName": "十月结晶-碘伏棉签",
          "icon": 13,
          "desc": "",
-         "single_price": 15,
+         "single_price": 11,
          "inStock": true,
          "categories": [
            "all",
-           "baby"
+           "baby",
+           "mum",
+           "family"
          ],
          "specifications": {
            "dimensions": "120cmx150cm",
@@ -219,7 +240,7 @@ const allProducts = [
          "productName": "十月结晶-纱布浴巾",
          "icon": 19,
          "desc": "",
-         "single_price": 15,
+         "single_price": 41,
          "inStock": true,
          "categories": [
            "all",
@@ -238,11 +259,13 @@ const allProducts = [
          "productName": "十月结晶-螺旋棉签",
          "icon": 11,
          "desc": "",
-         "single_price": 15,
+         "single_price": 7,
          "inStock": true,
          "categories": [
            "all",
-           "baby"
+           "baby",
+           "mum",
+           "family"
          ],
          "specifications": {
            "dimensions": "120cmx150cm",
@@ -276,11 +299,11 @@ const allProducts = [
          "productName": "十月结晶-零感一次性内裤",
          "icon": 15,
          "desc": "",
-         "single_price": 15,
+         "single_price": 11,
          "inStock": true,
          "categories": [
            "all",
-           "baby"
+           "mum"
          ],
          "specifications": {
            "dimensions": "120cmx150cm",
@@ -295,7 +318,7 @@ const allProducts = [
          "productName": "十月结晶一次性隔尿垫",
          "icon": 15,
          "desc": "",
-         "single_price": 15,
+         "single_price": 14,
          "inStock": true,
          "categories": [
            "all",
@@ -314,7 +337,7 @@ const allProducts = [
          "productName": "十月结晶-冰丝枕",
          "icon": 8,
          "desc": "",
-         "single_price": 15,
+         "single_price": 25,
          "inStock": true,
          "categories": [
            "all",
@@ -333,7 +356,7 @@ const allProducts = [
           "productName": "十月结晶-植物驱蚊贴",
           "icon": 13,
           "desc": "",
-          "single_price": 15,
+          "single_price": 9,
           "inStock": true,
           "categories": [
             "all",
@@ -352,7 +375,7 @@ const allProducts = [
          "productName": "十月结晶-紫草膏",
          "icon": 14,
          "desc": "",
-         "single_price": 15,
+         "single_price": 9,
          "inStock": true,
          "categories": [
            "all",
@@ -371,7 +394,7 @@ const allProducts = [
           "productName": "十月结晶-纱布围嘴",
           "icon": 18,
           "desc": "",
-          "single_price": 15,
+          "single_price": 8,
           "inStock": true,
           "categories": [
             "all",
@@ -390,7 +413,7 @@ const allProducts = [
            "productName": "Babycare-学习筷",
            "icon": 15,
            "desc": "",
-           "single_price": 15,
+           "single_price": 14,
            "inStock": true,
            "categories": [
              "all",
@@ -409,7 +432,7 @@ const allProducts = [
            "productName": "Babycare-恐龙弯弯叉勺",
            "icon": 14,
            "desc": "",
-           "single_price": 15,
+           "single_price": 28,
            "inStock": true,
            "categories": [
              "all",
@@ -428,7 +451,7 @@ const allProducts = [
            "productName": "Babycare-成长型儿童牙刷",
            "icon": 11,
            "desc": "",
-           "single_price": 15,
+           "single_price": 11,
            "inStock": true,
            "categories": [
              "all",
@@ -466,8 +489,8 @@ const allProducts = [
            "productName": "Babycare-霸王龙水杯",
            "icon": 3,
            "desc": "",
-           "single_price": 15,
-           "inStock": true,
+           "single_price": 60,
+           "inStock": false,
            "categories": [
              "all",
              "baby"
@@ -485,11 +508,12 @@ const allProducts = [
            "productName": "Babycare-除螨喷雾",
            "icon": 7,
            "desc": "",
-           "single_price": 15,
+           "single_price": 29,
            "inStock": true,
            "categories": [
              "all",
-             "baby"
+             "baby",
+             "family"
            ],
            "specifications": {
              "dimensions": "120cmx150cm",
@@ -504,7 +528,7 @@ const allProducts = [
            "productName": "Babycare-霸王龙托比果蔬训练器",
            "icon": 9,
            "desc": "",
-           "single_price": 15,
+           "single_price": 29.5,
            "inStock": true,
            "categories": [
              "all",
@@ -523,7 +547,7 @@ const allProducts = [
            "productName": "Babycare-多功能吸盘碗套装",
            "icon": 11,
            "desc": "",
-           "single_price": 15,
+           "single_price": 46,
            "inStock": true,
            "categories": [
              "all",
@@ -542,7 +566,7 @@ const allProducts = [
             "productName": "棒棒猪-餐桌垫",
             "icon": 15,
             "desc": "",
-            "single_price": 15,
+            "single_price": 7,
             "inStock": true,
             "categories": [
               "all",
@@ -558,10 +582,10 @@ const allProducts = [
           },
           {
             "pid": "00031",
-            "productName": "Babycare-多功能吸盘碗套装",
-            "icon": 11,
+            "productName": "棒棒猪-防撞条",
+            "icon": 12,
             "desc": "",
-            "single_price": 15,
+            "single_price": 9,
             "inStock": true,
             "categories": [
               "all",
@@ -575,4 +599,23 @@ const allProducts = [
               "1,2"
             ]
           },
+           {
+             "pid": "00032",
+             "productName": "棒棒猪-防撞角",
+             "icon": 1,
+             "desc": "",
+             "single_price": 9,
+             "inStock": true,
+             "categories": [
+               "all",
+               "baby"
+             ],
+             "specifications": {
+               "dimensions": "120cmx150cm",
+               "color":["blue","pink", "yellow"]
+             },
+             "relatedProducts": [
+               "1,2"
+             ]
+           },
     ];

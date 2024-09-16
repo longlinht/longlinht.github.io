@@ -315,7 +315,7 @@
               if(!loaded) {
                   products = await fetchProducts(currentPage, currentFilters);
                   loaded = true;
-                  if (products === undefined || products.length == 0) {
+                  if (products === undefined || products.length === 0) {
                     filteredProducts = allProducts
                   } else {
                     filteredProducts = [...products];

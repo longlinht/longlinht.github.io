@@ -248,76 +248,17 @@
           <div class="col-lg-6 col-md-8">
             <div class="product-info">
               <div class="product-header">
-                <h3 itemprop="name" class="product-title display-4">Casual T-Shirt</h3>
+                <h3 itemprop="name" class="product-title display-4" id="p-title">Casual T-Shirt</h3>
               </div>
               <div class="product-price">
-                <strong class="text-primary fs-3">$36.00</strong>
-                <del>$54.00</del>
+                <strong id="p-price" class="text-primary fs-3">$36.00</strong>
               </div>
-              <p>Casual T-Shirt, cum feugiat imperdiet nulla molestie ac vulputate scelerisque amet. Bibendum adipiscing platea blandit sit sed quam semper rhoncus. Diam ultrices maecenas consequat eu tortor orci, cras lectus mauris, cras egestas quam venenatis neque.</p>
+              <p id="p-desc"></p>
               <div class="cart-wrap">
-                <div class="color-options product-select">
-                  <div class="color-toggle d-flex align-items-baseline" data-option-index="0">
-                    <h4 class="fs-4 text-dark pe-2">Color:</h4>
-                    <ul class="select-list list-unstyled d-flex">
-                      <li class="select-item pe-2" data-val="Green" title="Green">
-                        <a href="https://longlinht.github.io/baby/single-product.html#">Green,</a>
-                      </li>
-                      <li class="select-item pe-2" data-val="Orange" title="Orange">
-                        <a href="https://longlinht.github.io/baby/single-product.html#">Orange,</a>
-                      </li>
-                      <li class="select-item" data-val="Red" title="Red">
-                        <a href="https://longlinht.github.io/baby/single-product.html#">Red</a>
-                      </li>
-                    </ul>
-                  </div>
-                </div>
-                <div class="swatch product-select d-flex align-items-baseline" data-option-index="1">
-                  <h4 class="fs-4 text-dark pe-2">Size:</h4>
-                  <ul class="select-list list-unstyled d-flex">
-                    <li data-value="S" class="select-item pe-2">
-                      <a href="https://longlinht.github.io/baby/single-product.html#">S,</a>
-                    </li>
-                    <li data-value="M" class="select-item pe-2">
-                      <a href="https://longlinht.github.io/baby/single-product.html#">M,</a>
-                    </li>
-                    <li data-value="L" class="select-item">
-                      <a href="https://longlinht.github.io/baby/single-product.html#">L</a>
-                    </li>
-                  </ul>
-                </div>
                 <div class="product-quantity">
-                  <div class="fs-5">
-                    <strong>2 in Stock</strong>
-                  </div>
                   <div class="stock-button-wrap d-flex flex-wrap">
-                    <div class="input-group product-qty me-3 align-items-center" style="max-width: 150px;">
-                      <span class="input-group-btn">
-                        <button type="button" class="quantity-left-minus btn btn-light btn-number border" data-type="minus" data-field=""> - </button>
-                      </span>
-                      <input type="text" id="quantity" name="quantity" class="form-control input-number text-center" value="1" min="1" max="100">
-                      <span class="input-group-btn">
-                        <button type="button" class="quantity-right-plus btn btn-light btn-number border" data-type="plus" data-field=""> + </button>
-                      </span>
-                    </div>
-                    <button type="submit" name="add-to-cart" value="1000" class="btn btn-dark btn-md rounded-0 text-uppercase">Add to cart</button>
+                    <button type="submit" name="add-to-cart" value="1000" class="btn btn-dark btn-md rounded-0 text-uppercase">马上购买</button>
                   </div>
-                </div>
-              </div>
-              <div class="meta-product mt-3">
-                <div class="meta-item d-flex align-items-baseline">
-                  <h4 class="fs-4 text-dark pe-2">Category:</h4>
-                  <ul class="select-list list-unstyled d-flex">
-                    <li data-value="S" class="select-item pe-2">
-                      <a href="https://longlinht.github.io/baby/single-product.html#">Women</a>,
-                    </li>
-                    <li data-value="S" class="select-item pe-2">
-                      <a href="https://longlinht.github.io/baby/single-product.html#">Popular</a>,
-                    </li>
-                    <li data-value="S" class="select-item">
-                      <a href="https://longlinht.github.io/baby/single-product.html#">Orange</a>
-                    </li>
-                  </ul>
                 </div>
               </div>
             </div>
@@ -380,6 +321,16 @@
       setInterval(() => {
           changeSlide(1);
       }, 3000);
+
+      const title = document.getElementById('p-title');
+      title.innerHTML = product.productName;
+
+      const price = document.getElementById('p-price');
+      price.innerHTML = product.single_price + " AED";
+
+      const desc = document.getElementById('p-desc');
+      desc.innerHTML = product.desc;
+
     </script>
   
 </body></html>

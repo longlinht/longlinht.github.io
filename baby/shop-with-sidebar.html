@@ -334,6 +334,8 @@
                   }
                   */
 
+                  loaded = true;
+
                   const currentUrl = window.location.href;
                   const url = new URL(currentUrl);
                   const params = new URLSearchParams(url.search);
@@ -468,7 +470,7 @@
 
               console.log("----filter: ", filter);
 
-              filteredProducts = products.filter(product => {
+              filteredProducts = allProducts.filter(product => {
                   const cateMatch = product.categories.includes(filter);
                   return cateMatch;
               });

@@ -48,19 +48,43 @@
         }
 
         /* Active button styles */
-        .pagination .active button {
-            background-color: #f0a2a3;
-            color: white;
+        .pagination button:active {
+            background-color: #ff00ff;
+            color: #00ff00;
             border-color: #f0a2a3;
             cursor: default;
         }
 
         /* Disabled button styles */
-        .pagination .disabled button {
+        .pagination.disabled {
             background-color: #f8f9fa;
             color: #6c757d;
             border-color: #ddd;
             cursor: not-allowed;
+        }
+
+        .page-btn {
+            padding: 10px 20px;
+            margin: 5px;
+            cursor: pointer;
+            background-color: #f0f0f0;
+            border: none;
+            border-radius: 5px;
+        }
+
+        .page-btn:hover {
+            background-color: #e9ecef;
+        }
+
+        .page-btn.active {
+            background-color: #f0a2a3;
+            color: white;
+        }
+
+        .page-btn.disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+            pointer-events: none;
         }
 
         .image-container {
@@ -355,11 +379,23 @@
 
               for (let i = 1; i <= totalPages; i++) {
                   const button = document.createElement('button');
-                  button.className = 'page-numbers me-3 text-center'
+                  button.className = 'page-numbers me-3 text-center page-btn'
                   button.textContent = i;
                   button.classList.toggle('active', i === currentPage);
                   button.addEventListener('click', () => {
                       currentPage = i;
+
+                      console.log("i:" + i);
+
+                      const buttons = document.querySelectorAll('.page-btn');
+
+                      console.log("btn count:" + buttons.length);
+
+                      // Remove active class from all buttons
+                      buttons.forEach(button => button.classList.remove('active'));
+                      // Add active class to the clicked button
+                      buttons[currentPage - 1].classList.add('active');
+
                       renderProducts();
                   });
                   pagination.appendChild(button);

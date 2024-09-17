@@ -700,7 +700,7 @@ animation: loader 5s infinite ease-out;
   width: 58%;
 }
 #intro .swiper-arrow.swiper-arrow-prev {
-  left: 22px;
+  left: 5px;
 }
 #intro .swiper-arrow.swiper-arrow-next {
   right: 5px;

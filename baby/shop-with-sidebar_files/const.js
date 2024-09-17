@@ -25,7 +25,7 @@ const allProducts = [
       {
         "pid": "00002",
         "productName": "十月结晶-婴儿柔润纸面巾",
-        "icon": 11,
+        "icon": 1,
         "desc": "",
         "single_price": 4,
         "group_price": 29,

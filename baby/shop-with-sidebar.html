@@ -322,6 +322,7 @@
 
           async function renderProducts() {
               if(!loaded) {
+                  /*
                   products = await fetchProducts(currentPage, currentFilters);
                   loaded = true;
                   if (!products) {
@@ -331,6 +332,7 @@
                     console.log("-----fetched");
                     filteredProducts = [...products];
                   }
+                  */
 
                   const currentUrl = window.location.href;
                   const url = new URL(currentUrl);

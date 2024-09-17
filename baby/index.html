@@ -17,6 +17,20 @@
     <link rel="preconnect" href="https://fonts.googleapis.com/">
     <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin="">
     <link href="./index_files/css2" rel="stylesheet">
+
+    <style>
+      .image-container {
+            width: 232;
+            height: 370;
+            overflow: hidden;
+        }
+        .image-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* You can change this value to 'contain', 'fill', 'none', or 'scale-down' */
+        }
+    </style>
+
     <!-- script
     ================================================== -->
     <script src="./index_files/modernizr.js"></script>
@@ -33,6 +47,10 @@
 
           $(function(){
             $("#commonFooterBottom").load("footer-bottom.html");
+          });
+
+          $(function(){
+            $("#offcanvasCart").load("cart.html");
           });
     </script>
 
@@ -133,45 +151,6 @@
       </div>
     </div>
     <div class="offcanvas offcanvas-end" data-bs-scroll="true" tabindex="-1" id="offcanvasCart" aria-labelledby="My Cart">
-      <div class="offcanvas-header">
-        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-      </div>
-      <div class="offcanvas-body">
-        <div class="order-md-last">
-          <h4 class="d-flex justify-content-between align-items-center mb-3 border-bottom pb-3">
-            <span class="text-secondary">Your Cart</span>
-            <span class="badge bg-dark rounded-pill">3</span>
-          </h4>
-          <ul class="list-group mb-3">
-            <li class="list-group-item border-0 d-flex justify-content-between lh-sm">
-              <div>
-                <h6 class="my-0">Cotton Outlay</h6>
-                <small class="text-body-secondary">Brief Description</small>
-              </div>
-              <span class="text-body-secondary">$320</span>
-            </li>
-            <li class="list-group-item border-0 d-flex justify-content-between lh-sm">
-              <div>
-                <h6 class="my-0">Woollen Pattern</h6>
-                <small class="text-body-secondary">Brief Description</small>
-              </div>
-              <span class="text-body-secondary">$320</span>
-            </li>
-            <li class="list-group-item border-0 d-flex justify-content-between lh-sm">
-              <div>
-                <h6 class="my-0">Casual Rabbit</h6>
-                <small class="text-body-secondary">Brief Description</small>
-              </div>
-              <span class="text-body-secondary">$320</span>
-            </li>
-            <li class="list-group-item border-0 d-flex justify-content-between">
-              <span>Total (USD)</span>
-              <strong>$960</strong>
-            </li>
-          </ul>
-          <button class="w-100 btn btn-primary btn-lg" type="submit">Continue to Checkout</button>
-        </div>
-      </div>
     </div>
     <header id="commonHeader" class="site-header bg-light py-3"> </header>
     <section id="category" class="my-lg-12 py-lg-7 mb-lg-0 position-relative bg-light">
@@ -240,7 +219,7 @@
                       </h1>
                       <p>一键开启，加倍密封锁水，24包，199迪</p>
                       <div class="btn-center mt-4">
-                        <a href="https://longlinht.github.io/baby/shop-with-sidebar.html" class="btn btn-primary btn-md text-uppercase rounded-0">参加团购</a>
+                        <a href="https://longlinht.github.io/baby/cart.html" class="btn btn-primary btn-md text-uppercase rounded-0" data-bs-toggle="offcanvas" data-bs-target="#offcanvasCart" aria-controls="offcanvasCart">参加团购</a>
                       </div>
                     </div>
                     <div class="bg-pattern-overlay position-absolute">

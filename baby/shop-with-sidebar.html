@@ -93,6 +93,10 @@
             $(function(){
               $("#commonFooterBottom").load("footer-bottom.html");
             });
+
+            $(function(){
+              $("#offcanvasCart").load("cart.html");
+            });
     </script>
 
   </head>
@@ -204,20 +208,6 @@
       </div>
     </div>
     <div class="offcanvas offcanvas-end" data-bs-scroll="true" tabindex="-1" id="offcanvasCart" aria-labelledby="My Cart">
-      <div class="offcanvas-header">
-        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-      </div>
-      <div class="offcanvas-body">
-        <div class="order-md-last">
-          <h5 class="d-flex justify-content-between align-items-center mb-3 border-bottom pb-3">
-            <span class="text-secondary" >请扫下方二维码进群购买</span>
-          </h5>
-
-          <div class="image-container">
-            <img src="./shop-with-sidebar_files/single_purchase_entrance.jpeg">
-          </div>
-        </div>
-      </div>
     </div>
     <header id="commonHeader" class="site-header bg-light py-3">
     </header>

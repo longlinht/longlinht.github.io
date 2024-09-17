@@ -322,7 +322,6 @@
 
           async function renderProducts() {
               if(!loaded) {
-                  /*
                   products = await fetchProducts(currentPage, currentFilters);
                   loaded = true;
                   if (!products) {
@@ -332,9 +331,6 @@
                     console.log("-----fetched");
                     filteredProducts = [...products];
                   }
-                  */
-
-                  filteredProducts = allProducts;
 
                   const currentUrl = window.location.href;
                   const url = new URL(currentUrl);
@@ -345,8 +341,10 @@
                   }
 
                   console.log("-----cate:" + cate);
-
-                  applyFilters(cate);
+                  filteredProducts = allProducts.filter(product => {
+                      const cateMatch = product.categories.includes(cate);
+                      return cateMatch;
+                  });
               }
 
               //const startIndex = (currentPage - 1) * productsPerPage;

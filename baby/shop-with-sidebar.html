@@ -322,7 +322,6 @@
 
           async function renderProducts() {
               if(!loaded) {
-                  /*
                   products = await fetchProducts(currentPage, currentFilters);
                   loaded = true;
                   if (products === undefined || products.length === 0) {
@@ -330,7 +329,6 @@
                   } else {
                     filteredProducts = [...products];
                   }
-                  */
 
                   filteredProducts = allProducts;
 
@@ -384,6 +382,7 @@
               });
 
               //renderPagination();
+              //let all = await fetchProducts(currentPage, currentFilters);
           }
 
           function renderPagination() {
@@ -477,6 +476,8 @@
           // Initialize the page
           renderFilters();
           renderProducts();
+
+
 
           // Add event listeners for filters
           document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {

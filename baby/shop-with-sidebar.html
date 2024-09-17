@@ -334,6 +334,18 @@
                   } else {
                     filteredProducts = [...products];
                   }
+
+                  const currentUrl = window.location.href;
+                  const url = new URL(currentUrl);
+                  const params = new URLSearchParams(url.search);
+                  let cate = params.get('cate');
+                  if(!cate){
+                    cate = "all";
+                  }
+
+                  console.log("-----cate:" + cate);
+
+                  applyFilters(cate);
               }
 
               const startIndex = (currentPage - 1) * productsPerPage;

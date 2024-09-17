@@ -245,11 +245,6 @@
                 <div class="row" id="productGrid"></div>
               </div>
             </div>
-            <nav class="navigation paging-navigation text-center mb-5" role="navigation">
-              <div class="pagination loop-pagination d-flex justify-content-center align-items-center" id="pagination">
-                  <span aria-current="page" class="page-numbers me-3 text-center current">1</span>
-              </div>
-            </nav>
           </main>
           <aside class="col-lg-2 col-md-9">
             <div class="row justify-content-center">
@@ -352,6 +347,7 @@
                   applyFilters(cate);
               }
 
+              //const startIndex = (currentPage - 1) * productsPerPage;
               const startIndex = (currentPage - 1) * productsPerPage;
               const endIndex = startIndex + productsPerPage;
 
@@ -361,7 +357,7 @@
               console.log("----products:", products);
               console.log("----filteredProducts:", filteredProducts);
 
-              filteredProducts.slice(startIndex, endIndex).forEach(product => {
+              filteredProducts.forEach(product => {
                   const productCard = document.createElement('div');
                   productCard.className = 'col-lg-4 col-md-6 col-sm-6 mb-5';
                   productCard.innerHTML = `
@@ -387,7 +383,7 @@
                   productGrid.appendChild(productCard);
               });
 
-              renderPagination();
+              //renderPagination();
           }
 
           function renderPagination() {

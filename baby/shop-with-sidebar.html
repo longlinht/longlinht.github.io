@@ -332,6 +332,8 @@
                     filteredProducts = [...products];
                   }
 
+                  filteredProducts = allProducts;
+
                   const currentUrl = window.location.href;
                   const url = new URL(currentUrl);
                   const params = new URLSearchParams(url.search);

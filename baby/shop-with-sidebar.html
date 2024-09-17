@@ -330,10 +330,12 @@
                   products = await fetchProducts(currentPage, currentFilters);
                   loaded = true;
                   if (products === undefined || products.length === 0) {
-                    filteredProducts = allProducts
+                    filteredProducts = allProducts;
                   } else {
                     filteredProducts = [...products];
                   }
+
+                  filteredProducts = allProducts;
 
                   const currentUrl = window.location.href;
                   const url = new URL(currentUrl);

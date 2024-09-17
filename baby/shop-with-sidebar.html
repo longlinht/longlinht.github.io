@@ -324,13 +324,13 @@
               if(!loaded) {
                   products = await fetchProducts(currentPage, currentFilters);
                   loaded = true;
-                  if (products === undefined || products.length === 0) {
+                  if (!products) {
+                    console.log("----not fetched");
                     filteredProducts = allProducts;
                   } else {
+                    console.log("-----fetched");
                     filteredProducts = [...products];
                   }
-
-                  filteredProducts = allProducts;
 
                   const currentUrl = window.location.href;
                   const url = new URL(currentUrl);

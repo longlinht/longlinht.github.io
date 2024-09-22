@@ -618,4 +618,80 @@ const allProducts = [
                "1,2"
              ]
            },
-    ];
+           {
+            "pid": "00033",
+            "productName": "十月结晶-舒睡裤",
+            "icon": 5,
+            "desc": "",
+            "single_price": 8,
+            "inStock": true,
+            "categories": [
+              "all",
+              "mum"
+            ],
+            "specifications": {
+              "dimensions": "120cmx150cm",
+              "color":["blue","pink", "yellow"]
+            },
+            "relatedProducts": [
+              "1,2"
+            ]
+          },
+          {
+              "pid": "00034",
+              "productName": "Babycare-棉款内裤",
+              "icon": 4,
+              "desc": "",
+              "single_price": 20,
+              "inStock": true,
+              "categories": [
+                "all",
+                "mum"
+              ],
+              "specifications": {
+                "dimensions": "120cmx150cm",
+                "color":["blue","pink", "yellow"]
+              },
+              "relatedProducts": [
+                "1,2"
+              ]
+            },
+           {
+               "pid": "00035",
+               "productName": "嫚熙-婴儿口腔清洁器",
+               "icon": 4,
+               "desc": "",
+               "single_price": 20,
+               "inStock": true,
+               "categories": [
+                 "all",
+                 "baby"
+               ],
+               "specifications": {
+                 "dimensions": "120cmx150cm",
+                 "color":["blue","pink", "yellow"]
+               },
+               "relatedProducts": [
+                 "1,2"
+               ]
+             },
+          {
+              "pid": "00036",
+              "productName": "scoornest-防水护耳贴",
+              "icon": 5,
+              "desc": "",
+              "single_price": 18,
+              "inStock": true,
+              "categories": [
+                "all",
+                "baby"
+              ],
+              "specifications": {
+                "dimensions": "120cmx150cm",
+                "color":["blue","pink", "yellow"]
+              },
+              "relatedProducts": [
+                "1,2"
+              ]
+            },
+];

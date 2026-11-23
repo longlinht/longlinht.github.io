@@ -17,13 +17,13 @@
     {% for post in paginator.posts %}
     <article class="post">
         <header class="post-header">
-            <h2 class="post-title"><a href="{{ site.url }}{{ post.url }}">{{ post.title }}</a></h2>
+            <h2 class="post-title"><a href="{{ site.url }}{{ post.url | remove_first: "/" }}">{{ post.title }}</a></h2>
         </header>
         <section class="post-excerpt">
             {% if post.chinese %}
-                <p>{{ post.content | truncate: 100 }} <a class="read-more" href="{{ site.url }}{{ post.url }}">&raquo;</a></p>
+                <p>{{ post.content | truncate: 100 }} <a class="read-more" href="{{ site.url }}{{ post.url | remove_first: "/" }}">&raquo;</a></p>
             {% else %}
-                <p>{{ post.content | truncatewords: 26 }} <a class="read-more" href="{{ site.url }}{{ post.url }}">&raquo;</a></p>
+                <p>{{ post.content | truncatewords: 26 }} <a class="read-more" href="{{ site.url }}{{ post.url | remove_first: "/" }}">&raquo;</a></p>
             {% endif %}
         </section>
         <footer class="post-meta">

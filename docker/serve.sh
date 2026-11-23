@@ -6,6 +6,10 @@
 # production config sends clicks to the live domain. This script writes a small
 # dev config that points site.url at localhost for the preview only; the
 # production build (docker/build.sh) is unaffected.
+#
+# Keep JEKYLL_ENV=production here (inherited from the image). In development
+# mode Jekyll 3 overrides site.url with "http://<host>:<port>" (no trailing
+# slash), which breaks the theme's links.
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
@@ -23,7 +27,6 @@ EOF
 docker run --rm -it \
   -u "$(id -u):$(id -g)" \
   -e HOME=/tmp \
-  -e JEKYLL_ENV=development \
   -v "$ROOT:/site" \
   -p "$PORT:4000" \
   "$IMAGE" \

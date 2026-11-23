@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- [[! Document Settings ]] -->
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+    <!-- [[! Page Meta ]] -->
+    <title>What a Native Crash Reporter Does While the Process Is Dying</title>
+    <meta name="description" content="与机器，人，神共舞 - 编程，读书，思考，旅行，与机器对话，与人交谈，对神发问，探索，体验人生美丽的风景" />
+
+    <meta name="HandheldFriendly" content="True" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link rel="shortcut icon" href="/assets/images/favicon.ico" >
+
+    <!-- [[! Styles'n'Scripts ]] -->
+    <link rel="stylesheet" type="text/css" href="/assets/css/screen.css" />
+    <link rel="stylesheet" type="text/css"
+          href="//fonts.googleapis.com/css?family=Merriweather:300,700,700italic,300italic|Open+Sans:700,400" />
+    <link rel="stylesheet" type="text/css" href="/assets/css/syntax.css" />
+    
+    <!-- [[! Ghost outputs important style and meta data with this tag ]] -->
+        <link rel="canonical" href="/" />
+    <meta name="referrer" content="origin" />
+    <link rel="next" href="/page2/" />
+
+    <meta property="og:site_name" content="与机器，人，神共舞" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="与机器，人，神共舞" />
+    <meta property="og:description" content="编程，读书，思考，旅行，与机器对话，与人交谈，对神发问，探索，体验人生美丽的风景" />
+    <meta property="og:url" content="/" />
+    <meta property="og:image" content="/assets/images/cover1.jpg" />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="与机器，人，神共舞" />
+    <meta name="twitter:description" content="编程，读书，思考，旅行，与机器对话，与人交谈，对神发问，探索，体验人生美丽的风景" />
+    <meta name="twitter:url" content="/" />
+    <meta name="twitter:image:src" content="/assets/images/cover1.jpg" />
+
+    <script type="application/ld+json">
+{
+    "@context": "http://schema.org",
+    "@type": "Website",
+    "publisher": "Tao's Page",
+    "url": "/",
+    "image": "/assets/images/cover1.jpg",
+    "description": "编程，读书，思考，旅行，与机器对话，与人交谈，对神发问，探索，体验人生美丽的风景"
+}
+    </script>
+
+    <meta name="generator" content="Jekyll 3.0.0" />
+    <link rel="alternate" type="application/rss+xml" title="与机器，人，神共舞" href="/rss.xml" />
+
+</head>
+<body class="home-template nav-closed">
+
+    <div class="nav">
+    <h3 class="nav-title">Menu</h3>
+    <a href="#" class="nav-close">
+        <span class="hidden">Close</span>
+    </a>
+    <ul>
+        <li class="nav-home " role="presentation"><a href="/">Home</a></li>
+        <li class="nav-about " role="presentation"><a href="/about.html">About</a></li>
+        <li class="nav-fables " role="presentation"><a href="/tag/machine/">Machine</a></li>
+        <li class="nav-speeches " role="presentation"><a href="/tag/human/">Human</a></li>
+        <li class="nav-fiction " role="presentation"><a href="/tag/god/">God</a></li>
+        <li class="nav-author " role="presentation"><a href="/author/hetao/">Author</a></li>
+    </ul>
+    <a class="subscribe-button icon-feed" href="/vocab.html">Apps</a>
+</div>
+<span class="nav-cover"></span>
+
+
+    <div class="site-wrapper">
+
+        <!-- [[! Everything else gets inserted here ]] -->
+        <!-- default -->
+
+<!-- The comment above "< default" means - insert everything in this file into -->
+    <!-- the [body] of the default.hbs template, which contains our header/footer. -->
+
+<!-- Everything inside the #post tags pulls data from the post -->
+<!-- #post -->
+
+<header class="main-header post-head no-cover">
+    <nav class="main-nav  clearfix">
+        
+        
+    </nav>
+</header>
+
+<main class="content" role="main">
+
+    <article class="post tag-machine">
+
+        <header class="post-header">
+            <h1 class="post-title">What a Native Crash Reporter Does While the Process Is Dying</h1>
+            <section class="post-meta">
+            <!-- <a href='/'>Tao He</a> -->
+
+            
+            <time class="post-date" datetime="2021-05-16">16 May 2021</time>
+                <!-- [[tags prefix=" on "]] -->
+                
+                on
+                
+                    
+                       <a href='/tag/machine'>Machine</a>
+                    
+                
+                
+            </section>
+        </header>
+
+        <section class="post-content">
+
+            <p>In 2021 I worked on an overseas short-video and live-streaming app. Native crashes climbed into our top crash list, and the free crash tool we used gave us almost nothing for them: no native stack, no context. So I integrated xCrash, an open-source crash catcher, and added our own upload on top. I wrote <a href="/summary-of-using-xcrash.html">a short summary of that in Chinese</a>.</p>
+
+<p>That post is about using the library. This one is about what I learned reading how it works. A crash reporter has a strange job. It must do careful work at the worst possible moment, inside a process that is already broken. Almost every design choice in it comes from that.</p>
+
+<h2 id="what-happens-when-native-code-crashes">What happens when native code crashes</h2>
+
+<p>When native code reads a bad address, divides by zero or calls <code class="language-plaintext highlighter-rouge">abort()</code>, the kernel sends a signal to the thread that did it: <code class="language-plaintext highlighter-rouge">SIGSEGV</code>, <code class="language-plaintext highlighter-rouge">SIGBUS</code>, <code class="language-plaintext highlighter-rouge">SIGFPE</code>, <code class="language-plaintext highlighter-rouge">SIGILL</code>, <code class="language-plaintext highlighter-rouge">SIGABRT</code>, <code class="language-plaintext highlighter-rouge">SIGTRAP</code> and a few others. By default the process dies. On Android, the system’s crash daemon writes a tombstone to <code class="language-plaintext highlighter-rouge">/data/tombstones</code> and prints the crash to logcat. But your app cannot read that tombstone on a normal device.</p>
+
+<p>So a crash reporter installs its own handler with <code class="language-plaintext highlighter-rouge">sigaction()</code> for those signals. When the crash happens, the kernel stops the faulting thread at whatever instruction it was on and jumps into the handler, on the same thread.</p>
+
+<p>That last part is the whole problem. The handler runs on top of a thread that was interrupted at an unknown point, in a process whose memory may already be corrupt.</p>
+
+<h2 id="rule-1-no-heap-almost-no-libc">Rule 1: no heap, almost no libc</h2>
+
+<p>Think about what the crashed thread might have been doing. Maybe it was inside <code class="language-plaintext highlighter-rouge">malloc()</code>. Many native crashes actually happen inside <code class="language-plaintext highlighter-rouge">malloc()</code> or <code class="language-plaintext highlighter-rouge">free()</code>, because some other code corrupted the heap earlier. In that case the allocator may be holding its lock, or its data structures are broken.</p>
+
+<p>Now the handler calls <code class="language-plaintext highlighter-rouge">malloc()</code>. It either waits forever for a lock that will never be released, or it walks the same broken heap and crashes again.</p>
+
+<p>This is why POSIX defines a short list of <strong>async-signal-safe</strong> functions. Only those can be called safely from a signal handler. The list includes <code class="language-plaintext highlighter-rouge">open</code>, <code class="language-plaintext highlighter-rouge">read</code>, <code class="language-plaintext highlighter-rouge">write</code>, <code class="language-plaintext highlighter-rouge">close</code>, <code class="language-plaintext highlighter-rouge">waitpid</code>, <code class="language-plaintext highlighter-rouge">execve</code>, <code class="language-plaintext highlighter-rouge">_exit</code> and <code class="language-plaintext highlighter-rouge">sigaction</code>. It does not include <code class="language-plaintext highlighter-rouge">malloc</code>, <code class="language-plaintext highlighter-rouge">printf</code>, <code class="language-plaintext highlighter-rouge">fopen</code>, or anything that might take a lock or touch the heap. C++ <code class="language-plaintext highlighter-rouge">new</code>, <code class="language-plaintext highlighter-rouge">std::string</code> and calling into Java through JNI are all off the table too.</p>
+
+<p>So a good crash handler:</p>
+
+<ul>
+  <li>uses only memory it reserved before the crash (static buffers, stack buffers, or pages it mapped at init time);</li>
+  <li>writes with <code class="language-plaintext highlighter-rouge">write()</code> on a file descriptor, never with <code class="language-plaintext highlighter-rouge">stdio</code>;</li>
+  <li>does as little as possible itself.</li>
+</ul>
+
+<p>Breakpad, Google’s crash reporter, is a good example. On Linux it does not use <code class="language-plaintext highlighter-rouge">malloc()</code> on the crash path. It has its own small page allocator built directly on <code class="language-plaintext highlighter-rouge">mmap()</code>, and it calls system calls directly instead of going through libc.</p>
+
+<h2 id="rule-2-have-your-own-stack">Rule 2: have your own stack</h2>
+
+<p>Not all crashes are bad pointers. A common one is stack overflow: deep recursion, or a huge array on the stack. The thread grows its stack until it touches the guard page below it, and the kernel sends <code class="language-plaintext highlighter-rouge">SIGSEGV</code>.</p>
+
+<p>To run a handler, the kernel must push a signal frame onto the stack. But the stack is exactly what just ran out. There is no room. The handler cannot run, and the process dies with no report.</p>
+
+<p>The fix is <code class="language-plaintext highlighter-rouge">sigaltstack()</code>. You give the kernel a separate block of memory to use as the stack for signal handlers, and you install the handler with the <code class="language-plaintext highlighter-rouge">SA_ONSTACK</code> flag:</p>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// generic sketch</span>
+<span class="k">static</span> <span class="kt">char</span> <span class="n">alt_stack</span><span class="p">[</span><span class="mi">64</span> <span class="o">*</span> <span class="mi">1024</span><span class="p">];</span>   <span class="c1">// reserved up front, not malloc'd at crash time</span>
+
+<span class="n">stack_t</span> <span class="n">ss</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">};</span>
+<span class="n">ss</span><span class="p">.</span><span class="n">ss_sp</span> <span class="o">=</span> <span class="n">alt_stack</span><span class="p">;</span>
+<span class="n">ss</span><span class="p">.</span><span class="n">ss_size</span> <span class="o">=</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">alt_stack</span><span class="p">);</span>
+<span class="n">sigaltstack</span><span class="p">(</span><span class="o">&amp;</span><span class="n">ss</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">);</span>
+
+<span class="k">struct</span> <span class="n">sigaction</span> <span class="n">act</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">};</span>
+<span class="n">act</span><span class="p">.</span><span class="n">sa_sigaction</span> <span class="o">=</span> <span class="n">crash_handler</span><span class="p">;</span>
+<span class="n">act</span><span class="p">.</span><span class="n">sa_flags</span> <span class="o">=</span> <span class="n">SA_SIGINFO</span> <span class="o">|</span> <span class="n">SA_ONSTACK</span><span class="p">;</span>
+<span class="n">sigemptyset</span><span class="p">(</span><span class="o">&amp;</span><span class="n">act</span><span class="p">.</span><span class="n">sa_mask</span><span class="p">);</span>
+<span class="n">sigaction</span><span class="p">(</span><span class="n">SIGSEGV</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">act</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">old_act</span><span class="p">);</span>
+</code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">SA_SIGINFO</code> is also important. It makes the kernel pass a <code class="language-plaintext highlighter-rouge">siginfo_t</code> (the fault address, the signal code) and a <code class="language-plaintext highlighter-rouge">ucontext</code> (the registers at the moment of the crash). That is the raw material for the report.</p>
+
+<p>One detail that is easy to miss: the alternate stack belongs to a <strong>thread</strong>, not to the process. Calling <code class="language-plaintext highlighter-rouge">sigaltstack()</code> once at init covers only the thread that called it. On Android this is less of a worry, because bionic, Android’s libc, already gives each thread it creates its own alternate signal stack. xCrash also registers one when it installs its handlers.</p>
+
+<h2 id="rule-3-reserve-a-file-descriptor-before-you-need-it">Rule 3: reserve a file descriptor before you need it</h2>
+
+<p>Every process has a limit on open file descriptors. A leak of sockets or files, which is a real bug on Android, can push the process to that limit. And sometimes that is exactly the bug that leads to the crash.</p>
+
+<p>If the fd table is full when the crash comes, <code class="language-plaintext highlighter-rouge">open()</code> for the crash log fails with <code class="language-plaintext highlighter-rouge">EMFILE</code>. You did everything right with memory and stack, and you still have nowhere to write.</p>
+
+<p>xCrash solves this in a simple way. At init it opens <code class="language-plaintext highlighter-rouge">/dev/null</code> and keeps that descriptor. It does nothing with it. It only holds a slot. At crash time, if opening the real log file fails, the handler closes the placeholder and tries again. <code class="language-plaintext highlighter-rouge">open()</code> always returns the lowest free descriptor number, so the slot that was just released is there for the log file.</p>
+
+<p>It is a small trick, but it shows the mindset: anything the crash path needs, take it while the process is still healthy.</p>
+
+<h2 id="rule-4-do-the-heavy-work-in-another-process">Rule 4: do the heavy work in another process</h2>
+
+<p>Even with these rules, a full report needs a lot of work: stop all threads, read their registers and memory, unwind every stack, read <code class="language-plaintext highlighter-rouge">/proc/self/maps</code>, the open fds, logcat lines. Doing all of that inside a signal handler, in a broken process, is asking for trouble.</p>
+
+<p>So xCrash does very little in the handler itself. Its main job is to start a child process:</p>
+
+<ol>
+  <li>The handler creates a child with <code class="language-plaintext highlighter-rouge">clone()</code>.</li>
+  <li>The child runs <code class="language-plaintext highlighter-rouge">execl()</code> on a separate dumper program that ships inside the APK. It is named like a library (<code class="language-plaintext highlighter-rouge">libxcrash_dumper.so</code>) so it gets installed with the other native libs, but it is a normal executable with a <code class="language-plaintext highlighter-rouge">main()</code>.</li>
+  <li>The parent passes the crash details (pid, crashed tid, <code class="language-plaintext highlighter-rouge">siginfo</code>, <code class="language-plaintext highlighter-rouge">ucontext</code>) to the dumper through a pipe on its stdin.</li>
+  <li>The parent waits with <code class="language-plaintext highlighter-rouge">waitpid()</code>.</li>
+</ol>
+
+<p>The dumper is a fresh process. It has a clean heap and its own working libc, so it can use <code class="language-plaintext highlighter-rouge">malloc()</code> freely. It uses <code class="language-plaintext highlighter-rouge">ptrace</code> to attach to the crashed process, suspends its threads, reads registers and memory, unwinds the stacks, and writes the tombstone. It also calls <code class="language-plaintext highlighter-rouge">alarm(30)</code> at the start, so if something hangs, the dumper is killed instead of staying around.</p>
+
+<p>There is a second reason for a separate process. A process cannot <code class="language-plaintext highlighter-rouge">ptrace</code> its own threads. To inspect itself from the outside, it needs an outside. Breakpad on Linux uses the same idea: it clones a child, and the child ptraces the crashed process to write the minidump.</p>
+
+<p>When the dumper is done, xCrash still has to tell the Java side. The handler cannot call into Java. Instead it writes to an <code class="language-plaintext highlighter-rouge">eventfd</code>, which is just a <code class="language-plaintext highlighter-rouge">write()</code>, so it is safe. A native thread that was started at init time is blocked on that <code class="language-plaintext highlighter-rouge">eventfd</code>. It wakes up and calls the Java callback from its normal thread context.</p>
+
+<p>Finally, because we set <code class="language-plaintext highlighter-rouge">setNativeRethrow(true)</code>, the original signal is passed on to the previous handler. The system crash daemon still gets its turn, so you don’t lose the system tombstone or the normal crash behaviour.</p>
+
+<h2 id="looking-back-at-my-own-integration">Looking back at my own integration</h2>
+
+<p>Reading all this made me look at our upload code with different eyes. The C part of xCrash is built with great care for a dying process. Our part was a Java callback that found the newest tombstone, gzipped it, uploaded it with the app’s global OkHttp client, and then slept five seconds to give the upload time to finish.</p>
+
+<p>All of that runs while the process is on its way out. In the Chinese post I listed the problems we saw: we suspected new OOM and ANR issues, a crash before the OkHttp client was ready meant no upload, and devices below Android 7 almost never reported. I can’t say the callback caused all of these. But it is the opposite of everything the native side does: it allocates, it takes locks, it depends on app state that may already be gone.</p>
+
+<p>The alternative is to write the tombstone at crash time and upload it on the next launch, when the process is healthy. You lose a little freshness, but the crash path becomes much smaller.</p>
+
+<h2 id="what-i-took-away">What I took away</h2>
+
+<ul>
+  <li><strong>The crash handler runs at the worst moment.</strong> Assume the heap is corrupt, a lock is held and the stack is full.</li>
+  <li><strong>Only async-signal-safe calls in the handler.</strong> No <code class="language-plaintext highlighter-rouge">malloc</code>, no <code class="language-plaintext highlighter-rouge">printf</code>, no JNI.</li>
+  <li><strong>Reserve everything in advance.</strong> An alternate stack, memory, even a file descriptor.</li>
+  <li><strong>Move heavy work out of the dying process.</strong> A child process with <code class="language-plaintext highlighter-rouge">ptrace</code> can look at the crash from outside, with a clean heap.</li>
+  <li><strong>Your own code in the callback is part of the crash path too.</strong> The library can be perfect and your upload code can still be the weak part.</li>
+</ul>
+
+
+        </section>
+
+        <footer class="post-footer">
+
+            <!-- Everything inside the #author tags pulls data from the author -->
+            <!-- #author-->
+            
+
+            <!-- Add Disqus Comments -->
+            
+
+        </footer>
+
+    </article>
+
+</main>
+
+<aside class="read-next">
+
+    <!-- [[! next_post ]] -->
+    
+        <a class="read-next-story no-cover" href="/kotli-coroutine-proguard-crash">
+            <section class="post">
+                <h2>升级Kotlin版本导致的coroutine崩溃ANR小记</h2>
+                <p>最近公司的项目在最新的版本中升级了kotlin版本，使用CI打包后的版本启动都或闪退，或ANR，看崩溃日志和ANR日志，矛头都指向了coroutine，并且Release版本崩溃而Debug版本没有问题，初步断定就是混淆的问题了。因此搜索相关Proguard rules，在Kotlin官方Github中找到coroutines.pro文件: ``` # Allow R8 to optimize away the FastServiceLoader. # Together with ServiceLoader...</p>
+            </section>
+        </a>
+    
+    <!-- [[! /next_post ]] -->
+    <!-- [[! prev_post ]] -->
+    
+        <a class="read-next-story prev no-cover" href="/summary-of-using-xcrash">
+            <section class="post">
+                <h2>xCrash运用小结</h2>
+                <p>公司在做海外产品，由于免费版firebase对native崩溃的捕获上报能力有限(无堆栈，无具体上下文信息)，因此对我们定位和降低native极为不利，当native崩溃总量进入top行列的时候，就不能对其视而不见了，因此我开始调研解决方案，最后决定接入爱奇艺推出的xCrash来捕获native崩溃，当然了，xCrash本身是不具备上报功能的，它只是将崩溃信息写入tombstone文件。因此需要在其基础之上添加上报功能。 要实现上报功能，就需要选择一个上报时机，在崩溃发生时或App再次启动时，我选择了在崩溃发生时即时上传tombstone文件，并与服务端约定上报协议，最终实现可在firebase后台通过设备ID来查看上传到服务器的tombstone文件。 具体实现如下： 在崩溃发生的回调中找到最新的tombstone文件，打包上传至服务器 public void init(Context context) { XCrash.init(context, new XCrash.InitParameters() .setAppVersion(BuildConfig.VERSION_NAME) .setLogDir(getCrashDir().getAbsolutePath()) .setJavaRethrow(true)...</p>
+            </section>
+        </a>
+    
+    <!-- [[! /prev_post ]] -->
+</aside>
+
+<!-- /post -->
+
+
+        <footer class="site-footer clearfix">
+          <section class="copyright"><a href="/">与机器，人，神共舞</a> &copy; 2026</section>
+        </footer>
+    </div>
+    <!-- [[! Ghost outputs important scripts and data with this tag ]] -->
+    <script type="text/javascript" src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+    <!-- [[! The main JavaScript file for Casper ]] -->
+    <script type="text/javascript" src="/assets/js/jquery.fitvids.js"></script>
+    <script type="text/javascript" src="/assets/js/index.js"></script>
+
+    <!-- Add Google Analytics  -->
+        <!-- Google Analytics Tracking code -->
+     <script>
+	    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+	    ga('create', 'UA-78960009-1', 'auto');
+	    ga('send', 'pageview');
+
+     </script>
+   
+</body>
+</html>

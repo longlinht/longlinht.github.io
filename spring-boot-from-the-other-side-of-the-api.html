@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- [[! Document Settings ]] -->
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+    <!-- [[! Page Meta ]] -->
+    <title>Spring Boot from the Other Side of the API</title>
+    <meta name="description" content="与机器，人，神共舞 - 编程，读书，思考，旅行，与机器对话，与人交谈，对神发问，探索，体验人生美丽的风景" />
+
+    <meta name="HandheldFriendly" content="True" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link rel="shortcut icon" href="/assets/images/favicon.ico" >
+
+    <!-- [[! Styles'n'Scripts ]] -->
+    <link rel="stylesheet" type="text/css" href="/assets/css/screen.css" />
+    <link rel="stylesheet" type="text/css"
+          href="//fonts.googleapis.com/css?family=Merriweather:300,700,700italic,300italic|Open+Sans:700,400" />
+    <link rel="stylesheet" type="text/css" href="/assets/css/syntax.css" />
+    
+    <!-- [[! Ghost outputs important style and meta data with this tag ]] -->
+        <link rel="canonical" href="/" />
+    <meta name="referrer" content="origin" />
+    <link rel="next" href="/page2/" />
+
+    <meta property="og:site_name" content="与机器，人，神共舞" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="与机器，人，神共舞" />
+    <meta property="og:description" content="编程，读书，思考，旅行，与机器对话，与人交谈，对神发问，探索，体验人生美丽的风景" />
+    <meta property="og:url" content="/" />
+    <meta property="og:image" content="/assets/images/cover1.jpg" />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="与机器，人，神共舞" />
+    <meta name="twitter:description" content="编程，读书，思考，旅行，与机器对话，与人交谈，对神发问，探索，体验人生美丽的风景" />
+    <meta name="twitter:url" content="/" />
+    <meta name="twitter:image:src" content="/assets/images/cover1.jpg" />
+
+    <script type="application/ld+json">
+{
+    "@context": "http://schema.org",
+    "@type": "Website",
+    "publisher": "Tao's Page",
+    "url": "/",
+    "image": "/assets/images/cover1.jpg",
+    "description": "编程，读书，思考，旅行，与机器对话，与人交谈，对神发问，探索，体验人生美丽的风景"
+}
+    </script>
+
+    <meta name="generator" content="Jekyll 3.0.0" />
+    <link rel="alternate" type="application/rss+xml" title="与机器，人，神共舞" href="/rss.xml" />
+
+</head>
+<body class="home-template nav-closed">
+
+    <div class="nav">
+    <h3 class="nav-title">Menu</h3>
+    <a href="#" class="nav-close">
+        <span class="hidden">Close</span>
+    </a>
+    <ul>
+        <li class="nav-home " role="presentation"><a href="/">Home</a></li>
+        <li class="nav-about " role="presentation"><a href="/about.html">About</a></li>
+        <li class="nav-fables " role="presentation"><a href="/tag/machine/">Machine</a></li>
+        <li class="nav-speeches " role="presentation"><a href="/tag/human/">Human</a></li>
+        <li class="nav-fiction " role="presentation"><a href="/tag/god/">God</a></li>
+        <li class="nav-author " role="presentation"><a href="/author/hetao/">Author</a></li>
+    </ul>
+    <a class="subscribe-button icon-feed" href="/vocab.html">Apps</a>
+</div>
+<span class="nav-cover"></span>
+
+
+    <div class="site-wrapper">
+
+        <!-- [[! Everything else gets inserted here ]] -->
+        <!-- default -->
+
+<!-- The comment above "< default" means - insert everything in this file into -->
+    <!-- the [body] of the default.hbs template, which contains our header/footer. -->
+
+<!-- Everything inside the #post tags pulls data from the post -->
+<!-- #post -->
+
+<header class="main-header post-head no-cover">
+    <nav class="main-nav  clearfix">
+        
+        
+    </nav>
+</header>
+
+<main class="content" role="main">
+
+    <article class="post tag-machine">
+
+        <header class="post-header">
+            <h1 class="post-title">Spring Boot from the Other Side of the API</h1>
+            <section class="post-meta">
+            <!-- <a href='/'>Tao He</a> -->
+
+            
+            <time class="post-date" datetime="2025-05-25">25 May 2025</time>
+                <!-- [[tags prefix=" on "]] -->
+                
+                on
+                
+                    
+                       <a href='/tag/machine'>Machine</a>
+                    
+                
+                
+            </section>
+        </header>
+
+        <section class="post-content">
+
+            <p>Two years ago I wrote <a href="/a-quick-tour-of-spring-boot.html">a quick tour of Spring Boot</a>. It was about the surface: starters, YAML config, REST style, how easy it is to add a library. This spring I went back to Java backend, this time slower and with a plan.</p>
+
+<p>I am an Android engineer. For years I have been on the client side of the API: calling endpoints, parsing JSON, retrying when the network is bad. This time I wanted to understand the other side. This post is about what I could reuse from Android, and what I had to learn from zero.</p>
+
+<h2 id="the-plan">The plan</h2>
+
+<p>I wrote a seven-day plan to get the whole map first and the details later:</p>
+
+<ol>
+  <li>Java basics from a backend view: collections, thread pools, Java 8 streams and <code class="language-plaintext highlighter-rouge">Optional</code>. Plus HTTP itself.</li>
+  <li>Spring Boot and IoC/DI.</li>
+  <li>Spring MVC and a small REST API.</li>
+  <li>Persistence: JDBC, JPA, MyBatis.</li>
+  <li>AOP, transactions, Spring Security basics.</li>
+  <li>Redis, message queues, the basic ideas of distributed systems.</li>
+  <li>Build and deploy: Maven, a runnable jar, Docker, logs.</li>
+</ol>
+
+<p>Seven days was too short, of course. The plan gave me the order. Then I spent the next weeks going through a Spring Boot course and taking notes: auto-configuration, bean scanning, a custom starter, JWT, <code class="language-plaintext highlighter-rouge">ThreadLocal</code>, testing, the data layer, caching.</p>
+
+<p>The rule I set for myself was simple: for every new thing, ask “what is this on Android?” Sometimes the answer was very close. Sometimes there was no answer at all.</p>
+
+<h2 id="what-transferred">What transferred</h2>
+
+<p><strong>Dependency injection.</strong> If you have used Dagger or Hilt, Spring’s IoC container is not new. <code class="language-plaintext highlighter-rouge">@Service</code> and <code class="language-plaintext highlighter-rouge">@Repository</code> are like <code class="language-plaintext highlighter-rouge">@Inject</code>-able classes, <code class="language-plaintext highlighter-rouge">@Configuration</code> with <code class="language-plaintext highlighter-rouge">@Bean</code> methods is like a Hilt module with <code class="language-plaintext highlighter-rouge">@Provides</code>. Constructor injection is the recommended style in both.</p>
+
+<p>The difference is when the wiring happens. Dagger generates code at compile time, so a missing dependency is a build error. Spring scans the classpath and builds the graph at startup with reflection and proxies, so a missing bean is a startup error. Both work. Spring is more flexible, Dagger tells you earlier.</p>
+
+<p><strong>HTTP, seen from the mirror.</strong> On Android I wrote Retrofit interfaces like this:</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@GET</span><span class="o">(</span><span class="s">"users/{id}"</span><span class="o">)</span>
+<span class="nc">Call</span><span class="o">&lt;</span><span class="nc">User</span><span class="o">&gt;</span> <span class="nf">getUser</span><span class="o">(</span><span class="nd">@Path</span><span class="o">(</span><span class="s">"id"</span><span class="o">)</span> <span class="kt">long</span> <span class="n">id</span><span class="o">);</span>
+</code></pre></div></div>
+
+<p>The Spring side is almost the same shape:</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@GetMapping</span><span class="o">(</span><span class="s">"/users/{id}"</span><span class="o">)</span>
+<span class="kd">public</span> <span class="nc">User</span> <span class="nf">getUser</span><span class="o">(</span><span class="nd">@PathVariable</span> <span class="nc">Long</span> <span class="n">id</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">return</span> <span class="n">userService</span><span class="o">.</span><span class="na">findById</span><span class="o">(</span><span class="n">id</span><span class="o">);</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>I already knew methods, headers, status codes and JSON. What changed is that now I choose them. Should creating a user return 200 or 201? What does a missing user return, 404 or an empty body? When I was the client, I complained about these choices. Now I had to make them.</p>
+
+<p><strong>Interceptors.</strong> An OkHttp <code class="language-plaintext highlighter-rouge">Interceptor</code> that adds an <code class="language-plaintext highlighter-rouge">Authorization</code> header has a mirror on the server: a filter that reads the header and checks the token. On Android I stored the JWT and attached it to every request. In Spring I wrote the other half: parse the token, verify it, reject the request if it is wrong. Spring Security is a chain of these filters. Once I saw it as “OkHttp interceptors, but on the receiving end”, it was much less scary.</p>
+
+<p><strong>Persistence.</strong> Room was my reference. MyBatis felt closest: you write the SQL yourself, in annotations or XML, and map the result to objects, like Room’s <code class="language-plaintext highlighter-rouge">@Query</code>. Spring Data JPA is further away. You declare <code class="language-plaintext highlighter-rouge">findByName(String name)</code> on an interface and the query is generated from the method name. It is convenient for simple queries and a bit magic for anything else.</p>
+
+<p><strong>The language.</strong> Java streams and <code class="language-plaintext highlighter-rouge">Optional</code> were easy after Kotlin’s collection functions and nullable types. Maven was new, but after years of Gradle the idea of a dependency tree and a parent version set was familiar.</p>
+
+<h2 id="what-did-not-transfer">What did not transfer</h2>
+
+<p><strong>The threading model.</strong> This was the biggest change in how I think.</p>
+
+<p>On Android there is one rule: don’t block the main thread. All my instincts are about moving work off one special thread.</p>
+
+<p>On a server there is no special thread. In a classic Spring MVC app on Tomcat, each request is handled by one thread from a pool (200 by default). Blocking in a request is normal. You call the database and wait. The danger is somewhere else: many threads running the same code <strong>at the same time</strong>.</p>
+
+<p>And by default, every Spring bean is a singleton. On Android a singleton holding mutable data already makes me nervous. On a server, one <code class="language-plaintext highlighter-rouge">UserService</code> instance is used by all request threads at once. So a field like this is a bug:</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@Service</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">OrderService</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="nc">Order</span> <span class="n">current</span><span class="o">;</span> <span class="c1">// shared by every request. Never do this.</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>Beans should be stateless. Per-request data goes in method parameters, or in a <code class="language-plaintext highlighter-rouge">ThreadLocal</code>. I used <code class="language-plaintext highlighter-rouge">ThreadLocal</code> to keep the current user after the JWT filter parsed the token, so the service layer can read it without passing it everywhere. But the threads are pooled and reused. If you don’t call <code class="language-plaintext highlighter-rouge">remove()</code> at the end of the request, the next request on that thread can see the previous user. On Android I almost never used <code class="language-plaintext highlighter-rouge">ThreadLocal</code>. Here it was in my notes in the first week, with a warning.</p>
+
+<p><strong>Transactions.</strong> Room has <code class="language-plaintext highlighter-rouge">@Transaction</code>, and I used it a few times. But on a phone there is one user, and the database is small and local. On a server, many users write the same tables at the same time, and a half-finished write can be seen by everyone.</p>
+
+<p><code class="language-plaintext highlighter-rouge">@Transactional</code> in Spring looks simple, but two details surprised me:</p>
+
+<ul>
+  <li>By default it rolls back only on unchecked exceptions (<code class="language-plaintext highlighter-rouge">RuntimeException</code> and <code class="language-plaintext highlighter-rouge">Error</code>). A checked exception commits the transaction unless you say <code class="language-plaintext highlighter-rouge">rollbackFor</code>.</li>
+  <li>It works through a proxy. If a method in the same class calls another <code class="language-plaintext highlighter-rouge">@Transactional</code> method directly, the call does not go through the proxy, and the annotation on the inner method is ignored.</li>
+</ul>
+
+<p>Both are easy to miss when you read the code, because the annotation is right there.</p>
+
+<p><strong>More than one copy of your app.</strong> An Android app runs once per phone. A backend service runs as several instances behind a load balancer. That changes many small decisions. You can’t keep a session in memory, because the next request may go to another instance. That is one reason tokens like JWT are popular: the server doesn’t need to remember anything. A cache like Redis sits outside the app so all instances share it.</p>
+
+<p>I took some Spring Cloud notes back in 2023: service registry with Eureka and Nacos, load balancing, Feign clients, a gateway. At that time they were a list of names. This time, after thinking about “more than one copy”, I could see which problem each one solves. A registry answers “where are the other services”. A gateway is one door in front of many services. Feign makes a remote call look like an interface call, a bit like Retrofit between services.</p>
+
+<p><strong>Shipping.</strong> On Android, you upload a build to the store, the rollout is slow, and you watch crash reports. On a server, you build a jar, put it in a Docker image, and it is live in minutes. Logs, health checks and metrics are how you see it. The feedback is much faster, and so are the mistakes.</p>
+
+<h2 id="what-i-took-away">What I took away</h2>
+
+<ul>
+  <li><strong>Asking “what is this on Android?” gets you most of the way.</strong> DI, HTTP, interceptors and data mapping all have a close match.</li>
+  <li><strong>The rest is about concurrency and scale.</strong> Shared singletons, pooled threads, transactions and many instances. My Android instincts had nothing to say there, and that is exactly the part to study slowly.</li>
+  <li><strong>Being the client for years helps.</strong> I know what a confusing API feels like from the outside. Now I can try not to build one.</li>
+  <li><strong>Annotations hide a lot.</strong> <code class="language-plaintext highlighter-rouge">@Transactional</code>, <code class="language-plaintext highlighter-rouge">@Autowired</code>, auto-configuration. Spring is easy to start because of them, and hard to debug for the same reason. Reading what they do underneath was the most useful part of these weeks.</li>
+</ul>
+
+
+        </section>
+
+        <footer class="post-footer">
+
+            <!-- Everything inside the #author tags pulls data from the author -->
+            <!-- #author-->
+            
+
+            <!-- Add Disqus Comments -->
+            
+
+        </footer>
+
+    </article>
+
+</main>
+
+<aside class="read-next">
+
+    <!-- [[! next_post ]] -->
+    
+        <a class="read-next-story no-cover" href="/flutter-for-android-engineers">
+            <section class="post">
+                <h2>Flutter for Android Engineers</h2>
+                <p>I wrote Android apps for about seven years. When I started learning Flutter this year,...</p>
+            </section>
+        </a>
+    
+    <!-- [[! /next_post ]] -->
+    <!-- [[! prev_post ]] -->
+    
+        <a class="read-next-story prev no-cover" href="/the-40-greatest-philosophiers">
+            <section class="post">
+                <h2>The greatest philosophiers from Socrates to Peter Singer</h2>
+                <p>I felt overwhelmed reading books about philosophy history every time until I read A Little...</p>
+            </section>
+        </a>
+    
+    <!-- [[! /prev_post ]] -->
+</aside>
+
+<!-- /post -->
+
+
+        <footer class="site-footer clearfix">
+          <section class="copyright"><a href="/">与机器，人，神共舞</a> &copy; 2026</section>
+        </footer>
+    </div>
+    <!-- [[! Ghost outputs important scripts and data with this tag ]] -->
+    <script type="text/javascript" src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+    <!-- [[! The main JavaScript file for Casper ]] -->
+    <script type="text/javascript" src="/assets/js/jquery.fitvids.js"></script>
+    <script type="text/javascript" src="/assets/js/index.js"></script>
+
+    <!-- Add Google Analytics  -->
+        <!-- Google Analytics Tracking code -->
+     <script>
+	    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+	    ga('create', 'UA-78960009-1', 'auto');
+	    ga('send', 'pageview');
+
+     </script>
+   
+</body>
+</html>

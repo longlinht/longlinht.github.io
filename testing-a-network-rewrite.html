@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- [[! Document Settings ]] -->
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+    <!-- [[! Page Meta ]] -->
+    <title>Testing a Network Rewrite, and What to Measure on Every Request</title>
+    <meta name="description" content="与机器，人，神共舞 - 编程，读书，思考，旅行，与机器对话，与人交谈，对神发问，探索，体验人生美丽的风景" />
+
+    <meta name="HandheldFriendly" content="True" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link rel="shortcut icon" href="/assets/images/favicon.ico" >
+
+    <!-- [[! Styles'n'Scripts ]] -->
+    <link rel="stylesheet" type="text/css" href="/assets/css/screen.css" />
+    <link rel="stylesheet" type="text/css"
+          href="//fonts.googleapis.com/css?family=Merriweather:300,700,700italic,300italic|Open+Sans:700,400" />
+    <link rel="stylesheet" type="text/css" href="/assets/css/syntax.css" />
+    
+    <!-- [[! Ghost outputs important style and meta data with this tag ]] -->
+        <link rel="canonical" href="/" />
+    <meta name="referrer" content="origin" />
+    <link rel="next" href="/page2/" />
+
+    <meta property="og:site_name" content="与机器，人，神共舞" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="与机器，人，神共舞" />
+    <meta property="og:description" content="编程，读书，思考，旅行，与机器对话，与人交谈，对神发问，探索，体验人生美丽的风景" />
+    <meta property="og:url" content="/" />
+    <meta property="og:image" content="/assets/images/cover1.jpg" />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="与机器，人，神共舞" />
+    <meta name="twitter:description" content="编程，读书，思考，旅行，与机器对话，与人交谈，对神发问，探索，体验人生美丽的风景" />
+    <meta name="twitter:url" content="/" />
+    <meta name="twitter:image:src" content="/assets/images/cover1.jpg" />
+
+    <script type="application/ld+json">
+{
+    "@context": "http://schema.org",
+    "@type": "Website",
+    "publisher": "Tao's Page",
+    "url": "/",
+    "image": "/assets/images/cover1.jpg",
+    "description": "编程，读书，思考，旅行，与机器对话，与人交谈，对神发问，探索，体验人生美丽的风景"
+}
+    </script>
+
+    <meta name="generator" content="Jekyll 3.0.0" />
+    <link rel="alternate" type="application/rss+xml" title="与机器，人，神共舞" href="/rss.xml" />
+
+</head>
+<body class="home-template nav-closed">
+
+    <div class="nav">
+    <h3 class="nav-title">Menu</h3>
+    <a href="#" class="nav-close">
+        <span class="hidden">Close</span>
+    </a>
+    <ul>
+        <li class="nav-home " role="presentation"><a href="/">Home</a></li>
+        <li class="nav-about " role="presentation"><a href="/about.html">About</a></li>
+        <li class="nav-fables " role="presentation"><a href="/tag/machine/">Machine</a></li>
+        <li class="nav-speeches " role="presentation"><a href="/tag/human/">Human</a></li>
+        <li class="nav-fiction " role="presentation"><a href="/tag/god/">God</a></li>
+        <li class="nav-author " role="presentation"><a href="/author/hetao/">Author</a></li>
+    </ul>
+    <a class="subscribe-button icon-feed" href="/vocab.html">Apps</a>
+</div>
+<span class="nav-cover"></span>
+
+
+    <div class="site-wrapper">
+
+        <!-- [[! Everything else gets inserted here ]] -->
+        <!-- default -->
+
+<!-- The comment above "< default" means - insert everything in this file into -->
+    <!-- the [body] of the default.hbs template, which contains our header/footer. -->
+
+<!-- Everything inside the #post tags pulls data from the post -->
+<!-- #post -->
+
+<header class="main-header post-head no-cover">
+    <nav class="main-nav  clearfix">
+        
+        
+    </nav>
+</header>
+
+<main class="content" role="main">
+
+    <article class="post tag-machine">
+
+        <header class="post-header">
+            <h1 class="post-title">Testing a Network Rewrite, and What to Measure on Every Request</h1>
+            <section class="post-meta">
+            <!-- <a href='/'>Tao He</a> -->
+
+            
+            <time class="post-date" datetime="2019-08-11">11 Aug 2019</time>
+                <!-- [[tags prefix=" on "]] -->
+                
+                on
+                
+                    
+                       <a href='/tag/machine'>Machine</a>
+                    
+                
+                
+            </section>
+        </header>
+
+        <section class="post-content">
+
+            <p>In <a href="/rewriting-the-android-network-layer-for-http2.html">the last post</a> I described how we rebuilt the Android network layer of a live-streaming app: HTTP/2 through OkHttp, our own DNS chain, an IP blacklist, a heartbeat, and remote switches for all of it.</p>
+
+<p>That kind of change is scary to ship. It sits under every request in the app. If it breaks, it does not break one screen, it breaks everything. And in a lab with good Wi-Fi it will almost always look fine.</p>
+
+<p>So before handing it to QA, we wrote two lists. The first was “what could this change break”. The second was “how will we know, from real users, that it works”. This post is both lists, plus a few tools that helped.</p>
+
+<h2 id="list-1-what-could-break">List 1: what could break</h2>
+
+<p>For each thing the new layer touches, write one line. Then QA can turn each line into test cases.</p>
+
+<p><strong>The old behaviour must not change.</strong></p>
+
+<ol>
+  <li>Every call to <code class="language-plaintext highlighter-rouge">HttpManager.send</code> and <code class="language-plaintext highlighter-rouge">sendMsg</code> still works. Almost all business requests go through these two, so this is basically “the whole app”.</li>
+  <li>Retry on failure still behaves the same.</li>
+  <li>Redirects still work.</li>
+  <li>Both HTTP and HTTPS work, on both the test and production environments.</li>
+  <li>Callbacks come at the same moment as before. If a callback suddenly arrives earlier or later, code that depends on the order can break in strange ways.</li>
+</ol>
+
+<p><strong>The new features must do what they claim.</strong></p>
+
+<ol>
+  <li>If a domain is hijacked, the heartbeat results should help us find another working IP.</li>
+  <li>After an IP fails several times, it goes into the blacklist.</li>
+  <li>When the network type changes, all caches are cleared.</li>
+  <li>When every DNS source fails for a domain, that domain’s cache is cleared, so a wrong blacklist cannot lock the user out.</li>
+  <li>The DNS chain can be configured, and each combination behaves correctly.</li>
+</ol>
+
+<p>The first five are the ones people forget. A new feature gets tested because everyone is excited about it. The old behaviour gets tested only if someone writes it down.</p>
+
+<h2 id="turning-switches-into-test-cases">Turning switches into test cases</h2>
+
+<p>This is where the remote switches paid off a second time. We built them for safety in production. But they also made testing much easier, because QA could change the behaviour of a build without a new build.</p>
+
+<p>The test points we gave QA:</p>
+
+<ol>
+  <li><strong>DNS combinations.</strong> Use the remote config to turn each DNS layer on and off: local cache, system DNS, backup IPs, Google’s DNS. Test the combinations where some are available and some are not.</li>
+  <li><strong>Bad networks.</strong> No network, weak network, no network to network, network to no network. The app should behave the same as the previous version.</li>
+  <li><strong>Network type changes.</strong> Wi-Fi to mobile and back.</li>
+  <li><strong>Downgrade.</strong> Turn HTTP/2 off remotely and check that everything falls back to HTTP/1.1.</li>
+  <li><strong>Soft downgrade.</strong> Make requests fail on purpose and check that the IP goes into the blacklist.</li>
+  <li><strong>Reporting.</strong> Check that every new analytics event is actually reported.</li>
+</ol>
+
+<p>The last one is easy to skip, and it is the one you cannot fix later. If the events are wrong in the release, you have no data for that release. I listed the weak network tools (2G-only SIM settings, a Raspberry Pi network box, Charles throttling) in <a href="/upgrade-to-http2.html">an earlier Chinese post</a>, so I won’t repeat them here.</p>
+
+<h2 id="how-to-see-http2-with-your-own-eyes">How to see HTTP/2 with your own eyes</h2>
+
+<p>“It works” is not enough for a protocol change. You want to see that the request really used HTTP/2 and really reused the connection. Two tools helped.</p>
+
+<p><strong>Charles.</strong> For each request it shows:</p>
+
+<ul>
+  <li>the <strong>ALPN</strong> result, which tells you if <code class="language-plaintext highlighter-rouge">h2</code> was negotiated;</li>
+  <li>whether the TLS <strong>session was resumed</strong>, which tells you if the connection was reused;</li>
+  <li>the <strong>timing</strong>. On a reused connection, the DNS, connect and TLS times are empty.</li>
+</ul>
+
+<p><strong>Wireshark (or tcpdump).</strong> Filter TLS handshakes to your server:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ip.addr == &lt;server-ip&gt; &amp;&amp; tcp.port == 443 &amp;&amp; ssl.handshake
+</code></pre></div></div>
+
+<p>With HTTP/2 and a working heartbeat, you should see one handshake, and then nothing, even while the app sends many requests. If you see a handshake every few seconds, something is closing the connection.</p>
+
+<h2 id="list-2-what-to-measure-on-every-request">List 2: what to measure on every request</h2>
+
+<p>Testing tells you it works on a few phones. Metrics tell you what happens on all of them. We had to decide them before the release, because you cannot go back and collect data for a version that is already out.</p>
+
+<p>The old layer already recorded a few timestamps for each request:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Field</th>
+      <th>Meaning</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>start</td>
+      <td>request started</td>
+    </tr>
+    <tr>
+      <td>connected</td>
+      <td>connection established</td>
+    </tr>
+    <tr>
+      <td>read content</td>
+      <td>started reading the response</td>
+    </tr>
+    <tr>
+      <td>end</td>
+      <td>response finished</td>
+    </tr>
+    <tr>
+      <td>content length</td>
+      <td>size of the body</td>
+    </tr>
+    <tr>
+      <td>success</td>
+      <td>success or failure flag</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>From these, and from the new layer, we picked the metrics:</p>
+
+<ol>
+  <li><strong>Total time (we called it RTT).</strong> From start to finish, for successful requests.</li>
+  <li><strong>Connect time.</strong> How long to set up the connection.</li>
+  <li><strong>DNS time.</strong> How long the lookup took.</li>
+  <li><strong>Time to first byte.</strong> When the response headers arrived.</li>
+  <li><strong>Speed.</strong> Bytes received divided by the time to receive them.</li>
+  <li><strong>Success rate.</strong> Successful requests divided by all requests.</li>
+</ol>
+
+<p>In the Chinese post I described how we split total time into buckets and compared versions. Here I want to talk about the other kind of metric, the ones that check the design itself.</p>
+
+<h2 id="metrics-that-check-the-design">Metrics that check the design</h2>
+
+<p>Some numbers are not about user experience. They exist only to prove that one part of the design does what it should. For our design:</p>
+
+<ul>
+  <li><strong>Total requests and HTTP/2 requests.</strong> How much traffic actually moved to HTTP/2. This catches the case where the server or the protocol cache silently sends everything back to HTTP/1.1.</li>
+  <li><strong>Connections created (handshakes) and heartbeats sent.</strong> Together with total requests, this gives the connection reuse rate. If the heartbeat works, requests per connection goes up. If it doesn’t, the heartbeat is just wasted traffic.</li>
+  <li><strong>The protocol field</strong> on each report, so every number can be split by HTTP/1.1 and HTTP/2.</li>
+  <li><strong>DNS events.</strong> Which DNS source answered, and when an IP enters the blacklist. Each event also carries the current remote config, so we know which layers were switched on for that user.</li>
+  <li><strong>SSL handshake failures</strong> when connecting to an IP directly, with the domain and the IP. A spike here means the IP list or the certificate setup is wrong.</li>
+</ul>
+
+<p>These counters were updated when each request finished, and reported in a batch, by default every 50 seconds. On the test environment we also printed them to the log, so QA could check them without waiting for the dashboard.</p>
+
+<h2 id="what-i-took-away">What I took away</h2>
+
+<ul>
+  <li><strong>Write down what must not change.</strong> New features get tested anyway. Old behaviour, like callback timing and retries, only gets tested if it is on the list.</li>
+  <li><strong>Remote switches are also test tools.</strong> The same switch that lets you roll back in production lets QA test every combination on one build.</li>
+  <li><strong>Look at the wire.</strong> ALPN, session reuse and the handshake count tell you more than any log line.</li>
+  <li><strong>Decide metrics before the release.</strong> You cannot collect data for a version that already shipped.</li>
+  <li><strong>Measure the design, not only the result.</strong> Reuse rate, HTTP/2 share and blacklist events tell you <em>why</em> the total time changed.</li>
+</ul>
+
+
+        </section>
+
+        <footer class="post-footer">
+
+            <!-- Everything inside the #author tags pulls data from the author -->
+            <!-- #author-->
+            
+
+            <!-- Add Disqus Comments -->
+            
+
+        </footer>
+
+    </article>
+
+</main>
+
+<aside class="read-next">
+
+    <!-- [[! next_post ]] -->
+    
+        <a class="read-next-story no-cover" href="/guide-to-prevent-null-in-android-project">
+            <section class="post">
+                <h2>Android防空指南</h2>
+                <p>最近集中进行了一段时间降低公司App崩溃率的工作，现在App的崩溃率控制在了万一与万三之间，整体来说还比较顺利，有必要将其中的方法和经验做一个沉淀。由于空指针异常导致的崩溃对App整体的崩溃率贡献巨大，日常的崩溃修复总是少不了几个空指针异常，虽然明显的空指针异常修复很容易，但是发出去的版本会持续崩溃，影响留存和体验，因此在积极修复空指针崩溃的同时也需要未雨绸缪，在开发阶段就把空指针拒之门外，对于事前防空的讨论非常多，也有大量的文章总结和分析这件事情，此文可能会提及这些讨论，但是主要还是总结我实践过的一些防空措施： ### 编写不空的代码 这个是基础，也是第一道防线，如果这一步没有做好，后面的一些措施可能负担更重。编写不空的代码其实就是要求我们在编写具体的方法和接口时尽量保证不返回null值，以及一些编程语言特性来避免空指针，也就是从根源上杜绝client代码不经意间去dereference一个空对象，具体的办法，或者说一些规约如下： * 对于数组，比如Point，返回空对象，return new Point[0]; * 对于容器，比如ArraryList,返回空对象。如果需要泛型支持，retrun Collections.emptyList(); 如果不需要泛型支持，则 return Collections.EMPTY_LIST; *...</p>
+            </section>
+        </a>
+    
+    <!-- [[! /next_post ]] -->
+    <!-- [[! prev_post ]] -->
+    
+        <a class="read-next-story prev no-cover" href="/rewriting-the-android-network-layer-for-http2">
+            <section class="post">
+                <h2>Rewriting Our Android Network Layer for HTTP/2</h2>
+                <p>In 2019 I worked on a live-streaming app with most users overseas, many in the...</p>
+            </section>
+        </a>
+    
+    <!-- [[! /prev_post ]] -->
+</aside>
+
+<!-- /post -->
+
+
+        <footer class="site-footer clearfix">
+          <section class="copyright"><a href="/">与机器，人，神共舞</a> &copy; 2026</section>
+        </footer>
+    </div>
+    <!-- [[! Ghost outputs important scripts and data with this tag ]] -->
+    <script type="text/javascript" src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+    <!-- [[! The main JavaScript file for Casper ]] -->
+    <script type="text/javascript" src="/assets/js/jquery.fitvids.js"></script>
+    <script type="text/javascript" src="/assets/js/index.js"></script>
+
+    <!-- Add Google Analytics  -->
+        <!-- Google Analytics Tracking code -->
+     <script>
+	    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+	    ga('create', 'UA-78960009-1', 'auto');
+	    ga('send', 'pageview');
+
+     </script>
+   
+</body>
+</html>

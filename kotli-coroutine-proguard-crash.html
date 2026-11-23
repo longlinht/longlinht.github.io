@@ -180,10 +180,10 @@
     <!-- [[! /next_post ]] -->
     <!-- [[! prev_post ]] -->
     
-        <a class="read-next-story prev no-cover" href="/summary-of-using-xcrash">
+        <a class="read-next-story prev no-cover" href="/native-crash-reporter-while-the-process-is-dying">
             <section class="post">
-                <h2>xCrash运用小结</h2>
-                <p>公司在做海外产品，由于免费版firebase对native崩溃的捕获上报能力有限(无堆栈，无具体上下文信息)，因此对我们定位和降低native极为不利，当native崩溃总量进入top行列的时候，就不能对其视而不见了，因此我开始调研解决方案，最后决定接入爱奇艺推出的xCrash来捕获native崩溃，当然了，xCrash本身是不具备上报功能的，它只是将崩溃信息写入tombstone文件。因此需要在其基础之上添加上报功能。 要实现上报功能，就需要选择一个上报时机，在崩溃发生时或App再次启动时，我选择了在崩溃发生时即时上传tombstone文件，并与服务端约定上报协议，最终实现可在firebase后台通过设备ID来查看上传到服务器的tombstone文件。 具体实现如下： 在崩溃发生的回调中找到最新的tombstone文件，打包上传至服务器 public void init(Context context) { XCrash.init(context, new XCrash.InitParameters() .setAppVersion(BuildConfig.VERSION_NAME) .setLogDir(getCrashDir().getAbsolutePath()) .setJavaRethrow(true)...</p>
+                <h2>What a Native Crash Reporter Does While the Process Is Dying</h2>
+                <p>In 2021 I worked on an overseas short-video and live-streaming app. Native crashes climbed into...</p>
             </section>
         </a>
     
@@ -194,7 +194,7 @@
 
 
         <footer class="site-footer clearfix">
-          <section class="copyright"><a href="/">与机器，人，神共舞</a> &copy; 2024</section>
+          <section class="copyright"><a href="/">与机器，人，神共舞</a> &copy; 2026</section>
         </footer>
     </div>
     <!-- [[! Ghost outputs important scripts and data with this tag ]] -->

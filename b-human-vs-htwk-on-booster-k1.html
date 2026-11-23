@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- [[! Document Settings ]] -->
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+    <!-- [[! Page Meta ]] -->
+    <title>Two Open-Source RoboCup Stacks on One Small Humanoid: B-Human vs HTWK on the Booster K1</title>
+    <meta name="description" content="与机器，人，神共舞 - 编程，读书，思考，旅行，与机器对话，与人交谈，对神发问，探索，体验人生美丽的风景" />
+
+    <meta name="HandheldFriendly" content="True" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link rel="shortcut icon" href="/assets/images/favicon.ico" >
+
+    <!-- [[! Styles'n'Scripts ]] -->
+    <link rel="stylesheet" type="text/css" href="/assets/css/screen.css" />
+    <link rel="stylesheet" type="text/css"
+          href="//fonts.googleapis.com/css?family=Merriweather:300,700,700italic,300italic|Open+Sans:700,400" />
+    <link rel="stylesheet" type="text/css" href="/assets/css/syntax.css" />
+    
+    <!-- [[! Ghost outputs important style and meta data with this tag ]] -->
+        <link rel="canonical" href="/" />
+    <meta name="referrer" content="origin" />
+    <link rel="next" href="/page2/" />
+
+    <meta property="og:site_name" content="与机器，人，神共舞" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="与机器，人，神共舞" />
+    <meta property="og:description" content="编程，读书，思考，旅行，与机器对话，与人交谈，对神发问，探索，体验人生美丽的风景" />
+    <meta property="og:url" content="/" />
+    <meta property="og:image" content="/assets/images/cover1.jpg" />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="与机器，人，神共舞" />
+    <meta name="twitter:description" content="编程，读书，思考，旅行，与机器对话，与人交谈，对神发问，探索，体验人生美丽的风景" />
+    <meta name="twitter:url" content="/" />
+    <meta name="twitter:image:src" content="/assets/images/cover1.jpg" />
+
+    <script type="application/ld+json">
+{
+    "@context": "http://schema.org",
+    "@type": "Website",
+    "publisher": "Tao's Page",
+    "url": "/",
+    "image": "/assets/images/cover1.jpg",
+    "description": "编程，读书，思考，旅行，与机器对话，与人交谈，对神发问，探索，体验人生美丽的风景"
+}
+    </script>
+
+    <meta name="generator" content="Jekyll 3.0.0" />
+    <link rel="alternate" type="application/rss+xml" title="与机器，人，神共舞" href="/rss.xml" />
+
+</head>
+<body class="home-template nav-closed">
+
+    <div class="nav">
+    <h3 class="nav-title">Menu</h3>
+    <a href="#" class="nav-close">
+        <span class="hidden">Close</span>
+    </a>
+    <ul>
+        <li class="nav-home " role="presentation"><a href="/">Home</a></li>
+        <li class="nav-about " role="presentation"><a href="/about.html">About</a></li>
+        <li class="nav-fables " role="presentation"><a href="/tag/machine/">Machine</a></li>
+        <li class="nav-speeches  nav-current" role="presentation"><a href="/tag/human/">Human</a></li>
+        <li class="nav-fiction " role="presentation"><a href="/tag/god/">God</a></li>
+        <li class="nav-author " role="presentation"><a href="/author/hetao/">Author</a></li>
+    </ul>
+    <a class="subscribe-button icon-feed" href="/vocab.html">Apps</a>
+</div>
+<span class="nav-cover"></span>
+
+
+    <div class="site-wrapper">
+
+        <!-- [[! Everything else gets inserted here ]] -->
+        <!-- default -->
+
+<!-- The comment above "< default" means - insert everything in this file into -->
+    <!-- the [body] of the default.hbs template, which contains our header/footer. -->
+
+<!-- Everything inside the #post tags pulls data from the post -->
+<!-- #post -->
+
+<header class="main-header post-head no-cover">
+    <nav class="main-nav  clearfix">
+        
+        
+    </nav>
+</header>
+
+<main class="content" role="main">
+
+    <article class="post tag-machine">
+
+        <header class="post-header">
+            <h1 class="post-title">Two Open-Source RoboCup Stacks on One Small Humanoid: B-Human vs HTWK on the Booster K1</h1>
+            <section class="post-meta">
+            <!-- <a href='/'>Tao He</a> -->
+
+            
+            <time class="post-date" datetime="2026-10-30">30 Oct 2026</time>
+                <!-- [[tags prefix=" on "]] -->
+                
+                on
+                
+                    
+                       <a href='/tag/machine'>Machine</a>
+                    
+                
+                
+            </section>
+        </header>
+
+        <section class="post-content">
+
+            <p>The Booster K1 is a small humanoid that many RoboCup teams now use. Two of the strongest teams have published software that can run on it, and they took very different paths.</p>
+
+<ul>
+  <li><strong>HTWK</strong> (Leipzig) published HTWK Gym, a reinforcement learning framework for training walking policies for the Booster T1 and K1. You bring the rest of the soccer stack.</li>
+  <li><strong>B-Human</strong> (Bremen) published its 2026 code release: a complete robot soccer program, perception to motion, now for the K1 and T1 only.</li>
+</ul>
+
+<p>I have been working with both this autumn. My K1 work started on the HTWK route: a walking policy trained in HTWK Gym, connected through a bridge to a ROS 2 behavior-tree soccer stack. This week I also installed the B-Human release on a K1. This post compares the two, as architecture. It is not a benchmark. Neither is “better”. They answer different questions.</p>
+
+<h2 id="shape-one-program-versus-many-nodes">Shape: one program versus many nodes</h2>
+
+<p><strong>B-Human</strong> is one C++ program, about 150,000 lines. Vision, localization, behavior and motion all live inside it, in threads: camera, motion at 500 Hz, audio, cognition, debug. All motions are RL policies: walk, kick and get-up, running at 50 Hz through ONNX Runtime.</p>
+
+<p><strong>The HTWK route</strong> is a set of pieces. HTWK Gym trains a 12-output lower-body walking policy (ParameterWalk, 54 inputs). On the robot, a bridge runs that policy next to separate ROS 2 nodes for vision and behavior. Get-up and other skills stay with the Booster firmware.</p>
+
+<p>The trade-off is the usual one. One program is easier to make consistent: one clock, one set of frames, one place to debug. Separate nodes are easier to swap and to mix with the vendor’s own stack, but every boundary is a place where timing and ownership can go wrong.</p>
+
+<h2 id="who-owns-the-robot">Who owns the robot</h2>
+
+<p>This was the biggest difference for me.</p>
+
+<p><strong>B-Human never gives control back to the vendor during play.</strong> It runs the whole time in Booster’s CUSTOM mode. Its own “prepare” and “walk” are states <em>inside</em> CUSTOM, not Booster’s PREP and WALK. A parent watchdog process starts the control program. If the control program dies, the watchdog switches the robot to damping and saves a trace. The emergency button (F1) is always handled by the watchdog, so it still works when the control program misbehaves. No robot data for 50 ms counts as an emergency.</p>
+
+<p><strong>The HTWK route leans on the firmware.</strong> The firmware’s standing posture is the safe home. The bridge hands over from firmware to the RL policy, and hands back to the firmware’s PREP mode when it releases. I wrote about that handover in the <a href="/exactly-one-motion-owner.html">motion owner post</a>.</p>
+
+<p>Both models end in the same place on a fault: damping. And damping drops a standing robot in either stack. That is worth remembering whichever one you pick.</p>
+
+<h2 id="the-installer-is-part-of-the-architecture">The installer is part of the architecture</h2>
+
+<p>B-Human’s installer is invasive, and that is a design choice, not a flaw. To be the only one who sees the buttons and the gamepad, it patches two Booster binaries so the original topic names are no longer published. It turns off several Booster services, including the vendor’s camera service, and installs its own camera streaming service on the head board. It changes the password and network settings.</p>
+
+<p>The consequence: once installed, anything that listens on Booster’s original button or gamepad topics, like SDK samples or a ROS 2 soccer stack, gets nothing. There is an uninstall option that restores the patched files, but not every change is undone.</p>
+
+<p>So in practice, <strong>you can’t casually run both stacks on one robot.</strong> B-Human’s release is tested on Booster firmware 1.7.1 and says 1.8.0 does not behave as intended. My HTWK-route robot runs a 1.8 firmware. Switching one robot between stacks means uninstalling, maybe changing firmware, and checking what is left behind. Where possible, I give each stack its own robot.</p>
+
+<h2 id="walking-policies">Walking policies</h2>
+
+<p>The walking inputs show two very different bets:</p>
+
+<ul>
+  <li><strong>HTWK ParameterWalk</strong>: 54 inputs to 12 outputs. Compact, current state plus commands.</li>
+  <li><strong>B-Human walk</strong>: 344 inputs on the K1, with a history of 10 steps (200 ms), 12 leg outputs, and an extra output that adjusts the gait frequency. B-Human credits the history and the learned frequency for straighter legs.</li>
+</ul>
+
+<p>I don’t know yet which matters more on our robots. But it is a concrete thing to try in HTWK Gym: add history, let the policy pick its frequency, and compare.</p>
+
+<h2 id="kicking">Kicking</h2>
+
+<p>Another clear difference:</p>
+
+<ul>
+  <li><strong>B-Human</strong> has two RL kick policies, and the kick policy also does the <strong>final approach</strong> to the ball. Its inputs include ball velocity, kick direction and strength, and the previous ball position.</li>
+  <li><strong>HTWK Gym</strong> has a kicking task with 44 inputs, built around a robot that is already standing in a tight window behind the ball.</li>
+</ul>
+
+<p>Handing the last steps to the kick policy is a big design choice. It means “walk to the ball” and “kick” are not two separate skills with a handover in between. If kicking becomes a priority for us, B-Human’s input design is the reference I’d start from.</p>
+
+<h2 id="small-details-that-bite">Small details that bite</h2>
+
+<ul>
+  <li><strong>Frames.</strong> B-Human’s torso frame origin is between the hip pitch joints. Booster’s is 77 mm higher. If you compare or exchange any pose data between the stacks, convert first.</li>
+  <li><strong>Build machine.</strong> B-Human’s Linux docs target Ubuntu 26.04 with recent clang, CMake and Qt. My workstation runs 22.04. Instead of upgrading it, I built in a Docker image and cross-compiled for the robot there. SimRobot, their simulator and debugging tool, also runs in a container and connects to the robot remotely.</li>
+  <li><strong>Build type.</strong> B-Human’s Develop build is the useful middle: fast enough on the robot, and it can still connect to SimRobot. Release can’t connect. Debug is too slow on the real robot.</li>
+  <li><strong>Licenses.</strong> B-Human’s code is released publicly every year. The HTWK Gym snapshot I looked at had no license file, and its README limits competition use of pretrained models to cases agreed with HTWK. Ask before reusing.</li>
+</ul>
+
+<h2 id="so-which-one">So which one?</h2>
+
+<p>For now, both, on separate robots.</p>
+
+<p>The HTWK route fits a team that already has a ROS 2 soccer stack and wants to add learned locomotion without replacing everything. Its cost is the handover between firmware and policy, which you have to design and test very carefully.</p>
+
+<p>The B-Human route is a complete, consistent system with years of competition behind it. Its cost is that it takes over the robot, and you accept its architecture, its firmware version and its tools.</p>
+
+<p>Reading both side by side has been the best robotics education I’ve had this year. Each one makes the other’s assumptions visible.</p>
+
+<h2 id="what-i-took-away">What I took away</h2>
+
+<ul>
+  <li><strong>Compare ownership models, not features.</strong> Who owns the joints, the buttons and the safe state tells you more than any feature list.</li>
+  <li><strong>An installer can be architecture.</strong> What it disables and patches is part of the design.</li>
+  <li><strong>One robot per stack.</strong> Firmware versions and patched binaries make sharing expensive.</li>
+  <li><strong>Read the inputs.</strong> The input vector of a policy tells you what its authors believed mattered.</li>
+  <li><strong>Open source in RoboCup is a gift.</strong> Both teams published years of work. The least I can do is read it carefully before I change it.</li>
+</ul>
+
+
+        </section>
+
+        <footer class="post-footer">
+
+            <!-- Everything inside the #author tags pulls data from the author -->
+            <!-- #author-->
+            
+
+            <!-- Add Disqus Comments -->
+            
+
+        </footer>
+
+    </article>
+
+</main>
+
+<aside class="read-next">
+
+    <!-- [[! next_post ]] -->
+    
+    <!-- [[! /next_post ]] -->
+    <!-- [[! prev_post ]] -->
+    
+        <a class="read-next-story prev no-cover" href="/exactly-one-motion-owner">
+            <section class="post">
+                <h2>Exactly One Motion Owner: Running an RL Policy Next to Vendor Firmware</h2>
+                <p>A Booster K1 comes with firmware that can already stand, walk, get up and kick....</p>
+            </section>
+        </a>
+    
+    <!-- [[! /prev_post ]] -->
+</aside>
+
+<!-- /post -->
+
+
+        <footer class="site-footer clearfix">
+          <section class="copyright"><a href="/">与机器，人，神共舞</a> &copy; 2026</section>
+        </footer>
+    </div>
+    <!-- [[! Ghost outputs important scripts and data with this tag ]] -->
+    <script type="text/javascript" src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+    <!-- [[! The main JavaScript file for Casper ]] -->
+    <script type="text/javascript" src="/assets/js/jquery.fitvids.js"></script>
+    <script type="text/javascript" src="/assets/js/index.js"></script>
+
+    <!-- Add Google Analytics  -->
+        <!-- Google Analytics Tracking code -->
+     <script>
+	    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+	    ga('create', 'UA-78960009-1', 'auto');
+	    ga('send', 'pageview');
+
+     </script>
+   
+</body>
+</html>

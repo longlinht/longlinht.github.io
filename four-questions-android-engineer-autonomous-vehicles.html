@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- [[! Document Settings ]] -->
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+    <!-- [[! Page Meta ]] -->
+    <title>Four Questions an Android Engineer Asked When Switching to Autonomous Vehicles</title>
+    <meta name="description" content="与机器，人，神共舞 - 编程，读书，思考，旅行，与机器对话，与人交谈，对神发问，探索，体验人生美丽的风景" />
+
+    <meta name="HandheldFriendly" content="True" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link rel="shortcut icon" href="/assets/images/favicon.ico" >
+
+    <!-- [[! Styles'n'Scripts ]] -->
+    <link rel="stylesheet" type="text/css" href="/assets/css/screen.css" />
+    <link rel="stylesheet" type="text/css"
+          href="//fonts.googleapis.com/css?family=Merriweather:300,700,700italic,300italic|Open+Sans:700,400" />
+    <link rel="stylesheet" type="text/css" href="/assets/css/syntax.css" />
+    
+    <!-- [[! Ghost outputs important style and meta data with this tag ]] -->
+        <link rel="canonical" href="/" />
+    <meta name="referrer" content="origin" />
+    <link rel="next" href="/page2/" />
+
+    <meta property="og:site_name" content="与机器，人，神共舞" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="与机器，人，神共舞" />
+    <meta property="og:description" content="编程，读书，思考，旅行，与机器对话，与人交谈，对神发问，探索，体验人生美丽的风景" />
+    <meta property="og:url" content="/" />
+    <meta property="og:image" content="/assets/images/cover1.jpg" />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="与机器，人，神共舞" />
+    <meta name="twitter:description" content="编程，读书，思考，旅行，与机器对话，与人交谈，对神发问，探索，体验人生美丽的风景" />
+    <meta name="twitter:url" content="/" />
+    <meta name="twitter:image:src" content="/assets/images/cover1.jpg" />
+
+    <script type="application/ld+json">
+{
+    "@context": "http://schema.org",
+    "@type": "Website",
+    "publisher": "Tao's Page",
+    "url": "/",
+    "image": "/assets/images/cover1.jpg",
+    "description": "编程，读书，思考，旅行，与机器对话，与人交谈，对神发问，探索，体验人生美丽的风景"
+}
+    </script>
+
+    <meta name="generator" content="Jekyll 3.0.0" />
+    <link rel="alternate" type="application/rss+xml" title="与机器，人，神共舞" href="/rss.xml" />
+
+</head>
+<body class="home-template nav-closed">
+
+    <div class="nav">
+    <h3 class="nav-title">Menu</h3>
+    <a href="#" class="nav-close">
+        <span class="hidden">Close</span>
+    </a>
+    <ul>
+        <li class="nav-home " role="presentation"><a href="/">Home</a></li>
+        <li class="nav-about " role="presentation"><a href="/about.html">About</a></li>
+        <li class="nav-fables " role="presentation"><a href="/tag/machine/">Machine</a></li>
+        <li class="nav-speeches " role="presentation"><a href="/tag/human/">Human</a></li>
+        <li class="nav-fiction " role="presentation"><a href="/tag/god/">God</a></li>
+        <li class="nav-author " role="presentation"><a href="/author/hetao/">Author</a></li>
+    </ul>
+    <a class="subscribe-button icon-feed" href="/vocab.html">Apps</a>
+</div>
+<span class="nav-cover"></span>
+
+
+    <div class="site-wrapper">
+
+        <!-- [[! Everything else gets inserted here ]] -->
+        <!-- default -->
+
+<!-- The comment above "< default" means - insert everything in this file into -->
+    <!-- the [body] of the default.hbs template, which contains our header/footer. -->
+
+<!-- Everything inside the #post tags pulls data from the post -->
+<!-- #post -->
+
+<header class="main-header post-head no-cover">
+    <nav class="main-nav  clearfix">
+        
+        
+    </nav>
+</header>
+
+<main class="content" role="main">
+
+    <article class="post tag-machine">
+
+        <header class="post-header">
+            <h1 class="post-title">Four Questions an Android Engineer Asked When Switching to Autonomous Vehicles</h1>
+            <section class="post-meta">
+            <!-- <a href='/'>Tao He</a> -->
+
+            
+            <time class="post-date" datetime="2026-01-18">18 Jan 2026</time>
+                <!-- [[tags prefix=" on "]] -->
+                
+                on
+                
+                    
+                       <a href='/tag/machine'>Machine</a>
+                    
+                
+                
+            </section>
+        </header>
+
+        <section class="post-content">
+
+            <p>I wrote C++ for a few years, then Android for about seven, then more mobile work in Dubai and Abu Dhabi. At the end of 2025 I moved to a research job at a university lab in Abu Dhabi. One of the projects is autonomous racing.</p>
+
+<p>The first weeks felt strange. I could read the code. I could build it. But I did not really understand why the stack was split the way it was. Words like “path”, “trajectory”, “pose” and “frame” were used all the time, and everybody seemed to agree on what they meant except me.</p>
+
+<p>So I did what I used to do with Android source: I wrote down the questions that kept blocking me, and I worked through them one by one until the answer was short enough to remember. There were four.</p>
+
+<h2 id="1-does-planning-output-a-path-or-a-trajectory">1. Does planning output a path or a trajectory?</h2>
+
+<p>I used both words as if they were the same. They are not.</p>
+
+<ul>
+  <li>A <strong>path</strong> is geometry. A curve in space, <code class="language-plaintext highlighter-rouge">x(s), y(s)</code>, parameterized by distance along the curve. It answers: <em>where should I go?</em></li>
+  <li>A <strong>trajectory</strong> is a path with time. <code class="language-plaintext highlighter-rouge">x(t), y(t), heading(t), v(t), a(t)</code>. It answers: <em>where should I be at each moment, and how fast?</em></li>
+</ul>
+
+<p>The rule of thumb I now use: does the output include time, or velocity? If no, it is a path. If yes, it is a trajectory.</p>
+
+<p>Why does it matter? Because a controller needs time. It computes an error between where the car is and where it should be <em>now</em>. With only a path, “now” is not defined. The controller does not know how fast to go or when to brake.</p>
+
+<p>In a typical stack, the global planner gives a path (a route along the map, no timing). The local or motion planner turns that into a trajectory, with speed and acceleration limits and obstacles. The controller tracks the trajectory.</p>
+
+<p>Small mobile robots often hide this. In ROS Nav2, for example, the global planner outputs a path and the local planner computes velocity commands on the fly. The path-to-trajectory step is still there. It is just inside one module.</p>
+
+<p>At racing speed you cannot hide it. You cannot decide speed only at the last moment in the controller. Speed has to be planned together with the curve.</p>
+
+<p>The Android comparison that helped me: a path is the shape of an animation, a trajectory is the shape plus the interpolator and the duration. Without the time part, nothing moves.</p>
+
+<h2 id="2-where-is-the-boundary-between-perception-and-localization">2. Where is the boundary between perception and localization?</h2>
+
+<p>Both use the same sensors: camera, LiDAR, IMU, GNSS. Sometimes even the same features. So where is the line?</p>
+
+<p>The answer that finally worked for me is: <strong>what is the subject of the estimate?</strong></p>
+
+<ul>
+  <li>Perception estimates the state of the world: other cars, their positions and speeds, lanes, free space.</li>
+  <li>Localization estimates the state of <em>me</em>: my position, heading and velocity in the map.</li>
+</ul>
+
+<p>Or in transform language: if a module estimates <code class="language-plaintext highlighter-rouge">T_map_base</code>, it is localization. If it estimates <code class="language-plaintext highlighter-rouge">T_base_object</code>, it is perception.</p>
+
+<p>Perception says “there is a car 12 meters ahead”. Localization says “I am at this point in the map”. Without localization, the perception output is floating. It is relative to a car whose position nobody knows.</p>
+
+<p>Some things sit on the line. SLAM builds a map (perception of structure) and estimates the pose (localization) at the same time. Lane detection is perception, but matching those lanes to an HD map to correct your pose is localization. Same raw data, different question.</p>
+
+<p>For me this was the same lesson as layering an app: don’t split modules by <em>what data they read</em>, split them by <em>what they are responsible for producing</em>.</p>
+
+<h2 id="3-why-is-the-tf-tree-so-important">3. Why is the TF tree so important?</h2>
+
+<p>In Android, coordinates were mostly a UI problem. A view has its own coordinates, the parent has others, the screen has others. You convert, and if you get it wrong a button is drawn a few pixels off.</p>
+
+<p>In a car the same mistake moves an obstacle by a meter.</p>
+
+<p>Every module lives in some frame. A typical tree looks like this:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>map
+ └── odom
+      └── base_link
+           ├── lidar
+           ├── camera_front
+           └── imu
+</code></pre></div></div>
+
+<p>The LiDAR sees a car at <code class="language-plaintext highlighter-rouge">(8.2, 1.1)</code> in the LiDAR frame. The planner needs it in the map frame. So you chain the transforms: map to base (from localization), base to LiDAR (from calibration), LiDAR to object (from perception). If any link is wrong, objects shift, lanes don’t line up, and the planner plans around things that are not there.</p>
+
+<p>The part I underestimated was <strong>time</strong>. Transforms change every moment, so you need the transform <em>at the timestamp of the measurement</em>. A small delay is harmless when you are slow. At 1 m/s, a 100 ms error is 10 cm. At 30 m/s, the same 100 ms is 3 meters.</p>
+
+<p>People say most “mysterious” bugs in robotics are TF bugs. After a few weeks I started to believe them.</p>
+
+<h2 id="4-what-does-a-vehicle-controller-actually-take-as-input">4. What does a vehicle controller actually take as input?</h2>
+
+<p>I expected a long list. In the end it is three things:</p>
+
+<ol>
+  <li><strong>Where I should be.</strong> The reference trajectory from the planner: positions, headings, speeds, sometimes acceleration, with timestamps.</li>
+  <li><strong>Where I am.</strong> The state estimate: pose, velocity, yaw rate, steering angle.</li>
+  <li><strong>What I am allowed to do.</strong> Vehicle parameters (wheelbase, max steering angle, max acceleration) and limits (steering rate, jerk, speed caps).</li>
+</ol>
+
+<p>Plus some mode information, like whether we are in emergency braking.</p>
+
+<p>What the controller does <strong>not</strong> take is just as useful to know: no camera images, no point clouds, no list of detected objects. All of that is already turned into a trajectory upstream. The controller lives in a much simpler world. It assumes the trajectory it gets is safe and feasible.</p>
+
+<p>Controllers are also often split in two:</p>
+
+<ul>
+  <li><strong>Lateral</strong> (steering) needs curvature, heading error, cross-track error, and current speed. Speed matters because the same steering angle does very different things at 20 km/h and at 200 km/h.</li>
+  <li><strong>Longitudinal</strong> (throttle and brake) needs the reference speed and acceleration and the current speed.</li>
+</ul>
+
+<p>This split is clean on paper. In racing it is not, because tires have a limited amount of grip, and braking and turning both use it. But that is a topic for another post.</p>
+
+<h2 id="what-i-took-away">What I took away</h2>
+
+<ul>
+  <li><strong>Ask “what does it output?” before “how does it work?”</strong> Every one of these four questions became easy once I looked at a module’s output, not its algorithm.</li>
+  <li><strong>Time is part of the data.</strong> Paths without time and transforms without timestamps both look fine until the car moves fast.</li>
+  <li><strong>Old habits still work.</strong> Reading Android source taught me to draw the data flow first. It is the same here, only the data is in meters instead of pixels.</li>
+  <li><strong>Write the questions down.</strong> They felt too basic to ask out loud. Written down, they had short answers, and those answers became the map I still use.</li>
+</ul>
+
+
+        </section>
+
+        <footer class="post-footer">
+
+            <!-- Everything inside the #author tags pulls data from the author -->
+            <!-- #author-->
+            
+
+            <!-- Add Disqus Comments -->
+            
+
+        </footer>
+
+    </article>
+
+</main>
+
+<aside class="read-next">
+
+    <!-- [[! next_post ]] -->
+    
+        <a class="read-next-story no-cover" href="/a-tour-of-avlite">
+            <section class="post">
+                <h2>A Tour of AVLite, a Simplified AV Stack</h2>
+                <p>A full autonomous driving stack is too big to read in one go. Autoware has...</p>
+            </section>
+        </a>
+    
+    <!-- [[! /next_post ]] -->
+    <!-- [[! prev_post ]] -->
+    
+        <a class="read-next-story prev no-cover" href="/flutter-three-trees-for-android-view-people">
+            <section class="post">
+                <h2>Flutter's Three Trees, for People Who Wrote Android Views</h2>
+                <p>In the last post I mapped Flutter words to Android words. One row in that...</p>
+            </section>
+        </a>
+    
+    <!-- [[! /prev_post ]] -->
+</aside>
+
+<!-- /post -->
+
+
+        <footer class="site-footer clearfix">
+          <section class="copyright"><a href="/">与机器，人，神共舞</a> &copy; 2026</section>
+        </footer>
+    </div>
+    <!-- [[! Ghost outputs important scripts and data with this tag ]] -->
+    <script type="text/javascript" src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+    <!-- [[! The main JavaScript file for Casper ]] -->
+    <script type="text/javascript" src="/assets/js/jquery.fitvids.js"></script>
+    <script type="text/javascript" src="/assets/js/index.js"></script>
+
+    <!-- Add Google Analytics  -->
+        <!-- Google Analytics Tracking code -->
+     <script>
+	    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+	    ga('create', 'UA-78960009-1', 'auto');
+	    ga('send', 'pageview');
+
+     </script>
+   
+</body>
+</html>

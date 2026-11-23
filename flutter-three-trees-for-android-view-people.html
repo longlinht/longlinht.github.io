@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- [[! Document Settings ]] -->
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+    <!-- [[! Page Meta ]] -->
+    <title>Flutter's Three Trees, for People Who Wrote Android Views</title>
+    <meta name="description" content="与机器，人，神共舞 - 编程，读书，思考，旅行，与机器对话，与人交谈，对神发问，探索，体验人生美丽的风景" />
+
+    <meta name="HandheldFriendly" content="True" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link rel="shortcut icon" href="/assets/images/favicon.ico" >
+
+    <!-- [[! Styles'n'Scripts ]] -->
+    <link rel="stylesheet" type="text/css" href="/assets/css/screen.css" />
+    <link rel="stylesheet" type="text/css"
+          href="//fonts.googleapis.com/css?family=Merriweather:300,700,700italic,300italic|Open+Sans:700,400" />
+    <link rel="stylesheet" type="text/css" href="/assets/css/syntax.css" />
+    
+    <!-- [[! Ghost outputs important style and meta data with this tag ]] -->
+        <link rel="canonical" href="/" />
+    <meta name="referrer" content="origin" />
+    <link rel="next" href="/page2/" />
+
+    <meta property="og:site_name" content="与机器，人，神共舞" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="与机器，人，神共舞" />
+    <meta property="og:description" content="编程，读书，思考，旅行，与机器对话，与人交谈，对神发问，探索，体验人生美丽的风景" />
+    <meta property="og:url" content="/" />
+    <meta property="og:image" content="/assets/images/cover1.jpg" />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="与机器，人，神共舞" />
+    <meta name="twitter:description" content="编程，读书，思考，旅行，与机器对话，与人交谈，对神发问，探索，体验人生美丽的风景" />
+    <meta name="twitter:url" content="/" />
+    <meta name="twitter:image:src" content="/assets/images/cover1.jpg" />
+
+    <script type="application/ld+json">
+{
+    "@context": "http://schema.org",
+    "@type": "Website",
+    "publisher": "Tao's Page",
+    "url": "/",
+    "image": "/assets/images/cover1.jpg",
+    "description": "编程，读书，思考，旅行，与机器对话，与人交谈，对神发问，探索，体验人生美丽的风景"
+}
+    </script>
+
+    <meta name="generator" content="Jekyll 3.0.0" />
+    <link rel="alternate" type="application/rss+xml" title="与机器，人，神共舞" href="/rss.xml" />
+
+</head>
+<body class="home-template nav-closed">
+
+    <div class="nav">
+    <h3 class="nav-title">Menu</h3>
+    <a href="#" class="nav-close">
+        <span class="hidden">Close</span>
+    </a>
+    <ul>
+        <li class="nav-home " role="presentation"><a href="/">Home</a></li>
+        <li class="nav-about " role="presentation"><a href="/about.html">About</a></li>
+        <li class="nav-fables " role="presentation"><a href="/tag/machine/">Machine</a></li>
+        <li class="nav-speeches " role="presentation"><a href="/tag/human/">Human</a></li>
+        <li class="nav-fiction " role="presentation"><a href="/tag/god/">God</a></li>
+        <li class="nav-author " role="presentation"><a href="/author/hetao/">Author</a></li>
+    </ul>
+    <a class="subscribe-button icon-feed" href="/vocab.html">Apps</a>
+</div>
+<span class="nav-cover"></span>
+
+
+    <div class="site-wrapper">
+
+        <!-- [[! Everything else gets inserted here ]] -->
+        <!-- default -->
+
+<!-- The comment above "< default" means - insert everything in this file into -->
+    <!-- the [body] of the default.hbs template, which contains our header/footer. -->
+
+<!-- Everything inside the #post tags pulls data from the post -->
+<!-- #post -->
+
+<header class="main-header post-head no-cover">
+    <nav class="main-nav  clearfix">
+        
+        
+    </nav>
+</header>
+
+<main class="content" role="main">
+
+    <article class="post tag-machine">
+
+        <header class="post-header">
+            <h1 class="post-title">Flutter's Three Trees, for People Who Wrote Android Views</h1>
+            <section class="post-meta">
+            <!-- <a href='/'>Tao He</a> -->
+
+            
+            <time class="post-date" datetime="2025-10-19">19 Oct 2025</time>
+                <!-- [[tags prefix=" on "]] -->
+                
+                on
+                
+                    
+                       <a href='/tag/machine'>Machine</a>
+                    
+                
+                
+            </section>
+        </header>
+
+        <section class="post-content">
+
+            <p>In the <a href="/flutter-for-android-engineers.html">last post</a> I mapped Flutter words to Android words. One row in that table was wrong in a useful way: “<code class="language-plaintext highlighter-rouge">setState()</code> is like <code class="language-plaintext highlighter-rouge">invalidate()</code>”. It is not. To see why, you need Flutter’s three trees.</p>
+
+<p>On Android there is one tree. A <code class="language-plaintext highlighter-rouge">View</code> is the configuration, the state and the thing that measures and draws, all in one object. You call <code class="language-plaintext highlighter-rouge">requestLayout()</code> when the size may change and <code class="language-plaintext highlighter-rouge">invalidate()</code> when the pixels change. I wrote custom Views for years with this model in my head.</p>
+
+<p>Flutter splits that one object into three.</p>
+
+<h2 id="three-trees-three-jobs">Three trees, three jobs</h2>
+
+<p><strong>Widget.</strong> An immutable description. <code class="language-plaintext highlighter-rouge">Padding(padding: 8, child: ...)</code> is just data. It is created on every build and thrown away. Creating one is very cheap.</p>
+
+<p><strong>Element.</strong> The live instance at one position in the tree. It holds a reference to the current widget, to its parent and children, and, for a <code class="language-plaintext highlighter-rouge">StatefulWidget</code>, the <code class="language-plaintext highlighter-rouge">State</code> object. The <code class="language-plaintext highlighter-rouge">BuildContext</code> you get in <code class="language-plaintext highlighter-rouge">build()</code> is the Element. This is the part that lives long.</p>
+
+<p><strong>RenderObject.</strong> The part that does layout, paint and hit testing. If you know <code class="language-plaintext highlighter-rouge">onMeasure()</code>, <code class="language-plaintext highlighter-rouge">onLayout()</code> and <code class="language-plaintext highlighter-rouge">onDraw()</code>, this is where they live: <code class="language-plaintext highlighter-rouge">performLayout()</code> and <code class="language-plaintext highlighter-rouge">paint()</code>.</p>
+
+<p>My notes first said “every widget has one Element and one RenderObject”. That is not quite right, and the difference matters:</p>
+
+<ul>
+  <li>Every widget creates one Element.</li>
+  <li>Only <strong>RenderObjectWidgets</strong> create a RenderObject. <code class="language-plaintext highlighter-rouge">Padding</code>, <code class="language-plaintext highlighter-rouge">Align</code>, <code class="language-plaintext highlighter-rouge">RichText</code>, <code class="language-plaintext highlighter-rouge">CustomPaint</code> are examples.</li>
+  <li><code class="language-plaintext highlighter-rouge">StatelessWidget</code> and <code class="language-plaintext highlighter-rouge">StatefulWidget</code> only compose other widgets. Their Elements have no RenderObject of their own.</li>
+</ul>
+
+<p>For example, <code class="language-plaintext highlighter-rouge">Text</code> is a <code class="language-plaintext highlighter-rouge">StatelessWidget</code>. Its <code class="language-plaintext highlighter-rouge">build()</code> returns a <code class="language-plaintext highlighter-rouge">RichText</code>, and the <code class="language-plaintext highlighter-rouge">RichText</code> creates a <code class="language-plaintext highlighter-rouge">RenderParagraph</code>. So the render tree is much smaller than the widget tree. Most of the widgets you write are just glue.</p>
+
+<h2 id="what-happens-on-setstate">What happens on setState</h2>
+
+<p>Say a counter changes from 1 to 2.</p>
+
+<ol>
+  <li><code class="language-plaintext highlighter-rouge">setState()</code> runs your callback and calls <code class="language-plaintext highlighter-rouge">markNeedsBuild()</code> on this Element. The Element is added to a dirty list, and a frame is scheduled. Nothing else happens yet.</li>
+  <li>On the next frame, Flutter calls <code class="language-plaintext highlighter-rouge">build()</code> on each dirty Element. Your <code class="language-plaintext highlighter-rouge">build()</code> returns a new <code class="language-plaintext highlighter-rouge">Text('2')</code>.</li>
+  <li>For each child, Flutter compares the old widget with the new one. If they can be matched (rules below), the old Element is kept and gets the new widget through <code class="language-plaintext highlighter-rouge">update()</code>.</li>
+  <li>Down the tree, <code class="language-plaintext highlighter-rouge">RichText</code> calls <code class="language-plaintext highlighter-rouge">updateRenderObject()</code>. It sets the new text on the existing <code class="language-plaintext highlighter-rouge">RenderParagraph</code>.</li>
+  <li>The RenderObject’s setter checks if the value really changed. If yes, it calls <code class="language-plaintext highlighter-rouge">markNeedsLayout()</code> or <code class="language-plaintext highlighter-rouge">markNeedsPaint()</code>.</li>
+  <li>Later in the same frame, only the marked RenderObjects run layout and paint.</li>
+</ol>
+
+<p>So <code class="language-plaintext highlighter-rouge">setState()</code> is not <code class="language-plaintext highlighter-rouge">invalidate()</code>. <code class="language-plaintext highlighter-rouge">markNeedsPaint()</code> is the real <code class="language-plaintext highlighter-rouge">invalidate()</code>, and <code class="language-plaintext highlighter-rouge">markNeedsLayout()</code> is the real <code class="language-plaintext highlighter-rouge">requestLayout()</code>. Rebuild is an extra step that Android Views do not have. The closest Android thing is recomposition in Jetpack Compose.</p>
+
+<h2 id="element-reuse">Element reuse</h2>
+
+<p>Step 3 is where performance and state are decided. The rule is in <code class="language-plaintext highlighter-rouge">Widget.canUpdate()</code>: an old Element can take a new widget if the two widgets have <strong>the same runtime type and the same key</strong>. That’s all.</p>
+
+<p>Children without keys are matched by position. Children with keys are matched by key. If the parent Element is replaced, all its children are replaced too.</p>
+
+<p>Two cases taught me why this matters.</p>
+
+<p><strong>Changing the type at a position loses state.</strong></p>
+
+<div class="language-dart highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// before</span>
+<span class="nl">child:</span> <span class="n">MyForm</span><span class="o">()</span>
+<span class="c1">// after, a condition wraps it</span>
+<span class="nl">child:</span> <span class="n">isWide</span> <span class="o">?</span> <span class="n">Padding</span><span class="o">(</span><span class="nl">padding:</span> <span class="n">p</span><span class="o">,</span> <span class="nl">child:</span> <span class="n">MyForm</span><span class="o">())</span> <span class="o">:</span> <span class="n">MyForm</span><span class="o">()</span>
+</code></pre></div></div>
+
+<p>When <code class="language-plaintext highlighter-rouge">isWide</code> flips, the widget at that position changes from <code class="language-plaintext highlighter-rouge">MyForm</code> to <code class="language-plaintext highlighter-rouge">Padding</code>. Different type, so the old Element is thrown away, and with it the <code class="language-plaintext highlighter-rouge">State</code> of <code class="language-plaintext highlighter-rouge">MyForm</code>. Whatever the user typed is gone. The fix is to keep the tree shape stable, for example always wrap with <code class="language-plaintext highlighter-rouge">Padding</code> and change only the padding value.</p>
+
+<p><strong>Reordering without keys moves the wrong thing.</strong></p>
+
+<p>My notes said that if you swap two <code class="language-plaintext highlighter-rouge">Text</code> widgets without keys, both are destroyed and rebuilt. That is not what happens. The types match at each position, so both Elements are <strong>reused</strong>. Each one just gets the other widget’s config. For <code class="language-plaintext highlighter-rouge">Text</code> this is fine, the screen looks correct.</p>
+
+<p>The real problem is with stateful children. Say a list of two items, each with a checkbox state inside its own <code class="language-plaintext highlighter-rouge">State</code>. The user checks the first one, then you swap the items. The Elements stay in place, and so do their <code class="language-plaintext highlighter-rouge">State</code> objects. The labels move, but the checked state does not. Now the wrong item looks checked.</p>
+
+<div class="language-dart highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nl">children:</span> <span class="n">items</span><span class="o">.</span><span class="na">map</span><span class="o">((</span><span class="n">item</span><span class="o">)</span> <span class="o">=&gt;</span> <span class="n">TodoTile</span><span class="o">(</span>
+  <span class="nl">key:</span> <span class="n">ValueKey</span><span class="o">(</span><span class="n">item</span><span class="o">.</span><span class="na">id</span><span class="o">),</span>
+  <span class="nl">item:</span> <span class="n">item</span><span class="o">,</span>
+<span class="o">)).</span><span class="na">toList</span><span class="o">(),</span>
+</code></pre></div></div>
+
+<p>With a <code class="language-plaintext highlighter-rouge">ValueKey</code>, Flutter matches by key. The Element, and its <code class="language-plaintext highlighter-rouge">State</code>, moves together with the item. This is the same idea as giving stable IDs to <code class="language-plaintext highlighter-rouge">RecyclerView</code> items, so the adapter knows which row is which.</p>
+
+<p>A <code class="language-plaintext highlighter-rouge">GlobalKey</code> goes one step further. It lets an Element keep its state even when it moves to a different parent. It is also more expensive, so I only use it when I really need that, or to reach a <code class="language-plaintext highlighter-rouge">State</code> from outside, like a <code class="language-plaintext highlighter-rouge">FormState</code>.</p>
+
+<h2 id="rebuild-is-not-repaint">Rebuild is not repaint</h2>
+
+<p>Once the three trees are clear, this follows:</p>
+
+<ul>
+  <li><strong>Rebuild</strong> happens in the Widget and Element trees. <code class="language-plaintext highlighter-rouge">build()</code> runs, new widgets are compared with old ones.</li>
+  <li><strong>Repaint</strong> happens in the RenderObject tree. <code class="language-plaintext highlighter-rouge">paint()</code> runs and records drawing commands into a layer.</li>
+</ul>
+
+<p>They are independent. A rebuild where nothing really changed ends at step 5 above: the setters see the same values and do not mark anything. No layout, no paint.</p>
+
+<p>And a repaint can happen without any rebuild. A <code class="language-plaintext highlighter-rouge">CustomPainter</code> can take a <code class="language-plaintext highlighter-rouge">repaint:</code> listenable, like an <code class="language-plaintext highlighter-rouge">AnimationController</code>. When the animation ticks, only <code class="language-plaintext highlighter-rouge">paint()</code> runs again. No <code class="language-plaintext highlighter-rouge">build()</code>, no diff. For a smooth animation this is the cheapest path.</p>
+
+<p>One note I had to correct: “rebuild costs CPU, repaint costs GPU”. It is not that clean. Build, layout and paint all run on the UI thread, on the CPU. Paint only records commands. The GPU work happens later, when the raster thread turns the layers into pixels. Both rebuild and repaint cost CPU time on the UI thread, and that is the budget you have to stay inside, about 16ms per frame at 60Hz.</p>
+
+<h2 id="repaintboundary">RepaintBoundary</h2>
+
+<p>By default a RenderObject paints into the same layer as its parent. If the parent repaints, the children repaint too.</p>
+
+<p><code class="language-plaintext highlighter-rouge">RepaintBoundary</code> gives a subtree its own layer. If something next to it repaints, the boundary’s layer can be reused as is. If something inside it repaints, the work stays inside the boundary. A spinning loader next to a complex chart is a good case: put each in its own boundary and the chart is not repainted 60 times a second.</p>
+
+<p>It is not free. Every layer costs memory and compositing time. To check if it helps, turn on <code class="language-plaintext highlighter-rouge">debugRepaintRainbowEnabled</code>. Each repainted area changes color, so you can see what repaints when it should not.</p>
+
+<h2 id="when-to-write-your-own-renderobject">When to write your own RenderObject</h2>
+
+<p>On Android, when the standard layouts were not enough, I wrote a custom <code class="language-plaintext highlighter-rouge">ViewGroup</code>. In Flutter the equivalent is a custom RenderObject. But it is lower level than a custom View, and usually you don’t need it. I try these first, in order:</p>
+
+<ol>
+  <li>Compose existing widgets.</li>
+  <li><code class="language-plaintext highlighter-rouge">CustomPaint</code> for custom drawing.</li>
+  <li><code class="language-plaintext highlighter-rouge">CustomMultiChildLayout</code> or <code class="language-plaintext highlighter-rouge">Flow</code> for custom positioning.</li>
+</ol>
+
+<p>A custom RenderObject makes sense for a layout the standard ones can’t express, like a real waterfall layout, or for a custom hit test, like a round or polygon-shaped button. The pattern has two parts: a widget that creates and updates the RenderObject, and the RenderObject itself. The part that is easy to get wrong is the setter:</p>
+
+<div class="language-dart highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">RenderBar</span> <span class="kd">extends</span> <span class="n">RenderBox</span> <span class="o">{</span>
+  <span class="n">RenderBar</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="na">_factor</span><span class="o">);</span>
+
+  <span class="kt">double</span> <span class="n">_factor</span><span class="o">;</span>
+  <span class="kd">set</span> <span class="n">factor</span><span class="o">(</span><span class="kt">double</span> <span class="n">value</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">if</span> <span class="o">(</span><span class="n">value</span> <span class="o">==</span> <span class="n">_factor</span><span class="o">)</span> <span class="k">return</span><span class="o">;</span>
+    <span class="n">_factor</span> <span class="o">=</span> <span class="n">value</span><span class="o">;</span>
+    <span class="n">markNeedsLayout</span><span class="o">();</span> <span class="c1">// size depends on it</span>
+  <span class="o">}</span>
+
+  <span class="nd">@override</span>
+  <span class="kt">void</span> <span class="n">performLayout</span><span class="o">()</span> <span class="o">{</span>
+    <span class="n">size</span> <span class="o">=</span> <span class="n">constraints</span><span class="o">.</span><span class="na">constrain</span><span class="o">(</span><span class="n">Size</span><span class="o">(</span><span class="mi">100</span> <span class="o">*</span> <span class="n">_factor</span><span class="o">,</span> <span class="mi">50</span><span class="o">));</span>
+  <span class="o">}</span>
+
+  <span class="nd">@override</span>
+  <span class="kt">void</span> <span class="n">paint</span><span class="o">(</span><span class="n">PaintingContext</span> <span class="n">context</span><span class="o">,</span> <span class="n">Offset</span> <span class="n">offset</span><span class="o">)</span> <span class="o">{</span>
+    <span class="n">context</span><span class="o">.</span><span class="na">canvas</span><span class="o">.</span><span class="na">drawRect</span><span class="o">(</span><span class="n">offset</span> <span class="o">&amp;</span> <span class="n">size</span><span class="o">,</span> <span class="n">Paint</span><span class="o">()..</span><span class="na">color</span> <span class="o">=</span> <span class="kd">const</span> <span class="n">Color</span><span class="o">(</span><span class="mh">0xFF2196F3</span><span class="o">));</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+
+<span class="kd">class</span> <span class="nc">Bar</span> <span class="kd">extends</span> <span class="n">LeafRenderObjectWidget</span> <span class="o">{</span>
+  <span class="kd">const</span> <span class="n">Bar</span><span class="o">({</span><span class="k">super</span><span class="o">.</span><span class="na">key</span><span class="o">,</span> <span class="n">required</span> <span class="k">this</span><span class="o">.</span><span class="na">factor</span><span class="o">});</span>
+  <span class="kd">final</span> <span class="kt">double</span> <span class="n">factor</span><span class="o">;</span>
+
+  <span class="nd">@override</span>
+  <span class="n">RenderBar</span> <span class="n">createRenderObject</span><span class="o">(</span><span class="n">BuildContext</span> <span class="n">context</span><span class="o">)</span> <span class="o">=&gt;</span> <span class="n">RenderBar</span><span class="o">(</span><span class="n">factor</span><span class="o">);</span>
+
+  <span class="nd">@override</span>
+  <span class="kt">void</span> <span class="n">updateRenderObject</span><span class="o">(</span><span class="n">BuildContext</span> <span class="n">context</span><span class="o">,</span> <span class="n">RenderBar</span> <span class="n">renderObject</span><span class="o">)</span> <span class="o">{</span>
+    <span class="n">renderObject</span><span class="o">.</span><span class="na">factor</span> <span class="o">=</span> <span class="n">factor</span><span class="o">;</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>If the setter just assigns the field and forgets <code class="language-plaintext highlighter-rouge">markNeedsLayout()</code>, the new value is stored but nothing on screen changes. If it always marks, even for the same value, you lose the “rebuild without repaint” benefit. The early return is what makes rebuilds cheap.</p>
+
+<h2 id="what-i-took-away">What I took away</h2>
+
+<ul>
+  <li><strong>Android’s one View is Flutter’s three objects.</strong> Widget is the config, Element is the instance with state, RenderObject is the measure-layout-draw part.</li>
+  <li><strong><code class="language-plaintext highlighter-rouge">markNeedsPaint()</code> is <code class="language-plaintext highlighter-rouge">invalidate()</code>. <code class="language-plaintext highlighter-rouge">setState()</code> is not.</strong> Rebuild is a separate, earlier step.</li>
+  <li><strong>Type and key decide if state survives.</strong> Keep the tree shape stable, and give list items keys.</li>
+  <li><strong>Rebuild is not repaint.</strong> Many rebuilds are cheap because nothing below them changes. Most real cost is in what you do inside <code class="language-plaintext highlighter-rouge">build()</code>.</li>
+  <li><strong>Custom RenderObjects are the last tool, not the first.</strong> Composition and <code class="language-plaintext highlighter-rouge">CustomPaint</code> cover most cases.</li>
+</ul>
+
+
+        </section>
+
+        <footer class="post-footer">
+
+            <!-- Everything inside the #author tags pulls data from the author -->
+            <!-- #author-->
+            
+
+            <!-- Add Disqus Comments -->
+            
+
+        </footer>
+
+    </article>
+
+</main>
+
+<aside class="read-next">
+
+    <!-- [[! next_post ]] -->
+    
+        <a class="read-next-story no-cover" href="/four-questions-android-engineer-autonomous-vehicles">
+            <section class="post">
+                <h2>Four Questions an Android Engineer Asked When Switching to Autonomous Vehicles</h2>
+                <p>I wrote C++ for a few years, then Android for about seven, then more mobile...</p>
+            </section>
+        </a>
+    
+    <!-- [[! /next_post ]] -->
+    <!-- [[! prev_post ]] -->
+    
+        <a class="read-next-story prev no-cover" href="/flutter-for-android-engineers">
+            <section class="post">
+                <h2>Flutter for Android Engineers</h2>
+                <p>I wrote Android apps for about seven years. When I started learning Flutter this year,...</p>
+            </section>
+        </a>
+    
+    <!-- [[! /prev_post ]] -->
+</aside>
+
+<!-- /post -->
+
+
+        <footer class="site-footer clearfix">
+          <section class="copyright"><a href="/">与机器，人，神共舞</a> &copy; 2026</section>
+        </footer>
+    </div>
+    <!-- [[! Ghost outputs important scripts and data with this tag ]] -->
+    <script type="text/javascript" src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+    <!-- [[! The main JavaScript file for Casper ]] -->
+    <script type="text/javascript" src="/assets/js/jquery.fitvids.js"></script>
+    <script type="text/javascript" src="/assets/js/index.js"></script>
+
+    <!-- Add Google Analytics  -->
+        <!-- Google Analytics Tracking code -->
+     <script>
+	    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+	    ga('create', 'UA-78960009-1', 'auto');
+	    ga('send', 'pageview');
+
+     </script>
+   
+</body>
+</html>

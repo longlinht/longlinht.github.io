@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- [[! Document Settings ]] -->
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+    <!-- [[! Page Meta ]] -->
+    <title>A Tour of AVLite, a Simplified AV Stack</title>
+    <meta name="description" content="与机器，人，神共舞 - 编程，读书，思考，旅行，与机器对话，与人交谈，对神发问，探索，体验人生美丽的风景" />
+
+    <meta name="HandheldFriendly" content="True" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link rel="shortcut icon" href="/assets/images/favicon.ico" >
+
+    <!-- [[! Styles'n'Scripts ]] -->
+    <link rel="stylesheet" type="text/css" href="/assets/css/screen.css" />
+    <link rel="stylesheet" type="text/css"
+          href="//fonts.googleapis.com/css?family=Merriweather:300,700,700italic,300italic|Open+Sans:700,400" />
+    <link rel="stylesheet" type="text/css" href="/assets/css/syntax.css" />
+    
+    <!-- [[! Ghost outputs important style and meta data with this tag ]] -->
+        <link rel="canonical" href="/" />
+    <meta name="referrer" content="origin" />
+    <link rel="next" href="/page2/" />
+
+    <meta property="og:site_name" content="与机器，人，神共舞" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="与机器，人，神共舞" />
+    <meta property="og:description" content="编程，读书，思考，旅行，与机器对话，与人交谈，对神发问，探索，体验人生美丽的风景" />
+    <meta property="og:url" content="/" />
+    <meta property="og:image" content="/assets/images/cover1.jpg" />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="与机器，人，神共舞" />
+    <meta name="twitter:description" content="编程，读书，思考，旅行，与机器对话，与人交谈，对神发问，探索，体验人生美丽的风景" />
+    <meta name="twitter:url" content="/" />
+    <meta name="twitter:image:src" content="/assets/images/cover1.jpg" />
+
+    <script type="application/ld+json">
+{
+    "@context": "http://schema.org",
+    "@type": "Website",
+    "publisher": "Tao's Page",
+    "url": "/",
+    "image": "/assets/images/cover1.jpg",
+    "description": "编程，读书，思考，旅行，与机器对话，与人交谈，对神发问，探索，体验人生美丽的风景"
+}
+    </script>
+
+    <meta name="generator" content="Jekyll 3.0.0" />
+    <link rel="alternate" type="application/rss+xml" title="与机器，人，神共舞" href="/rss.xml" />
+
+</head>
+<body class="home-template nav-closed">
+
+    <div class="nav">
+    <h3 class="nav-title">Menu</h3>
+    <a href="#" class="nav-close">
+        <span class="hidden">Close</span>
+    </a>
+    <ul>
+        <li class="nav-home " role="presentation"><a href="/">Home</a></li>
+        <li class="nav-about " role="presentation"><a href="/about.html">About</a></li>
+        <li class="nav-fables " role="presentation"><a href="/tag/machine/">Machine</a></li>
+        <li class="nav-speeches " role="presentation"><a href="/tag/human/">Human</a></li>
+        <li class="nav-fiction " role="presentation"><a href="/tag/god/">God</a></li>
+        <li class="nav-author " role="presentation"><a href="/author/hetao/">Author</a></li>
+    </ul>
+    <a class="subscribe-button icon-feed" href="/vocab.html">Apps</a>
+</div>
+<span class="nav-cover"></span>
+
+
+    <div class="site-wrapper">
+
+        <!-- [[! Everything else gets inserted here ]] -->
+        <!-- default -->
+
+<!-- The comment above "< default" means - insert everything in this file into -->
+    <!-- the [body] of the default.hbs template, which contains our header/footer. -->
+
+<!-- Everything inside the #post tags pulls data from the post -->
+<!-- #post -->
+
+<header class="main-header post-head no-cover">
+    <nav class="main-nav  clearfix">
+        
+        
+    </nav>
+</header>
+
+<main class="content" role="main">
+
+    <article class="post tag-machine">
+
+        <header class="post-header">
+            <h1 class="post-title">A Tour of AVLite, a Simplified AV Stack</h1>
+            <section class="post-meta">
+            <!-- <a href='/'>Tao He</a> -->
+
+            
+            <time class="post-date" datetime="2026-05-10">10 May 2026</time>
+                <!-- [[tags prefix=" on "]] -->
+                
+                on
+                
+                    
+                       <a href='/tag/machine'>Machine</a>
+                    
+                
+                
+            </section>
+        </header>
+
+        <section class="post-content">
+
+            <p>A full autonomous driving stack is too big to read in one go. Autoware has hundreds of packages. You open it, you read the launch files for a day, and you still don’t know where one loop iteration starts and ends.</p>
+
+<p>AVLite is the opposite. It is a simplified AV stack in Python: perception, localization, planning, control, a simulator bridge and a GUI, small enough to hold in your head. I spent some time reading it with one goal: follow one control step from start to end, and write down the map.</p>
+
+<p>This post is that map.</p>
+
+<h2 id="the-layout">The layout</h2>
+
+<p>The top-level modules are numbered, which I liked immediately:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>c10_perception     perception, localization, HD map interfaces
+c20_planning       global and local planning
+c30_control        controller interface and implementations
+c40_execution      runtime wiring, execution loop, world bridges
+c50_visualization  GUI
+c60_common         settings, reload helpers, capability enums
+extensions/        plugin-style extensions
+</code></pre></div></div>
+
+<p>The numbers tell you the order data flows through the system. It is a small thing, but when you open the folder you already see the architecture. I wish more codebases did this.</p>
+
+<p>The entry point starts a Tkinter GUI. So AVLite is GUI-first. You run it and you watch the car, which is exactly what you want when you are learning or trying a new planner.</p>
+
+<h2 id="the-most-important-file">The most important file</h2>
+
+<p>If you want to understand how the system boots, don’t start from <code class="language-plaintext highlighter-rouge">main</code>. Start from the factory in <code class="language-plaintext highlighter-rouge">c40_execution</code>.</p>
+
+<p>The factory is where everything is assembled. It:</p>
+
+<ul>
+  <li>loads extensions,</li>
+  <li>picks the strategies named in the config from registries,</li>
+  <li>loads the global plan,</li>
+  <li>creates one shared <code class="language-plaintext highlighter-rouge">PerceptionModel</code>,</li>
+  <li>wires planner, controller, world bridge, localization and perception together,</li>
+  <li>returns the selected executor.</li>
+</ul>
+
+<p>After reading this one file, the rest of the code made sense. Before reading it, every module looked like it floated on its own.</p>
+
+<h2 id="how-modules-are-plugged-in">How modules are plugged in</h2>
+
+<p>AVLite uses subclass auto-registration. You write a subclass of, say, a controller base class, you import it, and it becomes selectable by name in the config.</p>
+
+<p>That is very good for research. Want to compare two lateral controllers? Write the second one, change one string in the config, run again. No wiring code to touch.</p>
+
+<p>The cost is the usual cost of string-based wiring. A typo in the config is only found at runtime. And as the number of plugins grows, “which class is actually running?” becomes a real question. I learned to always check the effective class at startup, not just the default in the config file.</p>
+
+<h2 id="the-key-abstractions">The key abstractions</h2>
+
+<p>There are only a handful, and each has one job:</p>
+
+<ul>
+  <li><strong>GlobalPlan.</strong> Loaded from a JSON track file: reference XY path, reference speed profile, left and right boundaries. The static backbone of the drive.</li>
+  <li><strong>PerceptionModel.</strong> The shared environment memory: ego vehicle, other vehicles, optional HD map, predictions, occupancy grids. Several modules read from it and write into it.</li>
+  <li><strong>WorldBridge.</strong> The interface to the outside world. A simple built-in simulator, or bridges to CARLA or Gazebo. It gives the current ego state, sensor data and ground truth, and it accepts control commands.</li>
+  <li><strong>LocalPlanner.</strong> Generates and selects a short-term maneuver.</li>
+  <li><strong>Controller.</strong> Takes the ego state and a trajectory, returns a control command.</li>
+  <li><strong>Executor.</strong> The loop that calls all of the above in order.</li>
+</ul>
+
+<h2 id="one-step-of-the-loop">One step of the loop</h2>
+
+<p>This is the part I most wanted to understand. In the synchronous executor, one step goes like this:</p>
+
+<ol>
+  <li><strong>Read the ego state from the world.</strong> <code class="language-plaintext highlighter-rouge">world.get_ego_state()</code> is the source of truth for this instant: x, y, heading, speed.</li>
+  <li><strong>Replan if it is time.</strong> A <code class="language-plaintext highlighter-rouge">replan_dt</code> setting decides how often. The default local planner is a greedy lattice planner. It samples nodes in Frenet coordinates (distance along the track, and offset from it), builds candidate edges, rejects edges that collide or curve too much, and keeps the best chain as the selected local plan.</li>
+  <li><strong>Advance the planner with the current pose.</strong> The planner updates where the car is on the global and local trajectory. This keeps planner and controller in agreement about “where are we on the plan”.</li>
+  <li><strong>Run the controller.</strong> The default is a Stanley controller. It computes cross-track error and heading error against the local trajectory, reads the target speed from it, and produces steering and speed commands.</li>
+  <li><strong>Send the command to the world.</strong></li>
+  <li><strong>Run localization and perception, if enabled.</strong> They update the shared model for the next step.</li>
+</ol>
+
+<p>Written as one line:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>WorldBridge -&gt; LocalPlanner (replan, step) -&gt; Controller -&gt; WorldBridge
+                     ^                                         |
+                     +---- PerceptionModel &lt;-- perception -----+
+</code></pre></div></div>
+
+<p>The nice detail is that localization and perception are optional. In a simple simulator you can use ground truth and turn them off, and the rest of the loop does not change. When you want to test a localization algorithm, you turn it on and nothing else has to know.</p>
+
+<h2 id="a-debugging-checklist-that-falls-out-of-the-map">A debugging checklist that falls out of the map</h2>
+
+<p>Once the loop is clear, debugging becomes a question of <em>which transformation failed</em>:</p>
+
+<ul>
+  <li>Was the world state read correctly?</li>
+  <li>Is the perception model fresh, or stale from an earlier step?</li>
+  <li>Did the planner generate reasonable candidates?</li>
+  <li>Is the planner’s idea of “where am I on the plan” aligned with the real pose?</li>
+  <li>Is the controller tracking the trajectory it was given?</li>
+  <li>Was the command actually applied by the world bridge?</li>
+</ul>
+
+<p>When the car does something strange, I go down this list in order. It is much faster than staring at the GUI.</p>
+
+<h2 id="rough-edges">Rough edges</h2>
+
+<p>AVLite is research code and it shows in a few places:</p>
+
+<ul>
+  <li>The factory does a lot. It is the best place to start reading, and also the file most likely to grow into a god object.</li>
+  <li>Timing deserves attention. Sim time versus control time, and sync versus async execution, are where modular stacks usually start to break.</li>
+  <li>Naming is a bit rough here and there (<code class="language-plaintext highlighter-rouge">Executer</code>, <code class="language-plaintext highlighter-rouge">ControlComand</code>). Not a real problem, but it tells you nobody has done a cleanup pass yet.</li>
+</ul>
+
+<p>None of this stops it from being useful. For learning and quick experiments, a stack you can fully read beats a stack you can only configure.</p>
+
+<h2 id="what-i-took-away">What I took away</h2>
+
+<ul>
+  <li><strong>Find the assembly point first.</strong> In AVLite it is the factory. In an Android app it was <code class="language-plaintext highlighter-rouge">Application.onCreate()</code>. Same idea: read where things are wired before reading what they do.</li>
+  <li><strong>One loop iteration is the real architecture.</strong> Folder structure tells you the intent. The loop tells you the truth.</li>
+  <li><strong>Small stacks teach big ones.</strong> Every abstraction here, the world bridge, the shared model, the planner/controller split, exists in the large stacks too. They are just easier to see when there are six of them instead of six hundred.</li>
+  <li><strong>Real modularity versus apparent modularity.</strong> Registries make everything look pluggable. The question to ask is whether timing and capability assumptions still hold when you swap something in.</li>
+</ul>
+
+
+        </section>
+
+        <footer class="post-footer">
+
+            <!-- Everything inside the #author tags pulls data from the author -->
+            <!-- #author-->
+            
+
+            <!-- Add Disqus Comments -->
+            
+
+        </footer>
+
+    </article>
+
+</main>
+
+<aside class="read-next">
+
+    <!-- [[! next_post ]] -->
+    
+        <a class="read-next-story no-cover" href="/week-one-for-interns-git-ros2-humanoid">
+            <section class="post">
+                <h2>Week One for Interns: Git, ROS 2 and a Real Humanoid</h2>
+                <p>This summer our lab had a group of interns joining the RoboCup humanoid soccer work....</p>
+            </section>
+        </a>
+    
+    <!-- [[! /next_post ]] -->
+    <!-- [[! prev_post ]] -->
+    
+        <a class="read-next-story prev no-cover" href="/four-questions-android-engineer-autonomous-vehicles">
+            <section class="post">
+                <h2>Four Questions an Android Engineer Asked When Switching to Autonomous Vehicles</h2>
+                <p>I wrote C++ for a few years, then Android for about seven, then more mobile...</p>
+            </section>
+        </a>
+    
+    <!-- [[! /prev_post ]] -->
+</aside>
+
+<!-- /post -->
+
+
+        <footer class="site-footer clearfix">
+          <section class="copyright"><a href="/">与机器，人，神共舞</a> &copy; 2026</section>
+        </footer>
+    </div>
+    <!-- [[! Ghost outputs important scripts and data with this tag ]] -->
+    <script type="text/javascript" src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+    <!-- [[! The main JavaScript file for Casper ]] -->
+    <script type="text/javascript" src="/assets/js/jquery.fitvids.js"></script>
+    <script type="text/javascript" src="/assets/js/index.js"></script>
+
+    <!-- Add Google Analytics  -->
+        <!-- Google Analytics Tracking code -->
+     <script>
+	    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+	    ga('create', 'UA-78960009-1', 'auto');
+	    ga('send', 'pageview');
+
+     </script>
+   
+</body>
+</html>

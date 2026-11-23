@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- [[! Document Settings ]] -->
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+    <!-- [[! Page Meta ]] -->
+    <title>Flutter for Android Engineers</title>
+    <meta name="description" content="与机器，人，神共舞 - 编程，读书，思考，旅行，与机器对话，与人交谈，对神发问，探索，体验人生美丽的风景" />
+
+    <meta name="HandheldFriendly" content="True" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link rel="shortcut icon" href="/assets/images/favicon.ico" >
+
+    <!-- [[! Styles'n'Scripts ]] -->
+    <link rel="stylesheet" type="text/css" href="/assets/css/screen.css" />
+    <link rel="stylesheet" type="text/css"
+          href="//fonts.googleapis.com/css?family=Merriweather:300,700,700italic,300italic|Open+Sans:700,400" />
+    <link rel="stylesheet" type="text/css" href="/assets/css/syntax.css" />
+    
+    <!-- [[! Ghost outputs important style and meta data with this tag ]] -->
+        <link rel="canonical" href="/" />
+    <meta name="referrer" content="origin" />
+    <link rel="next" href="/page2/" />
+
+    <meta property="og:site_name" content="与机器，人，神共舞" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="与机器，人，神共舞" />
+    <meta property="og:description" content="编程，读书，思考，旅行，与机器对话，与人交谈，对神发问，探索，体验人生美丽的风景" />
+    <meta property="og:url" content="/" />
+    <meta property="og:image" content="/assets/images/cover1.jpg" />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="与机器，人，神共舞" />
+    <meta name="twitter:description" content="编程，读书，思考，旅行，与机器对话，与人交谈，对神发问，探索，体验人生美丽的风景" />
+    <meta name="twitter:url" content="/" />
+    <meta name="twitter:image:src" content="/assets/images/cover1.jpg" />
+
+    <script type="application/ld+json">
+{
+    "@context": "http://schema.org",
+    "@type": "Website",
+    "publisher": "Tao's Page",
+    "url": "/",
+    "image": "/assets/images/cover1.jpg",
+    "description": "编程，读书，思考，旅行，与机器对话，与人交谈，对神发问，探索，体验人生美丽的风景"
+}
+    </script>
+
+    <meta name="generator" content="Jekyll 3.0.0" />
+    <link rel="alternate" type="application/rss+xml" title="与机器，人，神共舞" href="/rss.xml" />
+
+</head>
+<body class="home-template nav-closed">
+
+    <div class="nav">
+    <h3 class="nav-title">Menu</h3>
+    <a href="#" class="nav-close">
+        <span class="hidden">Close</span>
+    </a>
+    <ul>
+        <li class="nav-home " role="presentation"><a href="/">Home</a></li>
+        <li class="nav-about " role="presentation"><a href="/about.html">About</a></li>
+        <li class="nav-fables " role="presentation"><a href="/tag/machine/">Machine</a></li>
+        <li class="nav-speeches " role="presentation"><a href="/tag/human/">Human</a></li>
+        <li class="nav-fiction " role="presentation"><a href="/tag/god/">God</a></li>
+        <li class="nav-author " role="presentation"><a href="/author/hetao/">Author</a></li>
+    </ul>
+    <a class="subscribe-button icon-feed" href="/vocab.html">Apps</a>
+</div>
+<span class="nav-cover"></span>
+
+
+    <div class="site-wrapper">
+
+        <!-- [[! Everything else gets inserted here ]] -->
+        <!-- default -->
+
+<!-- The comment above "< default" means - insert everything in this file into -->
+    <!-- the [body] of the default.hbs template, which contains our header/footer. -->
+
+<!-- Everything inside the #post tags pulls data from the post -->
+<!-- #post -->
+
+<header class="main-header post-head no-cover">
+    <nav class="main-nav  clearfix">
+        
+        
+    </nav>
+</header>
+
+<main class="content" role="main">
+
+    <article class="post tag-machine">
+
+        <header class="post-header">
+            <h1 class="post-title">Flutter for Android Engineers</h1>
+            <section class="post-meta">
+            <!-- <a href='/'>Tao He</a> -->
+
+            
+            <time class="post-date" datetime="2025-09-14">14 Sep 2025</time>
+                <!-- [[tags prefix=" on "]] -->
+                
+                on
+                
+                    
+                       <a href='/tag/machine'>Machine</a>
+                    
+                
+                
+            </section>
+        </header>
+
+        <section class="post-content">
+
+            <p>I wrote Android apps for about seven years. When I started learning Flutter this year, the hardest part was not Dart. Dart is easy if you know Java and Kotlin. The hard part was that every Flutter word looked like an Android word I already knew, and the match was almost right, but not quite.</p>
+
+<p>So I made a table. Every time I met a new concept, I wrote down the Android thing it reminded me of, and then where the comparison breaks. This post is that table, cleaned up.</p>
+
+<h2 id="the-short-version">The short version</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Flutter</th>
+      <th>Closest Android thing</th>
+      <th>Where it breaks</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">Widget</code></td>
+      <td><code class="language-plaintext highlighter-rouge">View</code> / <code class="language-plaintext highlighter-rouge">ViewGroup</code></td>
+      <td>A widget is cheap, immutable config. It is not the thing on screen.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">StatefulWidget</code> + <code class="language-plaintext highlighter-rouge">State</code></td>
+      <td>A View plus the fields that drive it</td>
+      <td>The <code class="language-plaintext highlighter-rouge">State</code> object lives longer than the widget.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">setState()</code></td>
+      <td>change a field + <code class="language-plaintext highlighter-rouge">invalidate()</code></td>
+      <td>It schedules a rebuild for the next frame. It does not draw.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">BuildContext</code></td>
+      <td><code class="language-plaintext highlighter-rouge">Context</code></td>
+      <td>It is a position in the tree, not an app-wide handle.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">Navigator.push</code> / <code class="language-plaintext highlighter-rouge">pop</code></td>
+      <td><code class="language-plaintext highlighter-rouge">startActivity</code> / <code class="language-plaintext highlighter-rouge">finish</code></td>
+      <td>Routes are not Activities. One Activity hosts them all.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">InheritedWidget</code> / Provider</td>
+      <td><code class="language-plaintext highlighter-rouge">ViewModel</code> + <code class="language-plaintext highlighter-rouge">LiveData</code></td>
+      <td>Scoped to a subtree, not global.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">Future</code> / <code class="language-plaintext highlighter-rouge">async</code> / <code class="language-plaintext highlighter-rouge">await</code></td>
+      <td>coroutines</td>
+      <td>No <code class="language-plaintext highlighter-rouge">Dispatchers.IO</code>. One thread per isolate.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">Stream</code></td>
+      <td><code class="language-plaintext highlighter-rouge">Flow</code> / <code class="language-plaintext highlighter-rouge">LiveData</code></td>
+      <td>Close enough.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">AnimationController</code> / <code class="language-plaintext highlighter-rouge">Tween</code></td>
+      <td><code class="language-plaintext highlighter-rouge">ValueAnimator</code> / <code class="language-plaintext highlighter-rouge">TypeEvaluator</code></td>
+      <td>Close enough.</td>
+    </tr>
+    <tr>
+      <td>Hot reload</td>
+      <td>Apply Changes</td>
+      <td>Much faster, and it keeps state.</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>Now the details.</p>
+
+<h2 id="widget-is-not-view">Widget is not View</h2>
+
+<p>On Android a <code class="language-plaintext highlighter-rouge">View</code> is a real object that stays on screen. You hold a reference to it and change it: <code class="language-plaintext highlighter-rouge">textView.setText("Hello")</code>.</p>
+
+<p>In Flutter you never do that. A <code class="language-plaintext highlighter-rouge">Text("Hello")</code> is just a description. It is immutable and very cheap. When the data changes, you build a new <code class="language-plaintext highlighter-rouge">Text("World")</code> and Flutter works out what to change on screen. You describe the UI as a function of state, and you stop thinking about references.</p>
+
+<p>If you have used Jetpack Compose, this part is familiar. If you only wrote XML layouts and <code class="language-plaintext highlighter-rouge">findViewById</code>, this is the biggest mental change. It took me a few days before I stopped looking for “the reference to the text view”.</p>
+
+<p><code class="language-plaintext highlighter-rouge">StatelessWidget</code> is for things that only depend on their constructor arguments. <code class="language-plaintext highlighter-rouge">StatefulWidget</code> is for things that have their own changing data.</p>
+
+<h2 id="state-and-why-build-lives-there">State, and why build lives there</h2>
+
+<p>A <code class="language-plaintext highlighter-rouge">StatefulWidget</code> comes with a separate <code class="language-plaintext highlighter-rouge">State</code> class, and <code class="language-plaintext highlighter-rouge">build()</code> is on the <code class="language-plaintext highlighter-rouge">State</code>, not on the widget. This looked strange to me at first.</p>
+
+<p>The reason is lifetime. The widget is thrown away and rebuilt all the time. The <code class="language-plaintext highlighter-rouge">State</code> object stays, as long as the widget keeps its place in the tree. So the data that must survive, like a counter or a scroll position, lives in <code class="language-plaintext highlighter-rouge">State</code>, and <code class="language-plaintext highlighter-rouge">build()</code> reads from it.</p>
+
+<div class="language-dart highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">_CounterState</span> <span class="kd">extends</span> <span class="n">State</span><span class="o">&lt;</span><span class="n">Counter</span><span class="o">&gt;</span> <span class="o">{</span>
+  <span class="kt">int</span> <span class="n">_count</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+
+  <span class="nd">@override</span>
+  <span class="n">Widget</span> <span class="n">build</span><span class="o">(</span><span class="n">BuildContext</span> <span class="n">context</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">return</span> <span class="n">TextButton</span><span class="o">(</span>
+      <span class="nl">onPressed:</span> <span class="o">()</span> <span class="o">=&gt;</span> <span class="n">setState</span><span class="o">(()</span> <span class="o">=&gt;</span> <span class="n">_count</span><span class="o">++),</span>
+      <span class="nl">child:</span> <span class="n">Text</span><span class="o">(</span><span class="s">'</span><span class="si">$_count</span><span class="s">'</span><span class="o">),</span>
+    <span class="o">);</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">setState()</code> is like “change the field and call <code class="language-plaintext highlighter-rouge">invalidate()</code>”, but there is a difference. It only marks this part of the tree as dirty. On the next frame Flutter calls <code class="language-plaintext highlighter-rouge">build()</code> again and compares the result with the old one. Nothing is drawn inside <code class="language-plaintext highlighter-rouge">setState()</code> itself.</p>
+
+<p>One Android habit that transfers directly: after an async call, check that you are still alive before touching the UI. On Android I used to check <code class="language-plaintext highlighter-rouge">isAdded()</code> on a Fragment, or the lifecycle state. In Flutter it is <code class="language-plaintext highlighter-rouge">if (!mounted) return;</code> before calling <code class="language-plaintext highlighter-rouge">setState()</code>.</p>
+
+<p>The lifecycle methods also map roughly:</p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">initState()</code> is like <code class="language-plaintext highlighter-rouge">onCreate()</code>, but for this widget, not the whole screen.</li>
+  <li><code class="language-plaintext highlighter-rouge">dispose()</code> is like <code class="language-plaintext highlighter-rouge">onDestroy()</code>. Cancel controllers and subscriptions here.</li>
+  <li>For the app going to background, there is <code class="language-plaintext highlighter-rouge">WidgetsBindingObserver</code> or <code class="language-plaintext highlighter-rouge">AppLifecycleListener</code>, which feel like <code class="language-plaintext highlighter-rouge">onPause()</code> and <code class="language-plaintext highlighter-rouge">onResume()</code>.</li>
+</ul>
+
+<h2 id="buildcontext-is-not-context">BuildContext is not Context</h2>
+
+<p>This one confused me the most, because the name is so similar.</p>
+
+<p>An Android <code class="language-plaintext highlighter-rouge">Context</code> is a handle to the app and the system. You use it to get resources, start Activities, get system services. Any <code class="language-plaintext highlighter-rouge">Context</code> from your app can do roughly the same things.</p>
+
+<p>A <code class="language-plaintext highlighter-rouge">BuildContext</code> is the location of a widget in the tree. Under the hood it is the Element object (more on Elements in the next post). When you call <code class="language-plaintext highlighter-rouge">Theme.of(context)</code> or <code class="language-plaintext highlighter-rouge">Navigator.of(context)</code>, Flutter walks up the tree from that location and finds the nearest one.</p>
+
+<p>So which <code class="language-plaintext highlighter-rouge">context</code> you use matters. A classic mistake: in the same <code class="language-plaintext highlighter-rouge">build()</code> method that creates a <code class="language-plaintext highlighter-rouge">Scaffold</code>, you call <code class="language-plaintext highlighter-rouge">Scaffold.of(context)</code>. It fails, because that <code class="language-plaintext highlighter-rouge">context</code> is above the <code class="language-plaintext highlighter-rouge">Scaffold</code>, not inside it. The fix is to use a <code class="language-plaintext highlighter-rouge">Builder</code>, or move the code into a child widget, so you get a context below it.</p>
+
+<p>The other rule: don’t keep a <code class="language-plaintext highlighter-rouge">BuildContext</code> after an <code class="language-plaintext highlighter-rouge">await</code> without checking <code class="language-plaintext highlighter-rouge">context.mounted</code>. The widget may be gone. This is the same kind of bug as holding an Activity <code class="language-plaintext highlighter-rouge">Context</code> too long on Android, just with a different symptom.</p>
+
+<h2 id="navigation">Navigation</h2>
+
+<p><code class="language-plaintext highlighter-rouge">Navigator.push()</code> and <code class="language-plaintext highlighter-rouge">pop()</code> work like a back stack. <code class="language-plaintext highlighter-rouge">pushReplacement()</code> is like <code class="language-plaintext highlighter-rouge">startActivity()</code> followed by <code class="language-plaintext highlighter-rouge">finish()</code>. Named routes feel like starting a screen with an Intent action or a deep link.</p>
+
+<p>The difference: these routes are not Activities. A Flutter app usually runs inside one <code class="language-plaintext highlighter-rouge">FlutterActivity</code>, and all the screens are drawn by Flutter inside it. There is no system back stack per screen, no <code class="language-plaintext highlighter-rouge">launchMode</code>, and no process death per screen to think about. I found this simpler.</p>
+
+<h2 id="sharing-state">Sharing state</h2>
+
+<p>My notes first said “<code class="language-plaintext highlighter-rouge">InheritedWidget</code> is like a singleton”. That is not right. An <code class="language-plaintext highlighter-rouge">InheritedWidget</code> gives data to its <strong>subtree</strong>. Two different subtrees can have two different values. Widgets below that read it with <code class="language-plaintext highlighter-rouge">context.dependOnInheritedWidgetOfExactType()</code> are rebuilt when it changes.</p>
+
+<p>A better match: Provider or Riverpod on top of a <code class="language-plaintext highlighter-rouge">ChangeNotifier</code> feels like <code class="language-plaintext highlighter-rouge">ViewModel</code> plus <code class="language-plaintext highlighter-rouge">LiveData</code>. You expose state, the UI listens, the UI rebuilds. The scoping is by tree position instead of by Activity or Fragment.</p>
+
+<h2 id="async-the-part-that-really-breaks">Async: the part that really breaks</h2>
+
+<p><code class="language-plaintext highlighter-rouge">Future</code> with <code class="language-plaintext highlighter-rouge">async</code> / <code class="language-plaintext highlighter-rouge">await</code> reads almost like a Kotlin <code class="language-plaintext highlighter-rouge">suspend</code> function. <code class="language-plaintext highlighter-rouge">Stream</code> is close to <code class="language-plaintext highlighter-rouge">Flow</code>, and <code class="language-plaintext highlighter-rouge">StreamBuilder</code> feels like observing <code class="language-plaintext highlighter-rouge">LiveData</code> in a Fragment.</p>
+
+<p>But the threading model is different, and this is the one place where my Android instinct was wrong.</p>
+
+<p>On Android, I would write <code class="language-plaintext highlighter-rouge">withContext(Dispatchers.IO) { ... }</code> and the work runs on another thread. In Dart, each isolate has one thread with an event loop. <code class="language-plaintext highlighter-rouge">await http.get(...)</code> does not block the UI, because the network IO itself is asynchronous and the result comes back as an event. But if you parse a huge JSON or resize an image in Dart code, that runs on the UI isolate and you will drop frames. There is no IO dispatcher to switch to.</p>
+
+<p>For heavy CPU work you start another isolate, for example with <code class="language-plaintext highlighter-rouge">Isolate.run()</code> or <code class="language-plaintext highlighter-rouge">compute()</code>. Isolates do not share memory. You send data in and get data back. It feels closer to a separate process than a thread.</p>
+
+<h2 id="animation-and-tools">Animation and tools</h2>
+
+<p><code class="language-plaintext highlighter-rouge">AnimationController</code> is like <code class="language-plaintext highlighter-rouge">ValueAnimator</code>: it produces values over time. A <code class="language-plaintext highlighter-rouge">Tween</code> maps 0..1 to the values you want, like a <code class="language-plaintext highlighter-rouge">TypeEvaluator</code>. The <code class="language-plaintext highlighter-rouge">vsync</code> argument ties the controller to the screen refresh, similar to what <code class="language-plaintext highlighter-rouge">Choreographer</code> does on Android.</p>
+
+<p>Hot reload deserves a line. It injects the new code and rebuilds the widgets while keeping the <code class="language-plaintext highlighter-rouge">State</code>. After years of waiting for Gradle, this changed how I worked. I tried small UI changes much more often because it cost a second.</p>
+
+<h2 id="what-i-took-away">What I took away</h2>
+
+<ul>
+  <li><strong>Map the new words to the old ones, but write down where the map breaks.</strong> The breaks are where the bugs are.</li>
+  <li><strong>Widgets are descriptions, not objects on screen.</strong> Once this clicked, most of Flutter made sense.</li>
+  <li><strong><code class="language-plaintext highlighter-rouge">BuildContext</code> is a position.</strong> Most of my early errors were using the context from the wrong place.</li>
+  <li><strong>Watch the threading.</strong> <code class="language-plaintext highlighter-rouge">async</code> is not “off the main thread”. Heavy work still needs an isolate.</li>
+</ul>
+
+<p>The row “rebuild vs invalidate” in the table is the most misleading one. Flutter actually keeps three trees, and a rebuild is not a redraw. That is the next post.</p>
+
+
+        </section>
+
+        <footer class="post-footer">
+
+            <!-- Everything inside the #author tags pulls data from the author -->
+            <!-- #author-->
+            
+
+            <!-- Add Disqus Comments -->
+            
+
+        </footer>
+
+    </article>
+
+</main>
+
+<aside class="read-next">
+
+    <!-- [[! next_post ]] -->
+    
+        <a class="read-next-story no-cover" href="/flutter-three-trees-for-android-view-people">
+            <section class="post">
+                <h2>Flutter's Three Trees, for People Who Wrote Android Views</h2>
+                <p>In the [last post](/flutter-for-android-engineers.html) I mapped Flutter words to Android words. One row in that...</p>
+            </section>
+        </a>
+    
+    <!-- [[! /next_post ]] -->
+    <!-- [[! prev_post ]] -->
+    
+        <a class="read-next-story prev no-cover" href="/spring-boot-from-the-other-side-of-the-api">
+            <section class="post">
+                <h2>Spring Boot from the Other Side of the API</h2>
+                <p>Two years ago I wrote a quick tour of Spring Boot. It was about the...</p>
+            </section>
+        </a>
+    
+    <!-- [[! /prev_post ]] -->
+</aside>
+
+<!-- /post -->
+
+
+        <footer class="site-footer clearfix">
+          <section class="copyright"><a href="/">与机器，人，神共舞</a> &copy; 2026</section>
+        </footer>
+    </div>
+    <!-- [[! Ghost outputs important scripts and data with this tag ]] -->
+    <script type="text/javascript" src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+    <!-- [[! The main JavaScript file for Casper ]] -->
+    <script type="text/javascript" src="/assets/js/jquery.fitvids.js"></script>
+    <script type="text/javascript" src="/assets/js/index.js"></script>
+
+    <!-- Add Google Analytics  -->
+        <!-- Google Analytics Tracking code -->
+     <script>
+	    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+	    ga('create', 'UA-78960009-1', 'auto');
+	    ga('send', 'pageview');
+
+     </script>
+   
+</body>
+</html>

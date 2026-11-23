@@ -12,1300 +12,1300 @@
    <atom:link href="rss" rel="self" type="application/rss+xml" />
    
 	<item>
-	  <title>The greatest philosophiers from Socrates to Peter Singer</title>
-	  <link>//the-40-greatest-philosophiers</link>
+	  <title>Two Open-Source RoboCup Stacks on One Small Humanoid: B-Human vs HTWK on the Booster K1</title>
+	  <link>//b-human-vs-htwk-on-booster-k1</link>
 	  <author>Tao He</author>
-	  <pubDate>2023-07-23T22:20:12+04:00</pubDate>
-	  <guid>//the-40-greatest-philosophiers</guid>
+	  <pubDate>2026-10-30T21:00:00+00:00</pubDate>
+	  <guid>//b-human-vs-htwk-on-booster-k1</guid>
 	  <description><![CDATA[
-	     <p>I felt overwhelmed reading books about philosophy history every time until I read A Little History of Philosophy, written by Nigel Warburton. Its conciseness and to-the-pointness deeply attracted me, and I finished it fast. Although it only has 40 chapters, it is still not easy to remember and understand all philosophiers’ideas, works, and experiences. So I decided to make a list. Every item on the list includes the philosopher’s name, birth and death years, and his or her most famous idea.</p>
+	     <p>The Booster K1 is a small humanoid that many RoboCup teams now use. Two of the strongest teams have published software that can run on it, and they took very different paths.</p>
 
 <ul>
-  <li>
-    <p>Socrates</p>
+  <li><strong>HTWK</strong> (Leipzig) published HTWK Gym, a reinforcement learning framework for training walking policies for the Booster T1 and K1. You bring the rest of the soccer stack.</li>
+  <li><strong>B-Human</strong> (Bremen) published its 2026 code release: a complete robot soccer program, perception to motion, now for the K1 and T1 only.</li>
+</ul>
 
-    <ul>
-      <li>470–399 BC</li>
-      <li>I know that I know nothing</li>
-      <li>The unexamined life is not worth living”</li>
-      <li>Gadfly</li>
-    </ul>
-  </li>
-  <li>Plato
-    <ul>
-      <li>428/427 or 424/423 BC</li>
-      <li>In The Republic,Philosophers would be at the top and would get a special education; Beneath them would be soldiers who were trained to defend the country, and beneath them would be the workers.</li>
-    </ul>
-  </li>
-  <li>Aristotle
-    <ul>
-      <li>384–322 BC</li>
-      <li>Eudaemonia isn’t about fleeting moments of bliss or how you feel.</li>
-    </ul>
-  </li>
-  <li>Pyrrho
-    <ul>
-      <li>365–360 BC</li>
-      <li>We know nothing</li>
-    </ul>
-  </li>
-  <li>Epicurus
-    <ul>
-      <li>341–270 BC</li>
-      <li>The fear of death was a waste of time and based on bad logic.</li>
-    </ul>
-  </li>
-  <li>Cicero
-    <ul>
-      <li>106-43 BC</li>
-      <li>Learning Not to Care</li>
-    </ul>
-  </li>
-  <li>Augustine
-    <ul>
-      <li>354-430 AD</li>
-      <li>God has given us free will.</li>
-    </ul>
-  </li>
-  <li>Boethius
-    <ul>
-      <li>480–524 AD</li>
-      <li>He should not forget that God judges human beings on how they behave, the choices they make, even though he knows in advance what they will do.</li>
-    </ul>
-  </li>
-  <li>Aquinas
-    <ul>
-      <li>1225-1274</li>
-      <li>This first cause, he declared, must have been God. God is the uncaused cause of everything that is.</li>
-    </ul>
-  </li>
-  <li>Machiavelli
-    <ul>
-      <li>1469-1527</li>
-      <li>Machiavelli stresses that it’s better as a leader to be feared than to be loved.If you can achieve what you are aiming for by showing kindness, keeping your promises, and being loved, then you should do this (or at least appear to do it). But if you can’t, then you need to combine these human qualities with animal ones.</li>
-    </ul>
-  </li>
-  <li>Thomas Hobbes
-    <ul>
-      <li>1588-1679</li>
-      <li>Life outside society would be ‘solitary, poor, nasty, brutish, and short’.</li>
-    </ul>
-  </li>
-  <li>René Descartes
-    <ul>
-      <li>1596-1650</li>
-      <li>I think, therefore I am</li>
-    </ul>
-  </li>
-  <li>Blaise Pascal
-    <ul>
-      <li>1623-1662</li>
-      <li>Place Your Bets</li>
-    </ul>
-  </li>
-  <li>Baruch Spinoza
-    <ul>
-      <li>1632-1677</li>
-      <li>God is nature and nature is God</li>
-    </ul>
-  </li>
-  <li>John Locke
-    <ul>
-      <li>1632-1704</li>
-      <li>Whenever laws end, tyranny begins.</li>
-    </ul>
-  </li>
-  <li>George Berkeley
-    <ul>
-      <li>1685-1753</li>
-      <li>Truth is the cry of all, but the game of few.</li>
-    </ul>
-  </li>
-  <li>Voltaire
-    <ul>
-      <li>1694–1778</li>
-      <li>I hate what you say, but will defend to the death your right to say it</li>
-    </ul>
-  </li>
-  <li>
-    <p>Leibniz</p>
+<p>I have been working with both this autumn. My K1 work started on the HTWK route: a walking policy trained in HTWK Gym, connected through a bridge to a ROS 2 behavior-tree soccer stack. This week I also installed the B-Human release on a K1. This post compares the two, as architecture. It is not a benchmark. Neither is “better”. They answer different questions.</p>
 
-    <ul>
-      <li>1646–1716</li>
-      <li>The present is big with the future.</li>
-    </ul>
-  </li>
-  <li>
-    <p>David Hume</p>
+<h2 id="shape-one-program-versus-many-nodes">Shape: one program versus many nodes</h2>
 
-    <ul>
-      <li>1711–76</li>
-      <li>Reason is, and ought only to be the slave of the passions.</li>
-    </ul>
-  </li>
-  <li>
-    <p>Jacques Rousseau</p>
+<p><strong>B-Human</strong> is one C++ program, about 150,000 lines. Vision, localization, behavior and motion all live inside it, in threads: camera, motion at 500 Hz, audio, cognition, debug. All motions are RL policies: walk, kick and get-up, running at 50 Hz through ONNX Runtime.</p>
 
-    <ul>
-      <li>1712-1778</li>
-      <li>Man was born free, and everywhere he is in chains</li>
-    </ul>
-  </li>
-  <li>
-    <p>Immanuel Kant</p>
+<p><strong>The HTWK route</strong> is a set of pieces. HTWK Gym trains a 12-output lower-body walking policy (ParameterWalk, 54 inputs). On the robot, a bridge runs that policy next to separate ROS 2 nodes for vision and behavior. Get-up and other skills stay with the Booster firmware.</p>
 
-    <ul>
-      <li>1724-1804</li>
-      <li>Always recognize that human individuals are ends, and do not use them as mere means to your end.</li>
-    </ul>
-  </li>
-  <li>
-    <p>Jeremy Bentham</p>
+<p>The trade-off is the usual one. One program is easier to make consistent: one clock, one set of frames, one place to debug. Separate nodes are easier to swap and to mix with the vendor’s own stack, but every boundary is a place where timing and ownership can go wrong.</p>
 
-    <ul>
-      <li>1748-1832</li>
-      <li>It is the greatest good to the greatest number of people which is the measure of right and wrong.</li>
-    </ul>
-  </li>
-  <li>
-    <p>Hegel</p>
+<h2 id="who-owns-the-robot">Who owns the robot</h2>
 
-    <ul>
-      <li>1770-1831</li>
-      <li>The owl of Minerva spreads its wings only with the falling of the dusk.</li>
-    </ul>
-  </li>
-  <li>
-    <p>Schopenhauer</p>
+<p>This was the biggest difference for me.</p>
 
-    <ul>
-      <li>1788-1860</li>
-      <li>Reality has two aspects. It exists both as Will and as Representation.</li>
-    </ul>
-  </li>
-  <li>
-    <p>Charles Darwin</p>
+<p><strong>B-Human never gives control back to the vendor during play.</strong> It runs the whole time in Booster’s CUSTOM mode. Its own “prepare” and “walk” are states <em>inside</em> CUSTOM, not Booster’s PREP and WALK. A parent watchdog process starts the control program. If the control program dies, the watchdog switches the robot to damping and saves a trace. The emergency button (F1) is always handled by the watchdog, so it still works when the control program misbehaves. No robot data for 50 ms counts as an emergency.</p>
 
-    <ul>
-      <li>1809-1882</li>
-      <li>It is not the strongest of the species that survives, nor the most intelligent that survives. It is the one that is the most adaptable to change.</li>
-    </ul>
-  </li>
-  <li>
-    <p>Søren Kierkegaard</p>
+<p><strong>The HTWK route leans on the firmware.</strong> The firmware’s standing posture is the safe home. The bridge hands over from firmware to the RL policy, and hands back to the firmware’s PREP mode when it releases. I wrote about that handover in the <a href="/exactly-one-motion-owner.html">motion owner post</a>.</p>
 
-    <ul>
-      <li>1813-1855</li>
-      <li>Life can only be understood backward, but it must be lived forward.</li>
-    </ul>
-  </li>
-  <li>
-    <p>Karl Marx</p>
+<p>Both models end in the same place on a fault: damping. And damping drops a standing robot in either stack. That is worth remembering whichever one you pick.</p>
 
-    <ul>
-      <li>1818-1883</li>
-      <li>Workers of the world, unite! You have nothing to lose but your chains.</li>
-    </ul>
-  </li>
-  <li>
-    <p>William James</p>
+<h2 id="the-installer-is-part-of-the-architecture">The installer is part of the architecture</h2>
 
-    <ul>
-      <li>1842-1910</li>
-      <li>The deepest principle in human nature is the craving to be appreciated.</li>
-    </ul>
-  </li>
-  <li>
-    <p>Nietzsche</p>
+<p>B-Human’s installer is invasive, and that is a design choice, not a flaw. To be the only one who sees the buttons and the gamepad, it patches two Booster binaries so the original topic names are no longer published. It turns off several Booster services, including the vendor’s camera service, and installs its own camera streaming service on the head board. It changes the password and network settings.</p>
 
-    <ul>
-      <li>1844-1900</li>
-      <li>God is dead, and we have killed him.</li>
-    </ul>
-  </li>
-  <li>
-    <p>Sigmund Freud</p>
+<p>The consequence: once installed, anything that listens on Booster’s original button or gamepad topics, like SDK samples or a ROS 2 soccer stack, gets nothing. There is an uninstall option that restores the patched files, but not every change is undone.</p>
 
-    <ul>
-      <li>1856-1939</li>
-      <li>The interpretation of dreams is the royal road to a knowledge of the unconscious activities of the mind.</li>
-    </ul>
-  </li>
-  <li>
-    <p>Bertrand Russell</p>
+<p>So in practice, <strong>you can’t casually run both stacks on one robot.</strong> B-Human’s release is tested on Booster firmware 1.7.1 and says 1.8.0 does not behave as intended. My HTWK-route robot runs a 1.8 firmware. Switching one robot between stacks means uninstalling, maybe changing firmware, and checking what is left behind. Where possible, I give each stack its own robot.</p>
 
-    <ul>
-      <li>1872-1970</li>
-      <li>The whole problem with the world is that fools and fanatics are always so certain of themselves, and wiser people so full of doubts.</li>
-    </ul>
-  </li>
-  <li>
-    <p>Alfred Jules Ayer</p>
+<h2 id="walking-policies">Walking policies</h2>
 
-    <ul>
-      <li>1910-1989</li>
-      <li>The principle of verification is a criterion of meaningfulness. We say that a sentence is factually significant to any given person, if, and only if, he knows how to verify the proposition which it purports to express.</li>
-    </ul>
-  </li>
-  <li>
-    <p>Jean-Paul Sartre</p>
+<p>The walking inputs show two very different bets:</p>
 
-    <ul>
-      <li>1905-1980</li>
-      <li>Existence precedes essence.</li>
-    </ul>
-  </li>
-  <li>
-    <p>Wittgenstein</p>
+<ul>
+  <li><strong>HTWK ParameterWalk</strong>: 54 inputs to 12 outputs. Compact, current state plus commands.</li>
+  <li><strong>B-Human walk</strong>: 344 inputs on the K1, with a history of 10 steps (200 ms), 12 leg outputs, and an extra output that adjusts the gait frequency. B-Human credits the history and the learned frequency for straighter legs.</li>
+</ul>
 
-    <ul>
-      <li>1889-1951</li>
-      <li>The limits of my language mean the limits of my world.”</li>
-    </ul>
-  </li>
-  <li>
-    <p>Hannah Arendt</p>
+<p>I don’t know yet which matters more on our robots. But it is a concrete thing to try in HTWK Gym: add history, let the policy pick its frequency, and compare.</p>
 
-    <ul>
-      <li>1906-1975</li>
-      <li>The sad truth is that most evil is done by people who never make up their minds to be good or evil.</li>
-    </ul>
-  </li>
-  <li>
-    <p>Philippa Foot</p>
+<h2 id="kicking">Kicking</h2>
 
-    <ul>
-      <li>1920-2010</li>
-      <li>The duty of not being unjust can override the duty of truth-telling.</li>
-    </ul>
-  </li>
-  <li>
-    <p>John Rawls</p>
+<p>Another clear difference:</p>
 
-    <ul>
-      <li>1921-2002</li>
-      <li>The most reasonable principles of justice are those everyone would accept and agree to from a fair position.</li>
-    </ul>
-  </li>
-  <li>
-    <p>Alan Turing</p>
+<ul>
+  <li><strong>B-Human</strong> has two RL kick policies, and the kick policy also does the <strong>final approach</strong> to the ball. Its inputs include ball velocity, kick direction and strength, and the previous ball position.</li>
+  <li><strong>HTWK Gym</strong> has a kicking task with 44 inputs, built around a robot that is already standing in a tight window behind the ball.</li>
+</ul>
 
-    <ul>
-      <li>1912-1954</li>
-      <li>A machine can be called intelligent when it can deceive a human into believing that it is human.</li>
-    </ul>
-  </li>
-  <li>
-    <p>Peter Singer</p>
+<p>Handing the last steps to the kick policy is a big design choice. It means “walk to the ball” and “kick” are not two separate skills with a handover in between. If kicking becomes a priority for us, B-Human’s input design is the reference I’d start from.</p>
 
-    <ul>
-      <li>1946</li>
-      <li>To protest about bullfighting in Spain, the eating of dogs in South Korea, or the slaughter of baby seals in Canada, while continuing to eat eggs from hens who have spent their lives crammed into cages, or veal from calves who have been deprived of their mothers, their proper diet, and the freedom to lie down with their legs extended, is like denouncing apartheid in South Africa while asking your neighbors not to sell their houses to blacks.</li>
-    </ul>
-  </li>
+<h2 id="small-details-that-bite">Small details that bite</h2>
+
+<ul>
+  <li><strong>Frames.</strong> B-Human’s torso frame origin is between the hip pitch joints. Booster’s is 77 mm higher. If you compare or exchange any pose data between the stacks, convert first.</li>
+  <li><strong>Build machine.</strong> B-Human’s Linux docs target Ubuntu 26.04 with recent clang, CMake and Qt. My workstation runs 22.04. Instead of upgrading it, I built in a Docker image and cross-compiled for the robot there. SimRobot, their simulator and debugging tool, also runs in a container and connects to the robot remotely.</li>
+  <li><strong>Build type.</strong> B-Human’s Develop build is the useful middle: fast enough on the robot, and it can still connect to SimRobot. Release can’t connect. Debug is too slow on the real robot.</li>
+  <li><strong>Licenses.</strong> B-Human’s code is released publicly every year. The HTWK Gym snapshot I looked at had no license file, and its README limits competition use of pretrained models to cases agreed with HTWK. Ask before reusing.</li>
+</ul>
+
+<h2 id="so-which-one">So which one?</h2>
+
+<p>For now, both, on separate robots.</p>
+
+<p>The HTWK route fits a team that already has a ROS 2 soccer stack and wants to add learned locomotion without replacing everything. Its cost is the handover between firmware and policy, which you have to design and test very carefully.</p>
+
+<p>The B-Human route is a complete, consistent system with years of competition behind it. Its cost is that it takes over the robot, and you accept its architecture, its firmware version and its tools.</p>
+
+<p>Reading both side by side has been the best robotics education I’ve had this year. Each one makes the other’s assumptions visible.</p>
+
+<h2 id="what-i-took-away">What I took away</h2>
+
+<ul>
+  <li><strong>Compare ownership models, not features.</strong> Who owns the joints, the buttons and the safe state tells you more than any feature list.</li>
+  <li><strong>An installer can be architecture.</strong> What it disables and patches is part of the design.</li>
+  <li><strong>One robot per stack.</strong> Firmware versions and patched binaries make sharing expensive.</li>
+  <li><strong>Read the inputs.</strong> The input vector of a policy tells you what its authors believed mattered.</li>
+  <li><strong>Open source in RoboCup is a gift.</strong> Both teams published years of work. The least I can do is read it carefully before I change it.</li>
 </ul>
 
 	  ]]></description>
 	</item>
 
 	<item>
-	  <title>Userful EOR operations in algorithm design</title>
-	  <link>//useful-eor-operation</link>
+	  <title>Exactly One Motion Owner: Running an RL Policy Next to Vendor Firmware</title>
+	  <link>//exactly-one-motion-owner</link>
 	  <author>Tao He</author>
-	  <pubDate>2023-07-22T22:20:12+04:00</pubDate>
-	  <guid>//useful-eor-operation</guid>
+	  <pubDate>2026-10-17T21:00:00+00:00</pubDate>
+	  <guid>//exactly-one-motion-owner</guid>
 	  <description><![CDATA[
-	     <p>The EOR is a short form of Exclusive OR, which is a logic operator and satisfies the commutative law and the associative law. It means:</p>
+	     <p>A Booster K1 comes with firmware that can already stand, walk, get up and kick. It is a complete product. For RoboCup we wanted to try our own walking: a reinforcement learning policy, trained in simulation, running on the robot and sending joint targets.</p>
 
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>0 ^ N == N
-N ^ N == 0
+<p>The tempting plan is: train the policy, export it, run it, publish joint commands. Done.</p>
 
-A ^ B == B ^ A
-A ^ B ^ C == A ^ (B ^ C)
+<p>The real problem turned out to be something else. Not “how do I run a policy”, but <strong>who is moving the legs right now?</strong> The firmware can move them. The policy can move them. The soccer behavior sends walk requests. If two of these think they are in charge at the same time, the robot falls.</p>
 
-</code></pre></div></div>
+<p>So the rule we designed around is simple to say: <strong>at any moment, exactly one thing owns the motion.</strong> This post is what that rule means in practice.</p>
 
-<p>With these properties, EOR can be useful to efficiently solve some questions. Let us start with a simple one:</p>
+<h2 id="the-modes-you-have-to-respect">The modes you have to respect</h2>
 
-<blockquote>
-  <p>Given an integer array with only one integer appearing odd times and others appearing even times, print the odd-times one.</p>
-</blockquote>
-
-<p>At first glance, you could have several solutions to this question. But trust me, you might not have an elegant solution like the one below:</p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>public static void printOddTimesNumber1(int[] array) {
-    int eor = 0;
-    for(int i=0; i &lt; array.length; i++) {
-        eor ^= array[i];
-    }
-    System.out.println(eor);
-}
-
-</code></pre></div></div>
-
-<p>With just few lines of code, it’s done. It utilizes the basic properties of EOR pretty well. EOR operation on even-time numbers always 0 while only one odd-times number <code class="language-plaintext highlighter-rouge">^</code> 0 always itself.</p>
-
-<p>One more difficult question:</p>
-
-<blockquote>
-  <p>Given an integer array with only two integers appearing odd times and others appearing event times, print the two odd-time numbers.</p>
-</blockquote>
-
-<p>We give the solution directly and explain the code later.</p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>public static void printOddTimesNumber2(int[] array) {
-    int eor = 0;
-    for(int i=0; i &lt; array.length; i++) {
-        eor ^= array[i];
-    }
-    
-    int rightOne = eor &amp; (~eor + 1);
-    onlyOne = 0;
-    for(int i=0; i &lt; array.length; i++) {
-        if(array[i] &amp; rightOne != 0) {
-            onlyOne ^= array[i];
-        }
-    }
-    
-    int zeroOne = eor ^ onlyOne;
-    System.out.println(onlyOne, eor ^ onlyOne);
-}
-
-</code></pre></div></div>
-
-<p>The code seems complex, especially this segment <code class="language-plaintext highlighter-rouge">eor &amp; (~eor + 1)</code>. The expression gets an integer whose only bit is the same as the most right 1 bit of eor and the rest is 0.</p>
-
-<p>Assume that these two numbers are A and B. The first part of the code was figured out: eor = A ^ B. We know A != B. So there must be a bit of A and B that is different. If the bit of A is 1 and the bit of B is 0, We need to figure out this bit. Then the complex expression above helped. Having the <code class="language-plaintext highlighter-rouge">rightOne</code>, we can iterate the array to find which number’s this bit is 1. After iteration, we get it as <code class="language-plaintext highlighter-rouge">onlyOne</code> which is A. Finally, we also get the <code class="language-plaintext highlighter-rouge">zeroOne</code> which is B.</p>
-
-
-	  ]]></description>
-	</item>
-
-	<item>
-	  <title>A practical way to make sure the correctness of your algorithm</title>
-	  <link>//a-practical-way-for-algorithm-correctness</link>
-	  <author>Tao He</author>
-	  <pubDate>2023-07-20T22:20:12+04:00</pubDate>
-	  <guid>//a-practical-way-for-algorithm-correctness</guid>
-	  <description><![CDATA[
-	     <p>As programmers, it really frustrates us when we cannot 100 percent make sure the functions or algorithms we have written can produce the results we expected. Although we have passed many test cases, we are still not confident enough to say these functions can work and output correct values in all cases. It is impossible for us to have a test case system like Leecode wherever and whenever. It is not realistic. So we need to figure out a way to test our algorithm ourselves. Fortunately, there is indeed one.</p>
-
-<p>As a fact, this method is based on comparing an existing solution to verify a new one. It sounds simple, right? What are we waiting for? Let us implement it step by step.</p>
+<p>The K1 manual describes a small set of modes:</p>
 
 <ul>
-  <li>Identify a function or algorithm you would like to test. For this example, it is a selection sort function we wrote.</li>
+  <li><strong>DAMP</strong>: joints resist motion but do not hold a posture. Safe for the motors. Not safe for a standing robot, it will fold.</li>
+  <li><strong>PREP</strong>: standing posture, but no active balance.</li>
+  <li><strong>WALK</strong>: the firmware’s own walking and predefined actions.</li>
+  <li><strong>CUSTOM</strong>: developer control. Low-level joint commands from the SDK only take effect here.</li>
+  <li><strong>PROTECT</strong>: entered automatically after errors like a fall.</li>
 </ul>
 
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>public static void selectionSort(int[] arr) {
-		if (arr == null || arr.length &lt; 2) {
-			return;
-		}
-		for (int i = 0; i &lt; arr.length - 1; i++) {
-			int minIndex = i;
-			for (int j = i + 1; j &lt; arr.length; j++) { 
-				minIndex = arr[j] &lt; arr[minIndex] ? j : minIndex;
-			}
-			swap(arr, i, minIndex);
-		}
-	}
+<p>And the transitions are restricted. CUSTOM can only be entered from PREP or DAMP, and can only go back to PREP or DAMP.</p>
 
+<p>So an RL policy lives in CUSTOM. The firmware’s walking lives in WALK. You cannot jump between them directly. Every switch is a handover, and handovers are where robots fall.</p>
+
+<h2 id="dont-change-the-soccer-code-put-a-proxy-in-front">Don’t change the soccer code, put a proxy in front</h2>
+
+<p>The soccer behavior (a ROS 2 “brain” node with a behavior tree) already sends locomotion requests to the firmware: “walk with this velocity”, “move the head”, “kick”, “get up”. We did not want to fork it.</p>
+
+<p>ROS 2 topic remapping gave us a clean option. At launch, the brain’s request topic is remapped to a bridge. The bridge decides where each request goes:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>brain (behavior tree)
+   |  locomotion requests (remapped)
+   v
+bridge
+   Firmware owns:  forward request to the firmware
+   RL owns:        walk velocity  -&gt; policy input
+                   head request   -&gt; head joint targets
+                   joint targets  -&gt; single low-level publisher
 </code></pre></div></div>
 
-<ul>
-  <li>In order to compare, we need to implement a simple function, which also can sort the array using an existed and verified solutiion. In this case we using a Java API.</li>
-</ul>
+<p>The brain does not need to know which one is walking. It keeps sending “walk forward at this speed”. The bridge turns that into either a firmware request or a policy command.</p>
 
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>public static void comparator(int[] arr) {
-    Arrays.sort(arr);
-}
+<p>One catch: if anyone starts the brain the old way, without the remap, it talks to the firmware directly and bypasses the bridge. So the bridge checks for other publishers on the firmware request topic and on the joint command topic before it takes over. A second writer is a fault, not a warning.</p>
 
-</code></pre></div></div>
+<h2 id="handing-over-firmware-to-rl">Handing over: firmware to RL</h2>
 
-<ul>
-  <li>Implement a random sample generator.</li>
-</ul>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>public static int[] generateRandomArray(int maxSize, int maxValue) {
-    int[] arr = new int[(int) (Math.random() * maxSize) + 1];
-    arr[0] = (int) (Math.random() * maxValue) - (int) (Math.random() * maxValue);
-    for (int i = 1; i &lt; arr.length; i++) {
-        do {
-            arr[i] = (int) (Math.random() * maxValue) - (int) (Math.random() * maxValue);
-        } while (arr[i] == arr[i - 1]);
-    }
-    return arr;
-}
-</code></pre></div></div>
-
-<ul>
-  <li>Write a function to compare output.</li>
-</ul>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>public static boolean isEqual(int[] arr1, int[] arr2) {
-    if ((arr1 == null &amp;&amp; arr2 != null) || (arr1 != null &amp;&amp; arr2 == null)) {
-        return false;
-    }
-    if (arr1 == null &amp;&amp; arr2 == null) {
-        return true;
-    }
-    if (arr1.length != arr2.length) {
-        return false;
-    }
-    for (int i = 0; i &lt; arr1.length; i++) {
-        if (arr1[i] != arr2[i]) {
-            return false;
-        }
-    }
-    return true;
-}
-
-</code></pre></div></div>
-
-<ul>
-  <li>Using various size of sample to test the function we wrote and compare to the existed solution.</li>
-</ul>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>public static void main(String[] args) {
-    int testTime = 500000;
-    int maxSize = 100;
-    int maxValue = 100;
-    boolean succeed = true;
-    for (int i = 0; i &lt; testTime; i++) {
-        int[] arr1 = generateRandomArray(maxSize, maxValue);
-        int[] arr2 = copyArray(arr1);
-        selectionSort(arr1);
-        comparator(arr2);
-        if (!isEqual(arr1, arr2)) {
-            succeed = false;
-            printArray(arr1);
-            printArray(arr2);
-            break;
-        }
-    }
-    System.out.println(succeed ? "Nice!" : "Fucking fucked!");
-
-    int[] arr = generateRandomArray(maxSize, maxValue);
-    printArray(arr);
-    selectionSort(arr);
-    printArray(arr);
-}
-
-</code></pre></div></div>
-
-<p>We can randomly set the test time and sample size to do loads of tests to make sure the function works and outputs correctly. If it can produce expected results after millions of tests. We can be sure of the correctness of this function. But if there is one time they are not equal, in other words, <code class="language-plaintext highlighter-rouge">selectionSort</code> produces outputs that are not equal, <code class="language-plaintext highlighter-rouge">comparator</code>. We have to say the new solution cannot be accepted; we should debug and test more to find the problem. As long as we use this sharp comparator more and more, we will have more confidence to write down more reliable algorithms.</p>
-
-	  ]]></description>
-	</item>
-
-	<item>
-	  <title>A quick tour of Spring Boot</title>
-	  <link>//a-quick-tour-of-spring-boot</link>
-	  <author>Tao He</author>
-	  <pubDate>2023-07-12T22:20:12+04:00</pubDate>
-	  <guid>//a-quick-tour-of-spring-boot</guid>
-	  <description><![CDATA[
-	     <p>As an Android developer currently, I have always dreamed of becoming a full-stack developer, so I started to learn Java backend programming. During the past two weeks, I have read one book and watched a series of tutorial videos on Spring Boot. So I am going to summarize what I have learned and write down my thoughts.</p>
-
-<p>I have to admit that I had never heard of Spring Boot before I started learning it. After I effortlessly started up a simple project and ran it successfully following the steps the book describes, I have to say it is pretty easy to create and run an application. It just takes one or two minutes to start a runnable program without any extra effort. It just works.</p>
-
-<p>So the first question is what such a powerful Spring Boot is. Actually, it is not a mysterious thing. You can treat it as an enhanced Spring, which simplifies the complicated configurations and makes dependency management unprecedentedly easy. Let us compare the differences between Spring and Spring Boot in configurations to experience the attractions of Spring Boot for developers.</p>
-
-<p>for Spring applications:</p>
-
-<ul>
-  <li>We have to manually add dependency in pom.xml</li>
-  <li>We have to manually program the Web3.0 configuration class.</li>
-  <li>We have to manually write the Spring/Spring MVC configuration class.</li>
-</ul>
-
-<p>while for Spring Boot applications:</p>
-
-<p>We only need to check a dependency to add it or manually add it, not manually write a configuration class anymore. Writing business controllers and designing data models become the only things we need to do. It significantly speeds up the process of development. No configurations, no worry about dependencies, especially dependency versions—it sounds amazing. We cannot stop asking, How did Spring Boot make it? The answer is that these configurations and dependencies are embedded into Spring Boot. The starter is the key point. Spring Boot has embedded most dependencies we need and organized every dependency with the most matched versions. For example, if we need Spring Web, we just add lines like below:</p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
-&lt;dependencies&gt;
-
-...
-
-        &lt;dependency&gt;
-            &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
-            &lt;artifactId&gt;spring-boot-starter-web&lt;/artifactId&gt;
-        &lt;/dependency&gt;
-...
-
-&lt;dependencies&gt;
-</code></pre></div></div>
-
-<p>You may have noticed that the dependency didn’t specify the version and that the name of artifactId contains <code class="language-plaintext highlighter-rouge">starter</code>. The version is not necessary any more; Spring Boot helps us figure out all embedded dependencies with the proper version based on the Spring Boot version. This saves us much time and effort in finding the matched versions of dependencies. As an Android developer, I have to say that Android developers also need a framework like this, which can do the most dirty work for us.</p>
-
-<p>Spring Boot also helps us avoid writing boilerplate code like the Spring MVC configuration class. I think it makes the most use of the annotation and the reflection of Java to implement. It is not uncommon to find that almost all production-grade frameworks written in Java use these Java features to fulfill complicated tasks.</p>
-
-<p>Another obvious difference between Spring and Spring Boot in the work flow is that Spring Boot has embedded a Tomcat, so I do not need to configure one manually any more. When you are in the process of development, you even forget its existence. You just run and wait for the result.</p>
-
-<p>Although Spring Boot has helped us get rid of annoying XML configurations, it still has configurations. Several styles of configuration files are supported. But the style of yaml is preferred.</p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>spring:
-  thymeleaf:
-    cache: false
-</code></pre></div></div>
-<p>Yaml differs from traditional property files, which consist of key=value lines. The reason for choosing yaml instead of property files is that property files cannot represent structured configuration well.</p>
-
-<p>Before going to the most exciting part of Spring Boot, let us go on a whirlwind REST tour.
-If we would like to locate a resource through a URI (path) and do different operations on it, we usually define different paths to complete different tasks.</p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>http://localhost/user/saveUser
-http://localhost/user/delete?id=1
-http://localhost/user/updateUser
-http://localhost/user/getById?id=1
-http://localhost/user/getAll
-
-</code></pre></div></div>
-<p>While adopting REST style, we can do this more elegantly:</p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>http://localhost/user/users
-http://localhost/user/users/1
-http://localhost/user/users
-http://localhost/user/users/1
-http://localhost/user/users
-
-</code></pre></div></div>
-<p>On first sight, it is hard to tell the difference among these paths. In fact, Spring Boot has provided us with several annotations to specify every action each path stands for. The first path with the GET action will make a request for all users, while the third path with the POST action will save a user. Concise and elegant, right? Next, we will step into the key part of Spring Boot that can show its power.</p>
-
-<p>Spring Boot has been evolving quickly since it appeared. Until now, it has been seamlessly integrated with most mainstream third-party technologies like JUnit(for testing), MyBatis(for persistence), Druid(for data source), Simple(for cache). Actually, it supports most of them directly. Introducing them to your project becomes quick and effortless. I have tried to integrate several of them into my trivial project and found a general routine to complete the integration task. When you want to introduce a technology (library) for a specific purpose to your project, generally speaking, you should do these three steps:</p>
+<p>This is the part with the most steps, and each step exists because something can go wrong there:</p>
 
 <ol>
-  <li>Import the starter of this library.</li>
-  <li>Turn on this library, which means letting Spring Boot know you want to use this library or technology.</li>
-  <li>Using it in your business code.</li>
+  <li><strong>Warm up the policy first.</strong> Run inference on live robot state for a short time while the firmware is still in charge. If inference can’t keep up now, it won’t keep up later.</li>
+  <li><strong>Ask the firmware to stand still.</strong> Zero velocity.</li>
+  <li><strong>Preload a hold command</strong> with the current joint positions. When control switches, the first command the motors see is “stay where you are”, not some default pose.</li>
+  <li><strong>Create the one and only joint publisher</strong>, and confirm nobody else is publishing.</li>
+  <li><strong>Warm up again under load</strong>, now with the high-rate publishing running. If a deadline is missed here, abort and stay with the firmware.</li>
+  <li><strong>Request CUSTOM once and wait for confirmation.</strong> Don’t spam the mode request.</li>
+  <li><strong>Check that the robot state is fresh.</strong></li>
+  <li><strong>Ramp in</strong> over a couple of seconds from the hold pose to the policy’s output.</li>
+  <li><strong>Only now</strong> accept walk commands from the brain.</li>
 </ol>
 
-<p>For example, if we want to introduce Simple for cache, we will follow these 3 steps:</p>
+<p>The policy runs at 50 Hz. Joint commands go out at 500 Hz. Targets are slew-limited, and a velocity command that is not refreshed in time is set back to zero.</p>
 
-<p>1.Import</p>
+<h2 id="handing-back-rl-to-firmware">Handing back: RL to firmware</h2>
 
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
-&lt;dependency&gt;
-    &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
-    &lt;artifactId&gt;spring-boot-starter-cache&lt;/artifactId&gt;
-&lt;/dependency&gt;
+<p>The reverse is shorter, and the order matters:</p>
 
-</code></pre></div></div>
-<p>2.Turn on</p>
+<ol>
+  <li>Mask the brain’s velocity.</li>
+  <li>Hold a zero command for a moment so the robot settles.</li>
+  <li>Switch to PREP and <strong>confirm</strong> the switch.</li>
+  <li>Remove the joint publisher.</li>
+</ol>
 
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
-@SpringBootApplication
-@EnableCaching
-public class TacoCloudApplication implements WebMvcConfigurer {
-    public static void main(String[] args) {
-        SpringApplication.run(TacoCloudApplication.class, args);
-    }
-}
+<p>Stopping the publisher and confirming the mode are two different things. If you only stop publishing, the motors keep the last command and you don’t know who is in charge. If you confirm the mode first, you know.</p>
 
-</code></pre></div></div>
-<p>3.Using</p>
+<p>Firmware skills like get-up go through this path too. The bridge first gives control back, confirms it, and only then forwards the skill request. After a firmware skill, the policy does not take over again automatically. Somebody has to enable it again on purpose.</p>
 
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>@Cachable(value="cacheSpace",key="#id")
-public User getById(Integer id) {
-  return userDao.selectById(id);
-}
+<h2 id="when-things-go-wrong-damping">When things go wrong: damping</h2>
 
-</code></pre></div></div>
-
-<p>After these 3 steps, we can already use all the cache capabilities that Simple has provided for us. Other 3rd-party libraries are directly supported by Spring Boot nearly all can be introduced like above. The quick tour of Spring Boot has to end now. This article is just a summary and whirlwind tour; next I will dive deep into a specific technology often used in Spring Boot.</p>
-
-
-	  ]]></description>
-	</item>
-
-	<item>
-	  <title>生活在Vim中</title>
-	  <link>//live-in-the-vim</link>
-	  <author>Tao He</author>
-	  <pubDate>2021-12-10T22:30:12+04:00</pubDate>
-	  <guid>//live-in-the-vim</guid>
-	  <description><![CDATA[
-	     <p>从第一天接触Vim编辑器到现在已经过去10年了，从最开始的不知所措到现在的运用自如，Vim已经融入到了我工作生活的很多场景, 它对于我已经不仅仅是一个高效强大的编辑器，更是变成了一种做事的方式和编辑，操作的哲学。关于这种哲学我最喜欢一个类比: 使用Vim的过程就像是一个画家画画的过程，当一个画家需要挥毫泼墨时，他就进入了insert模式，可以对画布进行任意的修改，当一个画家需要思考和审视时，他需要防止笔误和操作失当，这个时候他就需要进入normal模式，这个时候不能修改画布，只能在画布上移动，无论是移动你的手指和思绪，这个时候都不能对画布进行修改。这种特有的多模式也许是Vim和Emacs与其他大部分编辑器最显著的不同。</p>
-
-<p>当你初窥Vim的与众不同后，如果你还不熟悉它的使用，你可能会不知所措，甚至无法编辑，无法退出，你和它会僵死在那里。你遇到的这种困境也正是Vim特有的操作方式引起的。这篇文章不打算如流水账般罗列Vim的诸多命令，我只挑选几种在日常代码编辑中最常用的命令来呈现Vim的神奇与强大。Vim之强大主要体现在无论是移动查询还是修改替换都能将一个动作做到非常小的粒度和精确控制，并且可以以极少的击键次数优雅地实现你精细的操作。我来举一个最常见的例子:</p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>int i = 3 * (4 + 2);
-
-</code></pre></div></div>
-<p>如上，假如我们想将括号中的内容改掉，一般的编辑器的做法都是移动到数字4，然后完全选中括号中的内容后修改。但是如果使用Vim，动作将会非常简单和快捷，只需移动到左括号后键入<code class="language-plaintext highlighter-rouge">ci(</code>即可，然后就可以直接进入insert模式修改了。敏感的读者可能已经感知到Vim的这条命令其实就是change in ()，有非常强的自然语言命令的感觉。</p>
-
-<p>因为vim的使用其实可以写成一本书，网络上的教程更是数不胜数，这篇文章也不打算写成一篇使用教程。vim本身的使用需要长期的实践，而vim的使用场景的扩展可能就需要不断的探索和尝试了。我因为长期使用vim，对其浸润很深，所以发现了不少vim的其他使用方式和场景。第一个场景就是vim的命令和操作方式以插件的形式存在于其他的编辑器，IDE和软件应用中。 以下是三个典型的插件：</p>
+<p>The fault path is one direction only: request DAMP, then remove the publisher. Faults include:</p>
 
 <ul>
-  <li>
-    <p>VsVim(这个是大名鼎鼎的Visual Studio的一款Vim插件)</p>
-  </li>
-  <li>
-    <p>VSCodeVim(for Visual Studio Code)</p>
-  </li>
-  <li>
-    <p>IdeaVim(for Android Studio)</p>
-  </li>
+  <li>robot state is stale,</li>
+  <li>unsafe posture or a fall,</li>
+  <li>motor error or over-temperature,</li>
+  <li>a second writer appears,</li>
+  <li>the firmware leaves CUSTOM on its own (someone pressed the emergency button),</li>
+  <li>inference misses its deadline.</li>
 </ul>
 
-<p>这三个插件都是应用于IDE或编辑器, 下面的这个插件甚至应用于Google浏览器:</p>
+<p>Damping protects the motors. But remember the first section: a standing robot in damping folds to the ground. So “fault means damping” is the right rule for the hardware, and it is also why a person must be ready to catch or support the robot during these tests. There is no software-only safe stop for a standing humanoid.</p>
+
+<h2 id="the-rules-i-would-not-relax">The rules I would not relax</h2>
+
+<p>Some numbers in this design are tempting to loosen when a check fails: the publish rate, the inference deadline, the maximum age of robot state. Each of those exists because something real depends on it. If a check fails, the check found a problem. Loosening the threshold to make it pass only hides it.</p>
+
+<p>I wrote this down as a rule in the runbook, because on a long test day it is very easy to forget.</p>
+
+<h2 id="what-is-still-open">What is still open</h2>
+
+<p>The bridge knows who owns the motion. The behavior tree does not. It sends a kick request and doesn’t know that the bridge must first hand back to the firmware, or that RL will not resume afterwards. A clean interface that tells the behavior tree “firmware, RL, kick, get-up, fault” is the next piece, and it is still design work.</p>
+
+<h2 id="what-i-took-away">What I took away</h2>
 
 <ul>
-  <li>Vimium</li>
-</ul>
-
-<p>其实按照这个思路，凡是有编辑需求的应用都可以嵌入Vim插件，这样的话即使某一天Vim这个编辑器不存在了, Vim的这种思想却可以一直存在下去，这也许就是Vim的魅力吧! 至此，谈到Vim的永生，就不得不谈一个我最近几年一直在用的Emacs变体–Spacemacs。Spacemacs本质上还是Emacs，一个厉害的程序员通过配置文件将其扩展成了一个可以同时支持Vim和Emacs操作的巨无霸，足见Emacs的强大的可扩展性。当你第一次使用Spacemacs时会让你选择Vim世界还是Emacs世界,两大上古神奇竟以此种方式存在了下来…</p>
-
-<p>使用Vim的历程，从排斥到爱不释手到离不开，Vim已成为工作生活的一部分，可谓一日Vim，终生Vim.</p>
-
-
-	  ]]></description>
-	</item>
-
-	<item>
-	  <title>BaseQuickAdapter使用tips</title>
-	  <link>//base-quick-adapter-tips</link>
-	  <author>Tao He</author>
-	  <pubDate>2021-11-10T18:00:00+04:00</pubDate>
-	  <guid>//base-quick-adapter-tips</guid>
-	  <description><![CDATA[
-	     <p>此文记录在实际工作中使用BaseQuickAdapter的一些经验和心得，以期新同学在第一次使用时免去踩坑的风险。</p>
-
-<p>Tips:</p>
-
-<ul>
-  <li>如果adapter只有一种类型的item，则直接继承自BaseQuickAdapter，提供布局文件即可，例如:</li>
-</ul>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
-class SelectedContactAdapter : BaseQuickAdapter&lt;ContactUIItemData, BaseViewHolder&gt;(layoutResId = R.layout.s_item_select_user_normal){
-    override fun convert(holder: BaseViewHolder, item: ContactUIItemData) {
-        holder.getView&lt;UserFaceView&gt;(R.id.ufv_avatar).bindUid(item.bean.account)
-        addChildClickViewIds(R.id.ll_item)
-    }
-}
-
-</code></pre></div></div>
-
-<ul>
-  <li>如果adapter需要多种类型的item，则需要继承自BaseMultiItemQuickAdapter，例如:</li>
-</ul>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
-class ContactAdapter : BaseMultiItemQuickAdapter&lt;ContactUIItemData, BaseViewHolder&gt;() {
-
-    var actionType = AppConstants.User.TYPE_CONTACT_NEW_MESSAGE
-
-    init {
-        addItemType(ITEM_TYPE_HEAD, R.layout.s_item_contact_head)
-        addItemType(ITEM_TYPE_TITLE, R.layout.s_item_contact_title)
-        addItemType(ITEM_TYPE_CONTACT, R.layout.s_item_single_contact)
-
-        setDiffCallback(object : DiffUtil.ItemCallback&lt;ContactUIItemData&gt;() {
-            override fun areItemsTheSame(
-                oldItem: ContactUIItemData,
-                newItem: ContactUIItemData
-            ): Boolean {
-                return oldItem.viewType == newItem.viewType
-            }
-
-            override fun areContentsTheSame(
-                oldItem: ContactUIItemData,
-                newItem: ContactUIItemData
-            ): Boolean {
-                if (newItem.viewType == ITEM_TYPE_CONTACT) {
-                    return TextUtils.equals(newItem.bean.account, oldItem.bean.account) &amp;&amp; TextUtils.equals(newItem.bean.name, oldItem.bean.name)
-                    &amp;&amp; TextUtils.equals(newItem.searchText, oldItem.searchText)
-                }
-                return true;
-            }
-        })
-    }
-    
-    ....
-}
-
-</code></pre></div></div>
-
-<p>这里需要注意的是数据item必须实现MultiItemEntity接口:</p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
-public class ContactUIItemData implements MultiItemEntity {
-
-    ...
-
-    @Override
-    public int getItemType() {
-        return viewType;
-    }
-}
-
-</code></pre></div></div>
-
-<p>并且需要实现DiffCallback，DiffCallback有两个方法需要实现，第一个用来判断两个item是否同一类型，如果判断是，则调用第二个方法判断两个item内容是否相等，这两个方法需要根据实际业务场景谨慎实现。</p>
-
-<ul>
-  <li>
-    <p>刷新数据统一调用setDiffNewData，无论是第一次加载数据还是后续数据变更刷新，这里要注意的是，刷新时调用setDiffNewData需要传入新的数据列表才能实现刷新。</p>
-  </li>
-  <li>
-    <p>如只需刷新某个item，则可以通过notifyItemChanged来实现，当然添加和删除数据都有对应的方法，但是添加和删除还是统一走setDiffNewData比较好。</p>
-  </li>
-  <li>
-    <p>如只需刷新某个item中的某个元素，而不是刷新整个item，则可以通过payload的方式来实现局部刷新，例如:</p>
-  </li>
-</ul>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
-override fun convert(holder: BaseViewHolder, item: GroupUIItemData, payloads: List&lt;Any&gt;) {
-    super.convert(holder, item, payloads)
-    when(holder.itemViewType) {
-        GroupContactItemConstants.ITEM_TYPE_CONTACT -&gt; {
-            if (payloads.isEmpty()) {
-                return
-            }
-
-            val payload = payloads[0];
-            if (payload == EDIT_MODE_PAYLOAD) {
-
-                val cbSelect = holder.getView&lt;CheckBox&gt;(R.id.cb_select)
-                cbSelect.isChecked = item.checked
-                cbSelect.isEnabled = item.enabled
-
-                if (item.canSelect) {
-                    cbSelect.visibility = View.VISIBLE
-                } else {
-                    cbSelect.visibility = View.GONE
-                }
-            }
-        }
-    }
-}
-
-</code></pre></div></div>
-
-<p>对需要局部刷新的item调用contactsAdapter.notifyItemChanged(position, GroupContactAdapter.EDIT_MODE_PAYLOAD).</p>
-
-<ul>
-  <li>
-    <p>如遇到列表不刷新的问题，则需要检查调用setDiffNewData时传入的是否时新的列表，数据源对象是不是新对象，从多个方面来排查，理论上更新列表就统一使用这个方法，避免调用notifyDataSetChanged.</p>
-  </li>
-  <li>
-    <p>要注意DiffCallback的实现，如果遇到问题，可调试此接口两个方法实现的返回值。</p>
-  </li>
-  <li>
-    <p>Item的点击事件响应都是通过setOnItemClickListener和setOnItemChildClickListener分别实现，前者是注册整个item，后者是注册item上的子view，子view的响应需要调用addChildClickViewIds来分别注册。</p>
-  </li>
-  <li>
-    <p>Item的长按与点击相同，分别对应setOnItemLongClickListener和setOnItemChildLongClickListener两个方法。</p>
-  </li>
+  <li><strong>Ownership is the real interface.</strong> Running the policy was a small part. Deciding and proving who owns the joints was most of the work.</li>
+  <li><strong>One writer, always checked.</strong> Never assume you are the only publisher. Check, and treat a second one as a fault.</li>
+  <li><strong>Confirm, don’t assume.</strong> A mode request is not a mode change until the robot says so.</li>
+  <li><strong>Put a proxy in front instead of forking.</strong> Topic remapping let us change routing without touching the soccer code.</li>
+  <li><strong>Damping is safe for motors, not for people or robots standing up.</strong> Plan the physical side of a fault, not only the software side.</li>
 </ul>
 
 	  ]]></description>
 	</item>
 
 	<item>
-	  <title>Kotlin使用小计</title>
-	  <link>//kotlin-overview</link>
+	  <title>The Robot Saw the Ball and Didn't Move</title>
+	  <link>//the-robot-saw-the-ball-and-did-not-move</link>
 	  <author>Tao He</author>
-	  <pubDate>2021-11-06T18:00:00+04:00</pubDate>
-	  <guid>//kotlin-overview</guid>
+	  <pubDate>2026-10-04T20:30:00+00:00</pubDate>
+	  <guid>//the-robot-saw-the-ball-and-did-not-move</guid>
 	  <description><![CDATA[
-	     <p>此文记录一次对Kotlin的技术分享，显然无法对Kotlin的方方面面都涉及到，只将一些在实际工作中频繁涉及到的要点做一个梳理，以期对Kotlin这们JVM语言有一个整体的认识。</p>
+	     <p>Last week we had a Booster K1 on the field, running the full soccer behavior tree. The robot turned its head and followed the ball. Vision was clearly working. And the robot stood there. It did not walk to the ball.</p>
 
-<h4 id="为什么使用kotlin">为什么使用Kotlin</h4>
-<ul>
-  <li>静态类型语言</li>
-  <li>同时支持面向对象和函数式编程范式</li>
-  <li>更强大语言表达能力</li>
-  <li>解决Java NPE问题，更安全</li>
-  <li>支持扩展函数</li>
-  <li>与Java的高互操作性</li>
-</ul>
+<p>It took two days to understand. The direct cause was one condition. But on the way there we found four other problems that looked like the same problem. This post is about separating them.</p>
 
-<h3 id="类和函数">类和函数</h3>
-<ul>
-  <li>我们只能继承声明为open 或 obstract的类</li>
-  <li>Unit 类似Java中的void</li>
-  <li>每一个函数都返回一个值</li>
-  <li>函数参数支持默认值，类似C++</li>
-</ul>
+<h2 id="the-symptoms-all-at-once">The symptoms, all at once</h2>
 
-<h3 id="变量和属性">变量和属性</h3>
-<ul>
-  <li>一切都是对象，包括基础类型，比Java更加彻底</li>
-  <li>对于var和val的使用，最佳实践是: 尽可能多的使用val</li>
-  <li>Property类似java中的field，但更强大:</li>
-</ul>
-
-<p>In Java:</p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>public class Person {
-   private String name;
-
-   public String getName() {
-     return name;
-   }
-
-  public void setName(String name) {
-     this.name = name;
-   }
-
-}
-
-Person person = new Person();
-person.setName("name");
-String name = person.getName();
-
-</code></pre></div></div>
-
-<p>In Kotlin:</p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>class Person {
-  var name: String = ""
-}
-
-val person = Person()
-person.name = "name"
-val name = person.name
-
-</code></pre></div></div>
-
-<p>定制getter，setter行为:</p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>class Person {
-  var name: String = ""
-     get() = field.toUpperCase()
-     set(value) {
-       field = "Name: $value"
-     }
-}
-
-</code></pre></div></div>
-
-<h4 id="data-classes">Data Classes</h4>
-
-<p>强大的一种类，可以帮助我们避免一些模板代码和避免出错</p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>data class Movie(var name: String, var studio: String, var rating: Float)
-
-</code></pre></div></div>
-
-<p>等价于Java Pojo:</p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
-public class Movie {
-
-    private String name;
-    private String studio;
-    private float rating;
-    
-    public Movie(String name, String studio, float rating) {
-        this.name = name;
-        this.studio = studio;
-        this.rating = rating;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getStudio() {
-        return studio;
-    }
-
-    public void setStudio(String studio) {
-        this.studio = studio;
-    }
-
-    public float getRating() {
-        return rating;
-    }
-
-    public void setRating(float rating) {
-        this.rating = rating;
-    }
-
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        
-        result = prime * result + ((name == null) ? 0 : name.hashCode());
-        result = prime * result + Float.floatToIntBits(rating);
-        result = prime * result + ((studio == null) ? 0 : studio.hashCode());
-        
-        return result;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        
-        if (obj == null)
-            return false;
-        
-        if (getClass() != obj.getClass())
-            return false;
-        
-        Movie other = (Movie) obj;
-        
-        if (name == null) {
-            if (other.name != null)
-                return false;
-            
-        } else if (!name.equals(other.name))
-            return false;
-        
-        if (Float.floatToIntBits(rating) != Float.floatToIntBits(other.rating))
-            return false;
-        
-        if (studio == null) {
-            if (other.studio != null)
-                return false;
-            
-        } else if (!studio.equals(other.studio))
-            return false;
-        
-        return true;
-    }
-
-    @Override
-    public String toString() {
-        return "Movie [name=" + name + ", studio=" + studio + ", rating=" + rating + "]";
-    }
-}
-
-</code></pre></div></div>
-
-<p>Copy数据类对象:</p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>val f1 = Forecast(Date(), 27.5f, "Shiny day")
-val f2 = f1.copy(temperature = 30f)
-
-</code></pre></div></div>
-
-<p>把一个对象的多个字段映射到多个变量中</p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>val f1 = Forecast(Date(), 27.5f, "Shiny day")
-val (date, temperature, details) = f1
-
-</code></pre></div></div>
-
-<h4 id="操作符重载">操作符重载</h4>
+<p>When we started, everything was mixed together:</p>
 
 <ul>
-  <li>类似C++</li>
-  <li>===和!==不能被重载</li>
+  <li>At first, the vision and brain nodes sometimes failed to start or crashed.</li>
+  <li>With a simple “chase” tree, the robot turned its head but didn’t move its body.</li>
+  <li>With the full game tree, the status log showed the control state set, but the game state empty.</li>
+  <li>At one point the camera RGB topic had no publisher at all.</li>
+  <li>Our nodes and the vendor’s nodes sometimes could not see each other on the ROS 2 network.</li>
 </ul>
 
-<h4 id="lambdas">Lambdas</h4>
+<p>It is very tempting to look for one root cause that explains all of this. There wasn’t one. These were different layers failing in different ways, and some of them at the same time.</p>
+
+<h2 id="the-direct-cause-two-conditions-not-one">The direct cause: two conditions, not one</h2>
+
+<p>The soccer behavior tree we run has two separate pieces of state:</p>
 
 <ul>
-  <li>Java也支持，但是Kotlin中lambdas表达式可以变得非常简单，语法糖，便利的同时也要特别小心</li>
-  <li>在Kotlin中，函数可以作为一个类型</li>
-  <li>类似C++中的函数指针</li>
+  <li><strong>control state</strong>: is the robot under autonomous control?</li>
+  <li><strong>game state</strong>: what does the referee say? INITIAL, READY, SET, PLAY, END.</li>
 </ul>
 
-<h4 id="visibility-modifiers">Visibility Modifiers</h4>
+<p>When the game tree starts, it sets the control state to “autonomous”. That part was fine. But the normal striker and goalkeeper behavior also requires the game state to be <strong>PLAY</strong>. And nobody had told the robot the game was playing.</p>
+
+<p>So the robot did everything a robot should do before kick-off. It looked for the ball. It tracked it with its head. It did not walk, because the game had not started. From the outside, that looks exactly like a bug in the chase logic.</p>
+
+<p>The brain also listens to a simple external control topic with string commands: <code class="language-plaintext highlighter-rouge">locate</code>, <code class="language-plaintext highlighter-rouge">ready</code>, <code class="language-plaintext highlighter-rouge">play</code>, <code class="language-plaintext highlighter-rouge">stop</code>. Each one sets both pieces of state together. Sending <code class="language-plaintext highlighter-rouge">play</code> sets the control state and the game state to PLAY (and also marks the kick-off as ours).</p>
+
+<p>After a restart, we started the game tree and sent <code class="language-plaintext highlighter-rouge">play</code>. In the log, the brain received the command, the state changed to PLAY, and about two seconds later the first non-zero turn command appeared. A few seconds after that, the first forward walk command. The robot found the ball and went for it.</p>
+
+<p>Nothing in the chase algorithm or the speed parameters had changed. Only the game state.</p>
+
+<h2 id="head-tracking-is-not-proof-of-play">Head tracking is not proof of play</h2>
+
+<p>This is the lesson I most want to keep. A robot tracking the ball with its head tells you:</p>
 
 <ul>
-  <li>默认的可见性是public</li>
-  <li>private, protected, internal可见官方文档定义</li>
+  <li>the camera works,</li>
+  <li>vision detects the ball,</li>
+  <li>the brain receives detections.</li>
 </ul>
 
-<h4 id="集合和函数操作">集合和函数操作</h4>
+<p>It does <strong>not</strong> tell you that the play behavior is running. Head tracking can happen before PLAY. A correct control mode can happen before PLAY. Both are necessary, neither is sufficient.</p>
 
-<p>大概有如下几类操作,具体见官方文档</p>
+<p>Also, a manual <code class="language-plaintext highlighter-rouge">play</code> is a test tool. It is not the referee. In a real game, the GameController sends the game state. Getting the robot to move with a manual command proves the behavior works. It does not prove the referee path works. That has to be tested separately.</p>
+
+<h2 id="the-other-four-problems">The other four problems</h2>
+
+<p>While chasing the main issue we found and noted the others. I keep them separate because each has a different fix and a different level of “solved”.</p>
+
+<p><strong>The camera.</strong> The RGB topic had no publisher. On the firmware version we had, the head camera has to be switched into the right mode through a vendor service call. After that, RGB and detections both came back at a steady rate. This is specific to that firmware. After a firmware update, I check the vendor docs again before assuming the same call works.</p>
+
+<p><strong>The vendor stack.</strong> A restart brought back the motion, camera, vision and agent services. A restart is a good cleanup. It is not a fix. If it happens again, we need to know why.</p>
+
+<p><strong>DDS discovery.</strong> The Fast DDS profile listed network addresses that were not the ones actually active on the robot that day. That is a good explanation for nodes sometimes not discovering each other. But it is an explanation, not a proven root cause, and it is still open. When nodes are “missing”, I now check three things separately: is the process alive, is the ROS participant discovered, and do messages actually flow.</p>
+
+<p><strong>Startup robustness.</strong> We added some hardening: the start script checks that the behavior tree file is installed before stopping the old processes; the launch file checks the tree file name, that it exists, and that the XML parses; the vision node finds its model in the installed package and keeps the error instead of crashing with a null pointer if the model fails to load. None of this was the cause of the “doesn’t move” problem. All of it made the next test less confusing.</p>
+
+<h2 id="a-field-order-i-now-follow">A field order I now follow</h2>
+
+<p>From this I wrote a short field debug guide. The order is the important part. Each step only makes sense if the step before it is green:</p>
+
+<ol>
+  <li><strong>Record versions.</strong> Firmware version file and code commit. Without this, any result is hard to compare later.</li>
+  <li><strong>Vendor services.</strong> Are the motion, camera, vision and agent processes actually running? List nodes with <code class="language-plaintext highlighter-rouge">--no-daemon</code>, so you don’t read a stale cache.</li>
+  <li><strong>Camera.</strong> Does the RGB topic have a publisher? What is the rate?</li>
+  <li><strong>Vision.</strong> Are detections published, and at what rate?</li>
+  <li><strong>Brain.</strong> Is it running the tree you think it is?</li>
+  <li><strong>Game state.</strong> Is it PLAY? Who set it?</li>
+  <li><strong>Velocity output.</strong> Are non-zero commands coming out?</li>
+  <li><strong>Motion.</strong> Only now look at whether the robot moves.</li>
+</ol>
+
+<p>It is very easy to stare at step 8 and guess about steps 2 to 7. That is where the time goes.</p>
+
+<h2 id="what-id-like-to-have-next-time">What I’d like to have next time</h2>
 
 <ul>
-  <li>Aggregate operations:</li>
+  <li>A low-frequency, structured log of brain state changes. Finding “received play” among thousands of debug lines is slow.</li>
+  <li>A regression list I actually run: robot stays still with no game state; starts after PLAY; returns to zero after STOP; manual path and referee path tested separately; one change at a time.</li>
 </ul>
 
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
-//any
-val list = listOf(1, 2, 3, 4, 5, 6)
-assertTrue(list.any { it % 2 == 0 })
-assertFalse(list.any { it &gt; 10 })
-
-//all
-assertTrue(list.all { it &lt; 10 })
-assertFalse(list.all { it % 2 == 0 })
-
-...
-
-</code></pre></div></div>
+<h2 id="what-i-took-away">What I took away</h2>
 
 <ul>
-  <li>
-    <p>Filtering operations</p>
-  </li>
-  <li>
-    <p>Mapping operations</p>
-  </li>
-  <li>
-    <p>Elements operations</p>
-  </li>
-  <li>
-    <p>Generation operations</p>
-  </li>
-  <li>
-    <p>Ordering operations</p>
-  </li>
+  <li><strong>Many symptoms, many causes.</strong> Don’t force one story onto five problems.</li>
+  <li><strong>Know every gate on the path to motion.</strong> Control mode and game state were two gates, and I only knew about one.</li>
+  <li><strong>Head tracking proves perception, not behavior.</strong></li>
+  <li><strong>A restart is cleanup, not a fix.</strong> Write down what it cleaned up.</li>
+  <li><strong>Debug from the bottom up.</strong> Services, camera, vision, brain, game state, velocity, then motion. In that order.</li>
 </ul>
-
-<h4 id="null-safety-in-kotlin">Null safety in Kotlin</h4>
-
-<ul>
-  <li>
-    <p>对臭名昭著的Java NPE有了解决方案</p>
-  </li>
-  <li>
-    <p>代码中如果大量充斥!!操作符将是一个很不好的信号</p>
-  </li>
-  <li>
-    <p>如果显示声明为非空变量后再赋值空对象，会导致运行时crash，需特别注意</p>
-  </li>
-  <li>
-    <p>Kotlin和Java代码共存，并且互操作时要特别注意空指针问题</p>
-  </li>
-  <li>
-    <p>Java可通过Nullable和NonNull注解来显式明晰变量的取值</p>
-  </li>
-</ul>
-
-<h4 id="coroutine">Coroutine</h4>
-<p>可参见已有的一次技术分享: https://wiki.inn.bitcall.xyz/pages/viewpage.action?pageId=2232386</p>
-
-<h4 id="anko">Anko</h4>
-
-<ul>
-  <li>
-    <p>Github: https://github.com/Kotlin/anko</p>
-  </li>
-  <li>
-    <p>JetBrains开发的一个强大的类库</p>
-  </li>
-  <li>
-    <p>主要目的是使用代码来代替XML来生成UI布局</p>
-  </li>
-  <li>
-    <p>我们的项目在后期性能优化时可考虑引入使用</p>
-  </li>
-</ul>
-
-<h4 id="kotlin-vs-java">Kotlin vs. Java</h4>
-
-<p><img src="/assets/images/java-vs-kotlin.png" /></p>
-
 
 	  ]]></description>
 	</item>
 
 	<item>
-	  <title>升级Kotlin版本导致的coroutine崩溃ANR小记</title>
-	  <link>//kotli-coroutine-proguard-crash</link>
+	  <title>Hearing the Referee: Whistle Detection on an ARM Robot</title>
+	  <link>//whistle-detection-on-an-arm-robot</link>
 	  <author>Tao He</author>
-	  <pubDate>2021-06-04T18:00:00+04:00</pubDate>
-	  <guid>//kotli-coroutine-proguard-crash</guid>
+	  <pubDate>2026-07-12T21:00:00+00:00</pubDate>
+	  <guid>//whistle-detection-on-an-arm-robot</guid>
 	  <description><![CDATA[
-	     <p>最近公司的项目在最新的版本中升级了kotlin版本，使用CI打包后的版本启动都或闪退，或ANR，看崩溃日志和ANR日志，矛头都指向了coroutine，并且Release版本崩溃而Debug版本没有问题，初步断定就是混淆的问题了。因此搜索相关Proguard rules，在Kotlin官方Github中找到coroutines.pro文件:</p>
+	     <p>In RoboCup humanoid soccer, the referee uses a whistle. For some game state changes, like kick-off going from “set” to “playing”, robots are expected to hear the whistle themselves. The official GameController sends the same “playing” signal too, but with a delay. A robot that hears the whistle can start moving earlier.</p>
 
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
-# Allow R8 to optimize away the FastServiceLoader.
-# Together with ServiceLoader optimization in R8
-# this results in direct instantiation when loading Dispatchers.Main
--assumenosideeffects class kotlinx.coroutines.internal.MainDispatcherLoader {
-    boolean FAST_SERVICE_LOADER_ENABLED return false;
-}
+<p>So our robot needed ears. The pipeline is simple to describe:</p>
 
--assumenosideeffects class kotlinx.coroutines.internal.FastServiceLoaderKt {
-    boolean ANDROID_DETECTED return true;
-}
-
--keep class kotlinx.coroutines.android.AndroidDispatcherFactory {*;}
-
-# Disable support for "Missing Main Dispatcher", since we always have Android main dispatcher
--assumenosideeffects class kotlinx.coroutines.internal.MainDispatchersKt {
-    boolean SUPPORT_MISSING return false;
-}
-
-# Statically turn off all debugging facilities and assertions
--assumenosideeffects class kotlinx.coroutines.DebugKt {
-    boolean getASSERTIONS_ENABLED() return false;
-    boolean getDEBUG() return false;
-    boolean getRECOVER_STACK_TRACES() return false;
-}
-
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>microphone (ALSA)
+  -&gt; AlsaWhistleDetector
+  -&gt; TFLiteWhistleDetection (features + small neural net)
+  -&gt; whistle_detector_node publishes /whistle_detection/detected
+  -&gt; brain node subscribes
+  -&gt; behavior / game state
 </code></pre></div></div>
-<p>添加此混淆规则后重新打包，崩溃和ANR成功修复。</p>
 
+<p>Making it actually work on the robot took much longer than writing that diagram. Almost none of the problems were about the neural network.</p>
+
+<h2 id="problem-1-the-library-was-the-wrong-cpu">Problem 1: the library was the wrong CPU</h2>
+
+<p>The detector code came with TensorFlow Lite bundled as static libraries. For <code class="language-plaintext highlighter-rouge">x86_64</code>. Our workstations are <code class="language-plaintext highlighter-rouge">x86_64</code>. The robot is <code class="language-plaintext highlighter-rouge">aarch64</code>.</p>
+
+<p>So it built and ran on my laptop, and the robot build failed at CMake configure. On the robot there was no system TensorFlow Lite either. Nothing under <code class="language-plaintext highlighter-rouge">/usr</code> or <code class="language-plaintext highlighter-rouge">/usr/local</code>.</p>
+
+<p>The fix was to build the TensorFlow Lite C API for ARM64 myself, as a shared library, and keep it inside the repository:</p>
+
+<ol>
+  <li>On an Ubuntu <code class="language-plaintext highlighter-rouge">x86_64</code> machine, install the AArch64 cross toolchain and Bazelisk.</li>
+  <li>Clone TensorFlow and pin a release branch.</li>
+  <li>Run <code class="language-plaintext highlighter-rouge">./configure</code> with CUDA, ROCm, Android and iOS all off.</li>
+  <li>Build only the C library:</li>
+</ol>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>bazel build <span class="nt">--config</span><span class="o">=</span>elinux_aarch64 <span class="nt">-c</span> opt <span class="se">\</span>
+  //tensorflow/lite/c:libtensorflowlite_c.so
+</code></pre></div></div>
+
+<ol>
+  <li>Check that what you built is really what you think:</li>
+</ol>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>file libtensorflowlite_c.so
+readelf <span class="nt">-h</span> libtensorflowlite_c.so | <span class="nb">grep </span>Machine   <span class="c"># AArch64</span>
+readelf <span class="nt">-d</span> libtensorflowlite_c.so | <span class="nb">grep </span>NEEDED    <span class="c"># only libc, libm, libstdc++...</span>
+</code></pre></div></div>
+
+<ol>
+  <li>Copy the <code class="language-plaintext highlighter-rouge">.so</code> and the C headers into the package’s <code class="language-plaintext highlighter-rouge">3rdparty</code> folder under an <code class="language-plaintext highlighter-rouge">aarch64</code> directory.</li>
+</ol>
+
+<p>Then CMake picks the backend by architecture. There was one more trap. The build had a <strong>stub fallback</strong>: if no TensorFlow Lite was found, it built a detector that compiles, runs, and never detects anything. Good for keeping the build green. Terrible on a robot, because everything looks fine.</p>
+
+<p>So on the robot we build with the stub explicitly disabled:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>colcon build <span class="nt">--packages-select</span> whistle_detector <span class="nt">--symlink-install</span> <span class="se">\</span>
+  <span class="nt">--cmake-args</span> <span class="nt">-DWHISTLE_DETECTOR_ALLOW_STUB_FALLBACK</span><span class="o">=</span>OFF
+</code></pre></div></div>
+
+<p>and look for one line in the output: <code class="language-plaintext highlighter-rouge">using repo TensorFlow Lite library: .../aarch64/libtensorflowlite_c.so</code>. If it says “disabled stub”, stop.</p>
+
+<h2 id="problem-2-two-python-environments">Problem 2: two Python environments</h2>
+
+<p>To build TensorFlow I created a Python virtual environment. Later I ran <code class="language-plaintext highlighter-rouge">colcon build</code> for the ROS workspace from the same shell. ROS message generation failed with:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ModuleNotFoundError: No module named 'em'
+</code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">colcon</code> had picked the virtualenv’s <code class="language-plaintext highlighter-rouge">python3</code>, which did not have ROS’s Python dependencies. Nothing wrong with the code. Wrong shell.</p>
+
+<p>The rule now: the TensorFlow build shell is only for TensorFlow. ROS builds happen in a clean ROS shell.</p>
+
+<h2 id="problem-3-who-starts-the-detector">Problem 3: who starts the detector?</h2>
+
+<p>At first the detector was started by the brain’s launch file, as a child. The start script did not make that clear, and the stop script did not stop the detector at all. So you could end up with an old detector still holding the microphone.</p>
+
+<p>We changed it to two independent processes. The brain only subscribes to the topic. It never touches the microphone, and it does not spawn the detector. There is a script to start everything, one to start only the detector, one to start only the brain, and the stop script stops both.</p>
+
+<p>It is a small change, but now “is the detector running?” has one answer, and you can test each side alone.</p>
+
+<h2 id="problem-4-the-microphone-is-open-is-not-the-microphone-works">Problem 4: “the microphone is open” is not “the microphone works”</h2>
+
+<p>ALSA can open a device successfully and then deliver no audio. Or deliver audio from the wrong device. On a robot with several audio routes, <code class="language-plaintext highlighter-rouge">default</code> is not always what you want.</p>
+
+<p>The detector expects a very specific format: capture, interleaved, <code class="language-plaintext highlighter-rouge">S16_LE</code>, 2 channels, 44100 Hz. It does not resample or remap channels. So the first test is outside ROS:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>arecord <span class="nt">-l</span>
+arecord <span class="nt">-D</span> default <span class="nt">-f</span> S16_LE <span class="nt">-c</span> 2 <span class="nt">-r</span> 44100 <span class="nt">-d</span> 3 /tmp/whistle_test.wav
+</code></pre></div></div>
+
+<p>Then I added logs that separate the states that used to look the same:</p>
+
+<ul>
+  <li>device opened,</li>
+  <li>device opened but no frames yet,</li>
+  <li><strong>microphone input is active, received N frames</strong>,</li>
+  <li>overrun, recovering.</li>
+</ul>
+
+<p>Only the third one counts as “microphone online”. Two other small ALSA fixes came from comparing with a known-good capture example: call <code class="language-plaintext highlighter-rouge">snd_pcm_prepare()</code> explicitly before the read loop, and use <code class="language-plaintext highlighter-rouge">snd_pcm_drop()</code> instead of <code class="language-plaintext highlighter-rouge">snd_pcm_drain()</code> when closing a capture device.</p>
+
+<h2 id="problem-5-a-cooldown-that-never-cooled-down">Problem 5: a cooldown that never cooled down</h2>
+
+<p>After a detection, the node waits for a cooldown before publishing again. The “last publish” time was initialised to <code class="language-plaintext highlighter-rouge">steady_clock::time_point::min()</code>.</p>
+
+<p>That looks reasonable: “long, long ago”. But <code class="language-plaintext highlighter-rouge">now() - min()</code> overflows a signed 64-bit duration. My reading is that the cooldown check got a garbage value and never let the first detection through. Initialising it to <code class="language-plaintext highlighter-rouge">now() - cooldown - 1ms</code> fixed it.</p>
+
+<p>One more small crash in the same area: <code class="language-plaintext highlighter-rouge">cooldown_ms</code> was declared as a <code class="language-plaintext highlighter-rouge">double</code> parameter, and the launch file passed <code class="language-plaintext highlighter-rouge">1500</code>. ROS 2 is strict about parameter types and threw <code class="language-plaintext highlighter-rouge">InvalidParameterTypeException</code>. It had to be <code class="language-plaintext highlighter-rouge">1500.0</code>.</p>
+
+<h2 id="two-logs-that-tell-you-everything">Two logs that tell you everything</h2>
+
+<p>The most useful thing I added was two log lines, one on each side of the topic:</p>
+
+<ul>
+  <li>detector: <code class="language-plaintext highlighter-rouge">upstream whistle detector hit: published detection with confidence ...</code></li>
+  <li>brain: <code class="language-plaintext highlighter-rouge">whistleDetectionCallback triggered: whistle detected at ... s</code></li>
+</ul>
+
+<p>Now the diagnosis is a table:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Detector log</th>
+      <th>Brain log</th>
+      <th>Meaning</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>no</td>
+      <td>no</td>
+      <td>detector not triggering, not running, or on the stub</td>
+    </tr>
+    <tr>
+      <td>yes</td>
+      <td>no</td>
+      <td>detection works, brain is not receiving it</td>
+    </tr>
+    <tr>
+      <td>yes</td>
+      <td>yes</td>
+      <td>the chain is connected</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><code class="language-plaintext highlighter-rouge">grep</code> on two log files answers a question that used to take a lot of guessing.</p>
+
+<h2 id="what-tests-can-and-cant-tell-you">What tests can and can’t tell you</h2>
+
+<p>I added unit tests for the detector: a whistle-like tone should be detected, silence and an off-band tone should be rejected, and <code class="language-plaintext highlighter-rouge">reset()</code> should clear the streaming state. They pass.</p>
+
+<p>They test the model and the windowing logic. They do not test the microphone. Synthetic tones are not a referee in a noisy hall. In real testing we saw false positives even with a strict confidence threshold, so threshold tuning with real field recordings is still open work.</p>
+
+<p>And there was a bigger lesson. In a game test, the whistle was detected, but the robot was not in the ready or playing behavior we expected. The ears worked. The state handling around them did not, and we have not fully closed that yet.</p>
+
+<p>That changed how I think about the feature. Hearing correctly is not the hard part. Deciding <strong>who is allowed to change the game state</strong> is. The GameController is the official source of game state. If the whistle can also change it, you now have two referees inside one robot, and they will sometimes disagree. My plan from here is to keep the GameController as the authority, and treat the whistle as an extra signal that is logged and checked, until we can prove the two never fight.</p>
+
+<h2 id="what-i-took-away">What I took away</h2>
+
+<ul>
+  <li><strong>The model was the easy part.</strong> Cross-compiling, Python environments, process ownership and audio routing took most of the time.</li>
+  <li><strong>Never let a stub pass silently.</strong> A fallback that compiles but does nothing must be turned off on the real target.</li>
+  <li><strong>Log the boundaries.</strong> One log line on each side of a topic turns debugging into a lookup table.</li>
+  <li><strong>Opened is not working.</strong> Only count a sensor as online when real data arrives.</li>
+  <li><strong>Detection is not authority.</strong> Before a signal changes the robot’s state, decide who owns that state.</li>
+</ul>
 
 	  ]]></description>
 	</item>
 
 	<item>
-	  <title>xCrash运用小结</title>
-	  <link>//summary-of-using-xcrash</link>
+	  <title>Week One for Interns: Git, ROS 2 and a Real Humanoid</title>
+	  <link>//week-one-for-interns-git-ros2-humanoid</link>
 	  <author>Tao He</author>
-	  <pubDate>2021-04-29T18:00:00+04:00</pubDate>
-	  <guid>//summary-of-using-xcrash</guid>
+	  <pubDate>2026-06-21T20:00:00+00:00</pubDate>
+	  <guid>//week-one-for-interns-git-ros2-humanoid</guid>
 	  <description><![CDATA[
-	     <p>公司在做海外产品，由于免费版firebase对native崩溃的捕获上报能力有限(无堆栈，无具体上下文信息)，因此对我们定位和降低native极为不利，当native崩溃总量进入top行列的时候，就不能对其视而不见了，因此我开始调研解决方案，最后决定接入爱奇艺推出的xCrash来捕获native崩溃，当然了，xCrash本身是不具备上报功能的，它只是将崩溃信息写入tombstone文件。因此需要在其基础之上添加上报功能。</p>
+	     <p>This summer our lab had a group of interns joining the RoboCup humanoid soccer work. The robot is a Booster T1. The software is ROS 2 on Ubuntu.</p>
 
-<p>要实现上报功能，就需要选择一个上报时机，在崩溃发生时或App再次启动时，我选择了在崩溃发生时即时上传tombstone文件，并与服务端约定上报协议，最终实现可在firebase后台通过设备ID来查看上传到服务器的tombstone文件。</p>
+<p>I prepared the material for the first week. This post is how I planned it and why it is in that order.</p>
 
-<p>具体实现如下：</p>
+<h2 id="the-goal-of-week-one">The goal of week one</h2>
 
-<p>在崩溃发生的回调中找到最新的tombstone文件，打包上传至服务器</p>
+<p>Not “learn robotics”. That takes years.</p>
 
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
-public void init(Context context) {
-    XCrash.init(context, new XCrash.InitParameters()
-            .setAppVersion(BuildConfig.VERSION_NAME)
-            .setLogDir(getCrashDir().getAbsolutePath())
-            .setJavaRethrow(true)
-            .setJavaLogCountMax(3)
-            .setJavaDumpAllThreadsWhiteList(new String[]{"^main$", "^Binder:.*", ".*Finalizer.*"})
-            .setJavaDumpAllThreadsCountMax(0)
-            .setNativeRethrow(true)
-            .setNativeLogCountMax(3)
-            .setNativeDumpAllThreadsWhiteList(new String[]{"^Signal Catcher$", "^Jit thread pool$", ".*(R|r)ender.*", ".*Chrome.*"})
-            .setNativeDumpAllThreadsCountMax(0)
-            .setAnrRethrow(true)
-            .setAnrLogCountMax(3)
-            .setPlaceholderCountMax(0)
-            .setLogFileMaintainDelayMs(1000)
-            .setLogger(mLogger)
-            .setLibLoader(new ILibLoader() {
-                @Override public void loadLibrary(String libName) {
-                    try {
-                        ReLinker.loadLibrary(context, libName);
-                    } catch (Exception e) {
-                        printLog(e + " | " + libName);
-                        System.loadLibrary(libName);
-                    }
-                }
-            }).setAnrCallback(new ICrashCallback() {
-                // ANR发生时的回调
-                @Override public void onCrash(String logPath, String emergency) throws Exception {
-                    catchANRLogDelay();
-                }
-            }).setJavaCallback(new ICrashCallback() {
+<p>The goal was smaller: <strong>by the end of the week, every intern can change code in a shared robot repository without breaking anything for anybody else.</strong> If they can do that, everything after week one is learning. If they can’t, everything after week one is cleaning up.</p>
 
-                // Java崩溃发生时的回调
-                @Override public void onCrash(String logPath, String emergency) throws Exception {
-                    catchCrashLog();
-                }
-            }).setNativeCallback(new ICrashCallback() {
-               //Native崩溃发生时的回调
-                @Override public void onCrash(String logPath, String emergency) throws Exception {
-                    catchCrashLog();
-                }
-            })
-    );
-}
+<p>So the order was:</p>
 
+<ol>
+  <li>Git, for real teamwork.</li>
+  <li>ROS 2 installation and core concepts.</li>
+  <li>A tour of the actual RoboCup project.</li>
+  <li>A small hands-on ROS 2 project, done with Git.</li>
+</ol>
 
-// 打包上传tombstone文件
-private void catchCrashLog() {
-    crashZipId = generateCrashId();
-    final File out = new File(AppInstances.getPathManager().getTmpFilePath() + crashZipId + ".gzip");
+<p>The robot itself comes last on purpose.</p>
 
-    try {
-        List&lt;File&gt; files = Arrays.asList(getCrashDir().listFiles());
-        if (ListUtils.isEmpty(files)) {
-            return;
-        }
+<h2 id="git-first-not-ros-first">Git first, not ROS first</h2>
 
-        File crashFile = null;
-        long lastModified = 0;
-        for (File f : files) {
-            if (f.lastModified() &gt; lastModified) {
-                lastModified = f.lastModified();
-                crashFile = f;
-            }
-        }
+<p>It is tempting to start with the exciting part. A humanoid robot is right there in the room.</p>
 
-        if (crashFile != null) {
-            GZIPUtils.gzipFile(crashFile.getAbsolutePath(), out.getAbsolutePath());
-        }
+<p>But on a robot team, the most common way a new person causes damage is not a bad algorithm. It is <code class="language-plaintext highlighter-rouge">git add .</code> with build artifacts, a log file and a debug change mixed in. Or a commit directly on <code class="language-plaintext highlighter-rouge">main</code> the day before a test.</p>
 
-    } catch (Throwable e) {
-        e.printStackTrace();
-    }
+<p>So the Git session was not a list of commands. It was organised around one mental model and a list of real mistakes.</p>
 
-    upload();
-    try {
-        Thread.sleep(5000);
-    } catch (InterruptedException e) {
-        e.printStackTrace();
-    }
-}
+<p>The mental model is four places: the working directory (what you are editing), the staging area (what goes into the next commit), the local repository (saved history), and the remote (the shared copy on GitHub). Almost every Git confusion is “which of the four places is my change in right now?”</p>
 
-</code></pre></div></div>
-<p>上面的代码有一点需要注意: 为了尽可能将崩溃日志成功上传至服务器，主线程sleep五秒，对于anr的情况则是在非UI线程中上传日志。</p>
+<p>The habit I pushed hardest is <code class="language-plaintext highlighter-rouge">git status</code>. Before add, before commit, before pull, before push. It costs nothing and it answers the question above.</p>
 
-<p>日志上传成功后，就可以在firebase的崩溃列表中查看某一个崩溃，在数据一栏找到设备ID来查询。因为我们有运营后台可以将设备ID和用户ID关联，因此就可以轻松查到每个用户的崩溃日志。</p>
-
-<p>此即时上报的方案上线后虽然助力定位到了一些问题，但也有如下缺陷和问题</p>
+<p>Then the common mistakes, one per topic:</p>
 
 <ul>
-  <li>
-    <p>引入了新的问题，如OOM，ANR等问题。</p>
-  </li>
-  <li>
-    <p>由于上报依赖于全局的OkHttp Client，因此如果App在没有初始化OkHttp Client的情况下崩溃，则不会上报，就属漏报了。</p>
-  </li>
-  <li>
-    <p>崩溃和anr不能即时聚合到一处供查看</p>
-  </li>
-  <li>
-    <p>ANR目前不能查询，但是已尝试使用firebase Event上报，但是貌似免费版无法查看Event的字段，上报的意义不大，后期考虑向服务端上报。</p>
-  </li>
+  <li>Committing with messages like <code class="language-plaintext highlighter-rouge">update</code>, <code class="language-plaintext highlighter-rouge">fix</code>, <code class="language-plaintext highlighter-rouge">final</code>.</li>
+  <li>Huge commits that mix unrelated changes.</li>
+  <li>Working directly on <code class="language-plaintext highlighter-rouge">main</code>.</li>
+  <li>Switching branches with uncommitted work and getting lost.</li>
+  <li>Pulling with many uncommitted local changes.</li>
+  <li>Force pushing a shared branch without asking.</li>
+  <li><code class="language-plaintext highlighter-rouge">git reset --hard</code> without knowing what it throws away.</li>
+  <li>Keeping important work only in a stash for days.</li>
 </ul>
 
-<p>问题2和3其实可以很容易改善，但是问题1还有待进一步观察，同期因为我们代码的原因引入了一个严重的OOM问题，所以不太确定是不是xCrash受到了影响和牵连。这个OOM问题修复后准备再打开xCrash进一步验证。</p>
+<p>I find mistakes teach better than rules. “Never commit build artifacts” is easy to agree with and easy to forget. A concrete picture of what goes wrong is harder to forget.</p>
 
-<p>目前观察到一个现象，Android 7以下的机器基本都没有成功上报，比较奇怪，但是本地测试Android 4的机器是可以上报的，此问题后续有待验证。</p>
+<h2 id="a-git-practice-repository">A Git practice repository</h2>
+
+<p>Slides are not enough for Git. You need to feel a merge conflict once in a safe place.</p>
+
+<p>So I made a small practice repository. It has a README, a file for intern information, a robot startup checklist, a safety rules file, a small Python script and a <code class="language-plaintext highlighter-rouge">.gitignore</code>. Each task asks the intern to change one of them, on their own branch, and open a pull request.</p>
+
+<p>The content of the files is not random. The startup checklist asks things like “verify battery level, check network connection, confirm emergency stop status”. The safety rules file asks for at least three rules in professional language. So while practising Git, they are also writing the first version of habits they will need next to a real robot.</p>
+
+<p>Interns could work alone or in small groups. Either way, the rule was the same: never on <code class="language-plaintext highlighter-rouge">main</code>, always a named branch, always a pull request.</p>
+
+<h2 id="ros-2-four-ideas-and-a-few-commands">ROS 2: four ideas and a few commands</h2>
+
+<p>For ROS 2 we used Ubuntu 22.04 and ROS 2 Humble, the same as the robot project. I wrote an installation guide for that exact setup, including the errors students usually hit, like a missing <code class="language-plaintext highlighter-rouge">rosidl_default_generators</code> package.</p>
+
+<p>The concepts session was kept to four communication ideas:</p>
+
+<ul>
+  <li><strong>Topics</strong> for continuous data, like camera images and robot state.</li>
+  <li><strong>Services</strong> for quick request and response.</li>
+  <li><strong>Actions</strong> for long goals with feedback and cancel, like navigation.</li>
+  <li><strong>Parameters</strong> for runtime configuration, instead of constants in code.</li>
+</ul>
+
+<p>Each idea came with the command to see it on a running system: <code class="language-plaintext highlighter-rouge">ros2 topic list</code>, <code class="language-plaintext highlighter-rouge">ros2 topic echo</code>, <code class="language-plaintext highlighter-rouge">ros2 service list</code>, <code class="language-plaintext highlighter-rouge">ros2 param get</code>. I wanted them to look at a live ROS graph before they write a node.</p>
+
+<p>Then workspaces and packages: <code class="language-plaintext highlighter-rouge">src</code>, <code class="language-plaintext highlighter-rouge">build</code>, <code class="language-plaintext highlighter-rouge">install</code>, <code class="language-plaintext highlighter-rouge">log</code>, and the one rule that saves the most time in the first week: <strong>source the workspace after you build.</strong></p>
+
+<h2 id="a-tour-of-the-real-project">A tour of the real project</h2>
+
+<p>After the basics, we walked through the RoboCup software as it actually is. The stack has layers:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>RoboCup application
+ROS 2 middleware
+Booster SDK
+Robot OS / drivers
+Robot hardware
+</code></pre></div></div>
+
+<p>The key point for new people: application code uses the supported ROS 2 interfaces and SDK APIs. It does not talk to the hardware directly.</p>
+
+<p>The application itself is a few nodes. Vision detects the ball and the field. A game controller node receives the referee’s game state. A whistle detector listens to the referee. A central “brain” node combines all of this, runs the behavior, and sends motion requests down to the SDK.</p>
+
+<p>I also told them where bugs usually live on a robot. Most of them are not in the algorithm. They are sensor, timing, network, configuration or state machine problems. On a distributed robot, the DDS network configuration is part of the runtime, not something you set once and forget.</p>
+
+<h2 id="the-hands-on-project">The hands-on project</h2>
+
+<p>The last part tied everything together. Each intern cloned a starter repository, created a branch with their name, and built a ROS 2 Python package with two nodes: a <code class="language-plaintext highlighter-rouge">talker</code> that publishes a string on a topic, and a <code class="language-plaintext highlighter-rouge">listener</code> that subscribes and prints it.</p>
+
+<p>Then they had to inspect their own system with the CLI tools, commit, push, and open a pull request.</p>
+
+<p>It is the most basic ROS 2 example there is. That is the point. It touches every step of the real workflow once: workspace, package, build, source, run, inspect, commit, push, review. When they later work on the vision or behavior code, the steps are the same. Only the code inside is harder.</p>
+
+<h2 id="what-i-took-away">What I took away</h2>
+
+<ul>
+  <li><strong>Teach the workflow before the robot.</strong> The robot is the reward. The workflow is what keeps the robot running for everybody.</li>
+  <li><strong>Teach mistakes, not commands.</strong> Every Git command in the slides came with the way people misuse it.</li>
+  <li><strong>Make practice files useful.</strong> A startup checklist and safety rules are better practice content than “hello world” text.</li>
+  <li><strong>Keep the first ROS project tiny.</strong> A talker and a listener are enough to walk through the whole pipeline once.</li>
+  <li><strong>Show where real bugs live.</strong> New people expect bugs in algorithms. On a robot, they are mostly in timing, networking and configuration.</li>
+</ul>
 
 	  ]]></description>
 	</item>
 
 	<item>
-	  <title>客户端线上问题应对小记</title>
-	  <link>//resolve-online-problem</link>
+	  <title>A Tour of AVLite, a Simplified AV Stack</title>
+	  <link>//a-tour-of-avlite</link>
 	  <author>Tao He</author>
-	  <pubDate>2021-04-26T18:00:00+04:00</pubDate>
-	  <guid>//resolve-online-problem</guid>
+	  <pubDate>2026-05-10T20:30:00+00:00</pubDate>
+	  <guid>//a-tour-of-avlite</guid>
 	  <description><![CDATA[
-	     <p>今年三四月份我所在的App项目经历了不少我之前很少遇到的情况，回看这些无论是突发状况，还是隐匿得让人无法发觉的细节导致的问题，都非常有借鉴意义，也是很大的教训，难能可贵的经验，有必要用一小文记录下。</p>
+	     <p>A full autonomous driving stack is too big to read in one go. Autoware has hundreds of packages. You open it, you read the launch files for a day, and you still don’t know where one loop iteration starts and ends.</p>
 
-<p>两个月的时间，经历了一次线上crash激增，一次新发版本用户无法播放视频的集中反馈，和一次OOM和ANR持续上涨。下面分别复盘这三次惊魂时刻。</p>
+<p>AVLite is the opposite. It is a simplified AV stack in Python: perception, localization, planning, control, a simulator bridge and a GUI, small enough to hold in your head. I spent some time reading it with one goal: follow one control step from start to end, and write down the map.</p>
 
-<p>先来说说线上crash突然激增，那天上午的时候突然native崩溃曲线陡升，而我们App最近的一个版本已经全量好多天了，native崩溃一直都是一个相对稳定的曲线，这使我们一头雾水，因为firebase对native崩溃的捕获很不好，更加导致我们焦急万分，我负责App的整体质量，当时更是如热锅上的蚂蚁。着急归着急，也不能乱了阵脚，先开始排除活动或广告下发的影响，于是赶紧联系了市场的同学，让他们确定最近是否有活动或广告投放，询问后发现并没有，但是得知最近的确有买量的操作，并且DAU有上涨的趋势，于是怀疑是不是因为买量导致native崩溃激增，但是后来查看firebase后台，native崩溃大多发生在低端机器上，这就说不过去了，难道买到的量都是低端机器?于是很快推翻了这个怀疑。开始分版本分析，很快发现，近几个版本的native崩溃上涨曲线基本都能吻合，说明这是一个外部环境变化导致的崩溃，而不是某一个版本引入的新崩溃，在firebase有限的native崩溃信息中，还是发现了
-libmonochrome.so这个信息，当看到这个so的时候，直觉告诉我是广告导致的没跑了，但是问题来了，最近并没有增加广告的投放，广告又如何使native崩溃激增呢？直到我们搜到这条新闻:<a href="https://www.cnbeta.com/articles/tech/1105323.htm">谷歌正在修复Android系统WebView组件引发的应用崩溃问题</a>一切才豁然开朗，是因为Google推送的webview组件更新有bug，导致了大面积的崩溃，于是我们果断的关闭了广告的投放，到晚上八点的时候，native崩溃曲线终于回归了正常。</p>
+<p>This post is that map.</p>
 
-<p>再来说说集中反馈，事情是这样的，我们新发布了一个版本，在放量不到20%时，一天内集中收到好几个用户反馈视频不能播放，从用户提供的截图可以看出视频进度条还在动，但是并未渲染出视频，这个问题与之前我们已知的黑屏问题不同，显然是一个新问题。在没有任何头绪的情况下，就只能通过对比此版本与上个版本的diff来寻找蛛丝马迹，看完所有的diff后还是很让人疑惑，因为真的没有修改任何与播放器相关的代码，就连可能影响播放器的代码也没有，那这个版本到底有什么不同呢？在第二次对比diff的时候，广告sdk的升级改动引起了我的注意，我大胆猜想，难不成是这导致的，如果非要找个嫌疑人的话，只能是它了，于是赌上客户端组的声誉，告知市场广告sdk有问题，新版本去除更新重新发版，放量后再未出现此问题反馈，也是神奇，猜测广告sdk使用了opengl，可能影响到了播放器的视频渲染。</p>
+<h2 id="the-layout">The layout</h2>
 
-<p>最后说下OOM和ANR持续上涨得情况，这可以说是一次线上事故，是因为使用第三方库不当和第三方工具本身的问题合力导致的，这次问题是在版本全量后几天后才逐步暴露出来的，坏就坏在这个问题是逐步积累，然后雪球越滚越大最后导致了严重的问题。因为firebase不能统计到有些OOM的崩溃，期初的几天我们还奇怪为什么在没有新增崩溃的情况下，崩溃率竟然一直在涨，于是尽快分析firebase的数据，但仍旧没有什么有用的线索，因为我们一直习惯于在firebase后台看崩溃，在Google Play Console看ANR，因此一直以来的习惯是没有人去GPC去看崩溃，直到在一次看ANR的时候不经意间看到了一个之前未发现的崩溃，显示为OOM问题，至此，问题浮出水面，是全量的这个版本在使用第三方库的时候，未注意到第三方库有一个每次操作如果是在主线程调用的话都新建线程的逻辑，导致了严重的OOM，再加上同一版本也接入了xCrash和BoostMultiDex，因此到底是谁导致了OOM和ANR，已然纠缠不清，版本已发出xCrash和BoostMultiDex已无法绕过，但是导致OOM的这个rtt上报却有开关，可以动态关闭，于是在关闭几天后，崩溃率逐步恢复正常，ANR也恢复正常，因此可以断定rtt上报应该是罪魁祸首。这是一个失误导致的大问题，教训深刻，既暴露了我们工程对线程的管理不善，也暴露出firebase可能漏报了很多我们不知道的OOM崩溃，也就说实际的OOM可能比我们现在看到的还要严重。</p>
+<p>The top-level modules are numbered, which I liked immediately:</p>
 
-<p>这三次线上问题，都已经过去了，App的崩溃率和ANR也恢复正常，但是教训却很深刻，经过几天的认真复盘和思考，总结出如下经验和教训:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>c10_perception     perception, localization, HD map interfaces
+c20_planning       global and local planning
+c30_control        controller interface and implementations
+c40_execution      runtime wiring, execution loop, world bridges
+c50_visualization  GUI
+c60_common         settings, reload helpers, capability enums
+extensions/        plugin-style extensions
+</code></pre></div></div>
+
+<p>The numbers tell you the order data flows through the system. It is a small thing, but when you open the folder you already see the architecture. I wish more codebases did this.</p>
+
+<p>The entry point starts a Tkinter GUI. So AVLite is GUI-first. You run it and you watch the car, which is exactly what you want when you are learning or trying a new planner.</p>
+
+<h2 id="the-most-important-file">The most important file</h2>
+
+<p>If you want to understand how the system boots, don’t start from <code class="language-plaintext highlighter-rouge">main</code>. Start from the factory in <code class="language-plaintext highlighter-rouge">c40_execution</code>.</p>
+
+<p>The factory is where everything is assembled. It:</p>
 
 <ul>
-  <li>一个问题激增时不一定是App本身的代码导致的，但也需要及时诊断和定位，不能倾向于从用户设备和DAU变化找问题</li>
-  <li>诊断问题要聚焦，不要受一些外部因素干扰</li>
-  <li>当问题发生时，倾向于App本身有问题，而不是找外部原因，不要被误导诊断方向</li>
-  <li>当反馈集中发生时，肯定是有问题，而不用怀疑是反馈变集中了，事出反常必有妖</li>
-  <li>接入第三方库和工具时要慎之又慎，多测试，多验证，多怀疑，做好兜底，做好出了问题的应对之策</li>
-  <li>影响较大的功能和模块不宜同时出现在一个版本里，出现问题后纠缠不清，无法定位</li>
-  <li>一个问题持续出现后，必须引起重视，在上报数据不完整，无上下文的情况下也要通过其他途径去诊断和定位，切不可倾向于没有问题。</li>
+  <li>loads extensions,</li>
+  <li>picks the strategies named in the config from registries,</li>
+  <li>loads the global plan,</li>
+  <li>creates one shared <code class="language-plaintext highlighter-rouge">PerceptionModel</code>,</li>
+  <li>wires planner, controller, world bridge, localization and perception together,</li>
+  <li>returns the selected executor.</li>
 </ul>
 
+<p>After reading this one file, the rest of the code made sense. Before reading it, every module looked like it floated on its own.</p>
+
+<h2 id="how-modules-are-plugged-in">How modules are plugged in</h2>
+
+<p>AVLite uses subclass auto-registration. You write a subclass of, say, a controller base class, you import it, and it becomes selectable by name in the config.</p>
+
+<p>That is very good for research. Want to compare two lateral controllers? Write the second one, change one string in the config, run again. No wiring code to touch.</p>
+
+<p>The cost is the usual cost of string-based wiring. A typo in the config is only found at runtime. And as the number of plugins grows, “which class is actually running?” becomes a real question. I learned to always check the effective class at startup, not just the default in the config file.</p>
+
+<h2 id="the-key-abstractions">The key abstractions</h2>
+
+<p>There are only a handful, and each has one job:</p>
+
+<ul>
+  <li><strong>GlobalPlan.</strong> Loaded from a JSON track file: reference XY path, reference speed profile, left and right boundaries. The static backbone of the drive.</li>
+  <li><strong>PerceptionModel.</strong> The shared environment memory: ego vehicle, other vehicles, optional HD map, predictions, occupancy grids. Several modules read from it and write into it.</li>
+  <li><strong>WorldBridge.</strong> The interface to the outside world. A simple built-in simulator, or bridges to CARLA or Gazebo. It gives the current ego state, sensor data and ground truth, and it accepts control commands.</li>
+  <li><strong>LocalPlanner.</strong> Generates and selects a short-term maneuver.</li>
+  <li><strong>Controller.</strong> Takes the ego state and a trajectory, returns a control command.</li>
+  <li><strong>Executor.</strong> The loop that calls all of the above in order.</li>
+</ul>
+
+<h2 id="one-step-of-the-loop">One step of the loop</h2>
+
+<p>This is the part I most wanted to understand. In the synchronous executor, one step goes like this:</p>
+
+<ol>
+  <li><strong>Read the ego state from the world.</strong> <code class="language-plaintext highlighter-rouge">world.get_ego_state()</code> is the source of truth for this instant: x, y, heading, speed.</li>
+  <li><strong>Replan if it is time.</strong> A <code class="language-plaintext highlighter-rouge">replan_dt</code> setting decides how often. The default local planner is a greedy lattice planner. It samples nodes in Frenet coordinates (distance along the track, and offset from it), builds candidate edges, rejects edges that collide or curve too much, and keeps the best chain as the selected local plan.</li>
+  <li><strong>Advance the planner with the current pose.</strong> The planner updates where the car is on the global and local trajectory. This keeps planner and controller in agreement about “where are we on the plan”.</li>
+  <li><strong>Run the controller.</strong> The default is a Stanley controller. It computes cross-track error and heading error against the local trajectory, reads the target speed from it, and produces steering and speed commands.</li>
+  <li><strong>Send the command to the world.</strong></li>
+  <li><strong>Run localization and perception, if enabled.</strong> They update the shared model for the next step.</li>
+</ol>
+
+<p>Written as one line:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>WorldBridge -&gt; LocalPlanner (replan, step) -&gt; Controller -&gt; WorldBridge
+                     ^                                         |
+                     +---- PerceptionModel &lt;-- perception -----+
+</code></pre></div></div>
+
+<p>The nice detail is that localization and perception are optional. In a simple simulator you can use ground truth and turn them off, and the rest of the loop does not change. When you want to test a localization algorithm, you turn it on and nothing else has to know.</p>
+
+<h2 id="a-debugging-checklist-that-falls-out-of-the-map">A debugging checklist that falls out of the map</h2>
+
+<p>Once the loop is clear, debugging becomes a question of <em>which transformation failed</em>:</p>
+
+<ul>
+  <li>Was the world state read correctly?</li>
+  <li>Is the perception model fresh, or stale from an earlier step?</li>
+  <li>Did the planner generate reasonable candidates?</li>
+  <li>Is the planner’s idea of “where am I on the plan” aligned with the real pose?</li>
+  <li>Is the controller tracking the trajectory it was given?</li>
+  <li>Was the command actually applied by the world bridge?</li>
+</ul>
+
+<p>When the car does something strange, I go down this list in order. It is much faster than staring at the GUI.</p>
+
+<h2 id="rough-edges">Rough edges</h2>
+
+<p>AVLite is research code and it shows in a few places:</p>
+
+<ul>
+  <li>The factory does a lot. It is the best place to start reading, and also the file most likely to grow into a god object.</li>
+  <li>Timing deserves attention. Sim time versus control time, and sync versus async execution, are where modular stacks usually start to break.</li>
+  <li>Naming is a bit rough here and there (<code class="language-plaintext highlighter-rouge">Executer</code>, <code class="language-plaintext highlighter-rouge">ControlComand</code>). Not a real problem, but it tells you nobody has done a cleanup pass yet.</li>
+</ul>
+
+<p>None of this stops it from being useful. For learning and quick experiments, a stack you can fully read beats a stack you can only configure.</p>
+
+<h2 id="what-i-took-away">What I took away</h2>
+
+<ul>
+  <li><strong>Find the assembly point first.</strong> In AVLite it is the factory. In an Android app it was <code class="language-plaintext highlighter-rouge">Application.onCreate()</code>. Same idea: read where things are wired before reading what they do.</li>
+  <li><strong>One loop iteration is the real architecture.</strong> Folder structure tells you the intent. The loop tells you the truth.</li>
+  <li><strong>Small stacks teach big ones.</strong> Every abstraction here, the world bridge, the shared model, the planner/controller split, exists in the large stacks too. They are just easier to see when there are six of them instead of six hundred.</li>
+  <li><strong>Real modularity versus apparent modularity.</strong> Registries make everything look pluggable. The question to ask is whether timing and capability assumptions still hold when you swap something in.</li>
+</ul>
+
+	  ]]></description>
+	</item>
+
+	<item>
+	  <title>Four Questions an Android Engineer Asked When Switching to Autonomous Vehicles</title>
+	  <link>//four-questions-android-engineer-autonomous-vehicles</link>
+	  <author>Tao He</author>
+	  <pubDate>2026-01-18T21:00:00+00:00</pubDate>
+	  <guid>//four-questions-android-engineer-autonomous-vehicles</guid>
+	  <description><![CDATA[
+	     <p>I wrote C++ for a few years, then Android for about seven, then more mobile work in Dubai and Abu Dhabi. At the end of 2025 I moved to a research job at a university lab in Abu Dhabi. One of the projects is autonomous racing.</p>
+
+<p>The first weeks felt strange. I could read the code. I could build it. But I did not really understand why the stack was split the way it was. Words like “path”, “trajectory”, “pose” and “frame” were used all the time, and everybody seemed to agree on what they meant except me.</p>
+
+<p>So I did what I used to do with Android source: I wrote down the questions that kept blocking me, and I worked through them one by one until the answer was short enough to remember. There were four.</p>
+
+<h2 id="1-does-planning-output-a-path-or-a-trajectory">1. Does planning output a path or a trajectory?</h2>
+
+<p>I used both words as if they were the same. They are not.</p>
+
+<ul>
+  <li>A <strong>path</strong> is geometry. A curve in space, <code class="language-plaintext highlighter-rouge">x(s), y(s)</code>, parameterized by distance along the curve. It answers: <em>where should I go?</em></li>
+  <li>A <strong>trajectory</strong> is a path with time. <code class="language-plaintext highlighter-rouge">x(t), y(t), heading(t), v(t), a(t)</code>. It answers: <em>where should I be at each moment, and how fast?</em></li>
+</ul>
+
+<p>The rule of thumb I now use: does the output include time, or velocity? If no, it is a path. If yes, it is a trajectory.</p>
+
+<p>Why does it matter? Because a controller needs time. It computes an error between where the car is and where it should be <em>now</em>. With only a path, “now” is not defined. The controller does not know how fast to go or when to brake.</p>
+
+<p>In a typical stack, the global planner gives a path (a route along the map, no timing). The local or motion planner turns that into a trajectory, with speed and acceleration limits and obstacles. The controller tracks the trajectory.</p>
+
+<p>Small mobile robots often hide this. In ROS Nav2, for example, the global planner outputs a path and the local planner computes velocity commands on the fly. The path-to-trajectory step is still there. It is just inside one module.</p>
+
+<p>At racing speed you cannot hide it. You cannot decide speed only at the last moment in the controller. Speed has to be planned together with the curve.</p>
+
+<p>The Android comparison that helped me: a path is the shape of an animation, a trajectory is the shape plus the interpolator and the duration. Without the time part, nothing moves.</p>
+
+<h2 id="2-where-is-the-boundary-between-perception-and-localization">2. Where is the boundary between perception and localization?</h2>
+
+<p>Both use the same sensors: camera, LiDAR, IMU, GNSS. Sometimes even the same features. So where is the line?</p>
+
+<p>The answer that finally worked for me is: <strong>what is the subject of the estimate?</strong></p>
+
+<ul>
+  <li>Perception estimates the state of the world: other cars, their positions and speeds, lanes, free space.</li>
+  <li>Localization estimates the state of <em>me</em>: my position, heading and velocity in the map.</li>
+</ul>
+
+<p>Or in transform language: if a module estimates <code class="language-plaintext highlighter-rouge">T_map_base</code>, it is localization. If it estimates <code class="language-plaintext highlighter-rouge">T_base_object</code>, it is perception.</p>
+
+<p>Perception says “there is a car 12 meters ahead”. Localization says “I am at this point in the map”. Without localization, the perception output is floating. It is relative to a car whose position nobody knows.</p>
+
+<p>Some things sit on the line. SLAM builds a map (perception of structure) and estimates the pose (localization) at the same time. Lane detection is perception, but matching those lanes to an HD map to correct your pose is localization. Same raw data, different question.</p>
+
+<p>For me this was the same lesson as layering an app: don’t split modules by <em>what data they read</em>, split them by <em>what they are responsible for producing</em>.</p>
+
+<h2 id="3-why-is-the-tf-tree-so-important">3. Why is the TF tree so important?</h2>
+
+<p>In Android, coordinates were mostly a UI problem. A view has its own coordinates, the parent has others, the screen has others. You convert, and if you get it wrong a button is drawn a few pixels off.</p>
+
+<p>In a car the same mistake moves an obstacle by a meter.</p>
+
+<p>Every module lives in some frame. A typical tree looks like this:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>map
+ └── odom
+      └── base_link
+           ├── lidar
+           ├── camera_front
+           └── imu
+</code></pre></div></div>
+
+<p>The LiDAR sees a car at <code class="language-plaintext highlighter-rouge">(8.2, 1.1)</code> in the LiDAR frame. The planner needs it in the map frame. So you chain the transforms: map to base (from localization), base to LiDAR (from calibration), LiDAR to object (from perception). If any link is wrong, objects shift, lanes don’t line up, and the planner plans around things that are not there.</p>
+
+<p>The part I underestimated was <strong>time</strong>. Transforms change every moment, so you need the transform <em>at the timestamp of the measurement</em>. A small delay is harmless when you are slow. At 1 m/s, a 100 ms error is 10 cm. At 30 m/s, the same 100 ms is 3 meters.</p>
+
+<p>People say most “mysterious” bugs in robotics are TF bugs. After a few weeks I started to believe them.</p>
+
+<h2 id="4-what-does-a-vehicle-controller-actually-take-as-input">4. What does a vehicle controller actually take as input?</h2>
+
+<p>I expected a long list. In the end it is three things:</p>
+
+<ol>
+  <li><strong>Where I should be.</strong> The reference trajectory from the planner: positions, headings, speeds, sometimes acceleration, with timestamps.</li>
+  <li><strong>Where I am.</strong> The state estimate: pose, velocity, yaw rate, steering angle.</li>
+  <li><strong>What I am allowed to do.</strong> Vehicle parameters (wheelbase, max steering angle, max acceleration) and limits (steering rate, jerk, speed caps).</li>
+</ol>
+
+<p>Plus some mode information, like whether we are in emergency braking.</p>
+
+<p>What the controller does <strong>not</strong> take is just as useful to know: no camera images, no point clouds, no list of detected objects. All of that is already turned into a trajectory upstream. The controller lives in a much simpler world. It assumes the trajectory it gets is safe and feasible.</p>
+
+<p>Controllers are also often split in two:</p>
+
+<ul>
+  <li><strong>Lateral</strong> (steering) needs curvature, heading error, cross-track error, and current speed. Speed matters because the same steering angle does very different things at 20 km/h and at 200 km/h.</li>
+  <li><strong>Longitudinal</strong> (throttle and brake) needs the reference speed and acceleration and the current speed.</li>
+</ul>
+
+<p>This split is clean on paper. In racing it is not, because tires have a limited amount of grip, and braking and turning both use it. But that is a topic for another post.</p>
+
+<h2 id="what-i-took-away">What I took away</h2>
+
+<ul>
+  <li><strong>Ask “what does it output?” before “how does it work?”</strong> Every one of these four questions became easy once I looked at a module’s output, not its algorithm.</li>
+  <li><strong>Time is part of the data.</strong> Paths without time and transforms without timestamps both look fine until the car moves fast.</li>
+  <li><strong>Old habits still work.</strong> Reading Android source taught me to draw the data flow first. It is the same here, only the data is in meters instead of pixels.</li>
+  <li><strong>Write the questions down.</strong> They felt too basic to ask out loud. Written down, they had short answers, and those answers became the map I still use.</li>
+</ul>
+
+	  ]]></description>
+	</item>
+
+	<item>
+	  <title>Flutter's Three Trees, for People Who Wrote Android Views</title>
+	  <link>//flutter-three-trees-for-android-view-people</link>
+	  <author>Tao He</author>
+	  <pubDate>2025-10-19T20:40:00+00:00</pubDate>
+	  <guid>//flutter-three-trees-for-android-view-people</guid>
+	  <description><![CDATA[
+	     <p>In the <a href="/flutter-for-android-engineers.html">last post</a> I mapped Flutter words to Android words. One row in that table was wrong in a useful way: “<code class="language-plaintext highlighter-rouge">setState()</code> is like <code class="language-plaintext highlighter-rouge">invalidate()</code>”. It is not. To see why, you need Flutter’s three trees.</p>
+
+<p>On Android there is one tree. A <code class="language-plaintext highlighter-rouge">View</code> is the configuration, the state and the thing that measures and draws, all in one object. You call <code class="language-plaintext highlighter-rouge">requestLayout()</code> when the size may change and <code class="language-plaintext highlighter-rouge">invalidate()</code> when the pixels change. I wrote custom Views for years with this model in my head.</p>
+
+<p>Flutter splits that one object into three.</p>
+
+<h2 id="three-trees-three-jobs">Three trees, three jobs</h2>
+
+<p><strong>Widget.</strong> An immutable description. <code class="language-plaintext highlighter-rouge">Padding(padding: 8, child: ...)</code> is just data. It is created on every build and thrown away. Creating one is very cheap.</p>
+
+<p><strong>Element.</strong> The live instance at one position in the tree. It holds a reference to the current widget, to its parent and children, and, for a <code class="language-plaintext highlighter-rouge">StatefulWidget</code>, the <code class="language-plaintext highlighter-rouge">State</code> object. The <code class="language-plaintext highlighter-rouge">BuildContext</code> you get in <code class="language-plaintext highlighter-rouge">build()</code> is the Element. This is the part that lives long.</p>
+
+<p><strong>RenderObject.</strong> The part that does layout, paint and hit testing. If you know <code class="language-plaintext highlighter-rouge">onMeasure()</code>, <code class="language-plaintext highlighter-rouge">onLayout()</code> and <code class="language-plaintext highlighter-rouge">onDraw()</code>, this is where they live: <code class="language-plaintext highlighter-rouge">performLayout()</code> and <code class="language-plaintext highlighter-rouge">paint()</code>.</p>
+
+<p>My notes first said “every widget has one Element and one RenderObject”. That is not quite right, and the difference matters:</p>
+
+<ul>
+  <li>Every widget creates one Element.</li>
+  <li>Only <strong>RenderObjectWidgets</strong> create a RenderObject. <code class="language-plaintext highlighter-rouge">Padding</code>, <code class="language-plaintext highlighter-rouge">Align</code>, <code class="language-plaintext highlighter-rouge">RichText</code>, <code class="language-plaintext highlighter-rouge">CustomPaint</code> are examples.</li>
+  <li><code class="language-plaintext highlighter-rouge">StatelessWidget</code> and <code class="language-plaintext highlighter-rouge">StatefulWidget</code> only compose other widgets. Their Elements have no RenderObject of their own.</li>
+</ul>
+
+<p>For example, <code class="language-plaintext highlighter-rouge">Text</code> is a <code class="language-plaintext highlighter-rouge">StatelessWidget</code>. Its <code class="language-plaintext highlighter-rouge">build()</code> returns a <code class="language-plaintext highlighter-rouge">RichText</code>, and the <code class="language-plaintext highlighter-rouge">RichText</code> creates a <code class="language-plaintext highlighter-rouge">RenderParagraph</code>. So the render tree is much smaller than the widget tree. Most of the widgets you write are just glue.</p>
+
+<h2 id="what-happens-on-setstate">What happens on setState</h2>
+
+<p>Say a counter changes from 1 to 2.</p>
+
+<ol>
+  <li><code class="language-plaintext highlighter-rouge">setState()</code> runs your callback and calls <code class="language-plaintext highlighter-rouge">markNeedsBuild()</code> on this Element. The Element is added to a dirty list, and a frame is scheduled. Nothing else happens yet.</li>
+  <li>On the next frame, Flutter calls <code class="language-plaintext highlighter-rouge">build()</code> on each dirty Element. Your <code class="language-plaintext highlighter-rouge">build()</code> returns a new <code class="language-plaintext highlighter-rouge">Text('2')</code>.</li>
+  <li>For each child, Flutter compares the old widget with the new one. If they can be matched (rules below), the old Element is kept and gets the new widget through <code class="language-plaintext highlighter-rouge">update()</code>.</li>
+  <li>Down the tree, <code class="language-plaintext highlighter-rouge">RichText</code> calls <code class="language-plaintext highlighter-rouge">updateRenderObject()</code>. It sets the new text on the existing <code class="language-plaintext highlighter-rouge">RenderParagraph</code>.</li>
+  <li>The RenderObject’s setter checks if the value really changed. If yes, it calls <code class="language-plaintext highlighter-rouge">markNeedsLayout()</code> or <code class="language-plaintext highlighter-rouge">markNeedsPaint()</code>.</li>
+  <li>Later in the same frame, only the marked RenderObjects run layout and paint.</li>
+</ol>
+
+<p>So <code class="language-plaintext highlighter-rouge">setState()</code> is not <code class="language-plaintext highlighter-rouge">invalidate()</code>. <code class="language-plaintext highlighter-rouge">markNeedsPaint()</code> is the real <code class="language-plaintext highlighter-rouge">invalidate()</code>, and <code class="language-plaintext highlighter-rouge">markNeedsLayout()</code> is the real <code class="language-plaintext highlighter-rouge">requestLayout()</code>. Rebuild is an extra step that Android Views do not have. The closest Android thing is recomposition in Jetpack Compose.</p>
+
+<h2 id="element-reuse">Element reuse</h2>
+
+<p>Step 3 is where performance and state are decided. The rule is in <code class="language-plaintext highlighter-rouge">Widget.canUpdate()</code>: an old Element can take a new widget if the two widgets have <strong>the same runtime type and the same key</strong>. That’s all.</p>
+
+<p>Children without keys are matched by position. Children with keys are matched by key. If the parent Element is replaced, all its children are replaced too.</p>
+
+<p>Two cases taught me why this matters.</p>
+
+<p><strong>Changing the type at a position loses state.</strong></p>
+
+<div class="language-dart highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// before</span>
+<span class="nl">child:</span> <span class="n">MyForm</span><span class="o">()</span>
+<span class="c1">// after, a condition wraps it</span>
+<span class="nl">child:</span> <span class="n">isWide</span> <span class="o">?</span> <span class="n">Padding</span><span class="o">(</span><span class="nl">padding:</span> <span class="n">p</span><span class="o">,</span> <span class="nl">child:</span> <span class="n">MyForm</span><span class="o">())</span> <span class="o">:</span> <span class="n">MyForm</span><span class="o">()</span>
+</code></pre></div></div>
+
+<p>When <code class="language-plaintext highlighter-rouge">isWide</code> flips, the widget at that position changes from <code class="language-plaintext highlighter-rouge">MyForm</code> to <code class="language-plaintext highlighter-rouge">Padding</code>. Different type, so the old Element is thrown away, and with it the <code class="language-plaintext highlighter-rouge">State</code> of <code class="language-plaintext highlighter-rouge">MyForm</code>. Whatever the user typed is gone. The fix is to keep the tree shape stable, for example always wrap with <code class="language-plaintext highlighter-rouge">Padding</code> and change only the padding value.</p>
+
+<p><strong>Reordering without keys moves the wrong thing.</strong></p>
+
+<p>My notes said that if you swap two <code class="language-plaintext highlighter-rouge">Text</code> widgets without keys, both are destroyed and rebuilt. That is not what happens. The types match at each position, so both Elements are <strong>reused</strong>. Each one just gets the other widget’s config. For <code class="language-plaintext highlighter-rouge">Text</code> this is fine, the screen looks correct.</p>
+
+<p>The real problem is with stateful children. Say a list of two items, each with a checkbox state inside its own <code class="language-plaintext highlighter-rouge">State</code>. The user checks the first one, then you swap the items. The Elements stay in place, and so do their <code class="language-plaintext highlighter-rouge">State</code> objects. The labels move, but the checked state does not. Now the wrong item looks checked.</p>
+
+<div class="language-dart highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nl">children:</span> <span class="n">items</span><span class="o">.</span><span class="na">map</span><span class="o">((</span><span class="n">item</span><span class="o">)</span> <span class="o">=&gt;</span> <span class="n">TodoTile</span><span class="o">(</span>
+  <span class="nl">key:</span> <span class="n">ValueKey</span><span class="o">(</span><span class="n">item</span><span class="o">.</span><span class="na">id</span><span class="o">),</span>
+  <span class="nl">item:</span> <span class="n">item</span><span class="o">,</span>
+<span class="o">)).</span><span class="na">toList</span><span class="o">(),</span>
+</code></pre></div></div>
+
+<p>With a <code class="language-plaintext highlighter-rouge">ValueKey</code>, Flutter matches by key. The Element, and its <code class="language-plaintext highlighter-rouge">State</code>, moves together with the item. This is the same idea as giving stable IDs to <code class="language-plaintext highlighter-rouge">RecyclerView</code> items, so the adapter knows which row is which.</p>
+
+<p>A <code class="language-plaintext highlighter-rouge">GlobalKey</code> goes one step further. It lets an Element keep its state even when it moves to a different parent. It is also more expensive, so I only use it when I really need that, or to reach a <code class="language-plaintext highlighter-rouge">State</code> from outside, like a <code class="language-plaintext highlighter-rouge">FormState</code>.</p>
+
+<h2 id="rebuild-is-not-repaint">Rebuild is not repaint</h2>
+
+<p>Once the three trees are clear, this follows:</p>
+
+<ul>
+  <li><strong>Rebuild</strong> happens in the Widget and Element trees. <code class="language-plaintext highlighter-rouge">build()</code> runs, new widgets are compared with old ones.</li>
+  <li><strong>Repaint</strong> happens in the RenderObject tree. <code class="language-plaintext highlighter-rouge">paint()</code> runs and records drawing commands into a layer.</li>
+</ul>
+
+<p>They are independent. A rebuild where nothing really changed ends at step 5 above: the setters see the same values and do not mark anything. No layout, no paint.</p>
+
+<p>And a repaint can happen without any rebuild. A <code class="language-plaintext highlighter-rouge">CustomPainter</code> can take a <code class="language-plaintext highlighter-rouge">repaint:</code> listenable, like an <code class="language-plaintext highlighter-rouge">AnimationController</code>. When the animation ticks, only <code class="language-plaintext highlighter-rouge">paint()</code> runs again. No <code class="language-plaintext highlighter-rouge">build()</code>, no diff. For a smooth animation this is the cheapest path.</p>
+
+<p>One note I had to correct: “rebuild costs CPU, repaint costs GPU”. It is not that clean. Build, layout and paint all run on the UI thread, on the CPU. Paint only records commands. The GPU work happens later, when the raster thread turns the layers into pixels. Both rebuild and repaint cost CPU time on the UI thread, and that is the budget you have to stay inside, about 16ms per frame at 60Hz.</p>
+
+<h2 id="repaintboundary">RepaintBoundary</h2>
+
+<p>By default a RenderObject paints into the same layer as its parent. If the parent repaints, the children repaint too.</p>
+
+<p><code class="language-plaintext highlighter-rouge">RepaintBoundary</code> gives a subtree its own layer. If something next to it repaints, the boundary’s layer can be reused as is. If something inside it repaints, the work stays inside the boundary. A spinning loader next to a complex chart is a good case: put each in its own boundary and the chart is not repainted 60 times a second.</p>
+
+<p>It is not free. Every layer costs memory and compositing time. To check if it helps, turn on <code class="language-plaintext highlighter-rouge">debugRepaintRainbowEnabled</code>. Each repainted area changes color, so you can see what repaints when it should not.</p>
+
+<h2 id="when-to-write-your-own-renderobject">When to write your own RenderObject</h2>
+
+<p>On Android, when the standard layouts were not enough, I wrote a custom <code class="language-plaintext highlighter-rouge">ViewGroup</code>. In Flutter the equivalent is a custom RenderObject. But it is lower level than a custom View, and usually you don’t need it. I try these first, in order:</p>
+
+<ol>
+  <li>Compose existing widgets.</li>
+  <li><code class="language-plaintext highlighter-rouge">CustomPaint</code> for custom drawing.</li>
+  <li><code class="language-plaintext highlighter-rouge">CustomMultiChildLayout</code> or <code class="language-plaintext highlighter-rouge">Flow</code> for custom positioning.</li>
+</ol>
+
+<p>A custom RenderObject makes sense for a layout the standard ones can’t express, like a real waterfall layout, or for a custom hit test, like a round or polygon-shaped button. The pattern has two parts: a widget that creates and updates the RenderObject, and the RenderObject itself. The part that is easy to get wrong is the setter:</p>
+
+<div class="language-dart highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">RenderBar</span> <span class="kd">extends</span> <span class="n">RenderBox</span> <span class="o">{</span>
+  <span class="n">RenderBar</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="na">_factor</span><span class="o">);</span>
+
+  <span class="kt">double</span> <span class="n">_factor</span><span class="o">;</span>
+  <span class="kd">set</span> <span class="n">factor</span><span class="o">(</span><span class="kt">double</span> <span class="n">value</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">if</span> <span class="o">(</span><span class="n">value</span> <span class="o">==</span> <span class="n">_factor</span><span class="o">)</span> <span class="k">return</span><span class="o">;</span>
+    <span class="n">_factor</span> <span class="o">=</span> <span class="n">value</span><span class="o">;</span>
+    <span class="n">markNeedsLayout</span><span class="o">();</span> <span class="c1">// size depends on it</span>
+  <span class="o">}</span>
+
+  <span class="nd">@override</span>
+  <span class="kt">void</span> <span class="n">performLayout</span><span class="o">()</span> <span class="o">{</span>
+    <span class="n">size</span> <span class="o">=</span> <span class="n">constraints</span><span class="o">.</span><span class="na">constrain</span><span class="o">(</span><span class="n">Size</span><span class="o">(</span><span class="mi">100</span> <span class="o">*</span> <span class="n">_factor</span><span class="o">,</span> <span class="mi">50</span><span class="o">));</span>
+  <span class="o">}</span>
+
+  <span class="nd">@override</span>
+  <span class="kt">void</span> <span class="n">paint</span><span class="o">(</span><span class="n">PaintingContext</span> <span class="n">context</span><span class="o">,</span> <span class="n">Offset</span> <span class="n">offset</span><span class="o">)</span> <span class="o">{</span>
+    <span class="n">context</span><span class="o">.</span><span class="na">canvas</span><span class="o">.</span><span class="na">drawRect</span><span class="o">(</span><span class="n">offset</span> <span class="o">&amp;</span> <span class="n">size</span><span class="o">,</span> <span class="n">Paint</span><span class="o">()..</span><span class="na">color</span> <span class="o">=</span> <span class="kd">const</span> <span class="n">Color</span><span class="o">(</span><span class="mh">0xFF2196F3</span><span class="o">));</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+
+<span class="kd">class</span> <span class="nc">Bar</span> <span class="kd">extends</span> <span class="n">LeafRenderObjectWidget</span> <span class="o">{</span>
+  <span class="kd">const</span> <span class="n">Bar</span><span class="o">({</span><span class="k">super</span><span class="o">.</span><span class="na">key</span><span class="o">,</span> <span class="n">required</span> <span class="k">this</span><span class="o">.</span><span class="na">factor</span><span class="o">});</span>
+  <span class="kd">final</span> <span class="kt">double</span> <span class="n">factor</span><span class="o">;</span>
+
+  <span class="nd">@override</span>
+  <span class="n">RenderBar</span> <span class="n">createRenderObject</span><span class="o">(</span><span class="n">BuildContext</span> <span class="n">context</span><span class="o">)</span> <span class="o">=&gt;</span> <span class="n">RenderBar</span><span class="o">(</span><span class="n">factor</span><span class="o">);</span>
+
+  <span class="nd">@override</span>
+  <span class="kt">void</span> <span class="n">updateRenderObject</span><span class="o">(</span><span class="n">BuildContext</span> <span class="n">context</span><span class="o">,</span> <span class="n">RenderBar</span> <span class="n">renderObject</span><span class="o">)</span> <span class="o">{</span>
+    <span class="n">renderObject</span><span class="o">.</span><span class="na">factor</span> <span class="o">=</span> <span class="n">factor</span><span class="o">;</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>If the setter just assigns the field and forgets <code class="language-plaintext highlighter-rouge">markNeedsLayout()</code>, the new value is stored but nothing on screen changes. If it always marks, even for the same value, you lose the “rebuild without repaint” benefit. The early return is what makes rebuilds cheap.</p>
+
+<h2 id="what-i-took-away">What I took away</h2>
+
+<ul>
+  <li><strong>Android’s one View is Flutter’s three objects.</strong> Widget is the config, Element is the instance with state, RenderObject is the measure-layout-draw part.</li>
+  <li><strong><code class="language-plaintext highlighter-rouge">markNeedsPaint()</code> is <code class="language-plaintext highlighter-rouge">invalidate()</code>. <code class="language-plaintext highlighter-rouge">setState()</code> is not.</strong> Rebuild is a separate, earlier step.</li>
+  <li><strong>Type and key decide if state survives.</strong> Keep the tree shape stable, and give list items keys.</li>
+  <li><strong>Rebuild is not repaint.</strong> Many rebuilds are cheap because nothing below them changes. Most real cost is in what you do inside <code class="language-plaintext highlighter-rouge">build()</code>.</li>
+  <li><strong>Custom RenderObjects are the last tool, not the first.</strong> Composition and <code class="language-plaintext highlighter-rouge">CustomPaint</code> cover most cases.</li>
+</ul>
+
+	  ]]></description>
+	</item>
+
+	<item>
+	  <title>Flutter for Android Engineers</title>
+	  <link>//flutter-for-android-engineers</link>
+	  <author>Tao He</author>
+	  <pubDate>2025-09-14T20:30:00+00:00</pubDate>
+	  <guid>//flutter-for-android-engineers</guid>
+	  <description><![CDATA[
+	     <p>I wrote Android apps for about seven years. When I started learning Flutter this year, the hardest part was not Dart. Dart is easy if you know Java and Kotlin. The hard part was that every Flutter word looked like an Android word I already knew, and the match was almost right, but not quite.</p>
+
+<p>So I made a table. Every time I met a new concept, I wrote down the Android thing it reminded me of, and then where the comparison breaks. This post is that table, cleaned up.</p>
+
+<h2 id="the-short-version">The short version</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Flutter</th>
+      <th>Closest Android thing</th>
+      <th>Where it breaks</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">Widget</code></td>
+      <td><code class="language-plaintext highlighter-rouge">View</code> / <code class="language-plaintext highlighter-rouge">ViewGroup</code></td>
+      <td>A widget is cheap, immutable config. It is not the thing on screen.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">StatefulWidget</code> + <code class="language-plaintext highlighter-rouge">State</code></td>
+      <td>A View plus the fields that drive it</td>
+      <td>The <code class="language-plaintext highlighter-rouge">State</code> object lives longer than the widget.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">setState()</code></td>
+      <td>change a field + <code class="language-plaintext highlighter-rouge">invalidate()</code></td>
+      <td>It schedules a rebuild for the next frame. It does not draw.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">BuildContext</code></td>
+      <td><code class="language-plaintext highlighter-rouge">Context</code></td>
+      <td>It is a position in the tree, not an app-wide handle.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">Navigator.push</code> / <code class="language-plaintext highlighter-rouge">pop</code></td>
+      <td><code class="language-plaintext highlighter-rouge">startActivity</code> / <code class="language-plaintext highlighter-rouge">finish</code></td>
+      <td>Routes are not Activities. One Activity hosts them all.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">InheritedWidget</code> / Provider</td>
+      <td><code class="language-plaintext highlighter-rouge">ViewModel</code> + <code class="language-plaintext highlighter-rouge">LiveData</code></td>
+      <td>Scoped to a subtree, not global.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">Future</code> / <code class="language-plaintext highlighter-rouge">async</code> / <code class="language-plaintext highlighter-rouge">await</code></td>
+      <td>coroutines</td>
+      <td>No <code class="language-plaintext highlighter-rouge">Dispatchers.IO</code>. One thread per isolate.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">Stream</code></td>
+      <td><code class="language-plaintext highlighter-rouge">Flow</code> / <code class="language-plaintext highlighter-rouge">LiveData</code></td>
+      <td>Close enough.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">AnimationController</code> / <code class="language-plaintext highlighter-rouge">Tween</code></td>
+      <td><code class="language-plaintext highlighter-rouge">ValueAnimator</code> / <code class="language-plaintext highlighter-rouge">TypeEvaluator</code></td>
+      <td>Close enough.</td>
+    </tr>
+    <tr>
+      <td>Hot reload</td>
+      <td>Apply Changes</td>
+      <td>Much faster, and it keeps state.</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>Now the details.</p>
+
+<h2 id="widget-is-not-view">Widget is not View</h2>
+
+<p>On Android a <code class="language-plaintext highlighter-rouge">View</code> is a real object that stays on screen. You hold a reference to it and change it: <code class="language-plaintext highlighter-rouge">textView.setText("Hello")</code>.</p>
+
+<p>In Flutter you never do that. A <code class="language-plaintext highlighter-rouge">Text("Hello")</code> is just a description. It is immutable and very cheap. When the data changes, you build a new <code class="language-plaintext highlighter-rouge">Text("World")</code> and Flutter works out what to change on screen. You describe the UI as a function of state, and you stop thinking about references.</p>
+
+<p>If you have used Jetpack Compose, this part is familiar. If you only wrote XML layouts and <code class="language-plaintext highlighter-rouge">findViewById</code>, this is the biggest mental change. It took me a few days before I stopped looking for “the reference to the text view”.</p>
+
+<p><code class="language-plaintext highlighter-rouge">StatelessWidget</code> is for things that only depend on their constructor arguments. <code class="language-plaintext highlighter-rouge">StatefulWidget</code> is for things that have their own changing data.</p>
+
+<h2 id="state-and-why-build-lives-there">State, and why build lives there</h2>
+
+<p>A <code class="language-plaintext highlighter-rouge">StatefulWidget</code> comes with a separate <code class="language-plaintext highlighter-rouge">State</code> class, and <code class="language-plaintext highlighter-rouge">build()</code> is on the <code class="language-plaintext highlighter-rouge">State</code>, not on the widget. This looked strange to me at first.</p>
+
+<p>The reason is lifetime. The widget is thrown away and rebuilt all the time. The <code class="language-plaintext highlighter-rouge">State</code> object stays, as long as the widget keeps its place in the tree. So the data that must survive, like a counter or a scroll position, lives in <code class="language-plaintext highlighter-rouge">State</code>, and <code class="language-plaintext highlighter-rouge">build()</code> reads from it.</p>
+
+<div class="language-dart highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">_CounterState</span> <span class="kd">extends</span> <span class="n">State</span><span class="o">&lt;</span><span class="n">Counter</span><span class="o">&gt;</span> <span class="o">{</span>
+  <span class="kt">int</span> <span class="n">_count</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+
+  <span class="nd">@override</span>
+  <span class="n">Widget</span> <span class="n">build</span><span class="o">(</span><span class="n">BuildContext</span> <span class="n">context</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">return</span> <span class="n">TextButton</span><span class="o">(</span>
+      <span class="nl">onPressed:</span> <span class="o">()</span> <span class="o">=&gt;</span> <span class="n">setState</span><span class="o">(()</span> <span class="o">=&gt;</span> <span class="n">_count</span><span class="o">++),</span>
+      <span class="nl">child:</span> <span class="n">Text</span><span class="o">(</span><span class="s">'</span><span class="si">$_count</span><span class="s">'</span><span class="o">),</span>
+    <span class="o">);</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">setState()</code> is like “change the field and call <code class="language-plaintext highlighter-rouge">invalidate()</code>”, but there is a difference. It only marks this part of the tree as dirty. On the next frame Flutter calls <code class="language-plaintext highlighter-rouge">build()</code> again and compares the result with the old one. Nothing is drawn inside <code class="language-plaintext highlighter-rouge">setState()</code> itself.</p>
+
+<p>One Android habit that transfers directly: after an async call, check that you are still alive before touching the UI. On Android I used to check <code class="language-plaintext highlighter-rouge">isAdded()</code> on a Fragment, or the lifecycle state. In Flutter it is <code class="language-plaintext highlighter-rouge">if (!mounted) return;</code> before calling <code class="language-plaintext highlighter-rouge">setState()</code>.</p>
+
+<p>The lifecycle methods also map roughly:</p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">initState()</code> is like <code class="language-plaintext highlighter-rouge">onCreate()</code>, but for this widget, not the whole screen.</li>
+  <li><code class="language-plaintext highlighter-rouge">dispose()</code> is like <code class="language-plaintext highlighter-rouge">onDestroy()</code>. Cancel controllers and subscriptions here.</li>
+  <li>For the app going to background, there is <code class="language-plaintext highlighter-rouge">WidgetsBindingObserver</code> or <code class="language-plaintext highlighter-rouge">AppLifecycleListener</code>, which feel like <code class="language-plaintext highlighter-rouge">onPause()</code> and <code class="language-plaintext highlighter-rouge">onResume()</code>.</li>
+</ul>
+
+<h2 id="buildcontext-is-not-context">BuildContext is not Context</h2>
+
+<p>This one confused me the most, because the name is so similar.</p>
+
+<p>An Android <code class="language-plaintext highlighter-rouge">Context</code> is a handle to the app and the system. You use it to get resources, start Activities, get system services. Any <code class="language-plaintext highlighter-rouge">Context</code> from your app can do roughly the same things.</p>
+
+<p>A <code class="language-plaintext highlighter-rouge">BuildContext</code> is the location of a widget in the tree. Under the hood it is the Element object (more on Elements in the next post). When you call <code class="language-plaintext highlighter-rouge">Theme.of(context)</code> or <code class="language-plaintext highlighter-rouge">Navigator.of(context)</code>, Flutter walks up the tree from that location and finds the nearest one.</p>
+
+<p>So which <code class="language-plaintext highlighter-rouge">context</code> you use matters. A classic mistake: in the same <code class="language-plaintext highlighter-rouge">build()</code> method that creates a <code class="language-plaintext highlighter-rouge">Scaffold</code>, you call <code class="language-plaintext highlighter-rouge">Scaffold.of(context)</code>. It fails, because that <code class="language-plaintext highlighter-rouge">context</code> is above the <code class="language-plaintext highlighter-rouge">Scaffold</code>, not inside it. The fix is to use a <code class="language-plaintext highlighter-rouge">Builder</code>, or move the code into a child widget, so you get a context below it.</p>
+
+<p>The other rule: don’t keep a <code class="language-plaintext highlighter-rouge">BuildContext</code> after an <code class="language-plaintext highlighter-rouge">await</code> without checking <code class="language-plaintext highlighter-rouge">context.mounted</code>. The widget may be gone. This is the same kind of bug as holding an Activity <code class="language-plaintext highlighter-rouge">Context</code> too long on Android, just with a different symptom.</p>
+
+<h2 id="navigation">Navigation</h2>
+
+<p><code class="language-plaintext highlighter-rouge">Navigator.push()</code> and <code class="language-plaintext highlighter-rouge">pop()</code> work like a back stack. <code class="language-plaintext highlighter-rouge">pushReplacement()</code> is like <code class="language-plaintext highlighter-rouge">startActivity()</code> followed by <code class="language-plaintext highlighter-rouge">finish()</code>. Named routes feel like starting a screen with an Intent action or a deep link.</p>
+
+<p>The difference: these routes are not Activities. A Flutter app usually runs inside one <code class="language-plaintext highlighter-rouge">FlutterActivity</code>, and all the screens are drawn by Flutter inside it. There is no system back stack per screen, no <code class="language-plaintext highlighter-rouge">launchMode</code>, and no process death per screen to think about. I found this simpler.</p>
+
+<h2 id="sharing-state">Sharing state</h2>
+
+<p>My notes first said “<code class="language-plaintext highlighter-rouge">InheritedWidget</code> is like a singleton”. That is not right. An <code class="language-plaintext highlighter-rouge">InheritedWidget</code> gives data to its <strong>subtree</strong>. Two different subtrees can have two different values. Widgets below that read it with <code class="language-plaintext highlighter-rouge">context.dependOnInheritedWidgetOfExactType()</code> are rebuilt when it changes.</p>
+
+<p>A better match: Provider or Riverpod on top of a <code class="language-plaintext highlighter-rouge">ChangeNotifier</code> feels like <code class="language-plaintext highlighter-rouge">ViewModel</code> plus <code class="language-plaintext highlighter-rouge">LiveData</code>. You expose state, the UI listens, the UI rebuilds. The scoping is by tree position instead of by Activity or Fragment.</p>
+
+<h2 id="async-the-part-that-really-breaks">Async: the part that really breaks</h2>
+
+<p><code class="language-plaintext highlighter-rouge">Future</code> with <code class="language-plaintext highlighter-rouge">async</code> / <code class="language-plaintext highlighter-rouge">await</code> reads almost like a Kotlin <code class="language-plaintext highlighter-rouge">suspend</code> function. <code class="language-plaintext highlighter-rouge">Stream</code> is close to <code class="language-plaintext highlighter-rouge">Flow</code>, and <code class="language-plaintext highlighter-rouge">StreamBuilder</code> feels like observing <code class="language-plaintext highlighter-rouge">LiveData</code> in a Fragment.</p>
+
+<p>But the threading model is different, and this is the one place where my Android instinct was wrong.</p>
+
+<p>On Android, I would write <code class="language-plaintext highlighter-rouge">withContext(Dispatchers.IO) { ... }</code> and the work runs on another thread. In Dart, each isolate has one thread with an event loop. <code class="language-plaintext highlighter-rouge">await http.get(...)</code> does not block the UI, because the network IO itself is asynchronous and the result comes back as an event. But if you parse a huge JSON or resize an image in Dart code, that runs on the UI isolate and you will drop frames. There is no IO dispatcher to switch to.</p>
+
+<p>For heavy CPU work you start another isolate, for example with <code class="language-plaintext highlighter-rouge">Isolate.run()</code> or <code class="language-plaintext highlighter-rouge">compute()</code>. Isolates do not share memory. You send data in and get data back. It feels closer to a separate process than a thread.</p>
+
+<h2 id="animation-and-tools">Animation and tools</h2>
+
+<p><code class="language-plaintext highlighter-rouge">AnimationController</code> is like <code class="language-plaintext highlighter-rouge">ValueAnimator</code>: it produces values over time. A <code class="language-plaintext highlighter-rouge">Tween</code> maps 0..1 to the values you want, like a <code class="language-plaintext highlighter-rouge">TypeEvaluator</code>. The <code class="language-plaintext highlighter-rouge">vsync</code> argument ties the controller to the screen refresh, similar to what <code class="language-plaintext highlighter-rouge">Choreographer</code> does on Android.</p>
+
+<p>Hot reload deserves a line. It injects the new code and rebuilds the widgets while keeping the <code class="language-plaintext highlighter-rouge">State</code>. After years of waiting for Gradle, this changed how I worked. I tried small UI changes much more often because it cost a second.</p>
+
+<h2 id="what-i-took-away">What I took away</h2>
+
+<ul>
+  <li><strong>Map the new words to the old ones, but write down where the map breaks.</strong> The breaks are where the bugs are.</li>
+  <li><strong>Widgets are descriptions, not objects on screen.</strong> Once this clicked, most of Flutter made sense.</li>
+  <li><strong><code class="language-plaintext highlighter-rouge">BuildContext</code> is a position.</strong> Most of my early errors were using the context from the wrong place.</li>
+  <li><strong>Watch the threading.</strong> <code class="language-plaintext highlighter-rouge">async</code> is not “off the main thread”. Heavy work still needs an isolate.</li>
+</ul>
+
+<p>The row “rebuild vs invalidate” in the table is the most misleading one. Flutter actually keeps three trees, and a rebuild is not a redraw. That is the next post.</p>
+
+	  ]]></description>
+	</item>
+
+	<item>
+	  <title>Spring Boot from the Other Side of the API</title>
+	  <link>//spring-boot-from-the-other-side-of-the-api</link>
+	  <author>Tao He</author>
+	  <pubDate>2025-05-25T20:15:00+00:00</pubDate>
+	  <guid>//spring-boot-from-the-other-side-of-the-api</guid>
+	  <description><![CDATA[
+	     <p>Two years ago I wrote <a href="/a-quick-tour-of-spring-boot.html">a quick tour of Spring Boot</a>. It was about the surface: starters, YAML config, REST style, how easy it is to add a library. This spring I went back to Java backend, this time slower and with a plan.</p>
+
+<p>I am an Android engineer. For years I have been on the client side of the API: calling endpoints, parsing JSON, retrying when the network is bad. This time I wanted to understand the other side. This post is about what I could reuse from Android, and what I had to learn from zero.</p>
+
+<h2 id="the-plan">The plan</h2>
+
+<p>I wrote a seven-day plan to get the whole map first and the details later:</p>
+
+<ol>
+  <li>Java basics from a backend view: collections, thread pools, Java 8 streams and <code class="language-plaintext highlighter-rouge">Optional</code>. Plus HTTP itself.</li>
+  <li>Spring Boot and IoC/DI.</li>
+  <li>Spring MVC and a small REST API.</li>
+  <li>Persistence: JDBC, JPA, MyBatis.</li>
+  <li>AOP, transactions, Spring Security basics.</li>
+  <li>Redis, message queues, the basic ideas of distributed systems.</li>
+  <li>Build and deploy: Maven, a runnable jar, Docker, logs.</li>
+</ol>
+
+<p>Seven days was too short, of course. The plan gave me the order. Then I spent the next weeks going through a Spring Boot course and taking notes: auto-configuration, bean scanning, a custom starter, JWT, <code class="language-plaintext highlighter-rouge">ThreadLocal</code>, testing, the data layer, caching.</p>
+
+<p>The rule I set for myself was simple: for every new thing, ask “what is this on Android?” Sometimes the answer was very close. Sometimes there was no answer at all.</p>
+
+<h2 id="what-transferred">What transferred</h2>
+
+<p><strong>Dependency injection.</strong> If you have used Dagger or Hilt, Spring’s IoC container is not new. <code class="language-plaintext highlighter-rouge">@Service</code> and <code class="language-plaintext highlighter-rouge">@Repository</code> are like <code class="language-plaintext highlighter-rouge">@Inject</code>-able classes, <code class="language-plaintext highlighter-rouge">@Configuration</code> with <code class="language-plaintext highlighter-rouge">@Bean</code> methods is like a Hilt module with <code class="language-plaintext highlighter-rouge">@Provides</code>. Constructor injection is the recommended style in both.</p>
+
+<p>The difference is when the wiring happens. Dagger generates code at compile time, so a missing dependency is a build error. Spring scans the classpath and builds the graph at startup with reflection and proxies, so a missing bean is a startup error. Both work. Spring is more flexible, Dagger tells you earlier.</p>
+
+<p><strong>HTTP, seen from the mirror.</strong> On Android I wrote Retrofit interfaces like this:</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@GET</span><span class="o">(</span><span class="s">"users/{id}"</span><span class="o">)</span>
+<span class="nc">Call</span><span class="o">&lt;</span><span class="nc">User</span><span class="o">&gt;</span> <span class="nf">getUser</span><span class="o">(</span><span class="nd">@Path</span><span class="o">(</span><span class="s">"id"</span><span class="o">)</span> <span class="kt">long</span> <span class="n">id</span><span class="o">);</span>
+</code></pre></div></div>
+
+<p>The Spring side is almost the same shape:</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@GetMapping</span><span class="o">(</span><span class="s">"/users/{id}"</span><span class="o">)</span>
+<span class="kd">public</span> <span class="nc">User</span> <span class="nf">getUser</span><span class="o">(</span><span class="nd">@PathVariable</span> <span class="nc">Long</span> <span class="n">id</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">return</span> <span class="n">userService</span><span class="o">.</span><span class="na">findById</span><span class="o">(</span><span class="n">id</span><span class="o">);</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>I already knew methods, headers, status codes and JSON. What changed is that now I choose them. Should creating a user return 200 or 201? What does a missing user return, 404 or an empty body? When I was the client, I complained about these choices. Now I had to make them.</p>
+
+<p><strong>Interceptors.</strong> An OkHttp <code class="language-plaintext highlighter-rouge">Interceptor</code> that adds an <code class="language-plaintext highlighter-rouge">Authorization</code> header has a mirror on the server: a filter that reads the header and checks the token. On Android I stored the JWT and attached it to every request. In Spring I wrote the other half: parse the token, verify it, reject the request if it is wrong. Spring Security is a chain of these filters. Once I saw it as “OkHttp interceptors, but on the receiving end”, it was much less scary.</p>
+
+<p><strong>Persistence.</strong> Room was my reference. MyBatis felt closest: you write the SQL yourself, in annotations or XML, and map the result to objects, like Room’s <code class="language-plaintext highlighter-rouge">@Query</code>. Spring Data JPA is further away. You declare <code class="language-plaintext highlighter-rouge">findByName(String name)</code> on an interface and the query is generated from the method name. It is convenient for simple queries and a bit magic for anything else.</p>
+
+<p><strong>The language.</strong> Java streams and <code class="language-plaintext highlighter-rouge">Optional</code> were easy after Kotlin’s collection functions and nullable types. Maven was new, but after years of Gradle the idea of a dependency tree and a parent version set was familiar.</p>
+
+<h2 id="what-did-not-transfer">What did not transfer</h2>
+
+<p><strong>The threading model.</strong> This was the biggest change in how I think.</p>
+
+<p>On Android there is one rule: don’t block the main thread. All my instincts are about moving work off one special thread.</p>
+
+<p>On a server there is no special thread. In a classic Spring MVC app on Tomcat, each request is handled by one thread from a pool (200 by default). Blocking in a request is normal. You call the database and wait. The danger is somewhere else: many threads running the same code <strong>at the same time</strong>.</p>
+
+<p>And by default, every Spring bean is a singleton. On Android a singleton holding mutable data already makes me nervous. On a server, one <code class="language-plaintext highlighter-rouge">UserService</code> instance is used by all request threads at once. So a field like this is a bug:</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@Service</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">OrderService</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="nc">Order</span> <span class="n">current</span><span class="o">;</span> <span class="c1">// shared by every request. Never do this.</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>Beans should be stateless. Per-request data goes in method parameters, or in a <code class="language-plaintext highlighter-rouge">ThreadLocal</code>. I used <code class="language-plaintext highlighter-rouge">ThreadLocal</code> to keep the current user after the JWT filter parsed the token, so the service layer can read it without passing it everywhere. But the threads are pooled and reused. If you don’t call <code class="language-plaintext highlighter-rouge">remove()</code> at the end of the request, the next request on that thread can see the previous user. On Android I almost never used <code class="language-plaintext highlighter-rouge">ThreadLocal</code>. Here it was in my notes in the first week, with a warning.</p>
+
+<p><strong>Transactions.</strong> Room has <code class="language-plaintext highlighter-rouge">@Transaction</code>, and I used it a few times. But on a phone there is one user, and the database is small and local. On a server, many users write the same tables at the same time, and a half-finished write can be seen by everyone.</p>
+
+<p><code class="language-plaintext highlighter-rouge">@Transactional</code> in Spring looks simple, but two details surprised me:</p>
+
+<ul>
+  <li>By default it rolls back only on unchecked exceptions (<code class="language-plaintext highlighter-rouge">RuntimeException</code> and <code class="language-plaintext highlighter-rouge">Error</code>). A checked exception commits the transaction unless you say <code class="language-plaintext highlighter-rouge">rollbackFor</code>.</li>
+  <li>It works through a proxy. If a method in the same class calls another <code class="language-plaintext highlighter-rouge">@Transactional</code> method directly, the call does not go through the proxy, and the annotation on the inner method is ignored.</li>
+</ul>
+
+<p>Both are easy to miss when you read the code, because the annotation is right there.</p>
+
+<p><strong>More than one copy of your app.</strong> An Android app runs once per phone. A backend service runs as several instances behind a load balancer. That changes many small decisions. You can’t keep a session in memory, because the next request may go to another instance. That is one reason tokens like JWT are popular: the server doesn’t need to remember anything. A cache like Redis sits outside the app so all instances share it.</p>
+
+<p>I took some Spring Cloud notes back in 2023: service registry with Eureka and Nacos, load balancing, Feign clients, a gateway. At that time they were a list of names. This time, after thinking about “more than one copy”, I could see which problem each one solves. A registry answers “where are the other services”. A gateway is one door in front of many services. Feign makes a remote call look like an interface call, a bit like Retrofit between services.</p>
+
+<p><strong>Shipping.</strong> On Android, you upload a build to the store, the rollout is slow, and you watch crash reports. On a server, you build a jar, put it in a Docker image, and it is live in minutes. Logs, health checks and metrics are how you see it. The feedback is much faster, and so are the mistakes.</p>
+
+<h2 id="what-i-took-away">What I took away</h2>
+
+<ul>
+  <li><strong>Asking “what is this on Android?” gets you most of the way.</strong> DI, HTTP, interceptors and data mapping all have a close match.</li>
+  <li><strong>The rest is about concurrency and scale.</strong> Shared singletons, pooled threads, transactions and many instances. My Android instincts had nothing to say there, and that is exactly the part to study slowly.</li>
+  <li><strong>Being the client for years helps.</strong> I know what a confusing API feels like from the outside. Now I can try not to build one.</li>
+  <li><strong>Annotations hide a lot.</strong> <code class="language-plaintext highlighter-rouge">@Transactional</code>, <code class="language-plaintext highlighter-rouge">@Autowired</code>, auto-configuration. Spring is easy to start because of them, and hard to debug for the same reason. Reading what they do underneath was the most useful part of these weeks.</li>
+</ul>
 
 	  ]]></description>
 	</item>

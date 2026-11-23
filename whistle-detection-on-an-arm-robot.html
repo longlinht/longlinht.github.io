@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- [[! Document Settings ]] -->
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+    <!-- [[! Page Meta ]] -->
+    <title>Hearing the Referee: Whistle Detection on an ARM Robot</title>
+    <meta name="description" content="与机器，人，神共舞 - 编程，读书，思考，旅行，与机器对话，与人交谈，对神发问，探索，体验人生美丽的风景" />
+
+    <meta name="HandheldFriendly" content="True" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link rel="shortcut icon" href="/assets/images/favicon.ico" >
+
+    <!-- [[! Styles'n'Scripts ]] -->
+    <link rel="stylesheet" type="text/css" href="/assets/css/screen.css" />
+    <link rel="stylesheet" type="text/css"
+          href="//fonts.googleapis.com/css?family=Merriweather:300,700,700italic,300italic|Open+Sans:700,400" />
+    <link rel="stylesheet" type="text/css" href="/assets/css/syntax.css" />
+    
+    <!-- [[! Ghost outputs important style and meta data with this tag ]] -->
+        <link rel="canonical" href="/" />
+    <meta name="referrer" content="origin" />
+    <link rel="next" href="/page2/" />
+
+    <meta property="og:site_name" content="与机器，人，神共舞" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="与机器，人，神共舞" />
+    <meta property="og:description" content="编程，读书，思考，旅行，与机器对话，与人交谈，对神发问，探索，体验人生美丽的风景" />
+    <meta property="og:url" content="/" />
+    <meta property="og:image" content="/assets/images/cover1.jpg" />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="与机器，人，神共舞" />
+    <meta name="twitter:description" content="编程，读书，思考，旅行，与机器对话，与人交谈，对神发问，探索，体验人生美丽的风景" />
+    <meta name="twitter:url" content="/" />
+    <meta name="twitter:image:src" content="/assets/images/cover1.jpg" />
+
+    <script type="application/ld+json">
+{
+    "@context": "http://schema.org",
+    "@type": "Website",
+    "publisher": "Tao's Page",
+    "url": "/",
+    "image": "/assets/images/cover1.jpg",
+    "description": "编程，读书，思考，旅行，与机器对话，与人交谈，对神发问，探索，体验人生美丽的风景"
+}
+    </script>
+
+    <meta name="generator" content="Jekyll 3.0.0" />
+    <link rel="alternate" type="application/rss+xml" title="与机器，人，神共舞" href="/rss.xml" />
+
+</head>
+<body class="home-template nav-closed">
+
+    <div class="nav">
+    <h3 class="nav-title">Menu</h3>
+    <a href="#" class="nav-close">
+        <span class="hidden">Close</span>
+    </a>
+    <ul>
+        <li class="nav-home " role="presentation"><a href="/">Home</a></li>
+        <li class="nav-about " role="presentation"><a href="/about.html">About</a></li>
+        <li class="nav-fables " role="presentation"><a href="/tag/machine/">Machine</a></li>
+        <li class="nav-speeches " role="presentation"><a href="/tag/human/">Human</a></li>
+        <li class="nav-fiction " role="presentation"><a href="/tag/god/">God</a></li>
+        <li class="nav-author " role="presentation"><a href="/author/hetao/">Author</a></li>
+    </ul>
+    <a class="subscribe-button icon-feed" href="/vocab.html">Apps</a>
+</div>
+<span class="nav-cover"></span>
+
+
+    <div class="site-wrapper">
+
+        <!-- [[! Everything else gets inserted here ]] -->
+        <!-- default -->
+
+<!-- The comment above "< default" means - insert everything in this file into -->
+    <!-- the [body] of the default.hbs template, which contains our header/footer. -->
+
+<!-- Everything inside the #post tags pulls data from the post -->
+<!-- #post -->
+
+<header class="main-header post-head no-cover">
+    <nav class="main-nav  clearfix">
+        
+        
+    </nav>
+</header>
+
+<main class="content" role="main">
+
+    <article class="post tag-machine">
+
+        <header class="post-header">
+            <h1 class="post-title">Hearing the Referee: Whistle Detection on an ARM Robot</h1>
+            <section class="post-meta">
+            <!-- <a href='/'>Tao He</a> -->
+
+            
+            <time class="post-date" datetime="2026-07-12">12 Jul 2026</time>
+                <!-- [[tags prefix=" on "]] -->
+                
+                on
+                
+                    
+                       <a href='/tag/machine'>Machine</a>
+                    
+                
+                
+            </section>
+        </header>
+
+        <section class="post-content">
+
+            <p>In RoboCup humanoid soccer, the referee uses a whistle. For some game state changes, like kick-off going from “set” to “playing”, robots are expected to hear the whistle themselves. The official GameController sends the same “playing” signal too, but with a delay. A robot that hears the whistle can start moving earlier.</p>
+
+<p>So our robot needed ears. The pipeline is simple to describe:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>microphone (ALSA)
+  -&gt; AlsaWhistleDetector
+  -&gt; TFLiteWhistleDetection (features + small neural net)
+  -&gt; whistle_detector_node publishes /whistle_detection/detected
+  -&gt; brain node subscribes
+  -&gt; behavior / game state
+</code></pre></div></div>
+
+<p>Making it actually work on the robot took much longer than writing that diagram. Almost none of the problems were about the neural network.</p>
+
+<h2 id="problem-1-the-library-was-the-wrong-cpu">Problem 1: the library was the wrong CPU</h2>
+
+<p>The detector code came with TensorFlow Lite bundled as static libraries. For <code class="language-plaintext highlighter-rouge">x86_64</code>. Our workstations are <code class="language-plaintext highlighter-rouge">x86_64</code>. The robot is <code class="language-plaintext highlighter-rouge">aarch64</code>.</p>
+
+<p>So it built and ran on my laptop, and the robot build failed at CMake configure. On the robot there was no system TensorFlow Lite either. Nothing under <code class="language-plaintext highlighter-rouge">/usr</code> or <code class="language-plaintext highlighter-rouge">/usr/local</code>.</p>
+
+<p>The fix was to build the TensorFlow Lite C API for ARM64 myself, as a shared library, and keep it inside the repository:</p>
+
+<ol>
+  <li>On an Ubuntu <code class="language-plaintext highlighter-rouge">x86_64</code> machine, install the AArch64 cross toolchain and Bazelisk.</li>
+  <li>Clone TensorFlow and pin a release branch.</li>
+  <li>Run <code class="language-plaintext highlighter-rouge">./configure</code> with CUDA, ROCm, Android and iOS all off.</li>
+  <li>Build only the C library:</li>
+</ol>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>bazel build <span class="nt">--config</span><span class="o">=</span>elinux_aarch64 <span class="nt">-c</span> opt <span class="se">\</span>
+  //tensorflow/lite/c:libtensorflowlite_c.so
+</code></pre></div></div>
+
+<ol>
+  <li>Check that what you built is really what you think:</li>
+</ol>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>file libtensorflowlite_c.so
+readelf <span class="nt">-h</span> libtensorflowlite_c.so | <span class="nb">grep </span>Machine   <span class="c"># AArch64</span>
+readelf <span class="nt">-d</span> libtensorflowlite_c.so | <span class="nb">grep </span>NEEDED    <span class="c"># only libc, libm, libstdc++...</span>
+</code></pre></div></div>
+
+<ol>
+  <li>Copy the <code class="language-plaintext highlighter-rouge">.so</code> and the C headers into the package’s <code class="language-plaintext highlighter-rouge">3rdparty</code> folder under an <code class="language-plaintext highlighter-rouge">aarch64</code> directory.</li>
+</ol>
+
+<p>Then CMake picks the backend by architecture. There was one more trap. The build had a <strong>stub fallback</strong>: if no TensorFlow Lite was found, it built a detector that compiles, runs, and never detects anything. Good for keeping the build green. Terrible on a robot, because everything looks fine.</p>
+
+<p>So on the robot we build with the stub explicitly disabled:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>colcon build <span class="nt">--packages-select</span> whistle_detector <span class="nt">--symlink-install</span> <span class="se">\</span>
+  <span class="nt">--cmake-args</span> <span class="nt">-DWHISTLE_DETECTOR_ALLOW_STUB_FALLBACK</span><span class="o">=</span>OFF
+</code></pre></div></div>
+
+<p>and look for one line in the output: <code class="language-plaintext highlighter-rouge">using repo TensorFlow Lite library: .../aarch64/libtensorflowlite_c.so</code>. If it says “disabled stub”, stop.</p>
+
+<h2 id="problem-2-two-python-environments">Problem 2: two Python environments</h2>
+
+<p>To build TensorFlow I created a Python virtual environment. Later I ran <code class="language-plaintext highlighter-rouge">colcon build</code> for the ROS workspace from the same shell. ROS message generation failed with:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ModuleNotFoundError: No module named 'em'
+</code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">colcon</code> had picked the virtualenv’s <code class="language-plaintext highlighter-rouge">python3</code>, which did not have ROS’s Python dependencies. Nothing wrong with the code. Wrong shell.</p>
+
+<p>The rule now: the TensorFlow build shell is only for TensorFlow. ROS builds happen in a clean ROS shell.</p>
+
+<h2 id="problem-3-who-starts-the-detector">Problem 3: who starts the detector?</h2>
+
+<p>At first the detector was started by the brain’s launch file, as a child. The start script did not make that clear, and the stop script did not stop the detector at all. So you could end up with an old detector still holding the microphone.</p>
+
+<p>We changed it to two independent processes. The brain only subscribes to the topic. It never touches the microphone, and it does not spawn the detector. There is a script to start everything, one to start only the detector, one to start only the brain, and the stop script stops both.</p>
+
+<p>It is a small change, but now “is the detector running?” has one answer, and you can test each side alone.</p>
+
+<h2 id="problem-4-the-microphone-is-open-is-not-the-microphone-works">Problem 4: “the microphone is open” is not “the microphone works”</h2>
+
+<p>ALSA can open a device successfully and then deliver no audio. Or deliver audio from the wrong device. On a robot with several audio routes, <code class="language-plaintext highlighter-rouge">default</code> is not always what you want.</p>
+
+<p>The detector expects a very specific format: capture, interleaved, <code class="language-plaintext highlighter-rouge">S16_LE</code>, 2 channels, 44100 Hz. It does not resample or remap channels. So the first test is outside ROS:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>arecord <span class="nt">-l</span>
+arecord <span class="nt">-D</span> default <span class="nt">-f</span> S16_LE <span class="nt">-c</span> 2 <span class="nt">-r</span> 44100 <span class="nt">-d</span> 3 /tmp/whistle_test.wav
+</code></pre></div></div>
+
+<p>Then I added logs that separate the states that used to look the same:</p>
+
+<ul>
+  <li>device opened,</li>
+  <li>device opened but no frames yet,</li>
+  <li><strong>microphone input is active, received N frames</strong>,</li>
+  <li>overrun, recovering.</li>
+</ul>
+
+<p>Only the third one counts as “microphone online”. Two other small ALSA fixes came from comparing with a known-good capture example: call <code class="language-plaintext highlighter-rouge">snd_pcm_prepare()</code> explicitly before the read loop, and use <code class="language-plaintext highlighter-rouge">snd_pcm_drop()</code> instead of <code class="language-plaintext highlighter-rouge">snd_pcm_drain()</code> when closing a capture device.</p>
+
+<h2 id="problem-5-a-cooldown-that-never-cooled-down">Problem 5: a cooldown that never cooled down</h2>
+
+<p>After a detection, the node waits for a cooldown before publishing again. The “last publish” time was initialised to <code class="language-plaintext highlighter-rouge">steady_clock::time_point::min()</code>.</p>
+
+<p>That looks reasonable: “long, long ago”. But <code class="language-plaintext highlighter-rouge">now() - min()</code> overflows a signed 64-bit duration. My reading is that the cooldown check got a garbage value and never let the first detection through. Initialising it to <code class="language-plaintext highlighter-rouge">now() - cooldown - 1ms</code> fixed it.</p>
+
+<p>One more small crash in the same area: <code class="language-plaintext highlighter-rouge">cooldown_ms</code> was declared as a <code class="language-plaintext highlighter-rouge">double</code> parameter, and the launch file passed <code class="language-plaintext highlighter-rouge">1500</code>. ROS 2 is strict about parameter types and threw <code class="language-plaintext highlighter-rouge">InvalidParameterTypeException</code>. It had to be <code class="language-plaintext highlighter-rouge">1500.0</code>.</p>
+
+<h2 id="two-logs-that-tell-you-everything">Two logs that tell you everything</h2>
+
+<p>The most useful thing I added was two log lines, one on each side of the topic:</p>
+
+<ul>
+  <li>detector: <code class="language-plaintext highlighter-rouge">upstream whistle detector hit: published detection with confidence ...</code></li>
+  <li>brain: <code class="language-plaintext highlighter-rouge">whistleDetectionCallback triggered: whistle detected at ... s</code></li>
+</ul>
+
+<p>Now the diagnosis is a table:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Detector log</th>
+      <th>Brain log</th>
+      <th>Meaning</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>no</td>
+      <td>no</td>
+      <td>detector not triggering, not running, or on the stub</td>
+    </tr>
+    <tr>
+      <td>yes</td>
+      <td>no</td>
+      <td>detection works, brain is not receiving it</td>
+    </tr>
+    <tr>
+      <td>yes</td>
+      <td>yes</td>
+      <td>the chain is connected</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><code class="language-plaintext highlighter-rouge">grep</code> on two log files answers a question that used to take a lot of guessing.</p>
+
+<h2 id="what-tests-can-and-cant-tell-you">What tests can and can’t tell you</h2>
+
+<p>I added unit tests for the detector: a whistle-like tone should be detected, silence and an off-band tone should be rejected, and <code class="language-plaintext highlighter-rouge">reset()</code> should clear the streaming state. They pass.</p>
+
+<p>They test the model and the windowing logic. They do not test the microphone. Synthetic tones are not a referee in a noisy hall. In real testing we saw false positives even with a strict confidence threshold, so threshold tuning with real field recordings is still open work.</p>
+
+<p>And there was a bigger lesson. In a game test, the whistle was detected, but the robot was not in the ready or playing behavior we expected. The ears worked. The state handling around them did not, and we have not fully closed that yet.</p>
+
+<p>That changed how I think about the feature. Hearing correctly is not the hard part. Deciding <strong>who is allowed to change the game state</strong> is. The GameController is the official source of game state. If the whistle can also change it, you now have two referees inside one robot, and they will sometimes disagree. My plan from here is to keep the GameController as the authority, and treat the whistle as an extra signal that is logged and checked, until we can prove the two never fight.</p>
+
+<h2 id="what-i-took-away">What I took away</h2>
+
+<ul>
+  <li><strong>The model was the easy part.</strong> Cross-compiling, Python environments, process ownership and audio routing took most of the time.</li>
+  <li><strong>Never let a stub pass silently.</strong> A fallback that compiles but does nothing must be turned off on the real target.</li>
+  <li><strong>Log the boundaries.</strong> One log line on each side of a topic turns debugging into a lookup table.</li>
+  <li><strong>Opened is not working.</strong> Only count a sensor as online when real data arrives.</li>
+  <li><strong>Detection is not authority.</strong> Before a signal changes the robot’s state, decide who owns that state.</li>
+</ul>
+
+
+        </section>
+
+        <footer class="post-footer">
+
+            <!-- Everything inside the #author tags pulls data from the author -->
+            <!-- #author-->
+            
+
+            <!-- Add Disqus Comments -->
+            
+
+        </footer>
+
+    </article>
+
+</main>
+
+<aside class="read-next">
+
+    <!-- [[! next_post ]] -->
+    
+        <a class="read-next-story no-cover" href="/the-robot-saw-the-ball-and-did-not-move">
+            <section class="post">
+                <h2>The Robot Saw the Ball and Didn't Move</h2>
+                <p>Last week we had a Booster K1 on the field, running the full soccer behavior...</p>
+            </section>
+        </a>
+    
+    <!-- [[! /next_post ]] -->
+    <!-- [[! prev_post ]] -->
+    
+        <a class="read-next-story prev no-cover" href="/week-one-for-interns-git-ros2-humanoid">
+            <section class="post">
+                <h2>Week One for Interns: Git, ROS 2 and a Real Humanoid</h2>
+                <p>This summer our lab had a group of interns joining the RoboCup humanoid soccer work....</p>
+            </section>
+        </a>
+    
+    <!-- [[! /prev_post ]] -->
+</aside>
+
+<!-- /post -->
+
+
+        <footer class="site-footer clearfix">
+          <section class="copyright"><a href="/">与机器，人，神共舞</a> &copy; 2026</section>
+        </footer>
+    </div>
+    <!-- [[! Ghost outputs important scripts and data with this tag ]] -->
+    <script type="text/javascript" src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+    <!-- [[! The main JavaScript file for Casper ]] -->
+    <script type="text/javascript" src="/assets/js/jquery.fitvids.js"></script>
+    <script type="text/javascript" src="/assets/js/index.js"></script>
+
+    <!-- Add Google Analytics  -->
+        <!-- Google Analytics Tracking code -->
+     <script>
+	    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+	    ga('create', 'UA-78960009-1', 'auto');
+	    ga('send', 'pageview');
+
+     </script>
+   
+</body>
+</html>

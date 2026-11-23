@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- [[! Document Settings ]] -->
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+    <!-- [[! Page Meta ]] -->
+    <title>What Makes a Good SDK API</title>
+    <meta name="description" content="与机器，人，神共舞 - 编程，读书，思考，旅行，与机器对话，与人交谈，对神发问，探索，体验人生美丽的风景" />
+
+    <meta name="HandheldFriendly" content="True" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link rel="shortcut icon" href="/assets/images/favicon.ico" >
+
+    <!-- [[! Styles'n'Scripts ]] -->
+    <link rel="stylesheet" type="text/css" href="/assets/css/screen.css" />
+    <link rel="stylesheet" type="text/css"
+          href="//fonts.googleapis.com/css?family=Merriweather:300,700,700italic,300italic|Open+Sans:700,400" />
+    <link rel="stylesheet" type="text/css" href="/assets/css/syntax.css" />
+    
+    <!-- [[! Ghost outputs important style and meta data with this tag ]] -->
+        <link rel="canonical" href="/" />
+    <meta name="referrer" content="origin" />
+    <link rel="next" href="/page2/" />
+
+    <meta property="og:site_name" content="与机器，人，神共舞" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="与机器，人，神共舞" />
+    <meta property="og:description" content="编程，读书，思考，旅行，与机器对话，与人交谈，对神发问，探索，体验人生美丽的风景" />
+    <meta property="og:url" content="/" />
+    <meta property="og:image" content="/assets/images/cover1.jpg" />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="与机器，人，神共舞" />
+    <meta name="twitter:description" content="编程，读书，思考，旅行，与机器对话，与人交谈，对神发问，探索，体验人生美丽的风景" />
+    <meta name="twitter:url" content="/" />
+    <meta name="twitter:image:src" content="/assets/images/cover1.jpg" />
+
+    <script type="application/ld+json">
+{
+    "@context": "http://schema.org",
+    "@type": "Website",
+    "publisher": "Tao's Page",
+    "url": "/",
+    "image": "/assets/images/cover1.jpg",
+    "description": "编程，读书，思考，旅行，与机器对话，与人交谈，对神发问，探索，体验人生美丽的风景"
+}
+    </script>
+
+    <meta name="generator" content="Jekyll 3.0.0" />
+    <link rel="alternate" type="application/rss+xml" title="与机器，人，神共舞" href="/rss.xml" />
+
+</head>
+<body class="home-template nav-closed">
+
+    <div class="nav">
+    <h3 class="nav-title">Menu</h3>
+    <a href="#" class="nav-close">
+        <span class="hidden">Close</span>
+    </a>
+    <ul>
+        <li class="nav-home " role="presentation"><a href="/">Home</a></li>
+        <li class="nav-about " role="presentation"><a href="/about.html">About</a></li>
+        <li class="nav-fables " role="presentation"><a href="/tag/machine/">Machine</a></li>
+        <li class="nav-speeches " role="presentation"><a href="/tag/human/">Human</a></li>
+        <li class="nav-fiction " role="presentation"><a href="/tag/god/">God</a></li>
+        <li class="nav-author " role="presentation"><a href="/author/hetao/">Author</a></li>
+    </ul>
+    <a class="subscribe-button icon-feed" href="/vocab.html">Apps</a>
+</div>
+<span class="nav-cover"></span>
+
+
+    <div class="site-wrapper">
+
+        <!-- [[! Everything else gets inserted here ]] -->
+        <!-- default -->
+
+<!-- The comment above "< default" means - insert everything in this file into -->
+    <!-- the [body] of the default.hbs template, which contains our header/footer. -->
+
+<!-- Everything inside the #post tags pulls data from the post -->
+<!-- #post -->
+
+<header class="main-header post-head no-cover">
+    <nav class="main-nav  clearfix">
+        
+        
+    </nav>
+</header>
+
+<main class="content" role="main">
+
+    <article class="post tag-machine">
+
+        <header class="post-header">
+            <h1 class="post-title">What Makes a Good SDK API</h1>
+            <section class="post-meta">
+            <!-- <a href='/'>Tao He</a> -->
+
+            
+            <time class="post-date" datetime="2022-09-18">18 Sep 2022</time>
+                <!-- [[tags prefix=" on "]] -->
+                
+                on
+                
+                    
+                       <a href='/tag/machine'>Machine</a>
+                    
+                
+                
+            </section>
+        </header>
+
+        <section class="post-content">
+
+            <p>In our messaging app the code was split into a business layer and an SDK layer (<a href="/super-app-architecture-v1-to-v2.html">background here</a>). The business layer draws screens. The SDK layer does the real work: network, storage, encryption, sync.</p>
+
+<p>That split only pays off if the SDK API is good. If it is not, the business layer starts doing the SDK’s job, and after a year you have two layers that are both half-SDK.</p>
+
+<p>We wrote a short standard to judge whether an SDK API is “done”. For one complete feature, check five things:</p>
+
+<ol>
+  <li>Simple input, simple output.</li>
+  <li>One call, not several APIs working together.</li>
+  <li>The caller does not need to know how it works inside.</li>
+  <li>Data inside and outside the SDK is separated, and the SDK checks itself.</li>
+  <li>One calling style everywhere.</li>
+</ol>
+
+<h2 id="1--3-simple-in-simple-out-no-peeking-inside">1 &amp; 3. Simple in, simple out, no peeking inside</h2>
+
+<p>A real API call may involve the network, the local database and data conversion. The job of the SDK is to hide all that, so every call takes standard parameters and returns a standard result through one standard flow.</p>
+
+<p>For each feature, ask:</p>
+
+<ul>
+  <li>Are the parameters simple?</li>
+  <li>Is the result simple?</li>
+  <li>Are errors handled?</li>
+  <li>Is there a gap in the flow that the caller has to fill?</li>
+  <li>Are there threading problems the caller has to think about?</li>
+</ul>
+
+<p>If the caller has to manage storage or network steps by hand, the API is not finished.</p>
+
+<h2 id="2-one-call">2. One call</h2>
+
+<p>Getting a contact’s info is a complex flow: check the local DB, maybe ask the server, store the result, then return it. A good SDK API takes a uid and gives you the user. That’s it.</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nc">SdkFactory</span><span class="o">.</span><span class="na">getUserSdk</span><span class="o">().</span><span class="na">getContactInfo</span><span class="o">(</span><span class="n">uid</span><span class="o">,</span> <span class="n">callback</span><span class="o">);</span>
+</code></pre></div></div>
+
+<p>When a feature needs several APIs together, first ask whether they belong to the same feature. If they do, they should probably become one API.</p>
+
+<p>Two examples we found in our own code:</p>
+
+<p><strong>“Is this user in the group?”</strong> The ideal API takes a uid and returns a boolean. What we had: fetch all group members, then search the list in the business layer. The search is not hard, but it means the API is missing.</p>
+
+<p><strong>Login with a verification code.</strong> Our flow was: call the code-login API, then call auto-login by hand. Both steps lived in the business layer. That exposed the internal login logic to every caller. The right API takes a phone number and a code and returns a logged-in result.</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// before: the caller knows how login works inside</span>
+<span class="n">userSdk</span><span class="o">.</span><span class="na">loginWithCode</span><span class="o">(</span><span class="n">phone</span><span class="o">,</span> <span class="n">code</span><span class="o">,</span> <span class="n">result</span> <span class="o">-&gt;</span> <span class="o">{</span>
+    <span class="n">userSdk</span><span class="o">.</span><span class="na">autoLogin</span><span class="o">(</span><span class="n">result</span><span class="o">.</span><span class="na">getToken</span><span class="o">(),</span> <span class="o">...);</span>
+<span class="o">});</span>
+
+<span class="c1">// after: one call</span>
+<span class="n">userSdk</span><span class="o">.</span><span class="na">loginWithCode</span><span class="o">(</span><span class="n">phone</span><span class="o">,</span> <span class="n">code</span><span class="o">,</span> <span class="n">loginCallback</span><span class="o">);</span>
+</code></pre></div></div>
+
+<h2 id="4-two-data-models-and-self-checks">4. Two data models, and self-checks</h2>
+
+<p>This was the rule that caused the most discussion, so it is worth explaining.</p>
+
+<p>Inside the SDK, data is produced, stored and sent over the network. In the business layer, data is mostly displayed, edited a little, and passed into the next API call. These are very different jobs.</p>
+
+<ul>
+  <li><strong>Safety.</strong> From creation to disk, SDK data must follow a closed, correct path. If the SDK and the UI hold the <strong>same object</strong>, the UI can change a field, and now what is stored is not what the SDK expected.</li>
+  <li><strong>Shape.</strong> SDK beans have many fields. Some are about storage, some are tied to the DB schema or the wire format. They are hard to change. UI data is simpler: what you need to show, nothing else.</li>
+  <li><strong>Coupling.</strong> If both layers share one bean class, the code drifts together over time. Nobody knows every module. When an API is not quite complete, it is very easy to write a bit of code that sits between the two layers, and that code is how coupling starts.</li>
+</ul>
+
+<p>So the rule is: <strong>two data carriers</strong>. The SDK keeps its own models. At the end of an API flow it builds a <strong>new</strong> business-layer model and hands that out. The SDK does not care what the UI does with it, and nothing the UI does can affect the SDK’s internal state. As a bonus, internal or sensitive fields never leak out.</p>
+
+<p>Yes, this means mapping code. I think it is the cheapest insurance you can buy.</p>
+
+<p><strong>Self-checks.</strong> A reliable SDK checks itself:</p>
+
+<ol>
+  <li>If an API must run on a specific thread, check the thread.</li>
+  <li>Check parameters: nulls, ranges, preconditions. Mark whether a result can be null. If a value is a fixed set, restrict it to that set.</li>
+  <li>Handle internal exceptions, so the caller never receives broken data, or receives it at the wrong time.</li>
+</ol>
+
+<h2 id="5-one-style">5. One style</h2>
+
+<ul>
+  <li>One entry point for everything.</li>
+  <li>Group APIs by type: <code class="language-plaintext highlighter-rouge">SdkFactory.getUserSdk().getAccountService().xxx()</code>.</li>
+  <li>Don’t go too deep. Four levels at most. Every extra level is something the caller has to learn and type.</li>
+</ul>
+
+<h2 id="why-bother">Why bother</h2>
+
+<p>None of this is new. It is what every good library already does. The point of writing it down was to give code review a shared vocabulary. “This needs two calls” or “the UI is holding an SDK bean” is a much easier conversation than “I don’t like this API”.</p>
+
+<p>It also changed how I review SDK code in general. Before reading the implementation, I write the call site I wish I had. If the real API can’t be called that way, the problem is usually not the implementation.</p>
+
+
+        </section>
+
+        <footer class="post-footer">
+
+            <!-- Everything inside the #author tags pulls data from the author -->
+            <!-- #author-->
+            
+
+            <!-- Add Disqus Comments -->
+            
+
+        </footer>
+
+    </article>
+
+</main>
+
+<aside class="read-next">
+
+    <!-- [[! next_post ]] -->
+    
+        <a class="read-next-story no-cover" href="/a-quick-tour-of-spring-boot">
+            <section class="post">
+                <h2>A quick tour of Spring Boot</h2>
+                <p>As an Android developer currently, I have always dreamed of becoming a full-stack developer, so...</p>
+            </section>
+        </a>
+    
+    <!-- [[! /next_post ]] -->
+    <!-- [[! prev_post ]] -->
+    
+        <a class="read-next-story prev no-cover" href="/cold-start-as-a-dependency-graph">
+            <section class="post">
+                <h2>Cold Start as a Dependency Graph: 350 ms to 190 ms</h2>
+                <p>Every time we cold-started our messaging app, the home screen “jumped”. The conversation list showed...</p>
+            </section>
+        </a>
+    
+    <!-- [[! /prev_post ]] -->
+</aside>
+
+<!-- /post -->
+
+
+        <footer class="site-footer clearfix">
+          <section class="copyright"><a href="/">与机器，人，神共舞</a> &copy; 2026</section>
+        </footer>
+    </div>
+    <!-- [[! Ghost outputs important scripts and data with this tag ]] -->
+    <script type="text/javascript" src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+    <!-- [[! The main JavaScript file for Casper ]] -->
+    <script type="text/javascript" src="/assets/js/jquery.fitvids.js"></script>
+    <script type="text/javascript" src="/assets/js/index.js"></script>
+
+    <!-- Add Google Analytics  -->
+        <!-- Google Analytics Tracking code -->
+     <script>
+	    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+	    ga('create', 'UA-78960009-1', 'auto');
+	    ga('send', 'pageview');
+
+     </script>
+   
+</body>
+</html>

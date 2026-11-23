@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- [[! Document Settings ]] -->
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+    <!-- [[! Page Meta ]] -->
+    <title>Week One for Interns: Git, ROS 2 and a Real Humanoid</title>
+    <meta name="description" content="与机器，人，神共舞 - 编程，读书，思考，旅行，与机器对话，与人交谈，对神发问，探索，体验人生美丽的风景" />
+
+    <meta name="HandheldFriendly" content="True" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link rel="shortcut icon" href="/assets/images/favicon.ico" >
+
+    <!-- [[! Styles'n'Scripts ]] -->
+    <link rel="stylesheet" type="text/css" href="/assets/css/screen.css" />
+    <link rel="stylesheet" type="text/css"
+          href="//fonts.googleapis.com/css?family=Merriweather:300,700,700italic,300italic|Open+Sans:700,400" />
+    <link rel="stylesheet" type="text/css" href="/assets/css/syntax.css" />
+    
+    <!-- [[! Ghost outputs important style and meta data with this tag ]] -->
+        <link rel="canonical" href="/" />
+    <meta name="referrer" content="origin" />
+    <link rel="next" href="/page2/" />
+
+    <meta property="og:site_name" content="与机器，人，神共舞" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="与机器，人，神共舞" />
+    <meta property="og:description" content="编程，读书，思考，旅行，与机器对话，与人交谈，对神发问，探索，体验人生美丽的风景" />
+    <meta property="og:url" content="/" />
+    <meta property="og:image" content="/assets/images/cover1.jpg" />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="与机器，人，神共舞" />
+    <meta name="twitter:description" content="编程，读书，思考，旅行，与机器对话，与人交谈，对神发问，探索，体验人生美丽的风景" />
+    <meta name="twitter:url" content="/" />
+    <meta name="twitter:image:src" content="/assets/images/cover1.jpg" />
+
+    <script type="application/ld+json">
+{
+    "@context": "http://schema.org",
+    "@type": "Website",
+    "publisher": "Tao's Page",
+    "url": "/",
+    "image": "/assets/images/cover1.jpg",
+    "description": "编程，读书，思考，旅行，与机器对话，与人交谈，对神发问，探索，体验人生美丽的风景"
+}
+    </script>
+
+    <meta name="generator" content="Jekyll 3.0.0" />
+    <link rel="alternate" type="application/rss+xml" title="与机器，人，神共舞" href="/rss.xml" />
+
+</head>
+<body class="home-template nav-closed">
+
+    <div class="nav">
+    <h3 class="nav-title">Menu</h3>
+    <a href="#" class="nav-close">
+        <span class="hidden">Close</span>
+    </a>
+    <ul>
+        <li class="nav-home " role="presentation"><a href="/">Home</a></li>
+        <li class="nav-about " role="presentation"><a href="/about.html">About</a></li>
+        <li class="nav-fables " role="presentation"><a href="/tag/machine/">Machine</a></li>
+        <li class="nav-speeches  nav-current" role="presentation"><a href="/tag/human/">Human</a></li>
+        <li class="nav-fiction " role="presentation"><a href="/tag/god/">God</a></li>
+        <li class="nav-author " role="presentation"><a href="/author/hetao/">Author</a></li>
+    </ul>
+    <a class="subscribe-button icon-feed" href="/vocab.html">Apps</a>
+</div>
+<span class="nav-cover"></span>
+
+
+    <div class="site-wrapper">
+
+        <!-- [[! Everything else gets inserted here ]] -->
+        <!-- default -->
+
+<!-- The comment above "< default" means - insert everything in this file into -->
+    <!-- the [body] of the default.hbs template, which contains our header/footer. -->
+
+<!-- Everything inside the #post tags pulls data from the post -->
+<!-- #post -->
+
+<header class="main-header post-head no-cover">
+    <nav class="main-nav  clearfix">
+        
+        
+    </nav>
+</header>
+
+<main class="content" role="main">
+
+    <article class="post tag-machine">
+
+        <header class="post-header">
+            <h1 class="post-title">Week One for Interns: Git, ROS 2 and a Real Humanoid</h1>
+            <section class="post-meta">
+            <!-- <a href='/'>Tao He</a> -->
+
+            
+            <time class="post-date" datetime="2026-06-21">21 Jun 2026</time>
+                <!-- [[tags prefix=" on "]] -->
+                
+                on
+                
+                    
+                       <a href='/tag/machine'>Machine</a>
+                    
+                
+                
+            </section>
+        </header>
+
+        <section class="post-content">
+
+            <p>This summer our lab had a group of interns joining the RoboCup humanoid soccer work. The robot is a Booster T1. The software is ROS 2 on Ubuntu.</p>
+
+<p>I prepared the material for the first week. This post is how I planned it and why it is in that order.</p>
+
+<h2 id="the-goal-of-week-one">The goal of week one</h2>
+
+<p>Not “learn robotics”. That takes years.</p>
+
+<p>The goal was smaller: <strong>by the end of the week, every intern can change code in a shared robot repository without breaking anything for anybody else.</strong> If they can do that, everything after week one is learning. If they can’t, everything after week one is cleaning up.</p>
+
+<p>So the order was:</p>
+
+<ol>
+  <li>Git, for real teamwork.</li>
+  <li>ROS 2 installation and core concepts.</li>
+  <li>A tour of the actual RoboCup project.</li>
+  <li>A small hands-on ROS 2 project, done with Git.</li>
+</ol>
+
+<p>The robot itself comes last on purpose.</p>
+
+<h2 id="git-first-not-ros-first">Git first, not ROS first</h2>
+
+<p>It is tempting to start with the exciting part. A humanoid robot is right there in the room.</p>
+
+<p>But on a robot team, the most common way a new person causes damage is not a bad algorithm. It is <code class="language-plaintext highlighter-rouge">git add .</code> with build artifacts, a log file and a debug change mixed in. Or a commit directly on <code class="language-plaintext highlighter-rouge">main</code> the day before a test.</p>
+
+<p>So the Git session was not a list of commands. It was organised around one mental model and a list of real mistakes.</p>
+
+<p>The mental model is four places: the working directory (what you are editing), the staging area (what goes into the next commit), the local repository (saved history), and the remote (the shared copy on GitHub). Almost every Git confusion is “which of the four places is my change in right now?”</p>
+
+<p>The habit I pushed hardest is <code class="language-plaintext highlighter-rouge">git status</code>. Before add, before commit, before pull, before push. It costs nothing and it answers the question above.</p>
+
+<p>Then the common mistakes, one per topic:</p>
+
+<ul>
+  <li>Committing with messages like <code class="language-plaintext highlighter-rouge">update</code>, <code class="language-plaintext highlighter-rouge">fix</code>, <code class="language-plaintext highlighter-rouge">final</code>.</li>
+  <li>Huge commits that mix unrelated changes.</li>
+  <li>Working directly on <code class="language-plaintext highlighter-rouge">main</code>.</li>
+  <li>Switching branches with uncommitted work and getting lost.</li>
+  <li>Pulling with many uncommitted local changes.</li>
+  <li>Force pushing a shared branch without asking.</li>
+  <li><code class="language-plaintext highlighter-rouge">git reset --hard</code> without knowing what it throws away.</li>
+  <li>Keeping important work only in a stash for days.</li>
+</ul>
+
+<p>I find mistakes teach better than rules. “Never commit build artifacts” is easy to agree with and easy to forget. A concrete picture of what goes wrong is harder to forget.</p>
+
+<h2 id="a-git-practice-repository">A Git practice repository</h2>
+
+<p>Slides are not enough for Git. You need to feel a merge conflict once in a safe place.</p>
+
+<p>So I made a small practice repository. It has a README, a file for intern information, a robot startup checklist, a safety rules file, a small Python script and a <code class="language-plaintext highlighter-rouge">.gitignore</code>. Each task asks the intern to change one of them, on their own branch, and open a pull request.</p>
+
+<p>The content of the files is not random. The startup checklist asks things like “verify battery level, check network connection, confirm emergency stop status”. The safety rules file asks for at least three rules in professional language. So while practising Git, they are also writing the first version of habits they will need next to a real robot.</p>
+
+<p>Interns could work alone or in small groups. Either way, the rule was the same: never on <code class="language-plaintext highlighter-rouge">main</code>, always a named branch, always a pull request.</p>
+
+<h2 id="ros-2-four-ideas-and-a-few-commands">ROS 2: four ideas and a few commands</h2>
+
+<p>For ROS 2 we used Ubuntu 22.04 and ROS 2 Humble, the same as the robot project. I wrote an installation guide for that exact setup, including the errors students usually hit, like a missing <code class="language-plaintext highlighter-rouge">rosidl_default_generators</code> package.</p>
+
+<p>The concepts session was kept to four communication ideas:</p>
+
+<ul>
+  <li><strong>Topics</strong> for continuous data, like camera images and robot state.</li>
+  <li><strong>Services</strong> for quick request and response.</li>
+  <li><strong>Actions</strong> for long goals with feedback and cancel, like navigation.</li>
+  <li><strong>Parameters</strong> for runtime configuration, instead of constants in code.</li>
+</ul>
+
+<p>Each idea came with the command to see it on a running system: <code class="language-plaintext highlighter-rouge">ros2 topic list</code>, <code class="language-plaintext highlighter-rouge">ros2 topic echo</code>, <code class="language-plaintext highlighter-rouge">ros2 service list</code>, <code class="language-plaintext highlighter-rouge">ros2 param get</code>. I wanted them to look at a live ROS graph before they write a node.</p>
+
+<p>Then workspaces and packages: <code class="language-plaintext highlighter-rouge">src</code>, <code class="language-plaintext highlighter-rouge">build</code>, <code class="language-plaintext highlighter-rouge">install</code>, <code class="language-plaintext highlighter-rouge">log</code>, and the one rule that saves the most time in the first week: <strong>source the workspace after you build.</strong></p>
+
+<h2 id="a-tour-of-the-real-project">A tour of the real project</h2>
+
+<p>After the basics, we walked through the RoboCup software as it actually is. The stack has layers:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>RoboCup application
+ROS 2 middleware
+Booster SDK
+Robot OS / drivers
+Robot hardware
+</code></pre></div></div>
+
+<p>The key point for new people: application code uses the supported ROS 2 interfaces and SDK APIs. It does not talk to the hardware directly.</p>
+
+<p>The application itself is a few nodes. Vision detects the ball and the field. A game controller node receives the referee’s game state. A whistle detector listens to the referee. A central “brain” node combines all of this, runs the behavior, and sends motion requests down to the SDK.</p>
+
+<p>I also told them where bugs usually live on a robot. Most of them are not in the algorithm. They are sensor, timing, network, configuration or state machine problems. On a distributed robot, the DDS network configuration is part of the runtime, not something you set once and forget.</p>
+
+<h2 id="the-hands-on-project">The hands-on project</h2>
+
+<p>The last part tied everything together. Each intern cloned a starter repository, created a branch with their name, and built a ROS 2 Python package with two nodes: a <code class="language-plaintext highlighter-rouge">talker</code> that publishes a string on a topic, and a <code class="language-plaintext highlighter-rouge">listener</code> that subscribes and prints it.</p>
+
+<p>Then they had to inspect their own system with the CLI tools, commit, push, and open a pull request.</p>
+
+<p>It is the most basic ROS 2 example there is. That is the point. It touches every step of the real workflow once: workspace, package, build, source, run, inspect, commit, push, review. When they later work on the vision or behavior code, the steps are the same. Only the code inside is harder.</p>
+
+<h2 id="what-i-took-away">What I took away</h2>
+
+<ul>
+  <li><strong>Teach the workflow before the robot.</strong> The robot is the reward. The workflow is what keeps the robot running for everybody.</li>
+  <li><strong>Teach mistakes, not commands.</strong> Every Git command in the slides came with the way people misuse it.</li>
+  <li><strong>Make practice files useful.</strong> A startup checklist and safety rules are better practice content than “hello world” text.</li>
+  <li><strong>Keep the first ROS project tiny.</strong> A talker and a listener are enough to walk through the whole pipeline once.</li>
+  <li><strong>Show where real bugs live.</strong> New people expect bugs in algorithms. On a robot, they are mostly in timing, networking and configuration.</li>
+</ul>
+
+
+        </section>
+
+        <footer class="post-footer">
+
+            <!-- Everything inside the #author tags pulls data from the author -->
+            <!-- #author-->
+            
+
+            <!-- Add Disqus Comments -->
+            
+
+        </footer>
+
+    </article>
+
+</main>
+
+<aside class="read-next">
+
+    <!-- [[! next_post ]] -->
+    
+        <a class="read-next-story no-cover" href="/whistle-detection-on-an-arm-robot">
+            <section class="post">
+                <h2>Hearing the Referee: Whistle Detection on an ARM Robot</h2>
+                <p>In RoboCup humanoid soccer, the referee uses a whistle. For some game state changes, like...</p>
+            </section>
+        </a>
+    
+    <!-- [[! /next_post ]] -->
+    <!-- [[! prev_post ]] -->
+    
+        <a class="read-next-story prev no-cover" href="/a-tour-of-avlite">
+            <section class="post">
+                <h2>A Tour of AVLite, a Simplified AV Stack</h2>
+                <p>A full autonomous driving stack is too big to read in one go. Autoware has...</p>
+            </section>
+        </a>
+    
+    <!-- [[! /prev_post ]] -->
+</aside>
+
+<!-- /post -->
+
+
+        <footer class="site-footer clearfix">
+          <section class="copyright"><a href="/">与机器，人，神共舞</a> &copy; 2026</section>
+        </footer>
+    </div>
+    <!-- [[! Ghost outputs important scripts and data with this tag ]] -->
+    <script type="text/javascript" src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+    <!-- [[! The main JavaScript file for Casper ]] -->
+    <script type="text/javascript" src="/assets/js/jquery.fitvids.js"></script>
+    <script type="text/javascript" src="/assets/js/index.js"></script>
+
+    <!-- Add Google Analytics  -->
+        <!-- Google Analytics Tracking code -->
+     <script>
+	    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+	    ga('create', 'UA-78960009-1', 'auto');
+	    ga('send', 'pageview');
+
+     </script>
+   
+</body>
+</html>

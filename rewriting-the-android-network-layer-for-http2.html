@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- [[! Document Settings ]] -->
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+    <!-- [[! Page Meta ]] -->
+    <title>Rewriting Our Android Network Layer for HTTP/2</title>
+    <meta name="description" content="与机器，人，神共舞 - 编程，读书，思考，旅行，与机器对话，与人交谈，对神发问，探索，体验人生美丽的风景" />
+
+    <meta name="HandheldFriendly" content="True" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link rel="shortcut icon" href="/assets/images/favicon.ico" >
+
+    <!-- [[! Styles'n'Scripts ]] -->
+    <link rel="stylesheet" type="text/css" href="/assets/css/screen.css" />
+    <link rel="stylesheet" type="text/css"
+          href="//fonts.googleapis.com/css?family=Merriweather:300,700,700italic,300italic|Open+Sans:700,400" />
+    <link rel="stylesheet" type="text/css" href="/assets/css/syntax.css" />
+    
+    <!-- [[! Ghost outputs important style and meta data with this tag ]] -->
+        <link rel="canonical" href="/" />
+    <meta name="referrer" content="origin" />
+    <link rel="next" href="/page2/" />
+
+    <meta property="og:site_name" content="与机器，人，神共舞" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="与机器，人，神共舞" />
+    <meta property="og:description" content="编程，读书，思考，旅行，与机器对话，与人交谈，对神发问，探索，体验人生美丽的风景" />
+    <meta property="og:url" content="/" />
+    <meta property="og:image" content="/assets/images/cover1.jpg" />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="与机器，人，神共舞" />
+    <meta name="twitter:description" content="编程，读书，思考，旅行，与机器对话，与人交谈，对神发问，探索，体验人生美丽的风景" />
+    <meta name="twitter:url" content="/" />
+    <meta name="twitter:image:src" content="/assets/images/cover1.jpg" />
+
+    <script type="application/ld+json">
+{
+    "@context": "http://schema.org",
+    "@type": "Website",
+    "publisher": "Tao's Page",
+    "url": "/",
+    "image": "/assets/images/cover1.jpg",
+    "description": "编程，读书，思考，旅行，与机器对话，与人交谈，对神发问，探索，体验人生美丽的风景"
+}
+    </script>
+
+    <meta name="generator" content="Jekyll 3.0.0" />
+    <link rel="alternate" type="application/rss+xml" title="与机器，人，神共舞" href="/rss.xml" />
+
+</head>
+<body class="home-template nav-closed">
+
+    <div class="nav">
+    <h3 class="nav-title">Menu</h3>
+    <a href="#" class="nav-close">
+        <span class="hidden">Close</span>
+    </a>
+    <ul>
+        <li class="nav-home " role="presentation"><a href="/">Home</a></li>
+        <li class="nav-about " role="presentation"><a href="/about.html">About</a></li>
+        <li class="nav-fables " role="presentation"><a href="/tag/machine/">Machine</a></li>
+        <li class="nav-speeches " role="presentation"><a href="/tag/human/">Human</a></li>
+        <li class="nav-fiction " role="presentation"><a href="/tag/god/">God</a></li>
+        <li class="nav-author " role="presentation"><a href="/author/hetao/">Author</a></li>
+    </ul>
+    <a class="subscribe-button icon-feed" href="/vocab.html">Apps</a>
+</div>
+<span class="nav-cover"></span>
+
+
+    <div class="site-wrapper">
+
+        <!-- [[! Everything else gets inserted here ]] -->
+        <!-- default -->
+
+<!-- The comment above "< default" means - insert everything in this file into -->
+    <!-- the [body] of the default.hbs template, which contains our header/footer. -->
+
+<!-- Everything inside the #post tags pulls data from the post -->
+<!-- #post -->
+
+<header class="main-header post-head no-cover">
+    <nav class="main-nav  clearfix">
+        
+        
+    </nav>
+</header>
+
+<main class="content" role="main">
+
+    <article class="post tag-machine">
+
+        <header class="post-header">
+            <h1 class="post-title">Rewriting Our Android Network Layer for HTTP/2</h1>
+            <section class="post-meta">
+            <!-- <a href='/'>Tao He</a> -->
+
+            
+            <time class="post-date" datetime="2019-07-14">14 Jul 2019</time>
+                <!-- [[tags prefix=" on "]] -->
+                
+                on
+                
+                    
+                       <a href='/tag/machine'>Machine</a>
+                    
+                
+                
+            </section>
+        </header>
+
+        <section class="post-content">
+
+            <p>In 2019 I worked on a live-streaming app with most users overseas, many in the Middle East. Two network problems kept coming back. Many requests failed with <code class="language-plaintext highlighter-rouge">UnknownHostException</code>, and entering a live room was slow because the room fires a burst of requests at the same moment.</p>
+
+<p>I already wrote two posts in Chinese about this work. One is about <a href="/connectivity-in-android.html">the DNS fallback chain</a>, the other is about <a href="/upgrade-to-http2.html">HTTP/2 itself and how we measured it</a>. This post is about the part in between: how the new network layer was put together, and why some decisions were made the way they were.</p>
+
+<h2 id="where-we-started">Where we started</h2>
+
+<p>The old network layer was built on <code class="language-plaintext highlighter-rouge">HttpURLConnection</code>. It only spoke HTTP/1.1. Almost every business request went through one class, <code class="language-plaintext highlighter-rouge">HttpManager</code>, with two entry points, <code class="language-plaintext highlighter-rouge">send</code> and <code class="language-plaintext highlighter-rouge">sendMsg</code>.</p>
+
+<p>That was actually good news. If almost everything goes through one door, you can change what is behind the door without touching hundreds of call sites.</p>
+
+<p>The goal was:</p>
+
+<ol>
+  <li>Use OkHttp and HTTP/2 when the server supports it.</li>
+  <li>Control DNS ourselves, with fallbacks.</li>
+  <li>Keep the HTTP/2 connection alive between requests.</li>
+  <li>Avoid IPs that keep failing.</li>
+  <li>Be able to turn every one of these off from the server, without a new release.</li>
+</ol>
+
+<h2 id="one-dispatcher-two-protocol-managers">One dispatcher, two protocol managers</h2>
+
+<p>We did not replace the old code. We put a dispatcher in front of it.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>            HttpManager (dispatcher)
+              /                \
+HttpProtocol_1x_Manager   HttpProtocol_20_Manager
+ (HttpURLConnection)          (OkHttp)
+</code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">HttpManager</code> kept its public API. Inside, it decides which manager handles each request. The HTTP/2 manager remembers, per host, which protocol the last response actually used. The next request to that host goes to the right manager directly.</p>
+
+<p>Why keep the old path at all? Two reasons.</p>
+
+<p>First, some requests were not a good fit. File upload, for example, was written by hand: parameters and file bytes were concatenated into one stream. It worked, it was not where HTTP/2 helps, and rewriting it was risk without benefit. So uploads stayed on HTTP/1.1.</p>
+
+<p>Second, safety. If HTTP/2 caused trouble after release, we wanted to switch everything back to the old path with one remote switch. A rewrite you cannot roll back is a bet, not an upgrade.</p>
+
+<p>One small cost: the new OkHttp version needed Java 8, so we had to raise the Java language level of the whole app. Not hard, but it touches everyone’s build, so it is worth saying early.</p>
+
+<h2 id="dns-replace-the-resolver-not-the-url">DNS: replace the resolver, not the URL</h2>
+
+<p>The first idea many people have for HttpDNS is simple. Resolve the IP yourself, then in an interceptor replace the host in the URL with the IP and add a <code class="language-plaintext highlighter-rouge">Host</code> header.</p>
+
+<p>This does not work well. The host name in the URL is used in many places inside the HTTP client:</p>
+
+<ul>
+  <li><strong>Cookies</strong> are stored and looked up by domain.</li>
+  <li><strong>Connection reuse</strong> is keyed by host. Replace it with an IP and the pool is confused.</li>
+  <li><strong>HTTPS</strong> needs the host name for SNI and for certificate checking. With an IP in the URL, the TLS handshake asks for the wrong name, and certificate verification fails unless you write your own verifier.</li>
+</ul>
+
+<p>The better place is the moment the socket connects. That is the only time an IP is really needed. OkHttp gives you exactly this hook: the <code class="language-plaintext highlighter-rouge">Dns</code> interface.</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nc">OkHttpClient</span> <span class="n">client</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">OkHttpClient</span><span class="o">.</span><span class="na">Builder</span><span class="o">()</span>
+        <span class="o">.</span><span class="na">dns</span><span class="o">(</span><span class="k">new</span> <span class="nc">ChainDns</span><span class="o">())</span>   <span class="c1">// our own resolver</span>
+        <span class="o">.</span><span class="na">build</span><span class="o">();</span>
+</code></pre></div></div>
+
+<p>The URL keeps its host name, so cookies, the connection pool, SNI and certificates all keep working. Only the address lookup changes.</p>
+
+<p>Our <code class="language-plaintext highlighter-rouge">lookup()</code> walked a chain of four sources: an in-memory cache, the system DNS, a backup list of IPs, and Google’s DNS over HTTPS. The details of the chain are in <a href="/connectivity-in-android.html">the Chinese post</a>. What matters here is that each layer could be switched on or off from our remote config system. That turned out to be very useful for testing too, which I will cover in the next post.</p>
+
+<h2 id="the-ip-blacklist">The IP blacklist</h2>
+
+<p>DNS gives you a list of IPs. Some of them may be bad for a given user: blocked, hijacked, or just far away and slow.</p>
+
+<p>We cached results with <code class="language-plaintext highlighter-rouge">host + ip</code> as the key and a small status object as the value. Every failed connection increased a counter. After more than five failures, that IP was treated as blacklisted and skipped.</p>
+
+<p>A blacklist that only grows is dangerous. If the network is down for a minute, every IP fails, and soon every IP is blacklisted. Then the app can never recover, even after the network comes back. So we added two rules to clear it:</p>
+
+<ul>
+  <li><strong>When the network type changes</strong>, clear all the caches. A bad IP on mobile data may be fine on Wi-Fi.</li>
+  <li><strong>When every DNS source fails for a host</strong>, clear that host’s entries. If nothing works, the blacklist is probably wrong, not the servers.</li>
+</ul>
+
+<p>Adding things to a blacklist is easy. Deciding when to forget is the real design.</p>
+
+<h2 id="heartbeats-that-move-out-of-the-way">Heartbeats that move out of the way</h2>
+
+<p>In the ideal case, HTTP/2 uses one connection per host. Most of our business requests went to one host. So if that connection stayed alive, almost every request would skip DNS, TCP and TLS.</p>
+
+<p>But it is not a real long connection. If nothing is sent for a while, the connection is closed. So the HTTP/2 manager starts a heartbeat when it sees that a host supports HTTP/2.</p>
+
+<p>The heartbeat is “postponed”. Every real request pushes the next heartbeat further away. If the user is active, real requests keep the connection alive and no heartbeat is sent at all. Heartbeats only go out when the app is quiet.</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// generic sketch, not the production code</span>
+<span class="kt">void</span> <span class="nf">onRequestFinished</span><span class="o">(</span><span class="nc">String</span> <span class="n">host</span><span class="o">)</span> <span class="o">{</span>
+    <span class="n">handler</span><span class="o">.</span><span class="na">removeCallbacks</span><span class="o">(</span><span class="n">heartbeatTask</span><span class="o">);</span>
+    <span class="n">handler</span><span class="o">.</span><span class="na">postDelayed</span><span class="o">(</span><span class="n">heartbeatTask</span><span class="o">,</span> <span class="no">HEARTBEAT_INTERVAL_MS</span><span class="o">);</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>The heartbeat result is also a cheap health check. A failed heartbeat counts against that IP, so the blacklist can react before a user request hits the bad IP. We also hoped it could help detect a weak network and a hijacked domain, by seeing that one IP keeps failing while another works.</p>
+
+<p>We added a log every time a new connection was created. If the heartbeat works, that log should be rare. That gave us a simple way to see whether the heartbeat was doing its job.</p>
+
+<h2 id="what-http2-changed-for-the-live-room">What HTTP/2 changed for the live room</h2>
+
+<p>Before HTTP/2, entering a live room fired many requests at once. To avoid too many parallel HTTP/1.1 connections, the old code merged requests through a queue, with at most four running at a time. The rest waited.</p>
+
+<p>With HTTP/2 the requests run at the same time on one connection, without waiting for a free slot. When we compared the timelines of entering a room, the difference was clear. The merge queue (<code class="language-plaintext highlighter-rouge">HttpBatchBlockingQueue</code>) stayed, but the rule changed: as soon as four requests are collected, send the batch right away instead of waiting.</p>
+
+<p>One thing surprised me. The number of IPs a domain resolves to decides how many connections you end up with. HTTP/2 can only reuse a connection if requests go to the same place. So DNS and HTTP/2 are not two separate topics. They are one design.</p>
+
+<h2 id="what-i-took-away">What I took away</h2>
+
+<ul>
+  <li><strong>Find the one door first.</strong> Because almost all requests went through <code class="language-plaintext highlighter-rouge">HttpManager</code>, the whole rewrite was possible without touching business code.</li>
+  <li><strong>Keep the old path, behind a switch.</strong> Every new piece (HTTP/2, each DNS layer) could be turned off remotely. That is what made it safe to ship.</li>
+  <li><strong>Change the resolver, not the URL.</strong> Host names are used for cookies, pooling and TLS. Give the client an IP only at connect time.</li>
+  <li><strong>A blacklist needs a way to forget.</strong> Clear it on network change and when everything fails.</li>
+  <li><strong>Heartbeats should get out of the way.</strong> Postpone them on every real request.</li>
+</ul>
+
+<p>Shipping the design was half the work. The other half was proving it worked. That is the next post.</p>
+
+
+        </section>
+
+        <footer class="post-footer">
+
+            <!-- Everything inside the #author tags pulls data from the author -->
+            <!-- #author-->
+            
+
+            <!-- Add Disqus Comments -->
+            
+
+        </footer>
+
+    </article>
+
+</main>
+
+<aside class="read-next">
+
+    <!-- [[! next_post ]] -->
+    
+        <a class="read-next-story no-cover" href="/testing-a-network-rewrite">
+            <section class="post">
+                <h2>Testing a Network Rewrite, and What to Measure on Every Request</h2>
+                <p>In [the last post](/rewriting-the-android-network-layer-for-http2.html) I described how we rebuilt the Android network layer of a...</p>
+            </section>
+        </a>
+    
+    <!-- [[! /next_post ]] -->
+    <!-- [[! prev_post ]] -->
+    
+        <a class="read-next-story prev no-cover" href="/h5-video-fullscreen-in-webview">
+            <section class="post">
+                <h2>在WebView中支持视频全屏</h2>
+                <p>最近感觉和WebView杠上了，刚解决完在WebView中使用Android相机拍照和录像的问题，又遇到在WebView中视频无法全屏，和之前相机拍照和视频的问题一样，iOS和其他浏览器都没有问题，独WebView出错。通过网上查阅一些资料，最终顺利解决，虽不是什么难搞的东西，但是真要弄起来，也需要一些心力，所以通过此篇记录下整个过程。 解决整个问题其实很程式化，先按部就班保证视频能够正常播放: 在AndroidManifest.xml中声明hardwareAccelerate属性 &lt;application android:hardwareAccelerated ="true"&gt; 在Activity中声明 &lt;activity android:hardwareAccelerated="true" &gt; 在代码中设置 getWindow.setFlags(WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED, WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED); 然后来实现全屏, 而能够全屏的关键在于重写WebChromeClient的onShowCustomView()和onHideCustomView()方法,...</p>
+            </section>
+        </a>
+    
+    <!-- [[! /prev_post ]] -->
+</aside>
+
+<!-- /post -->
+
+
+        <footer class="site-footer clearfix">
+          <section class="copyright"><a href="/">与机器，人，神共舞</a> &copy; 2026</section>
+        </footer>
+    </div>
+    <!-- [[! Ghost outputs important scripts and data with this tag ]] -->
+    <script type="text/javascript" src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+    <!-- [[! The main JavaScript file for Casper ]] -->
+    <script type="text/javascript" src="/assets/js/jquery.fitvids.js"></script>
+    <script type="text/javascript" src="/assets/js/index.js"></script>
+
+    <!-- Add Google Analytics  -->
+        <!-- Google Analytics Tracking code -->
+     <script>
+	    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+	    ga('create', 'UA-78960009-1', 'auto');
+	    ga('send', 'pageview');
+
+     </script>
+   
+</body>
+</html>

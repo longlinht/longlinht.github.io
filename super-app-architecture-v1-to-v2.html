@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- [[! Document Settings ]] -->
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+    <!-- [[! Page Meta ]] -->
+    <title>Two Versions of a Super App Architecture</title>
+    <meta name="description" content="与机器，人，神共舞 - 编程，读书，思考，旅行，与机器对话，与人交谈，对神发问，探索，体验人生美丽的风景" />
+
+    <meta name="HandheldFriendly" content="True" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link rel="shortcut icon" href="/assets/images/favicon.ico" >
+
+    <!-- [[! Styles'n'Scripts ]] -->
+    <link rel="stylesheet" type="text/css" href="/assets/css/screen.css" />
+    <link rel="stylesheet" type="text/css"
+          href="//fonts.googleapis.com/css?family=Merriweather:300,700,700italic,300italic|Open+Sans:700,400" />
+    <link rel="stylesheet" type="text/css" href="/assets/css/syntax.css" />
+    
+    <!-- [[! Ghost outputs important style and meta data with this tag ]] -->
+        <link rel="canonical" href="/" />
+    <meta name="referrer" content="origin" />
+    <link rel="next" href="/page2/" />
+
+    <meta property="og:site_name" content="与机器，人，神共舞" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="与机器，人，神共舞" />
+    <meta property="og:description" content="编程，读书，思考，旅行，与机器对话，与人交谈，对神发问，探索，体验人生美丽的风景" />
+    <meta property="og:url" content="/" />
+    <meta property="og:image" content="/assets/images/cover1.jpg" />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="与机器，人，神共舞" />
+    <meta name="twitter:description" content="编程，读书，思考，旅行，与机器对话，与人交谈，对神发问，探索，体验人生美丽的风景" />
+    <meta name="twitter:url" content="/" />
+    <meta name="twitter:image:src" content="/assets/images/cover1.jpg" />
+
+    <script type="application/ld+json">
+{
+    "@context": "http://schema.org",
+    "@type": "Website",
+    "publisher": "Tao's Page",
+    "url": "/",
+    "image": "/assets/images/cover1.jpg",
+    "description": "编程，读书，思考，旅行，与机器对话，与人交谈，对神发问，探索，体验人生美丽的风景"
+}
+    </script>
+
+    <meta name="generator" content="Jekyll 3.0.0" />
+    <link rel="alternate" type="application/rss+xml" title="与机器，人，神共舞" href="/rss.xml" />
+
+</head>
+<body class="home-template nav-closed">
+
+    <div class="nav">
+    <h3 class="nav-title">Menu</h3>
+    <a href="#" class="nav-close">
+        <span class="hidden">Close</span>
+    </a>
+    <ul>
+        <li class="nav-home " role="presentation"><a href="/">Home</a></li>
+        <li class="nav-about " role="presentation"><a href="/about.html">About</a></li>
+        <li class="nav-fables " role="presentation"><a href="/tag/machine/">Machine</a></li>
+        <li class="nav-speeches " role="presentation"><a href="/tag/human/">Human</a></li>
+        <li class="nav-fiction " role="presentation"><a href="/tag/god/">God</a></li>
+        <li class="nav-author " role="presentation"><a href="/author/hetao/">Author</a></li>
+    </ul>
+    <a class="subscribe-button icon-feed" href="/vocab.html">Apps</a>
+</div>
+<span class="nav-cover"></span>
+
+
+    <div class="site-wrapper">
+
+        <!-- [[! Everything else gets inserted here ]] -->
+        <!-- default -->
+
+<!-- The comment above "< default" means - insert everything in this file into -->
+    <!-- the [body] of the default.hbs template, which contains our header/footer. -->
+
+<!-- Everything inside the #post tags pulls data from the post -->
+<!-- #post -->
+
+<header class="main-header post-head no-cover">
+    <nav class="main-nav  clearfix">
+        
+        
+    </nav>
+</header>
+
+<main class="content" role="main">
+
+    <article class="post tag-machine">
+
+        <header class="post-header">
+            <h1 class="post-title">Two Versions of a Super App Architecture</h1>
+            <section class="post-meta">
+            <!-- <a href='/'>Tao He</a> -->
+
+            
+            <time class="post-date" datetime="2022-03-20">20 Mar 2022</time>
+                <!-- [[tags prefix=" on "]] -->
+                
+                on
+                
+                    
+                       <a href='/tag/machine'>Machine</a>
+                    
+                
+                
+            </section>
+        </header>
+
+        <section class="post-content">
+
+            <p>In 2021 I moved from Beijing to Dubai and joined the Android team of a messaging super app. Chat, voice and video calls, payments, official accounts, end-to-end encryption, all in one app. The codebase was large and growing, and the team was growing too.</p>
+
+<p>One of the first things we did was write down the architecture. Not a slide for management, but a document that a new engineer could read on day one and know where his code should go. We ended up writing it twice. This post is about the two versions and what changed between them.</p>
+
+<h2 id="why-components-at-all">Why components at all</h2>
+
+<p>Before the details, the reason. When an app does many unrelated things, the worst outcome is that every feature can see every other feature. Then one change breaks three screens, the build gets slower every month, and nobody can own anything.</p>
+
+<p>So we split the project by function: user, chat, voip, payment, and so on. Each piece is a component with its own Gradle module. The benefits we were looking for were very practical:</p>
+
+<ol>
+  <li><strong>Faster builds.</strong> A component can be compiled and run on its own. Less code, faster build.</li>
+  <li><strong>Clear ownership.</strong> Each engineer owns a few components. A new person only needs to learn the components he works on. QA can focus on the components that changed.</li>
+  <li><strong>Reuse.</strong> A base component works like a third-party library. A new business line can start with the existing base instead of copying code.</li>
+</ol>
+
+<h2 id="version-1-four-layers">Version 1: four layers</h2>
+
+<p>The first version had four layers, from bottom to top.</p>
+
+<p><strong>SDK layer.</strong> All internal SDKs. Each one wraps atomic operations and knows nothing about the business.</p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">library_base</code>: things that have nothing to do with this app. HTTP, event bus, downloads, logging, utils. The plan was to publish it as a standalone Maven library one day.</li>
+  <li><code class="language-plaintext highlighter-rouge">Push</code>: the long-connection SDK.</li>
+  <li><code class="language-plaintext highlighter-rouge">Storage</code>: the database SDK, with a three-level cache and encryption.</li>
+  <li><code class="language-plaintext highlighter-rouge">sdk_e2ee</code>: end-to-end encryption.</li>
+</ul>
+
+<p><strong>Base components.</strong> Things that do belong to this app but are shared by all features.</p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">library_common</code>: <code class="language-plaintext highlighter-rouge">BaseApplication</code>, <code class="language-plaintext highlighter-rouge">BaseActivity</code>, <code class="language-plaintext highlighter-rouge">BaseFragment</code>, a customized request type on top of <code class="language-plaintext highlighter-rouge">library_base</code>.</li>
+  <li><code class="language-plaintext highlighter-rouge">library_baseUi</code>: colors, styles, strings, shared dialogs and views.</li>
+  <li><code class="language-plaintext highlighter-rouge">library_media</code>, <code class="language-plaintext highlighter-rouge">library_picker</code>, <code class="language-plaintext highlighter-rouge">library_payment</code>, <code class="language-plaintext highlighter-rouge">library_fts</code> (search).</li>
+</ul>
+
+<p><strong>Business components.</strong> <code class="language-plaintext highlighter-rouge">module_main</code>, <code class="language-plaintext highlighter-rouge">module_user</code>, <code class="language-plaintext highlighter-rouge">module_chat</code>, <code class="language-plaintext highlighter-rouge">module_voip</code>, <code class="language-plaintext highlighter-rouge">module_discover</code>, <code class="language-plaintext highlighter-rouge">module_official_account</code>, <code class="language-plaintext highlighter-rouge">module_payment</code>. Each can run on its own for development and testing.</p>
+
+<p><strong>App layer.</strong> Just a shell: the package name, the launch entry and application initialization.</p>
+
+<p>A single flag in <code class="language-plaintext highlighter-rouge">gradle.properties</code> switched between the two modes:</p>
+
+<div class="language-properties highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># false: one project, all modules linked into the app
+# true:  each business module builds as its own application
+</span><span class="py">isBuildModule</span><span class="p">=</span><span class="s">false</span>
+</code></pre></div></div>
+
+<div class="language-groovy highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// module build.gradle</span>
+<span class="k">if</span> <span class="o">(</span><span class="n">isBuildModule</span><span class="o">.</span><span class="na">toBoolean</span><span class="o">())</span> <span class="o">{</span>
+    <span class="n">apply</span> <span class="nl">plugin:</span> <span class="s1">'com.android.application'</span>
+<span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+    <span class="n">apply</span> <span class="nl">plugin:</span> <span class="s1">'com.android.library'</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>This worked. But after some months of real development, two problems were clear.</p>
+
+<p>The first: the line between “SDK” and “business” was blurry. Some business logic, like how a chat message is sent and stored, lived in the business modules. Other parts lived in SDK modules. People were not sure where new code should go.</p>
+
+<p>The second: the components still needed to call each other. Chat needs to open a user profile. Voip needs user data. If <code class="language-plaintext highlighter-rouge">module_chat</code> depends on <code class="language-plaintext highlighter-rouge">module_user</code> directly, we are back to a ball of mud.</p>
+
+<h2 id="version-2-business-layer-and-sdk-layer">Version 2: business layer and SDK layer</h2>
+
+<p>Version 2 drew one hard line through the project. Above the line is the <strong>business layer</strong>: UI and product flows. Below the line is the <strong>SDK layer</strong>: the real implementation of IM, users, payment and calls. We also kept in mind that one day we might want to give the SDK to other teams, or even outside the company. If that day came, the SDK had to stand on its own.</p>
+
+<h3 id="business-layer">Business layer</h3>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>app
+api_lib
+lib_common
+module_main  module_user  module_chat  module_voip  module_discover  module_payment
+</code></pre></div></div>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">app</code> is the entry. It initializes the app, the communication between modules and the SDKs. Nothing else. No feature code in <code class="language-plaintext highlighter-rouge">app</code>.</li>
+  <li><code class="language-plaintext highlighter-rouge">lib_common</code> holds shared resources and a few shared UI widgets, like a user name view or an avatar view. Nothing else is allowed here. To be honest, in practice this module kept attracting code that did not belong there. A “common” module is a magnet. You have to keep saying no.</li>
+  <li><code class="language-plaintext highlighter-rouge">api_lib</code> is how the business modules talk to each other. More on it below.</li>
+</ul>
+
+<h3 id="talking-without-depending">Talking without depending</h3>
+
+<p>The business modules do not depend on each other at all. They all depend on <code class="language-plaintext highlighter-rouge">api_lib</code>. Inside it there is a <code class="language-plaintext highlighter-rouge">ModuleApiFactory</code> with a provider interface:</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// in api_lib</span>
+<span class="kd">public</span> <span class="kd">final</span> <span class="kd">class</span> <span class="nc">ModuleApiFactory</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="kd">static</span> <span class="nc">ModuleApiProvider</span> <span class="n">provider</span><span class="o">;</span>
+
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">installApiProvider</span><span class="o">(</span><span class="nc">ModuleApiProvider</span> <span class="n">p</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">provider</span> <span class="o">=</span> <span class="n">p</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kd">static</span> <span class="nc">UserApi</span> <span class="nf">getUserApi</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="n">provider</span><span class="o">.</span><span class="na">getUserApi</span><span class="o">();</span>
+    <span class="o">}</span>
+    <span class="c1">// getChatApi(), getVoipApi(), ...</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>The <code class="language-plaintext highlighter-rouge">app</code> module, which is the only place that can see every module, installs the real implementation at startup:</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// in app, SuperApplication.onCreate()</span>
+<span class="nc">ModuleApiFactory</span><span class="o">.</span><span class="na">installApiProvider</span><span class="o">(</span><span class="k">new</span> <span class="nc">ModuleApiProviderImpl</span><span class="o">());</span>
+</code></pre></div></div>
+
+<p>And then chat can open a profile page without knowing that <code class="language-plaintext highlighter-rouge">module_user</code> exists:</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nc">ModuleApiFactory</span><span class="o">.</span><span class="na">getUserApi</span><span class="o">().</span><span class="na">gotoUserProfileActivity</span><span class="o">(</span><span class="n">context</span><span class="o">,</span> <span class="n">uid</span><span class="o">);</span>
+</code></pre></div></div>
+
+<p>This is nothing new. It is dependency inversion with a service locator. But it is simple, everyone can read it, and the compiler stops you if you try to import a class from another module.</p>
+
+<h3 id="sdk-layer">SDK layer</h3>
+
+<p>The SDK layer is split by responsibility:</p>
+
+<ul>
+  <li><strong>SDK modules</strong>: <code class="language-plaintext highlighter-rouge">sdk_chat</code>, <code class="language-plaintext highlighter-rouge">sdk_user</code>, <code class="language-plaintext highlighter-rouge">sdk_payment</code>, <code class="language-plaintext highlighter-rouge">sdk_voip</code>. These map to the four main features: IM, accounts, payment and calls.</li>
+  <li><strong>SDK base libraries</strong>: <code class="language-plaintext highlighter-rouge">sdk_storage</code>, <code class="language-plaintext highlighter-rouge">sdk_e2ee</code>, <code class="language-plaintext highlighter-rouge">sdk_push</code>, <code class="language-plaintext highlighter-rouge">sdk_media</code>, networking. They serve all SDK modules. For example, encryption serves both chat and voip, and storage serves almost everything. These should never appear in the public API.</li>
+  <li><strong>General base libraries</strong>: the old <code class="language-plaintext highlighter-rouge">baseLib</code> and <code class="language-plaintext highlighter-rouge">baseUi</code>. Utils, loading views, dialogs, permissions. No business meaning at all, so they sit at the very bottom and anyone can use them. Still, we tried to keep things like encryption utils out of the business layer. If the business layer needs to encrypt something by hand, the SDK is missing an API.</li>
+  <li><strong><code class="language-plaintext highlighter-rouge">sdk_api</code></strong>: the only door into the SDK layer.</li>
+</ul>
+
+<p><code class="language-plaintext highlighter-rouge">sdk_api</code> uses the same pattern as <code class="language-plaintext highlighter-rouge">api_lib</code>. A <code class="language-plaintext highlighter-rouge">SdkFactory</code> gives you each SDK:</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nc">SdkFactory</span><span class="o">.</span><span class="na">getUserSdk</span><span class="o">().</span><span class="na">getContactInfo</span><span class="o">(</span><span class="n">userHid</span><span class="o">,</span> <span class="k">new</span> <span class="nc">CommonDataCallback</span><span class="o">&lt;</span><span class="nc">ContactInfo</span><span class="o">&gt;()</span> <span class="o">{</span>
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onSuccess</span><span class="o">(</span><span class="nc">ContactInfo</span> <span class="n">contactInfo</span><span class="o">)</span> <span class="o">{</span>
+        <span class="c1">// show it</span>
+    <span class="o">}</span>
+<span class="o">});</span>
+</code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">sdk_api</code> also holds the beans, listeners, callbacks and HTTP interface definitions that the business layer is allowed to see.</p>
+
+<h2 id="what-i-took-away">What I took away</h2>
+
+<ul>
+  <li><strong>Write the architecture down early, and expect to rewrite it.</strong> Version 1 was not wrong. It was what we understood at the time. Version 2 came from a few months of seeing where people actually got confused.</li>
+  <li><strong>One hard line is better than many soft ones.</strong> Four layers with fuzzy rules caused more debate than two layers with a clear rule: “UI and flow above, implementation below”.</li>
+  <li><strong>Modules talk through interfaces, and only the app knows the wiring.</strong> Once this was in place, nobody had to ask “can I depend on that module?” The answer was always no, and there was always a way around it.</li>
+  <li><strong>Watch the “common” module.</strong> It will grow if you let it.</li>
+</ul>
+
+<p>The rules for what a good SDK API looks like deserve their own post. That is next.</p>
+
+
+        </section>
+
+        <footer class="post-footer">
+
+            <!-- Everything inside the #author tags pulls data from the author -->
+            <!-- #author-->
+            
+
+            <!-- Add Disqus Comments -->
+            
+
+        </footer>
+
+    </article>
+
+</main>
+
+<aside class="read-next">
+
+    <!-- [[! next_post ]] -->
+    
+        <a class="read-next-story no-cover" href="/cold-start-as-a-dependency-graph">
+            <section class="post">
+                <h2>Cold Start as a Dependency Graph: 350 ms to 190 ms</h2>
+                <p>Every time we cold-started our messaging app, the home screen "jumped". The conversation list showed...</p>
+            </section>
+        </a>
+    
+    <!-- [[! /next_post ]] -->
+    <!-- [[! prev_post ]] -->
+    
+        <a class="read-next-story prev no-cover" href="/live-in-the-vim">
+            <section class="post">
+                <h2>生活在Vim中</h2>
+                <p>从第一天接触Vim编辑器到现在已经过去10年了，从最开始的不知所措到现在的运用自如，Vim已经融入到了我工作生活的很多场景, 它对于我已经不仅仅是一个高效强大的编辑器，更是变成了一种做事的方式和编辑，操作的哲学。关于这种哲学我最喜欢一个类比: 使用Vim的过程就像是一个画家画画的过程，当一个画家需要挥毫泼墨时，他就进入了insert模式，可以对画布进行任意的修改，当一个画家需要思考和审视时，他需要防止笔误和操作失当，这个时候他就需要进入normal模式，这个时候不能修改画布，只能在画布上移动，无论是移动你的手指和思绪，这个时候都不能对画布进行修改。这种特有的多模式也许是Vim和Emacs与其他大部分编辑器最显著的不同。 当你初窥Vim的与众不同后，如果你还不熟悉它的使用，你可能会不知所措，甚至无法编辑，无法退出，你和它会僵死在那里。你遇到的这种困境也正是Vim特有的操作方式引起的。这篇文章不打算如流水账般罗列Vim的诸多命令，我只挑选几种在日常代码编辑中最常用的命令来呈现Vim的神奇与强大。Vim之强大主要体现在无论是移动查询还是修改替换都能将一个动作做到非常小的粒度和精确控制，并且可以以极少的击键次数优雅地实现你精细的操作。我来举一个最常见的例子: int i = 3 * (4 + 2); 如上，假如我们想将括号中的内容改掉，一般的编辑器的做法都是移动到数字4，然后完全选中括号中的内容后修改。但是如果使用Vim，动作将会非常简单和快捷，只需移动到左括号后键入ci(即可，然后就可以直接进入insert模式修改了。敏感的读者可能已经感知到Vim的这条命令其实就是change in ()，有非常强的自然语言命令的感觉。...</p>
+            </section>
+        </a>
+    
+    <!-- [[! /prev_post ]] -->
+</aside>
+
+<!-- /post -->
+
+
+        <footer class="site-footer clearfix">
+          <section class="copyright"><a href="/">与机器，人，神共舞</a> &copy; 2026</section>
+        </footer>
+    </div>
+    <!-- [[! Ghost outputs important scripts and data with this tag ]] -->
+    <script type="text/javascript" src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+    <!-- [[! The main JavaScript file for Casper ]] -->
+    <script type="text/javascript" src="/assets/js/jquery.fitvids.js"></script>
+    <script type="text/javascript" src="/assets/js/index.js"></script>
+
+    <!-- Add Google Analytics  -->
+        <!-- Google Analytics Tracking code -->
+     <script>
+	    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+	    ga('create', 'UA-78960009-1', 'auto');
+	    ga('send', 'pageview');
+
+     </script>
+   
+</body>
+</html>

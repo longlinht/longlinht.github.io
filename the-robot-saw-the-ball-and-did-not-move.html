@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- [[! Document Settings ]] -->
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+    <!-- [[! Page Meta ]] -->
+    <title>The Robot Saw the Ball and Didn't Move</title>
+    <meta name="description" content="与机器，人，神共舞 - 编程，读书，思考，旅行，与机器对话，与人交谈，对神发问，探索，体验人生美丽的风景" />
+
+    <meta name="HandheldFriendly" content="True" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link rel="shortcut icon" href="/assets/images/favicon.ico" >
+
+    <!-- [[! Styles'n'Scripts ]] -->
+    <link rel="stylesheet" type="text/css" href="/assets/css/screen.css" />
+    <link rel="stylesheet" type="text/css"
+          href="//fonts.googleapis.com/css?family=Merriweather:300,700,700italic,300italic|Open+Sans:700,400" />
+    <link rel="stylesheet" type="text/css" href="/assets/css/syntax.css" />
+    
+    <!-- [[! Ghost outputs important style and meta data with this tag ]] -->
+        <link rel="canonical" href="/" />
+    <meta name="referrer" content="origin" />
+    <link rel="next" href="/page2/" />
+
+    <meta property="og:site_name" content="与机器，人，神共舞" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="与机器，人，神共舞" />
+    <meta property="og:description" content="编程，读书，思考，旅行，与机器对话，与人交谈，对神发问，探索，体验人生美丽的风景" />
+    <meta property="og:url" content="/" />
+    <meta property="og:image" content="/assets/images/cover1.jpg" />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="与机器，人，神共舞" />
+    <meta name="twitter:description" content="编程，读书，思考，旅行，与机器对话，与人交谈，对神发问，探索，体验人生美丽的风景" />
+    <meta name="twitter:url" content="/" />
+    <meta name="twitter:image:src" content="/assets/images/cover1.jpg" />
+
+    <script type="application/ld+json">
+{
+    "@context": "http://schema.org",
+    "@type": "Website",
+    "publisher": "Tao's Page",
+    "url": "/",
+    "image": "/assets/images/cover1.jpg",
+    "description": "编程，读书，思考，旅行，与机器对话，与人交谈，对神发问，探索，体验人生美丽的风景"
+}
+    </script>
+
+    <meta name="generator" content="Jekyll 3.0.0" />
+    <link rel="alternate" type="application/rss+xml" title="与机器，人，神共舞" href="/rss.xml" />
+
+</head>
+<body class="home-template nav-closed">
+
+    <div class="nav">
+    <h3 class="nav-title">Menu</h3>
+    <a href="#" class="nav-close">
+        <span class="hidden">Close</span>
+    </a>
+    <ul>
+        <li class="nav-home " role="presentation"><a href="/">Home</a></li>
+        <li class="nav-about " role="presentation"><a href="/about.html">About</a></li>
+        <li class="nav-fables " role="presentation"><a href="/tag/machine/">Machine</a></li>
+        <li class="nav-speeches " role="presentation"><a href="/tag/human/">Human</a></li>
+        <li class="nav-fiction " role="presentation"><a href="/tag/god/">God</a></li>
+        <li class="nav-author " role="presentation"><a href="/author/hetao/">Author</a></li>
+    </ul>
+    <a class="subscribe-button icon-feed" href="/vocab.html">Apps</a>
+</div>
+<span class="nav-cover"></span>
+
+
+    <div class="site-wrapper">
+
+        <!-- [[! Everything else gets inserted here ]] -->
+        <!-- default -->
+
+<!-- The comment above "< default" means - insert everything in this file into -->
+    <!-- the [body] of the default.hbs template, which contains our header/footer. -->
+
+<!-- Everything inside the #post tags pulls data from the post -->
+<!-- #post -->
+
+<header class="main-header post-head no-cover">
+    <nav class="main-nav  clearfix">
+        
+        
+    </nav>
+</header>
+
+<main class="content" role="main">
+
+    <article class="post tag-machine">
+
+        <header class="post-header">
+            <h1 class="post-title">The Robot Saw the Ball and Didn't Move</h1>
+            <section class="post-meta">
+            <!-- <a href='/'>Tao He</a> -->
+
+            
+            <time class="post-date" datetime="2026-10-04">04 Oct 2026</time>
+                <!-- [[tags prefix=" on "]] -->
+                
+                on
+                
+                    
+                       <a href='/tag/machine'>Machine</a>
+                    
+                
+                
+            </section>
+        </header>
+
+        <section class="post-content">
+
+            <p>Last week we had a Booster K1 on the field, running the full soccer behavior tree. The robot turned its head and followed the ball. Vision was clearly working. And the robot stood there. It did not walk to the ball.</p>
+
+<p>It took two days to understand. The direct cause was one condition. But on the way there we found four other problems that looked like the same problem. This post is about separating them.</p>
+
+<h2 id="the-symptoms-all-at-once">The symptoms, all at once</h2>
+
+<p>When we started, everything was mixed together:</p>
+
+<ul>
+  <li>At first, the vision and brain nodes sometimes failed to start or crashed.</li>
+  <li>With a simple “chase” tree, the robot turned its head but didn’t move its body.</li>
+  <li>With the full game tree, the status log showed the control state set, but the game state empty.</li>
+  <li>At one point the camera RGB topic had no publisher at all.</li>
+  <li>Our nodes and the vendor’s nodes sometimes could not see each other on the ROS 2 network.</li>
+</ul>
+
+<p>It is very tempting to look for one root cause that explains all of this. There wasn’t one. These were different layers failing in different ways, and some of them at the same time.</p>
+
+<h2 id="the-direct-cause-two-conditions-not-one">The direct cause: two conditions, not one</h2>
+
+<p>The soccer behavior tree we run has two separate pieces of state:</p>
+
+<ul>
+  <li><strong>control state</strong>: is the robot under autonomous control?</li>
+  <li><strong>game state</strong>: what does the referee say? INITIAL, READY, SET, PLAY, END.</li>
+</ul>
+
+<p>When the game tree starts, it sets the control state to “autonomous”. That part was fine. But the normal striker and goalkeeper behavior also requires the game state to be <strong>PLAY</strong>. And nobody had told the robot the game was playing.</p>
+
+<p>So the robot did everything a robot should do before kick-off. It looked for the ball. It tracked it with its head. It did not walk, because the game had not started. From the outside, that looks exactly like a bug in the chase logic.</p>
+
+<p>The brain also listens to a simple external control topic with string commands: <code class="language-plaintext highlighter-rouge">locate</code>, <code class="language-plaintext highlighter-rouge">ready</code>, <code class="language-plaintext highlighter-rouge">play</code>, <code class="language-plaintext highlighter-rouge">stop</code>. Each one sets both pieces of state together. Sending <code class="language-plaintext highlighter-rouge">play</code> sets the control state and the game state to PLAY (and also marks the kick-off as ours).</p>
+
+<p>After a restart, we started the game tree and sent <code class="language-plaintext highlighter-rouge">play</code>. In the log, the brain received the command, the state changed to PLAY, and about two seconds later the first non-zero turn command appeared. A few seconds after that, the first forward walk command. The robot found the ball and went for it.</p>
+
+<p>Nothing in the chase algorithm or the speed parameters had changed. Only the game state.</p>
+
+<h2 id="head-tracking-is-not-proof-of-play">Head tracking is not proof of play</h2>
+
+<p>This is the lesson I most want to keep. A robot tracking the ball with its head tells you:</p>
+
+<ul>
+  <li>the camera works,</li>
+  <li>vision detects the ball,</li>
+  <li>the brain receives detections.</li>
+</ul>
+
+<p>It does <strong>not</strong> tell you that the play behavior is running. Head tracking can happen before PLAY. A correct control mode can happen before PLAY. Both are necessary, neither is sufficient.</p>
+
+<p>Also, a manual <code class="language-plaintext highlighter-rouge">play</code> is a test tool. It is not the referee. In a real game, the GameController sends the game state. Getting the robot to move with a manual command proves the behavior works. It does not prove the referee path works. That has to be tested separately.</p>
+
+<h2 id="the-other-four-problems">The other four problems</h2>
+
+<p>While chasing the main issue we found and noted the others. I keep them separate because each has a different fix and a different level of “solved”.</p>
+
+<p><strong>The camera.</strong> The RGB topic had no publisher. On the firmware version we had, the head camera has to be switched into the right mode through a vendor service call. After that, RGB and detections both came back at a steady rate. This is specific to that firmware. After a firmware update, I check the vendor docs again before assuming the same call works.</p>
+
+<p><strong>The vendor stack.</strong> A restart brought back the motion, camera, vision and agent services. A restart is a good cleanup. It is not a fix. If it happens again, we need to know why.</p>
+
+<p><strong>DDS discovery.</strong> The Fast DDS profile listed network addresses that were not the ones actually active on the robot that day. That is a good explanation for nodes sometimes not discovering each other. But it is an explanation, not a proven root cause, and it is still open. When nodes are “missing”, I now check three things separately: is the process alive, is the ROS participant discovered, and do messages actually flow.</p>
+
+<p><strong>Startup robustness.</strong> We added some hardening: the start script checks that the behavior tree file is installed before stopping the old processes; the launch file checks the tree file name, that it exists, and that the XML parses; the vision node finds its model in the installed package and keeps the error instead of crashing with a null pointer if the model fails to load. None of this was the cause of the “doesn’t move” problem. All of it made the next test less confusing.</p>
+
+<h2 id="a-field-order-i-now-follow">A field order I now follow</h2>
+
+<p>From this I wrote a short field debug guide. The order is the important part. Each step only makes sense if the step before it is green:</p>
+
+<ol>
+  <li><strong>Record versions.</strong> Firmware version file and code commit. Without this, any result is hard to compare later.</li>
+  <li><strong>Vendor services.</strong> Are the motion, camera, vision and agent processes actually running? List nodes with <code class="language-plaintext highlighter-rouge">--no-daemon</code>, so you don’t read a stale cache.</li>
+  <li><strong>Camera.</strong> Does the RGB topic have a publisher? What is the rate?</li>
+  <li><strong>Vision.</strong> Are detections published, and at what rate?</li>
+  <li><strong>Brain.</strong> Is it running the tree you think it is?</li>
+  <li><strong>Game state.</strong> Is it PLAY? Who set it?</li>
+  <li><strong>Velocity output.</strong> Are non-zero commands coming out?</li>
+  <li><strong>Motion.</strong> Only now look at whether the robot moves.</li>
+</ol>
+
+<p>It is very easy to stare at step 8 and guess about steps 2 to 7. That is where the time goes.</p>
+
+<h2 id="what-id-like-to-have-next-time">What I’d like to have next time</h2>
+
+<ul>
+  <li>A low-frequency, structured log of brain state changes. Finding “received play” among thousands of debug lines is slow.</li>
+  <li>A regression list I actually run: robot stays still with no game state; starts after PLAY; returns to zero after STOP; manual path and referee path tested separately; one change at a time.</li>
+</ul>
+
+<h2 id="what-i-took-away">What I took away</h2>
+
+<ul>
+  <li><strong>Many symptoms, many causes.</strong> Don’t force one story onto five problems.</li>
+  <li><strong>Know every gate on the path to motion.</strong> Control mode and game state were two gates, and I only knew about one.</li>
+  <li><strong>Head tracking proves perception, not behavior.</strong></li>
+  <li><strong>A restart is cleanup, not a fix.</strong> Write down what it cleaned up.</li>
+  <li><strong>Debug from the bottom up.</strong> Services, camera, vision, brain, game state, velocity, then motion. In that order.</li>
+</ul>
+
+
+        </section>
+
+        <footer class="post-footer">
+
+            <!-- Everything inside the #author tags pulls data from the author -->
+            <!-- #author-->
+            
+
+            <!-- Add Disqus Comments -->
+            
+
+        </footer>
+
+    </article>
+
+</main>
+
+<aside class="read-next">
+
+    <!-- [[! next_post ]] -->
+    
+        <a class="read-next-story no-cover" href="/exactly-one-motion-owner">
+            <section class="post">
+                <h2>Exactly One Motion Owner: Running an RL Policy Next to Vendor Firmware</h2>
+                <p>A Booster K1 comes with firmware that can already stand, walk, get up and kick....</p>
+            </section>
+        </a>
+    
+    <!-- [[! /next_post ]] -->
+    <!-- [[! prev_post ]] -->
+    
+        <a class="read-next-story prev no-cover" href="/whistle-detection-on-an-arm-robot">
+            <section class="post">
+                <h2>Hearing the Referee: Whistle Detection on an ARM Robot</h2>
+                <p>In RoboCup humanoid soccer, the referee uses a whistle. For some game state changes, like...</p>
+            </section>
+        </a>
+    
+    <!-- [[! /prev_post ]] -->
+</aside>
+
+<!-- /post -->
+
+
+        <footer class="site-footer clearfix">
+          <section class="copyright"><a href="/">与机器，人，神共舞</a> &copy; 2026</section>
+        </footer>
+    </div>
+    <!-- [[! Ghost outputs important scripts and data with this tag ]] -->
+    <script type="text/javascript" src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+    <!-- [[! The main JavaScript file for Casper ]] -->
+    <script type="text/javascript" src="/assets/js/jquery.fitvids.js"></script>
+    <script type="text/javascript" src="/assets/js/index.js"></script>
+
+    <!-- Add Google Analytics  -->
+        <!-- Google Analytics Tracking code -->
+     <script>
+	    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+	    ga('create', 'UA-78960009-1', 'auto');
+	    ga('send', 'pageview');
+
+     </script>
+   
+</body>
+</html>

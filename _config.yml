@@ -48,6 +48,11 @@ exclude:
   - Gemfile.lock
   - changelog.md
   - "*.Rmd"
+  - docker
+  - build.md
+  - release.sh
+  - server.sh
+  - _config_dev.yml
   - vendor
   - .travis.yml
   - node_modules

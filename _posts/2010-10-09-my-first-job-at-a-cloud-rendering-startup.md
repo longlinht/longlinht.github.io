@@ -3,8 +3,8 @@ layout: post
 cover: false
 title:  毕业了，我加入了一家做云渲染的创业公司
 date:   2010-10-09 21:30:00
-tags: human
-subclass: 'post tag-human'
+tags: machine
+subclass: 'post tag-machine'
 categories: 'hetao'
 chinese: true
 ---

@@ -1,7 +1,7 @@
 ---
 layout: post
 cover: false
-title:  渲染农场是什么，以及我们的渲染集群管理软件
+title:  初识渲染集群管理软件
 date:   2010-10-20 22:00:00
 tags: machine
 subclass: 'post tag-machine'
